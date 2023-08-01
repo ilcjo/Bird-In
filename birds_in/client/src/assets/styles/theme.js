@@ -8,8 +8,8 @@ const theme = createTheme({
   palette: {
     primary: {
       light: '#ccd6cc',
-      main: '#00381c',
-      dark: '#003400',
+      main: '#C1C700',
+      dark: '#00381C',
       contrastText: '#340015',
     },
     secondary: {
@@ -22,20 +22,21 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Arsenal',
     h1: {
-      fontSize: '4rem',
-      fontWeight: 500,
-     
-
+      fontSize: '2.5rem',
+      fontWeight: 600,
+      padding: '20px',
     },
     h2: {
-      fontSize: '2rem',
+      fontSize: '1.5rem',
       fontWeight: 300,
+      my: 1
 
     },
     body1: {
-      fontSize: '1.4rem', // Estilo de cuerpo del texto
+      fontSize: '1.3rem', // Estilo de cuerpo del texto
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
+      lineHeight: 1.2 
     },
   },
 

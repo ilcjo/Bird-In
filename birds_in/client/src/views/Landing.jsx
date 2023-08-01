@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Grid, Paper, Typography, useTheme } from '@mui/material';
+import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { Link } from 'react-router-dom'
 
 
 export const Landing = () => {
@@ -7,65 +9,110 @@ export const Landing = () => {
 
   return (
     <React.Fragment>
-      <Grid container  component="main" sx={{ height: '100vh' }}>
-      <Grid
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <Grid
           item
           xs={12}
           sx={{
-            width: '16%',
-            height: '34%' ,
+            width: '209px',
+            height: '198px',
             display: 'flex',
             justifyContent: 'center', // Centrar horizontalmente
             alignItems: 'center', // Centrar verticalmente
             borderRadius: '50%', // Hacer el Grid redondo
             overflow: 'hidden', // Para que la imagen se ajuste al tamaño del Grid redondo
-            backgroundColor: theme.palette.primary.main, // Color de fondo del Grid redondo
+            backgroundColor: theme.palette.primary.dark, // Color de fondo del Grid redondo
             position: 'absolute', // Posición absoluta para que se coloque encima de los otros Grids
-            top: '50%', // Centrar verticalmente en la mitad de la pantalla
-            left: '75%', // Centrar horizontalmente en la mitad de la pantalla
+            top: '40%', // Centrar verticalmente en la mitad de la pantalla
+            left: '67%', // Centrar horizontalmente en la mitad de la pantalla
             transform: 'translate(-50%, -50%)', // Centrar exactamente en el centro
             zIndex: 1, // Elevar el nuevo Grid encima de los otros
-            border: ' 8px solid #00381c' 
+            border: ' 10px solid #00381c',
+            
           }}
         >
           {/* Aquí puedes poner la URL de la imagen */}
           <img
             src="https://source.unsplash.com/random?people"
             alt="Ave"
-            style={{ width: '100%', height: '100%', objectFit: 'cover',}}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', }}
           />
         </Grid>
 
-        <Grid  item xs={false} sm={4} md={9}
+        <Grid item xs={false} sm={4} md={8}
           sx={{
             backgroundImage: 'url(https://source.unsplash.com/random?bird)',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.40)', // Agregar sombra
           }}>
-             <Typography variant="h1" color='primary.light'
-             sx={{
-              alignItems: 'center'
-             }}
-             >LAS AVES QUE PASARON POR MIS OJOS<br/> a</Typography>
-            <Typography variant="body1" color="primary.light" 
+
+          <Typography variant="body1" color="primary.light"
             sx={{
               position: 'absolute', // Posiciona el segundo párrafo en la esquina inferior izquierda
               bottom: 0, // Coloca el segundo párrafo en la parte inferior del contenedor
-              left: 0, // Coloca el segundo párrafo en la esquina izquierda del contenedor
-              margin: '20px', // Ajusta los márgenes según tus necesidades
+              right: 530, // Coloca el segundo párrafo en la esquina izquierda del contenedor
+              margin: '20px', // Ajusta los márgenes según tus necesidade
             }}>
-              iconos nombre de la foto y lugar
-              </Typography>
+            <LocationOnIcon /> Nombre del lugar
+          </Typography>
+          <Typography variant="body1" color="primary.light"
+            sx={{
+              position: 'absolute', // Posiciona el segundo párrafo en la esquina inferior izquierda
+              bottom: 0, // Coloca el segundo párrafo en la parte inferior del contenedor
+              right: 530, // Coloca el segundo párrafo en la esquina izquierda del contenedor
+              margin: '20px', // Ajusta los márgenes según tus necesidades
+              bottom: '30px'
+            }}>
+            Nombre del lugar
+          </Typography>
         </Grid>
-       <Grid item xs={12} sm={8} md={3} component={Paper} elevation={6} square
-       sx={{
-        backgroundColor:theme.palette.primary.main,
-        padding: '20px'
-       }}>
-          <Typography variant="body1" color='primary.light'>Bienvenidos<br/> a</Typography>
-           
-      
+        <Grid item xs={12} sm={8} md={4} component={Box} elevation={6} square
+          sx={{
+            backgroundColor: theme.palette.primary.dark,
+            padding: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}>
+          <Box sx={{
+            display: 'flex',
+            textAlign: 'left',
+            width: '70%',
+          }}>
+            <Typography variant="h1" color='primary.main'
+            sx={{
+              textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+            }}>
+              LAS AVES QUE PASARON POR MIS OJOS
+            </Typography>
+          </Box>
+          <Box sx={{
+            display: 'absolute',
+            top: '500px',
+            textAlign: 'left',
+            width: '80%',
+            mt: 20
+          }}>
+            <Typography variant="h2" color='primary.main' sx={{ my: 1 }}>
+              Bienvenidos
+            </Typography>
+            <Typography variant="body1" color='primary.light'>
+              Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.
+            </Typography>
+            <Typography variant="body1" sx={{ color: '#fff', fontWeight: 'bold', my: 2, fontFamily: 'Arsenal', fontSize: '1rem', }}>
+              Fotografias por Moises Sterimberg
+            </Typography>
+          </Box>
+          <Box sx={{ '& button': { m: 1, my: 3 } }}>
+            <Link to='/home'>
+            <Button variant="outlined">Log In</Button>
+            </Link>
+            <Link>
+            <Button variant="contained">Registro</Button>
+            </Link>
+          </Box>
         </Grid>
       </Grid>
     </React.Fragment>
