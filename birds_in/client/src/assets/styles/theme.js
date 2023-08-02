@@ -24,7 +24,7 @@ const theme = createTheme({
     h1: {
       fontSize: '2.5rem',
       fontWeight: 600,
-      padding: '20px',
+      
     },
     h2: {
       fontSize: '1.5rem',
@@ -39,8 +39,21 @@ const theme = createTheme({
       lineHeight: 1.2 
     },
   },
-
-
+  components: {
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: 'rgba(0, 56, 28, 0.1)',
+          backdropFilter: 'blur(90px)',
+          WebkitBackdropFilter: 'blur(90px)',
+          padding: '20px',       
+        },
+      },
+    },
+  },
+ 
+        
+   
   background: '#ccd6cc', // Cambia "#00381c" por el color de fondo que desees
 
 });

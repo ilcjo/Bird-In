@@ -2,10 +2,42 @@ import * as React from 'react';
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Link } from 'react-router-dom'
+import { RegisterForm } from '../components/RegisterForm';
 
 
 export const Landing = () => {
   const theme = useTheme()
+  const [open, setOpen] = React.useState(false)
+  const [data, setData] = React.useState({
+    userName: '',
+    name: '',
+    pais: '',
+    email: '',
+    pass: ''
+  });
+
+  const handleOpen = () => {
+    setOpen(true)
+  };
+
+  const handleClose = () => {
+    setOpen(false)
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('DAtos del formulario', data)
+    handleClose()
+  };
+
 
   return (
     <React.Fragment>
@@ -28,7 +60,7 @@ export const Landing = () => {
             transform: 'translate(-50%, -50%)', // Centrar exactamente en el centro
             zIndex: 1, // Elevar el nuevo Grid encima de los otros
             border: ' 10px solid #00381c',
-            
+
           }}
         >
           {/* Aquí puedes poner la URL de la imagen */}
@@ -68,7 +100,7 @@ export const Landing = () => {
             Nombre del lugar
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={8} md={4} component={Box} elevation={6} square
+        <Grid item xs={12} sm={8} md={4} component={Box} elevation={6}
           sx={{
             backgroundColor: theme.palette.primary.dark,
             padding: 3,
@@ -82,14 +114,13 @@ export const Landing = () => {
             width: '70%',
           }}>
             <Typography variant="h1" color='primary.main'
-            sx={{
-              textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-            }}>
+              sx={{
+                textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+              }}>
               LAS AVES QUE PASARON POR MIS OJOS
             </Typography>
           </Box>
           <Box sx={{
-            display: 'absolute',
             top: '500px',
             textAlign: 'left',
             width: '80%',
@@ -107,12 +138,17 @@ export const Landing = () => {
           </Box>
           <Box sx={{ '& button': { m: 1, my: 3 } }}>
             <Link to='/home'>
-            <Button variant="outlined">Log In</Button>
+              <Button variant="outlined">Log In</Button>
             </Link>
-            <Link>
-            <Button variant="contained">Registro</Button>
-            </Link>
+            <Button variant="contained" onClick={handleOpen}>Registrarse</Button>
           </Box>
+          <RegisterForm
+            open={open}
+            handleOpen={handleOpen}
+            handleClose={handleClose}
+            data={data}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit} />
         </Grid>
       </Grid>
     </React.Fragment>

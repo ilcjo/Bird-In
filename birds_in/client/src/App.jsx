@@ -11,7 +11,6 @@ function App() {
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/home' element={<Home />} />
-        <Route path='/register' element={<RegisterForm />} />
        
       </Routes>
     </>
