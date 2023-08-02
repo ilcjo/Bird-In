@@ -22,7 +22,7 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Arsenal',
     h1: {
-      fontSize: '2.5rem',
+      fontSize: '2.8rem',
       fontWeight: 600,
       
     },
