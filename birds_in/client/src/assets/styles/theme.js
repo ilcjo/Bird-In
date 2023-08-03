@@ -22,21 +22,28 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Arsenal',
     h1: {
-      fontSize: '2.8rem',
+      fontSize: '2.6rem',
       fontWeight: 600,
-      
     },
     h2: {
       fontSize: '1.5rem',
       fontWeight: 300,
-      my: 1
-
+      my: 1,
+    },
+    h3: {
+      fontSize: '1rem',
+      fontWeight: 400,
+    },
+    h4: {
+      fontSize: '1 rem',
+      fontWeight: 600,
+      marginLeft: '6px'
     },
     body1: {
-      fontSize: '1.3rem', // Estilo de cuerpo del texto
+      fontSize: '1.3rem',
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
-      lineHeight: 1.2 
+      lineHeight: 1.2,
     },
   },
   components: {
