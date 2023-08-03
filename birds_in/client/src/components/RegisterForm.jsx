@@ -6,188 +6,268 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   TextField,
   Typography,
-  useTheme
+  useTheme,
+  Link as MuiLink,
+  MenuItem,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { Link } from 'react-router-dom'
+import CountryList from 'react-select-country-list';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 
 export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubmit }) => {
   const theme = useTheme()
+  const [showPassword, setShowPassword] = React.useState('')
 
   const dialogStyles = {
     backgroundColor: 'rgba(204, 214, 204, 0.17)',
     "& .MuiDialogTitle-root": {
       variant: "h1",
       color: theme.palette.primary.light, // Establecer el color del texto utilizando el theme
-      borderRadius: '18px'
+
+
     },
-  };
-  const containerStyles = {
-    display: 'flex',
-    // flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100%', // Esto asegura que el contenedor ocupe al menos toda la altura disponible
   };
 
   const labelStyles = {
-    fontSize: '16px', // Tamaño de texto del label
     color: theme.palette.primary.main, // Color del texto del label
-
+    marginTop: '-6px',
   };
 
   const inputStyles = {
     // Aquí puedes agregar los estilos que desees para los inputs
-
+    color: theme.palette.primary.light,
+    backgroundColor: 'rgba(204,214,204,0.17) ',
+    borderRadius: '9px',
+    height: '50px',
+   
+    
     '& .MuiInputBase-input': {
-      backgroundColor: 'rgba(204,214,204,0.17) ',
-      borderRadius: '8px',
-      height: '50px',
       padding: '0px',
-  
-
+      paddingLeft: '10px',
 
     },
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: 'none',
-
     },
     '&:hover .MuiOutlinedInput-notchedOutline': {
       borderColor: theme.palette.primary.main, // Color del borde en el hover
-
+      backgroundColor: 'rgba(193,190,0,0.22) ',
     },
-    // Otros estilos de los inputs...
+    '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+      // Agrega los estilos que desees para el Select
+      height: '50px',
+      // width: '180px' // Ejemplo: cambia el color del texto a azul
+    },
+
+  };
+  const selectStyles = {
+    '& .MuiSelect-select': {
+      // Estilos para el select en el TextField
+      color: 'red', // Cambiar color del texto
+    },
+    '& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper': {
+      // Estilos para el Paper del Menu
+      backgroundColor: 'blue', // Cambiar color de fondo del Paper
+      color: 'white', // Cambiar color del texto en el Paper
+    },
   };
   const actionsStyles = {
     justifyContent: 'center', // Centrar el botón horizontalmente
-    
+    margin: '0px',
+    marginTop: '-20px'
+
   };
 
   return (
-    <Box>
-      <Dialog open={open} onClose={handleClose} sx={dialogStyles}>
+    <Box sx={{ width: '100px' }}>
+      <Dialog open={open} onClose={handleClose} sx={dialogStyles} PaperProps={{ sx: { padding: '11px' } }} >
         <DialogTitle  >
-          <Typography variant="h1" color='primary.light' sx>
-            Crear una Cuenta
-          </Typography>
-
+          <div>
+            <Typography variant="h1" color='primary.light' sx={{ marginLeft: '2px' }}>
+              Crear una Cuenta
+            </Typography>
+            <Typography variant="body1" color="primary.main" sx={{ marginLeft: '8px' }}>
+              Ya eres miembro ?
+              <MuiLink component={Link} to="/home" color="primary.light" variant='h4' underline="none" >
+                LOG IN
+              </MuiLink>
+            </Typography>
+          </div>
         </DialogTitle>
         <DialogContent >
 
-          <form onSubmit={handleSubmit} >
-            <Box sx={containerStyles} >
-
+          <Grid container component={Box}  >
+            <form onSubmit={handleSubmit} >
               <TextField
                 label="Nombre Completo"
                 name="name"
                 value={data.name}
                 onChange={handleChange}
-
-                margin="normal"
+                helperText=" "
+                fullWidth
+                margin="dense"
                 InputLabelProps={{
                   sx: labelStyles, // Establece el estilo del label del input
                 }}
                 InputProps={{
                   sx: inputStyles, // Establece el estilo del input
                 }}
-                required />
-
-              <TextField
-                label="Pais"
-                name="pais"
-                value={data.pais}
-                onChange={handleChange}
-
-                margin="normal"
-                InputLabelProps={{
-                  sx: labelStyles, // Establece el estilo del label del input
-                }}
-                InputProps={{
-                  sx: inputStyles, // Establece el estilo del input
-                }}
-                required
               />
+
+
               <TextField
                 label="E-mail"
                 name="email"
                 type="email"
                 value={data.email}
                 onChange={handleChange}
-
-                margin="normal"
+                margin="none"
+                fullWidth
                 InputLabelProps={{
                   sx: labelStyles, // Establece el estilo del label del input
+
                 }}
                 InputProps={{
                   sx: inputStyles, // Establece el estilo del input
                 }}
-                required
+                helperText=" Ejemplo: nombre@mail.com"
+                FormHelperTextProps={{
+                  sx: {
+                    /* Agrega los estilos que desees para el texto del helper text */
+                    /* Por ejemplo, para agregar un margen izquierdo: */
+                    fontSize: '1rem',
+                    color: theme.palette.primary.light,
+                    /* Agrega otros estilos que desees... */
+                  },
+                }}
               />
 
               <TextField
-                label="Nombre de Usuario"
-                name="userName"
-                value={data.userName}
+                label="Pais (opcional)"
+                name="pais"
+                value={data.pais}
                 onChange={handleChange}
-
-                margin="normal"
+                fullWidth
+                select
+                margin="dense"
+                helperText="Seleccione su Pais de Origen"
                 InputLabelProps={{
                   sx: labelStyles, // Establece el estilo del label del input
                 }}
                 InputProps={{
                   sx: inputStyles, // Establece el estilo del input
                 }}
-                required
-              />
+                SelectProps={{
+                  classes: {
+                    select: selectStyles['& .MuiSelect-select'], // Aplica la clase de estilos para el componente Select
+                  },
+                }}
+               
+              
+                FormHelperTextProps={{
+                  sx: {
+                    /* Agrega los estilos que desees para el texto del helper text */
+                    /* Por ejemplo, para agregar un margen izquierdo: */
+                    fontSize: '1rem',
+                    color: theme.palette.primary.light,
+                    /* Agrega otros estilos que desees... */
+                  },
+                }}
+              >
+
+                {CountryList().getData().map((country) => (
+                  <MenuItem key={country.label} value={country.label}>
+                    {country.label}
+                  </MenuItem>
+                ))}
+              </TextField >
 
               <TextField
                 label="Password"
+                name="passFirst"
+                margin="dense"
+                type={showPassword ? 'text' : 'password'}
+                fullWidth
+                InputLabelProps={{
+                  sx: labelStyles, // Establece el estilo del label del input
+                }}
+                InputProps={{
+                  sx: inputStyles, 
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={(event) => event.preventDefault()}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                
+                helperText="Al menos 6 caracteres y una mayuscula"
+                FormHelperTextProps={{
+                  sx: {
+                    /* Agrega los estilos que desees para el texto del helper text */
+                    /* Por ejemplo, para agregar un margen izquierdo: */
+                    fontSize: '1rem',
+                    color: theme.palette.primary.light,
+                    /* Agrega otros estilos que desees... */
+                  },
+                }}
+              />
+              <TextField
+                label="Confirme el Password"
                 name="pass"
                 value={data.pass}
                 onChange={handleChange}
-                margin="normal"
+                type={showPassword ? 'text' : 'password'}
+                margin="dense"
+                fullWidth
                 InputLabelProps={{
                   sx: labelStyles, // Establece el estilo del label del input
                 }}
                 InputProps={{
                   sx: inputStyles, // Establece el estilo del input
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={(event) => event.preventDefault()}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
-                required
+
               />
-                <TextField
-                label="Password"
-                name="pass"
-                value={data.pass}
-                onChange={handleChange}
-                margin="normal"
-                InputLabelProps={{
-                  sx: labelStyles, // Establece el estilo del label del input
-                }}
-                InputProps={{
-                  sx: inputStyles, // Establece el estilo del input
-                }}
-                required
-              />
-        
-            
-        </Box>
-          </form>
-          
-         
+            </form>
+          </Grid>
+
+
         </DialogContent>
         <DialogTitle>
-          <Typography variant="body1" color="primary.main" sx={{  fontSize: '14px' }}>
-            Ya eres miembro ?   <Link> Log In </Link>
-          </Typography>
+
         </DialogTitle>
-           <DialogActions sx={actionsStyles}>
+        <DialogActions sx={actionsStyles}>
+          <Button variant="outlined" onClick={handleClose} color="primary">
+            Cancelar
+          </Button>
+
           <Button variant="contained" onClick={handleSubmit} color="primary">
             Crear Cuenta
           </Button>
         </DialogActions>
-       
+
       </Dialog>
     </Box>
   )
