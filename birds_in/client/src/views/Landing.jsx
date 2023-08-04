@@ -4,7 +4,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Boolean } from '../redux/slices/OpenClose';
-import { RegisterForm } from '../components/SingUpTabs/RegisterForm';
+import { Index } from '../components/SingUpTabs/Index';
 
 
 export const Landing = () => {
@@ -120,7 +120,7 @@ export const Landing = () => {
             </Link>
             <Button variant="contained" onClick={handleOpen}>Registrarse</Button>
           </Box>
-        <RegisterForm
+        <Index 
         open={open}/>
         </Grid>
       </Grid>

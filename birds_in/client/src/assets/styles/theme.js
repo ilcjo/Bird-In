@@ -26,12 +26,12 @@ const theme = createTheme({
       fontWeight: 600,
     },
     h2: {
-      fontSize: '1.5rem',
-      fontWeight: 300,
+      fontSize: '1.9rem',
+      fontWeight: 600,
       my: 1,
     },
     h3: {
-      fontSize: '1rem',
+      fontSize: '0.5rem',
       fontWeight: 400,
     },
     h4: {
@@ -41,6 +41,12 @@ const theme = createTheme({
     },
     body1: {
       fontSize: '1.3rem',
+      fontWeight: 100,
+      fontFamily: 'Crimson Pro, sans-serif',
+      lineHeight: 1.2,
+    },
+    body2: {
+      fontSize: '0.9rem',
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
@@ -57,10 +63,29 @@ const theme = createTheme({
         },
       },
     },
+    // MuiButton: {
+    //   styleOverrides: {
+    //     root: {
+    //       // Estilo para el botón cuando no está en hover
+    //       backgroundColor: theme.palette.primary.main,
+    //       color: theme.palette.common.white,
+    //       '&:hover': {
+    //         // Estilo para el botón cuando se hace hover
+    //         backgroundColor: theme.palette.primary.dark,
+    //       },
+    //     },
+    //     contained: {
+    //       // Estilo para el botón variant="contained" cuando no está en hover
+    //       boxShadow: 'none',
+    //       '&:hover': {
+    //         // Estilo para el botón variant="contained" cuando se hace hover
+    //         boxShadow: 'none',
+    //       },
+    //     },
+    //   },
+    // },
   },
- 
-        
-   
+  
   background: '#ccd6cc', // Cambia "#00381c" por el color de fondo que desees
 
 });

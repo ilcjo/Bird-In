@@ -84,7 +84,7 @@ export const RegisterForm = () => {
 
   return (
     <Box sx={{ width: '100px' }}>
-      <Dialog open={open} onClose={handleClose} sx={dialogStyles} PaperProps={{ sx: { padding: '11px', borderRadius:'25px' } }} >
+      <Dialog sx={dialogStyles} PaperProps={{ sx: { padding: '11px', borderRadius:'25px' } }} >
         <DialogTitle  >
           <div>
             <Typography variant="h1" color='primary.light' sx={{ marginLeft: '2px' }}>
