@@ -18,18 +18,35 @@ import {
 import { Link } from 'react-router-dom'
 import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Boolean } from '../../redux/slices/OpenClose';
+import { emailUser, nameUser, paisUser, passwordUser, resetForm } from '../../redux/slices/Register'
 
+export const RegisterForm = ({ open }) => {
 
-export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubmit }) => {
   const theme = useTheme()
+  const dispatch = useDispatch()
   const [showPassword, setShowPassword] = React.useState('')
+  const { name, email, pais, pass } = useSelector((state) => state.registerSlice)
+
+  const handleClose = () => {
+    dispatch(Boolean(false))
+    dispatch(resetForm())
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('DAtos del formulario', name, email, pais, pass)
+    handleClose()
+    dispatch(resetForm())
+  };
 
   const dialogStyles = {
     backgroundColor: 'rgba(204, 214, 204, 0.17)',
+
     "& .MuiDialogTitle-root": {
       variant: "h1",
       color: theme.palette.primary.light, // Establecer el color del texto utilizando el theme
-
 
     },
   };
@@ -37,6 +54,7 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
     marginTop: '-6px',
+
   };
 
   const inputStyles = {
@@ -45,8 +63,8 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
     backgroundColor: 'rgba(204,214,204,0.17) ',
     borderRadius: '9px',
     height: '50px',
-   
-    
+
+
     '& .MuiInputBase-input': {
       padding: '0px',
       paddingLeft: '10px',
@@ -86,7 +104,7 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
 
   return (
     <Box sx={{ width: '100px' }}>
-      <Dialog open={open} onClose={handleClose} sx={dialogStyles} PaperProps={{ sx: { padding: '11px' } }} >
+      <Dialog open={open} onClose={handleClose} sx={dialogStyles} PaperProps={{ sx: { padding: '11px', borderRadius: '15px' } }} >
         <DialogTitle  >
           <div>
             <Typography variant="h1" color='primary.light' sx={{ marginLeft: '2px' }}>
@@ -104,11 +122,12 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
 
           <Grid container component={Box}  >
             <form onSubmit={handleSubmit} >
+
               <TextField
                 label="Nombre Completo"
                 name="name"
-                value={data.name}
-                onChange={handleChange}
+                value={name}
+                onChange={(e) => dispatch(nameUser(e.target.value))}
                 helperText=" "
                 fullWidth
                 margin="dense"
@@ -125,8 +144,8 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
                 label="E-mail"
                 name="email"
                 type="email"
-                value={data.email}
-                onChange={handleChange}
+                value={email}
+                onChange={(e) => dispatch(emailUser(e.target.value))}
                 margin="none"
                 fullWidth
                 InputLabelProps={{
@@ -151,8 +170,8 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
               <TextField
                 label="Pais (opcional)"
                 name="pais"
-                value={data.pais}
-                onChange={handleChange}
+                value={pais}
+                onChange={(e) => dispatch(paisUser(e.target.value))}
                 fullWidth
                 select
                 margin="dense"
@@ -168,8 +187,8 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
                     select: selectStyles['& .MuiSelect-select'], // Aplica la clase de estilos para el componente Select
                   },
                 }}
-               
-              
+
+
                 FormHelperTextProps={{
                   sx: {
                     /* Agrega los estilos que desees para el texto del helper text */
@@ -198,7 +217,7 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
                   sx: labelStyles, // Establece el estilo del label del input
                 }}
                 InputProps={{
-                  sx: inputStyles, 
+                  sx: inputStyles,
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
@@ -211,7 +230,7 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
                     </InputAdornment>
                   ),
                 }}
-                
+
                 helperText="Al menos 6 caracteres y una mayuscula"
                 FormHelperTextProps={{
                   sx: {
@@ -226,8 +245,8 @@ export const RegisterForm = ({ open, handleClose, data, handleChange, handleSubm
               <TextField
                 label="Confirme el Password"
                 name="pass"
-                value={data.pass}
-                onChange={handleChange}
+                value={pass}
+                onChange={(e) => dispatch(passwordUser(e.target.value))}
                 type={showPassword ? 'text' : 'password'}
                 margin="dense"
                 fullWidth
