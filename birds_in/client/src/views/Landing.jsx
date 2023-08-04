@@ -2,42 +2,20 @@ import * as React from 'react';
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Link } from 'react-router-dom'
-import { RegisterForm } from '../components/RegisterForm';
+import { useDispatch, useSelector } from 'react-redux'
+import { Boolean } from '../redux/slices/OpenClose';
+import { RegisterForm } from '../components/SingUpTabs/RegisterForm';
 
 
 export const Landing = () => {
   const theme = useTheme()
-  const [open, setOpen] = React.useState(false)
-  const [data, setData] = React.useState({
-    userName: '',
-    name: '',
-    pais: '',
-    email: '',
-    pass: ''
-  });
+  const dispatch = useDispatch()
+  const { open } = useSelector((state) => state.openCloseSlice)
+  
 
   const handleOpen = () => {
-    setOpen(true)
+    dispatch(Boolean(true))
   };
-
-  const handleClose = () => {
-    setOpen(false)
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log('DAtos del formulario', data)
-    handleClose()
-  };
-
 
   return (
     <React.Fragment>
@@ -55,7 +33,7 @@ export const Landing = () => {
             overflow: 'hidden', // Para que la imagen se ajuste al tamaño del Grid redondo
             backgroundColor: theme.palette.primary.dark, // Color de fondo del Grid redondo
             position: 'absolute', // Posición absoluta para que se coloque encima de los otros Grids
-            top: '40%', // Centrar verticalmente en la mitad de la pantalla
+            top: '38%', // Centrar verticalmente en la mitad de la pantalla
             left: '67%', // Centrar horizontalmente en la mitad de la pantalla
             transform: 'translate(-50%, -50%)', // Centrar exactamente en el centro
             zIndex: 1, // Elevar el nuevo Grid encima de los otros
@@ -136,19 +114,14 @@ export const Landing = () => {
               Fotografias por Moises Sterimberg
             </Typography>
           </Box>
-          <Box sx={{ '& button': { m: 1, my: 3 } }}>
+          <Box sx={{ '& button': { m: 1, my: 6 } }}>
             <Link to='/home'>
               <Button variant="outlined">Log In</Button>
             </Link>
             <Button variant="contained" onClick={handleOpen}>Registrarse</Button>
           </Box>
-          <RegisterForm
-            open={open}
-            handleOpen={handleOpen}
-            handleClose={handleClose}
-            data={data}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit} />
+        <RegisterForm
+        open={open}/>
         </Grid>
       </Grid>
     </React.Fragment>
