@@ -47,7 +47,7 @@ const theme = createTheme({
     },
     body2: {
       fontSize: '0.9rem',
-      fontWeight: 100,
+      fontWeight: 200,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
