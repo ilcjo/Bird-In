@@ -68,7 +68,7 @@ export const LoginForm = () => {
   const actionsStyles = {
     justifyContent: 'center', // Centrar el botón horizontalmente
     margin: '0px',
-    marginTop: '20px',
+    marginTop: '40px',
     gap: '20px',
     fontWeight: 500,
 
@@ -159,7 +159,15 @@ export const LoginForm = () => {
               ),
             }}
 
-            helperText="Al menos 6 caracteres y una mayuscula"
+            helperText={
+              <React.Fragment>
+                
+                {' '}
+                <Link to="/forgot-password" style={{ color: theme.palette.primary.main }}>
+                  Olvidó su contraseña?
+                </Link>
+              </React.Fragment>
+            }
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */

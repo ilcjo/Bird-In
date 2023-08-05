@@ -104,7 +104,7 @@ export const RegisterForm = () => {
         <Typography variant="body2" color="primary.main" sx={{  marginLeft: '8px', my:'10px' }}>
           Ya eres miembro ?
           <MuiLink component={Link} to="/home" color="primary.light" variant='h4' underline="none" >
-            LOGIN
+            Log In
           </MuiLink>
         </Typography>
       </div>
@@ -161,7 +161,7 @@ export const RegisterForm = () => {
             fullWidth
             select
             margin="normal"
-            helperText="Seleccione su Pais de Origen"
+            helperText="Seleccione Pais de Origen"
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
             }}

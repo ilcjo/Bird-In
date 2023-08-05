@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs, useTheme } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { RegisterForm } from './RegisterForm';
 import { useDispatch } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
@@ -19,17 +19,19 @@ export const Index = ({ open }) => {
     setSelectedTab(newValue);
   };
 
-  const dialogStyles = {
-    backgroundColor: 'rgba(204, 214, 204, 0.17)',
-
-    "& .MuiDialogTitle-root": {
-      variant: "h1",
-      color: theme.palette.primary.light, // Establecer el color del texto utilizando el theme
-
+  const tabTitleStyles = {
+  color: theme.palette.primary.light,
+    "&:hover": {
+      color: theme.palette.primary.main, // Cambiar el color del texto en el hover
+      cursor: 'pointer', // Cambiar el cursor a "mano" en el hover
     },
+   
+   
   };
+
+
   return (
-    <Dialog open={open} onClose={handleClose} sx={dialogStyles} PaperProps={{
+    <Dialog open={open} onClose={handleClose}  PaperProps={{
       sx: {
         padding: '9px',
         borderRadius: '15px',
@@ -40,6 +42,7 @@ export const Index = ({ open }) => {
       }
     }}
     >
+      
       <DialogTitle>
         <Tabs
           value={selectedTab}
@@ -49,9 +52,17 @@ export const Index = ({ open }) => {
           aria-label="tabsLogin"
           selectionfollowsfocu='true'
         >
-          <Tab label="Log In"></Tab>
-          <Tab label="Registrar"></Tab>
-          <Tab label="Recuperar Contrasena"></Tab>
+          <Tab label={
+            <Typography variant='h5' sx={tabTitleStyles}>
+              Log In
+            </Typography>
+          }></Tab>
+          <Tab label={ <Typography variant='h5'  sx={tabTitleStyles}>
+              Registrarse
+            </Typography>}></Tab>
+            <Tab label={ <Typography variant='h5'   sx={tabTitleStyles}>
+              Recuperar contrasena
+            </Typography>}></Tab>
         </Tabs>
       </DialogTitle>
       <DialogContent>

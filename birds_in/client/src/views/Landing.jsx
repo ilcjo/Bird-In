@@ -11,26 +11,27 @@ export const Landing = () => {
   const dispatch = useDispatch()
   const { open } = useSelector((state) => state.openCloseSlice)
 
-  const actionsStyles = {
+  // const actionsStyles = {
 
 
-    '& .MuiButton-contained': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-      fontWeight: 'bold', // Hacer el texto negrita
-      textTransform: 'none',
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-        color: theme.palette.primary.light, // Cambia el color del texto en hover
-        textTransform: 'none',
-      },
-    },
+  //   '& .MuiButton-contained': {
+  //     fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+  //     fontWeight: 'bold', // Hacer el texto negrita
+  //     textTransform: 'none',
+  //     '&:hover': {
+  //       backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+  //       color: theme.palette.primary.light, // Cambia el color del texto en hover
+  //       textTransform: 'none',
+  //     },
+  //   },
 
-    '& .MuiButton-outlined': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-      fontWeight: 'bold', // Hacer el texto negrita
-      textTransform: 'none',
-    },
-  };
+  //   '& .MuiButton-outlined': {
+  //     fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+  //     fontWeight: 'bold', // Hacer el texto negrita
+  //     textTransform: 'none',
+      
+  //   },
+  // };
   const handleOpen = () => {
     dispatch(Boolean(true))
   };
@@ -56,7 +57,6 @@ export const Landing = () => {
             transform: 'translate(-50%, -50%)', // Centrar exactamente en el centro
             zIndex: 1, // Elevar el nuevo Grid encima de los otros
             border: ' 10px solid #00381c',
-
           }}
         >
           {/* Aquí puedes poner la URL de la imagen */}
@@ -149,7 +149,7 @@ export const Landing = () => {
               textTransform: 'none',
             }
           }}>
-            <Button variant="contained" onClick={handleOpen} size="medium">Entrar</Button>
+            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5}}>Comenzar</Button>
           </Box>
           <Index
             open={open} />
