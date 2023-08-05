@@ -9,24 +9,27 @@ import {
   MenuItem,
   InputAdornment,
   IconButton,
+  Link as MuiLink,
 } from '@mui/material';
 
 import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { emailUser, nameUser, paisUser, passwordUser, resetForm } from '../../redux/slices/Register'
+import { Boolean } from '../../redux/slices/OpenClose';
+import { Link } from 'react-router-dom';
 
-export const RegisterForm = ({ handleClose }) => {
+export const RegisterForm = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = React.useState('')
   const { name, email, pais, pass } = useSelector((state) => state.registerSlice)
 
-  // const handleClose = () => {
-  //   dispatch(Boolean(false))
-  //   dispatch(resetForm())
-  // };
+  const handleClose = () => {
+    dispatch(Boolean(false))
+    dispatch(resetForm())
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -45,19 +48,18 @@ export const RegisterForm = ({ handleClose }) => {
     color: theme.palette.primary.light,
     backgroundColor: 'rgba(204,214,204,0.17)',
     borderRadius: '9px',
-    height: '40px',
+    height: '50px',
 
-
+  
     '& .MuiInputBase-input': {
       padding: '0px',
       paddingLeft: '10px',
-
     },
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: 'none',
     },
     '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: theme.palette.primary.dark, // Color del borde en el hover
+      borderColor: theme.palette.primary.main, // Color del borde en el hover
       backgroundColor: 'rgba(0,56,28,0.22) ',
     },
     '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
@@ -67,45 +69,44 @@ export const RegisterForm = ({ handleClose }) => {
     },
 
   };
-  const selectStyles = {
-    '& .MuiSelect-select': {
-      // Estilos para el select en el TextField
-      color: 'red', // Cambiar color del texto
-    },
-    '& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper': {
-      // Estilos para el Paper del Menu
-      backgroundColor: 'blue', // Cambiar color de fondo del Paper
-      color: 'white', // Cambiar color del texto en el Paper
-    },
-  };
+ 
   const actionsStyles = {
     justifyContent: 'center', // Centrar el botón horizontalmente
     margin: '0px',
     marginTop: '20px',
     gap: '20px',
-    width: '100%',
-
+    fontWeight: 500,
+    
     '& .MuiButton-contained': {
+      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontWeight:'bold', // Hacer el texto negrita
+      textTransform: 'none',
       '&:hover': {
-        backgroundColor: theme.palette.primary.light, // Cambia el color de fondo en hover
-        color: theme.palette.primary.dark, // Cambia el color del texto en hover
-      },
+        backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+        color: theme.palette.primary.light, // Cambia el color del texto en hover
+        textTransform: 'none',
+      },  
     },
 
+    '& .MuiButton-outlined': {
+      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontWeight: 'bold', // Hacer el texto negrita
+      textTransform: 'none',
+    },
   };
 
   return (
-    <Box >
+    <Box sx={{ margin:'10px'}}>
       <div>
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
           Crear Cuenta
         </Typography>
-        {/* <Typography variant="body2" color="primary.main" sx={{ marginLeft: '8px' }}>
+        <Typography variant="body2" color="primary.main" sx={{  marginLeft: '8px', my:'10px' }}>
           Ya eres miembro ?
           <MuiLink component={Link} to="/home" color="primary.light" variant='h4' underline="none" >
-            LOGIN
+            Log In
           </MuiLink>
-        </Typography> */}
+        </Typography>
       </div>
       <Grid container component={Box}  >
         <form onSubmit={handleSubmit} >
@@ -131,7 +132,7 @@ export const RegisterForm = ({ handleClose }) => {
             type="email"
             value={email}
             onChange={(e) => dispatch(emailUser(e.target.value))}
-            margin="none"
+            margin="normal"
             fullWidth
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
@@ -160,20 +161,13 @@ export const RegisterForm = ({ handleClose }) => {
             fullWidth
             select
             margin="normal"
-            helperText="Seleccione su Pais de Origen"
+            helperText="Seleccione Pais de Origen"
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
             }}
             InputProps={{
               sx: inputStyles, // Establece el estilo del input
             }}
-            SelectProps={{
-              classes: {
-                select: selectStyles['& .MuiSelect-select'], // Aplica la clase de estilos para el componente Select
-              },
-            }}
-
-
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
@@ -228,7 +222,7 @@ export const RegisterForm = ({ handleClose }) => {
             }}
           />
           <TextField
-            label="Confirme el Password"
+            label="Confirmar Password"
             name="pass"
             value={pass}
             onChange={(e) => dispatch(passwordUser(e.target.value))}

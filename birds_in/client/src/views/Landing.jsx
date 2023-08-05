@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Boolean } from '../redux/slices/OpenClose';
 import { Index } from '../components/SingUpTabs/Index';
@@ -11,8 +10,28 @@ export const Landing = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { open } = useSelector((state) => state.openCloseSlice)
-  
 
+  // const actionsStyles = {
+
+
+  //   '& .MuiButton-contained': {
+  //     fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+  //     fontWeight: 'bold', // Hacer el texto negrita
+  //     textTransform: 'none',
+  //     '&:hover': {
+  //       backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+  //       color: theme.palette.primary.light, // Cambia el color del texto en hover
+  //       textTransform: 'none',
+  //     },
+  //   },
+
+  //   '& .MuiButton-outlined': {
+  //     fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+  //     fontWeight: 'bold', // Hacer el texto negrita
+  //     textTransform: 'none',
+      
+  //   },
+  // };
   const handleOpen = () => {
     dispatch(Boolean(true))
   };
@@ -38,7 +57,6 @@ export const Landing = () => {
             transform: 'translate(-50%, -50%)', // Centrar exactamente en el centro
             zIndex: 1, // Elevar el nuevo Grid encima de los otros
             border: ' 10px solid #00381c',
-
           }}
         >
           {/* Aquí puedes poner la URL de la imagen */}
@@ -114,14 +132,27 @@ export const Landing = () => {
               Fotografias por Moises Sterimberg
             </Typography>
           </Box>
-          <Box sx={{ '& button': { m: 1, my: 6 } }}>
-            <Link to='/home'>
-              <Button variant="outlined">Log In</Button>
-            </Link>
-            <Button variant="contained" onClick={handleOpen}>Registrarse</Button>
+          <Box sx={{
+            '& .MuiButton-contained': {
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: theme.palette.primary.light,
+                color: theme.palette.primary.dark,
+                textTransform: 'none',
+              }
+            },
+            '& .MuiButton-outlined': {
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              textTransform: 'none',
+            }
+          }}>
+            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5}}>Comenzar</Button>
           </Box>
-        <Index 
-        open={open}/>
+          <Index
+            open={open} />
         </Grid>
       </Grid>
     </React.Fragment>

@@ -1,8 +1,11 @@
 import * as React from 'react'
-import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs, useTheme } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { RegisterForm } from './RegisterForm';
 import { useDispatch } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
+import { LoginForm } from './LoginForm';
+
+
 
 export const Index = ({ open }) => {
   const theme = useTheme()
@@ -11,23 +14,35 @@ export const Index = ({ open }) => {
 
   const handleClose = () => {
     dispatch(Boolean(false))
-    dispatch(resetForm())
   };
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
 
-   const dialogStyles = {
-    backgroundColor: 'rgba(204, 214, 204, 0.17)',
-
-    "& .MuiDialogTitle-root": {
-      variant: "h1",
-      color: theme.palette.primary.light, // Establecer el color del texto utilizando el theme
-
+  const tabTitleStyles = {
+  color: theme.palette.primary.light,
+    "&:hover": {
+      color: theme.palette.primary.main, // Cambiar el color del texto en el hover
+      cursor: 'pointer', // Cambiar el cursor a "mano" en el hover
     },
+   
+   
   };
+
+
   return (
-    <Dialog open={open} onClose={handleClose}  sx={dialogStyles} PaperProps={{ sx: { padding: '11px', borderRadius: '15px', height: '100%' } }} >
+    <Dialog open={open} onClose={handleClose}  PaperProps={{
+      sx: {
+        padding: '9px',
+        borderRadius: '15px',
+        minHeight: '90%',
+        maxHeight: '90%',
+        minWidth: '40%',
+        maxWidth: '40%'
+      }
+    }}
+    >
+      
       <DialogTitle>
         <Tabs
           value={selectedTab}
@@ -37,17 +52,32 @@ export const Index = ({ open }) => {
           aria-label="tabsLogin"
           selectionfollowsfocu='true'
         >
-          <Tab label="Registrar"></Tab>
-          <Tab label="Login"></Tab>
-          <Tab label="Olvido Contrasena"></Tab>
+          <Tab label={
+            <Typography variant='h5' sx={tabTitleStyles}>
+              Log In
+            </Typography>
+          }></Tab>
+          <Tab label={ <Typography variant='h5'  sx={tabTitleStyles}>
+              Registrarse
+            </Typography>}></Tab>
+            <Tab label={ <Typography variant='h5'   sx={tabTitleStyles}>
+              Recuperar contrasena
+            </Typography>}></Tab>
         </Tabs>
       </DialogTitle>
       <DialogContent>
         {selectedTab === 0 && (
           <Box>
-            <RegisterForm 
-            open={open}
-            onClose={handleClose}
+            <LoginForm
+              open={open}
+              />
+          </Box>
+        )}
+        {selectedTab === 1 && (
+          <Box>
+            <RegisterForm
+              open={open}
+              
             />
           </Box>
         )}

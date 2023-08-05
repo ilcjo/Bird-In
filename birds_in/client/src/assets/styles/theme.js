@@ -35,9 +35,14 @@ const theme = createTheme({
       fontWeight: 400,
     },
     h4: {
-      fontSize: '1 rem',
+      fontSize: '1rem',
       fontWeight: 600,
       marginLeft: '6px'
+    },
+    h5: {
+      fontSize: '1.2rem',
+      fontWeight: 600,
+      
     },
     body1: {
       fontSize: '1.3rem',
@@ -47,7 +52,7 @@ const theme = createTheme({
     },
     body2: {
       fontSize: '0.9rem',
-      fontWeight: 100,
+      fontWeight: 200,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
