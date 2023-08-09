@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { Sequelize } from 'sequelize'
-import fs from 'fs';
-import path from 'path';
+  // import fs from 'fs';
+  // import path from 'path';
 const {
     DB_USER, 
     DB_PASSWORD, 

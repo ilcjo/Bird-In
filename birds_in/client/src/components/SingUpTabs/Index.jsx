@@ -4,6 +4,7 @@ import { RegisterForm } from './RegisterForm';
 import { useDispatch } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
 import { LoginForm } from './LoginForm';
+import { ForgotPass } from './ForgotPass';
 
 
 
@@ -76,6 +77,14 @@ export const Index = ({ open }) => {
         {selectedTab === 1 && (
           <Box>
             <RegisterForm
+              open={open}
+              
+            />
+          </Box>
+        )}
+        {selectedTab === 2 && (
+          <Box>
+            <ForgotPass
               open={open}
               
             />
