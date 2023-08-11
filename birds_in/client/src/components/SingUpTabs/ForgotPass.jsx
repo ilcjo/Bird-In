@@ -32,8 +32,6 @@ export const ForgotPass = ({open}) => {
     backgroundColor: 'rgba(204,214,204,0.17)',
     borderRadius: '9px',
     height: '50px',
-
-
     '& .MuiInputBase-input': {
       padding: '0px',
       paddingLeft: '10px',
@@ -81,12 +79,15 @@ export const ForgotPass = ({open}) => {
   return (
     <Box sx={{ margin: '10px' }}>
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
-          Restablecer Contraseña
+        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', mb: 2}}>
+            ¿Olvidaste tu contrasena?
+        </Typography>
+        <Typography variant="body1" color='primary.main' sx={{ marginLeft: '2px', mb:2}}>
+            No te preocupes ! Ingresa tu email y te enviaremos las intrucciones para recuperarla.
         </Typography>
 
       </div>
-      <Grid container component={Box}  >
+     
         <form onSubmit={handleLogin} >
           <TextField
             label="E-mail"
@@ -103,16 +104,7 @@ export const ForgotPass = ({open}) => {
             InputProps={{
               sx: inputStyles, // Establece el estilo del input
             }}
-            helperText=" Ejemplo: nombre@mail.com"
-            FormHelperTextProps={{
-              sx: {
-                /* Agrega los estilos que desees para el texto del helper text */
-                /* Por ejemplo, para agregar un margen izquierdo: */
-                fontSize: '1rem',
-                color: theme.palette.primary.light,
-                /* Agrega otros estilos que desees... */
-              },
-            }}
+            
           />
 
        
@@ -123,7 +115,7 @@ export const ForgotPass = ({open}) => {
             Recuperar Contraseña
           </Button>
         </Grid>
-      </Grid>
+      
     </Box>
   )
 }

@@ -55,8 +55,7 @@ export const Landing = () => {
             top: '38%', // Centrar verticalmente en la mitad de la pantalla
             left: '67%', // Centrar horizontalmente en la mitad de la pantalla
             transform: 'translate(-50%, -50%)', // Centrar exactamente en el centro
-            zIndex: 1, // Elevar el nuevo Grid encima de los otros
-            border: ' 10px solid #00381c',
+            zIndex: 1, // Elevar el nuevo Grid encima de los otros 
           }}
         >
           {/* Aquí puedes poner la URL de la imagen */}

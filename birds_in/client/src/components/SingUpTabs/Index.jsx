@@ -25,9 +25,7 @@ export const Index = ({ open }) => {
     "&:hover": {
       color: theme.palette.primary.main, // Cambiar el color del texto en el hover
       cursor: 'pointer', // Cambiar el cursor a "mano" en el hover
-    },
-   
-   
+    },  
   };
 
 
