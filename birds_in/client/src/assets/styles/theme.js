@@ -45,13 +45,13 @@ const theme = createTheme({
       
     },
     body1: {
-      fontSize: '1.3rem',
+      fontSize: '1.2rem',
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
     body2: {
-      fontSize: '0.9rem',
+      fontSize: '1 rem',
       fontWeight: 200,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,

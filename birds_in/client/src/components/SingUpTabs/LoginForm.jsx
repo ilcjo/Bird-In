@@ -94,11 +94,11 @@ export const LoginForm = () => {
     <Box sx={{ margin: '10px' }}>
       <div>
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
-          Ingresar
+          Acceder a tu cuenta
         </Typography>
         <Typography variant="body2" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Aun no eres miembro ?
-          <MuiLink component={Link} to="/home" color="primary.light" variant='h4' underline="none" >
+          <MuiLink component={Link} to="/home" color="primary.light"  underline="none"  sx={{ marginLeft:'5px'}}>
             Registrarse
           </MuiLink>
         </Typography>
