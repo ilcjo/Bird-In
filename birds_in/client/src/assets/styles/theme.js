@@ -9,8 +9,8 @@ const theme = createTheme({
     primary: {
       light: '#ccd6cc',
       main: '#C1C700',
-      dark: '#00381C',
-      contrastText: '#340015',
+      dark: '#004E37',
+      contrastText: '#004E37',
     },
     secondary: {
       light: '#ff7961',
@@ -91,7 +91,14 @@ const theme = createTheme({
     // },
   },
   
-  background: '#ccd6cc', // Cambia "#00381c" por el color de fondo que desees
+  global: {
+    body: {
+      margin: 0, // Establece el margen del cuerpo a 0
+      padding: 0,
+      
+    },
+  },
+
 
 });
 

@@ -9,17 +9,15 @@ import theme from './assets/styles/theme.js';
 import { CssBaseline } from '@mui/material';
 
 
-
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-     <ThemeProvider theme={theme}>
-    <Provider store={store}>
-      <BrowserRouter>
-      <CssBaseline/>
-        <App />
-      </BrowserRouter>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <CssBaseline />     
+            <App />  
+        </BrowserRouter>
+      </Provider>
     </ThemeProvider>
   </React.StrictMode>,
 )
