@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const MainAves = () => {
+export const Aves = () => {
   return (
-    <div>MainAves</div>
+    <div>Aves</div>
   )
 }
 

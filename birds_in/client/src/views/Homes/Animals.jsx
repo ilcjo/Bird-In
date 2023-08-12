@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const MainAnimals = () => {
+export const Animals = () => {
   return (
     <div>MainAnimals
       

@@ -1,7 +1,8 @@
 import React from 'react'
 
-export const MainLandsCapes = () => {
+export const LandsCapes = () => {
   return (
-    <div>MainLandsCapes</div>
+   <div>landscape</div>
   )
+
 }
