@@ -12,6 +12,7 @@ import {
   Link as MuiLink,
 } from '@mui/material';
 
+
 import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -96,7 +97,7 @@ export const RegisterForm = () => {
   };
 
   return (
-    <Box sx={{ margin:'10px'}}>
+    <Box sx={{ margin:'10px'}} >
       <div>
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
           Crear Cuenta
@@ -109,7 +110,7 @@ export const RegisterForm = () => {
         </Typography>
       </div>
       <Grid container component={Box}  >
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit}  >
           <TextField
             label="Nombre Completo"
             name="name"

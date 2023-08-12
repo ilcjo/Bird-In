@@ -1,36 +1,16 @@
-import React from 'react';
-import { Scrollbars } from 'react-scrollbars-custom';
+import styled from 'styled-components';
 
-export const CustomeScrollBar = () => {
-  return (
-    <Scrollbars
-      style={{ width: 300, height: 200 }} // Establece el ancho y alto del scrollbar
-      thumbMinSize={30} // Tamaño mínimo del thumb (barrón del scrollbar)
-      renderThumbVertical={({ style, ...props }) => (
-        <div
-          {...props}
-          style={{
-            ...style,
-            backgroundColor: '#C1C700', // Color del thumb (barrón del scrollbar)
-            borderRadius: 8, // Radio de esquinas del thumb
-          }}
-        />
-      )}
-      renderTrackVertical={({ style, ...props }) => (
-        <div
-          {...props}
-          style={{
-            ...style,
-            backgroundColor: '#ccd6cc', // Color del track (fondo del scrollbar)
-            borderRadius: 8, // Radio de esquinas del track
-          }}
-        />
-      )}
-    >
-      {/* Aquí coloca el contenido que se mostrará con el scrollbar */}
-      <div style={{ height: 500 }}>
-        <p>Contenido del scrollbar personalizado.</p>
-      </div>
-    </Scrollbars>
-  );
-};
+export const CustomeScrollBar =  styled.div`
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #da17d0;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+`;
