@@ -1,7 +1,7 @@
 import React from 'react'
 
-export const MainFlowers = () => {
+export const Flowers = () => {
   return (
-    <div>MainFlowers</div>
+    <did>Flowers</did>
   )
 }

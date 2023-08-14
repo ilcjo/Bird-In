@@ -1,11 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
 import { Landing } from './views/Landing'
-import { Options } from './views/Options'
 import { Index } from './components/SingUpTabs/Index'
-import { MainAves } from './views/Mains/MainAves'
-import { MainAnimals } from './views/Mains/MainAnimals'
-import { MainFlowers } from './views/Mains/MainFlowers'
-import { MainLandsCapes } from './views/Mains/MainLandsCapes'
+import { Animals } from './views/Homes/Animals'
+import { Flowers } from './views/Homes/Flowers'
+import { LandsCapes } from './views/Homes/LandsCapes'
+import { Home } from './views/Home'
+import { Aves } from './views/Homes/Aves'
+
+
 
 
 function App() {
@@ -14,11 +16,11 @@ function App() {
     <>
       <Routes>
         <Route path='/' element={<Landing />} />
-        <Route path='/menu' element={<Options />} />
-        <Route path='/aves' element={<MainAves />} />
-        <Route path='/animales' element={<MainAnimals />} />
-        <Route path='/flores' element={<MainFlowers />} />
-        <Route path='/paisajes' element={<MainLandsCapes />} />
+        <Route path='/menu' element={<Home />} />
+        <Route path='/aves' element={<Aves />} />
+        <Route path='/animales' element={<Animals />} />
+        <Route path='/flores' element={<Flowers />} />
+        <Route path='/paisajes' element={<LandsCapes />} />
         <Route path='/tab' element={<Index />}></Route>
       </Routes>
     </>
