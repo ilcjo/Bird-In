@@ -1,8 +1,8 @@
-import express from 'express'
-import morgan from 'morgan'
-    // import mainRoutes from './routes/index'
+const express = require('express');
+const morgan = require('morgan');
+// const mainRoutes = require('./routes/index');
 
-import './db/db.js'
+require('./db/db.js');
 
 const server = express();
 const serverName = 'APIBird';
@@ -22,4 +22,5 @@ server.use((err, req, res, next) => {
   res.status(status).send(message);
 });
 
-export default server;
+module.exports = server;
+
