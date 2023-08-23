@@ -1,62 +1,68 @@
-import 'dotenv/config';
-import { Sequelize } from 'sequelize'
-  // import fs from 'fs';
-  // import path from 'path';
+require('dotenv').config();
+
+const { Sequelize } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
+
 const {
-    DB_USER, 
-    DB_PASSWORD, 
-    DB_HOST, 
-    DB_NAME, 
-    DB_PORT
+  DB_USER,
+  DB_PASSWORD,
+  DB_HOST,
+  DB_NAME,
+  DB_PORT
 } = process.env
 
-const db = new Sequelize (`mariadb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,{
-    logging: console.log,
-    define: {
-        freezeTableName: true
-    }
+const db = new Sequelize(`mariadb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
+  logging: console.log,
+  dialectOptions: {
+    connectTimeout: 30000, // Aumenta el tiempo de conexión a 30 segundos (30000 ms)
+  },
+  define: {
+    freezeTableName: true
+  }
 });
 // Prueba la conexión a la base de datos
 (async () => {
-    try {
-      await db.authenticate();
-      console.log('Conexión a la base de datos establecida correctamente.');
-  
-    //   // Ejemplo de consulta de prueba
-    //   const birds = await db.query('SELECT * FROM tempo_info', { type: Sequelize.QueryTypes.SELECT });
-    //   console.log(birds); // Deberías ver los registros de la tabla "users" si la consulta fue exitosa.
-  
-    } catch (error) {
-      console.error('Error al conectar a la base de datos:', error);
-    }
-  })();
-  
+  try {
+    await db.authenticate();
+    console.log('Conexión a la base de datos establecida correctamente.');
 
-// const basename = path.basename(new URL(import.meta.url).pathname);
+    // Ejemplo de consulta de prueba
+    // const birds = await db.query('SELECT * FROM tempo_info', { type: Sequelize.QueryTypes.SELECT });
+    // console.log(birds); // Deberías ver los registros de la tabla "users" si la consulta fue exitosa.
 
-// const modelDefiners = [];
+  } catch (error) {
+    console.error('Error al conectar a la base de datos:', error);
+  }
+})();
 
-// // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
-// fs.readdirSync(path.join(new URL(import.meta.url).pathname, 'models'))
-//     .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
-//     .forEach(async (file) => {
-//         const model = (await import(path.join(new URL(import.meta.url).pathname, 'models', file))).default;
-//         modelDefiners.push(model);
-//     });
+const basename = path.basename(__filename);
+const modelDefiners = [];
 
-// // Injectamos la conexion (sequelize) a todos los modelos
-// modelDefiners.forEach(model => model(db));
-// // Capitalizamos los nombres de los modelos ie: product => Product
-// let entries = Object.entries(db.models);
-// let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
-// db.models = Object.fromEntries(capsEntries);
+fs.readdirSync(path.join(__dirname, '..', 'models'))
+  .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    modelDefiners.push(require(path.join(__dirname, '..', 'models', file)));
+  });
 
-// // En sequelize.models están todos los modelos importados como propiedades
-// // Para relacionarlos hacemos un destructuring
-// const { } = db.models;
+// Injectamos la conexión (sequelize) a todos los modelos
+modelDefiners.forEach(model => model(db));
 
+// Capitalizamos los nombres de los modelos ie: product => Product
+let entries = Object.entries(db.models);
+let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
+db.models = Object.fromEntries(capsEntries)
 
+// En sequelize.models están todos los modelos importados como propiedades
+// Para relacionarlos hacemos un destructuring
+const { Aves, Familias, Grupos, Imagenes_aves, Nombres_comunes, Paises, Urls_externas, Usuarios } = db.models;
+Aves.hasMany(Familias)
+Aves.hasMany(Grupos)
+Aves.belongsToMany(Paises(tro))
 
 
-export {
-     db as conn }
+
+module.exports = {
+  ...db.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
+  conn: db,     // para importart la conexión { conn } = require('./db.js');
+}

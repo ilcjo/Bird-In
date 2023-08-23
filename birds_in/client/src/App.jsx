@@ -8,8 +8,6 @@ import { Home } from './views/Home'
 import { Aves } from './views/Homes/Aves'
 
 
-
-
 function App() {
 
   return (
