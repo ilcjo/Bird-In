@@ -8,7 +8,8 @@ module.exports = (sequelize) => {
             primaryKey: true,
             allowNull: false,
             autoIncrement: true
-        }, url: {
+        }, 
+        url: {
             type: DataTypes.STRING,
             allowNull: true
         },
