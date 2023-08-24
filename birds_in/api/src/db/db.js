@@ -55,12 +55,19 @@ db.models = Object.fromEntries(capsEntries)
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Aves, Familias, Grupos, Imagenes_aves, Nombres_comunes, Paises, Urls_externas, Usuarios } = db.models;
-Aves.hasMany(Familias)
-Aves.hasMany(Grupos)
-Aves.belongsToMany(Paises(tro))
-
-
+const { Aves, Familias, Grupos, Imagenes_aves, Nombres_comunes, Paises, Urls_externas } = db.models;
+// UNO A UNO
+Aves.belongsTo(Familias, { foreignKey: 'familias_id_familia' })
+Familias.hasOne(Aves, { foreignKey: 'familias_id_familia' })
+Aves.hasOne(Grupos, { foreignKey: 'grupos_id_grupo' })
+Grupos.belongsTo(Aves, { foreignKey: 'grupos_id_grupo' })
+// UNO A MUCHOS
+Aves.hasMany(Imagenes_aves, { foreignKey: 'aves_id_ave' })
+Aves.hasMany(Nombres_comunes, { foreignKey: 'aves_id_ave' })
+Aves.hasMany(Urls_externas, { foreignKey: 'aves_id_ave' })
+// MUCHOS A MUCHOS
+Aves.belongsToMany(Paises, { through: 'aves_has_paises', foreignKey:'aves_id_ave' })
+Paises.belongsToMany(Aves, { through: 'aves_has_paises', foreignKey: 'paises_id_pais'})
 
 module.exports = {
   ...db.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

@@ -7,6 +7,10 @@ import { ThemeProvider } from '@emotion/react';
 import App from './App.jsx';
 import theme from './assets/styles/theme.js';
 import { CssBaseline } from '@mui/material';
+import axios from 'axios';
+
+
+axios.defaults.baseURL = 'http://localhost:3001/';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -14,8 +18,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <BrowserRouter>
-          <CssBaseline />     
-            <App />  
+          <CssBaseline />
+          <App />
         </BrowserRouter>
       </Provider>
     </ThemeProvider>
