@@ -1,5 +1,6 @@
+const { Op } = require("sequelize");
 const { fetchBirds, fetchFilteredInfo } = require("../../controllers/birds/birdsController");
-const { Aves } = require('../../db/db')
+const { Aves, Familias, Grupos, Paises } = require('../../db/db')
 
 const getAllBirds = async (req, res) => {
    try {
@@ -12,33 +13,57 @@ const getAllBirds = async (req, res) => {
 
 const getFilterInfo = async (req, res) => {
 
-   const { familiaId, grupo, nombreCientifico, nombreIngles, pais } = req.query;
+   const { familia, grupo, nombreCientifico, nombreIngles, pais } = req.query;
 
-   console.log(familiaId)
    try {
 
       const whereClause = {};
-      console.log(whereClause)
-
-      if (familiaId) {
-         whereClause.familias_id_familia = familiaId;
+      if (familia) {
+         whereClause.familias_id_familia = familia;
       }
       if (grupo) {
-         whereClause.nombre_grupo = grupo;
+         whereClause.grupos_id_grupo = grupo;
       }
       if (nombreCientifico) {
-         whereClause.nombre_cientifico = nombreCientifico;
+         whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
       }
       if (nombreIngles) {
-         whereClause.nombre_ingles = nombreIngles;
+         whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
       }
+
+      const includeArr = [
+         { model: Grupos, as: 'grupo', attributes: ['nombre'] },
+         { model: Familias, as: 'familia', attributes: ['nombre'] },
+         {
+            model: Paises,
+            as: 'paises', // El mismo alias que en la definición de la asociación
+            attributes: ['nombre'],
+            through: {
+               attributes: []
+            }
+         }
+      ];
+
       if (pais) {
-         // Aplicar filtro en relación a los países
+         includeArr.push({
+            model: Paises,
+            as: 'paises',
+            attributes: ['nombre'],
+            through: {
+               attributes: [],
+            },
+            where: { id_pais: pais }
+         });
       }
 
       const avesFiltradas = await Aves.findAll({
          where: whereClause,
+         include: includeArr
       });
+      
+      if (avesFiltradas.length === 0) {
+         return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
+      }
 
       res.json(avesFiltradas);
    } catch (error) {

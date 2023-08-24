@@ -59,8 +59,8 @@ const { Aves, Familias, Grupos, Imagenes_aves, Nombres_comunes, Paises, Urls_ext
 // UNO A UNO
 Aves.belongsTo(Familias, { foreignKey: 'familias_id_familia' })
 Familias.hasOne(Aves, { foreignKey: 'familias_id_familia' })
-Aves.hasOne(Grupos, { foreignKey: 'grupos_id_grupo' })
-Grupos.belongsTo(Aves, { foreignKey: 'grupos_id_grupo' })
+Aves.belongsTo(Grupos, { foreignKey: 'grupos_id_grupo' })
+Grupos.hasOne(Aves, { foreignKey: 'grupos_id_grupo' })
 // UNO A MUCHOS
 Aves.hasMany(Imagenes_aves, { foreignKey: 'aves_id_ave' })
 Aves.hasMany(Nombres_comunes, { foreignKey: 'aves_id_ave' })
