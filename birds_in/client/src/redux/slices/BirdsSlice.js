@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  infoBirds: []
+  infoBirds: [],
+  currentPage: 1,
 };
 
 export const birdSlice = createSlice({
@@ -12,8 +13,11 @@ export const birdSlice = createSlice({
     fetchInfo: (state, action) => {
       state.infoBirds = action.payload
     },
+    loadMoreDataSuccess: (state, action) => {
+      state.infoBirds = [...state.infoBirds, ...action.payload];
+    }
   },
 });
 
-export const { fetchInfo } = birdSlice.actions;
+export const { fetchInfo, loadMoreDataSuccess } = birdSlice.actions;
 export default birdSlice.reducer;

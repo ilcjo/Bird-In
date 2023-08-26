@@ -11,17 +11,7 @@ const fetchBirds = async () => {
     return fetchInfo
 }
 
-const fetchFilteredInfo = async (whereClause) => {
-    console.log('fetchFilteredInfo function called')
-    const filter = await Aves.findAll({
-        where: whereClause,
-    });
-    console.log(filter)
-    return filter
-}
-
 
 module.exports = {
     fetchBirds,
-    fetchFilteredInfo
 }

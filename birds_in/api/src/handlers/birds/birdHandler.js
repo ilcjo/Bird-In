@@ -1,6 +1,9 @@
 const { Op } = require("sequelize");
-const { fetchBirds, fetchFilteredInfo } = require("../../controllers/birds/birdsController");
+const { fetchBirds } = require("../../controllers/birds/birdsController");
 const { Aves, Familias, Grupos, Paises } = require('../../db/db')
+
+const DEFAULT_PER_PAGE = 9;
+const DEFAULT_PAGE = 1;
 
 const getAllBirds = async (req, res) => {
    try {
@@ -13,7 +16,7 @@ const getAllBirds = async (req, res) => {
 
 const getFilterInfo = async (req, res) => {
 
-   const { familia, grupo, nombreCientifico, nombreIngles, pais } = req.query;
+   const { familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage } = req.query;
 
    try {
 
@@ -55,12 +58,17 @@ const getFilterInfo = async (req, res) => {
             where: { id_pais: pais }
          });
       }
+      const pageConvert = Number(page) || DEFAULT_PAGE;
+      const perPageConvert = Number(perPage) || DEFAULT_PER_PAGE;
+      const offset = (pageConvert - 1) * perPageConvert;
 
       const avesFiltradas = await Aves.findAll({
          where: whereClause,
-         include: includeArr
+         include: includeArr,
+         limit: perPageConvert,
+         offset: offset,
       });
-      
+
       if (avesFiltradas.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }

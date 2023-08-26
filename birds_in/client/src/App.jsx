@@ -4,7 +4,7 @@ import { Index } from './components/SingUpTabs/Index'
 import { Animals } from './views/Homes/Animals'
 import { Flowers } from './views/Homes/Flowers'
 import { LandsCapes } from './views/Homes/LandsCapes'
-import { Home } from './views/Home'
+import { Home } from './views/HomeMenu'
 import { Aves } from './views/Homes/Aves'
 
 
