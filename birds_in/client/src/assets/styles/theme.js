@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { alpha, createTheme } from '@mui/material/styles';
 import '@fontsource/crimson-pro';
 import '@fontsource/arsenal';
 
@@ -13,9 +13,9 @@ const theme = createTheme({
       contrastText: '#004E37',
     },
     secondary: {
-      light: '#ff7961',
+      light: alpha('#CCD6CC', 0.17),
       main: '#f44336',
-      dark: '#ba000d',
+      dark: '#004E4E',
       contrastText: '#000',
     },
   },

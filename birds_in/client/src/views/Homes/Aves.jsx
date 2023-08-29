@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Grid, useTheme } from '@mui/material'
 import { FloatMenu } from '../../components/Menus/FloatMenu'
+import { getOptionsData } from '../../redux/actions/fetchOptions'
 
 export const Aves = () => {
   const theme = useTheme()
@@ -22,6 +23,7 @@ export const Aves = () => {
 
   React.useEffect(() => {
     dispatch(getInfoBirds());
+    dispatch(getOptionsData());
   }, [dispatch]);
 
   return (
@@ -30,7 +32,7 @@ export const Aves = () => {
       <Grid container direction="column" alignItems="center"
         sx={{
           padding: '40px',
-          backgroundColor: theme.palette.primary.light,
+          backgroundColor: theme.palette.secondary.light,
           minHeight: '100vh'
         }}>
         <Menu />
