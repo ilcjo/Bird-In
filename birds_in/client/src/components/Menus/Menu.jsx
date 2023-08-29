@@ -10,7 +10,7 @@ export const Menu = () => {
 
     return (
         <Grid container spacing={2}>
-            <Grid item>
+            <Grid item sx={{ marginLeft: '50px'}}>
                 <Button
                     color="primary" // Cambiar el color a "primary"
                     size="large"

@@ -6,7 +6,7 @@ export const Header = () => {
   return (
     <Grid container component={Box} sx={{
       height: '40vh',
-      width: '100vw',
+      width: '100%',
       position: 'relative',
       backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fondo semitransparente para mejorar la legibilidad
     }}>

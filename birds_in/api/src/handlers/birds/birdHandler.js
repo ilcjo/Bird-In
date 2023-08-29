@@ -1,5 +1,7 @@
-const { fetchBirds, fetchFilteredInfo } = require("../../controllers/birds/birdsController");
-const { Aves } = require('../../db/db')
+const { Op } = require("sequelize");
+const { fetchBirds, fetchOptions, filterOptions, fetchFilterBirds } = require("../../controllers/birds/birdsController");
+const { Aves, Familias, Grupos, Paises } = require('../../db/db')
+
 
 const getAllBirds = async (req, res) => {
    try {
@@ -12,44 +14,46 @@ const getAllBirds = async (req, res) => {
 
 const getFilterInfo = async (req, res) => {
 
-   const { familiaId, grupo, nombreCientifico, nombreIngles, pais } = req.query;
+   const { familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage } = req.query;
 
-   console.log(familiaId)
    try {
+      const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage)
+      console.log(allData)
+      if (allData.length === 0) {
+         return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
+      }
+      res.json(allData);
 
-      const whereClause = {};
-      console.log(whereClause)
-
-      if (familiaId) {
-         whereClause.familias_id_familia = familiaId;
-      }
-      if (grupo) {
-         whereClause.nombre_grupo = grupo;
-      }
-      if (nombreCientifico) {
-         whereClause.nombre_cientifico = nombreCientifico;
-      }
-      if (nombreIngles) {
-         whereClause.nombre_ingles = nombreIngles;
-      }
-      if (pais) {
-         // Aplicar filtro en relación a los países
-      }
-
-      const avesFiltradas = await Aves.findAll({
-         where: whereClause,
-      });
-
-      res.json(avesFiltradas);
    } catch (error) {
       console.error(error);
       res.status(500).send('Error en el servidor');
    }
 
+};
+
+const selectOptions = async (req, res) => {
+   try {
+      const getAllOptions = await fetchOptions()
+      return res.status(200).json(getAllOptions)
+   } catch (error) {
+      res.status(500).send({ error: error.message })
+   }
 }
 
+const getFilterOptions = async (req, res,) => {
+   const { familia, grupo, nombreCientifico, nombreIngles, pais } = req.query;
+   try {
+      const newOptions = await filterOptions(familia, grupo, nombreCientifico, nombreIngles, pais)
+      return res.status(200).json(newOptions)
+   } catch (error) {
+      res.status(500).send({ error: error.message })
+
+   }
+}
 
 module.exports = {
    getAllBirds,
-   getFilterInfo
+   getFilterInfo,
+   selectOptions,
+   getFilterOptions
 }

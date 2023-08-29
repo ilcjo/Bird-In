@@ -1,6 +1,6 @@
-import { Card, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import * as React from 'react'
+import { Card, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
+import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 
 export const Cards = ({ foto, name, index }) => {
   return (                                                                                                                
@@ -18,7 +18,7 @@ export const Cards = ({ foto, name, index }) => {
             {name}
           </Typography>
           <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+            <TurnedInNotIcon />
           </IconButton>
         </CardActions>
 
