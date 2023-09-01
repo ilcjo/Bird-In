@@ -1,16 +1,6 @@
-const { Op } = require("sequelize");
-const { fetchBirds, fetchOptions, filterOptions, fetchFilterBirds } = require("../../controllers/birds/birdsController");
-const { Aves, Familias, Grupos, Paises } = require('../../db/db')
 
+const {  fetchOptions, filterOptions, fetchFilterBirds } = require("../../controllers/birds/birdsController");
 
-const getAllBirds = async (req, res) => {
-   try {
-      const birdsInfo = await fetchBirds()
-      return res.status(200).json(birdsInfo)
-   } catch (error) {
-      res.status(400).json({ error: error.message })
-   }
-};
 
 const getFilterInfo = async (req, res) => {
 
@@ -18,7 +8,6 @@ const getFilterInfo = async (req, res) => {
 
    try {
       const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage)
-      console.log(allData)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
@@ -52,7 +41,6 @@ const getFilterOptions = async (req, res,) => {
 }
 
 module.exports = {
-   getAllBirds,
    getFilterInfo,
    selectOptions,
    getFilterOptions

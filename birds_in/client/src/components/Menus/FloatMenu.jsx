@@ -61,6 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const FloatMenu = () => {
+  
   const theme = useTheme()
   const [value, setValue] = React.useState('recents');
   const [searchVisible, setSearchVisible] = React.useState(false);
@@ -135,9 +136,9 @@ export const FloatMenu = () => {
             < FilterAltIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
         />
         {filterVisible && (
-          < Filters />
+          < Filters/>
         )}
-       
+
 
       </BottomNavigation>
     </Paper>
