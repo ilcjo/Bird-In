@@ -1,5 +1,6 @@
-import { Button, Grid } from '@mui/material'
 import * as React from 'react'
+import { Button, Grid } from '@mui/material'
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 
 export const Menu = () => {
     const [selectedButton, setSelectedButton] = React.useState('todo');
@@ -10,8 +11,12 @@ export const Menu = () => {
 
     return (
         <Grid container spacing={2}>
-            <Grid item sx={{ marginLeft: '50px'}}>
+            <Grid item sx={{ marginLeft: '60px', marginBottom: '10px' }}>
                 <Button
+                    sx={{
+                        fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+                        fontWeight: 'bold', // Hacer el texto negrita
+                    }}
                     color="primary" // Cambiar el color a "primary"
                     size="large"
                     onClick={() => handleButtonClick('todo')}
@@ -19,11 +24,16 @@ export const Menu = () => {
                     Todo
                 </Button>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ marginBottom: '10px' }}>
                 <Button
+                    sx={{
+                        fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+                        fontWeight: 'bold', // Hacer el texto negrita
+                    }}
                     color="primary" // Cambiar el color a "primary"
                     size="large"
                     onClick={() => handleButtonClick('coleccion')}
+                    endIcon={<BookmarksIcon />}
                 >
                     Colección
                 </Button>

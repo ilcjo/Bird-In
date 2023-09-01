@@ -16,7 +16,6 @@ import { useSelector } from 'react-redux';
 import { loginRequest } from '../../redux/slices/Auth';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-
 export const LoginForm = () => {
   const theme = useTheme()
   const [user, setUser] = React.useState('')
@@ -106,7 +105,6 @@ export const LoginForm = () => {
       <Grid container component={Box}  >
         <form onSubmit={handleLogin} >
        
-
           <TextField
             label="E-mail"
             name="email"
@@ -186,7 +184,6 @@ export const LoginForm = () => {
           <Button variant="outlined" onClick={handleClose} color="primary">
             Cancelar
           </Button>
-
 
           <Button variant="contained" onClick={handleLogin} color="primary">
             Crear Cuenta

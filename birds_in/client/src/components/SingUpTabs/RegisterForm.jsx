@@ -11,8 +11,6 @@ import {
   IconButton,
   Link as MuiLink,
 } from '@mui/material';
-
-
 import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -250,7 +248,6 @@ export const RegisterForm = () => {
           />
         </form>
         <Grid container component={Box} sx={actionsStyles} size="medium">
-
 
           <Button variant="outlined" onClick={handleClose} color="primary">
             Cancelar

@@ -7,6 +7,9 @@ import { getInfoBirds, loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Grid, useTheme } from '@mui/material'
 import { FloatMenu } from '../../components/Menus/FloatMenu'
 import { getOptionsData } from '../../redux/actions/fetchOptions'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
+
 
 export const Aves = () => {
 
@@ -35,26 +38,40 @@ export const Aves = () => {
         sx={{
           padding: '40px',
           backgroundColor: theme.palette.secondary.light,
-          minHeight: '100vh'
+          minHeight: '100vh',
+          marginBottom: '20px'
         }}>
         <Menu />
         <Grid item container spacing={3} justifyContent="center">
           {birds.map((i, index) => (
             <Grid item key={index}>
-              <Cards foto={i.imagenes_ave} name={i.nombre_cientifico} />
+              <Cards foto={i.imagenes_ave} name={i.nombre_ingles} />
             </Grid>
           ))}
         </Grid>
-        <Button
-          variant="outline"
-          color="primary"
-          onClick={handleChangePage}
-        >
-          Más
-        </Button>
-        < FloatMenu />
-      </Grid>
+        <Grid item>
+          <Button
+            sx={{
+              m: 2,
+              fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+              fontWeight: 'bold', // Hacer el texto negrita
+              textTransform: 'none',
+              color: theme.palette.primary.main,
+              borderRadius: '800px'
 
+            }
+            }
+            variant="outline"
+            onClick={handleChangePage}
+            
+          >
+            <ExpandMoreIcon style={{ fontSize: '3rem' }} />
+
+          </Button>
+        </Grid>
+
+      </Grid>
+      < FloatMenu />
     </React.Fragment>
   )
 }

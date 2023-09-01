@@ -17,7 +17,7 @@ export const Header = () => {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(rgba(193, 199, 0, 0), rgba(193, 199, 0, 1.5))',
+          background: 'linear-gradient(rgba(137, 138, 108, 0), rgba(0, 61, 21, 100))',
           opacity: 0.6,
         }}
       />
@@ -26,7 +26,7 @@ export const Header = () => {
         alt="Ave"
         style={{ width: '100vw', height: '100%', objectFit: 'cover', }}
       />
-      <Typography variant='h1' color="primary.light" sx={{
+      <Typography variant='h1' color="primary.main" sx={{
         position: 'absolute',
         top: '50%', // Centra verticalmente el título
         left: '20%', // Centra horizontalmente el título

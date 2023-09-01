@@ -18,39 +18,32 @@ import { Filters } from '../../components/Filters'
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.primary.dark, 0.15),
+  backgroundColor: alpha(theme.palette.primary.light, 0.15),
   '&:hover': {
-    backgroundColor: alpha(theme.palette.primary.main, 0.25),
+    backgroundColor: alpha(theme.palette.primary.light, 0.25),
+    
   },
   marginLeft: 0,
   marginTop: 8,
   height: '40px',
   width: '90%',
+  color: theme.palette.primary.light,
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(1),
     width: 'auto',
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    paddingLeft: `calc(0.5em + ${theme.spacing(1)})`,
     transition: theme.transitions.create('width'),
-
     width: '90%',
+    color: theme.palette.primary.light,
     [theme.breakpoints.up('sm')]: {
       width: '12ch',
       '&:focus': {
@@ -59,6 +52,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
+
 
 export const FloatMenu = () => {
   
@@ -87,12 +82,12 @@ export const FloatMenu = () => {
 
 
   return (
-    <Paper sx={{}} elevation={3}>
+    <Paper elevation={3}>
       <BottomNavigation
         sx={{
           position: 'fixed',
           width: 600,
-          borderRadius: '50px',
+          borderRadius: '20px',
           backgroundColor: theme.palette.primary.dark,
           bottom: 5, left: '50%',
           transform: 'translateX(-50%)',
@@ -100,39 +95,34 @@ export const FloatMenu = () => {
         }}
         value={value}
         onChange={handleChange}>
-
-        <BottomNavigationAction
-          style={{ color: theme.palette.primary.light, }}
+        <BottomNavigationAction   
           label="Buscar"
           value="search"
-          icon={showCloseIcon ? <SearchOffIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} /> :
+          icon={showCloseIcon ? <SearchOffIcon style={{ color: theme.palette.primary.main, fontSize: 36 }} /> :
             <SearchIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
           onClick={toggleSearch} // Agregar esta línea para mostrar/ocultar la barra de búsqueda
         />
         {searchVisible && ( // Mostrar la barra de búsqueda solo cuando searchVisible es verdadero
           <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Buscar...."
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
         )}
         <BottomNavigationAction
-          style={{ color: theme.palette.primary.light }}
+         
           label='Add'
           value="add"
           icon={<AddCircleIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
 
         />
         <BottomNavigationAction
-          style={{ color: theme.palette.primary.light }}
+         
           label='Filtros'
           value="filtros"
           onClick={toggleFilters}
-          icon={showCloseFilter ? <FilterAltOffIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} /> :
+          icon={showCloseFilter ? <FilterAltOffIcon style={{ color: theme.palette.primary.main, fontSize: 36 }} /> :
             < FilterAltIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
         />
         {filterVisible && (
