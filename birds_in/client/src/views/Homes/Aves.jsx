@@ -9,21 +9,23 @@ import { FloatMenu } from '../../components/Menus/FloatMenu'
 import { getOptionsData } from '../../redux/actions/fetchOptions'
 
 export const Aves = () => {
+
   const theme = useTheme()
-  const birds = useSelector(state => state.birdSlice.infoBirds)
   const dispatch = useDispatch()
+  const birds = useSelector(state => state.birdSlice.infoBirds)
+  const parameter = useSelector(state => state.birdSlice.filters)
+
   const [page, setPage] = React.useState(1);
 
-
   const handleChangePage = () => {
-    const newPage = page + 1; // Incrementa el valor de la página en 1
+    const newPage = page + 1;
     setPage(newPage);
-    dispatch(loadMoreData(newPage));
+    dispatch(loadMoreData(newPage, parameter));
   };
 
   React.useEffect(() => {
     dispatch(getInfoBirds());
-    dispatch(getOptionsData());
+    dispatch(getOptionsData())
   }, [dispatch]);
 
   return (

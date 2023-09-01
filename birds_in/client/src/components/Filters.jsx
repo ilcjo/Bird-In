@@ -5,30 +5,19 @@ import {
     Chip,
     FormControl,
     Grid,
-    InputLabel,
-    MenuItem,
-    OutlinedInput,
-    Select,
     Typography,
-    useTheme
+    useTheme,
+    Autocomplete,
+    TextField
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { sendParameter } from '../redux/actions/fetchAllBirds';
+import { sendParameter } from '../redux/actions/fetchAllBirds'
+import { saveFilters } from '../redux/slices/BirdsSlice'
+import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
 
-
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
 
 export const Filters = () => {
+
     const theme = useTheme()
     const dispatch = useDispatch()
     const grupos = useSelector(state => state.birdSlice.options.grupos)
@@ -43,56 +32,26 @@ export const Filters = () => {
     const [cientificoName, setCientificoName] = React.useState([]);
     const [inglesName, setInglesName] = React.useState([]);
 
-    const handleChangeGrupo = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setGrupoName(
-            typeof value === 'string' ? value.split(',') : value,
-        )
-
-    };
-    const handleChangeFamilia = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setFamiliaName(
-            typeof value === 'string' ? value.split(',') : value,
-        )
-
-    };
-    const handleChangePaises = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setPaisesName(
-            typeof value === 'string' ? value.split(',') : value,
-        )
-
-    };
-    const handleChangeNombreIngles = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setInglesName(
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
-    const handleChangeNombreCientifico = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setCientificoName(
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
-    const handleDelete = (value) => {
-        setGrupoName((prevSelected) => prevSelected.filter(item => item !== value))
-    };
     const handleClickAplicar = () => {
-        dispatch(sendParameter(grupoName, familiaName, paisesName));
-    }
-
+        const filtersPayload = {
+            grupo: grupoName,
+            familia: familiaName,
+            paises: paisesName,
+            cientifico: cientificoName,
+            ingles: inglesName
+        };
+        dispatch(saveFilters(filtersPayload))
+        dispatch(sendParameter(grupoName, familiaName, paisesName, inglesName, cientificoName,))
+    };
+    const handleReset = () => {
+        setGrupoName([]);
+        setFamiliaName([]);
+        setPaisesName([]);
+        setCientificoName([]);
+        setInglesName([]);
+        dispatch(getOptionsData())
+        // Restablece otros selectores si es necesario
+    };
     return (
         <Grid component={Box}
             sx={{
@@ -116,152 +75,150 @@ export const Filters = () => {
             <Grid item>
 
                 <FormControl sx={{ m: 1, width: '95%' }}>
-                    <InputLabel id="grupos-label"  >Grupo</InputLabel>
-                    <Select
-                        labelId="grupos-label"
-                        id="grupos"
+
+                    <Autocomplete
                         multiple
                         value={grupoName}
-                        onChange={handleChangeGrupo}
-                        input={<OutlinedInput id="select-multiple-grupo" label="Grupo" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) => (
-                                    <Chip key={value.id} label={value.nombre} onDelete={() => handleDelete(value)} color="primary" />
-                                ))}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {grupos.map((name, index) => (
-                            <MenuItem
-                                key={index}
-                                value={{ id: name.id, nombre: name.nombre }}
+                        onChange={(event, newValue) => {
+                            const selectedValues = newValue.map((option) => ({
+                                id: option.id,
+                                nombre: option.nombre,
+                            }));
+                            setGrupoName(selectedValues)
+                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
+                        }}
+                        options={grupos}
+                        getOptionLabel={(option) => option.nombre}
+                        renderInput={(params) => <TextField {...params} label="Grupo" />}
+                        renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                                <Chip
+                                    key={option.id}
+                                    label={option.nombre}
+                                    {...getTagProps({ index })}
+                                />
+                            ))
+                        }
+                        isOptionEqualToValue={(option, value) => option.id === value?.id}
+                        disabled={grupos.length === 0}
+                    />
 
-                            >
-                                {name.nombre}
-                            </MenuItem>
-                        ))}
-                    </Select>
+
                 </FormControl>
                 <FormControl sx={{ m: 1, width: '95%' }}>
-                    <InputLabel id="demo-multiple-familia-label">Familia</InputLabel>
-                    <Select
-                        labelId="demo-multiple-familia-label"
-                        id="demo-multiple-familias"
+                    <Autocomplete
                         multiple
                         value={familiaName}
-                        onChange={handleChangeFamilia}
-                        input={<OutlinedInput id="select-multiplefamilias" label="Familia" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) => (
-                                    <Chip key={value.id} label={value.nombre} color="primary" />
-                                ))}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {familias.map((name, index) => (
-                            <MenuItem
-                                key={index}
-                                value={{ id: name.id, nombre: name.nombre }}
-                            >
-                                {name.nombre}
-                            </MenuItem>
-                        ))}
-                    </Select>
+                        onChange={(event, newValue) => {
+                            const selectedValues = newValue.map((option) => ({
+                                id: option.id,
+                                nombre: option.nombre,
+                            }));
+                            setFamiliaName(selectedValues)
+                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
+                        }}
+                        options={familias}
+                        getOptionLabel={(option) => option.nombre}
+                        renderInput={(params) => <TextField {...params} label="Familia" />}
+                        renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                                <Chip
+                                    key={option.id}
+                                    label={option.nombre}
+                                    {...getTagProps({ index })}
+                                />
+                            ))
+                        }
+                        isOptionEqualToValue={(option, value) => option.id === value?.id}
+                        disabled={familias.length === 0}
+                    />
+
                 </FormControl>
 
                 <FormControl sx={{ m: 1, width: '95%' }}>
-                    <InputLabel id="demo-multiple-paises-label">Paises</InputLabel>
-                    <Select
-                        labelId="demo-multiple-paises-label"
-                        id="demo-multiple-paises"
+                    <Autocomplete
                         multiple
                         value={paisesName}
-                        onChange={handleChangePaises}
-                        input={<OutlinedInput id="select-multiple-paises" label="Paises" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) => (
-                                    <Chip key={value.id} label={value.nombre} color="primary" />
-                                ))}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {paises.map((name, index) => (
-                            <MenuItem
-                                key={index}
-                                value={{ id: name.id, nombre: name.nombre }}
-
-                            >
-                                {name.nombre}
-                            </MenuItem>
-                        ))}
-                    </Select>
-
+                        onChange={(event, newValue) => {
+                            const selectedValues = newValue.map((option) => ({
+                                id: option.id,
+                                nombre: option.nombre,
+                            }));
+                            setPaisesName(selectedValues)
+                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
+                        }}
+                        options={paises}
+                        getOptionLabel={(option) => option.nombre}
+                        renderInput={(params) => <TextField {...params} label="Paises" />}
+                        renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                                <Chip
+                                    key={option.id}
+                                    label={option.nombre}
+                                    {...getTagProps({ index })}
+                                />
+                            ))
+                        }
+                        isOptionEqualToValue={(option, value) => option.id === value?.id}
+                        disabled={paises.length === 0}
+                    />
                 </FormControl>
                 <FormControl sx={{ m: 1, width: '95%' }}>
-                    <InputLabel id="demo-multiple-ncientifico-label">Nombre Cientifico</InputLabel>
-                    <Select
-                        labelId="demo-multiple-ncientifico-label"
-                        id="demo-multiple-ncientifico"
+                    <Autocomplete
                         multiple
+
                         value={cientificoName}
-                        onChange={handleChangeNombreCientifico}
-                        input={<OutlinedInput id="select-multiple-ncientifico" label="ncientifico" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value, index) => (
-                                    <Chip key={index} label={value.nombre} color="primary" />
-                                ))}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {cientifico.map((name, index) => (
-                            <MenuItem
-                                key={index}
-                                value={name.nombre}
-                            >
-                                {name.nombre}
-                            </MenuItem>
-                        ))}
-                    </Select>
+                        onChange={(event, newValue) => {
+                            const selectedValues = newValue.map((option) => ({
+                                nombre: option.nombre,
+                            }));
+                            setCientificoName(selectedValues)
+                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
+                        }}
+                        options={cientifico}
+                        getOptionLabel={(option) => option.nombre}
+                        renderInput={(params) => <TextField {...params} label="Nombre Cientifico" />}
+                        renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                                <Chip
+                                    key={index}
+                                    label={option.nombre}
+                                    {...getTagProps({ index })}
+                                    disabled={nCientifico.length === 0}
+                                />
+                            ))
+                        }
+                    />
                 </FormControl>
                 <FormControl sx={{ m: 1, width: '95%' }} >
-                    <InputLabel id="demo-multiple-ningles-label">Nombre en Ingles</InputLabel>
-                    <Select
-                        labelId="demo-multiple-ningles-label"
-                        id="demo-multiple-ningles"
+                    <Autocomplete
                         multiple
                         value={inglesName}
-                        onChange={handleChangeNombreIngles}
-                        input={<OutlinedInput id="select-multiple-ningles" label="Nombre en Ingles" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value, index) => (
-                                    <Chip key={index} label={value.nombre} color="primary" />
-                                ))}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {ingles.map((name, index) => (
-                            <MenuItem
-                                key={index}
-                                value={name.nombre}
-                            >
-                                {name.nombre}
-                            </MenuItem>
-                        ))}
-                    </Select>
+                        onChange={(event, newValue) => {
+                            const selectedValues = newValue.map((option) => ({
+                                nombre: option.nombre,
+                            }));
+                            setInglesName(selectedValues)
+                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
+                        }}
+                        options={ingles}
+                        getOptionLabel={(option) => option.nombre}
+                        renderInput={(params) => <TextField {...params} label="Nombre Ingles" />}
+                        renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                                <Chip
+                                    key={index}
+                                    label={option.nombre}
+                                    {...getTagProps({ index })}
+                                    disabled={ingles.length === 0}
+                                />
+                            ))
+                        }
+                    />
                 </FormControl>
 
                 <Grid item sx={{ textAlign: 'center' }}>
-                    <Button variant="contained" size="medium">
+                    <Button variant="contained" size="medium" onClick={handleReset}>
                         Reset
                     </Button>
                     <Button variant="contained" size="medium" onClick={handleClickAplicar}>

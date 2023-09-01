@@ -1,9 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+
 const initialState = {
   infoBirds: [],
   options: [],
-  filtersInfo: [],
+  filtersOn: false,
+  currentFilters: {
+    grupo: [],
+    familia: [],
+    paises: [],
+    cientifico: [],
+    ingles: [],
+  },
+  filters:''
 };
 
 export const birdSlice = createSlice({
@@ -25,9 +34,34 @@ export const birdSlice = createSlice({
     },
     newOptions: (state, action) => {
       state.options = action.payload
-    }
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload
+    },
+    saveFilters: (state, action) => {
+      const { grupo, familia, paises, cientifico, ingles } = action.payload
+      state.currentFilters = {
+        grupo: grupo,
+        familia: familia,
+        paises: paises,
+        cientifico: cientifico,
+        ingles: ingles,
+      };
   },
+  stringParameter: (state, action) => {
+    state.filters = action.payload
+  }
+},
 });
 
-export const { fetchInfo, loadMoreDataSuccess, fetchOptions, returnFilters, newOptions } = birdSlice.actions;
+export const {
+  fetchInfo,
+  loadMoreDataSuccess,
+  fetchOptions,
+  returnFilters,
+  newOptions,
+  setCurrentPage,
+  saveFilters, 
+  stringParameter
+} = birdSlice.actions;
 export default birdSlice.reducer;
