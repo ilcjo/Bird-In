@@ -25,7 +25,7 @@ const selectOptions = async (req, res) => {
       const getAllOptions = await fetchOptions()
       return res.status(200).json(getAllOptions)
    } catch (error) {
-      res.status(500).send({ error: error.message })
+      res.status(500).json({ error: error.message })
    }
 }
 

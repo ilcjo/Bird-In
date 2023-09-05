@@ -17,11 +17,7 @@ export const getOptionsData = () => {
 export const fetchNewOptions = (gruposIds, familiaIds, paisId, nombreIngles, nombreCientifico) => {
     return async (dispatch) => {
         try {
-            console.log('soy grupos',gruposIds, )
-            console.log('soy familias', familiaIds,)
-            console.log('soy cientifico', nombreCientifico)
-            console.log('soy ingles', nombreIngles)
-            console.log('soy pais', paisId)
+           
             let queryParams = '';
 
             if (gruposIds && gruposIds.length > 0) {

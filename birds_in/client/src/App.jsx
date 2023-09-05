@@ -6,22 +6,30 @@ import { Flowers } from './views/Homes/Flowers'
 import { LandsCapes } from './views/Homes/LandsCapes'
 import { Home } from './views/HomeMenu'
 import { Aves } from './views/Homes/Aves'
-import { Filters } from './components/Filters'
+
 
 
 function App() {
-
+  const token = localStorage.getItem('token')
   return (
     <>
       <Routes>
-        <Route path='/' element={<Landing />} />
-        <Route path='/menu' element={<Home />} />
-        <Route path='/aves' element={<Aves />} />
-        <Route path='/animales' element={<Animals />} />
-        <Route path='/flores' element={<Flowers />} />
-        <Route path='/paisajes' element={<LandsCapes />} />
-        <Route path='/tab' element={<Index />}></Route>
-        <Route path='/filters' element={< Filters />}/>
+        {token && (
+          <>
+            <Route path='/menu' element={<Home />} />
+            <Route path='/aves' element={<Aves />} />
+            <Route path='/animales' element={<Animals />} />
+            <Route path='/flores' element={<Flowers />} />
+            <Route path='/paisajes' element={<LandsCapes />} />
+            <Route path='/' element={<Landing />} />
+          </>
+        )}
+        {!token && (
+          <>
+            <Route path='/' element={<Landing />} />
+            <Route path='/tab' element={<Index />}></Route>
+          </>
+        )}
       </Routes>
     </>
   )

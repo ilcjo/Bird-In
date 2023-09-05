@@ -32,6 +32,63 @@ export const Filters = () => {
     const [cientificoName, setCientificoName] = React.useState([]);
     const [inglesName, setInglesName] = React.useState([]);
 
+    const labelStyles = {
+        color: theme.palette.primary.main, // Color del texto del label
+        marginTop: '-9px',
+    };
+
+    const inputStyles = {
+        // Aquí puedes agregar los estilos que desees para los inputs
+        color: theme.palette.primary.light,
+        backgroundColor: 'rgba(204,214,204,0.17)',
+        borderRadius: '9px',
+       
+        '& .MuiInputBase-input': {
+            padding: '0px',
+            paddingLeft: '10px',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'none',
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main, // Color del borde en el hover
+            backgroundColor: 'rgba(204,214,204,0.17)',
+        },
+        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+            // Agrega los estilos que desees para el Select
+            height: '50px',
+            // width: '180px' // Ejemplo: cambia el color del texto a azul
+        },
+
+    };
+
+    const actionsStyles = {
+        justifyContent: 'center', // Centrar el botón horizontalmente
+        margin: '0px',
+        marginTop: '20px',
+        gap: '20px',
+        fontWeight: 500,
+        textAlign: 'center',
+        
+
+        '& .MuiButton-contained': {
+            fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+            fontWeight: 'bold', // Hacer el texto negrita
+            textTransform: 'none',
+            '&:hover': {
+                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                textTransform: 'none',
+            },
+        },
+
+        '& .MuiButton-outlined': {
+            fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+            fontWeight: 'bold', // Hacer el texto negrita
+            textTransform: 'none',
+        },
+    };
+
     const handleClickAplicar = () => {
         const filtersPayload = {
             grupo: grupoName,
@@ -57,25 +114,24 @@ export const Filters = () => {
             sx={{
                 position: 'fixed',
                 height: 'auto',
-                width: 550,
-                borderRadius: '10px 10px 0px 0px',
+                width: 600,
+                borderRadius: '20px 20px 20px 20px',
                 backgroundColor: theme.palette.primary.dark,
-                bottom: 54, left: '50%',
+                bottom: 50, left: '50%',
                 transform: 'translateX(-50%)',
                 zIndex: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                padding: 2
+                padding: 5,
             }} >
             <Grid item>
-                <Typography variant="h2" color='primary' sx={{ m: 1 }}>
+                <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
                     Filtros Combinados
                 </Typography>
             </Grid>
             <Grid item>
 
                 <FormControl sx={{ m: 1, width: '95%' }}>
-
                     <Autocomplete
                         multiple
                         value={grupoName}
@@ -89,10 +145,22 @@ export const Filters = () => {
                         }}
                         options={grupos}
                         getOptionLabel={(option) => option.nombre}
-                        renderInput={(params) => <TextField {...params} label="Grupo" />}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Grupo"
+                                InputLabelProps={{
+                                    sx: labelStyles, // Estilo del label
+                                }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                      sx: inputStyles, // Estilo del input
+                                    
+                                  }}
+                            />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
                                 <Chip
+                                color='primary'
                                     key={option.id}
                                     label={option.nombre}
                                     {...getTagProps({ index })}
@@ -102,9 +170,8 @@ export const Filters = () => {
                         isOptionEqualToValue={(option, value) => option.id === value?.id}
                         disabled={grupos.length === 0}
                     />
-
-
                 </FormControl>
+
                 <FormControl sx={{ m: 1, width: '95%' }}>
                     <Autocomplete
                         multiple
@@ -119,7 +186,18 @@ export const Filters = () => {
                         }}
                         options={familias}
                         getOptionLabel={(option) => option.nombre}
-                        renderInput={(params) => <TextField {...params} label="Familia" />}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Familia"
+                                InputLabelProps={{
+                                    sx: labelStyles, // Estilo del label
+                                }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                      sx: inputStyles, // Estilo del input
+                                    
+                                  }}
+                            />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
                                 <Chip
@@ -132,7 +210,6 @@ export const Filters = () => {
                         isOptionEqualToValue={(option, value) => option.id === value?.id}
                         disabled={familias.length === 0}
                     />
-
                 </FormControl>
 
                 <FormControl sx={{ m: 1, width: '95%' }}>
@@ -149,7 +226,18 @@ export const Filters = () => {
                         }}
                         options={paises}
                         getOptionLabel={(option) => option.nombre}
-                        renderInput={(params) => <TextField {...params} label="Paises" />}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Paises"
+                                InputLabelProps={{
+                                    sx: labelStyles, // Estilo del label
+                                }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                      sx: inputStyles, // Estilo del input
+                                    
+                                  }}
+                            />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
                                 <Chip
@@ -163,6 +251,7 @@ export const Filters = () => {
                         disabled={paises.length === 0}
                     />
                 </FormControl>
+
                 <FormControl sx={{ m: 1, width: '95%' }}>
                     <Autocomplete
                         multiple
@@ -177,7 +266,18 @@ export const Filters = () => {
                         }}
                         options={cientifico}
                         getOptionLabel={(option) => option.nombre}
-                        renderInput={(params) => <TextField {...params} label="Nombre Cientifico" />}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Nombre Cientifico"
+                                InputLabelProps={{
+                                    sx: labelStyles, // Estilo del label
+                                }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                      sx: inputStyles, // Estilo del input
+                                    
+                                  }}
+                            />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
                                 <Chip
@@ -190,6 +290,7 @@ export const Filters = () => {
                         }
                     />
                 </FormControl>
+
                 <FormControl sx={{ m: 1, width: '95%' }} >
                     <Autocomplete
                         multiple
@@ -203,7 +304,18 @@ export const Filters = () => {
                         }}
                         options={ingles}
                         getOptionLabel={(option) => option.nombre}
-                        renderInput={(params) => <TextField {...params} label="Nombre Ingles" />}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Nombre Ingles"
+                                InputLabelProps={{
+                                    sx: labelStyles, // Estilo del label
+                                }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                      sx: inputStyles, // Estilo del input
+                                    
+                                  }}
+                            />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
                                 <Chip
@@ -217,12 +329,12 @@ export const Filters = () => {
                     />
                 </FormControl>
 
-                <Grid item sx={{ textAlign: 'center' }}>
-                    <Button variant="contained" size="medium" onClick={handleReset}>
-                        Reset
+                <Grid container component={Box} sx={actionsStyles}>
+                    <Button variant="outlined" color="primary" onClick={handleReset}>
+                        Resetear
                     </Button>
-                    <Button variant="contained" size="medium" onClick={handleClickAplicar}>
-                        Aplicar
+                    <Button variant="contained" color="primary" onClick={handleClickAplicar}>
+                        Filtrar
                     </Button>
                 </Grid>
 
