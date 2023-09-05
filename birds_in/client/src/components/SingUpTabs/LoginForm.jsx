@@ -11,26 +11,56 @@ import {
   IconButton,
 
 } from '@mui/material';
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux';
-import { loginRequest } from '../../redux/slices/Auth';
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { loginUser } from '../../redux/actions/userLoginRegister';
+import { Boolean } from '../../redux/slices/OpenClose';
 
 export const LoginForm = () => {
   const theme = useTheme()
-  const [user, setUser] = React.useState('')
-  const [pass, setpass] = React.useState('')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [loginData, setLoginData] = React.useState({
+    email: '',
+    password: ''
+  })
   const [showPassword, setShowPassword] = React.useState('')
-  const { loading, error } = useSelector((state) => state.authSlice)
+  const [errorTextPass, setErrorTextPass] = React.useState('');
+  const [errorText, setErrorText] = React.useState('');
+  const { loading, error, } = useSelector((state) => state.authSlice)
 
   const handleClose = () => {
     dispatch(Boolean(false))
-
   };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginRequest());
-  }
+    try {
+      const data = await dispatch(loginUser(loginData));
+      // Redirige a la página de "aves" después del inicio de sesión exitoso
+      navigate('/menu');
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      if (error.response) {
+        console.error('Error de respuesta del servidor:', error.response.data);
+        if (error.response.data.message === 'Contraseña incorrecta') {
+          setErrorTextPass(error.response.data.message); // Establece el mensaje de error de contraseña
+          setErrorText(''); // Limpia el mensaje de error de correo si existe
+        } else if (error.response.data.message === 'Usuario no registrado') {
+          setErrorText(error.response.data.message); // Establece el mensaje de error de correo
+          setErrorTextPass(''); // Limpia el mensaje de error de contraseña si existe
+        } else {
+          console.error('Error desconocido:', error.response.data.message);
+        }
+      } else if (error.request) {
+        console.error('Error de red al realizar la solicitud:', error.request);
+      } else {
+        console.error('Error al enviar la solicitud:', error.message);
+      }
+    }
+  };
+
 
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
@@ -97,20 +127,22 @@ export const LoginForm = () => {
         </Typography>
         <Typography variant="body2" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Aun no eres miembro ?
-          <MuiLink component={Link} to="/home" color="primary.light"  underline="none"  sx={{ marginLeft:'5px'}}>
+          <MuiLink component={Link} to="/home" color="primary.light" underline="none" sx={{ marginLeft: '5px' }}>
             Registrarse
           </MuiLink>
         </Typography>
       </div>
       <Grid container component={Box}  >
         <form onSubmit={handleLogin} >
-       
+
           <TextField
             label="E-mail"
             name="email"
             type="email"
-            // value={email}
-            // onChange={(e) => dispatch(emailUser(e.target.value))}
+            value={loginData.email}
+            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+            error={errorText !== ''}
+            helperText={errorText}
             margin="normal"
             fullWidth
             InputLabelProps={{
@@ -120,7 +152,6 @@ export const LoginForm = () => {
             InputProps={{
               sx: inputStyles, // Establece el estilo del input
             }}
-            helperText=" Ejemplo: nombre@mail.com"
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
@@ -132,13 +163,17 @@ export const LoginForm = () => {
             }}
           />
 
-         
           <TextField
             label="Password"
-            name="passFirst"
+            name="password"
             margin="normal"
             type={showPassword ? 'text' : 'password'}
             fullWidth
+            value={loginData.password}
+            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+            onMouseDown={(event) => event.preventDefault()}
+            error={errorTextPass !== ''}
+            helperText={errorTextPass}
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
             }}
@@ -150,6 +185,7 @@ export const LoginForm = () => {
                     edge="end"
                     onClick={() => setShowPassword(!showPassword)}
                     onMouseDown={(event) => event.preventDefault()}
+
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
@@ -157,15 +193,6 @@ export const LoginForm = () => {
               ),
             }}
 
-            helperText={
-              <React.Fragment>
-                
-                {' '}
-                <Link to="/forgot-password" style={{ color: theme.palette.primary.main }}>
-                  Olvidó su contraseña?
-                </Link>
-              </React.Fragment>
-            }
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
@@ -176,7 +203,15 @@ export const LoginForm = () => {
               },
             }}
           />
-         
+          <Typography>
+
+            <Link to="/forgot-password" style={{ color: theme.palette.primary.main }}>
+              Olvidó su contraseña?
+            </Link>
+
+
+          </Typography>
+
         </form>
         <Grid container component={Box} sx={actionsStyles} size="medium">
 

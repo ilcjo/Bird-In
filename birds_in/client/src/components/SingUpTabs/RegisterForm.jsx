@@ -13,28 +13,46 @@ import {
 } from '@mui/material';
 import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
-import { emailUser, nameUser, paisUser, passwordUser, resetForm } from '../../redux/slices/Register'
+import { useDispatch, } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
 import { Link } from 'react-router-dom';
+import { registerData } from '../../redux/actions/userLoginRegister';
 
 export const RegisterForm = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const [showPassword, setShowPassword] = React.useState('')
-  const { name, email, pais, pass } = useSelector((state) => state.registerSlice)
+  const [showPassword, setShowPassword] = React.useState(false)
+  const [error, setError] = React.useState('')
+  const [formData, setFormData] = React.useState({
+    email: '',
+    name: '',
+    pais: '',
+    pass: '',
+    passFirst: '',
+  })
 
+  console.log(formData)
   const handleClose = () => {
     dispatch(Boolean(false))
-    dispatch(resetForm())
+    setFormData({
+      name: '',
+      email: '',
+      pais: '',
+      pass: '',
+      passFirst: '',
+    });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('DAtos del formulario', name, email, pais, pass)
-    handleClose()
-    dispatch(resetForm())
+    if (formData.pass === formData.passFirst) {
+      setError('');
+      dispatch(registerData(formData))
+      handleClose()
+    } else {
+      setError('Las contraseñas no coinciden')
+    }
   };
 
   const labelStyles = {
@@ -49,7 +67,7 @@ export const RegisterForm = () => {
     borderRadius: '9px',
     height: '50px',
 
-  
+
     '& .MuiInputBase-input': {
       padding: '0px',
       paddingLeft: '10px',
@@ -68,23 +86,23 @@ export const RegisterForm = () => {
     },
 
   };
- 
+
   const actionsStyles = {
     justifyContent: 'center', // Centrar el botón horizontalmente
     margin: '0px',
     marginTop: '20px',
     gap: '20px',
     fontWeight: 500,
-    
+
     '& .MuiButton-contained': {
       fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-      fontWeight:'bold', // Hacer el texto negrita
+      fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
         backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
         color: theme.palette.primary.light, // Cambia el color del texto en hover
         textTransform: 'none',
-      },  
+      },
     },
 
     '& .MuiButton-outlined': {
@@ -95,14 +113,14 @@ export const RegisterForm = () => {
   };
 
   return (
-    <Box sx={{ margin:'10px'}} >
+    <Box sx={{ margin: '10px' }} >
       <div>
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
           Crear Cuenta
         </Typography>
-        <Typography variant="body1" color="primary.main" sx={{  marginLeft: '8px', my:'10px' }}>
+        <Typography variant="body1" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Ya eres miembro ?
-          <MuiLink component={Link} to="/home" color="primary.light" underline="none" sx={{ marginLeft:'5px'}}>
+          <MuiLink component={Link} to="/home" color="primary.light" underline="none" sx={{ marginLeft: '5px' }}>
             Log In
           </MuiLink>
         </Typography>
@@ -112,8 +130,8 @@ export const RegisterForm = () => {
           <TextField
             label="Nombre Completo"
             name="name"
-            value={name}
-            onChange={(e) => dispatch(nameUser(e.target.value))}
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             helperText=" "
             fullWidth
             margin="normal"
@@ -129,8 +147,8 @@ export const RegisterForm = () => {
             label="E-mail"
             name="email"
             type="email"
-            value={email}
-            onChange={(e) => dispatch(emailUser(e.target.value))}
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             margin="normal"
             fullWidth
             InputLabelProps={{
@@ -155,8 +173,8 @@ export const RegisterForm = () => {
           <TextField
             label="Pais (opcional)"
             name="pais"
-            value={pais}
-            onChange={(e) => dispatch(paisUser(e.target.value))}
+            value={formData.pais}
+            onChange={(e) => setFormData({ ...formData, pais: e.target.value })}
             fullWidth
             select
             margin="normal"
@@ -186,13 +204,14 @@ export const RegisterForm = () => {
           </TextField >
 
           <TextField
-            label="Password"
+            label="Confirmar Password"
             name="passFirst"
             margin="normal"
+            error={error !== ''}
             type={showPassword ? 'text' : 'password'}
             fullWidth
             InputLabelProps={{
-              sx: labelStyles, // Establece el estilo del label del input
+              sx: labelStyles,
             }}
             InputProps={{
               sx: inputStyles,
@@ -208,8 +227,28 @@ export const RegisterForm = () => {
                 </InputAdornment>
               ),
             }}
-
-            helperText="Al menos 6 caracteres y una mayuscula"
+            helperText={`Al menos 6 caracteres y una mayúscula${error ? `\n${error}` : ''}`}
+            FormHelperTextProps={{
+              sx: {
+                fontSize: '1rem',
+                color: theme.palette.primary.light,
+              },
+            }}
+            value={formData.passFirst} // Vincula este campo al valor 'passFirst' en el estado
+            onChange={(e) => {
+              setFormData({ ...formData, passFirst: e.target.value });
+            }}
+          />
+          <TextField
+            label="Confirmar Password"
+            name="pass"
+            value={formData.pass}
+            error={error !== ''}
+            helperText={error}
+            onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
+            type={showPassword ? 'text' : 'password'}
+            margin="normal"
+            fullWidth
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
@@ -219,15 +258,6 @@ export const RegisterForm = () => {
                 /* Agrega otros estilos que desees... */
               },
             }}
-          />
-          <TextField
-            label="Confirmar Password"
-            name="pass"
-            value={pass}
-            onChange={(e) => dispatch(passwordUser(e.target.value))}
-            type={showPassword ? 'text' : 'password'}
-            margin="normal"
-            fullWidth
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
             }}
@@ -239,7 +269,9 @@ export const RegisterForm = () => {
                     edge="end"
                     onClick={() => setShowPassword(!showPassword)}
                     onMouseDown={(event) => event.preventDefault()}
+
                   >
+
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>

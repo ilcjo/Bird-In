@@ -3,7 +3,8 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+
 import {
   BottomNavigation,
   BottomNavigationAction,
@@ -13,7 +14,7 @@ import {
   styled,
   useTheme
 } from '@mui/material';
-import { Filters } from '../../components/Filters'
+import { Filters } from '../Filters'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -21,7 +22,7 @@ const Search = styled('div')(({ theme }) => ({
   backgroundColor: alpha(theme.palette.primary.light, 0.15),
   '&:hover': {
     backgroundColor: alpha(theme.palette.primary.light, 0.25),
-    
+
   },
   marginLeft: 0,
   marginTop: 8,
@@ -54,9 +55,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
-
 export const FloatMenu = () => {
-  
+
   const theme = useTheme()
   const [value, setValue] = React.useState('recents');
   const [searchVisible, setSearchVisible] = React.useState(false);
@@ -95,7 +95,7 @@ export const FloatMenu = () => {
         }}
         value={value}
         onChange={handleChange}>
-        <BottomNavigationAction   
+        <BottomNavigationAction
           label="Buscar"
           value="search"
           icon={showCloseIcon ? <SearchOffIcon style={{ color: theme.palette.primary.main, fontSize: 36 }} /> :
@@ -111,14 +111,14 @@ export const FloatMenu = () => {
           </Search>
         )}
         <BottomNavigationAction
-         
+
           label='Add'
           value="add"
-          icon={<AddCircleIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
+          icon={<PersonPinIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
 
         />
         <BottomNavigationAction
-         
+
           label='Filtros'
           value="filtros"
           onClick={toggleFilters}
@@ -126,7 +126,7 @@ export const FloatMenu = () => {
             < FilterAltIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
         />
         {filterVisible && (
-          < Filters/>
+          < Filters />
         )}
 
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const mainRoutes = require('./routes/index');
 
 require('./db/db.js');
@@ -8,6 +9,7 @@ const server = express();
 const serverName = 'APIBird';
 server.set('serverName', serverName);
 
+server.use(cookieParser());
 server.use(express.urlencoded({ extended: true, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
 server.use(morgan('dev'));

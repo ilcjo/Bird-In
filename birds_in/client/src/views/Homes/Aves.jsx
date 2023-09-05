@@ -5,7 +5,7 @@ import { Cards } from '../../components/Cards/Cards'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Grid, useTheme } from '@mui/material'
-import { FloatMenu } from '../../components/Menus/FloatMenu'
+import { FloatMenu } from '../../components/Menus/FloatMenuAdmin'
 import { getOptionsData } from '../../redux/actions/fetchOptions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';

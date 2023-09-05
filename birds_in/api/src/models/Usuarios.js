@@ -23,9 +23,17 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         tipo: {
-            type: DataTypes.ENUM('admin', 'usuario'),
+            type: DataTypes.ENUM('admin', 'user'),
             allowNull: false
         },
-    },
+        status: {
+            type: DataTypes.ENUM('pending', 'approved', 'denied'),
+            allowNull: false
+        },
+        pais: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+    }, { timestamps: true, }
     )
 }
