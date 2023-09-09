@@ -26,7 +26,7 @@ const theme = createTheme({
       fontWeight: 600,
     },
     h2: {
-      fontSize: '1.9rem',
+      fontSize: '2rem',
       fontWeight: 600,
       my: 1,
     },
@@ -40,18 +40,18 @@ const theme = createTheme({
       marginLeft: '6px'
     },
     h5: {
-      fontSize: '1.2rem',
-      fontWeight: 500,
+      fontSize: '1.3rem',
+      fontWeight: 600,
       
     },
     body1: {
-      fontSize: '1.2rem',
+      fontSize: '1.7rem',
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
     body2: {
-      fontSize: '1 rem',
+      fontSize: '1 .5rem',
       fontWeight: 200,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
@@ -68,6 +68,16 @@ const theme = createTheme({
         },
       },
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+          backdropFilter: 'blur(90px)', // Efecto de desenfoque de fondo
+          WebkitBackdropFilter: 'blur(90px)', // Efecto de desenfoque de fondo para navegadores basados en Webkit
+        },
+      },
+    },
+ 
     // MuiButton: {
     //   styleOverrides: {
     //     root: {

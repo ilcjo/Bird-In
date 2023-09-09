@@ -11,26 +11,14 @@ import {
     TextField
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { sendParameter } from '../redux/actions/fetchAllBirds'
+import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
 import { saveFilters } from '../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
 
 
 export const Filters = () => {
-
     const theme = useTheme()
     const dispatch = useDispatch()
-    const grupos = useSelector(state => state.birdSlice.options.grupos)
-    const familias = useSelector(state => state.birdSlice.options.familias)
-    const paises = useSelector(state => state.birdSlice.options.paises)
-    const cientifico = useSelector(state => state.birdSlice.options.nCientifico)
-    const ingles = useSelector(state => state.birdSlice.options.nIngles)
-
-    const [grupoName, setGrupoName] = React.useState([]);
-    const [familiaName, setFamiliaName] = React.useState([]);
-    const [paisesName, setPaisesName] = React.useState([]);
-    const [cientificoName, setCientificoName] = React.useState([]);
-    const [inglesName, setInglesName] = React.useState([]);
 
     const labelStyles = {
         color: theme.palette.primary.main, // Color del texto del label
@@ -42,7 +30,7 @@ export const Filters = () => {
         color: theme.palette.primary.light,
         backgroundColor: 'rgba(204,214,204,0.17)',
         borderRadius: '9px',
-       
+
         '& .MuiInputBase-input': {
             padding: '0px',
             paddingLeft: '10px',
@@ -69,7 +57,7 @@ export const Filters = () => {
         gap: '20px',
         fontWeight: 500,
         textAlign: 'center',
-        
+
 
         '& .MuiButton-contained': {
             fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
@@ -89,26 +77,45 @@ export const Filters = () => {
         },
     };
 
-    const handleClickAplicar = () => {
-        const filtersPayload = {
-            grupo: grupoName,
-            familia: familiaName,
-            paises: paisesName,
-            cientifico: cientificoName,
-            ingles: inglesName
+    const { nIngles, nCientifico, paises, familias, grupos } = useSelector(state => state.birdSlice.options)
+    const [selectOption, setSelectOption] = React.useState({
+        grupo: [],
+        familia: [],
+        pais: [],
+        cientifico: [],
+        ingles: []
+
+    });
+   
+    const handleOptionChange = (category, newValue) => {
+        const updatedSelectOption = {
+            ...selectOption,
+            [category]: newValue.map((option) => ({
+                id: option.id,
+                nombre: option.nombre,
+            })),
         };
-        dispatch(saveFilters(filtersPayload))
-        dispatch(sendParameter(grupoName, familiaName, paisesName, inglesName, cientificoName,))
+    setSelectOption(updatedSelectOption);
+    dispatch(fetchNewOptions(updatedSelectOption));     
     };
+
+    const handleClickFiltrar = () => {
+        dispatch(saveFilters(selectOption))
+        dispatch(sendParameter(selectOption))
+    };
+
     const handleReset = () => {
-        setGrupoName([]);
-        setFamiliaName([]);
-        setPaisesName([]);
-        setCientificoName([]);
-        setInglesName([]);
+        setSelectOption({
+            grupo: [],
+            familia: [],
+            pais: [],
+            cientifico: [],
+            ingles: []
+        })
         dispatch(getOptionsData())
-        // Restablece otros selectores si es necesario
+        dispatch(getInfoBirds())
     };
+
     return (
         <Grid component={Box}
             sx={{
@@ -134,15 +141,8 @@ export const Filters = () => {
                 <FormControl sx={{ m: 1, width: '95%' }}>
                     <Autocomplete
                         multiple
-                        value={grupoName}
-                        onChange={(event, newValue) => {
-                            const selectedValues = newValue.map((option) => ({
-                                id: option.id,
-                                nombre: option.nombre,
-                            }));
-                            setGrupoName(selectedValues)
-                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
-                        }}
+                        value={selectOption.grupo}
+                        onChange={(event, newValue) => handleOptionChange('grupo', newValue)}
                         options={grupos}
                         getOptionLabel={(option) => option.nombre}
                         renderInput={(params) =>
@@ -153,14 +153,14 @@ export const Filters = () => {
                                 }}
                                 InputProps={{
                                     ...params.InputProps,
-                                      sx: inputStyles, // Estilo del input
-                                    
-                                  }}
+                                    sx: inputStyles, // Estilo del input
+
+                                }}
                             />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
                                 <Chip
-                                color='primary'
+                                    color='primary'
                                     key={option.id}
                                     label={option.nombre}
                                     {...getTagProps({ index })}
@@ -175,15 +175,8 @@ export const Filters = () => {
                 <FormControl sx={{ m: 1, width: '95%' }}>
                     <Autocomplete
                         multiple
-                        value={familiaName}
-                        onChange={(event, newValue) => {
-                            const selectedValues = newValue.map((option) => ({
-                                id: option.id,
-                                nombre: option.nombre,
-                            }));
-                            setFamiliaName(selectedValues)
-                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
-                        }}
+                        value={selectOption.familia}
+                        onChange={(event, newValue) => handleOptionChange('familia', newValue)}
                         options={familias}
                         getOptionLabel={(option) => option.nombre}
                         renderInput={(params) =>
@@ -194,9 +187,8 @@ export const Filters = () => {
                                 }}
                                 InputProps={{
                                     ...params.InputProps,
-                                      sx: inputStyles, // Estilo del input
-                                    
-                                  }}
+                                    sx: inputStyles, // Estilo del input
+                                }}
                             />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
@@ -215,15 +207,8 @@ export const Filters = () => {
                 <FormControl sx={{ m: 1, width: '95%' }}>
                     <Autocomplete
                         multiple
-                        value={paisesName}
-                        onChange={(event, newValue) => {
-                            const selectedValues = newValue.map((option) => ({
-                                id: option.id,
-                                nombre: option.nombre,
-                            }));
-                            setPaisesName(selectedValues)
-                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
-                        }}
+                        value={selectOption.pais}
+                        onChange={(event, newValue) => handleOptionChange('pais', newValue)}
                         options={paises}
                         getOptionLabel={(option) => option.nombre}
                         renderInput={(params) =>
@@ -234,9 +219,9 @@ export const Filters = () => {
                                 }}
                                 InputProps={{
                                     ...params.InputProps,
-                                      sx: inputStyles, // Estilo del input
-                                    
-                                  }}
+                                    sx: inputStyles, // Estilo del input
+
+                                }}
                             />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
@@ -256,15 +241,9 @@ export const Filters = () => {
                     <Autocomplete
                         multiple
 
-                        value={cientificoName}
-                        onChange={(event, newValue) => {
-                            const selectedValues = newValue.map((option) => ({
-                                nombre: option.nombre,
-                            }));
-                            setCientificoName(selectedValues)
-                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
-                        }}
-                        options={cientifico}
+                        value={selectOption.cientifico}
+                        onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
+                        options={nCientifico}
                         getOptionLabel={(option) => option.nombre}
                         renderInput={(params) =>
                             <TextField {...params}
@@ -274,9 +253,9 @@ export const Filters = () => {
                                 }}
                                 InputProps={{
                                     ...params.InputProps,
-                                      sx: inputStyles, // Estilo del input
-                                    
-                                  }}
+                                    sx: inputStyles, // Estilo del input
+
+                                }}
                             />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
@@ -294,15 +273,9 @@ export const Filters = () => {
                 <FormControl sx={{ m: 1, width: '95%' }} >
                     <Autocomplete
                         multiple
-                        value={inglesName}
-                        onChange={(event, newValue) => {
-                            const selectedValues = newValue.map((option) => ({
-                                nombre: option.nombre,
-                            }));
-                            setInglesName(selectedValues)
-                            dispatch(fetchNewOptions(selectedValues, familiaName, paisesName, inglesName, cientificoName));
-                        }}
-                        options={ingles}
+                        value={selectOption.ingles}
+                        onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
+                        options={nIngles}
                         getOptionLabel={(option) => option.nombre}
                         renderInput={(params) =>
                             <TextField {...params}
@@ -312,9 +285,9 @@ export const Filters = () => {
                                 }}
                                 InputProps={{
                                     ...params.InputProps,
-                                      sx: inputStyles, // Estilo del input
-                                    
-                                  }}
+                                    sx: inputStyles, // Estilo del input
+
+                                }}
                             />}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (
@@ -322,7 +295,7 @@ export const Filters = () => {
                                     key={index}
                                     label={option.nombre}
                                     {...getTagProps({ index })}
-                                    disabled={ingles.length === 0}
+                                    disabled={nIngles.length === 0}
                                 />
                             ))
                         }
@@ -333,11 +306,10 @@ export const Filters = () => {
                     <Button variant="outlined" color="primary" onClick={handleReset}>
                         Resetear
                     </Button>
-                    <Button variant="contained" color="primary" onClick={handleClickAplicar}>
+                    <Button variant="contained" color="primary" onClick={handleClickFiltrar}>
                         Filtrar
                     </Button>
                 </Grid>
-
             </Grid>
         </Grid >
 

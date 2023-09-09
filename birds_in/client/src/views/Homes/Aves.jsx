@@ -5,10 +5,11 @@ import { Cards } from '../../components/Cards/Cards'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Grid, useTheme } from '@mui/material'
-import { FloatMenu } from '../../components/Menus/FloatMenuAdmin'
 import { getOptionsData } from '../../redux/actions/fetchOptions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
+import { FloatMenuAdmin } from '../../components/Menus/FloatMenuAdmin'
+import { FloatMenuUser } from '../../components/Menus/FloatMenuUser'
+// import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 
 
 export const Aves = () => {
@@ -17,8 +18,10 @@ export const Aves = () => {
   const dispatch = useDispatch()
   const birds = useSelector(state => state.birdSlice.infoBirds)
   const parameter = useSelector(state => state.birdSlice.filters)
-
+  const cliente = localStorage.getItem('tipoCliente');
   const [page, setPage] = React.useState(1);
+  
+  const isAdmin = cliente === "admin";
 
   const handleChangePage = () => {
     const newPage = page + 1;
@@ -28,7 +31,10 @@ export const Aves = () => {
 
   React.useEffect(() => {
     dispatch(getInfoBirds());
-    dispatch(getOptionsData())
+    dispatch(getOptionsData()).then(() => {
+      // Marca las opciones como cargadas cuando se resuelve la promesa
+      setOptionsLoaded(true);
+    });
   }, [dispatch]);
 
   return (
@@ -58,20 +64,18 @@ export const Aves = () => {
               textTransform: 'none',
               color: theme.palette.primary.main,
               borderRadius: '800px'
-
             }
             }
             variant="outline"
             onClick={handleChangePage}
-            
+
           >
             <ExpandMoreIcon style={{ fontSize: '3rem' }} />
 
           </Button>
         </Grid>
-
       </Grid>
-      < FloatMenu />
+      {isAdmin ? <FloatMenuAdmin /> : <FloatMenuUser />}
     </React.Fragment>
   )
 }

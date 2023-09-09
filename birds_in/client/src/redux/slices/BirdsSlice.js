@@ -12,7 +12,7 @@ const initialState = {
     cientifico: [],
     ingles: [],
   },
-  filters:''
+  filters: ''
 };
 
 export const birdSlice = createSlice({
@@ -39,19 +39,22 @@ export const birdSlice = createSlice({
       state.currentPage = action.payload
     },
     saveFilters: (state, action) => {
-      const { grupo, familia, paises, cientifico, ingles } = action.payload
+      const { grupo, familia, pais, cientifico, ingles } = action.payload
       state.currentFilters = {
-        grupo: grupo,
-        familia: familia,
-        paises: paises,
-        cientifico: cientifico,
-        ingles: ingles,
+        grupo: grupo.map(option => ({ id: option.id, nombre: option.nombre })),
+        familia: familia.map(option => ({ id: option.id, nombre: option.nombre })),
+        paises: pais.map(option => ({ id: option.id, nombre: option.nombre })),
+        cientifico: cientifico.map(option => ({ id: option.id, nombre: option.nombre })),
+        ingles: ingles.map(option => ({ id: option.id, nombre: option.nombre })),
       };
+    },
+    stringParameter: (state, action) => {
+      state.filters = action.payload
+    },
+    searchBarResult: (state, action) => {
+      state.infoBirds = action.payload
+    }
   },
-  stringParameter: (state, action) => {
-    state.filters = action.payload
-  }
-},
 });
 
 export const {
@@ -61,7 +64,8 @@ export const {
   returnFilters,
   newOptions,
   setCurrentPage,
-  saveFilters, 
-  stringParameter
+  saveFilters,
+  stringParameter,
+  searchBarResult
 } = birdSlice.actions;
 export default birdSlice.reducer;

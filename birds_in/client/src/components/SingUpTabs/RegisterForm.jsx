@@ -32,7 +32,6 @@ export const RegisterForm = () => {
     passFirst: '',
   })
 
-  console.log(formData)
   const handleClose = () => {
     dispatch(Boolean(false))
     setFormData({
@@ -118,7 +117,7 @@ export const RegisterForm = () => {
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
           Crear Cuenta
         </Typography>
-        <Typography variant="body1" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+        <Typography variant="h4" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Ya eres miembro ?
           <MuiLink component={Link} to="/home" color="primary.light" underline="none" sx={{ marginLeft: '5px' }}>
             Log In

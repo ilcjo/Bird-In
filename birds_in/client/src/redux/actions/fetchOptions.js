@@ -1,49 +1,44 @@
 import axios from 'axios'
-import { fetchOptions, newOptions } from '../slices/BirdsSlice'
+import { fetchOptions, newOptions, searchBarResult } from '../slices/BirdsSlice'
+import { creatParams } from '../../components/utils/convertId';
+
 
 
 export const getOptionsData = () => {
-    return async (dispatch) => {
-        try {
-            const response = await axios('aves/opciones')
-            const data = response.data
-            dispatch(fetchOptions(data))
-        } catch (error) {
-            console.error("Error al obtener los datos:", error)
-        }
+  return async (dispatch) => {
+    try {
+      const response = await axios('aves/opciones')
+      const data = response.data
+      dispatch(fetchOptions(data))
+    } catch (error) {
+      console.error("Error al obtener los datos:", error)
     }
+  }
 };
 
-export const fetchNewOptions = (gruposIds, familiaIds, paisId, nombreIngles, nombreCientifico) => {
-    return async (dispatch) => {
-        try {
-           
-            let queryParams = '';
-
-            if (gruposIds && gruposIds.length > 0) {
-              queryParams += `grupo=${gruposIds.map(ave => ave.id).join('&grupo=')}`;
-            }
-            if (familiaIds && familiaIds.length > 0) {
-              queryParams += queryParams ? '&' : '';
-              queryParams += `familia=${familiaIds.map(ave => ave.id).join('&familia=')}`;
-            }
-            if (paisId && paisId.length > 0) {
-              queryParams += queryParams ? '&' : '';
-              queryParams += `pais=${paisId.map(ave => ave.id).join('&pais=')}`;
-            }
-            if (nombreIngles && nombreIngles.length > 0) {
-              queryParams += queryParams ? '&' : '';
-              queryParams += nombreIngles.map(nombre => `nombreIngles=${encodeURIComponent(nombre)}`).join('&');
-            }
-            if (nombreCientifico && nombreCientifico.length > 0) {
-              queryParams += queryParams ? '&' : '';
-              queryParams += nombreCientifico.map(nombre => `nombreCientifico=${encodeURIComponent(nombre.nombre)}`).join('&');
-            }
-            const response = await axios(`aves/nuevasOpciones?${queryParams}`);
-            const data = response.data
-            dispatch(newOptions(data))
-        } catch (error) {
-            console.log('error enviando datos:', error)
-        }
+export const fetchNewOptions = (selectedOptions) => {
+  return async (dispatch) => {
+    try {
+      const parameter = creatParams(selectedOptions)
+      console.log(typeof(parameter), parameter)
+      const response = await axios(`aves/nuevasOpciones?${parameter}`);
+      const data = response.data
+      console.log(data)
+      dispatch(newOptions(data))
+    } catch (error) {
+      console.log('error enviando datos:', error)
     }
+  }
+};
+
+export const searchBar = (name) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios(`aves/filtros?nombreIngles=${name}`)
+      const result = response.data
+      dispatch(searchBarResult(result))
+    } catch (error) {
+      console.log('error enviando datos:', error)
+    }
+  }
 };

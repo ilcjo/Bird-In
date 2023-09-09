@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { fetchInfo, loadMoreDataSuccess, returnFilters, stringParameter } from '../slices/BirdsSlice'
-import { fetchNewOptions } from './fetchOptions';
+import { creatParams } from '../../components/utils/convertId';
+
 
 
 export const getInfoBirds = () => {
@@ -29,30 +30,10 @@ export const loadMoreData = (currentPage, parameters) => {
   };
 };
 
-export const sendParameter = (gruposIds, familiaIds, paisId, nombreIngles, nombreCientifico) => {
+export const sendParameter = (selectedOptions) => {
   return async (dispatch) => {
     try {
-      let queryParams = '';
-
-      if (gruposIds && gruposIds.length > 0) {
-        queryParams += `grupo=${gruposIds.map(ave => ave.id).join('&grupo=')}`;
-      }
-      if (familiaIds && familiaIds.length > 0) {
-        queryParams += queryParams ? '&' : '';
-        queryParams += `familia=${familiaIds.map(ave => ave.id).join('&familia=')}`;
-      }
-      if (paisId && paisId.length > 0) {
-        queryParams += queryParams ? '&' : '';
-        queryParams += `pais=${paisId.map(ave => ave.id).join('&pais=')}`;
-      }
-      if (nombreIngles && nombreIngles.length > 0) {
-        queryParams += queryParams ? '&' : '';
-        queryParams += nombreIngles.map(nombre => `nombreIngles=${encodeURIComponent(nombre)}`).join('&');
-      }
-      if (nombreCientifico && nombreCientifico.length > 0) {
-        queryParams += queryParams ? '&' : '';
-        queryParams += nombreCientifico.map(nombre => `nombreCientifico=${encodeURIComponent(nombre.nombre)}`).join('&');
-      }
+      const queryParams = creatParams(selectedOptions)
       const response = await axios.get(`aves/filtros?${queryParams}`);
       const data = response.data;
       dispatch(stringParameter(queryParams))
@@ -63,33 +44,4 @@ export const sendParameter = (gruposIds, familiaIds, paisId, nombreIngles, nombr
   };
 };
 
-// export const fetchData = (page, gruposIds, familiaIds, paisId,) => {
-//   return async (dispatch) => {
-//     try {
-//       console.log('entrando al axios', gruposIds)
-//       const currentPageNumber = page;
-//       const perPages = 9;
-//       let queryParams = `page=${currentPageNumber}&perPage=${perPages}`;
-
-//       if (gruposIds && gruposIds.length > 0) {
-//         queryParams += `&grupo=${gruposIds.map(ave => ave.id).join('&grupo=')}`;
-//       }
-//       if (familiaIds && familiaIds.length > 0) {
-//         queryParams += `&familia=${familiaIds.map(ave => ave.id).join('&familia=')}`;
-//       }
-//       if (paisId && paisId.length > 0) {
-//         queryParams += `&pais=${paisId.map(ave => ave.id).join('&pais=')}`;
-//       }
-
-//       const response = await axios(`/aves/filtros?${queryParams}`);
-//       const data = response.data;
-//       console.log('respuesta del axios', data)
-//       dispatch(loadMoreDataSuccess(data));
-//       dispatch(returnFilters(data));
-
-//     } catch (error) {
-//       console.log('error enviando/recibiendo datos:', error);
-//     }
-//   };
-// };
 

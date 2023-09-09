@@ -5,8 +5,8 @@ const {  fetchOptions, filterOptions, fetchFilterBirds } = require("../../contro
 const getFilterInfo = async (req, res) => {
 
    const { familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage } = req.query;
-
    try {
+     
       const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });

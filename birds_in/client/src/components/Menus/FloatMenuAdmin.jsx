@@ -4,7 +4,9 @@ import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
 import {
+  Badge,
   BottomNavigation,
   BottomNavigationAction,
   InputBase,
@@ -14,6 +16,8 @@ import {
   useTheme
 } from '@mui/material';
 import { Filters } from '../Filters'
+import { searchBar } from '../../redux/actions/fetchOptions';
+import { useDispatch } from 'react-redux';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -21,7 +25,7 @@ const Search = styled('div')(({ theme }) => ({
   backgroundColor: alpha(theme.palette.primary.light, 0.15),
   '&:hover': {
     backgroundColor: alpha(theme.palette.primary.light, 0.25),
-    
+
   },
   marginLeft: 0,
   marginTop: 8,
@@ -54,10 +58,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
+export const FloatMenuAdmin = () => {
 
-export const FloatMenu = () => {
-  
   const theme = useTheme()
+  const dispatch = useDispatch()
   const [value, setValue] = React.useState('recents');
   const [searchVisible, setSearchVisible] = React.useState(false);
   const [showCloseIcon, setShowCloseIcon] = React.useState(false); // Estado para mostrar/ocultar el icono de cerrar
@@ -79,7 +83,10 @@ export const FloatMenu = () => {
     setShowCloseFilter(!showCloseFilter)
 
   };
-
+  const handleSearchChange = (e) => {
+    const searchQuery = e.target.value;
+    dispatch(searchBar(searchQuery));
+  };
 
   return (
     <Paper elevation={3}>
@@ -95,7 +102,8 @@ export const FloatMenu = () => {
         }}
         value={value}
         onChange={handleChange}>
-        <BottomNavigationAction   
+
+        <BottomNavigationAction
           label="Buscar"
           value="search"
           icon={showCloseIcon ? <SearchOffIcon style={{ color: theme.palette.primary.main, fontSize: 36 }} /> :
@@ -107,18 +115,13 @@ export const FloatMenu = () => {
             <StyledInputBase
               placeholder="Buscar...."
               inputProps={{ 'aria-label': 'search' }}
+              onChange={handleSearchChange}
             />
           </Search>
         )}
-        <BottomNavigationAction
-         
-          label='Add'
-          value="add"
-          icon={<AddCircleIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
 
-        />
         <BottomNavigationAction
-         
+
           label='Filtros'
           value="filtros"
           onClick={toggleFilters}
@@ -126,9 +129,21 @@ export const FloatMenu = () => {
             < FilterAltIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
         />
         {filterVisible && (
-          < Filters/>
+          < Filters />
         )}
-
+        <BottomNavigationAction
+          label='Add'
+          value="add"
+          icon={<AddCircleIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
+        />
+      
+          <BottomNavigationAction
+            label='Autorizaciones'
+            value="autorize"
+            icon={  <Badge badgeContent={10} color="warning" size="large" max={999}> <AnnouncementIcon style={{ color: theme.palette.primary.light, fontSize: 36 }}  /></Badge>}
+            
+          />
+        
 
       </BottomNavigation>
     </Paper>

@@ -9,9 +9,8 @@ import theme from './assets/styles/theme.js';
 import { CssBaseline } from '@mui/material';
 import axios from 'axios';
 
-
-axios.defaults.baseURL = 'http://localhost:3001/';
-
+axios.defaults.baseURL = 'http://localhost:3001';
+//https://lasavesquepasaronpormisojos-com.onrender.com
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

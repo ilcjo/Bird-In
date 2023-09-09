@@ -1,14 +1,20 @@
 import React from 'react'
 import { Box, Button, Grid, Typography } from '@mui/material'
-import image from '../assets/images/sreenivas-zqtZKhfDaYE-unsplash.jpg'
+import image from '../assets/images/birdExample2.jpg'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { clearToken } from '../redux/slices/Auth';
 
 export const Header = () => {
   const usuarioNombre = localStorage.getItem("usuarioNombre");
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  
   const onLogoutClick = () => {
     localStorage.clear();
+    dispatch(clearToken())
+    
     navigate('/')
   };
 

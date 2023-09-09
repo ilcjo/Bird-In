@@ -7,7 +7,6 @@ import { LoginForm } from './LoginForm';
 import { ForgotPass } from './ForgotPass';
 
 
-
 export const Index = ({ open }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
