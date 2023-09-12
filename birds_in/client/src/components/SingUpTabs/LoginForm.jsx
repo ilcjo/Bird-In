@@ -11,7 +11,7 @@ import {
   IconButton,
 
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { loginUser } from '../../redux/actions/userLoginRegister';
@@ -20,7 +20,8 @@ import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { loginFailure, loginRequest } from '../../redux/slices/Auth';
 
-export const LoginForm = () => {
+export const LoginForm = ({ changeTab }) => {
+ 
 
   const theme = useTheme()
   const navigate = useNavigate()
@@ -32,10 +33,22 @@ export const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState('')
   const [errorTextPass, setErrorTextPass] = React.useState('');
   const [errorText, setErrorText] = React.useState('');
-  const { loading  } = useSelector((state) => state.authSlice);
-  
+  const { loading } = useSelector((state) => state.authSlice);
+
   const handleClose = () => {
     dispatch(Boolean(false))
+  };
+
+  const handleegisterLinkClicRk = (e) => {
+    e.preventDefault();
+    const numOne = 1 
+    changeTab(numOne);
+  };
+
+  const handlePassLinkClicRk = (e) => {
+    e.preventDefault();
+    const num = 2 
+    changeTab(num);
   };
 
   const handleLogin = async (e) => {
@@ -132,7 +145,12 @@ export const LoginForm = () => {
         </Typography>
         <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Aun no eres miembro ?
-          <MuiLink component={Link} to="/home" color="primary.light" underline="none" sx={{ marginLeft: '5px' }}>
+          <MuiLink onClick={handleegisterLinkClicRk}  color="primary.light" underline="none" 
+          sx={{  
+            cursor: 'pointer',
+          '&:hover': {
+            color: theme.palette.primary.main },
+            marginLeft: '5px' }}>
             Registrarse
           </MuiLink>
         </Typography>
@@ -208,9 +226,15 @@ export const LoginForm = () => {
           />
           <Typography variant="h5">
 
-            <Link to="/forgot-password" sx={{ marginLeft: '8px', marginTop: '10px'}} style={{ color: theme.palette.primary.main }}>
+            <MuiLink  onClick={handlePassLinkClicRk}  
+            sx={{  
+              cursor: 'pointer',
+            '&:hover': {
+              color: theme.palette.primary.main },
+              marginLeft: '8px', 
+              marginTop: '10px' }} style={{ color: theme.palette.primary.main }}>
               Olvidó su contraseña?
-            </Link>
+            </MuiLink>
 
 
           </Typography>
@@ -230,7 +254,7 @@ export const LoginForm = () => {
             loadingPosition="end"
             variant="contained"
             disabled={!loginData.email && !loginData.password}
-            
+
           >
             <span>Iniciar Sesion</span>
           </LoadingButton>

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Boolean } from '../redux/slices/OpenClose';
 import { Index } from '../components/SingUpTabs/Index';
 import cover from '../assets/images/DSC07270.jpg'
+import logo from '../assets/images/Logo.png'
 
 
 export const Landing = () => {
@@ -20,7 +21,7 @@ export const Landing = () => {
   return (
     <React.Fragment>
       <Grid container component="main" sx={{ height: '100vh' }}>
-      
+
         <Grid item xs={false} sm={3} md={8.5}
           sx={{
             backgroundImage: `url(${cover})`,
@@ -60,24 +61,30 @@ export const Landing = () => {
           }}>
           <Box sx={{
             display: 'flex',
-            textAlign: 'left',
-            width: '80%',
+            alignItems: 'center', // Centra verticalmente
+            justifyContent: 'center', // Centra horizontalmente
+            // Altura mínima de la ventana gráfica
           }}>
-            <Typography variant="h1" color='primary.main'
+            <img alt='logo' src={logo} style={{
+              width: '170px', // Establece el ancho fijo que desees
+              height: 'auto', // Permite que la altura se ajuste automáticamente para mantener la proporción
+            }} >
+            </img>
+            {/* <Typography variant="h1" color='primary.main'
               sx={{
                 textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
               }}>
               LAS AVES QUE PASARON POR MIS OJOS
-            </Typography>
+            </Typography> */}
           </Box>
           <Box sx={{
-            top: '500px',
-            textAlign: 'left',
+            // top: '500px',
+            textAlign: 'justify',
             width: '80%',
             mt: 11
           }}>
-            <Typography variant="h2" color='primary.main' sx={{ my: 1 }}>
-             Moises Sterinberg
+            <Typography variant="h2" color='primary.main' >
+              Moises Sterinberg
             </Typography>
             <Typography variant="body1" color='primary.light'>
               Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.
@@ -103,7 +110,7 @@ export const Landing = () => {
               textTransform: 'none',
             }
           }}>
-            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5}}>Iniciar sesion</Button>
+            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5 }}>Iniciar sesion</Button>
           </Box>
           <Index
             open={open} />

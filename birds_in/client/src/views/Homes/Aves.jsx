@@ -68,8 +68,8 @@ export const Aves = () => {
             }
             variant="outline"
             onClick={handleChangePage}
-
           >
+            
             <ExpandMoreIcon style={{ fontSize: '3rem' }} />
 
           </Button>

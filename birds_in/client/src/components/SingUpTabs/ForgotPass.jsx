@@ -59,7 +59,7 @@ export const ForgotPass = ({open}) => {
     fontWeight: 500,
 
     '& .MuiButton-contained': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -70,7 +70,7 @@ export const ForgotPass = ({open}) => {
     },
 
     '& .MuiButton-outlined': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },

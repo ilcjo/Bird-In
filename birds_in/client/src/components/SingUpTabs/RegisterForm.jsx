@@ -15,10 +15,9 @@ import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
-import { Link } from 'react-router-dom';
 import { registerData } from '../../redux/actions/userLoginRegister';
 
-export const RegisterForm = () => {
+export const RegisterForm = ({ changeTab }) => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -52,6 +51,12 @@ export const RegisterForm = () => {
     } else {
       setError('Las contraseñas no coinciden')
     }
+  };
+
+  const handleLinkClicRk = (e) => {
+    e.preventDefault();
+    const num = 0 
+    changeTab(num);
   };
 
   const labelStyles = {
@@ -94,7 +99,7 @@ export const RegisterForm = () => {
     fontWeight: 500,
 
     '& .MuiButton-contained': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -105,7 +110,7 @@ export const RegisterForm = () => {
     },
 
     '& .MuiButton-outlined': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },
@@ -117,9 +122,13 @@ export const RegisterForm = () => {
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
           Crear Cuenta
         </Typography>
-        <Typography variant="h4" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Ya eres miembro ?
-          <MuiLink component={Link} to="/home" color="primary.light" underline="none" sx={{ marginLeft: '5px' }}>
+          <MuiLink onClick={handleLinkClicRk} color="primary.light" underline="none" sx={{ 
+            cursor: 'pointer',
+            '&:hover': {
+              color: theme.palette.primary.main }, 
+            marginLeft: '5px' }}>
             Log In
           </MuiLink>
         </Typography>

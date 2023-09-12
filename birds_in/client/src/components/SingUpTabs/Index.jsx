@@ -15,21 +15,22 @@ export const Index = ({ open }) => {
   const handleClose = () => {
     dispatch(Boolean(false))
   };
-  const handleTabChange = (event, newValue) => {
-    setSelectedTab(newValue);
+  const handleTabChange = (event, newValue) => { 
+    const convertNumber = Number(newValue)
+    setSelectedTab(convertNumber);
   };
 
   const tabTitleStyles = {
-  color: theme.palette.primary.light,
+    color: theme.palette.primary.light,
     "&:hover": {
       color: theme.palette.primary.main, // Cambiar el color del texto en el hover
       cursor: 'pointer', // Cambiar el cursor a "mano" en el hover
-    },  
+    },
   };
 
 
   return (
-    <Dialog open={open} onClose={handleClose}  PaperProps={{
+    <Dialog open={open} onClose={handleClose} PaperProps={{
       sx: {
         padding: '9px',
         borderRadius: '15px',
@@ -40,7 +41,7 @@ export const Index = ({ open }) => {
       }
     }}
     >
-      
+
       <DialogTitle>
         <Tabs
           value={selectedTab}
@@ -55,27 +56,29 @@ export const Index = ({ open }) => {
               Log In
             </Typography>
           }></Tab>
-          <Tab label={ <Typography variant='h5'  sx={tabTitleStyles}>
-              Registrarse
-            </Typography>}></Tab>
-            <Tab label={ <Typography variant='h5'   sx={tabTitleStyles}>
-              Recuperar contrasena
-            </Typography>}></Tab>
+          <Tab label={<Typography variant='h5' sx={tabTitleStyles}>
+            Registrarse
+          </Typography>}></Tab>
+          <Tab label={<Typography variant='h5' sx={tabTitleStyles}>
+            Recuperar contrasena
+          </Typography>}></Tab>
         </Tabs>
       </DialogTitle>
       <DialogContent>
         {selectedTab === 0 && (
           <Box>
             <LoginForm
+              changeTab={(newValue) => setSelectedTab(newValue)}
               open={open}
-              />
+            />
           </Box>
         )}
         {selectedTab === 1 && (
           <Box>
             <RegisterForm
+              changeTab={(newValue) => setSelectedTab(newValue)}
               open={open}
-              
+
             />
           </Box>
         )}
@@ -83,7 +86,7 @@ export const Index = ({ open }) => {
           <Box>
             <ForgotPass
               open={open}
-              
+
             />
           </Box>
         )}
