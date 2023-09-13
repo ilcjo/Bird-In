@@ -1,5 +1,5 @@
 import  React from 'react'
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Button, Grid, Typography, useTheme } from '@mui/material'
 import image from '../assets/images/DSC01570-105.jpg'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 export const Header = () => {
+  const theme = useTheme()
   const usuarioNombre = localStorage.getItem("usuarioNombre");
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -81,16 +82,17 @@ export const Header = () => {
         sx={{
           position: 'absolute',
           top: '80%',
-          right: '10%', // Ajusta la posición derecha
+          right: '15%', // Ajusta la posición derecha
           transform: 'translate(50%, -50%)',
         }}
       >
          <Button
           sx={{
-            fontSize: '1rem',
+            fontSize: '1.3rem',
             fontWeight: 'bold',
+            color: theme.palette.primary.light
           }}
-          color="primary"
+          
           size="large"
           onClick={returnMenuClick}
           startIcon={<ArrowBackIcon />}
@@ -99,7 +101,7 @@ export const Header = () => {
         </Button>
         <Button
           sx={{
-            fontSize: '1rem',
+            fontSize: '1.3rem',
             fontWeight: 'bold',
           }}
           color="primary"

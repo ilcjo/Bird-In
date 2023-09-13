@@ -2,12 +2,18 @@ const { Op } = require("sequelize");
 const { Aves, Grupos, Familias, Paises } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 
-
 const DEFAULT_PER_PAGE = 9;
 const DEFAULT_PAGE = 1;
 
-const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage) => {
-    console.log('funcion all birds',familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage)
+const fetchFilterBirds = async (
+    familia, 
+    grupo, 
+    nombreCientifico, 
+    nombreIngles, 
+    pais, 
+    page, 
+    perPage
+    ) => {
     if (nombreCientifico) {
         nombreCientifico = decodeURIComponent(nombreCientifico);
     }
@@ -111,7 +117,6 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
         nIngles: [],
         nCientifico: [],
     };
-
         const gruposSet = new Set();
 
         allResults.forEach(ave => {
@@ -123,8 +128,6 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
 
         const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
         newOptions.grupos = gruposArray
-
-
     
         const familiasSet = new Set();
 
@@ -138,7 +141,6 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
         const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
         newOptions.familias = familiasArray;
    
-  
         const paisesSet = new Set();
 
         allResults.forEach(ave => {
@@ -154,8 +156,6 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
         const nombresCientificos = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
         newOptions.nCientifico = nombresCientificos;
     
-
-   
         const nombresIngles = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_ingles })))];
         newOptions.nIngles = nombresIngles;
     

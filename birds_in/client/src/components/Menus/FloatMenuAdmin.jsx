@@ -120,7 +120,7 @@ export const FloatMenuAdmin = () => {
           </Search>
         )}
 
-        <BottomNavigationAction
+        {/* <BottomNavigationAction
 
           label='Filtros'
           value="filtros"
@@ -130,7 +130,7 @@ export const FloatMenuAdmin = () => {
         />
         {filterVisible && (
           < Filters />
-        )}
+        )} */}
         <BottomNavigationAction
           label='Add'
           value="add"

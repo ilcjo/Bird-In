@@ -1,12 +1,23 @@
 import * as React from 'react'
 import { Button, Grid } from '@mui/material'
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { getOptionsData } from '../../redux/actions/fetchOptions';
+import { getInfoBirds } from '../../redux/actions/fetchAllBirds';
+import { useDispatch } from 'react-redux';
 
-export const Menu = () => {
+export const MenuBar = ({ isFilterOpen, setIsFilterOpen }) => {
+    const dispatch = useDispatch()
     const [selectedButton, setSelectedButton] = React.useState('todo');
 
     const handleButtonClick = (button) => {
         setSelectedButton(button);
+    };
+    const handleFilterButtonClick = () => {
+        // Cambiar el estado del filtro al hacer clic en el botón del filtro
+        setIsFilterOpen(!isFilterOpen);
+        dispatch(getOptionsData())
+        dispatch(getInfoBirds())
     };
 
     return (
@@ -36,6 +47,16 @@ export const Menu = () => {
                     endIcon={<BookmarksIcon />}
                 >
                     Colección
+                </Button>
+            </Grid>
+            <Grid item>
+                <Button sx={{ marginBottom: '10px', marginLeft: '950px', }}
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleFilterButtonClick}
+                    endIcon={<FilterAltIcon />}
+                >
+                    Abrir Filtro
                 </Button>
             </Grid>
         </Grid>
