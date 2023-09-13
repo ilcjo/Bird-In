@@ -9,6 +9,7 @@ const initialState = {
     grupo: [],
     familia: [],
     paises: [],
+    zona: [],
     cientifico: [],
     ingles: [],
   },
@@ -39,11 +40,12 @@ export const birdSlice = createSlice({
       state.currentPage = action.payload
     },
     saveFilters: (state, action) => {
-      const { grupo, familia, pais, cientifico, ingles } = action.payload
+      const { grupo, familia, pais, cientifico, ingles, zonas } = action.payload
       state.currentFilters = {
         grupo: grupo.map(option => ({ id: option.id, nombre: option.nombre })),
         familia: familia.map(option => ({ id: option.id, nombre: option.nombre })),
         paises: pais.map(option => ({ id: option.id, nombre: option.nombre })),
+        zona: zonas.map(option => ({ id: option.id, nombre: option.nombre })),
         cientifico: cientifico.map(option => ({ id: option.id, nombre: option.nombre })),
         ingles: ingles.map(option => ({ id: option.id, nombre: option.nombre })),
       };
@@ -59,6 +61,7 @@ export const birdSlice = createSlice({
         grupo: [],
         familia: [],
         paises: [],
+        zona: [],
         cientifico: [],
         ingles: [],
       };

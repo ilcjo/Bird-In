@@ -2,19 +2,18 @@ import * as React from 'react'
 import {
     Box,
     Button,
-    Chip,
     FormControl,
     Grid,
     Typography,
     useTheme,
     Autocomplete,
     TextField,
-    CircularProgress,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
 import { resetCurrentFilters, saveFilters } from '../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
@@ -77,18 +76,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             textTransform: 'none',
         },
     };
-    const isOpen = isFilterOpen
+
     const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
-    const { nIngles, nCientifico, paises, familias, grupos } = useSelector(state => state.birdSlice.options)
+    const { nIngles, nCientifico, paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],
         familia: [],
         pais: [],
+        zona:[],
         cientifico: [],
         ingles: [],
         ...selectOptionFromSlice,
     });
-    console.log(selectOption)
+
     const handleOptionChange = (category, newValue) => {
 
         const updatedSelectOption = {
@@ -100,14 +100,17 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         };
         setSelectOption(updatedSelectOption);
         dispatch(fetchNewOptions(updatedSelectOption));
-    };
 
+    };
 
     const handleClickFiltrar = () => {
         dispatch(saveFilters(selectOption))
         dispatch(sendParameter(selectOption))
+        setIsFilterOpen(!isFilterOpen);
     };
-
+    const handleBack = () => {
+        setIsFilterOpen(!isFilterOpen);
+    };
     const handleReset = () => {
         setSelectOption({
             grupo: [],
@@ -122,18 +125,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     };
 
     React.useEffect(() => {
-        if (isOpen) {
-          // Actualiza selectOption solo si isFilterOpen es true
-          setSelectOption((prevSelectOption) => ({
-            ...prevSelectOption,
-            ...selectOptionFromSlice,
-          }));
+        if (isFilterOpen) {
+            // Actualiza selectOption solo si isFilterOpen es true
+            setSelectOption((prevSelectOption) => ({
+                ...prevSelectOption,
+                ...selectOptionFromSlice,
+            }));
         }
-      }, [isFilterOpen, selectOptionFromSlice]);
-
-
-
-
+    }, [isFilterOpen, selectOptionFromSlice]);
 
     return (
         <Grid component={Box}
@@ -281,6 +280,50 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
+                        {/* Zona */}
+
+                        <FormControl sx={{ m: 1, width: '95%' }}>
+                            <Autocomplete
+                                multiple
+
+                                value={selectOption.cientifico}
+                                onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
+                                options={nCientifico}
+                                getOptionLabel={(option) => option.nombre}
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        label="Zonas"
+                                        InputLabelProps={{
+                                            sx: labelStyles, // Estilo del label
+                                        }}
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            sx: inputStyles, // Estilo del input
+
+                                        }}
+                                    />}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Typography
+                                            key={option.id}
+                                            variant="body2" // Elige el variant y otros estilos según tus necesidades
+                                            sx={{
+                                                display: 'inline-block',
+                                                padding: '4px 8px',
+                                                color: 'white', // Color del texto de la etiqueta
+                                                marginRight: '8px', // Espacio entre etiquetas
+                                            }}
+                                        >
+                                            {option.nombre}
+                                        </Typography>
+                                    ))
+                                }
+                                isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                disabled={nCientifico.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
                         {/* Cientifico */}
 
                         <FormControl sx={{ m: 1, width: '95%' }}>
@@ -364,14 +407,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                 disabled={nIngles.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
                             />
                         </FormControl>
+
                     </Grid>
                     <Grid container sx={actionsStyles}>
+                        <Button variant="contained" color="primary" onClick={handleBack}>
+                            <ArrowBackIcon /> Volver
+                        </Button>
                         <Button variant="outlined" color="primary" onClick={handleReset}>
                             Resetear
                         </Button>
                         <Button variant="contained" color="primary" onClick={handleClickFiltrar}>
-                            Filtrar
+                            Mostrar
                         </Button>
+
                     </Grid>
                 </Grid>
             </Grid >

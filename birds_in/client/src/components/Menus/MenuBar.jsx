@@ -11,7 +11,6 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen }) => {
     const [selectedButton, setSelectedButton] = React.useState('todo');
     const handleButtonClick = (button) => {
         setSelectedButton(button);
-
         if (button === 'todo') {
             // Si se hace clic en "Todo", obtén todos los pájaros.
             dispatch(getInfoBirds());
@@ -21,7 +20,6 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen }) => {
     const handleFilterButtonClick = () => {
         // Cambiar el estado del filtro al hacer clic en el botón del filtro
         setIsFilterOpen(!isFilterOpen);
-        
     };
 
     return (

@@ -61,7 +61,7 @@ export const Aves = () => {
           fullWidth
           maxWidth="md"
         >
-          <Filters  />
+          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
         </Dialog>
         {/* {showFilter && (
           <Grid item container spacing={3} justifyContent="center">
