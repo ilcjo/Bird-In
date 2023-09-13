@@ -12,37 +12,37 @@ const sections = [
     id: 'aves',
     imageUrl: imagenBird,
     title: 'Aves',
-    description: 'Imágenes de aves',
+    description: 'Galeria de aves',
   },
   {
     id: 'animales',
     imageUrl: 'https://source.unsplash.com/random?animal',
     title: 'Animales',
-    description: 'Giágenes de animales',
+    description: 'Galeria de animales',
   },
   {
     id: 'peces',
     imageUrl: 'https://source.unsplash.com/random?fish',
     title: 'Peces',
-    description: 'imágenes de peces',
+    description: 'Galeria de peces',
   },
   {
     id: 'flores',
     imageUrl: 'https://source.unsplash.com/random?flower',
     title: 'Flora',
-    description: 'imágenes de flora',
+    description: 'Galeria de flora',
   },
   {
     id: 'paisajes',
     imageUrl: 'https://source.unsplash.com/random?landscape',
     title: 'Paisajes',
-    description: 'imágenes de paisajes',
+    description: 'Galeria de paisajes',
   },
   {
     id: 'Admin',
     imageUrl: imageDash,
     title: 'Admin',
-    description: 'Dashboard de Admin',
+    description: 'Dashboard ',
   },
 
 ];
@@ -62,7 +62,7 @@ export const HomeMenu = () => {
   }, [dispatch]);
 
   return (
-    <Grid container spacing={1} sx={{ marginTop: '20px', justifyContent: 'center', alignItems: 'center' }}>
+    <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
       {sections.map((section) => (
         // Verifica si no es el elemento "Admin" o si el usuario es administrador
         (isAdmin || section.id !== 'Admin') && (
@@ -74,7 +74,7 @@ export const HomeMenu = () => {
                   alt={section.title}
                   style={{
                     width: '100%',
-                    height: '600px',
+                    height: '580px',
                     objectFit: 'cover',
                     borderRadius: "0 0 100px 100px",
                   }}
@@ -127,7 +127,7 @@ export const HomeMenu = () => {
                     component={RouterLink}
                     to={`/${section.id}`}
                   >
-                    {section.id === 'Admin' && isAdmin ? 'Ir al dashboard' : 'Ir a la galeria'}
+                    {section.id === 'Admin' && isAdmin ? 'dashboard' : 'Ir a galeria'}
                   </Button>
                 </Box>
               </div>

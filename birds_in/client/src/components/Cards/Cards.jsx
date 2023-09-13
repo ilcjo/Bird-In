@@ -1,11 +1,9 @@
 import * as React from 'react'
-import { Button, Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
+import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
-import image from '../../assets/images/birdExample.jpg'
-import image2 from '../../assets/images/birdExample2.jpg'
 import { CarruselGallery } from '../Galeries/CarruselGallery';
 import { useTheme } from '@emotion/react';
 
@@ -40,7 +38,7 @@ export const Cards = ({ foto, name, index }) => {
         <CardMedia
           component="img"
           height="194"
-          image={image}
+          image={foto}
           alt={name}
           key={index}
           onClick={openGallery}
@@ -66,7 +64,7 @@ export const Cards = ({ foto, name, index }) => {
         )}
       </CardActions>
 
-      <CarruselGallery isOpen={isGalleryOpen} images={[image, image2]} onClose={() => setIsGalleryOpen(false)} />
+      <CarruselGallery isOpen={isGalleryOpen} images={[foto]} onClose={() => setIsGalleryOpen(false)} />
     </Card >
 
   )

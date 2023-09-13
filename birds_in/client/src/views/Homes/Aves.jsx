@@ -47,7 +47,7 @@ export const Aves = () => {
         direction="column"
         alignItems="center"
         sx={{
-          padding: '40px',
+          padding: '30px',
           backgroundColor: theme.palette.secondary.light,
           minHeight: '100vh',
           marginBottom: '20px',
@@ -61,7 +61,7 @@ export const Aves = () => {
           fullWidth
           maxWidth="md"
         >
-          <Filters />
+          <Filters  />
         </Dialog>
         {/* {showFilter && (
           <Grid item container spacing={3} justifyContent="center">

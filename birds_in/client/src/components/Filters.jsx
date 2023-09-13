@@ -13,11 +13,11 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
-import { saveFilters } from '../redux/slices/BirdsSlice'
+import { resetCurrentFilters, saveFilters } from '../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
 
 
-export const Filters = () => {
+export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
@@ -61,7 +61,7 @@ export const Filters = () => {
 
 
         '& .MuiButton-contained': {
-            fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+            fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
             fontWeight: 'bold', // Hacer el texto negrita
             textTransform: 'none',
             '&:hover': {
@@ -72,26 +72,23 @@ export const Filters = () => {
         },
 
         '& .MuiButton-outlined': {
-            fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+            fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
             fontWeight: 'bold', // Hacer el texto negrita
             textTransform: 'none',
         },
     };
-
+    const isOpen = isFilterOpen
+    const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
     const { nIngles, nCientifico, paises, familias, grupos } = useSelector(state => state.birdSlice.options)
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],
         familia: [],
         pais: [],
         cientifico: [],
-        ingles: []
-
+        ingles: [],
+        ...selectOptionFromSlice,
     });
-
-    // const [open, setOpen] = React.useState(false);
-    // const [loading, setLoading] = React.useState(true);
-    // const loading = open || grupos.length === 0 || familias.length === 0 || paises.length === 0 || nCientifico.length === 0 || nIngles.length === 0;
-
+    console.log(selectOption)
     const handleOptionChange = (category, newValue) => {
 
         const updatedSelectOption = {
@@ -119,26 +116,43 @@ export const Filters = () => {
             cientifico: [],
             ingles: []
         })
+        dispatch(resetCurrentFilters());
         dispatch(getOptionsData())
         dispatch(getInfoBirds())
     };
+
+    React.useEffect(() => {
+        if (isOpen) {
+          // Actualiza selectOption solo si isFilterOpen es true
+          setSelectOption((prevSelectOption) => ({
+            ...prevSelectOption,
+            ...selectOptionFromSlice,
+          }));
+        }
+      }, [isFilterOpen, selectOptionFromSlice]);
+
+
+
+
 
     return (
         <Grid component={Box}
             sx={{
                 height: 'auto',
-                width: 600,
+                width: '80%',
                 borderRadius: '20px 20px 20px 20px',
                 backgroundColor: 'rgba(0, 61, 21, 0.2)',
                 padding: 2,
+                marginLeft: '90px'
+
             }} >
-            <Grid item>
-                <Typography variant="h2" color='primary.light' sx={{ m: 1, }}>
+            <Grid item >
+                <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
                     Filtros
                 </Typography>
             </Grid>
-            <Grid item container justifyContent="center">
-                <Grid>
+            <Grid item container alignItems="center">
+                <Grid xs={12} >
                     {/* Grupo */}
                     <FormControl sx={{ m: 1, width: '95%' }}>
                         <Autocomplete
@@ -178,6 +192,7 @@ export const Filters = () => {
 
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             disabled={grupos.length === 0}
+
                         />
 
                     </FormControl>
@@ -261,92 +276,96 @@ export const Filters = () => {
                                     ))
                                 }
                                 isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={paises.length === 0}
+                                disabled={paises.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
                             />
                         </FormControl>
                     </Grid>
-                    <FormControl sx={{ m: 1, width: '95%' }}>
-                        <Autocomplete
-                            multiple
+                    <Grid item xs={12}>
+                        {/* Cientifico */}
 
-                            value={selectOption.cientifico}
-                            onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
-                            options={nCientifico}
-                            getOptionLabel={(option) => option.nombre}
-                            renderInput={(params) =>
-                                <TextField {...params}
-                                    label="Nombre Cientifico"
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
-                                    }}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
+                        <FormControl sx={{ m: 1, width: '95%' }}>
+                            <Autocomplete
+                                multiple
 
-                                    }}
-                                />}
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Typography
-                                        key={option.id}
-                                        variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                        sx={{
-                                            display: 'inline-block',
-                                            padding: '4px 8px',
-                                            color: 'white', // Color del texto de la etiqueta
-                                            marginRight: '8px', // Espacio entre etiquetas
+                                value={selectOption.cientifico}
+                                onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
+                                options={nCientifico}
+                                getOptionLabel={(option) => option.nombre}
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        label="Nombre Cientifico"
+                                        InputLabelProps={{
+                                            sx: labelStyles, // Estilo del label
                                         }}
-                                    >
-                                        {option.nombre}
-                                    </Typography>
-                                ))
-                            }
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            disabled={nCientifico.length === 0}
-                        />
-                    </FormControl>
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            sx: inputStyles, // Estilo del input
 
-                    <FormControl sx={{ m: 1, width: '95%' }} >
-                        <Autocomplete
-                            multiple
-                            value={selectOption.ingles}
-                            onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
-                            options={nIngles}
-                            getOptionLabel={(option) => option.nombre}
-                            renderInput={(params) =>
-                                <TextField {...params}
-                                    label="Nombre Ingles"
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
-                                    }}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
-
-                                    }}
-                                />}
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Typography
-                                        key={option.id}
-                                        variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                        sx={{
-                                            display: 'inline-block',
-                                            padding: '4px 8px',
-                                            color: 'white', // Color del texto de la etiqueta
-                                            marginRight: '8px', // Espacio entre etiquetas
                                         }}
-                                    >
-                                        {option.nombre}
-                                    </Typography>
-                                ))
-                            }
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            disabled={nIngles.length === 0}
-                        />
-                    </FormControl>
+                                    />}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Typography
+                                            key={option.id}
+                                            variant="body2" // Elige el variant y otros estilos según tus necesidades
+                                            sx={{
+                                                display: 'inline-block',
+                                                padding: '4px 8px',
+                                                color: 'white', // Color del texto de la etiqueta
+                                                marginRight: '8px', // Espacio entre etiquetas
+                                            }}
+                                        >
+                                            {option.nombre}
+                                        </Typography>
+                                    ))
+                                }
+                                isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                disabled={nCientifico.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl sx={{ m: 1, width: '95%' }} >
+                            <Autocomplete
+                                multiple
+                                value={selectOption.ingles}
+                                onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
+                                options={nIngles}
+                                getOptionLabel={(option) => option.nombre}
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        label="Nombre Ingles"
+                                        InputLabelProps={{
+                                            sx: labelStyles, // Estilo del label
+                                        }}
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            sx: inputStyles, // Estilo del input
 
-                    <Grid container component={Box} sx={actionsStyles}>
+                                        }}
+                                    />}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Typography
+                                            key={option.id}
+                                            variant="body2" // Elige el variant y otros estilos según tus necesidades
+                                            sx={{
+                                                display: 'inline-block',
+                                                padding: '4px 8px',
+                                                color: 'white', // Color del texto de la etiqueta
+                                                marginRight: '8px', // Espacio entre etiquetas
+                                            }}
+                                        >
+                                            {option.nombre}
+                                        </Typography>
+                                    ))
+                                }
+                                isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                disabled={nIngles.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid container sx={actionsStyles}>
                         <Button variant="outlined" color="primary" onClick={handleReset}>
                             Resetear
                         </Button>

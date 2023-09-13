@@ -53,7 +53,16 @@ export const birdSlice = createSlice({
     },
     searchBarResult: (state, action) => {
       state.infoBirds = action.payload
-    }
+    },
+    resetCurrentFilters: (state) => {
+      state.currentFilters = {
+        grupo: [],
+        familia: [],
+        paises: [],
+        cientifico: [],
+        ingles: [],
+      };
+    },
   },
 });
 
@@ -66,6 +75,7 @@ export const {
   setCurrentPage,
   saveFilters,
   stringParameter,
-  searchBarResult
+  searchBarResult,
+  resetCurrentFilters
 } = birdSlice.actions;
 export default birdSlice.reducer;
