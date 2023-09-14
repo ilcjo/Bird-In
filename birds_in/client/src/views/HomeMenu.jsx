@@ -6,6 +6,7 @@ import imageDash from '../assets/images/IMG_1572-2048x1536.jpg'
 import { useDispatch } from 'react-redux'
 import { getInfoBirds } from '../redux/actions/fetchAllBirds'
 import { getOptionsData } from '../redux/actions/fetchOptions'
+import { saveOptions } from '../redux/slices/BirdsSlice'
 
 const sections = [
   {
@@ -53,13 +54,11 @@ export const HomeMenu = () => {
   const isAdmin = admin === 'admin'
   const dispatch = useDispatch()
   
-  React.useEffect(() => {
-    dispatch(getInfoBirds());
-    dispatch(getOptionsData()).then(() => {
-      // Marca las opciones como cargadas cuando se resuelve la promesa
-      
-    });
-  }, [dispatch]);
+  // React.useEffect(() => {
+  //   dispatch(getInfoBirds());
+  //   dispatch(getOptionsData())
+  //   dispatch(saveOptions())
+  // }, [dispatch]);
 
   return (
     <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>

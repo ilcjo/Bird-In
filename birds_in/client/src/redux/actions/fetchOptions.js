@@ -20,10 +20,8 @@ export const fetchNewOptions = (selectedOptions) => {
   return async (dispatch) => {
     try {
       const parameter = creatParams(selectedOptions)
-      console.log(typeof(parameter), parameter)
       const response = await axios(`aves/nuevasOpciones?${parameter}`);
       const data = response.data
-      console.log(data)
       dispatch(newOptions(data))
     } catch (error) {
       console.log('error enviando datos:', error)

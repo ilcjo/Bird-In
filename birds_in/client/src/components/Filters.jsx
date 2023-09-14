@@ -78,6 +78,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     };
 
     const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
+    console.log(selectOptionFromSlice)
     const { nIngles, nCientifico, paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],
@@ -90,7 +91,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     });
 
     const handleOptionChange = (category, newValue) => {
-
         const updatedSelectOption = {
             ...selectOption,
             [category]: newValue.map((option) => ({
@@ -100,22 +100,24 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         };
         setSelectOption(updatedSelectOption);
         dispatch(fetchNewOptions(updatedSelectOption));
-
     };
 
     const handleClickFiltrar = () => {
         dispatch(saveFilters(selectOption))
         dispatch(sendParameter(selectOption))
-        setIsFilterOpen(!isFilterOpen);
+        setIsFilterOpen(false);
     };
+
     const handleBack = () => {
         setIsFilterOpen(!isFilterOpen);
     };
+
     const handleReset = () => {
         setSelectOption({
             grupo: [],
             familia: [],
             pais: [],
+            zona:[],
             cientifico: [],
             ingles: []
         })
@@ -285,10 +287,9 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                         <FormControl sx={{ m: 1, width: '95%' }}>
                             <Autocomplete
                                 multiple
-
-                                value={selectOption.cientifico}
-                                onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
-                                options={nCientifico}
+                                value={selectOption.zona}
+                                onChange={(event, newValue) => handleOptionChange('zona', newValue)}
+                                options={zonas}
                                 getOptionLabel={(option) => option.nombre}
                                 renderInput={(params) =>
                                     <TextField {...params}
@@ -319,7 +320,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     ))
                                 }
                                 isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={nCientifico.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                                disabled={zonas.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
                             />
                         </FormControl>
                     </Grid>
@@ -410,7 +411,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
 
                     </Grid>
                     <Grid container sx={actionsStyles}>
-                        <Button variant="contained" color="primary" onClick={handleBack}>
+                        <Button variant="outlined" color="primary" onClick={handleBack}>
                             <ArrowBackIcon /> Volver
                         </Button>
                         <Button variant="outlined" color="primary" onClick={handleReset}>

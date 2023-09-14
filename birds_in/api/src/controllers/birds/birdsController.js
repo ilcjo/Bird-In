@@ -6,19 +6,26 @@ const DEFAULT_PER_PAGE = 9;
 const DEFAULT_PAGE = 1;
 
 const fetchFilterBirds = async (
-    familia, 
-    grupo, 
-    nombreCientifico, 
-    nombreIngles, 
-    pais, 
-    page, 
+    familia,
+    grupo,
+    nombreCientifico,
+    nombreIngles,
+    pais,
+    zonasNombre,
+    page,
     perPage
-    ) => {
+) => {
+    
     if (nombreCientifico) {
-        nombreCientifico = decodeURIComponent(nombreCientifico);
+        nombreCientifico = decodeURIComponent(nombreCientifico)  
     }
     if (nombreIngles) {
-        nombreIngles = decodeURIComponent(nombreIngles);
+        nombreIngles = decodeURIComponent(nombreIngles);  
+    }
+    
+    if (zonasNombre) {
+        zonasNombre = decodeURIComponent(zonasNombre);
+        console.log(zonasNombre)
     }
     const whereClause = {};
     if (familia) {
@@ -33,6 +40,9 @@ const fetchFilterBirds = async (
     }
     if (nombreIngles) {
         whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
+    }
+    if (zonasNombre) {
+        whereClause.zonas  = { [Op.like]: `%${zonasNombre}%` };
     }
 
     const includeArr = [
@@ -61,8 +71,6 @@ const fetchFilterBirds = async (
     }
     const pageConvert = Number(page) || DEFAULT_PAGE;
     const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
-    console.log('soy pagina', perPageConvert)
-
     const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
 
     const avesFiltradas = await Aves.findAll({
@@ -71,7 +79,6 @@ const fetchFilterBirds = async (
         limit: perPageConvert,
         offset: offset,
     });
-
     return avesFiltradas
 
 };
@@ -96,69 +103,76 @@ const fetchOptions = async () => {
     const nombrePaises = mapFieldValues(optionsPaises, 'nombre', 'id_pais')
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles')
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico')
+    const zonasLista = mapFieldValues(optionsNames, 'zonas')
+    
     return {
         grupos: nombresGrupos,
         familias: nombreFamilias,
         paises: nombrePaises,
+        zonas: zonasLista,
         nIngles: nombreIngles,
         nCientifico: nombreCientifico
     }
 };
 
-const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico,) => {
+const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
     const perpage = '0'
     const page = '0'
-    const allResults = await fetchFilterBirds(grupo, familia, pais, nombreIngles, nombreCientifico, page, perpage)
-    
+    const allResults = await fetchFilterBirds(grupo, familia, pais, nombreIngles, nombreCientifico, zonas, page, perpage)
+
     const newOptions = {
         grupos: [],
         familias: [],
         paises: [],
+        zonas: [],
         nIngles: [],
         nCientifico: [],
     };
-        const gruposSet = new Set();
+    const gruposSet = new Set();
 
-        allResults.forEach(ave => {
-            gruposSet.add(JSON.stringify({
-                id: ave.dataValues.grupos_id_grupo,
-                nombre: ave.grupo.dataValues.nombre
-            }));
-        });
+    allResults.forEach(ave => {
+        gruposSet.add(JSON.stringify({
+            id: ave.dataValues.grupos_id_grupo,
+            nombre: ave.grupo.dataValues.nombre
+        }));
+    });
 
-        const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
-        newOptions.grupos = gruposArray
-    
-        const familiasSet = new Set();
+    const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
+    newOptions.grupos = gruposArray
 
-        allResults.forEach(ave => {
-            familiasSet.add(JSON.stringify({
-                id: ave.dataValues.familias_id_familia,
-                nombre: ave.familia.dataValues.nombre
-            }));
-        });
+    const familiasSet = new Set();
 
-        const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
-        newOptions.familias = familiasArray;
-   
-        const paisesSet = new Set();
+    allResults.forEach(ave => {
+        familiasSet.add(JSON.stringify({
+            id: ave.dataValues.familias_id_familia,
+            nombre: ave.familia.dataValues.nombre
+        }));
+    });
 
-        allResults.forEach(ave => {
-            ave.paises.forEach(pais => paisesSet.add(JSON.stringify({
-                id: pais.dataValues.id_pais,
-                nombre: pais.dataValues.nombre
-            })));
-        });
+    const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
+    newOptions.familias = familiasArray;
 
-        newOptions.paises = Array.from(paisesSet).map(pais =>
-            JSON.parse(pais));
-    
-        const nombresCientificos = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
-        newOptions.nCientifico = nombresCientificos;
-    
-        const nombresIngles = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_ingles })))];
-        newOptions.nIngles = nombresIngles;
-    
+    const paisesSet = new Set();
+
+    allResults.forEach(ave => {
+        ave.paises.forEach(pais => paisesSet.add(JSON.stringify({
+            id: pais.dataValues.id_pais,
+            nombre: pais.dataValues.nombre
+        })));
+    });
+
+    newOptions.paises = Array.from(paisesSet).map(pais =>
+        JSON.parse(pais));
+
+    const nombresCientificos = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
+    newOptions.nCientifico = nombresCientificos;
+
+    const nombresIngles = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_ingles })))];
+    newOptions.nIngles = nombresIngles;
+
+    const listaZona = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.zonas })))];
+    newOptions.zonas = listaZona;
+
     return newOptions;
 
 };
