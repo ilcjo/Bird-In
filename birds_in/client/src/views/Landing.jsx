@@ -4,6 +4,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useDispatch, useSelector } from 'react-redux'
 import { Boolean } from '../redux/slices/OpenClose';
 import { Index } from '../components/SingUpTabs/Index';
+import cover from '../assets/images/DSC07270.jpg'
+import logo from '../assets/images/Logo.png'
 
 
 export const Landing = () => {
@@ -19,36 +21,10 @@ export const Landing = () => {
   return (
     <React.Fragment>
       <Grid container component="main" sx={{ height: '100vh' }}>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            width: '209px',
-            height: '198px',
-            display: 'flex',
-            justifyContent: 'center', // Centrar horizontalmente
-            alignItems: 'center', // Centrar verticalmente
-            borderRadius: '50%', // Hacer el Grid redondo
-            overflow: 'hidden', // Para que la imagen se ajuste al tamaño del Grid redondo
-            backgroundColor: theme.palette.primary.dark, // Color de fondo del Grid redondo
-            position: 'absolute', // Posición absoluta para que se coloque encima de los otros Grids
-            top: '38%', // Centrar verticalmente en la mitad de la pantalla
-            left: '67%', // Centrar horizontalmente en la mitad de la pantalla
-            transform: 'translate(-50%, -50%)', // Centrar exactamente en el centro
-            zIndex: 1, // Elevar el nuevo Grid encima de los otros 
-          }}
-        >
-          {/* Aquí puedes poner la URL de la imagen */}
-          <img
-            src="https://source.unsplash.com/random?people"
-            alt="Ave"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', }}
-          />
-        </Grid>
 
-        <Grid item xs={false} sm={4} md={8}
+        <Grid item xs={false} sm={3} md={8.5}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?bird)',
+            backgroundImage: `url(${cover})`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -75,34 +51,40 @@ export const Landing = () => {
             Nombre del lugar
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={8} md={4} component={Box} elevation={6}
+        <Grid item xs={12} sm={9} md={3.5} component={Box} elevation={6}
           sx={{
             backgroundColor: theme.palette.primary.dark,
-            padding: 3,
+            padding: 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center'
           }}>
           <Box sx={{
             display: 'flex',
-            textAlign: 'left',
-            width: '70%',
+            alignItems: 'center', // Centra verticalmente
+            justifyContent: 'center', // Centra horizontalmente
+            // Altura mínima de la ventana gráfica
           }}>
-            <Typography variant="h1" color='primary.main'
+            <img alt='logo' src={logo} style={{
+              width: '170px', // Establece el ancho fijo que desees
+              height: 'auto', // Permite que la altura se ajuste automáticamente para mantener la proporción
+            }} >
+            </img>
+            {/* <Typography variant="h1" color='primary.main'
               sx={{
                 textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
               }}>
               LAS AVES QUE PASARON POR MIS OJOS
-            </Typography>
+            </Typography> */}
           </Box>
           <Box sx={{
-            top: '500px',
-            textAlign: 'left',
+            // top: '500px',
+            textAlign: 'justify',
             width: '80%',
-            mt: 20
+            mt: 11
           }}>
-            <Typography variant="h2" color='primary.main' sx={{ my: 1 }}>
-              Bienvenidos
+            <Typography variant="h2" color='primary.main' >
+              Moises Sterinberg
             </Typography>
             <Typography variant="body1" color='primary.light'>
               Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.
@@ -113,7 +95,7 @@ export const Landing = () => {
           </Box>
           <Box sx={{
             '& .MuiButton-contained': {
-              fontSize: '1rem',
+              fontSize: '1.3rem',
               fontWeight: 'bold',
               textTransform: 'none',
               '&:hover': {
@@ -123,12 +105,12 @@ export const Landing = () => {
               }
             },
             '& .MuiButton-outlined': {
-              fontSize: '1rem',
+              fontSize: '1.3rem',
               fontWeight: 'bold',
               textTransform: 'none',
             }
           }}>
-            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5}}>Comenzar</Button>
+            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5 }}>Iniciar sesion</Button>
           </Box>
           <Index
             open={open} />

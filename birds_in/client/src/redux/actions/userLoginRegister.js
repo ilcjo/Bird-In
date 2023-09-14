@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { loginSuccess } from '../slices/Auth';
 
+
 export const registerData = (info) => {
     return async (dispatch) => {
         try {
@@ -20,6 +21,7 @@ export const loginUser = (info) => {
             localStorage.setItem("token", data.token)
             localStorage.setItem("usuarioNombre", data.nombre);
             localStorage.setItem("tipoCliente", data.tipo);
+            dispatch(loginSuccess())
         } catch (error) {
             throw error
         }

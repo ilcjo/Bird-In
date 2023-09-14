@@ -15,6 +15,8 @@ import {
   useTheme
 } from '@mui/material';
 import { Filters } from '../Filters'
+import { searchBar } from '../../redux/actions/fetchOptions';
+import { useDispatch } from 'react-redux';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -55,9 +57,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
-export const FloatMenu = () => {
+export const FloatMenuUser = () => {
 
   const theme = useTheme()
+  const dispatch = useDispatch()
   const [value, setValue] = React.useState('recents');
   const [searchVisible, setSearchVisible] = React.useState(false);
   const [showCloseIcon, setShowCloseIcon] = React.useState(false); // Estado para mostrar/ocultar el icono de cerrar
@@ -80,6 +83,10 @@ export const FloatMenu = () => {
 
   };
 
+  const handleSearchChange = (e) => {
+    const searchQuery = e.target.value;
+    dispatch(searchBar(searchQuery));
+  };
 
   return (
     <Paper elevation={3}>
@@ -106,19 +113,13 @@ export const FloatMenu = () => {
           <Search>
             <StyledInputBase
               placeholder="Buscar...."
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={
+                { 'aria-label': 'search' }}
+              onChange={handleSearchChange}
             />
           </Search>
         )}
         <BottomNavigationAction
-
-          label='Add'
-          value="add"
-          icon={<PersonPinIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
-
-        />
-        <BottomNavigationAction
-
           label='Filtros'
           value="filtros"
           onClick={toggleFilters}
@@ -128,8 +129,13 @@ export const FloatMenu = () => {
         {filterVisible && (
           < Filters />
         )}
+        <BottomNavigationAction
 
+          label='Add'
+          value="add"
+          icon={<PersonPinIcon style={{ color: theme.palette.primary.light, fontSize: 36 }} />}
 
+        />
       </BottomNavigation>
     </Paper>
   )

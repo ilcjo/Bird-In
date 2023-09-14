@@ -11,56 +11,75 @@ import {
   IconButton,
 
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { loginUser } from '../../redux/actions/userLoginRegister';
 import { Boolean } from '../../redux/slices/OpenClose';
+import SendIcon from '@mui/icons-material/Send';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { loginFailure, loginRequest } from '../../redux/slices/Auth';
 
-export const LoginForm = () => {
+export const LoginForm = ({ changeTab }) => {
+ 
+
   const theme = useTheme()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [loginData, setLoginData] = React.useState({
     email: '',
     password: ''
-  })
+  });
   const [showPassword, setShowPassword] = React.useState('')
   const [errorTextPass, setErrorTextPass] = React.useState('');
   const [errorText, setErrorText] = React.useState('');
-  const { loading, error, } = useSelector((state) => state.authSlice)
+  const { loading } = useSelector((state) => state.authSlice);
 
   const handleClose = () => {
     dispatch(Boolean(false))
   };
 
+  const handleegisterLinkClicRk = (e) => {
+    e.preventDefault();
+    const numOne = 1 
+    changeTab(numOne);
+  };
+
+  const handlePassLinkClicRk = (e) => {
+    e.preventDefault();
+    const num = 2 
+    changeTab(num);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const data = await dispatch(loginUser(loginData));
-      // Redirige a la página de "aves" después del inicio de sesión exitoso
-      navigate('/menu');
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      if (error.response) {
-        console.error('Error de respuesta del servidor:', error.response.data);
-        if (error.response.data.message === 'Contraseña incorrecta') {
-          setErrorTextPass(error.response.data.message); // Establece el mensaje de error de contraseña
-          setErrorText(''); // Limpia el mensaje de error de correo si existe
-        } else if (error.response.data.message === 'Usuario no registrado') {
-          setErrorText(error.response.data.message); // Establece el mensaje de error de correo
-          setErrorTextPass(''); // Limpia el mensaje de error de contraseña si existe
+    if (loginData.email && loginData.password) {
+      try {
+        dispatch(loginRequest())
+        await dispatch(loginUser(loginData));
+        navigate('/menu');
+      } catch (error) {
+        dispatch(loginFailure(null))
+        console.error('Error al iniciar sesión:', error);
+        if (error.response) {
+          console.error('Error de respuesta del servidor:', error.response.data);
+          if (error.response.data.message === 'Contraseña incorrecta') {
+            setErrorTextPass(error.response.data.message); // Establece el mensaje de error de contraseña
+            setErrorText(''); // Limpia el mensaje de error de correo si existe
+          } else if (error.response.data.message === 'Usuario no registrado') {
+            setErrorText(error.response.data.message); // Establece el mensaje de error de correo
+            setErrorTextPass(''); // Limpia el mensaje de error de contraseña si existe
+          } else {
+            console.error('Error desconocido:', error.response.data.message);
+          }
+        } else if (error.request) {
+          console.error('Error de red al realizar la solicitud:', error.request);
         } else {
-          console.error('Error desconocido:', error.response.data.message);
+          console.error('Error al enviar la solicitud:', error.message);
         }
-      } else if (error.request) {
-        console.error('Error de red al realizar la solicitud:', error.request);
-      } else {
-        console.error('Error al enviar la solicitud:', error.message);
       }
     }
   };
-
 
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
@@ -91,7 +110,6 @@ export const LoginForm = () => {
       height: '50px',
       // width: '180px' // Ejemplo: cambia el color del texto a azul
     },
-
   };
 
   const actionsStyles = {
@@ -102,7 +120,7 @@ export const LoginForm = () => {
     fontWeight: 500,
 
     '& .MuiButton-contained': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -113,7 +131,7 @@ export const LoginForm = () => {
     },
 
     '& .MuiButton-outlined': {
-      fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },
@@ -125,9 +143,14 @@ export const LoginForm = () => {
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
           Acceder a tu cuenta
         </Typography>
-        <Typography variant="body2" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Aun no eres miembro ?
-          <MuiLink component={Link} to="/home" color="primary.light" underline="none" sx={{ marginLeft: '5px' }}>
+          <MuiLink onClick={handleegisterLinkClicRk}  color="primary.light" underline="none" 
+          sx={{  
+            cursor: 'pointer',
+          '&:hover': {
+            color: theme.palette.primary.main },
+            marginLeft: '5px' }}>
             Registrarse
           </MuiLink>
         </Typography>
@@ -171,7 +194,6 @@ export const LoginForm = () => {
             fullWidth
             value={loginData.password}
             onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-            onMouseDown={(event) => event.preventDefault()}
             error={errorTextPass !== ''}
             helperText={errorTextPass}
             InputLabelProps={{
@@ -184,7 +206,6 @@ export const LoginForm = () => {
                   <IconButton
                     edge="end"
                     onClick={() => setShowPassword(!showPassword)}
-                    onMouseDown={(event) => event.preventDefault()}
 
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -203,11 +224,17 @@ export const LoginForm = () => {
               },
             }}
           />
-          <Typography>
+          <Typography variant="h5">
 
-            <Link to="/forgot-password" style={{ color: theme.palette.primary.main }}>
+            <MuiLink  onClick={handlePassLinkClicRk}  
+            sx={{  
+              cursor: 'pointer',
+            '&:hover': {
+              color: theme.palette.primary.main },
+              marginLeft: '8px', 
+              marginTop: '10px' }} style={{ color: theme.palette.primary.main }}>
               Olvidó su contraseña?
-            </Link>
+            </MuiLink>
 
 
           </Typography>
@@ -220,9 +247,18 @@ export const LoginForm = () => {
             Cancelar
           </Button>
 
-          <Button variant="contained" onClick={handleLogin} color="primary">
-            Crear Cuenta
-          </Button>
+          <LoadingButton
+            onClick={handleLogin}
+            endIcon={<SendIcon />}
+            loading={loading}
+            loadingPosition="end"
+            variant="contained"
+            disabled={!loginData.email && !loginData.password}
+
+          >
+            <span>Iniciar Sesion</span>
+          </LoadingButton>
+
         </Grid>
       </Grid>
     </Box>

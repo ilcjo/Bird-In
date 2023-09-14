@@ -1,14 +1,16 @@
 import * as React from 'react'
 import { Header } from '../../components/Header'
-import { Menu } from '../../components/Menus/Menu'
+import {  MenuBar } from '../../components/Menus/MenuBar'
 import { Cards } from '../../components/Cards/Cards'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, loadMoreData } from '../../redux/actions/fetchAllBirds'
-import { Button, Grid, useTheme } from '@mui/material'
-import { FloatMenu } from '../../components/Menus/FloatMenuAdmin'
-import { getOptionsData } from '../../redux/actions/fetchOptions'
+import { Button, Dialog, Grid, useTheme } from '@mui/material'
+// import { getOptionsData } from '../../redux/actions/fetchOptions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
+// import { FloatMenuAdmin } from '../../components/Menus/FloatMenuAdmin'
+// import { FloatMenuUser } from '../../components/Menus/FloatMenuUser'
+import { Filters } from '../../components/Filters'
+// import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 
 
 export const Aves = () => {
@@ -17,8 +19,11 @@ export const Aves = () => {
   const dispatch = useDispatch()
   const birds = useSelector(state => state.birdSlice.infoBirds)
   const parameter = useSelector(state => state.birdSlice.filters)
-
+  // const cliente = localStorage.getItem('tipoCliente');
   const [page, setPage] = React.useState(1);
+  // const [showFilter, setShowFilter] = React.useState(true); // Estado para mostrar/ocultar el filtro
+  const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
+  // const isAdmin = cliente === "admin";
 
   const handleChangePage = () => {
     const newPage = page + 1;
@@ -28,51 +33,99 @@ export const Aves = () => {
 
   React.useEffect(() => {
     dispatch(getInfoBirds());
-    dispatch(getOptionsData())
   }, [dispatch]);
+
+  // const toggleFilterView = () => {
+  //   setShowFilter(!showFilter);
+  // };
 
   return (
     <React.Fragment>
       <Header />
-      <Grid container direction="column" alignItems="center"
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
         sx={{
-          padding: '40px',
+          padding: '30px',
           backgroundColor: theme.palette.secondary.light,
           minHeight: '100vh',
-          marginBottom: '20px'
-        }}>
-        <Menu />
-        <Grid item container spacing={3} justifyContent="center">
-          {birds.map((i, index) => (
-            <Grid item key={index}>
-              <Cards foto={i.imagenes_ave} name={i.nombre_ingles} />
-            </Grid>
-          ))}
-        </Grid>
+          marginBottom: '20px',
+        }}
+      >
+        < MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
+       
+        <Dialog
+          open={isFilterDialogOpen}
+          onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
+          fullWidth
+          maxWidth="md"
+        >
+          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
+        </Dialog>
+        {/* {showFilter && (
+          <Grid item container spacing={3} justifyContent="center">
+            <Filters />
+          </Grid>
+        )} */}
+
+          <Grid item container spacing={3} justifyContent="center">
+            {birds.map((i, index) => (
+              <Grid item key={index}>
+                <Cards foto={i.imagenes_ave} name={i.nombre_ingles} />
+              </Grid>
+            ))}
+          </Grid>
+        
         <Grid item>
+          {/* {showFilter ? (
+            <Button
+              sx={{
+                m: 2,
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                color: theme.palette.primary.main,
+                borderRadius: '800px',
+              }}
+              variant="outline"
+              onClick={toggleFilterView}
+            >
+              Ver tarjetas
+            </Button>
+          ) : (
+            <Button
+              sx={{
+                m: 2,
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                color: theme.palette.primary.main,
+                borderRadius: '800px',
+              }}
+              variant="outline"
+              onClick={toggleFilterView}
+            >
+              Volver al filtro
+            </Button>
+          )} */}
           <Button
             sx={{
               m: 2,
-              fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-              fontWeight: 'bold', // Hacer el texto negrita
+              fontSize: '1rem',
+              fontWeight: 'bold',
               textTransform: 'none',
               color: theme.palette.primary.main,
-              borderRadius: '800px'
-
-            }
-            }
+              borderRadius: '800px',
+            }}
             variant="outline"
             onClick={handleChangePage}
-            
           >
             <ExpandMoreIcon style={{ fontSize: '3rem' }} />
-
           </Button>
         </Grid>
-
       </Grid>
-      < FloatMenu />
+      {/* {isAdmin ? <FloatMenuAdmin /> : <FloatMenuUser />} */}
     </React.Fragment>
-  )
-}
-
+  );
+};

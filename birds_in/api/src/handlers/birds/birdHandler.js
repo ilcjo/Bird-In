@@ -4,10 +4,9 @@ const {  fetchOptions, filterOptions, fetchFilterBirds } = require("../../contro
 
 const getFilterInfo = async (req, res) => {
 
-   const { familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage } = req.query;
-
+   const { familia, grupo, nombreCientifico, nombreIngles, pais, zonasNombre, page, perPage } = req.query;
    try {
-      const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, page, perPage)
+      const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, zonasNombre, page, perPage)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
@@ -30,9 +29,9 @@ const selectOptions = async (req, res) => {
 }
 
 const getFilterOptions = async (req, res,) => {
-   const { familia, grupo, nombreCientifico, nombreIngles, pais } = req.query;
+   const { familia, grupo, nombreCientifico, nombreIngles, pais, zonas } = req.query;
    try {
-      const newOptions = await filterOptions(familia, grupo, nombreCientifico, nombreIngles, pais)
+      const newOptions = await filterOptions(familia, grupo, nombreCientifico, nombreIngles, pais, zonas)
       return res.status(200).json(newOptions)
    } catch (error) {
       res.status(500).send({ error: error.message })
