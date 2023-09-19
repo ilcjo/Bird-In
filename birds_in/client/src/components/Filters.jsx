@@ -78,7 +78,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     };
 
     const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
-    console.log(selectOptionFromSlice)
     const { nIngles, nCientifico, paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],

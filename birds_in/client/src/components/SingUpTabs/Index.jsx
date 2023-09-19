@@ -28,7 +28,6 @@ export const Index = ({ open }) => {
     },
   };
 
-
   return (
     <Dialog open={open} onClose={handleClose} PaperProps={{
       sx: {

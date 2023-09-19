@@ -4,9 +4,6 @@ import { Link as RouterLink } from 'react-router-dom'
 import imagenBird from '../assets/images/DSC01585-106.jpg'
 import imageDash from '../assets/images/IMG_1572-2048x1536.jpg'
 import { useDispatch } from 'react-redux'
-import { getInfoBirds } from '../redux/actions/fetchAllBirds'
-import { getOptionsData } from '../redux/actions/fetchOptions'
-import { saveOptions } from '../redux/slices/BirdsSlice'
 
 const sections = [
   {
@@ -40,7 +37,7 @@ const sections = [
     description: 'Galeria de paisajes',
   },
   {
-    id: 'Admin',
+    id: 'panelAdministrador',
     imageUrl: imageDash,
     title: 'Admin',
     description: 'Dashboard ',
@@ -52,22 +49,16 @@ export const HomeMenu = () => {
   const theme = useTheme()
   const admin = localStorage.getItem('tipoCliente')
   const isAdmin = admin === 'admin'
-  const dispatch = useDispatch()
-  
-  // React.useEffect(() => {
-  //   dispatch(getInfoBirds());
-  //   dispatch(getOptionsData())
-  //   dispatch(saveOptions())
-  // }, [dispatch]);
-
+ 
   return (
+
     <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
       {sections.map((section) => (
-        // Verifica si no es el elemento "Admin" o si el usuario es administrador
+        // Verifies if it's not the "Admin" element or if the user is an administrator
         (isAdmin || section.id !== 'Admin') && (
           <Grid item xs={12} sm={6} md={1.7} key={section.id} sx={{ margin: '5px' }}>
-            <Link component={RouterLink} to={`/${section.id}`} style={{ textDecoration: 'none' }}>
-              <div style={{ position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'relative', overflow: 'hidden' }}>
+              <Link component={RouterLink} to={`/${section.id}`} style={{ textDecoration: 'none' }}>
                 <img
                   src={section.imageUrl}
                   alt={section.title}
@@ -129,8 +120,8 @@ export const HomeMenu = () => {
                     {section.id === 'Admin' && isAdmin ? 'dashboard' : 'Ir a galeria'}
                   </Button>
                 </Box>
-              </div>
-            </Link>
+              </Link>
+            </div>
           </Grid>
         )
       ))}

@@ -176,8 +176,19 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
     return newOptions;
 
 };
+
+
+const sendAndCreateBird = async (  
+    imagenes,
+   ) =>{
+console.log('desde el controler:p',  
+imagenes,
+)
+};
+
 module.exports = {
     fetchOptions,
     filterOptions,
-    fetchFilterBirds
+    fetchFilterBirds,
+    sendAndCreateBird,
 }
