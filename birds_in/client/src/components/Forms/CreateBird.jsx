@@ -2,34 +2,36 @@ import * as  React from 'react'
 import { Autocomplete, Box, Button, Divider, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
-import { createBirdData } from '../../redux/actions/createBirds';
+import { createBird, saveImageFtp } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-import axios from 'axios';
+
 
 
 export const CreateBird = () => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
-    const [image, setImage] = React.useState(null);
-    console.log(image)
+    const [imageURL, setImageURL] = React.useState(null); // Para mostrar la imagen seleccionada
+    const [imageFile, setImageFile] = React.useState(null); // Para almacenar el Blob de la imagen
+
     const [createData, setCreateData] = React.useState({
         grupo: null,
         familia: null,
-        pais: null,
+        pais: [],
         zona: '',
         cientifico: '',
         ingles: '',
-        imagenes: [],
-        descripcion: '',
-        url: ''
+        urlWiki: '',
+        urlBird: '',
     });
     console.log(createData)
-    // const formData = new FormData();
-
-    const handleImagenChange = (event) => {
-        // Maneja el cambio de la entrada de imagen y actualiza el estado
-        setImage(event.target.files[0]);
+    const handleImageChange = (event) => {
+        const selectedImage = event.target.files[0];
+        if (selectedImage) {
+            setImageFile(selectedImage);
+            const imageURL = URL.createObjectURL(selectedImage);
+            setImageURL(imageURL);
+        }
     };
 
     const handleInputChange = (event) => {
@@ -40,47 +42,62 @@ export const CreateBird = () => {
         });
     };
 
-    const handleRemoveImage = (indexToRemove) => {
-        const updatedImages = createData.imagenes.filter((_, index) => index !== indexToRemove);
-        setCreateData({
-            ...createData,
-            imagenes: updatedImages,
-        });
-    };
-
-
-    const handleImageUpload = (event) => {
-        const files = event.target.files;
-
-        // Verifica si hay archivos seleccionados
-        if (files.length > 0) {
-            setCreateData({
-                ...createData,
-                imagenes: [...createData.imagenes, ...files],
-            });
-        }
+    const handleRemoveImage = () => {
+        URL.revokeObjectURL(imageURL);
+        setImageFile(null);
+        setImageURL(null);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // Crea un objeto FormData para enviar la imagen al servidor
-        const formData = new FormData();
-        formData.append('image', image);
-        try {
-            // Realiza la solicitud POST con Axios
-            const response = await axios.post('aves/upload_image', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
-              },
-            });
-      
-            // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
-            console.log('Respuesta del servidor:', response.data);
-          } catch (error) {
-            // Maneja los errores de la solicitud
-            console.error('Error al enviar la imagen:', error);
-          }
-        };
+        if (imageFile) {
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            try {
+                // Utiliza Promise.all para esperar que ambas promesas se resuelvan
+                await Promise.all([saveImageFtpWithMessage(formData), createBirdWithMessage(createData)]);
+                alert("El ave se ha creado correctamente.");
+                // Borra los datos del formulario
+                setCreateData({
+                    grupo: null,
+                    familia: null,
+                    pais: [],
+                    zona: '',
+                    cientifico: '',
+                    ingles: '',
+                    urlWiki: '',
+                    urlBird: '',
+                });
+                setImageURL(null)
+                setImageFile(null)
+            } catch (error) {
+                alert(error); // Muestra el mensaje de error en caso de que ocurra un error en cualquiera de las dos promesas.
+            }
+        }
+    };
+    const saveImageFtpWithMessage = async (formData) => {
+        return new Promise((resolve, reject) => {
+            dispatch(saveImageFtp(formData))
+                .then(() => {
+                    resolve(); // Si la carga de la imagen tiene éxito, resuelve la Promesa sin un mensaje.
+                })
+                .catch((error) => {
+                    reject("Error al guardar la imagen en el servidor"); // Si hay un error, resuelve la Promesa con un mensaje.
+                });
+        });
+    };
+    
+    const createBirdWithMessage = async (createData) => {
+        return new Promise((resolve, reject) => {
+            dispatch(createBird(createData))
+                .then(() => {
+                    resolve(); // Si la creación del ave tiene éxito, resuelve la Promesa sin un mensaje.
+                })
+                .catch((error) => {
+                    reject("Error al crear el ave"); // Si hay un error, resuelve la Promesa con un mensaje.
+                });
+        });
+    };
     
 
     return (
@@ -113,7 +130,7 @@ export const CreateBird = () => {
                         type="file"
                         accept="image/*"
                         multiple  // Permite la selección de múltiples imágenes
-                        onChange={handleImagenChange}
+                        onChange={handleImageChange}
                         style={{ display: 'none' }}
                         id="image-upload-input"
                     />
@@ -131,40 +148,38 @@ export const CreateBird = () => {
                                     textTransform: 'none',
                                 },
                             }} // Estilo personalizado
-                            onChange={handleImageUpload}
+                            onChange={handleImageChange}
                         >
                             Subir Imagenes
                         </Button>
                     </label>
 
-                    {/* Mostrar imágenes cargadas */}
+                    {/* Mostrar imagen cargada */}
                     <Grid container spacing={2}>
-                        {createData.imagenes.map((imageUrl, index) => (
-                            <Grid item key={index}>
+                        {imageURL && (
+                            <Grid item >
                                 <div style={{ position: 'relative' }}>
                                     <img
-                                        src={URL.createObjectURL(image)}
+                                        src={imageURL}
                                         alt="Imagen seleccionada"
                                         style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px' }}
                                     />
                                     <IconButton
                                         color="primary"
-                                        onClick={() => handleRemoveImage(index)}
+                                        onClick={handleRemoveImage}
                                         style={{
                                             position: 'absolute',
                                             top: '8px',
-                                            right: '0',
+                                            right: '0px',
                                         }}
                                     >
                                         <DisabledByDefaultIcon />
                                     </IconButton>
                                 </div>
                             </Grid>
-                        ))}
+                        )}
                     </Grid>
-
                 </Grid>
-
                 <Grid item xs={12} sm={6}>
 
                     <Typography variant='h5' color='primary.light' sx={{ mb: 2 }} >
@@ -239,8 +254,7 @@ export const CreateBird = () => {
                         onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
                         renderInput={(params) => <TextField {...params} label="Pais" />}
                         isOptionEqualToValue={(option, value) => option.id === value?.id}
-
-
+                        multiple
                     />
                 </Grid>
                 <Grid item xs={12} sm={12}>
@@ -249,12 +263,12 @@ export const CreateBird = () => {
                         <Divider sx={{ my: 1 }} />
                     </Typography>
                     <TextField
-                        name="url"
+                        name="urlWiki"
                         label="Url Externa"
                         multiline
                         rows={1}
                         variant="filled"
-                        value={createData.url}
+                        value={createData.urlWiki}
                         onChange={handleInputChange}
                         sx={{ my: 2 }}
                         fullWidth
@@ -262,12 +276,12 @@ export const CreateBird = () => {
                     />
 
                     <TextField
-                        name="descripcion"
-                        label="Descripción"
+                        name="urlBird"
+                        label="Url Bird"
                         multiline
-                        rows={4}
+                        rows={1}
                         variant="filled"
-                        value={createData.descripcion}
+                        value={createData.urlBird}
                         onChange={handleInputChange}
                         fullWidth
                         margin="normal"

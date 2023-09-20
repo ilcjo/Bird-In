@@ -63,11 +63,9 @@ Aves.belongsTo(Grupos, { foreignKey: 'grupos_id_grupo' })
 Grupos.hasOne(Aves, { foreignKey: 'grupos_id_grupo' })
 // UNO A MUCHOS
 Aves.hasMany(Imagenes_aves, { foreignKey: 'aves_id_ave' })
-Aves.hasMany(Nombres_comunes, { foreignKey: 'aves_id_ave' })
-Aves.hasMany(Urls_externas, { foreignKey: 'aves_id_ave' })
 // MUCHOS A MUCHOS
-Aves.belongsToMany(Paises, { through: 'aves_has_paises', foreignKey: 'aves_id_ave' })
-Paises.belongsToMany(Aves, { through: 'aves_has_paises', foreignKey: 'paises_id_pais' })
+Aves.belongsToMany(Paises, { through: 'aves_has_paises', foreignKey: 'aves_id_ave', timestamps: false, })
+Paises.belongsToMany(Aves, { through: 'aves_has_paises', foreignKey: 'paises_id_pais', timestamps: false, })
 
 module.exports = {
   ...db.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

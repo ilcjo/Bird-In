@@ -15,14 +15,14 @@ const fetchFilterBirds = async (
     page,
     perPage
 ) => {
-    
+
     if (nombreCientifico) {
-        nombreCientifico = decodeURIComponent(nombreCientifico)  
+        nombreCientifico = decodeURIComponent(nombreCientifico)
     }
     if (nombreIngles) {
-        nombreIngles = decodeURIComponent(nombreIngles);  
+        nombreIngles = decodeURIComponent(nombreIngles);
     }
-    
+
     if (zonasNombre) {
         zonasNombre = decodeURIComponent(zonasNombre);
         console.log(zonasNombre)
@@ -42,7 +42,7 @@ const fetchFilterBirds = async (
         whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
     }
     if (zonasNombre) {
-        whereClause.zonas  = { [Op.like]: `%${zonasNombre}%` };
+        whereClause.zonas = { [Op.like]: `%${zonasNombre}%` };
     }
 
     const includeArr = [
@@ -104,7 +104,7 @@ const fetchOptions = async () => {
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles')
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico')
     const zonasLista = mapFieldValues(optionsNames, 'zonas')
-    
+
     return {
         grupos: nombresGrupos,
         familias: nombreFamilias,
@@ -178,13 +178,66 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
 };
 
 
-const sendAndCreateBird = async (  
-    imagenes,
-   ) =>{
-console.log('desde el controler:p',  
-imagenes,
-)
+const sendAndCreateBird = async (
+    grupo,
+    familia,
+    paises,
+    zona,
+    cientifico,
+    ingles,
+    urlBird,
+    urlWiki
+) => {
+    console.log(paises)
+    try {
+
+
+        const converIngles = ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase();
+        const converCientifico = cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase();
+        const converZona = zona.charAt(0).toUpperCase() + zona.slice(1).toLowerCase();
+
+        const urls = [urlBird, urlWiki].join(',');
+        // Crear un nuevo registro en la tabla "aves" y relacionarlo con los registros auxiliares
+        const createNewBird = await Aves.create({
+            nombre_ingles: converIngles,
+            nombre_cientifico: converCientifico,
+            zonas: converZona,
+            url_externas: urls,
+            grupos_id_grupo: grupo.id,
+            familias_id_familia: familia.id
+
+        });
+        for (const pais of paises) {
+            await createNewBird.addPaises(pais.id);
+        }
+        
+        return "El ave se ha creado correctamente.";
+        // Obtener todos los países asociados a un ave específico
+        // const paisesAsociados = await createNewBird.getPaises();
+        // console.log(paisesAsociados)
+        // console.log(createNewBird);
+
+    } catch (error) {
+        // Error: Captura cualquier excepción que se produzca durante la ejecución
+        console.error('Error:', error);
+
+        // A continuación, puedes agregar lógica para manejar errores específicos si es necesario.
+        if (error.name === 'SequelizeValidationError') {
+            // Handle validation errors (e.g., required fields, unique constraints)
+            console.error('Errores de validación:', error.errors);
+        } else if (error.name === 'SequelizeUniqueConstraintError') {
+            // Handle unique constraint violations
+            console.error('Violación de restricción única:', error.errors);
+        } else if (error.name === 'SequelizeForeignKeyConstraintError') {
+            // Handle foreign key constraint violations
+            console.error('Violación de restricción de clave foránea:', error.parent);
+        } else {
+            // Handle other types of errors
+            console.error('Error no manejado:', error);
+        }
+    }
 };
+
 
 module.exports = {
     fetchOptions,

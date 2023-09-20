@@ -1,7 +1,12 @@
-
+require('dotenv').config();
 const { fetchOptions, filterOptions, fetchFilterBirds, sendAndCreateBird } = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
 const checkFTPConnection = require("../../utils/checkFtp");
+const {
+   FTP_HOST,
+   FTP_USER,
+   FTP_PASS,
+} = process.env
 
 
 const getFilterInfo = async (req, res) => {
@@ -43,14 +48,28 @@ const getFilterOptions = async (req, res,) => {
 
 const createBird = async (req, res) => {
 
-   const imagenes = req.file;
+   const {
+      grupo,
+      familia,
+      pais,
+      zona,
+      cientifico,
+      ingles,
+      urlWiki,
+      urlBird, 
+   } = req.body;
 
    try {
 
-      const succesCreate = await sendAndCreateBird(
-
-         imagenes,
-      )
+      const succesCreate = await sendAndCreateBird( 
+         grupo,
+         familia,
+         pais,
+         zona,
+         cientifico,
+         ingles,
+         urlWiki,
+         urlBird,)
       return res.status(200).json(succesCreate)
 
    } catch (error) {
@@ -66,9 +85,9 @@ const uploadImageftp = async (req, res) => {
       const remotePath = '/';
       client.ftp.timeout = 1000000;
       await client.access({
-         host: 'ftp.hotelparque97.com',
-         user: 'dev_bird@lasavesquepasaronpormisojos.com',
-         password: 'Leon1316',
+         host: FTP_HOST,
+         user: FTP_USER,
+         password: FTP_PASS,
          secure: false,
       });
 
@@ -77,10 +96,14 @@ const uploadImageftp = async (req, res) => {
       if (!image) {
          return res.status(400).json({ error: 'No se subió ninguna imagen' });
       }
-
+      const imageUrls = [];
       const remoteFileName = `${Date.now()}_${image.originalname}`;
       await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
 
+      // Obtén la URL completa de la imagen
+      const imageUrl = `https://lasavesquepasaronpormisojos.com/imagenes/${remoteFileName}`;
+      // Agrega la URL al array de imageUrls
+      imageUrls.push(imageUrl);
       // Cerrar la conexión FTP
       await client.close();
 
@@ -100,7 +123,7 @@ const uploadImageftp = async (req, res) => {
       res.status(500).json({ error: 'Error al cargar la imagen en FTP' });
    }
 };
- 
+
 
 module.exports = {
    getFilterInfo,

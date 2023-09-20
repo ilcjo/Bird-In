@@ -1,14 +1,20 @@
 const ftp = require('basic-ftp');
+require('dotenv').config();
+const {
+  FTP_HOST,
+  FTP_USER,
+  FTP_PASS,
+} = process.env
 
 async function checkFTPConnection() {
   const client = new ftp.Client();
 
   try {
     await client.access({
-        host: 'ftp.hotelparque97.com',
-        user: 'dev_bird@lasavesquepasaronpormisojos.com',
-        password: 'Leon1316',
-        secure: false, 
+      host: FTP_HOST,
+      user: FTP_USER,
+      password: FTP_PASS,
+      secure: false,
     });
 
     // Si la conexión se establece correctamente, puedes hacer alguna operación de prueba, como listar directorios

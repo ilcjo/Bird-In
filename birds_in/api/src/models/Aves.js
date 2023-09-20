@@ -22,10 +22,14 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        descripcion: {
+        urls_externas: {
             type: DataTypes.TEXT,
             allowNull: true
         },
-    },
+        nombre_comun: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+    },{ timestamps: true, }
     )
 }
