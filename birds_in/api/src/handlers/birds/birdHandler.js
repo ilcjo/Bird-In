@@ -66,10 +66,7 @@ const uploadImageftp = async (req, res) => {
       const remotePath = '/';
       client.ftp.timeout = 1000000;
       await client.access({
-         host: 'ftp.hotelparque97.com',
-         user: 'dev_bird@lasavesquepasaronpormisojos.com',
-         password: 'Leon1316',
-         secure: false,
+       
       });
 
       const image = req.file;
