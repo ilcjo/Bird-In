@@ -5,10 +5,7 @@ async function checkFTPConnection() {
 
   try {
     await client.access({
-        host: 'ftp.hotelparque97.com',
-        user: 'dev_bird@lasavesquepasaronpormisojos.com',
-        password: 'Leon1316',
-        secure: false, 
+      
     });
 
     // Si la conexión se establece correctamente, puedes hacer alguna operación de prueba, como listar directorios
