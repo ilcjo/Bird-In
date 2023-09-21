@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { CreateBird } from '../Forms/CreateBird';
-import { UpdateHomes } from '../Forms/UpdateHomes';
+import { Update } from './Update';
 
 export const IndexD = () => {
 
@@ -30,7 +30,7 @@ export const IndexD = () => {
           </Typography>
         }></Tab>
         <Tab label={<Typography variant='h5' >
-          Actualizar Inicios
+          Actualizar Aves
         </Typography>}></Tab>
 
       </Tabs>
@@ -42,7 +42,7 @@ export const IndexD = () => {
         )}
         {selectedTab === 1 && (
           <Box>
-            <UpdateHomes />
+            <Update/>
           </Box>
         )}
 

@@ -55,6 +55,11 @@ const fetchFilterBirds = async (
             through: {
                 attributes: []
             }
+        },
+        {
+            model: Imagenes_aves,
+            as: 'imagenes_aves',
+            attributes: ['url']
         }
     ];
 
@@ -213,12 +218,12 @@ const sendAndCreateBird = async (
         }, {
             include: Imagenes_aves, // Incluye la tabla Imagenes_aves en la consulta
         });
-        
+
 
         for (const pais of paises) {
             await createNewBird.addPaises(pais.id);
         }
-      
+
 
         return "El ave se ha creado correctamente.";
         // Obtener todos los países asociados a un ave específico

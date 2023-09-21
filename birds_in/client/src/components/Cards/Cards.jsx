@@ -1,26 +1,23 @@
 import * as React from 'react'
 import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
 import { CarruselGallery } from '../Galeries/CarruselGallery';
 import { useTheme } from '@emotion/react';
 
 
 export const Cards = ({ foto, name, index }) => {
-  
+  console.log('soy', foto)
+
   const theme = useTheme()
-  const [isFavorited, setIsFavorited] = React.useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorited((prev) => !prev);
-  };
-
+  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
 
   const openGallery = () => {
     setIsGalleryOpen(true);
+  };
+
+  const handleImageClick = (index) => {
+    setSelectedImageIndex(index);
+    openGallery();
   };
 
   return (
@@ -38,10 +35,10 @@ export const Cards = ({ foto, name, index }) => {
         <CardMedia
           component="img"
           height="194"
-          image={foto}
+          image={foto[selectedImageIndex].url}
           alt={name}
           key={index}
-          onClick={openGallery}
+          onClick={() => handleImageClick(selectedImageIndex)}
           sx={{ objectFit: 'cover', }}
         />
       </CardActionArea>
@@ -50,21 +47,12 @@ export const Cards = ({ foto, name, index }) => {
           {name}
         </Typography>
 
-        <IconButton aria-label="toggle favorite" onClick={toggleFavorite}>
-          {isFavorited ? (
-            <BookmarkAddedIcon color='primary' />
-          ) : (
-            <BookmarkAddIcon color='primary' />
-          )}
-        </IconButton>
-        {isFavorited && (
-          <IconButton aria-label="remove favorite" onMouseEnter={toggleFavorite}>
-            <BookmarkRemoveIcon color='error' />
-          </IconButton>
-        )}
       </CardActions>
-
-      <CarruselGallery isOpen={isGalleryOpen} images={[foto]} onClose={() => setIsGalleryOpen(false)} />
+      <CarruselGallery
+        isOpen={isGalleryOpen}
+        images={foto}
+        selectedIndex={selectedImageIndex}
+        onClose={() => setIsGalleryOpen(false)} />
     </Card >
 
   )

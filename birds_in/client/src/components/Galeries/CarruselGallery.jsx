@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Typography, imageListClasses } from '@mui/material';
 import { Carousel } from 'react-responsive-carousel'
 import CloseIcon from '@mui/icons-material/Close';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -6,6 +6,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import * as React from 'react'
 
 export const CarruselGallery = ({ isOpen, images, onClose }) => {
+  console.log('soy images',images)
   const [selectedImage, setSelectedImage] = React.useState(null);
 
   const openDialog = (images) => {
@@ -30,7 +31,7 @@ export const CarruselGallery = ({ isOpen, images, onClose }) => {
               {images.map((image, index) => (
                 <div key={index}>
 
-                  <img src={image} alt={`Image ${index}`} style={{
+                  <img src={image.url} alt={`Image ${index}`} style={{
                     maxWidth: '100vh',
                     maxHeight: '90vh',
                     height: '100%',

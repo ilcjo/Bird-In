@@ -9,6 +9,7 @@ export const getInfoBirds = () => {
     try {
       const response = await axios('/aves/filtros')
       const data = response.data
+      console.log(response.data)
       dispatch(fetchInfo(data))
     } catch (error) {
       console.error("Error al obtener los datos:", error)
