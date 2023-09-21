@@ -56,21 +56,25 @@ const createBird = async (req, res) => {
       cientifico,
       ingles,
       urlWiki,
-      urlBird, 
+      urlBird,
+      urlImagen
+
    } = req.body;
-
+   console.log(typeof (urlImagen))
+   console.log(urlImagen)
    try {
-
-      const succesCreate = await sendAndCreateBird( 
-         grupo,
-         familia,
-         pais,
-         zona,
-         cientifico,
-         ingles,
-         urlWiki,
-         urlBird,)
-      return res.status(200).json(succesCreate)
+     
+         const succesCreate = await sendAndCreateBird(
+            grupo,
+            familia,
+            pais,
+            zona,
+            cientifico,
+            ingles,
+            urlWiki,
+            urlBird,
+            urlImagen)
+         return res.status(200).json(succesCreate)
 
    } catch (error) {
       res.status(500).send({ error: error.message })
@@ -104,6 +108,7 @@ const uploadImageftp = async (req, res) => {
       const imageUrl = `https://lasavesquepasaronpormisojos.com/imagenes/${remoteFileName}`;
       // Agrega la URL al array de imageUrls
       imageUrls.push(imageUrl);
+
       // Cerrar la conexión FTP
       await client.close();
 
@@ -117,7 +122,7 @@ const uploadImageftp = async (req, res) => {
          }
       });
 
-      res.status(200).json({ message: 'Imagen subida con éxito al servidor FTP' });
+      res.status(200).json({ message: 'Imagen subida con éxito al servidor FTP', imageUrl });
    } catch (error) {
       console.error('Error al cargar la imagen en FTP:', error);
       res.status(500).json({ error: 'Error al cargar la imagen en FTP' });

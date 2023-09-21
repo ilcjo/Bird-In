@@ -1,5 +1,5 @@
-const { Op } = require("sequelize");
-const { Aves, Grupos, Familias, Paises } = require('../../db/db');
+const { Op, Utils } = require("sequelize");
+const { Aves, Grupos, Familias, Paises, Imagenes_aves } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 
 const DEFAULT_PER_PAGE = 9;
@@ -186,11 +186,11 @@ const sendAndCreateBird = async (
     cientifico,
     ingles,
     urlBird,
-    urlWiki
+    urlWiki,
+    urlImagen
 ) => {
-    console.log(paises)
     try {
-
+        console.log(urlImagen)
 
         const converIngles = ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase();
         const converCientifico = cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase();
@@ -202,15 +202,24 @@ const sendAndCreateBird = async (
             nombre_ingles: converIngles,
             nombre_cientifico: converCientifico,
             zonas: converZona,
-            url_externas: urls,
+            urls_externas: urls,
             grupos_id_grupo: grupo.id,
-            familias_id_familia: familia.id
-
+            familias_id_familia: familia.id,
+            imagenes_aves: [ // Define la relación con Imagenes_aves y crea la imagen en la misma consulta
+                {
+                    url: urlImagen,
+                },
+            ],
+        }, {
+            include: Imagenes_aves, // Incluye la tabla Imagenes_aves en la consulta
         });
+        
+
         for (const pais of paises) {
             await createNewBird.addPaises(pais.id);
         }
-        
+      
+
         return "El ave se ha creado correctamente.";
         // Obtener todos los países asociados a un ave específico
         // const paisesAsociados = await createNewBird.getPaises();
