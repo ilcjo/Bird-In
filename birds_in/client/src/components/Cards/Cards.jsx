@@ -21,39 +21,47 @@ export const Cards = ({ foto, name, index }) => {
   };
 
   return (
-
     <Card sx={{
       maxWidth: 'auto',
       minWidth: 415,
-      maxheigth: 'auto',
-      minheigth: 399,
+      minHeight: 280, // Establece una altura mínima para la tarjeta
       position: 'relative',
-      borderRadius: '15px'
-      // background: 'linear-gradient(rgba(137, 138, 108, 0), rgba(0, 61, 21, 0.5))',
+      borderRadius: '15px',
+      display: 'flex', // Establece la tarjeta como un contenedor flexible
+      flexDirection: 'column', // Alinea el contenido verticalmente
+      justifyContent: 'space-between', // Centra verticalmente el contenido
     }}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="194"
-          image={foto[selectedImageIndex].url}
-          alt={name}
-          key={index}
-          onClick={() => handleImageClick(selectedImageIndex)}
-          sx={{ objectFit: 'cover', }}
-        />
+        {foto[selectedImageIndex] && foto[selectedImageIndex].url ? (
+          <CardMedia
+            component="img"
+            height="194"
+            image={foto[selectedImageIndex].url}
+            alt={name}
+            key={index}
+            onClick={() => handleImageClick(selectedImageIndex)}
+            sx={{ objectFit: 'cover' }}
+          />
+        ) : (
+          <Typography variant="body2">Imagen no disponible</Typography>
+        )}
       </CardActionArea>
-      <CardActions disableSpacing >
+      <CardActions disableSpacing>
         <Typography>
           {name}
         </Typography>
-
       </CardActions>
       <CarruselGallery
         isOpen={isGalleryOpen}
         images={foto}
         selectedIndex={selectedImageIndex}
         onClose={() => setIsGalleryOpen(false)} />
-    </Card >
-
-  )
+    </Card>
+  );
 }
+
+
+
+
+
+

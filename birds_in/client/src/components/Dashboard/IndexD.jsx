@@ -2,10 +2,12 @@
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { CreateBird } from '../Forms/CreateBird';
-import { Update } from './Update';
+import { SearchBird } from '../SearchBird';
+import { BirdUp } from '../Forms/BirdUp';
+import { UpdateBirds } from '../Forms/UpdateBirds';
+
 
 export const IndexD = () => {
-
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -30,6 +32,9 @@ export const IndexD = () => {
           </Typography>
         }></Tab>
         <Tab label={<Typography variant='h5' >
+          Buscar ave
+        </Typography>}></Tab>
+        <Tab label={<Typography variant='h5' >
           Actualizar Aves
         </Typography>}></Tab>
 
@@ -42,7 +47,12 @@ export const IndexD = () => {
         )}
         {selectedTab === 1 && (
           <Box>
-            <Update/>
+            <SearchBird changeTab={(newValue) => setSelectedTab(newValue)} />
+          </Box>
+        )}
+        {selectedTab === 2 && (
+          <Box>
+            <UpdateBirds />
           </Box>
         )}
 

@@ -18,8 +18,8 @@ async function checkFTPConnection() {
     });
 
     // Si la conexión se establece correctamente, puedes hacer alguna operación de prueba, como listar directorios
-    const list = await client.list();
-    console.log('Conexión FTP establecida con éxito:', list);
+ 
+    console.log('Conexión FTP establecida con éxito:');
 
     return true; // Devuelve true si la conexión es exitosa
   } catch (error) {

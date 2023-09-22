@@ -1,33 +1,64 @@
 import * as  React from 'react'
-import { Alert, Autocomplete, Backdrop, Box, Button, CircularProgress, Divider, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import {
+    Alert,
+    Autocomplete,
+    Backdrop,
+    Box,
+    Button,
+    CircularProgress,
+    Divider,
+    Grid,
+    IconButton,
+    Snackbar,
+    TextField,
+    Typography
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
+import { UpdateAveImage, actualizarAve } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-import { SearchBird } from '../SearchBird';
-
 
 export const UpdateBirds = () => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
     const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
+    const { infoAveForUpdate } = useSelector(state => state.createBird)
+
+    const initialCreateData = infoAveForUpdate
+        ? {
+            grupo: infoAveForUpdate.grupo,
+            familia: infoAveForUpdate.familia,
+            pais: infoAveForUpdate.paises, // Supongo que esto viene de Redux también
+            zona: infoAveForUpdate.zonas,
+            cientifico: infoAveForUpdate.nombre_cientifico,
+            ingles: infoAveForUpdate.nombre_ingles,
+            urlWiki: infoAveForUpdate.url_wiki, // Inicialmente vacío
+            urlBird: infoAveForUpdate.url_bird, // Inicialmente vacío
+            idAve: infoAveForUpdate.id_ave,
+            urlImagen: infoAveForUpdate.url,
+        }
+        : {
+            // Valores iniciales si no hay información en el estado de Redux
+            grupo: '',
+            familia: '',
+            pais: [],
+            zona: '',
+            cientifico: '',
+            ingles: '',
+            urlWiki: '',
+            urlBird: '',
+            idAve: 0,
+            urlImagen: '',
+        };
+    const [createData, setCreateData] = React.useState(initialCreateData);
     const [imageURL, setImageURL] = React.useState(null); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState(null); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
-
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const [createData, setCreateData] = React.useState({
-        grupo: null,
-        familia: null,
-        pais: [],
-        zona: '',
-        cientifico: '',
-        ingles: '',
-        urlWiki: '',
-        urlBird: '',
-        urlImagen: null,
-    });
+
+    console.log('form de update', createData)
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -67,24 +98,22 @@ export const UpdateBirds = () => {
             formData.append('image', imageFile);
 
             setShowBackdrop(true);
-            setLoadingMessage('Subiendo imagen...');
+            setLoadingMessage('Subiendo imagenes...');
 
             try {
                 // Espera a que la imagen se suba y obtén la URL
-                // const imageUrl = await saveImageFtpWithMessage(formData);
+                const imageUrl = await saveImageFtpWithMessage(formData);
 
                 // Restaurar el mensaje de carga si es necesario
-                setLoadingMessage('Creando ave...');
+                setLoadingMessage('Actualizando ave...');
 
-                // await createBirdWithMessage(createData, imageUrl);
+                await createBirdWithMessage(createData, imageUrl);
+
                 setShowBackdrop(false);
                 setLoadingMessage('Cargando...');
-                setBirdCreated(true);
 
                 // Abre el Snackbar
                 setOpenSnackbar(true);
-
-                // Abre el Snackbar
 
                 // Borra los datos del formulario
                 setCreateData({
@@ -96,22 +125,56 @@ export const UpdateBirds = () => {
                     ingles: '',
                     urlWiki: '',
                     urlBird: '',
+                    idAve: 0,
                     urlImagen: '',
                 });
                 setImageURL(null);
                 setImageFile(null);
             } catch (error) {
-                setShowBackdrop(false);
                 // Muestra el mensaje de error en caso de que ocurra un error en cualquiera de las dos promesas.
-                alert(error);
+                console.error('Error:', error);
+                setShowBackdrop(false);
             }
         }
     };
 
+    const saveImageFtpWithMessage = async (formData) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // Realiza la carga de la imagen y espera la respuesta
+                const response = await dispatch(UpdateAveImage(formData));
+                
+                // Verifica si la respuesta contiene la URL de la imagen
+                if (response && response.data && response.data.imageUrl) {
+                    const imageUrlString = response.data.imageUrl;
+                    resolve(imageUrlString);
+                } else {
+                    console.error('El servidor no devolvió la URL de la imagen.');
+                    reject('El servidor no devolvió la URL de la imagen.');
+                }
+            } catch (error) {
+                console.error('Error al enviar la imagen:', error);
+                reject('Error al enviar la imagen.');
+            }
+        });
+    };
+
+    const createBirdWithMessage = async (createData, imageUrl) => {
+        return new Promise((resolve, reject) => {
+            dispatch(actualizarAve({ ...createData, urlImagen: imageUrl }))
+                .then(() => {
+                    resolve(); // Solo resuelve la Promesa si la actualización del ave tiene éxito.
+                })
+                .catch((error) => {
+                    console.error('Error al crear el ave:', error);
+                    reject("Error al crear el ave"); // Si hay un error, resuelve la Promesa con un mensaje.
+                });
+        });
+    };
 
     return (
         <React.Fragment>
-           
+
             <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -129,8 +192,14 @@ export const UpdateBirds = () => {
                 }} >
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
-                            Formulario de Creación
+                            Formulario de Actualizacion
                         </Typography>
+
+                        <Typography variant='h5' color='primary.light' sx={{}}>
+                            Imágenes Existente
+                            <Divider sx={{ my: 1 }} />
+                        </Typography>
+
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imagenes Galeria
                             <Divider sx={{ my: 1 }} />
@@ -274,7 +343,7 @@ export const UpdateBirds = () => {
                         </Typography>
                         <TextField
                             name="urlWiki"
-                            label="Url Externa"
+                            label="Url Wiki"
                             multiline
                             rows={1}
                             variant="filled"

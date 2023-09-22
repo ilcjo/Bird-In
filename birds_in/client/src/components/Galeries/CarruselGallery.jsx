@@ -19,18 +19,17 @@ export const CarruselGallery = ({ isOpen, images, onClose }) => {
   };
 
   return (
-    <div>
-
+  
+  <div>
       <Dialog open={isOpen} onClose={closeDialog} maxWidth="ml" fullWidth>
         <DialogActions>
-          <Button onClick={closeDialog} startIcon={< CloseIcon />}>Cerrar</Button>
+          <Button onClick={closeDialog} startIcon={<CloseIcon />}>Cerrar</Button>
         </DialogActions>
-        <DialogContent >
-          {isOpen && images.length > 0 ? (
+        <DialogContent>
+          {isOpen && images && images.length > 0 ? (
             <Carousel showArrows={true}>
               {images.map((image, index) => (
                 <div key={index}>
-
                   <img src={image.url} alt={`Image ${index}`} style={{
                     maxWidth: '100vh',
                     maxHeight: '90vh',
@@ -54,9 +53,10 @@ export const CarruselGallery = ({ isOpen, images, onClose }) => {
                 </div>
               ))}
             </Carousel>
-          ) : null}
+          ) : (
+            <Typography variant="body2">No hay imágenes disponibles.</Typography>
+          )}
         </DialogContent>
-
       </Dialog>
     </div>
   );

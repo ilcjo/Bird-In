@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Grid, InputBase, Typography, alpha, styled, useTheme } from '@mui/material';
 import { searchBar } from '../redux/actions/fetchOptions';
 import { useDispatch, useSelector } from 'react-redux';
-import { Cards } from './Cards/Cards';
 import { CardsUpdate } from './Cards/CardsUpdate';
 
 const Search = styled('div')(({ theme }) => ({
@@ -42,8 +41,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-export const SearchBird = ({ showForm, toggleForm }) => {
-    console.log(toggleForm)
+export const SearchBird = ({ changeTab }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -54,10 +52,15 @@ export const SearchBird = ({ showForm, toggleForm }) => {
         dispatch(searchBar(searchQuery));
         setSearchQuery(searchQuery)
     };
+    const handleCardClick = () => {
+        // Llama a la función para cambiar la pestaña activa (por ejemplo, cambia a la pestaña de actualización)
+        changeTab(2); // Cambia a la pestaña de actualización (el número depende de la pestaña que desees)
+      };
+
     return (
         <React.Fragment>
             <Grid container direction="column" alignItems="center"  >
-                <Grid item sx={{ my: 2}}>
+                <Grid item sx={{ my: 2 }}>
                     <Typography variant='h2' color='primary'>
                         Buscar Ave
                     </Typography>
@@ -73,10 +76,10 @@ export const SearchBird = ({ showForm, toggleForm }) => {
                 </Grid>
             </Grid>
             {searchQuery !== '' && (
-                <Grid container spacing={3} justifyContent="center" sx={{my:3}}>
+                <Grid container spacing={3} justifyContent="center" sx={{ my: 3 }}>
                     {birds.map((bird, index) => (
                         <Grid item xs={4} key={index}>
-                            <CardsUpdate foto={bird.imagenes_ave} name={bird.nombre_ingles} onClick={toggleForm} />
+                            <CardsUpdate foto={bird.imagenes_aves} name={bird.nombre_ingles} onClick={handleCardClick} ave={bird.id_ave} />
                         </Grid>
                     ))}
                 </Grid>

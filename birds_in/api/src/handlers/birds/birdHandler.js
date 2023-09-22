@@ -1,7 +1,14 @@
 require('dotenv').config();
-const { fetchOptions, filterOptions, fetchFilterBirds, sendAndCreateBird } = require("../../controllers/birds/birdsController");
+const { 
+   fetchOptions, 
+   filterOptions, 
+   fetchFilterBirds, 
+   sendAndCreateBird,
+   findDataById,
+   sendAndUpdateBird,
+
+} = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
-const checkFTPConnection = require("../../utils/checkFtp");
 const {
    FTP_HOST,
    FTP_USER,
@@ -60,21 +67,19 @@ const createBird = async (req, res) => {
       urlImagen
 
    } = req.body;
-   console.log(typeof (urlImagen))
-   console.log(urlImagen)
    try {
-     
-         const succesCreate = await sendAndCreateBird(
-            grupo,
-            familia,
-            pais,
-            zona,
-            cientifico,
-            ingles,
-            urlWiki,
-            urlBird,
-            urlImagen)
-         return res.status(200).json(succesCreate)
+
+      const succesCreate = await sendAndCreateBird(
+         grupo,
+         familia,
+         pais,
+         zona,
+         cientifico,
+         ingles,
+         urlWiki,
+         urlBird,
+         urlImagen)
+      return res.status(200).json(succesCreate)
 
    } catch (error) {
       res.status(500).send({ error: error.message })
@@ -130,10 +135,61 @@ const uploadImageftp = async (req, res) => {
 };
 
 
+const findInfoForUpdate = async (req, res) => {
+   const { id } = req.query;
+   try {
+       if (!id) {
+           return res.status(400).json({ error: 'ID de ave no proporcionado' });
+       }
+       const formDataUpdate = await findDataById(id);
+       if (!formDataUpdate) {
+           return res.status(404).json({ error: 'Ave no encontrada' });
+       }
+       return res.status(200).json(formDataUpdate);
+   } catch (error) {
+       res.status(500).json({ error: 'Error actualizando ave' });
+   }
+};
+
+const updateInfoBids = async (req, res) => {
+   const {  
+      grupo,
+      familia,
+      pais,
+      zona,
+      cientifico,
+      ingles,
+      urlWiki,
+      urlBird,
+      idAve,
+      urlImagen,
+    } = req.body;
+   try {
+      const succesUpdate = await sendAndUpdateBird(
+         grupo,
+         familia,
+         pais,
+         zona,
+         cientifico,
+         ingles,
+         urlWiki,
+         urlBird,
+         idAve,
+         urlImagen)
+      return res.status(200).json(succesUpdate)
+
+   } catch (error) {
+      res.status(500).send({ error: error.message })
+   }
+};
+
+
 module.exports = {
    getFilterInfo,
    selectOptions,
    getFilterOptions,
    createBird,
-   uploadImageftp
+   uploadImageftp,
+   findInfoForUpdate,
+   updateInfoBids
 }

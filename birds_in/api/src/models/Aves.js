@@ -22,7 +22,11 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        urls_externas: {
+        url_wiki: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        url_bird: {
             type: DataTypes.TEXT,
             allowNull: true
         },

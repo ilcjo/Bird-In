@@ -25,7 +25,6 @@ const fetchFilterBirds = async (
 
     if (zonasNombre) {
         zonasNombre = decodeURIComponent(zonasNombre);
-        console.log(zonasNombre)
     }
     const whereClause = {};
     if (familia) {
@@ -123,7 +122,15 @@ const fetchOptions = async () => {
 const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
     const perpage = '0'
     const page = '0'
-    const allResults = await fetchFilterBirds(grupo, familia, pais, nombreIngles, nombreCientifico, zonas, page, perpage)
+    const allResults = await fetchFilterBirds(
+        grupo,
+        familia,
+        pais,
+        nombreIngles,
+        nombreCientifico,
+        zonas,
+        page,
+        perpage)
 
     const newOptions = {
         grupos: [],
@@ -182,7 +189,6 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
 
 };
 
-
 const sendAndCreateBird = async (
     grupo,
     familia,
@@ -195,19 +201,18 @@ const sendAndCreateBird = async (
     urlImagen
 ) => {
     try {
-        console.log(urlImagen)
 
         const converIngles = ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase();
         const converCientifico = cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase();
         const converZona = zona.charAt(0).toUpperCase() + zona.slice(1).toLowerCase();
 
-        const urls = [urlBird, urlWiki].join(',');
         // Crear un nuevo registro en la tabla "aves" y relacionarlo con los registros auxiliares
         const createNewBird = await Aves.create({
             nombre_ingles: converIngles,
             nombre_cientifico: converCientifico,
             zonas: converZona,
-            urls_externas: urls,
+            url_wiki: urlWiki,
+            url_bird: urlBird,
             grupos_id_grupo: grupo.id,
             familias_id_familia: familia.id,
             imagenes_aves: [ // Define la relación con Imagenes_aves y crea la imagen en la misma consulta
@@ -218,7 +223,6 @@ const sendAndCreateBird = async (
         }, {
             include: Imagenes_aves, // Incluye la tabla Imagenes_aves en la consulta
         });
-
 
         for (const pais of paises) {
             await createNewBird.addPaises(pais.id);
@@ -252,10 +256,148 @@ const sendAndCreateBird = async (
     }
 };
 
+const findDataById = async (id) => {
+    console.log('dentro dle controler', id)
+    try {
+        const ave = await Aves.findOne({
+            where: { id_ave: id },
+            include: [
+                {
+                    model: Imagenes_aves,
+                    attributes: ['url', 'id'] // Atributos que deseas de Imagenes_aves
+                },
+                {
+                    model: Paises,
+                    attributes: ['nombre', ['id_pais', 'id']],
+                    through: {
+                        attributes: [],
+                    }, // Atributos que deseas de Paises
+                },
+                { model: Grupos, attributes: ['nombre', ['id_grupo', 'id']] },
+                { model: Familias, attributes: ['nombre',['id_familia', 'id']] },
+            ],
+            attributes: [
+                'id_ave',
+                'nombre_ingles',
+                'nombre_cientifico',
+                'nombre_comun',
+                'zonas',
+                'url_wiki',
+                'url_bird',] // Atributos de Aves que deseas
+        });
+
+        return ave;
+    } catch (error) {
+        // Manejar errores de consulta
+        console.error('Error en la consulta:', error);
+        throw error;
+    }
+};
+
+const sendAndUpdateBird = async (
+    grupo,
+    familia,
+    paises,
+    zona,
+    cientifico,
+    ingles,
+    urlBird,
+    urlWiki,
+    aveId,
+    urlImagen
+) => {
+    try {
+        // Obtener el ave existente de la base de datos
+        const existingBird = await Aves.findOne({
+            where: {
+                id_ave: aveId,
+            },
+        });
+
+        if (!existingBird) {
+            throw new Error("El ave con ID especificado no existe.");
+        }
+
+        // Comparar los nuevos valores con los valores actuales
+        const converIngles = ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase();
+        const converCientifico = cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase();
+        const converZona = zona.charAt(0).toUpperCase() + zona.slice(1).toLowerCase();
+
+        // Verificar si los nuevos valores son diferentes de los actuales antes de actualizar
+        if (
+            converIngles !== existingBird.nombre_ingles ||
+            converCientifico !== existingBird.nombre_cientifico ||
+            converZona !== existingBird.zonas ||
+            urlWiki !== existingBird.url_wiki ||
+            urlBird !== existingBird.url_bird ||
+            grupo.id !== existingBird.grupos_id_grupo ||
+            familia.id !== existingBird.familias_id_familia
+        ) {
+            // Actualizar el registro existente en la tabla "aves" y sus relaciones
+            await Aves.update(
+                {
+                    nombre_ingles: converIngles,
+                    nombre_cientifico: converCientifico,
+                    zonas: converZona,
+                    url_wiki: urlWiki,
+                    url_bird: urlBird,
+                    grupos_id_grupo: grupo.id,
+                    familias_id_familia: familia.id,
+                },
+                {
+                    where: {
+                        id_ave: aveId,
+                    },
+                }
+            );
+        }
+
+        // Actualizar las imágenes del ave (esto dependerá de cómo esté estructurada tu base de datos)
+        await Imagenes_aves.destroy({
+            where: {
+                aves_id_ave: aveId,
+            },
+        });
+
+        // Crear nuevas imágenes asociadas al ave actualizado
+        // for (const imageUrl of urlImagen) {
+        await Imagenes_aves.create({
+            aves_id_ave: aveId,
+            url: urlImagen,
+        });
+        // }
+        const existingRelations = await Aves.findByPk(aveId);
+
+        if (existingRelations) {
+            // Obtén todas las relaciones de países asociadas al ave
+            const existingPaises = await existingRelations.getPaises();
+            
+            // Itera sobre las relaciones y elimina cada una de ellas
+            for (const pais of existingPaises) {
+                await existingRelations.removePaises(pais);
+            }
+
+            
+        }
+
+        for (const pais of paises) {
+            await existingRelations.addPaises(pais.id);
+        }
+
+        return "El ave se ha actualizado correctamente.";
+    } catch (error) {
+        console.error('Error:', error);
+        // Agrega manejo de errores específicos si es necesario.
+    }
+};
+
+
 
 module.exports = {
     fetchOptions,
     filterOptions,
     fetchFilterBirds,
     sendAndCreateBird,
+    findDataById,
+    sendAndUpdateBird,
 }
