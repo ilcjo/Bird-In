@@ -15,7 +15,7 @@ async function checkFTPConnection() {
       user: FTP_USER,
       password: FTP_PASS,
       secure: false,
-    });
+
 
     // Si la conexión se establece correctamente, puedes hacer alguna operación de prueba, como listar directorios
  
