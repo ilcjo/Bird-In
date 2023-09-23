@@ -1,5 +1,5 @@
-const { Op } = require("sequelize");
-const { Aves, Grupos, Familias, Paises } = require('../../db/db');
+const { Op, Utils } = require("sequelize");
+const { Aves, Grupos, Familias, Paises, Imagenes_aves } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 
 const DEFAULT_PER_PAGE = 9;
@@ -15,17 +15,16 @@ const fetchFilterBirds = async (
     page,
     perPage
 ) => {
-    
+
     if (nombreCientifico) {
-        nombreCientifico = decodeURIComponent(nombreCientifico)  
+        nombreCientifico = decodeURIComponent(nombreCientifico)
     }
     if (nombreIngles) {
-        nombreIngles = decodeURIComponent(nombreIngles);  
+        nombreIngles = decodeURIComponent(nombreIngles);
     }
-    
+
     if (zonasNombre) {
         zonasNombre = decodeURIComponent(zonasNombre);
-        console.log(zonasNombre)
     }
     const whereClause = {};
     if (familia) {
@@ -42,7 +41,7 @@ const fetchFilterBirds = async (
         whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
     }
     if (zonasNombre) {
-        whereClause.zonas  = { [Op.like]: `%${zonasNombre}%` };
+        whereClause.zonas = { [Op.like]: `%${zonasNombre}%` };
     }
 
     const includeArr = [
@@ -55,6 +54,11 @@ const fetchFilterBirds = async (
             through: {
                 attributes: []
             }
+        },
+        {
+            model: Imagenes_aves,
+            as: 'imagenes_aves',
+            attributes: ['url']
         }
     ];
 
@@ -95,7 +99,7 @@ const fetchOptions = async () => {
         attributes: ['nombre', 'id_pais']
     })
     const optionsNames = await Aves.findAll({
-        attributes: ['nombre_cientifico', 'nombre_ingles']
+        attributes: ['nombre_cientifico', 'nombre_ingles', 'zonas']
 
     })
     const nombresGrupos = mapFieldValues(optionsGrupos, 'nombre', 'id_grupo')
@@ -103,22 +107,30 @@ const fetchOptions = async () => {
     const nombrePaises = mapFieldValues(optionsPaises, 'nombre', 'id_pais')
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles')
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico')
-    const zonasLista = mapFieldValues(optionsNames, 'zonas')
-    
+    const nombrezonas = mapFieldValues(optionsNames, 'zonas')
+
     return {
         grupos: nombresGrupos,
         familias: nombreFamilias,
         paises: nombrePaises,
-        zonas: zonasLista,
         nIngles: nombreIngles,
-        nCientifico: nombreCientifico
+        nCientifico: nombreCientifico,
+        zonas: nombrezonas
     }
 };
 
 const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
     const perpage = '0'
     const page = '0'
-    const allResults = await fetchFilterBirds(grupo, familia, pais, nombreIngles, nombreCientifico, zonas, page, perpage)
+    const allResults = await fetchFilterBirds(
+        grupo,
+        familia,
+        pais,
+        nombreIngles,
+        nombreCientifico,
+        zonas,
+        page,
+        perpage)
 
     const newOptions = {
         grupos: [],
@@ -177,18 +189,215 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
 
 };
 
+const sendAndCreateBird = async (
+    grupo,
+    familia,
+    paises,
+    zona,
+    cientifico,
+    ingles,
+    urlBird,
+    urlWiki,
+    urlImagen
+) => {
+    try {
 
-const sendAndCreateBird = async (  
-    imagenes,
-   ) =>{
-console.log('desde el controler:p',  
-imagenes,
-)
+        const converIngles = ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase();
+        const converCientifico = cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase();
+        const converZona = zona.charAt(0).toUpperCase() + zona.slice(1).toLowerCase();
+
+        // Crear un nuevo registro en la tabla "aves" y relacionarlo con los registros auxiliares
+        const createNewBird = await Aves.create({
+            nombre_ingles: converIngles,
+            nombre_cientifico: converCientifico,
+            zonas: converZona,
+            url_wiki: urlWiki,
+            url_bird: urlBird,
+            grupos_id_grupo: grupo.id,
+            familias_id_familia: familia.id,
+            imagenes_aves: [ // Define la relación con Imagenes_aves y crea la imagen en la misma consulta
+                {
+                    url: urlImagen,
+                },
+            ],
+        }, {
+            include: Imagenes_aves, // Incluye la tabla Imagenes_aves en la consulta
+        });
+
+        for (const pais of paises) {
+            await createNewBird.addPaises(pais.id);
+        }
+
+
+        return "El ave se ha creado correctamente.";
+        // Obtener todos los países asociados a un ave específico
+        // const paisesAsociados = await createNewBird.getPaises();
+        // console.log(paisesAsociados)
+        // console.log(createNewBird);
+
+    } catch (error) {
+        // Error: Captura cualquier excepción que se produzca durante la ejecución
+        console.error('Error:', error);
+
+        // A continuación, puedes agregar lógica para manejar errores específicos si es necesario.
+        if (error.name === 'SequelizeValidationError') {
+            // Handle validation errors (e.g., required fields, unique constraints)
+            console.error('Errores de validación:', error.errors);
+        } else if (error.name === 'SequelizeUniqueConstraintError') {
+            // Handle unique constraint violations
+            console.error('Violación de restricción única:', error.errors);
+        } else if (error.name === 'SequelizeForeignKeyConstraintError') {
+            // Handle foreign key constraint violations
+            console.error('Violación de restricción de clave foránea:', error.parent);
+        } else {
+            // Handle other types of errors
+            console.error('Error no manejado:', error);
+        }
+    }
 };
+
+const findDataById = async (id) => {
+    console.log('dentro dle controler', id)
+    try {
+        const ave = await Aves.findOne({
+            where: { id_ave: id },
+            include: [
+                {
+                    model: Imagenes_aves,
+                    attributes: ['url', 'id'] // Atributos que deseas de Imagenes_aves
+                },
+                {
+                    model: Paises,
+                    attributes: ['nombre', ['id_pais', 'id']],
+                    through: {
+                        attributes: [],
+                    }, // Atributos que deseas de Paises
+                },
+                { model: Grupos, attributes: ['nombre', ['id_grupo', 'id']] },
+                { model: Familias, attributes: ['nombre',['id_familia', 'id']] },
+            ],
+            attributes: [
+                'id_ave',
+                'nombre_ingles',
+                'nombre_cientifico',
+                'nombre_comun',
+                'zonas',
+                'url_wiki',
+                'url_bird',] // Atributos de Aves que deseas
+        });
+
+        return ave;
+    } catch (error) {
+        // Manejar errores de consulta
+        console.error('Error en la consulta:', error);
+        throw error;
+    }
+};
+
+const sendAndUpdateBird = async (
+    grupo,
+    familia,
+    paises,
+    zona,
+    cientifico,
+    ingles,
+    urlBird,
+    urlWiki,
+    aveId,
+    urlImagen
+) => {
+    try {
+        // Obtener el ave existente de la base de datos
+        const existingBird = await Aves.findOne({
+            where: {
+                id_ave: aveId,
+            },
+        });
+
+        if (!existingBird) {
+            throw new Error("El ave con ID especificado no existe.");
+        }
+
+        // Comparar los nuevos valores con los valores actuales
+        const converIngles = ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase();
+        const converCientifico = cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase();
+        const converZona = zona.charAt(0).toUpperCase() + zona.slice(1).toLowerCase();
+
+        // Verificar si los nuevos valores son diferentes de los actuales antes de actualizar
+        if (
+            converIngles !== existingBird.nombre_ingles ||
+            converCientifico !== existingBird.nombre_cientifico ||
+            converZona !== existingBird.zonas ||
+            urlWiki !== existingBird.url_wiki ||
+            urlBird !== existingBird.url_bird ||
+            grupo.id !== existingBird.grupos_id_grupo ||
+            familia.id !== existingBird.familias_id_familia
+        ) {
+            // Actualizar el registro existente en la tabla "aves" y sus relaciones
+            await Aves.update(
+                {
+                    nombre_ingles: converIngles,
+                    nombre_cientifico: converCientifico,
+                    zonas: converZona,
+                    url_wiki: urlWiki,
+                    url_bird: urlBird,
+                    grupos_id_grupo: grupo.id,
+                    familias_id_familia: familia.id,
+                },
+                {
+                    where: {
+                        id_ave: aveId,
+                    },
+                }
+            );
+        }
+
+        // Actualizar las imágenes del ave (esto dependerá de cómo esté estructurada tu base de datos)
+        await Imagenes_aves.destroy({
+            where: {
+                aves_id_ave: aveId,
+            },
+        });
+
+        // Crear nuevas imágenes asociadas al ave actualizado
+        // for (const imageUrl of urlImagen) {
+        await Imagenes_aves.create({
+            aves_id_ave: aveId,
+            url: urlImagen,
+        });
+        // }
+        const existingRelations = await Aves.findByPk(aveId);
+
+        if (existingRelations) {
+            // Obtén todas las relaciones de países asociadas al ave
+            const existingPaises = await existingRelations.getPaises();
+            
+            // Itera sobre las relaciones y elimina cada una de ellas
+            for (const pais of existingPaises) {
+                await existingRelations.removePaises(pais);
+            }
+
+            
+        }
+
+        for (const pais of paises) {
+            await existingRelations.addPaises(pais.id);
+        }
+
+        return "El ave se ha actualizado correctamente.";
+    } catch (error) {
+        console.error('Error:', error);
+        // Agrega manejo de errores específicos si es necesario.
+    }
+};
+
+
 
 module.exports = {
     fetchOptions,
     filterOptions,
     fetchFilterBirds,
     sendAndCreateBird,
+    findDataById,
+    sendAndUpdateBird,
 }

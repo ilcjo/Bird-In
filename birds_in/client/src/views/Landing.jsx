@@ -20,7 +20,7 @@ export const Landing = () => {
 
   return (
     <React.Fragment>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{  }}>
 
         <Grid item xs={false} sm={3} md={8.5}
           sx={{
@@ -30,25 +30,20 @@ export const Landing = () => {
             backgroundPosition: 'center',
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.40)', // Agregar sombra
           }}>
-
-          <Typography variant="body1" color="primary.light"
+            <Typography variant="h5" color="black"
             sx={{
               position: 'absolute', // Posiciona el segundo párrafo en la esquina inferior izquierda
               bottom: 0, // Coloca el segundo párrafo en la parte inferior del contenedor
-              right: 530, // Coloca el segundo párrafo en la esquina izquierda del contenedor
-              margin: '20px', // Ajusta los márgenes según tus necesidade
-            }}>
-            <LocationOnIcon /> Nombre del lugar
-          </Typography>
-          <Typography variant="body1" color="primary.light"
-            sx={{
-              position: 'absolute', // Posiciona el segundo párrafo en la esquina inferior izquierda
-              bottom: 0, // Coloca el segundo párrafo en la parte inferior del contenedor
-              right: 530, // Coloca el segundo párrafo en la esquina izquierda del contenedor
+              right: 460, // Coloca el segundo párrafo en la esquina izquierda del contenedor
               margin: '20px', // Ajusta los márgenes según tus necesidades
-              bottom: '30px'
+              bottom: '80vh',
+              // backgroundColor: 'rgba(255, 255, 255, 0.5)',
             }}>
-            Nombre del lugar
+            Fiery-billed Aracari
+          <br></br>
+          Pteroglossus frantzii
+          <br></br>
+           Boquete, Panamá
           </Typography>
         </Grid>
         <Grid item xs={12} sm={9} md={3.5} component={Box} elevation={6}
@@ -84,7 +79,7 @@ export const Landing = () => {
             mt: 11
           }}>
             <Typography variant="h2" color='primary.main' >
-              Moises Sterinberg
+              Moises Sterimberg
             </Typography>
             <Typography variant="body1" color='primary.light'>
               Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.

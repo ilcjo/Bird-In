@@ -22,10 +22,18 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        descripcion: {
+        url_wiki: {
             type: DataTypes.TEXT,
             allowNull: true
         },
-    },
+        url_bird: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        nombre_comun: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+    },{ timestamps: true, }
     )
 }

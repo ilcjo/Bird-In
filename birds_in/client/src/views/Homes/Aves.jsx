@@ -53,7 +53,7 @@ export const Aves = () => {
           <Grid item container spacing={3} justifyContent="center">
             {birds.map((i, index) => (
               <Grid item key={index}>
-                <Cards foto={i.imagenes_ave} name={i.nombre_ingles} />
+                <Cards foto={i.imagenes_aves} name={i.nombre_ingles}  />
               </Grid>
             ))}
           </Grid>

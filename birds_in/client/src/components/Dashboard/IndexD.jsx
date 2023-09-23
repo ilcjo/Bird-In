@@ -2,16 +2,28 @@
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { CreateBird } from '../Forms/CreateBird';
-import { UpdateHomes } from '../Forms/UpdateHomes';
+import { UpdateBirds } from '../Forms/UpdateBirds';
+import { SearchBird } from './SearchBird';
+import { useDispatch } from 'react-redux';
+import { setEstateInfo } from '../../redux/slices/createSlice';
+
 
 export const IndexD = () => {
-
+  const dispatch = useDispatch();
   const [selectedTab, setSelectedTab] = React.useState(0);
+  const [isFormEnabled, setIsFormEnabled] = React.useState(false);
 
   const handleTabChange = (event, newValue) => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
-  };
+    
+  // Si el nuevo valor es 1 (pestaña "Buscar ave"), establece el estado de Redux
+  if (convertNumber === 1) {
+   
+    dispatch(setEstateInfo()); // Reemplaza con la acción que establece el estado en Redux
+  }
+};
+
 
   return (
     <>
@@ -28,10 +40,23 @@ export const IndexD = () => {
           <Typography variant='h5' >
             Crear ave
           </Typography>
-        }></Tab>
+        }>
+
+        </Tab>
         <Tab label={<Typography variant='h5' >
-          Actualizar Inicios
-        </Typography>}></Tab>
+          Buscar ave
+        </Typography>}>
+        </Tab>
+
+        <Tab 
+        label={<Typography variant='h5' >
+          Actualizar Aves
+        </Typography>
+      }
+      disabled={!isFormEnabled}
+      >
+
+        </Tab>
 
       </Tabs>
       <div>
@@ -42,7 +67,12 @@ export const IndexD = () => {
         )}
         {selectedTab === 1 && (
           <Box>
-            <UpdateHomes />
+            <SearchBird changeTab={(newValue) => setSelectedTab(newValue) } isEnable={setIsFormEnabled}/>
+          </Box>
+        )}
+        {selectedTab === 2 && (
+          <Box>
+            <UpdateBirds isEnable={setIsFormEnabled} />
           </Box>
         )}
 

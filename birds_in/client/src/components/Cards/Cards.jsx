@@ -1,71 +1,67 @@
 import * as React from 'react'
 import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
 import { CarruselGallery } from '../Galeries/CarruselGallery';
 import { useTheme } from '@emotion/react';
 
 
 export const Cards = ({ foto, name, index }) => {
-  
+  console.log('soy', foto)
+
   const theme = useTheme()
-  const [isFavorited, setIsFavorited] = React.useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorited((prev) => !prev);
-  };
-
+  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
 
   const openGallery = () => {
     setIsGalleryOpen(true);
   };
 
-  return (
+  const handleImageClick = (index) => {
+    setSelectedImageIndex(index);
+    openGallery();
+  };
 
+  return (
     <Card sx={{
       maxWidth: 'auto',
       minWidth: 415,
-      maxheigth: 'auto',
-      minheigth: 399,
+      minHeight: 280, // Establece una altura mínima para la tarjeta
       position: 'relative',
-      borderRadius: '15px'
-      // background: 'linear-gradient(rgba(137, 138, 108, 0), rgba(0, 61, 21, 0.5))',
+      borderRadius: '15px',
+      display: 'flex', // Establece la tarjeta como un contenedor flexible
+      flexDirection: 'column', // Alinea el contenido verticalmente
+      justifyContent: 'space-between', // Centra verticalmente el contenido
     }}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="194"
-          image={foto}
-          alt={name}
-          key={index}
-          onClick={openGallery}
-          sx={{ objectFit: 'cover', }}
-        />
+        {foto[selectedImageIndex] && foto[selectedImageIndex].url ? (
+          <CardMedia
+            component="img"
+            height="194"
+            image={foto[selectedImageIndex].url}
+            alt={name}
+            key={index}
+            onClick={() => handleImageClick(selectedImageIndex)}
+            sx={{ objectFit: 'cover' }}
+          />
+        ) : (
+          <Typography variant="body2">Imagen no disponible</Typography>
+        )}
       </CardActionArea>
-      <CardActions disableSpacing >
+      <CardActions disableSpacing>
         <Typography>
           {name}
         </Typography>
-
-        <IconButton aria-label="toggle favorite" onClick={toggleFavorite}>
-          {isFavorited ? (
-            <BookmarkAddedIcon color='primary' />
-          ) : (
-            <BookmarkAddIcon color='primary' />
-          )}
-        </IconButton>
-        {isFavorited && (
-          <IconButton aria-label="remove favorite" onMouseEnter={toggleFavorite}>
-            <BookmarkRemoveIcon color='error' />
-          </IconButton>
-        )}
       </CardActions>
-
-      <CarruselGallery isOpen={isGalleryOpen} images={[foto]} onClose={() => setIsGalleryOpen(false)} />
-    </Card >
-
-  )
+      <CarruselGallery
+        isOpen={isGalleryOpen}
+        images={foto}
+        selectedIndex={selectedImageIndex}
+        onClose={() => setIsGalleryOpen(false)} />
+    </Card>
+  );
 }
+
+
+
+
+
+
