@@ -19,7 +19,7 @@ import { Boolean } from '../../redux/slices/OpenClose';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { loginFailure, loginRequest } from '../../redux/slices/Auth';
-
+import CloseIcon from '@mui/icons-material/Close';
 export const LoginForm = ({ changeTab }) => {
  
 
@@ -258,7 +258,9 @@ export const LoginForm = ({ changeTab }) => {
           >
             <span>Iniciar Sesion</span>
           </LoadingButton>
-
+          <Button onClick={handleClose} variant="outlined" sx={{
+            bottom: -85
+          }} startIcon={<CloseIcon />}>Cerrar</Button>
         </Grid>
       </Grid>
     </Box>

@@ -1,12 +1,11 @@
 import * as React from 'react'
-import { Backdrop, Button, Card, CardActions, CardMedia, CircularProgress, Typography } from '@mui/material'
-import { useTheme } from '@emotion/react';
+import { Backdrop, Button, Card, CardActions, CardMedia, CircularProgress, Typography, useTheme } from '@mui/material'
 import { useDispatch } from 'react-redux';
 import { idSelectedUpdate } from '../../redux/slices/createSlice';
 import { getInfoForUpdate } from '../../redux/actions/createBirds';
 
 
-export const CardsUpdate = ({ foto, name, ave, onClick, }) => {
+export const CardsUpdate = ({ foto, name, ave, onClick, isEnable }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
   const theme = useTheme();
@@ -48,7 +47,7 @@ export const CardsUpdate = ({ foto, name, ave, onClick, }) => {
         <CardMedia
           component="img"
           height="194"
-          image={foto}
+          // image={foto}
           alt={name}
           key={ave}
           sx={{ objectFit: 'cover' }}
@@ -76,4 +75,4 @@ export const CardsUpdate = ({ foto, name, ave, onClick, }) => {
     </React.Fragment>
   )
 
-}
+};

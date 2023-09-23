@@ -4,7 +4,7 @@ const initialState = {
 
     imagenUrlString: '',
     idAve: 0,
-    infoAveForUpdate: [],
+    infoAveForUpdate: {},
 };
 
 export const createBird = createSlice({
@@ -20,6 +20,9 @@ export const createBird = createSlice({
         },
         getAve: (state, action) => {
             state.infoAveForUpdate = action.payload
+        },
+        setEstateInfo: (state, action) =>{
+            state.infoAveForUpdate = {}
         }
     }
 });
@@ -27,6 +30,7 @@ export const createBird = createSlice({
 export const {
     saveUrlImage,
     idSelectedUpdate,
-    getAve
+    getAve,
+    setEstateInfo
 } = createBird.actions;
 export default createBird.reducer;

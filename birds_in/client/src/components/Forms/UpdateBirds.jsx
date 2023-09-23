@@ -18,47 +18,38 @@ import { useTheme } from '@emotion/react';
 import { UpdateAveImage, actualizarAve } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
-export const UpdateBirds = () => {
+export const UpdateBirds = ({ isEnable }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
     const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
+    console.log('soy infoupdate actios',infoAveForUpdate)
 
-    const initialCreateData = infoAveForUpdate
-        ? {
-            grupo: infoAveForUpdate.grupo,
-            familia: infoAveForUpdate.familia,
-            pais: infoAveForUpdate.paises, // Supongo que esto viene de Redux también
-            zona: infoAveForUpdate.zonas,
-            cientifico: infoAveForUpdate.nombre_cientifico,
-            ingles: infoAveForUpdate.nombre_ingles,
-            urlWiki: infoAveForUpdate.url_wiki, // Inicialmente vacío
-            urlBird: infoAveForUpdate.url_bird, // Inicialmente vacío
-            idAve: infoAveForUpdate.id_ave,
-            urlImagen: infoAveForUpdate.url,
+    const initialCreateData = {
+        grupo: infoAveForUpdate.grupo || null,
+        familia: infoAveForUpdate.familia || null,
+        pais: infoAveForUpdate.paises || [],
+        zona: infoAveForUpdate.zonas || '',
+        cientifico: infoAveForUpdate.nombre_cientifico || '',
+        ingles: infoAveForUpdate.nombre_ingles || '',
+        urlWiki: infoAveForUpdate.url_wiki || '',
+        urlBird: infoAveForUpdate.url_bird || '',
+        idAve: infoAveForUpdate.id_ave || 0,
+        urlImagen: infoAveForUpdate.imagenes_aves || [],
+    
+            
         }
-        : {
-            // Valores iniciales si no hay información en el estado de Redux
-            grupo: '',
-            familia: '',
-            pais: [],
-            zona: '',
-            cientifico: '',
-            ingles: '',
-            urlWiki: '',
-            urlBird: '',
-            idAve: 0,
-            urlImagen: '',
-        };
-    const [createData, setCreateData] = React.useState(initialCreateData);
+    
+    console.log('soy initianstate',initialCreateData)
+    const [createData, setCreateData] = React.useState(initialCreateData)
+    console.log('soy formulario data',createData)
     const [imageURL, setImageURL] = React.useState(null); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState(null); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
-    console.log('form de update', createData)
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -90,60 +81,60 @@ export const UpdateBirds = () => {
         setImageURL(null);
     };
 
-
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (imageFile) {
-            const formData = new FormData();
-            formData.append('image', imageFile);
 
-            setShowBackdrop(true);
-            setLoadingMessage('Subiendo imagenes...');
+        setShowBackdrop(true);
+        setLoadingMessage('Actualizando ave...');
 
-            try {
-                // Espera a que la imagen se suba y obtén la URL
-                const imageUrl = await saveImageFtpWithMessage(formData);
+        try {
+            let imageUrl = '';
 
-                // Restaurar el mensaje de carga si es necesario
-                setLoadingMessage('Actualizando ave...');
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append('image', imageFile);
 
-                await createBirdWithMessage(createData, imageUrl);
+                imageUrl = await saveImageFtpWithMessage(formData);
 
-                setShowBackdrop(false);
-                setLoadingMessage('Cargando...');
-
-                // Abre el Snackbar
-                setOpenSnackbar(true);
-
-                // Borra los datos del formulario
-                setCreateData({
-                    grupo: null,
-                    familia: null,
-                    pais: [],
-                    zona: '',
-                    cientifico: '',
-                    ingles: '',
-                    urlWiki: '',
-                    urlBird: '',
-                    idAve: 0,
-                    urlImagen: '',
-                });
-                setImageURL(null);
-                setImageFile(null);
-            } catch (error) {
-                // Muestra el mensaje de error en caso de que ocurra un error en cualquiera de las dos promesas.
-                console.error('Error:', error);
-                setShowBackdrop(false);
+                setLoadingMessage('Actualizando ave...'); // Restaura el mensaje después de subir la imagen
             }
+
+            await createBirdWithMessage(createData, imageUrl);
+
+            setShowBackdrop(false);
+            setLoadingMessage('Cargando...');
+
+            setOpenSnackbar(true);
+
+            // Borra los datos del formulario
+            setCreateData({
+                grupo: null,
+                familia: null,
+                pais: [],
+                zona: '',
+                cientifico: '',
+                ingles: '',
+                urlWiki: '',
+                urlBird: '',
+                idAve: 0,
+                urlImagen: '',
+            });
+            setImageURL(null);
+            setImageFile(null);
+            isEnable(false);
+        } catch (error) {
+            console.error('Error:', error);
+            setShowBackdrop(false);
         }
     };
+
 
     const saveImageFtpWithMessage = async (formData) => {
         return new Promise(async (resolve, reject) => {
             try {
                 // Realiza la carga de la imagen y espera la respuesta
                 const response = await dispatch(UpdateAveImage(formData));
-                
+
                 // Verifica si la respuesta contiene la URL de la imagen
                 if (response && response.data && response.data.imageUrl) {
                     const imageUrlString = response.data.imageUrl;
@@ -166,12 +157,14 @@ export const UpdateBirds = () => {
                     resolve(); // Solo resuelve la Promesa si la actualización del ave tiene éxito.
                 })
                 .catch((error) => {
-                    console.error('Error al crear el ave:', error);
-                    reject("Error al crear el ave"); // Si hay un error, resuelve la Promesa con un mensaje.
+                    console.error('Error al actualizar el ave:', error);
+                    reject("Error al actualizar el ave"); // Si hay un error, resuelve la Promesa con un mensaje.
                 });
         });
     };
-
+    React.useEffect(() => {
+        setCreateData(initialCreateData);
+      }, [infoAveForUpdate]); //
     return (
         <React.Fragment>
 

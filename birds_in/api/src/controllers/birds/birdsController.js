@@ -99,7 +99,7 @@ const fetchOptions = async () => {
         attributes: ['nombre', 'id_pais']
     })
     const optionsNames = await Aves.findAll({
-        attributes: ['nombre_cientifico', 'nombre_ingles']
+        attributes: ['nombre_cientifico', 'nombre_ingles', 'zonas']
 
     })
     const nombresGrupos = mapFieldValues(optionsGrupos, 'nombre', 'id_grupo')
@@ -107,15 +107,15 @@ const fetchOptions = async () => {
     const nombrePaises = mapFieldValues(optionsPaises, 'nombre', 'id_pais')
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles')
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico')
-    const zonasLista = mapFieldValues(optionsNames, 'zonas')
+    const nombrezonas = mapFieldValues(optionsNames, 'zonas')
 
     return {
         grupos: nombresGrupos,
         familias: nombreFamilias,
         paises: nombrePaises,
-        zonas: zonasLista,
         nIngles: nombreIngles,
-        nCientifico: nombreCientifico
+        nCientifico: nombreCientifico,
+        zonas: nombrezonas
     }
 };
 
