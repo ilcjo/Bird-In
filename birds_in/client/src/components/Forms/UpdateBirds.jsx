@@ -24,7 +24,7 @@ export const UpdateBirds = ({ isEnable }) => {
     const dispatch = useDispatch()
     const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
-    console.log('soy infoupdate actios',infoAveForUpdate)
+    console.log('soy infoupdate actios', infoAveForUpdate)
 
     const initialCreateData = {
         grupo: infoAveForUpdate.grupo || null,
@@ -37,13 +37,13 @@ export const UpdateBirds = ({ isEnable }) => {
         urlBird: infoAveForUpdate.url_bird || '',
         idAve: infoAveForUpdate.id_ave || 0,
         urlImagen: infoAveForUpdate.imagenes_aves || [],
-    
-            
-        }
-    
-    console.log('soy initianstate',initialCreateData)
+
+
+    }
+
+    console.log('soy initianstate', initialCreateData)
     const [createData, setCreateData] = React.useState(initialCreateData)
-    console.log('soy formulario data',createData)
+    console.log('soy formulario data', createData)
     const [imageURL, setImageURL] = React.useState(null); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState(null); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -164,7 +164,7 @@ export const UpdateBirds = ({ isEnable }) => {
     };
     React.useEffect(() => {
         setCreateData(initialCreateData);
-      }, [infoAveForUpdate]); //
+    }, [infoAveForUpdate]); //
     return (
         <React.Fragment>
 
@@ -185,7 +185,7 @@ export const UpdateBirds = ({ isEnable }) => {
                 }} >
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
-                            Formulario de Actualizacion
+                            Formulario de Actualización
                         </Typography>
 
                         <Typography variant='h5' color='primary.light' sx={{}}>
@@ -194,7 +194,7 @@ export const UpdateBirds = ({ isEnable }) => {
                         </Typography>
 
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
-                            Subir imagenes Galeria
+                            Subir imágenes a la Galería
                             <Divider sx={{ my: 1 }} />
                         </Typography>
                         {/* Input para cargar imágenes */}
@@ -222,7 +222,7 @@ export const UpdateBirds = ({ isEnable }) => {
                                 }} // Estilo personalizado
                                 onChange={handleImageChange}
                             >
-                                Subir Imagenes
+                                Subir Imágenes
                             </Button>
                         </label>
 
@@ -252,12 +252,13 @@ export const UpdateBirds = ({ isEnable }) => {
                             )}
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 2 }} >
+                    <Grid item xs={12} sm={12}>
+                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Datos del Ave
-                            <Divider sx={{ my: 1 }} />
+                            <Divider sx={{ my: 2 }} />
                         </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6} sx={{ mt: -4 }}>
 
                         <TextField
                             variant="filled"
@@ -268,7 +269,26 @@ export const UpdateBirds = ({ isEnable }) => {
                             fullWidth
                             margin="normal"
                         />
-
+                        <TextField
+                            variant="filled"
+                            name="cientifico"
+                            label="Nombre cientifico"
+                            value={createData.cientifico}
+                            onChange={handleInputChange}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <TextField
+                            variant="filled"
+                            name="Comun"
+                            label="Nombre común"
+                            value={createData.cientifico}
+                            onChange={handleInputChange}
+                            fullWidth
+                            margin="normal"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} sx={{ mt: -4 }}>
                         <Autocomplete
                             disablePortal
                             id="combo-box-grupos"
@@ -278,31 +298,7 @@ export const UpdateBirds = ({ isEnable }) => {
                             onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
                             renderInput={(params) => <TextField {...params} label="Grupos" />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
-
-                        />
-                        <TextField
-                            variant="filled"
-                            name="zona"
-                            label="Zonas"
-                            value={createData.zona}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Typography variant='h5' color='secondary.light' sx={{ mb: 3 }}>
-                            1
-                        </Typography>
-                        <TextField
-                            variant="filled"
-                            name="cientifico"
-                            label="Nombre cientifico"
-                            value={createData.cientifico}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
+                            sx={{ mb: 3, mt: 1 }}
                         />
                         <Autocomplete
                             disablePortal
@@ -316,7 +312,6 @@ export const UpdateBirds = ({ isEnable }) => {
                             sx={{ mb: 3 }}
                         />
 
-
                         <Autocomplete
                             disablePortal
                             id="combo-box-pais"
@@ -327,12 +322,28 @@ export const UpdateBirds = ({ isEnable }) => {
                             renderInput={(params) => <TextField {...params} label="Pais" />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
+                            
                         />
+
                     </Grid>
                     <Grid item xs={12} sm={12}>
+                        <TextField
+                            variant="filled"
+                            multiline
+                            name="zona"
+                            label="Zonas"
+                            rows={3}
+                            value={createData.zona}
+                            onChange={handleInputChange}
+                            fullWidth
+                            margin="normal"
+                            helperText='En este campo siempre separar cada zonas por ,  y no espacios'
+                            sx={{ mt: -3, mb: 2 }}
+
+                        />
                         <Typography variant='h5' color='primary.light' sx={{}}>
-                            Informacion adicional
-                            <Divider sx={{ my: 1 }} />
+                            Información adicional
+                            <Divider sx={{ my: 2 }} />
                         </Typography>
                         <TextField
                             name="urlWiki"
@@ -359,7 +370,7 @@ export const UpdateBirds = ({ isEnable }) => {
                             margin="normal"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={12} >
                         <Button onClick={handleSubmit}
                             sx={{
                                 fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',

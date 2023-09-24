@@ -77,12 +77,14 @@ const fetchFilterBirds = async (
     const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
     const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
 
+ 
     const avesFiltradas = await Aves.findAll({
         where: whereClause,
         include: includeArr,
         limit: perPageConvert,
         offset: offset,
     });
+    
     return avesFiltradas
 
 };

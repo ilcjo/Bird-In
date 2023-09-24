@@ -79,10 +79,32 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             textTransform: 'none',
         },
     };
+    const sortAlphabetically = (array) => {
+        return array.slice().sort((a, b) => {
+          // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
+          if (a && a.nombre && b && b.nombre) {
+            const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
+            const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
+            return nameA.localeCompare(nameB);
+          }
+          // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
+          return 0;
+        });
+      };
 
     const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
-    console.log(selectOptionFromSlice)
     const { nIngles, nCientifico, paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
+
+    const sortedPaises = sortAlphabetically(paises);
+    const sortedFamilias = sortAlphabetically(familias);
+    const sortedGrupos = sortAlphabetically(grupos);
+    const sortedZonas = sortAlphabetically(zonas);
+
+    const sortedNCientifico = sortAlphabetically(nCientifico);
+    console.log(sortedNCientifico)
+    const sortedNIngles = sortAlphabetically(nIngles);
+    console.log(sortedNIngles)
+
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],
         familia: [],
@@ -168,7 +190,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                     backgroundColor: 'rgba(0, 61, 21, 0.2)',
                     padding: 2,
                     marginLeft: '90px'
-
                 }} >
                 <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
@@ -181,11 +202,18 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                         <FormControl sx={{ m: 1, width: '95%' }}>
                             <Autocomplete
                                 multiple
-                                id='grupoInút'
+                                id='grupoUnico'
                                 value={selectOption.grupo}
                                 onChange={(event, newValue) => handleOptionChange('grupo', newValue)}
-                                options={grupos}
+                                options={sortedGrupos}
                                 getOptionLabel={(option) => option.nombre}
+                                filterOptions={(options, state) => {
+                                    // Filtra las opciones para que coincidan solo al principio de las letras
+                                    const inputValue = state.inputValue.toLowerCase();
+                                    return options.filter((option) =>
+                                      option.nombre.toLowerCase().startsWith(inputValue)
+                                    );
+                                  }}
                                 renderInput={(params) =>
                                     <TextField {...params}
                                         label="Grupo"
@@ -216,7 +244,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
 
                                 isOptionEqualToValue={(option, value) => option.id === value?.id}
                                 disabled={grupos.length === 0}
-
                             />
 
                         </FormControl>
@@ -228,8 +255,15 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                 multiple
                                 value={selectOption.familia}
                                 onChange={(event, newValue) => handleOptionChange('familia', newValue)}
-                                options={familias}
+                                options={sortedFamilias}
                                 getOptionLabel={(option) => option.nombre}
+                                filterOptions={(options, state) => {
+                                    // Filtra las opciones para que coincidan solo al principio de las letras
+                                    const inputValue = state.inputValue.toLowerCase();
+                                    return options.filter((option) =>
+                                      option.nombre.toLowerCase().startsWith(inputValue)
+                                    );
+                                  }}
                                 renderInput={(params) =>
                                     <TextField {...params}
                                         label="Familia"
@@ -269,11 +303,18 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     multiple
                                     value={selectOption.pais}
                                     onChange={(event, newValue) => handleOptionChange('pais', newValue)}
-                                    options={paises}
+                                    options={sortedPaises}
                                     getOptionLabel={(option) => option.nombre}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                          option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                      }}
                                     renderInput={(params) =>
                                         <TextField {...params}
-                                            label="Paises"
+                                            label="Países"
                                             InputLabelProps={{
                                                 sx: labelStyles, // Estilo del label
                                             }}
@@ -300,7 +341,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={grupos.length === 0 || paises.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                                    disabled={grupos.length === 0 || selectOption.grupo.length === 0 && selectOption.familia.length === 0}
                                 />
                             </FormControl>
                         </Grid>
@@ -312,8 +353,15 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     multiple
                                     value={selectOption.zona}
                                     onChange={(event, newValue) => handleOptionChange('zona', newValue)}
-                                    options={zonas}
+                                    options={sortedZonas}
                                     getOptionLabel={(option) => option.nombre}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                          option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                      }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
@@ -343,7 +391,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={zonas.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                                    disabled={zonas.length === 0 || selectOption.grupo.length === 0 && selectOption.familia.length === 0}
                                 />
                             </FormControl>
                         </Grid>
@@ -356,11 +404,18 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
 
                                     value={selectOption.cientifico}
                                     onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
-                                    options={nCientifico}
+                                    options={sortedNCientifico}
                                     getOptionLabel={(option) => option.nombre}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                          option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                      }}
                                     renderInput={(params) =>
                                         <TextField {...params}
-                                            label="Nombre Cientifico"
+                                            label="Nombre Científico"
                                             InputLabelProps={{
                                                 sx: labelStyles, // Estilo del label
                                             }}
@@ -387,7 +442,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nCientifico.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                                    disabled={nCientifico.length === 0 || selectOption.familia.length === 0 && selectOption.grupo.length === 0}
                                 />
                             </FormControl>
                         </Grid>
@@ -397,11 +452,18 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     multiple
                                     value={selectOption.ingles}
                                     onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
-                                    options={nIngles}
+                                    options={sortedNIngles}
                                     getOptionLabel={(option) => option.nombre}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                          option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                      }}
                                     renderInput={(params) =>
                                         <TextField {...params}
-                                            label="Nombre Ingles"
+                                            label="Nombre Inglés"
                                             InputLabelProps={{
                                                 sx: labelStyles, // Estilo del label
                                             }}
@@ -428,7 +490,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nIngles.length === 0 || selectOption.grupo.length === 0 || selectOption.familia.length === 0}
+                                    disabled={nIngles.length === 0 || selectOption.grupo.length === 0 && selectOption.familia.length === 0}
                                 />
                             </FormControl>
 

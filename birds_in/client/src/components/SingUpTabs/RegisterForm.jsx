@@ -179,14 +179,14 @@ export const RegisterForm = ({ changeTab }) => {
           />
 
           <TextField
-            label="Pais (opcional)"
+            label="País"
             name="pais"
             value={formData.pais}
             onChange={(e) => setFormData({ ...formData, pais: e.target.value })}
             fullWidth
             select
             margin="normal"
-            helperText="Seleccione Pais de Origen"
+            helperText="Seleccione País de Origen"
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
             }}

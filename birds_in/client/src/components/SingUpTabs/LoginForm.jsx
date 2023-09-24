@@ -254,13 +254,14 @@ export const LoginForm = ({ changeTab }) => {
             loadingPosition="end"
             variant="contained"
             disabled={!loginData.email && !loginData.password}
-
           >
-            <span>Iniciar Sesion</span>
+            <span>Iniciar Sesión</span>
           </LoadingButton>
-          <Button onClick={handleClose} variant="outlined" sx={{
-            bottom: -85
-          }} startIcon={<CloseIcon />}>Cerrar</Button>
+          <Button 
+          onClick={handleClose} 
+          variant="outlined"
+          color='secondary'
+          startIcon={<CloseIcon />}>Cerrar</Button>
         </Grid>
       </Grid>
     </Box>

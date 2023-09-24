@@ -10,31 +10,31 @@ const sections = [
     id: 'aves',
     imageUrl: imagenBird,
     title: 'Aves',
-    description: 'Galeria de aves',
+    description: 'Galería de aves',
   },
   {
     id: 'animales',
     imageUrl: 'https://source.unsplash.com/random?animal',
     title: 'Animales',
-    description: 'Galeria de animales',
+    description: 'Galería de animales',
   },
   {
     id: 'peces',
     imageUrl: 'https://source.unsplash.com/random?fish',
     title: 'Peces',
-    description: 'Galeria de peces',
+    description: 'Galería de peces',
   },
   {
     id: 'flores',
     imageUrl: 'https://source.unsplash.com/random?flower',
     title: 'Flora',
-    description: 'Galeria de flora',
+    description: 'Galería de flora',
   },
   {
     id: 'paisajes',
     imageUrl: 'https://source.unsplash.com/random?landscape',
     title: 'Paisajes',
-    description: 'Galeria de paisajes',
+    description: 'Galería de paisajes',
   },
   {
     id: 'panelAdministrador',
@@ -55,7 +55,7 @@ export const HomeMenu = () => {
     <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
       {sections.map((section) => (
         // Verifies if it's not the "Admin" element or if the user is an administrator
-        (isAdmin || section.id !== 'Admin') && (
+        (isAdmin || section.id !== 'panelAdministrador') && ( // Change 'Admin' to 'panelAdministrador'
           <Grid item xs={12} sm={6} md={1.7} key={section.id} sx={{ margin: '5px' }}>
             <div style={{ position: 'relative', overflow: 'hidden' }}>
               <Link component={RouterLink} to={`/${section.id}`} style={{ textDecoration: 'none' }}>
@@ -116,8 +116,10 @@ export const HomeMenu = () => {
                     color="primary"
                     component={RouterLink}
                     to={`/${section.id}`}
-                  >
-                    {section.id === 'Admin' && isAdmin ? 'dashboard' : 'Ir a galeria'}
+                  >  {section.id === 'panelAdministrador' && isAdmin
+                  ? 'Ir al panel' // For the "Admin" section when the user is an admin
+                  : 'Ir galería' // For other sections
+                }
                   </Button>
                 </Box>
               </Link>
@@ -127,4 +129,4 @@ export const HomeMenu = () => {
       ))}
     </Grid>
   )
-}
+};

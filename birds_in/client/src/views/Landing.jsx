@@ -20,7 +20,7 @@ export const Landing = () => {
 
   return (
     <React.Fragment>
-      <Grid container component="main" sx={{  }}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
 
         <Grid item xs={false} sm={3} md={8.5}
           sx={{
@@ -30,20 +30,21 @@ export const Landing = () => {
             backgroundPosition: 'center',
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.40)', // Agregar sombra
           }}>
-            <Typography variant="h5" color="black"
+          <Typography variant="body2" color="black"
             sx={{
               position: 'absolute', // Posiciona el segundo párrafo en la esquina inferior izquierda
               bottom: 0, // Coloca el segundo párrafo en la parte inferior del contenedor
               right: 460, // Coloca el segundo párrafo en la esquina izquierda del contenedor
               margin: '20px', // Ajusta los márgenes según tus necesidades
-              bottom: '80vh',
+              bottom: '82vh',
+              fontSize: '1.4rem',
               // backgroundColor: 'rgba(255, 255, 255, 0.5)',
             }}>
             Fiery-billed Aracari
-          <br></br>
-          Pteroglossus frantzii
-          <br></br>
-           Boquete, Panamá
+            <br></br>
+            Pteroglossus frantzii
+            <br></br>
+            Boquete, Panamá
           </Typography>
         </Grid>
         <Grid item xs={12} sm={9} md={3.5} component={Box} elevation={6}
@@ -65,12 +66,6 @@ export const Landing = () => {
               height: 'auto', // Permite que la altura se ajuste automáticamente para mantener la proporción
             }} >
             </img>
-            {/* <Typography variant="h1" color='primary.main'
-              sx={{
-                textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-              }}>
-              LAS AVES QUE PASARON POR MIS OJOS
-            </Typography> */}
           </Box>
           <Box sx={{
             // top: '500px',
@@ -85,7 +80,7 @@ export const Landing = () => {
               Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.
             </Typography>
             <Typography variant="body1" sx={{ color: '#fff', fontWeight: 'bold', my: 2, fontFamily: 'Arsenal', fontSize: '1rem', }}>
-              Fotografias por Moises Sterimberg
+              Fotografías por Moises Sterimberg
             </Typography>
           </Box>
           <Box sx={{
@@ -105,7 +100,7 @@ export const Landing = () => {
               textTransform: 'none',
             }
           }}>
-            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5 }}>Iniciar sesion</Button>
+            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ my: 5 }}>Iniciar sesión</Button>
           </Box>
           <Index
             open={open} />

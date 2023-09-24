@@ -17,7 +17,7 @@ export const Aves = () => {
   const parameter = useSelector(state => state.birdSlice.filters)
   const [page, setPage] = React.useState(1);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
-
+  const totalBirdsCount = birds.length;
   const handleChangePage = () => {
     const newPage = page + 1;
     setPage(newPage);
@@ -59,7 +59,7 @@ export const Aves = () => {
           </Grid>
         
         <Grid item>
-     
+        {birds.length > 1 && (
           <Button
             sx={{
               m: 2,
@@ -74,9 +74,9 @@ export const Aves = () => {
           >
             <ExpandMoreIcon style={{ fontSize: '3rem' }} />
           </Button>
+        )}
         </Grid>
       </Grid>
-    
     </React.Fragment>
   );
 };

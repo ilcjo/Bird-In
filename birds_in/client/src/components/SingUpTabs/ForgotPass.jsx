@@ -80,10 +80,10 @@ export const ForgotPass = ({open}) => {
     <Box sx={{ margin: '10px' }}>
       <div>
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', mb: 2}}>
-            ¿Olvidaste tu contrasena?
+            ¿Olvidaste tu contraseña?
         </Typography>
         <Typography variant="body1" color='primary.main' sx={{ marginLeft: '2px', mb:2}}>
-            No te preocupes ! Ingresa tu email y te enviaremos las intrucciones para recuperarla.
+          Ingresa tu email y te enviaremos las instrucciones para recuperarla.
         </Typography>
 
       </div>

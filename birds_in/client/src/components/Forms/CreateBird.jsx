@@ -1,5 +1,18 @@
 import * as  React from 'react'
-import { Alert, Autocomplete, Backdrop, Box, Button, CircularProgress, Divider, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import {
+    Alert,
+    Autocomplete,
+    Backdrop,
+    Box,
+    Button,
+    CircularProgress,
+    Divider,
+    Grid,
+    IconButton,
+    Snackbar,
+    TextField,
+    Typography
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { createBird, saveImageFtp } from '../../redux/actions/createBirds';
@@ -114,7 +127,7 @@ export const CreateBird = () => {
             try {
                 // Realiza la carga de la imagen y espera la respuesta
                 const response = await dispatch(saveImageFtp(formData));
-                
+
                 // Verifica si la respuesta contiene la URL de la imagen
                 if (response && response.data && response.data.imageUrl) {
                     const imageUrlString = response.data.imageUrl;
@@ -166,7 +179,7 @@ export const CreateBird = () => {
                             Formulario de Creación
                         </Typography>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
-                            Subir imagenes Galeria
+                            Subir imágenes Galería
                             <Divider sx={{ my: 1 }} />
                         </Typography>
                         {/* Input para cargar imágenes */}
@@ -178,7 +191,6 @@ export const CreateBird = () => {
                             style={{ display: 'none' }}
                             id="image-upload-input"
                         />
-
                         <label htmlFor="image-upload-input"> {/* Utiliza el atributo "for" para asociar el label al input */}
                             <Button
                                 variant="contained" // Cambia el estilo del botón a "contained" para un aspecto diferente
@@ -194,10 +206,9 @@ export const CreateBird = () => {
                                 }} // Estilo personalizado
                                 onChange={handleImageChange}
                             >
-                                Subir Imagenes
+                                Subir Imágenes
                             </Button>
                         </label>
-
                         {/* Mostrar imagen cargada */}
                         <Grid container spacing={2}>
                             {imageURL && (
@@ -224,23 +235,42 @@ export const CreateBird = () => {
                             )}
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 2 }} >
+                    <Grid item xs={12} sm={12}>
+                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Datos del Ave
-                            <Divider sx={{ my: 1 }} />
+                            <Divider sx={{ my: 2 }} />
                         </Typography>
-
+                    </Grid>
+                    <Grid item xs={12} sm={6} sx={{ mt: -4 }}>
                         <TextField
                             variant="filled"
                             name="ingles"
-                            label="Nombre en Ingles"
+                            label="Nombre en Inglés"
                             value={createData.ingles}
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
                         />
-
+                        <TextField
+                            variant="filled"
+                            name="comun"
+                            label="Nombre en comen"
+                            value={createData.nombre_comun}
+                            onChange={handleInputChange}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <TextField
+                            variant="filled"
+                            name="cientifico"
+                            label="Nombre científico"
+                            value={createData.cientifico}
+                            onChange={handleInputChange}
+                            fullWidth
+                            margin="normal"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} sx={{ mt: -4 }}>
                         <Autocomplete
                             disablePortal
                             id="combo-box-grupos"
@@ -250,31 +280,7 @@ export const CreateBird = () => {
                             onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
                             renderInput={(params) => <TextField {...params} label="Grupos" />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
-
-                        />
-                        <TextField
-                            variant="filled"
-                            name="zona"
-                            label="Zonas"
-                            value={createData.zona}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Typography variant='h5' color='secondary.light' sx={{ mb: 3 }}>
-                            1
-                        </Typography>
-                        <TextField
-                            variant="filled"
-                            name="cientifico"
-                            label="Nombre cientifico"
-                            value={createData.cientifico}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
+                            sx={{ mb: 3, mt: 1 }}
                         />
                         <Autocomplete
                             disablePortal
@@ -287,8 +293,6 @@ export const CreateBird = () => {
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             sx={{ mb: 3 }}
                         />
-
-
                         <Autocomplete
                             disablePortal
                             id="combo-box-pais"
@@ -296,15 +300,27 @@ export const CreateBird = () => {
                             getOptionLabel={(option) => option.nombre}
                             value={createData.pais}
                             onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Pais" />}
+                            renderInput={(params) => <TextField {...params} label="País" />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
+                        <TextField
+                            variant="filled"
+                            name="zona"
+                            label="Zonas"
+                            value={createData.zona}
+                            onChange={handleInputChange}
+                            fullWidth
+                            margin="normal"
+                            multiline
+                            rows={2}
+                            sx={{ mt: -3, mb: 2 }}
+                        />
                         <Typography variant='h5' color='primary.light' sx={{}}>
-                            Informacion adicional
-                            <Divider sx={{ my: 1 }} />
+                            Información adicional
+                            <Divider sx={{ my: 2 }} />
                         </Typography>
                         <TextField
                             name="urlWiki"
@@ -351,14 +367,14 @@ export const CreateBird = () => {
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={showBackdrop}
                 >
-                    
-                        <>
-                            <CircularProgress color="inherit" />
-                            <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-                                {loadingMessage}
-                            </Typography>
-                        </>
-                    
+
+                    <>
+                        <CircularProgress color="inherit" />
+                        <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
+                            {loadingMessage}
+                        </Typography>
+                    </>
+
                 </Backdrop>
 
             </Box>
