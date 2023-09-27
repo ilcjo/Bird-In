@@ -38,19 +38,19 @@ export const IndexD = () => {
       >
         <Tab label={
           <Typography variant='h5' >
-            Crear ave
+            Actualizar
           </Typography>
         }>
 
         </Tab>
         <Tab label={<Typography variant='h5' >
-          Buscar ave
+          Crear
         </Typography>}>
         </Tab>
 
         <Tab 
-        label={<Typography variant='h5' >
-          Actualizar Aves
+        label={<Typography variant='h5' color='white'>
+          .
         </Typography>
       }
       disabled={!isFormEnabled}
@@ -60,19 +60,19 @@ export const IndexD = () => {
 
       </Tabs>
       <div>
-        {selectedTab === 0 && (
+        {selectedTab === 1 && (
           <Box>
             <CreateBird />
           </Box>
         )}
-        {selectedTab === 1 && (
+        {selectedTab === 0 && (
           <Box>
             <SearchBird changeTab={(newValue) => setSelectedTab(newValue) } isEnable={setIsFormEnabled}/>
           </Box>
         )}
         {selectedTab === 2 && (
           <Box>
-            <UpdateBirds isEnable={setIsFormEnabled} />
+            {/* <UpdateBirds isEnable={setIsFormEnabled} /> */}
           </Box>
         )}
 

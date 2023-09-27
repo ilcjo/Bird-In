@@ -13,15 +13,28 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
-import { resetCurrentFilters, saveFilters } from '../redux/slices/BirdsSlice'
+import { saveFilters } from '../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom'
+import CloseIcon from '@mui/icons-material/Close';
 
 
 export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
+    const navigate= useNavigate()
+    const nombreIngles = localStorage.getItem('nombreIngles');
 
+    React.useEffect(() => {
+        if (nombreIngles || !isFilterOpen) {
+            // El localStorage tiene el nombre, así que envía el parámetro y cierra el filtro
+            const selectOption = { ingles: [{ nombre: nombreIngles }] };
+            dispatch(sendParameter(selectOption));
+            setIsFilterOpen(true)
+
+        }
+    }, [nombreIngles]);
 
     const labelStyles = {
         color: theme.palette.primary.main, // Color del texto del label
@@ -79,19 +92,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             textTransform: 'none',
         },
     };
+
     const sortAlphabetically = (array) => {
         return array.slice().sort((a, b) => {
-          // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
-          if (a && a.nombre && b && b.nombre) {
-            const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-            const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-            return nameA.localeCompare(nameB);
-          }
-          // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
-          return 0;
+            // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
+            if (a && a.nombre && b && b.nombre) {
+                const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
+                const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
+                return nameA.localeCompare(nameB);
+            }
+            // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
+            return 0;
         });
-      };
-
+    };
     const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
     const { nIngles, nCientifico, paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
 
@@ -99,11 +112,8 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     const sortedFamilias = sortAlphabetically(familias);
     const sortedGrupos = sortAlphabetically(grupos);
     const sortedZonas = sortAlphabetically(zonas);
-
     const sortedNCientifico = sortAlphabetically(nCientifico);
-    console.log(sortedNCientifico)
     const sortedNIngles = sortAlphabetically(nIngles);
-    console.log(sortedNIngles)
 
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],
@@ -115,7 +125,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         ...selectOptionFromSlice,
     });
     const [isLoading, setIsLoading] = React.useState(true);
-
+    const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     React.useEffect(() => {
         if (isFilterOpen) {
             setIsLoading(true); // Set loading to true when filters are open
@@ -129,6 +139,8 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     }, [isFilterOpen, selectOptionFromSlice]);
 
     const handleOptionChange = (category, newValue) => {
+        setIsFetchingOptions(true); // Activa el indicador de carga
+
         const updatedSelectOption = {
             ...selectOption,
             [category]: newValue.map((option) => ({
@@ -136,9 +148,18 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                 nombre: option.nombre,
             })),
         };
+
         setSelectOption(updatedSelectOption);
-        dispatch(fetchNewOptions(updatedSelectOption));
+        // Realiza la solicitud para obtener las opciones
+        dispatch(fetchNewOptions(updatedSelectOption))
+            .then(() => {
+                setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
+            })
+            .catch(() => {
+                setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
+            });
     };
+
 
     const handleClickFiltrar = () => {
         dispatch(saveFilters(selectOption))
@@ -151,6 +172,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     };
 
     const handleReset = () => {
+        setIsFetchingOptions(true); // Activa el indicador de carga
         setSelectOption({
             grupo: [],
             familia: [],
@@ -158,21 +180,32 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             zona: [],
             cientifico: [],
             ingles: []
-        })
-        dispatch(resetCurrentFilters());
+        });
+
+        // Realiza la solicitud para obtener las opciones completas
         dispatch(getOptionsData())
-        dispatch(getInfoBirds())
+            .then(() => {
+                setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
+            })
+            .catch(() => {
+                setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
+            });
     };
 
-    React.useEffect(() => {
-        if (isFilterOpen) {
-            // Actualiza selectOption solo si isFilterOpen es true
-            setSelectOption((prevSelectOption) => ({
-                ...prevSelectOption,
-                ...selectOptionFromSlice,
-            }));
-        }
-    }, [isFilterOpen, selectOptionFromSlice]);
+    const returnMenuClick = () => {
+        setSelectOption({
+            grupo: [],
+            familia: [],
+            pais: [],
+            zona: [],
+            cientifico: [],
+            ingles: []
+        });
+        localStorage.removeItem('nombreIngles')
+        dispatch(getOptionsData())
+        dispatch(getInfoBirds())
+        navigate('/menu')
+    };
 
     return (
         <React.Fragment>
@@ -191,11 +224,11 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                     padding: 2,
                     marginLeft: '90px'
                 }} >
-                <Grid item >
+                {/* <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
                         Filtros
                     </Typography>
-                </Grid>
+                </Grid> */}
                 <Grid item container alignItems="center">
                     <Grid xs={12} >
                         {/* Grupo */}
@@ -211,9 +244,10 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     // Filtra las opciones para que coincidan solo al principio de las letras
                                     const inputValue = state.inputValue.toLowerCase();
                                     return options.filter((option) =>
-                                      option.nombre.toLowerCase().startsWith(inputValue)
+                                        option.nombre.toLowerCase().startsWith(inputValue)
                                     );
-                                  }}
+                                }}
+                                loading={isFetchingOptions}
                                 renderInput={(params) =>
                                     <TextField {...params}
                                         label="Grupo"
@@ -241,11 +275,9 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         </Typography>
                                     ))
                                 }
-
                                 isOptionEqualToValue={(option, value) => option.id === value?.id}
                                 disabled={grupos.length === 0}
                             />
-
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
@@ -257,13 +289,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                 onChange={(event, newValue) => handleOptionChange('familia', newValue)}
                                 options={sortedFamilias}
                                 getOptionLabel={(option) => option.nombre}
+                                loading={isFetchingOptions}
                                 filterOptions={(options, state) => {
                                     // Filtra las opciones para que coincidan solo al principio de las letras
                                     const inputValue = state.inputValue.toLowerCase();
                                     return options.filter((option) =>
-                                      option.nombre.toLowerCase().startsWith(inputValue)
+                                        option.nombre.toLowerCase().startsWith(inputValue)
                                     );
-                                  }}
+                                }}
                                 renderInput={(params) =>
                                     <TextField {...params}
                                         label="Familia"
@@ -305,13 +338,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     onChange={(event, newValue) => handleOptionChange('pais', newValue)}
                                     options={sortedPaises}
                                     getOptionLabel={(option) => option.nombre}
+                                    loading={isFetchingOptions}
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();
                                         return options.filter((option) =>
-                                          option.nombre.toLowerCase().startsWith(inputValue)
+                                            option.nombre.toLowerCase().startsWith(inputValue)
                                         );
-                                      }}
+                                    }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Países"
@@ -341,13 +375,12 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={grupos.length === 0 || selectOption.grupo.length === 0 && selectOption.familia.length === 0}
+                                    disabled={grupos.length === 0}
                                 />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             {/* Zona */}
-
                             <FormControl sx={{ m: 1, width: '95%' }}>
                                 <Autocomplete
                                     multiple
@@ -355,13 +388,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     onChange={(event, newValue) => handleOptionChange('zona', newValue)}
                                     options={sortedZonas}
                                     getOptionLabel={(option) => option.nombre}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                          option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                      }}
+                                    loading={isFetchingOptions}
+                                    // filterOptions={(options, state) => {
+                                    //     // Filtrar opciones que coincidan con las primeras letras del inputValue
+                                    //     const inputValue = state.inputValue.toLowerCase();
+                                    //     return options.filter((option) =>
+                                    //         option.nombre.toLowerCase().startsWith(inputValue)
+                                    //     );
+                                    // }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
@@ -391,28 +425,27 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={zonas.length === 0 || selectOption.grupo.length === 0 && selectOption.familia.length === 0}
+                                    disabled={zonas.length === 0}
                                 />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             {/* Cientifico */}
-
                             <FormControl sx={{ m: 1, width: '95%' }}>
                                 <Autocomplete
                                     multiple
-
                                     value={selectOption.cientifico}
                                     onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
                                     options={sortedNCientifico}
                                     getOptionLabel={(option) => option.nombre}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                          option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                      }}
+                                    loading={isFetchingOptions}
+                                    // filterOptions={(options, state) => {
+                                    //     // Filtra las opciones para que coincidan solo al principio de las letras
+                                    //     const inputValue = state.inputValue.toLowerCase();
+                                    //     return options.filter((option) =>
+                                    //         option.nombre.toLowerCase().startsWith(inputValue)
+                                    //     );
+                                    // }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Científico"
@@ -442,7 +475,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nCientifico.length === 0 || selectOption.familia.length === 0 && selectOption.grupo.length === 0}
+                                    disabled={nCientifico.length === 0}
                                 />
                             </FormControl>
                         </Grid>
@@ -454,13 +487,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
                                     options={sortedNIngles}
                                     getOptionLabel={(option) => option.nombre}
+                                    loading={isFetchingOptions}
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();
                                         return options.filter((option) =>
-                                          option.nombre.toLowerCase().startsWith(inputValue)
+                                            option.nombre.toLowerCase().startsWith(inputValue)
                                         );
-                                      }}
+                                    }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Inglés"
@@ -470,7 +504,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                             InputProps={{
                                                 ...params.InputProps,
                                                 sx: inputStyles, // Estilo del input
-
                                             }}
                                         />}
                                     renderTags={(value, getTagProps) =>
@@ -490,20 +523,22 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nIngles.length === 0 || selectOption.grupo.length === 0 && selectOption.familia.length === 0}
+                                    disabled={nIngles.length === 0}
                                 />
                             </FormControl>
-
                         </Grid>
                         <Grid container sx={actionsStyles}>
-                            <Button variant="outlined" color="primary" onClick={handleBack}>
-                                <ArrowBackIcon /> Volver
+                            <Button variant="contained" color="primary" onClick={handleClickFiltrar}>
+                                Mostrar
                             </Button>
                             <Button variant="outlined" color="primary" onClick={handleReset}>
                                 Resetear
                             </Button>
-                            <Button variant="contained" color="primary" onClick={handleClickFiltrar}>
-                                Mostrar
+                            <Button variant="outlined" color="primary" onClick={returnMenuClick}>
+                                <ArrowBackIcon /> Volver
+                            </Button>
+                            <Button variant="outlined" color="secondary" onClick={handleBack}>
+                                < CloseIcon/> Cerrar
                             </Button>
 
                         </Grid>
@@ -512,4 +547,4 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             </Grid>
         </React.Fragment>
     )
-}
+};

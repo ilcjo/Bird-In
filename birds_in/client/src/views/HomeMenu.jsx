@@ -1,9 +1,12 @@
 import * as React from 'react'
 import { Box, Button, Grid, Link, Typography, useTheme } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import imagenBird from '../assets/images/DSC01585-106.jpg'
 import imageDash from '../assets/images/IMG_1572-2048x1536.jpg'
+import LogoutIcon from '@mui/icons-material/Logout'
 import { useDispatch } from 'react-redux'
+import { clearToken } from '../redux/slices/Auth'
+import imagenSobreMi from '../assets/images/DSC01677-111.jpg'
 
 const sections = [
   {
@@ -37,26 +40,37 @@ const sections = [
     description: 'Galería de paisajes',
   },
   {
+    id: 'SobreMi',
+    imageUrl: imagenSobreMi,
+    title: 'Sobre Mi',
+    description: 'Leer sobre mi',
+  },
+  {
     id: 'panelAdministrador',
     imageUrl: imageDash,
     title: 'Admin',
     description: 'Dashboard ',
   },
-
 ];
 
 export const HomeMenu = () => {
   const theme = useTheme()
   const admin = localStorage.getItem('tipoCliente')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const isAdmin = admin === 'admin'
- 
+  const onLogoutClick = () => {
+    localStorage.clear();
+    dispatch(clearToken())
+    navigate('/')
+  };
   return (
 
     <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-      {sections.map((section) => (
+      {sections.map((section, index) => (
         // Verifies if it's not the "Admin" element or if the user is an administrator
         (isAdmin || section.id !== 'panelAdministrador') && ( // Change 'Admin' to 'panelAdministrador'
-          <Grid item xs={12} sm={6} md={1.7} key={section.id} sx={{ margin: '5px' }}>
+          <Grid item xs={12} sm={6} md={1.6} key={section.id} sx={{ margin: '5px' }}>
             <div style={{ position: 'relative', overflow: 'hidden' }}>
               <Link component={RouterLink} to={`/${section.id}`} style={{ textDecoration: 'none' }}>
                 <img
@@ -116,10 +130,13 @@ export const HomeMenu = () => {
                     color="primary"
                     component={RouterLink}
                     to={`/${section.id}`}
-                  >  {section.id === 'panelAdministrador' && isAdmin
-                  ? 'Ir al panel' // For the "Admin" section when the user is an admin
-                  : 'Ir galería' // For other sections
-                }
+                  >
+                    {section.id === 'SobreMi'
+                      ? 'Leer' // Cambia el texto para el panel "Sobre Mi"
+                      : section.id === 'panelAdministrador' && isAdmin
+                        ? 'Ir al panel' // Cambia el texto para el panel de administrador cuando el usuario es un administrador
+                        : 'Ir galería' // Texto predeterminado para otros paneles
+                    }
                   </Button>
                 </Box>
               </Link>
@@ -127,6 +144,19 @@ export const HomeMenu = () => {
           </Grid>
         )
       ))}
+      <Button
+        sx={{
+          fontSize: '1.3rem',
+          fontWeight: 'bold',
+          ml: 148
+        }}
+        color="primary"
+        size="large"
+        onClick={onLogoutClick}
+        endIcon={<LogoutIcon />}
+      >
+        Cerrar Sesión
+      </Button>
     </Grid>
   )
 };

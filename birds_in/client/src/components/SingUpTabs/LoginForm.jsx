@@ -22,7 +22,6 @@ import { loginFailure, loginRequest } from '../../redux/slices/Auth';
 import CloseIcon from '@mui/icons-material/Close';
 export const LoginForm = ({ changeTab }) => {
  
-
   const theme = useTheme()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -58,6 +57,7 @@ export const LoginForm = ({ changeTab }) => {
         dispatch(loginRequest())
         await dispatch(loginUser(loginData));
         navigate('/menu');
+        dispatch(Boolean(false))
       } catch (error) {
         dispatch(loginFailure(null))
         console.error('Error al iniciar sesión:', error);

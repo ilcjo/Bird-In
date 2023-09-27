@@ -40,7 +40,6 @@ export const Index = ({ open }) => {
       }
     }}
     >
-
       <DialogTitle>
         <Tabs
           value={selectedTab}
@@ -59,7 +58,7 @@ export const Index = ({ open }) => {
             Registrarse
           </Typography>}></Tab>
           <Tab label={<Typography variant='h5' sx={tabTitleStyles}>
-            Recuperar contrasena
+            Recuperar contraseña
           </Typography>}></Tab>
         </Tabs>
       </DialogTitle>
@@ -77,7 +76,6 @@ export const Index = ({ open }) => {
             <RegisterForm
               changeTab={(newValue) => setSelectedTab(newValue)}
               open={open}
-
             />
           </Box>
         )}
@@ -85,11 +83,10 @@ export const Index = ({ open }) => {
           <Box>
             <ForgotPass
               open={open}
-
             />
           </Box>
         )}
       </DialogContent>
     </Dialog>
   )
-}
+};

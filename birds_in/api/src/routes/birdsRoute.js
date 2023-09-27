@@ -14,7 +14,7 @@ birdsRouter.get('/filtros', getFilterInfo)
     .get('/opciones', selectOptions)
     .get('/nuevasOpciones', getFilterOptions)
     .post('/create', createBird)
-    .post('/upload_image', upload.single('image'), uploadImageftp)
+    .post('/upload_image', upload.array('images'), uploadImageftp)
     .get('/get_update', findInfoForUpdate)
     .put('/update', updateInfoBids)
 module.exports = birdsRouter

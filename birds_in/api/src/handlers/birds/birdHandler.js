@@ -1,8 +1,8 @@
 require('dotenv').config();
-const { 
-   fetchOptions, 
-   filterOptions, 
-   fetchFilterBirds, 
+const {
+   fetchOptions,
+   filterOptions,
+   fetchFilterBirds,
    sendAndCreateBird,
    findDataById,
    sendAndUpdateBird,
@@ -14,7 +14,7 @@ const {
    FTP_USER,
    FTP_PASS,
 } = process.env
-
+const { Imagenes_aves } = require('../../db/db');
 
 const getFilterInfo = async (req, res) => {
 
@@ -40,7 +40,7 @@ const selectOptions = async (req, res) => {
    } catch (error) {
       res.status(500).json({ error: error.message })
    }
-}
+};
 
 const getFilterOptions = async (req, res,) => {
    const { familia, grupo, nombreCientifico, nombreIngles, pais, zonas } = req.query;
@@ -62,6 +62,7 @@ const createBird = async (req, res) => {
       zona,
       cientifico,
       ingles,
+      comun,
       urlWiki,
       urlBird,
       urlImagen
@@ -76,6 +77,7 @@ const createBird = async (req, res) => {
          zona,
          cientifico,
          ingles,
+         comun,
          urlWiki,
          urlBird,
          urlImagen)
@@ -100,97 +102,104 @@ const uploadImageftp = async (req, res) => {
          secure: false,
       });
 
-      const image = req.file;
+      const images = req.files; // Usar req.files para manejar múltiples archivos
 
-      if (!image) {
+      if (!images || images.length === 0) {
          return res.status(400).json({ error: 'No se subió ninguna imagen' });
       }
-      const imageUrls = [];
-      const remoteFileName = `${Date.now()}_${image.originalname}`;
-      await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
 
-      // Obtén la URL completa de la imagen
-      const imageUrl = `https://lasavesquepasaronpormisojos.com/imagenes/${remoteFileName}`;
-      // Agrega la URL al array de imageUrls
-      imageUrls.push(imageUrl);
+      const imageUrls = []; // Definir imageUrls fuera del bucle
 
-      // Cerrar la conexión FTP
+      for (const image of images) {
+         const remoteFileName = `${Date.now()}_${image.originalname}`;
+         await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
+
+         // Obtén la URL completa de la imagen
+         const imageUrl = `https://lasavesquepasaronpormisojos.com/imagenes/${remoteFileName}`;
+         // Agrega la URL al array de imageUrls
+         imageUrls.push(imageUrl);
+
+         // Eliminar la imagen del servidor local después de una transferencia exitosa
+         const fs = require('fs');
+         fs.unlink(image.path, (err) => {
+            if (err) {
+               console.error('Error al eliminar la imagen del servidor local:', err);
+            } else {
+               console.log('Imagen eliminada del servidor local con éxito');
+            }
+         });
+      }
+
+      // Cerrar la conexión FTP después de subir todas las imágenes
       await client.close();
 
-      // Eliminar la imagen del servidor local después de una transferencia exitosa
-      const fs = require('fs');
-      fs.unlink(image.path, (err) => {
-         if (err) {
-            console.error('Error al eliminar la imagen del servidor local:', err);
-         } else {
-            console.log('Imagen eliminada del servidor local con éxito');
+      res.status(200).json({ message: 'Imágenes subidas con éxito al servidor FTP', imageUrls });
+   } catch (error) {
+      console.error('Error al cargar las imágenes en FTP:', error);
+      res.status(500).json({ error: 'Error al cargar las imágenes en FTP' });
+   }
+};
+
+   const findInfoForUpdate = async (req, res) => {
+      const { id } = req.query;
+      try {
+         if (!id) {
+            return res.status(400).json({ error: 'ID de ave no proporcionado' });
          }
-      });
+         const formDataUpdate = await findDataById(id);
+         if (!formDataUpdate) {
+            return res.status(404).json({ error: 'Ave no encontrada' });
+         }
+         return res.status(200).json(formDataUpdate);
+      } catch (error) {
+         res.status(500).json({ error: 'Error actualizando ave' });
+      }
+   };
 
-      res.status(200).json({ message: 'Imagen subida con éxito al servidor FTP', imageUrl });
-   } catch (error) {
-      console.error('Error al cargar la imagen en FTP:', error);
-      res.status(500).json({ error: 'Error al cargar la imagen en FTP' });
-   }
-};
-
-
-const findInfoForUpdate = async (req, res) => {
-   const { id } = req.query;
-   try {
-       if (!id) {
-           return res.status(400).json({ error: 'ID de ave no proporcionado' });
-       }
-       const formDataUpdate = await findDataById(id);
-       if (!formDataUpdate) {
-           return res.status(404).json({ error: 'Ave no encontrada' });
-       }
-       return res.status(200).json(formDataUpdate);
-   } catch (error) {
-       res.status(500).json({ error: 'Error actualizando ave' });
-   }
-};
-
-const updateInfoBids = async (req, res) => {
-   const {  
-      grupo,
-      familia,
-      pais,
-      zona,
-      cientifico,
-      ingles,
-      urlWiki,
-      urlBird,
-      idAve,
-      urlImagen,
-    } = req.body;
-   try {
-      const succesUpdate = await sendAndUpdateBird(
+   const updateInfoBids = async (req, res) => {
+      const {
          grupo,
          familia,
          pais,
          zona,
          cientifico,
          ingles,
+         comun,
          urlWiki,
          urlBird,
+         urlImagen,
          idAve,
-         urlImagen)
-      return res.status(200).json(succesUpdate)
+      } = req.body;
+      
+      try {
+         const succesUpdate = await sendAndUpdateBird(
+         grupo,
+         familia,
+         pais,
+         zona,
+         cientifico,
+         ingles,
+         comun,
+         urlWiki,
+         urlBird,
+         urlImagen,
+         idAve,
+         )
+         return res.status(200).json(succesUpdate)
 
-   } catch (error) {
-      res.status(500).send({ error: error.message })
+      } catch (error) {
+         res.status(500).send({ error: error.message })
+      }
+   };
+
+
+   module.exports = {
+      getFilterInfo,
+      selectOptions,
+      getFilterOptions,
+      createBird,
+      uploadImageftp,
+      findInfoForUpdate,
+      updateInfoBids
    }
-};
-
-
-module.exports = {
-   getFilterInfo,
-   selectOptions,
-   getFilterOptions,
-   createBird,
-   uploadImageftp,
-   findInfoForUpdate,
-   updateInfoBids
-}
 

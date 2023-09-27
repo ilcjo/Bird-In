@@ -2,8 +2,6 @@ import axios from 'axios'
 import { fetchOptions, newOptions, searchBarResult } from '../slices/BirdsSlice'
 import { creatParams } from '../../components/utils/convertId';
 
-
-
 export const getOptionsData = () => {
   return async (dispatch) => {
     try {

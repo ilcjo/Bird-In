@@ -9,6 +9,7 @@ import {
     Divider,
     Grid,
     IconButton,
+    InputLabel,
     Snackbar,
     TextField,
     Typography
@@ -17,14 +18,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { UpdateAveImage, actualizarAve } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import wikipediaLogo from '../../assets/images/wikilogo.png'
+import ebirdLogo from '../../assets/images/cornell-lab-logo.svg'
+import { useNavigate } from 'react-router-dom';
 
 export const UpdateBirds = ({ isEnable }) => {
-
     const theme = useTheme()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
-    console.log('soy infoupdate actios', infoAveForUpdate)
+    const sortAlphabetically = (array) => {
+        return array.slice().sort((a, b) => {
+            // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
+            if (a && a.nombre && b && b.nombre) {
+                const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
+                const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
+                return nameA.localeCompare(nameB);
+            }
+            // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
+            return 0;
+        });
+    };
+    const sortedPaises = sortAlphabetically(paises);
+    const sortedFamilias = sortAlphabetically(familias);
+    const sortedGrupos = sortAlphabetically(grupos);
 
     const initialCreateData = {
         grupo: infoAveForUpdate.grupo || null,
@@ -33,19 +51,17 @@ export const UpdateBirds = ({ isEnable }) => {
         zona: infoAveForUpdate.zonas || '',
         cientifico: infoAveForUpdate.nombre_cientifico || '',
         ingles: infoAveForUpdate.nombre_ingles || '',
+        comun: infoAveForUpdate.nombre_comun || '',
         urlWiki: infoAveForUpdate.url_wiki || '',
         urlBird: infoAveForUpdate.url_bird || '',
         idAve: infoAveForUpdate.id_ave || 0,
         urlImagen: infoAveForUpdate.imagenes_aves || [],
-
-
     }
 
-    console.log('soy initianstate', initialCreateData)
     const [createData, setCreateData] = React.useState(initialCreateData)
-    console.log('soy formulario data', createData)
-    const [imageURL, setImageURL] = React.useState(null); // Para mostrar la imagen seleccionada
-    const [imageFile, setImageFile] = React.useState(null); // Para almacenar el Blob de la imagen
+    console.log(createData)
+    const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
+    const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -56,17 +72,30 @@ export const UpdateBirds = ({ isEnable }) => {
         }
         setOpenSnackbar(false);
     };
-
     const handleImageChange = (event) => {
-        const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            setImageFile(selectedImage);
-            const imageURL = URL.createObjectURL(selectedImage);
-            setImageURL(imageURL);
+        const selectedImages = event.target.files;
+        if (selectedImages.length > 0) {
+            // Opcionalmente, puedes guardar los archivos en el estado
+            setImageFile(selectedImages);
+
+            // Crear un array para almacenar las URLs de las imágenes (para mostrarlas en el formulario)
+            const imageUrls = [];
+
+            // Recorrer todas las imágenes seleccionadas
+            for (let i = 0; i < selectedImages.length; i++) {
+                const selectedImage = selectedImages[i];
+
+                // Crear una URL para cada imagen seleccionada
+                const imageUrl = URL.createObjectURL(selectedImage);
+
+                // Agregar la URL al array
+                imageUrls.push(imageUrl);
+            }
+
+            // Actualizar el estado con el array de URLs de imágenes
+            setImageURL(imageUrls);
         }
     };
-
-
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setCreateData({
@@ -76,36 +105,45 @@ export const UpdateBirds = ({ isEnable }) => {
     };
 
     const handleRemoveImage = () => {
-        URL.revokeObjectURL(imageURL);
-        setImageFile(null);
-        setImageURL(null);
+        // Revocar la URL de la imagen eliminada
+        URL.revokeObjectURL(imageURL[index]);
+
+        // Crear una copia del array de URLs de imágenes
+        const updatedImageURLs = [...imageURL];
+
+        // Eliminar la URL de la imagen en la posición 'index'
+        updatedImageURLs.splice(index, 1);
+
+        // Actualizar el estado con el nuevo array de URLs
+        setImageURL(updatedImageURLs);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         setShowBackdrop(true);
         setLoadingMessage('Actualizando ave...');
 
         try {
             let imageUrl = '';
 
-            if (imageFile) {
+            if (imageFile && imageFile.length > 0) {
                 const formData = new FormData();
-                formData.append('image', imageFile);
-
+                for (let i = 0; i < imageFile.length; i++) {
+                    formData.append('images', imageFile[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
+                }
                 imageUrl = await saveImageFtpWithMessage(formData);
 
                 setLoadingMessage('Actualizando ave...'); // Restaura el mensaje después de subir la imagen
+            }
+            if (createData.ingles) {
+                localStorage.setItem('nombreIngles', createData.ingles);
             }
 
             await createBirdWithMessage(createData, imageUrl);
 
             setShowBackdrop(false);
             setLoadingMessage('Cargando...');
-
             setOpenSnackbar(true);
-
             // Borra los datos del formulario
             setCreateData({
                 grupo: null,
@@ -114,14 +152,14 @@ export const UpdateBirds = ({ isEnable }) => {
                 zona: '',
                 cientifico: '',
                 ingles: '',
+                comun: '',
                 urlWiki: '',
                 urlBird: '',
                 idAve: 0,
-                urlImagen: '',
+                urlImagen: [],
             });
-            setImageURL(null);
-            setImageFile(null);
-            isEnable(false);
+            setImageURL([]);
+            setImageFile([]);
         } catch (error) {
             console.error('Error:', error);
             setShowBackdrop(false);
@@ -134,10 +172,9 @@ export const UpdateBirds = ({ isEnable }) => {
             try {
                 // Realiza la carga de la imagen y espera la respuesta
                 const response = await dispatch(UpdateAveImage(formData));
-
                 // Verifica si la respuesta contiene la URL de la imagen
-                if (response && response.data && response.data.imageUrl) {
-                    const imageUrlString = response.data.imageUrl;
+                if (response && response.data && response.data.imageUrls) {
+                    const imageUrlString = response.data.imageUrls;
                     resolve(imageUrlString);
                 } else {
                     console.error('El servidor no devolvió la URL de la imagen.');
@@ -162,8 +199,13 @@ export const UpdateBirds = ({ isEnable }) => {
                 });
         });
     };
+
+
     React.useEffect(() => {
+
         setCreateData(initialCreateData);
+
+
     }, [infoAveForUpdate]); //
     return (
         <React.Fragment>
@@ -227,38 +269,41 @@ export const UpdateBirds = ({ isEnable }) => {
                         </label>
 
                         {/* Mostrar imagen cargada */}
-                        <Grid container spacing={2}>
-                            {imageURL && (
-                                <Grid item >
-                                    <div style={{ position: 'relative' }}>
-                                        <img
-                                            src={imageURL}
-                                            alt="Imagen seleccionada"
-                                            style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px' }}
-                                        />
-                                        <IconButton
-                                            color="primary"
-                                            onClick={handleRemoveImage}
-                                            style={{
-                                                position: 'absolute',
-                                                top: '8px',
-                                                right: '0px',
-                                            }}
-                                        >
-                                            <DisabledByDefaultIcon />
-                                        </IconButton>
-                                    </div>
-                                </Grid>
-                            )}
-                        </Grid>
+                        {imageURL.length > 0 && (
+                            <Grid container spacing={1}>
+                                {imageURL.map((imageUrl, index) => (
+                                    <Grid item key={index}>
+                                        <div style={{ position: 'relative' }}>
+                                            <img
+                                                src={imageUrl}
+                                                alt={`Imagen seleccionada ${index + 1}`}
+                                                style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px' }}
+                                            />
+                                            <IconButton
+                                                color="primary"
+                                                onClick={() => handleRemoveImage(index)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '8px',
+                                                    right: '0px',
+                                                }}
+                                            >
+                                                <DisabledByDefaultIcon />
+                                            </IconButton>
+                                        </div>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
                     </Grid>
+
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Datos del Ave
                             <Divider sx={{ my: 2 }} />
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6} sx={{ mt: -4 }}>
+                    <Grid item xs={12} sm={6} sx={{ mt: -6 }}>
 
                         <TextField
                             variant="filled"
@@ -280,49 +325,69 @@ export const UpdateBirds = ({ isEnable }) => {
                         />
                         <TextField
                             variant="filled"
-                            name="Comun"
+                            name="comun"
                             label="Nombre común"
-                            value={createData.cientifico}
+                            value={createData.comun}
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} sx={{ mt: -4 }}>
+                    <Grid item xs={12} sm={6} sx={{ mt: -5.5 }}>
                         <Autocomplete
                             disablePortal
                             id="combo-box-grupos"
-                            options={grupos}
+                            options={sortedGrupos}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.grupo}
                             onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Grupos" />}
+                            renderInput={(params) => <TextField {...params} label="Grupo" />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             sx={{ mb: 3, mt: 1 }}
+                            filterOptions={(options, state) => {
+                                // Filtra las opciones para que coincidan solo al principio de las letras
+                                const inputValue = state.inputValue.toLowerCase();
+                                return options.filter((option) =>
+                                    option.nombre.toLowerCase().startsWith(inputValue)
+                                );
+                            }}
                         />
                         <Autocomplete
                             disablePortal
                             id="combo-box-familias"
-                            options={familias}
+                            options={sortedFamilias}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.familia}
                             onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Familias" />}
+                            renderInput={(params) => <TextField {...params} label="Familia" />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             sx={{ mb: 3 }}
+                            filterOptions={(options, state) => {
+                                // Filtra las opciones para que coincidan solo al principio de las letras
+                                const inputValue = state.inputValue.toLowerCase();
+                                return options.filter((option) =>
+                                    option.nombre.toLowerCase().startsWith(inputValue)
+                                );
+                            }}
                         />
 
                         <Autocomplete
                             disablePortal
                             id="combo-box-pais"
-                            options={paises}
+                            options={sortedPaises}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.pais}
                             onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Pais" />}
+                            renderInput={(params) => <TextField {...params} label="Países" />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
-                            
+                            filterOptions={(options, state) => {
+                                // Filtra las opciones para que coincidan solo al principio de las letras
+                                const inputValue = state.inputValue.toLowerCase();
+                                return options.filter((option) =>
+                                    option.nombre.toLowerCase().startsWith(inputValue)
+                                );
+                            }}
                         />
 
                     </Grid>
@@ -347,7 +412,6 @@ export const UpdateBirds = ({ isEnable }) => {
                         </Typography>
                         <TextField
                             name="urlWiki"
-                            label="Url Wiki"
                             multiline
                             rows={1}
                             variant="filled"
@@ -356,11 +420,23 @@ export const UpdateBirds = ({ isEnable }) => {
                             sx={{ my: 2 }}
                             fullWidth
                             margin="normal"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputLabel htmlFor="urlWiki" sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
+                                            paddingRight: '5px',
+                                            marginTop: '10px',
+                                            width: '39px', // Ajusta el ancho de la imagen
+                                            height: '39px', // Ajusta la altura de la imagen
+                                        }} />
+                                        URL
+                                    </InputLabel>
+                                ),
+                            }}
                         />
 
                         <TextField
                             name="urlBird"
-                            label="Url Bird"
                             multiline
                             rows={1}
                             variant="filled"
@@ -368,6 +444,19 @@ export const UpdateBirds = ({ isEnable }) => {
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputLabel htmlFor="urlBird" sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <img src={ebirdLogo} alt="EBird Logo" style={{
+                                            paddingRight: '5px',
+                                            marginTop: '10px',
+                                            width: '130px', // Ajusta el ancho de la imagen
+                                            height: '39px', // Ajusta la altura de la imagen
+                                        }} />
+                                        URL
+                                    </InputLabel>
+                                ),
+                            }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} >
@@ -382,7 +471,7 @@ export const UpdateBirds = ({ isEnable }) => {
                             }}
                             variant="contained"
                             color="primary"
-                        >Enviar</Button>
+                        >Hecho</Button>
                     </Grid>
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
@@ -403,7 +492,7 @@ export const UpdateBirds = ({ isEnable }) => {
             </Box>
             <Snackbar
                 open={openSnackbar}
-                autoHideDuration={6000} // Duración en milisegundos (ajusta según tus preferencias)
+                autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
                 onClose={handleCloseSnackbar}
             >
                 <Alert
@@ -413,6 +502,21 @@ export const UpdateBirds = ({ isEnable }) => {
                     onClose={handleCloseSnackbar}
                 >
                     El ave se ha creado correctamente.
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => { navigate('/aves') }}
+                         sx={{ ml:3,
+                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                    textTransform: 'none',
+                                },
+                            }}
+                    >
+                        Ver Ave
+                    </Button>
                 </Alert>
             </Snackbar>
         </React.Fragment>

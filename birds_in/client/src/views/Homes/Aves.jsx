@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { Header } from '../../components/Header'
-import {  MenuBar } from '../../components/Menus/MenuBar'
+import { MenuBar } from '../../components/Menus/MenuBar'
 import { Cards } from '../../components/Cards/Cards'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Dialog, Grid, useTheme } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Filters } from '../../components/Filters'
+import { PhotosDetail } from '../../components/photosDetail'
 
 
 export const Aves = () => {
@@ -17,7 +18,7 @@ export const Aves = () => {
   const parameter = useSelector(state => state.birdSlice.filters)
   const [page, setPage] = React.useState(1);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
-  const totalBirdsCount = birds.length;
+
   const handleChangePage = () => {
     const newPage = page + 1;
     setPage(newPage);
@@ -27,7 +28,7 @@ export const Aves = () => {
 
   return (
     <React.Fragment>
-      <Header />
+      <Header isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
       <Grid
         container
         direction="column"
@@ -39,8 +40,8 @@ export const Aves = () => {
           marginBottom: '20px',
         }}
       >
-        < MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
-       
+        {/* < MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} /> */}
+
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
@@ -49,32 +50,33 @@ export const Aves = () => {
         >
           <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
         </Dialog>
-    
-          <Grid item container spacing={3} justifyContent="center">
-            {birds.map((i, index) => (
+
+        <Grid item container spacing={3} justifyContent="center">
+          <PhotosDetail />
+          {/* {birds.map((i, index) => (
               <Grid item key={index}>
                 <Cards foto={i.imagenes_aves} name={i.nombre_ingles}  />
               </Grid>
-            ))}
-          </Grid>
-        
+            ))} */}
+        </Grid>
+
         <Grid item>
-        {birds.length > 1 && (
-          <Button
-            sx={{
-              m: 2,
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              textTransform: 'none',
-              color: theme.palette.primary.main,
-              borderRadius: '800px',
-            }}
-            variant="outline"
-            onClick={handleChangePage}
-          >
-            <ExpandMoreIcon style={{ fontSize: '3rem' }} />
-          </Button>
-        )}
+          {birds.length > 1 && (
+            <Button
+              sx={{
+                m: 2,
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                color: theme.palette.primary.main,
+                borderRadius: '800px',
+              }}
+              variant="outline"
+              onClick={handleChangePage}
+            >
+              <ExpandMoreIcon style={{ fontSize: '3rem' }} />
+            </Button>
+          )}
         </Grid>
       </Grid>
     </React.Fragment>

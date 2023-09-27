@@ -12,6 +12,7 @@ import { HomeMenu } from './views/HomeMenu'
 import { Peces } from './views/Homes/Peces'
 import { clearToken } from './redux/slices/Auth'
 import { Dashboard } from './views/Homes/Dashboard'
+import { SobreMi } from './views/Homes/SobreMi'
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
           <Route path='/paisajes' element={<LandsCapes />} />
           <Route path='/peces' element={<Peces />} />
           <Route path='/galeria' element={<CarruselGallery />} />
+          <Route path='/sobremi' element={<SobreMi />} />
           <Route path='/panelAdministrador' element={<Dashboard />} />
           <Route path='/' element={<Landing />} />
         </>
