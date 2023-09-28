@@ -352,7 +352,6 @@ const sendAndUpdateBird = async (
             );
         }
 
-
         for (const imageUrl of urlImagen) {
             await Imagenes_aves.create({
                 aves_id_ave: idAve,
@@ -370,8 +369,6 @@ const sendAndUpdateBird = async (
             for (const pais of existingPaises) {
                 await existingRelations.removePaises(pais);
             }
-
-
         }
 
         for (const pais of paises) {

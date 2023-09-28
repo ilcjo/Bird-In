@@ -6,7 +6,6 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import * as React from 'react'
 
 export const CarruselGallery = ({ isOpen, images, onClose }) => {
-  console.log('soy images',images)
   const [selectedImage, setSelectedImage] = React.useState(null);
 
   const openDialog = (images) => {

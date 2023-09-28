@@ -11,32 +11,34 @@ import { getInfoBirds } from '../redux/actions/fetchAllBirds';
 import { MenuBar } from './Menus/MenuBar';
 
 
-export const Header = () => {
+export const Header = ({ isFilterOpen, setIsFilterOpen }) => {
   const theme = useTheme()
   const usuarioNombre = localStorage.getItem("usuarioNombre");
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const onLogoutClick = () => {
-    localStorage.clear();
-    dispatch(clearToken())
-    navigate('/')
-  };
+  // const onLogoutClick = () => {
+  //   localStorage.clear();
+  //   dispatch(clearToken())
+  //   navigate('/')
+  // };
 
-  const returnMenuClick = () => {
-    localStorage.removeItem('nombreIngles')
-    dispatch(getInfoBirds())
-    dispatch(getOptionsData())
-    navigate('/menu')
-  };
+  // const returnMenuClick = () => {
+  //   localStorage.removeItem('nombreIngles')
+  //   dispatch(getInfoBirds())
+  //   dispatch(getOptionsData())
+  //   navigate('/menu')
+  // };
 
   return (
+
     <Grid container component={Box} sx={{
       height: '15vh',
       width: '100%',
       position: 'relative',
       backgroundColor: 'rgba(255, 255, 255, 0)', // Fondo semitransparente para mejorar la legibilidad
     }}>
+
       <Box
         sx={{
           position: 'absolute',
@@ -53,32 +55,10 @@ export const Header = () => {
         alt="Ave"
         style={{ width: '100vw', height: '100%', objectFit: 'cover' }}
       />
-      {/* Columna izquierda */}
-      <Grid
-        item
-        xs={6} // Controla el ancho de la columna izquierda
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '20%', // Ajusta la posición izquierda
-          transform: 'translate(-50%, -50%)',
-          padding: '10px',
-          borderRadius: '4px',
-        }}
-      >
-        {/* <Typography
-          variant="body1"
-          color="primary.light"
-          sx={{
-            marginTop: '20px', // Espacio entre el título y el párrafo
-            width: '400px', // Ajusta el ancho del texto
-          }}
-        >
-          Esta es una página sobre ornitología, mi pasión por las aves.
-        </Typography> */}
-      </Grid>
-      {/* Columna derecha */}
-      <Grid item xs={6} // Controla el ancho de la columna derecha
+        < MenuBar isOpen={isFilterOpen} setOpen={setIsFilterOpen}/>
+
+    
+      <Grid item xs={12} // Controla el ancho de la columna derecha
         sx={{
           position: 'absolute',
           top: '80%',
@@ -86,7 +66,6 @@ export const Header = () => {
           transform: 'translate(50%, -50%)',
         }}
       >
-        < MenuBar />
         {/* <Button
           sx={{
             fontSize: '1.3rem',

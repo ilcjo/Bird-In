@@ -15,10 +15,10 @@ export const Dashboard = () => {
         direction="column"
         alignItems="center"
         sx={{
-          padding: '30px',
+          marginTop:'72px',
           backgroundColor: theme.palette.secondary.light,
           minHeight: '100vh',
-          marginBottom: '20px',
+        
         }}
       >
         <IndexD />

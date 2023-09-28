@@ -1,13 +1,12 @@
 import * as React from 'react'
-import { Header } from '../../components/Header'
-import { MenuBar } from '../../components/Menus/MenuBar'
-import { Cards } from '../../components/Cards/Cards'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Dialog, Grid, useTheme } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Filters } from '../../components/Filters'
 import { PhotosDetail } from '../../components/photosDetail'
+import { Cards } from '../../components/Cards/Cards'
+import { MenuBar } from '../../components/Menus/MenuBar'
 
 
 export const Aves = () => {
@@ -28,7 +27,7 @@ export const Aves = () => {
 
   return (
     <React.Fragment>
-      <Header isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
+      <MenuBar/>
       <Grid
         container
         direction="column"
@@ -40,8 +39,6 @@ export const Aves = () => {
           marginBottom: '20px',
         }}
       >
-        {/* < MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} /> */}
-
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
@@ -51,14 +48,17 @@ export const Aves = () => {
           <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
         </Dialog>
 
-        <Grid item container spacing={3} justifyContent="center">
-          <PhotosDetail />
-          {/* {birds.map((i, index) => (
+        {birds.length === 1 ? (
+          <PhotosDetail bird={birds[0]} />
+        ) : (
+          <Grid item container spacing={3} justifyContent="center">
+            {birds.map((bird, index) => (
               <Grid item key={index}>
-                <Cards foto={i.imagenes_aves} name={i.nombre_ingles}  />
+                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
               </Grid>
-            ))} */}
-        </Grid>
+            ))}
+          </Grid>
+        )}
 
         <Grid item>
           {birds.length > 1 && (
