@@ -10,7 +10,7 @@ import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { clearToken } from '../../redux/slices/Auth';
 
-export const MenuBar = ({ isOpen, setOpen }) => {
+export const MenuBar = ({ isFilterOpen, setIsFilterOpen }) => {
     const dispatch = useDispatch()
     const theme = useTheme()
     const navigate = useNavigate()
@@ -26,20 +26,22 @@ export const MenuBar = ({ isOpen, setOpen }) => {
 
     const handleFilterButtonClick = () => {
         // Cambiar el estado del filtro al hacer clic en el botón del filtro
-        setOpen(!isOpen);
+        setIsFilterOpen(!isFilterOpen);
     };
 
     const onLogoutClick = () => {
         localStorage.clear();
-        dispatch(clearToken())
         navigate('/')
+        dispatch(clearToken())
+        dispatch(getInfoBirds())
+        dispatch(getOptionsData())
     };
 
     const returnMenuClick = () => {
-        // localStorage.removeItem('nombreIngles')
-        // dispatch(getInfoBirds())
-        // dispatch(getOptionsData())
+        localStorage.removeItem('nombreIngles')
         navigate('/menu')
+        dispatch(getInfoBirds())
+        dispatch(getOptionsData())
     };
     return (
 

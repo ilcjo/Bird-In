@@ -4,9 +4,9 @@ import { loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Dialog, Grid, useTheme } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Filters } from '../../components/Filters'
-import { PhotosDetail } from '../../components/photosDetail'
 import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
+import { PhotosDetail } from '../../components/PhotosDetail';
 
 
 
@@ -27,7 +27,7 @@ export const Aves = () => {
 
   return (
     <React.Fragment>
-      <MenuBar />
+      <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen}  />
       <Grid
         container
         direction="column"
@@ -54,7 +54,7 @@ export const Aves = () => {
           <Grid item container spacing={3} justifyContent="center">
             {birds.map((bird, index) => (
               <Grid item key={index}>
-                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
+                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles}  />
               </Grid>
             ))}
           </Grid>

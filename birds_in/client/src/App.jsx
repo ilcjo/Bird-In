@@ -13,6 +13,7 @@ import { Peces } from './views/Homes/Peces'
 import { clearToken } from './redux/slices/Auth'
 import { Dashboard } from './views/Homes/Dashboard'
 import { SobreMi } from './views/Homes/SobreMi'
+import { PhotosDetail } from './components/PhotosDetail'
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
           <Route path='/galeria' element={<CarruselGallery />} />
           <Route path='/sobremi' element={<SobreMi />} />
           <Route path='/panelAdministrador' element={<Dashboard />} />
+          <Route path='/detalle' element={<PhotosDetail />} />
           <Route path='/' element={<Landing />} />
         </>
       )}

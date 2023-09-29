@@ -5,20 +5,22 @@ import { useTheme } from '@emotion/react';
 
 
 export const ImagesCards = ({ foto, name, index, arrayImages }) => {
-
-
   const theme = useTheme()
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
+ 
 
-  const openGallery = () => {
+  const openGallery = (foto) => {
+    console.log('Clic en la imagen, índice:', index);
+    console.log('Clic en la imagen, nombre:', foto);
+    setSelectedImageIndex(foto);
     setIsGalleryOpen(true);
   };
 
-  const handleImageClick = (index) => {
-    setSelectedImageIndex(index);
-    openGallery();
-  };
+  // const handleImageClick = (index) => {
+  //   setSelectedImageIndex(index);
+  //   openGallery();
+  // };
 
   return (
     <Card
@@ -36,12 +38,12 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
         overflow: 'hidden', // Oculta cualquier contenido que se desborde
       }}
     >
-      <CardActionArea>
+      <CardActionArea  onClick={() => openGallery(index)}>
         <img
           src={foto}
           alt={name}
           key={index}
-          onClick={() => handleImageClick(selectedImageIndex)}
+          // onClick={() => handleImageClick(selectedImageIndex)}
           style={{
             width: '100%',
             height: '100%', // Establece la altura al 100% para ocupar todo el espacio de la tarjeta

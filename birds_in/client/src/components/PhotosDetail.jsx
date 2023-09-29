@@ -9,9 +9,10 @@ import ebirdLogo from '../assets/images/cornell-lab-logo.svg'
 export const PhotosDetail = () => {
     const theme = useTheme()
     const birds = useSelector(state => state.birdSlice.infoBirds)
-    console.log(birds)
+    // console.log(birds)
     const allImages = birds.flatMap(bird => bird.imagenes_aves);
     const [expanded, setExpanded] = React.useState(false);
+   
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -140,36 +141,35 @@ export const PhotosDetail = () => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={2} >
-                                <Typography variant="h5" color="primary.light" >
-                                    Urls Externas:
-                                    <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
-                                </Typography>
-                                {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-                                <Typography>
-                                    <a href={birds.url_wiki} target="_blank" rel="noopener noreferrer">
-                                        <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
-                                            marginRight: '5px',
-                                            marginTop: '5px',
-                                            width: '30px', // Ajusta el ancho de la imagen
-                                            height: '25px', // Ajusta la altura de la imagen
-
-                                        }}
-                                        />
-                                        Wikipedia
-                                    </a>
-                                </Typography>
-                                <Typography >
-                                    <a href={birds.url_bird} target="_blank" rel="noopener noreferrer">
-                                        <img src={ebirdLogo} alt="eBird Logo" style={{
-                                            // marginLeft: '30px',
-                                            marginTop: '10px',
-                                            width: '130px', // Ajusta el ancho de la imagen
-                                            height: '39px', // Ajusta la altura de la imagen
-                                        }} />
-                                    </a >
-                                </Typography>
-                                {/* </div> */}
-                            </Grid>
+                                    <Typography variant="h5" color="primary.light" >
+                                        Urls Externas:
+                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
+                                    </Typography>
+                                    {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                                    <Typography>
+                                        <a href={bird.url_wiki} target="_blank" rel="noopener noreferrer">
+                                            <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
+                                                marginRight: '5px',
+                                                marginTop: '5px',
+                                                width: '30px', // Ajusta el ancho de la imagen
+                                                height: '25px', // Ajusta la altura de la imagen
+                                            }}
+                                            />
+                                            Wikipedia
+                                        </a>
+                                    </Typography>
+                                    <Typography >
+                                        <a href={bird.url_bird} target="_blank" rel="noopener noreferrer">
+                                            <img src={ebirdLogo} alt="eBird Logo" style={{
+                                                // marginLeft: '30px',
+                                                marginTop: '10px',
+                                                width: '130px', // Ajusta el ancho de la imagen
+                                                height: '39px', // Ajusta la altura de la imagen
+                                            }} />
+                                        </a >
+                                    </Typography>
+                                    {/* </div> */}
+                                </Grid>
                             </Grid>
                             <Divider
                                 sx={{
@@ -178,7 +178,7 @@ export const PhotosDetail = () => {
                                     borderColor: 'primary.main',
                                     borderWidth: 1,
                                 }} />
-                           
+
                         </AccordionDetails>
                     </Accordion>
                 ))}
