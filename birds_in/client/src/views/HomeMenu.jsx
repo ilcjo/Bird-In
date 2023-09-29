@@ -59,6 +59,7 @@ export const HomeMenu = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const isAdmin = admin === 'admin'
+  
   const onLogoutClick = () => {
     localStorage.clear();
     dispatch(clearToken())

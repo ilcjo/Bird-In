@@ -59,7 +59,6 @@ export const UpdateBirds = ({ isEnable }) => {
     }
 
     const [createData, setCreateData] = React.useState(initialCreateData)
-    console.log(createData)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -251,7 +250,7 @@ export const UpdateBirds = ({ isEnable }) => {
 
                         <label htmlFor="image-upload-input"> {/* Utiliza el atributo "for" para asociar el label al input */}
                             <Button
-                                variant="contained" // Cambia el estilo del botón a "contained" para un aspecto diferente
+                                variant="outlined" // Cambia el estilo del botón a "contained" para un aspecto diferente
                                 color="primary"
                                 component="span" // Indica que es un botón para seleccionar archivo
                                 sx={{
@@ -266,8 +265,23 @@ export const UpdateBirds = ({ isEnable }) => {
                             >
                                 Subir Imágenes
                             </Button>
+                            
                         </label>
-
+                     
+                        <Button onClick={handleSubmit}
+                            sx={{
+                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5,textTransform: 'none',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
+                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                    textTransform: 'none',
+                                    
+                                },
+                            }}
+                            variant="contained"
+                            color="primary"
+                        >Hecho</Button>
+                  
                         {/* Mostrar imagen cargada */}
                         {imageURL.length > 0 && (
                             <Grid container spacing={1}>
@@ -459,20 +473,7 @@ export const UpdateBirds = ({ isEnable }) => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={12} >
-                        <Button onClick={handleSubmit}
-                            sx={{
-                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                    textTransform: 'none',
-                                },
-                            }}
-                            variant="contained"
-                            color="primary"
-                        >Hecho</Button>
-                    </Grid>
+                   
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
                 <Backdrop

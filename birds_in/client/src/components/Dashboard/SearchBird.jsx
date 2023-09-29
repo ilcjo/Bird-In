@@ -27,6 +27,7 @@ export const SearchBird = ({ changeTab, isEnable }) => {
 
     const handleBirdSelect = (bird) => {
         setSelectedBird(bird);
+        handleButtonClick();
     };
 
     const handleButtonClick = () => {
@@ -39,6 +40,11 @@ export const SearchBird = ({ changeTab, isEnable }) => {
             setShowSearchBird(false);
         }
     };
+    React.useEffect(() => {
+        if (selectedBird) {
+          handleButtonClick();
+        }
+      }, [selectedBird]);
 
 
     React.useEffect(() => {
@@ -115,7 +121,7 @@ export const SearchBird = ({ changeTab, isEnable }) => {
                                 fullWidth
                                 sx={{ mb: 3, mt: -10 }}
                             />
-                            <Button
+                            {/* <Button
                                 variant="contained"
                                 color="primary"
                                 disabled={!selectedBird}
@@ -130,7 +136,7 @@ export const SearchBird = ({ changeTab, isEnable }) => {
                                 }}
                             >
                                 Actualizar
-                            </Button>
+                            </Button> */}
 
                         </Grid>
                     </Grid>

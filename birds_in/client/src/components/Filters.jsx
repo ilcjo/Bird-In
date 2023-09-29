@@ -27,11 +27,12 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     const nombreIngles = localStorage.getItem('nombreIngles');
 
     React.useEffect(() => {
-        if (nombreIngles || !isFilterOpen) {
+        if (nombreIngles) {
             // El localStorage tiene el nombre, así que envía el parámetro y cierra el filtro
             const selectOption = { ingles: [{ nombre: nombreIngles }] };
             dispatch(sendParameter(selectOption));
-            setIsFilterOpen(true)
+            localStorage.removeItem('nombreIngles')
+            setIsFilterOpen(false)
 
         }
     }, [nombreIngles]);
@@ -126,17 +127,18 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     });
     const [isLoading, setIsLoading] = React.useState(true);
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
-    React.useEffect(() => {
-        if (isFilterOpen) {
-            setIsLoading(true); // Set loading to true when filters are open
-            // Actualiza selectOption solo si isFilterOpen es true
-            setSelectOption((prevSelectOption) => ({
-                ...prevSelectOption,
-                ...selectOptionFromSlice,
-            }));
-            setIsLoading(false); // Set loading to false after options are loaded
-        }
-    }, [isFilterOpen, selectOptionFromSlice]);
+    
+    // React.useEffect(() => {
+    //     if (isFilterOpen) {
+    //         setIsLoading(true); // Set loading to true when filters are open
+    //         // Actualiza selectOption solo si isFilterOpen es true
+    //         setSelectOption((prevSelectOption) => ({
+    //             ...prevSelectOption,
+    //             ...selectOptionFromSlice,
+    //         }));
+    //         setIsLoading(false); // Set loading to false after options are loaded
+    //     }
+    // }, [isFilterOpen, selectOptionFromSlice]);
 
     const handleOptionChange = (category, newValue) => {
         setIsFetchingOptions(true); // Activa el indicador de carga
@@ -209,12 +211,12 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
 
     return (
         <React.Fragment>
-            <Backdrop
+            {/* <Backdrop
                 sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}
                 open={isLoading} // Show the backdrop when loading is true
             >
                 <CircularProgress color="inherit" />
-            </Backdrop>
+            </Backdrop> */}
             <Grid component={Box}
                 sx={{
                     height: 'auto',
