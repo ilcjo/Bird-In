@@ -9,6 +9,7 @@ import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 
 
+
 export const Aves = () => {
 
   const theme = useTheme()
@@ -24,10 +25,9 @@ export const Aves = () => {
     dispatch(loadMoreData(newPage, parameter));
   };
 
-
   return (
     <React.Fragment>
-      <MenuBar/>
+      <MenuBar />
       <Grid
         container
         direction="column"

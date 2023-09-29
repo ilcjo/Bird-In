@@ -316,18 +316,18 @@ export const UpdateBirds = ({ isEnable }) => {
                         />
                         <TextField
                             variant="filled"
-                            name="cientifico"
-                            label="Nombre cientifico"
-                            value={createData.cientifico}
+                            name="comun"
+                            label="Nombre común"
+                            value={createData.comun}
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
                         />
                         <TextField
                             variant="filled"
-                            name="comun"
-                            label="Nombre común"
-                            value={createData.comun}
+                            name="cientifico"
+                            label="Nombre cientifico"
+                            value={createData.cientifico}
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
@@ -506,14 +506,15 @@ export const UpdateBirds = ({ isEnable }) => {
                         variant="contained"
                         color="secondary"
                         onClick={() => { navigate('/aves') }}
-                         sx={{ ml:3,
-                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                    textTransform: 'none',
-                                },
-                            }}
+                        sx={{
+                            ml: 3,
+                            fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                            },
+                        }}
                     >
                         Ver Ave
                     </Button>

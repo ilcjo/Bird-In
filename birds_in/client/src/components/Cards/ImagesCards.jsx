@@ -21,25 +21,33 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
   };
 
   return (
-    <Card sx={{
-      maxWidth: 'auto',
-      minWidth: 415,
-      minHeight: 280, // Establece una altura mínima para la tarjeta
-      position: 'relative',
-      borderRadius: '15px',
-      display: 'flex', // Establece la tarjeta como un contenedor flexible
-      flexDirection: 'column', // Alinea el contenido verticalmente
-      justifyContent: 'space-between', // Centra verticalmente el contenido
-    }}>
+    <Card
+      sx={{
+        maxWidth: 'auto',
+        minWidth: 415,
+        minHeight: 280,
+        width:'200px',
+        height:'194px',
+        position: 'relative',
+        borderRadius: '15px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        overflow: 'hidden', // Oculta cualquier contenido que se desborde
+      }}
+    >
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="194"
-          image={foto}
+        <img
+          src={foto}
           alt={name}
           key={index}
           onClick={() => handleImageClick(selectedImageIndex)}
-          sx={{ objectFit: 'cover' }}
+          style={{
+            width: '100%',
+            height: '100%', // Establece la altura al 100% para ocupar todo el espacio de la tarjeta
+            objectFit: 'cover',
+            borderRadius: '15px',
+          }}
         />
       </CardActionArea>
 
@@ -51,7 +59,7 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
       />
     </Card>
   );
-}
+};
 
 
 
