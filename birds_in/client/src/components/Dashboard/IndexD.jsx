@@ -5,6 +5,7 @@ import { CreateBird } from '../Forms/CreateBird';
 import { SearchBird } from './SearchBird';
 import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../redux/slices/createSlice';
+import { Customize } from './Customize';
 
 
 export const IndexD = () => {
@@ -69,7 +70,7 @@ export const IndexD = () => {
         )}
         {selectedTab === 2 && (
           <Box>
-            
+            <Customize />
           </Box>
         )}
 

@@ -1,4 +1,4 @@
-const { Op, Utils, Sequelize } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const { Aves, Grupos, Familias, Paises, Imagenes_aves } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 

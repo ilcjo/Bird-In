@@ -100,11 +100,17 @@ export const SearchBird = ({ changeTab }) => {
                                 options={birdsData}
                                 getOptionLabel={(option) => option.nombre_ingles}
                                 filterOptions={(options, state) => {
-                                    // Filtra las opciones para que coincidan solo al inicio de la palabra
+                                    // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                     const inputValue = state.inputValue.toLowerCase();
-                                    return options.filter((option) =>
-                                        option.nombre_ingles.toLowerCase().startsWith(inputValue)
-                                    );
+                                    return options.filter((option) => {
+                                        const birdName = option.nombre_ingles.toLowerCase();
+                                        const birdNamesArray = birdName.split(' ');
+
+                                        // Check if any of the names (first, second, or third) start with the inputValue
+                                        return birdNamesArray.some(
+                                            (name) => name.startsWith(inputValue)
+                                        );
+                                    });
                                 }}
                                 value={selectedBird}
                                 onChange={(event, newValue) => handleBirdSelect(newValue)}
@@ -123,7 +129,7 @@ export const SearchBird = ({ changeTab }) => {
             )}
             {showUpdateBird && < IndexTabsUpdates changeTab={changeTab} showUpdateBird={setShowUpdateBird}
                 showSearchBird={setShowSearchBird}
-                selectedBird={setSelectedBird}/>}
+                selectedBird={setSelectedBird} />}
         </React.Fragment>
     );
 };

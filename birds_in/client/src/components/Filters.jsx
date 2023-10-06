@@ -23,7 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
-    const navigate= useNavigate()
+    const navigate = useNavigate()
     const nombreIngles = localStorage.getItem('nombreIngles');
 
     React.useEffect(() => {
@@ -127,7 +127,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     });
     const [isLoading, setIsLoading] = React.useState(true);
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
-    
+
     // React.useEffect(() => {
     //     if (isFilterOpen) {
     //         setIsLoading(true); // Set loading to true when filters are open
@@ -257,11 +257,17 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                 options={sortedGrupos}
                                 getOptionLabel={(option) => option.nombre}
                                 filterOptions={(options, state) => {
-                                    // Filtra las opciones para que coincidan solo al principio de las letras
+                                    // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                     const inputValue = state.inputValue.toLowerCase();
-                                    return options.filter((option) =>
-                                        option.nombre.toLowerCase().startsWith(inputValue)
-                                    );
+                                    return options.filter((option) => {
+                                        const birdName = option.nombre.toLowerCase();
+                                        const birdNamesArray = birdName.split(' ');
+
+                                        // Check if any of the names (first, second, or third) start with the inputValue
+                                        return birdNamesArray.some(
+                                            (name) => name.startsWith(inputValue)
+                                        );
+                                    });
                                 }}
                                 loading={isFetchingOptions}
                                 renderInput={(params) =>
@@ -307,11 +313,17 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                 getOptionLabel={(option) => option.nombre}
                                 loading={isFetchingOptions}
                                 filterOptions={(options, state) => {
-                                    // Filtra las opciones para que coincidan solo al principio de las letras
+                                    // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                     const inputValue = state.inputValue.toLowerCase();
-                                    return options.filter((option) =>
-                                        option.nombre.toLowerCase().startsWith(inputValue)
-                                    );
+                                    return options.filter((option) => {
+                                        const birdName = option.nombre.toLowerCase();
+                                        const birdNamesArray = birdName.split(' ');
+
+                                        // Check if any of the names (first, second, or third) start with the inputValue
+                                        return birdNamesArray.some(
+                                            (name) => name.startsWith(inputValue)
+                                        );
+                                    });
                                 }}
                                 renderInput={(params) =>
                                     <TextField {...params}
@@ -554,7 +566,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                 <ArrowBackIcon /> Volver
                             </Button>
                             <Button variant="outlined" color="secondary" onClick={handleBack}>
-                                < CloseIcon/> Cerrar
+                                < CloseIcon /> Cerrar
                             </Button>
 
                         </Grid>

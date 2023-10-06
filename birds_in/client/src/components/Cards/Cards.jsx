@@ -5,7 +5,6 @@ import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { sendParameter } from '../../redux/actions/fetchAllBirds';
 
-
 export const Cards = ({ foto, name, index }) => {
 
   const theme = useTheme()
@@ -32,7 +31,7 @@ export const Cards = ({ foto, name, index }) => {
     <Card sx={{
       maxWidth: 'auto',
       minWidth: 415,
-      minHeight: 280, // Establece una altura mínima para la tarjeta
+      minHeight: 320, // Establece una altura mínima para la tarjeta
       position: 'relative',
       borderRadius: '15px',
       display: 'flex', // Establece la tarjeta como un contenedor flexible
@@ -43,7 +42,7 @@ export const Cards = ({ foto, name, index }) => {
         {destacadaImage && destacadaImage.url ? (
           <CardMedia
             component="img"
-            height="194"
+            height="260"
             image={destacadaImage.url}
             alt={name}
             key={index}
@@ -67,7 +66,7 @@ export const Cards = ({ foto, name, index }) => {
       />
     </Card>
   );
-}
+};
 
 
 

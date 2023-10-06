@@ -1,52 +1,43 @@
 import * as React from 'react'
 import { Box, Button, Grid, Link, Typography, useTheme } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
-import imagenBird from '../assets/images/DSC01677-111.jpg'
-import imageDash from '../assets/images/IMG_1572-2048x1536.jpg'
-import imagenSobreMi from '../assets/images/Moises_Sterimberg.jpeg'
 import { MenuBar } from '../components/Menus/MenuBar'
+import { useSelector } from 'react-redux'
 
 
 const sections = [
   {
     id: 'aves',
-    imageUrl: imagenBird,
     title: 'Aves',
     description: 'Galería de aves',
   },
   {
     id: 'animales',
-    imageUrl: 'https://source.unsplash.com/random?animal',
     title: 'Animales',
     description: 'Galería de animales',
   },
   {
     id: 'peces',
-    imageUrl: 'https://source.unsplash.com/random?fish',
     title: 'Peces',
     description: 'Galería de peces',
   },
   {
     id: 'flores',
-    imageUrl: 'https://source.unsplash.com/random?flower',
     title: 'Flora',
     description: 'Galería de flora',
   },
   {
     id: 'paisajes',
-    imageUrl: 'https://source.unsplash.com/random?landscape',
     title: 'Paisajes',
     description: 'Galería de paisajes',
   },
   {
     id: 'SobreMi',
-    imageUrl: imagenSobreMi,
     title: 'Sobre Mi',
     description: 'Leer sobre mi',
   },
   {
     id: 'panelAdministrador',
-    imageUrl: imageDash,
     title: 'Admin',
     description: 'Dashboard ',
   },
@@ -56,19 +47,32 @@ export const HomeMenu = () => {
   const theme = useTheme()
   const admin = localStorage.getItem('tipoCliente')
   const isAdmin = admin === 'admin'
+  const { allCustom } = useSelector(state => state.customizesSlice)
+
+
+  // Accede a las propiedades específicas de allCustom para obtener las URL de las imágenes
+  const images = {
+    aves: allCustom.cover_birds,
+    animales: allCustom.cover_animals,
+    peces: allCustom.cover_fish,
+    flores: allCustom.cover_flowers,
+    paisajes: allCustom.cover_land,
+    SobreMi: allCustom.cover_about,
+    panelAdministrador: allCustom.covert_admin, // Corregir el nombre de la propiedad
+  };
 
   return (
     <div>
       <MenuBar ShowFilterButton={false} ShowBackButton={false} />
       <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
         {sections.map((section, index) => (
-          // Verifies if it's not the "Admin" element or if the user is an administrator
-          (isAdmin || section.id !== 'panelAdministrador') && ( // Change 'Admin' to 'panelAdministrador'
+          // Verifica si no es el elemento "Admin" o si el usuario es un administrador
+          (isAdmin || section.id !== 'panelAdministrador') && (
             <Grid item xs={12} sm={6} md={1.6} key={section.id} sx={{ margin: '5px', mt: 0 }}>
               <div style={{ position: 'relative', overflow: 'hidden' }}>
                 <Link component={RouterLink} to={`/${section.id}`} style={{ textDecoration: 'none' }}>
                   <img
-                    src={section.imageUrl}
+                    src={images[section.id]} // Usa la URL de la imagen específica de allCustom
                     alt={section.title}
                     style={{
                       width: '100%',
@@ -140,5 +144,5 @@ export const HomeMenu = () => {
         ))}
       </Grid>
     </div>
-  )
-};
+  );
+}

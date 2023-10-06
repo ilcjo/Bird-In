@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Backdrop, Button, Checkbox, CircularProgress, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useSelector, useDispatch } from 'react-redux';
-import { getInfoForUpdate } from '../../redux/actions/createBirds';
-import { sendCoverPhoto, sendPhotosDelete } from '../../redux/actions/DeletCover';
+import { getInfoForUpdate } from '../../../redux/actions/createBirds';
+import { sendCoverPhoto, sendPhotosDelete } from '../../../redux/actions/DeletCover';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
@@ -17,8 +17,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [highlightedImage, setHighlightedImage] = React.useState(null);
-    console.log(highlightedImage)
-
+    
     const handleStarClick = (id, url) => {
         setHighlightedImage((prev) => {
             if (prev && prev.id === id) {

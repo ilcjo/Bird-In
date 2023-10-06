@@ -1,34 +1,12 @@
 import React from 'react'
-import { Box, Button, Grid, Typography, useTheme } from '@mui/material'
-import image from '../assets/images/DSC01570-105.jpg'
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { clearToken } from '../redux/slices/Auth';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getOptionsData } from '../redux/actions/fetchOptions';
-import { getInfoBirds } from '../redux/actions/fetchAllBirds';
+import { Box, Grid, } from '@mui/material'
 import { MenuBar } from './Menus/MenuBar';
+import { useSelector } from 'react-redux';
 
 
-export const Header = ({ isFilterOpen, setIsFilterOpen }) => {
-  const theme = useTheme()
-  const usuarioNombre = localStorage.getItem("usuarioNombre");
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
 
-  // const onLogoutClick = () => {
-  //   localStorage.clear();
-  //   dispatch(clearToken())
-  //   navigate('/')
-  // };
-
-  // const returnMenuClick = () => {
-  //   localStorage.removeItem('nombreIngles')
-  //   dispatch(getInfoBirds())
-  //   dispatch(getOptionsData())
-  //   navigate('/menu')
-  // };
+export const Header = () => {
+  const { allCustom } = useSelector(state => state.customizesSlice)
 
   return (
 
@@ -51,7 +29,7 @@ export const Header = ({ isFilterOpen, setIsFilterOpen }) => {
         }}
       />
       <img
-        src={image}
+        src={allCustom.header}
         alt="Ave"
         style={{ width: '100vw', height: '100%', objectFit: 'cover' }}
       />
@@ -66,30 +44,6 @@ export const Header = ({ isFilterOpen, setIsFilterOpen }) => {
           transform: 'translate(50%, -50%)',
         }}
       >
-        {/* <Button
-          sx={{
-            fontSize: '1.3rem',
-            fontWeight: 'bold',
-            color: theme.palette.primary.light
-          }}
-          size="large"
-          onClick={returnMenuClick}
-          startIcon={<ArrowBackIcon />}
-        >
-          volver
-        </Button>
-        <Button
-          sx={{
-            fontSize: '1.3rem',
-            fontWeight: 'bold',
-          }}
-          color="primary"
-          size="large"
-          onClick={onLogoutClick}
-          endIcon={<LogoutIcon />}
-        >
-          Cerrar Sesión
-        </Button> */}
       </Grid>
     </Grid>
   )

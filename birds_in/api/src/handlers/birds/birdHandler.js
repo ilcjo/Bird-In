@@ -195,6 +195,7 @@ const updateInfoBids = async (req, res) => {
       res.status(500).send({ error: error.message })
    }
 };
+
 const deletePhotos = async (req, res) => {
    const { ids, urls } = req.body;
    try {

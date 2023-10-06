@@ -1,19 +1,34 @@
 import * as React from 'react';
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useDispatch, useSelector } from 'react-redux'
 import { Boolean } from '../redux/slices/OpenClose';
 import { Index } from '../components/SingUpTabs/Index';
-import cover from '../assets/images/DSC07270.jpg'
-import logo from '../assets/images/Logo.png'
 
 
 export const Landing = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { open } = useSelector((state) => state.openCloseSlice)
-
-
+  const { allCustom } = useSelector(state => state.customizesSlice)
+  const convertTextWithBr = (text) => {
+    if (!text) {
+      return null;
+    }
+  
+    // Dividir el texto por comas y agregar <br /> después de cada coma
+    const segments = text.split('.').map((segment, index) => (
+      <React.Fragment key={index}>
+        {segment.trim()} {/* Eliminar espacios en blanco alrededor de cada segmento */}
+        <br />
+      </React.Fragment>
+    ));
+  
+    return (
+      <React.Fragment>
+        {segments}
+      </React.Fragment>
+    );
+  };
   const handleOpen = () => {
     dispatch(Boolean(true))
   };
@@ -24,7 +39,7 @@ export const Landing = () => {
 
         <Grid item xs={false} sm={3} md={8.5}
           sx={{
-            backgroundImage: `url(${cover})`,
+            backgroundImage: `url(${allCustom.cover_login})`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -40,11 +55,7 @@ export const Landing = () => {
               fontSize: '1.4rem',
               // backgroundColor: 'rgba(255, 255, 255, 0.5)',
             }}>
-            Fiery-billed Aracari
-            <br></br>
-            Pteroglossus frantzii
-            <br></br>
-            Boquete, Panamá
+            {convertTextWithBr(allCustom.text_login)}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={9} md={3.5} component={Box} elevation={6}
@@ -61,7 +72,7 @@ export const Landing = () => {
             justifyContent: 'center', // Centra horizontalmente
             // Altura mínima de la ventana gráfica
           }}>
-            <img alt='logo' src={logo} style={{
+            <img alt='logo' src={allCustom.logo} style={{
               width: '170px', // Establece el ancho fijo que desees
               height: 'auto', // Permite que la altura se ajuste automáticamente para mantener la proporción
             }} >

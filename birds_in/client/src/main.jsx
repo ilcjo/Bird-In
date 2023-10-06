@@ -11,6 +11,7 @@ import axios from 'axios';
 import { getInfoBirds } from './redux/actions/fetchAllBirds';
 import { getOptionsData } from './redux/actions/fetchOptions';
 import { saveOptions } from './redux/slices/BirdsSlice';
+import { getAllCustomizes } from './redux/actions/Custome';
 
 // Configurar la URL base de Axios
 const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
@@ -21,6 +22,7 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
 store.dispatch(getInfoBirds());
 store.dispatch(getOptionsData());
 store.dispatch(saveOptions());
+store.dispatch(getAllCustomizes());
 
 // Utilizar createRoot en lugar de ReactDOM.render
 const root = createRoot(document.getElementById('root'));

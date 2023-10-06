@@ -1,16 +1,18 @@
 import * as React from 'react'
-import { UpdateBirds } from '../Forms/UpdateBirds'
-import { CoverDelet } from './Custome/CoverDelet'
-import { Box, Tab, Tabs, Typography } from '@mui/material';
-import { styled } from '@mui/system';
 import { useTheme } from '@emotion/react';
+import { About } from './Custome/About';
+import { Covers } from './Custome/Covers';
+import styled from '@emotion/styled';
+import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { General } from './Custome/General';
+import { CoverLogin } from './Custome/CoverLogin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.light,
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: '23%',
-    marginLeft: '150px',
+    width: '40%',
+    marginLeft: '10%',
     '& .Mui-selected': {
         backgroundColor: theme.palette.secondary.light,
     },
@@ -20,19 +22,15 @@ const StyledTab = styled(Tab)({
     textTransform: 'none',
 });
 
-export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, history }) => {
+export const IndexCustome = () => {
     const [selectedTab, setSelectedTab] = React.useState(0);
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
 
-    const handleNavigateToCoverDelet = () => {
-        setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
-    };
     return (
         <React.Fragment>
-            {/* ... Otro contenido */}
             <StyledTabs
                 value={selectedTab}
                 onChange={handleTabChange}
@@ -41,28 +39,29 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
                 aria-label="tabsInfoActualizar"
                 selectionfollowsfocu='true'
             >
-                <StyledTab label={<Typography variant='h5' >
-                    Información
-                </Typography>} />
-                <StyledTab label={<Typography variant='h5' >
-                    Imágenes Existente
-                </Typography>} onClick={handleNavigateToCoverDelet} />
+                <StyledTab label={<Typography variant='h5' >Portadas</Typography>} />
+                <StyledTab label={<Typography variant='h5' >Inicio de Sesión</Typography>} onClick={() => setSelectedTab(1)} />
+                <StyledTab label={<Typography variant='h5' >Sobre Mí</Typography>} onClick={() => setSelectedTab(2)} />
+                <StyledTab label={<Typography variant='h5' >General</Typography>} onClick={() => setSelectedTab(3)} />
                 {/* Agrega más pestañas según sea necesario */}
             </StyledTabs>
             <Box>
                 {selectedTab === 0 && (
                     <React.Fragment>
-                        {/* Contenido de la primera pestaña */}
-                        <UpdateBirds changeTab={changeTab} showUpdateBird={showUpdateBird}
-                            showSearchBird={showSearchBird}
-                            selectedBird={selectedBird} />
+
+                        <Covers />
                     </React.Fragment>
                 )}
                 {selectedTab === 1 && (
-                    <CoverDelet changeTab={changeTab} showUpdateBird={showUpdateBird}
-                    showSearchBird={showSearchBird}
-                    selectedBird={selectedBird} />
+                    <CoverLogin />
                 )}
+                {selectedTab === 2 && (
+                    <About />
+                )}
+                {selectedTab === 3 && (
+                    <General />
+                )}
+                {/* Agrega más bloques para otras pestañas según sea necesario */}
             </Box>
         </React.Fragment>
     )
