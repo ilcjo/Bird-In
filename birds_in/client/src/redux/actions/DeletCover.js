@@ -18,3 +18,21 @@ export const sendPhotosDelete = (ids, urls) => {
         }
     };
 };
+
+export const sendCoverPhoto = (id, idAves) => {
+    return async (dispatch) => {
+        try {
+            const requestData = {
+                idFoto: id,
+                idAve: idAves
+            };
+
+            const response = axios.put('/aves/foto_portada', requestData )
+            const data = response.data
+            console.log(data)
+        } catch (error) {
+            console.error("Error al obtener los datos:", error)
+
+        }
+    };
+};

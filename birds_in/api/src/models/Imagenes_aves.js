@@ -14,9 +14,9 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         destacada: {
-            type: DataTypes.TEXT,
+            type: DataTypes.BOOLEAN,
             allowNull: true
         },
-    },{ timestamps: false, }
+    }, { timestamps: false, }
     )
 }

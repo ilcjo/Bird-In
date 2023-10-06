@@ -3,7 +3,7 @@ import { Backdrop, Button, Checkbox, CircularProgress, Divider, Grid, IconButton
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useSelector, useDispatch } from 'react-redux';
 import { getInfoForUpdate } from '../../redux/actions/createBirds';
-import { sendPhotosDelete } from '../../redux/actions/DeletCover';
+import { sendCoverPhoto, sendPhotosDelete } from '../../redux/actions/DeletCover';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
@@ -16,7 +16,36 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
-    // console.log(selectedImages)
+    const [highlightedImage, setHighlightedImage] = React.useState(null);
+    console.log(highlightedImage)
+
+    const handleStarClick = (id, url) => {
+        setHighlightedImage((prev) => {
+            if (prev && prev.id === id) {
+                // Deseleccionar la imagen destacada si ya estaba seleccionada
+                return null;
+            } else {
+                // Seleccionar la nueva imagen destacada
+                return { id, url };
+            }
+        });
+    };
+
+    const handleSaveAsFeatured = async () => {
+        try {
+            if (highlightedImage) {
+                // Envía el ID y la URL de la imagen destacada con destacada: true
+                await dispatch(sendCoverPhoto(highlightedImage.id, infoAveForUpdate.id_ave));
+            }
+            setSnackbarOpen(true);
+            setSnackbarMessage('Imagen destacada guardada con éxito');
+        } catch (error) {
+            console.error('Error al guardar la imagen destacada:', error);
+            setSnackbarOpen(true);
+            setSnackbarMessage('Error al guardar la imagen destacada');
+        }
+    };
+
 
     const handleDeleteCheckBox = (id, url) => {
         const index = selectedImages.findIndex((img) => img.id === id);
@@ -69,6 +98,14 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
             try {
                 // Llama a la acción para obtener la información necesaria
                 await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+
+                // Verifica si hay una imagen destacada en la información actualizada
+                const destacadaImage = infoAveForUpdate.imagenes_aves.find((img) => img.destacada);
+
+                // Inicializa highlightedImage con la imagen destacada si existe
+                if (destacadaImage) {
+                    setHighlightedImage({ id: destacadaImage.id, url: destacadaImage.url });
+                }
 
                 // Una vez que obtienes la información, establece loading en false
                 setLoading(false);
@@ -131,6 +168,22 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                         Eliminar seleccionadas
                     </Button>
                     <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleSaveAsFeatured}
+                        sx={{
+                            marginTop: '10px',
+                            marginBottom: '0px',
+                            fontSize: '1.2rem',
+                            fontWeight: 'bold',
+                            textTransform: 'none',
+                            color: theme.palette.primary.dark,
+                            ml: 4
+                        }}
+                    >
+                        Guardar Portada
+                    </Button>
+                    <Button
                         sx={{
                             marginBottom: '0px',
                             fontSize: '1.3rem',
@@ -160,9 +213,20 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                                                 color="primary"
                                                 onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url)}
                                             />
-                                            <IconButton aria-label="add to favorites">
-                                                <StarBorderIcon color="primary" />
+
+                                            <IconButton
+                                                aria-label="add to favorites"
+                                                onClick={() => handleStarClick(imageUrl.id, imageUrl.url)}
+                                            >
+                                                <StarBorderIcon color={highlightedImage && highlightedImage.id === imageUrl.id ? "primary" : "primary.dark"} />
                                             </IconButton>
+                                            {highlightedImage && highlightedImage.id === imageUrl.id && (
+                                                <Typography variant="body1" color="primary" sx={{ marginLeft: 1 }}>
+                                                    Portada
+                                                </Typography>
+                                            )}
+
+
                                         </div>
                                     </div>
                                 </Grid>

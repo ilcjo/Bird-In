@@ -12,6 +12,7 @@ export const Cards = ({ foto, name, index }) => {
   const dispatch = useDispatch()
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
+  const destacadaImage = foto.find((img) => img.destacada);
 
   const openGallery = () => {
     setIsGalleryOpen(true);
@@ -39,11 +40,11 @@ export const Cards = ({ foto, name, index }) => {
       justifyContent: 'space-between', // Centra verticalmente el contenido
     }}>
       <CardActionArea>
-        {foto[selectedImageIndex] && foto[selectedImageIndex].url ? (
+        {destacadaImage && destacadaImage.url ? (
           <CardMedia
             component="img"
             height="194"
-            image={foto[selectedImageIndex].url}
+            image={destacadaImage.url}
             alt={name}
             key={index}
             onClick={handleDetailClick}
@@ -53,7 +54,7 @@ export const Cards = ({ foto, name, index }) => {
           <Typography variant="body2">Imagen no disponible</Typography>
         )}
       </CardActionArea>
-      <CardActions disableSpacing >
+      <CardActions disableSpacing>
         <Typography onClick={handleDetailClick} style={{ cursor: 'pointer' }}>
           {name}
         </Typography>
@@ -62,7 +63,8 @@ export const Cards = ({ foto, name, index }) => {
         isOpen={isGalleryOpen}
         images={foto}
         selectedIndex={selectedImageIndex}
-        onClose={() => setIsGalleryOpen(false)} />
+        onClose={() => setIsGalleryOpen(false)}
+      />
     </Card>
   );
 }

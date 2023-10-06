@@ -58,7 +58,7 @@ const fetchFilterBirds = async (
         {
             model: Imagenes_aves,
             as: 'imagenes_aves',
-            attributes: ['url']
+            attributes: ['url', 'destacada']
         }
     ];
 
@@ -261,7 +261,7 @@ const findDataById = async (id) => {
             include: [
                 {
                     model: Imagenes_aves,
-                    attributes: ['url', 'id'] // Atributos que deseas de Imagenes_aves
+                    attributes: ['url', 'id', 'destacada'] // Atributos que deseas de Imagenes_aves
                 },
                 {
                     model: Paises,
@@ -393,6 +393,34 @@ const findPhotosId = async (imgsIds) => {
 };
 
 
+const setDbCover = async (idFoto, idAve) => {
+    try {
+        // Buscar todas las imágenes asociadas al ave
+        const imagenesAve = await Imagenes_aves.findAll({ where: {aves_id_ave: idAve } });
+
+        // Encontrar la imagen destacada actual, si la hay
+        const imagenDestacadaActual = imagenesAve.find((imagen) => imagen.destacada === true);
+
+        // Desmarcar la imagen destacada actual, si la hay
+        if (imagenDestacadaActual) {
+            await imagenDestacadaActual.update({ destacada: null });
+        }
+
+        // Marcar la nueva imagen como destacada
+        const imagenNuevaDestacada = await Imagenes_aves.findByPk(idFoto);
+
+        if (imagenNuevaDestacada) {
+            await imagenNuevaDestacada.update({ destacada: true });
+            return 'La fotografía se ha destacado exitosamente';
+        } else {
+            return 'No se encontró la fotografía con el ID proporcionado';
+        }
+    } catch (error) {
+        console.error('Error al buscar o actualizar la foto por ID de ave:', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchOptions,
     filterOptions,
@@ -400,5 +428,6 @@ module.exports = {
     sendAndCreateBird,
     findDataById,
     sendAndUpdateBird,
-    findPhotosId
+    findPhotosId,
+    setDbCover
 }

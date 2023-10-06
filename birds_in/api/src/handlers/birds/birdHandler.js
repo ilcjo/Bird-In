@@ -8,6 +8,7 @@ const {
    sendAndUpdateBird,
    saveDbDescatada,
    findPhotosId,
+   setDbCover,
 
 } = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
@@ -197,20 +198,33 @@ const updateInfoBids = async (req, res) => {
 const deletePhotos = async (req, res) => {
    const { ids, urls } = req.body;
    try {
-       const deletedFtp = await deletePhotoFromFTP(urls);
+      const deletedFtp = await deletePhotoFromFTP(urls);
 
-       if (!deletedFtp.success) {
-           // Algunas fotos no se encontraron o hubo errores en el servidor FTP
-           console.warn('Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.');
-           return res.status(400).json({ error: 'Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.' });
-       }
+      if (!deletedFtp.success) {
+         // Algunas fotos no se encontraron o hubo errores en el servidor FTP
+         console.warn('Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.');
+         return res.status(400).json({ error: 'Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.' });
+      }
 
-       // Continúa con la lógica para eliminar de la base de datos
-       const deletedDb = await findPhotosId(ids);
-       return res.status(200).json(deletedDb);
+      // Continúa con la lógica para eliminar de la base de datos
+      const deletedDb = await findPhotosId(ids);
+      return res.status(200).json(deletedDb);
    } catch (error) {
-       console.error('Error en el controlador deletePhotos:', error);
-       res.status(500).json({ error: 'Error interno del servidor' });
+      console.error('Error en el controlador deletePhotos:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+   }
+};
+
+const setCoverPhoto = async (req, res) => {
+   const { idFoto, idAve } = req.body
+   console.log(idFoto)
+   console.log(idAve)
+   try {
+      const newCover = await setDbCover(idFoto, idAve)
+      return res.status(200).json(newCover);
+
+   } catch (error) {
+      res.status(500).json({ error: 'Error interno del servidor' });
    }
 };
 
@@ -222,6 +236,7 @@ module.exports = {
    uploadImageftp,
    findInfoForUpdate,
    updateInfoBids,
-   deletePhotos
+   deletePhotos,
+   setCoverPhoto
 }
 
