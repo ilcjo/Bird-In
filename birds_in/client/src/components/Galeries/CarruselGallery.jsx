@@ -1,62 +1,64 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Typography, imageListClasses } from '@mui/material';
+import * as React from 'react'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Paper,
+  Typography,
+  imageListClasses
+} from '@mui/material';
 import { Carousel } from 'react-responsive-carousel'
 import CloseIcon from '@mui/icons-material/Close';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Viewer from 'react-viewer';
 
-import * as React from 'react'
 
 export const CarruselGallery = ({ isOpen, images, onClose }) => {
-  const [selectedImage, setSelectedImage] = React.useState(null);
+  const [viewerIsOpen, setViewerIsOpen] = React.useState(false);
+  const [viewerImages, setViewerImages] = React.useState([]);
+  const [viewerIndex, setViewerIndex] = React.useState(0);
 
-  const openDialog = (images) => {
-    setSelectedImage(images);
+  // Actualizar las imágenes cuando cambie la prop 'images'
+  React.useEffect(() => {
+    setViewerImages(images.map((image) => ({ src: image.url })));
+  }, [images]);
+
+  const openViewer = (index) => {
+    setViewerIndex(index);
+    setViewerIsOpen(true);
   };
 
-  const closeDialog = () => {
-    setSelectedImage(null);
-    onClose(); // Cierra el diálogo cuando se hace clic en "Cerrar"
+  const closeViewer = () => {
+    setViewerIndex(0);
+    setViewerIsOpen(false);
+    onClose();
   };
+
+  // Abre el visor cuando 'isOpen' cambia a 'true'
+  React.useEffect(() => {
+    if (isOpen) {
+      setViewerIsOpen(true);
+    }
+  }, [isOpen]);
+
+  const customToolbar = {
+    rotateLeft: false, // Desactivar rotación a la izquierda
+    rotateRight: false, // Desactivar rotación a la derecha
+  };
+
 
   return (
-  
-  <div>
-      <Dialog open={isOpen} onClose={closeDialog} maxWidth="ml" fullWidth>
-        <DialogActions>
-          <Button onClick={closeDialog} startIcon={<CloseIcon />}>Cerrar</Button>
-        </DialogActions>
-        <DialogContent>
-          {isOpen && images && images.length > 0 ? (
-            <Carousel showArrows={true}>
-              {images.map((image, index) => (
-                <div key={index}>
-                  <img src={image.url} alt={`Image ${index}`} style={{
-                    maxWidth: '100vh',
-                    maxHeight: '90vh',
-                    height: '100%',
-                    width: '100%',
-                    overflow: 'hidden'
-                  }} />
-                  {/* <Paper
-                    square
-                    elevation={0}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      height: 50,
-                      pl: 2,
-                      background: 'linear-gradient(rgba(137, 138, 108, 0), rgba(0, 61, 21, 0.5))',
-                    }}
-                  >
-                    <Typography>ubicacion</Typography>
-                  </Paper> */}
-                </div>
-              ))}
-            </Carousel>
-          ) : (
-            <Typography variant="body2">No hay imágenes disponibles.</Typography>
-          )}
-        </DialogContent>
-      </Dialog>
+    <div>
+    <Viewer
+      visible={viewerIsOpen}
+        onClose={closeViewer}
+        images={viewerImages}
+        activeIndex={viewerIndex}
+        rotatable={false}  // Desactivar rotación
+        rotatableKeyModifiers={[]}  // Desactivar rotación
+      />
     </div>
   );
 };

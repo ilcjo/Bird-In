@@ -6,7 +6,10 @@ const {
     createBird,
     uploadImageftp,
     findInfoForUpdate,
-    updateInfoBids} = require('../handlers/birds/birdHandler')
+    updateInfoBids,
+    deletePhotos,
+
+    } = require('../handlers/birds/birdHandler')
 const upload = require('../utils/multerConfig')
 
 const birdsRouter = Router()
@@ -17,4 +20,5 @@ birdsRouter.get('/filtros', getFilterInfo)
     .post('/upload_image', upload.array('images'), uploadImageftp)
     .get('/get_update', findInfoForUpdate)
     .put('/update', updateInfoBids)
+    .delete('/borrar_fotos', deletePhotos)
 module.exports = birdsRouter

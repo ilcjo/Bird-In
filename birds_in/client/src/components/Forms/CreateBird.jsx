@@ -19,7 +19,8 @@ import { useTheme } from '@emotion/react';
 import { createBird, saveImageFtp } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import wikipediaLogo from '../../assets/images/wikilogo.png'
-import ebirdLogo from '../../assets/images/cornell-lab-logo.svg'
+import ebirdLogo from '../../assets/images/Logo_ebird.png'
+import { getOptionsData } from '../../redux/actions/fetchOptions';
 
 export const CreateBird = () => {
     const theme = useTheme()
@@ -245,6 +246,10 @@ export const CreateBird = () => {
         });
     };
 
+    React.useEffect(() => {
+        // Aquí despachas la acción para cargar las opciones al montar el componente
+        dispatch(getOptionsData());
+    }, []);
 
     return (
         <React.Fragment>
@@ -495,7 +500,7 @@ export const CreateBird = () => {
                                         <img src={ebirdLogo} alt="Wikipedia Logo" style={{
                                             paddingRight: '5px',
                                             marginTop: '10px',
-                                            width: '130px', // Ajusta el ancho de la imagen
+                                            width: '110px', // Ajusta el ancho de la imagen
                                             height: '39px', // Ajusta la altura de la imagen
                                         }} />
                                         URL

@@ -4,18 +4,18 @@ import { useSelector } from 'react-redux'
 import { ImagesCards } from './Cards/ImagesCards'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import wikipediaLogo from '../assets/images/wikilogo.png'
-import ebirdLogo from '../assets/images/cornell-lab-logo.svg'
+import ebirdLogo from '../assets/images/Logo_ebird.png'
 
 export const PhotosDetail = () => {
     const theme = useTheme()
     const birds = useSelector(state => state.birdSlice.infoBirds)
     // console.log(birds)
     const allImages = birds.flatMap(bird => bird.imagenes_aves);
-    const [expanded, setExpanded] = React.useState(false);
-   
+    const [expanded, setExpanded] = React.useState(`panel0`);
+
 
     const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
+        setExpanded(isExpanded ? panel : null);
     };
 
     const formatCountries = (countries) => {
@@ -71,70 +71,65 @@ export const PhotosDetail = () => {
                             sx={{ position: 'relative' }}
                         >
                             <Typography variant="h1" color='primary' sx={{ width: '33%', flexShrink: 0 }}>
-                                {bird.nombre_ingles}
-                                <Divider sx={{ mt: 2, borderColor: 'primary.main', borderWidth: 1, width: '50vh' }} />
+                            {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
+                                {/* <Divider sx={{ mt: 2, borderColor: 'primary.main', borderWidth: 1, width: '50vh' }} /> */}
                             </Typography>
 
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container spacing={9}>
-                                <Grid item xs={3} ></Grid>
-                                <Grid item xs={2.5}>
-                                    {/* Contenido de la primera columna */}
+                            <Grid container spacing={5} sx={{ ml: 4 }}>
+                                {/* Contenido de la primera columna */}
+                                <Grid item xs={2.5} >
                                     <Typography variant="h5" color="primary.light">
-                                        Nombre Inglés:
-                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
-                                        <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
-                                            {bird.nombre_ingles}
+                                        Nombre Inglés:  <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
+                                            {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
                                         </Typography>
+                                        {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
+                                    </Typography>
+                                    <Typography variant="h5" color="primary.light">
+                                        País: <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
+                                            {formatCountries(bird.paises)}
+                                        </Typography>
+                                    </Typography>
+                                </Grid>
+                                {/* Contenido de la segunda columna */}
+                                <Grid item xs={2.5}>
+                                    <Typography variant="h5" color="primary.light">
+                                        Nombre Común:
+                                        <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
+                                            {bird.nombre_comun ? bird.nombre_comun : 'No Especificado'}
+                                        </Typography>
+                                        {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
 
                                     <Typography variant="h5" color="primary.light">
-                                        Nombre Común:
-                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
+                                        Zonas:
                                         <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
-                                            {bird.nombre_comun}
-                                        </Typography>
-                                    </Typography>
-                                    <Typography variant="h5" color="primary.light">
-                                        Nombre Científico:
-                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
-                                        <Typography variant="body1" color="primary.dark">
-                                            {bird.nombre_cientifico}
+                                            {bird.zonas ? bird.zonas : 'No Especificado'}
                                         </Typography>
                                     </Typography>
 
                                 </Grid>
                                 <Grid item xs={2}>
-                                    {/* Contenido de la segunda columna */}
+                                    {/* Contenido de la tercera columna */}
                                     <Typography variant="h5" color="primary.light">
-                                        País:
-                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
-                                        <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
-                                            {formatCountries(bird.paises)}
-                                        </Typography>
-                                    </Typography>
-
-                                    <Typography variant="h5" color="primary.light">
-                                        Zonas:
-                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
-                                        <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
-                                            {bird.zonas}
+                                        Nombre Científico:
+                                        <Typography variant="body1" color="primary.dark">
+                                            {bird.nombre_cientifico ? bird.nombre_cientifico : 'No Especificado'}
                                         </Typography>
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                     <Typography variant="h5" color="primary.light">
                                         Grupo:
-                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
                                         <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
                                             {bird.grupo.nombre}
                                         </Typography>
+                                        {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
 
                                     <Typography variant="h5" color="primary.light">
                                         Familia:
-                                        <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
                                         <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
                                             {bird.familia.nombre}
                                         </Typography>
@@ -142,31 +137,51 @@ export const PhotosDetail = () => {
                                 </Grid>
                                 <Grid item xs={2} >
                                     <Typography variant="h5" color="primary.light" >
-                                        Urls Externas:
+                                        URLS Externas:
                                         <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} />
                                     </Typography>
                                     {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                                     <Typography>
-                                        <a href={bird.url_wiki} target="_blank" rel="noopener noreferrer">
+
+                                        {bird.url_wiki ? (
+                                            <a href={bird.url_wiki} target="_blank" rel="noopener noreferrer">
+                                                <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
+                                                    marginRight: '5px',
+                                                    marginTop: '5px',
+                                                    width: '30px', // Ajusta el ancho de la imagen
+                                                    height: '25px', // Ajusta la altura de la imagen
+                                                }}
+                                                />
+                                                Wikipedia
+                                            </a>
+                                        ) : (
+                                            <React.Fragment>
                                             <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
                                                 marginRight: '5px',
                                                 marginTop: '5px',
-                                                width: '30px', // Ajusta el ancho de la imagen
-                                                height: '25px', // Ajusta la altura de la imagen
-                                            }}
-                                            />
-                                            Wikipedia
-                                        </a>
+                                                width: '30px',
+                                                height: '25px',
+                                            }} />
+                                            <span>  Wikipedia</span>
+                                        </React.Fragment>
+                                        )}
                                     </Typography>
                                     <Typography >
-                                        <a href={bird.url_bird} target="_blank" rel="noopener noreferrer">
+                                        {bird.url_bird ? (
+                                            <a href={bird.url_bird} target="_blank" rel="noopener noreferrer">
+                                                <img src={ebirdLogo} alt="eBird Logo" style={{
+                                                    marginTop: '12px',
+                                                    width: '110px',
+                                                    height: '39px',
+                                                }} />
+                                            </a>
+                                        ) : (
                                             <img src={ebirdLogo} alt="eBird Logo" style={{
-                                                // marginLeft: '30px',
-                                                marginTop: '10px',
-                                                width: '130px', // Ajusta el ancho de la imagen
-                                                height: '39px', // Ajusta la altura de la imagen
+                                                marginTop: '12px',
+                                                width: '110px',
+                                                height: '39px',
                                             }} />
-                                        </a >
+                                        )}
                                     </Typography>
                                     {/* </div> */}
                                 </Grid>
@@ -174,7 +189,7 @@ export const PhotosDetail = () => {
                             <Divider
                                 sx={{
                                     mb: 3,
-                                    mt: 5,
+                                    mt: 2,
                                     borderColor: 'primary.main',
                                     borderWidth: 1,
                                 }} />

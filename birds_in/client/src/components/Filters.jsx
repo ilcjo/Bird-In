@@ -209,6 +209,20 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         navigate('/menu')
     };
 
+    // React.useEffect(() => {
+    //     return () => {
+    //         setSelectOption({
+    //             grupo: [],
+    //             familia: [],
+    //             pais: [],
+    //             zona: [],
+    //             cientifico: [],
+    //             ingles: []
+    //         });
+    //         dispatch(getOptionsData())
+    //     };
+    // }, []);
+
     return (
         <React.Fragment>
             {/* <Backdrop

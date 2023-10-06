@@ -10,11 +10,13 @@ import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { clearToken } from '../../redux/slices/Auth';
 
-export const MenuBar = ({ isFilterOpen, setIsFilterOpen }) => {
+export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton }) => {
     const dispatch = useDispatch()
     const theme = useTheme()
     const navigate = useNavigate()
     const [selectedButton, setSelectedButton] = React.useState('todo');
+    // const [showFilterButton, setShowFilterButton] = React.useState(true)
+
 
     const handleButtonTodos = (button) => {
         setSelectedButton(button);
@@ -59,35 +61,41 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen }) => {
                 }}
             >
                 {/* Logo en la esquina izquierda */}
-                <img src={logoBird} alt="Logo" style={{ width: 'auto', height: '100%' , marginBottom: '50px'}} />
+                
+                <img src={logoBird} alt="Logo" style={{ width: 'auto', height: '100%', marginBottom: '50px' }} />
+                
                 <Grid item sx={{ mb: 4 }}>
-                    <Button
-                        sx={{
-                            marginBottom: '10px',
-                            fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-                            fontWeight: 'bold',
-                            color: theme.palette.primary.light,
-                        }}
-                        variant="outline"
-                        color="primary"
-                        onClick={handleFilterButtonClick}
-                        endIcon={<FilterAltIcon />}
-                    >
-                        Abrir Filtro
-                    </Button>
-                    <Button
-                        sx={{
-                            marginBottom: '10px',
-                            fontSize: '1rem',
-                            fontWeight: 'bold',
-                            color: theme.palette.primary.main,
-                        }}
-                        variant="outline"
-                        onClick={returnMenuClick}
-                        startIcon={<ArrowBackIcon />}
-                    >
-                        volver
-                    </Button>
+                    {ShowFilterButton && (
+                        <Button
+                            sx={{
+                                marginBottom: '10px',
+                                fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+                                fontWeight: 'bold',
+                                color: theme.palette.primary.light,
+                            }}
+                            variant="outline"
+                            color="primary"
+                            onClick={handleFilterButtonClick}
+                            endIcon={<FilterAltIcon />}
+                        >
+                            Abrir Filtro
+                        </Button>
+                    )}
+                    {ShowBackButton && (
+                        <Button
+                            sx={{
+                                marginBottom: '10px',
+                                fontSize: '1rem',
+                                fontWeight: 'bold',
+                                color: theme.palette.primary.main,
+                            }}
+                            variant="outline"
+                            onClick={returnMenuClick}
+                            startIcon={<ArrowBackIcon />}
+                        >
+                            volver
+                        </Button>
+                    )}
                     <Button
                         sx={{
                             marginBottom: '10px',

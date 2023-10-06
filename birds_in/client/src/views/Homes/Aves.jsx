@@ -27,7 +27,7 @@ export const Aves = () => {
 
   return (
     <React.Fragment>
-      <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen}  />
+      <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} ShowFilterButton={true} ShowBackButton={true} />
       <Grid
         container
         direction="column"
@@ -54,7 +54,7 @@ export const Aves = () => {
           <Grid item container spacing={3} justifyContent="center">
             {birds.map((bird, index) => (
               <Grid item key={index}>
-                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles}  />
+                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
               </Grid>
             ))}
           </Grid>

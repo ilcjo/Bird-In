@@ -12,22 +12,26 @@ import {
     InputLabel,
     Snackbar,
     TextField,
-    Typography
+    Typography,
+    setRef
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { UpdateAveImage, actualizarAve } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import wikipediaLogo from '../../assets/images/wikilogo.png'
-import ebirdLogo from '../../assets/images/cornell-lab-logo.svg'
+import ebirdLogo from '../../assets/images/Logo_ebird.png'
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { getOptionsData } from '../../redux/actions/fetchOptions';
 
-export const UpdateBirds = ({ isEnable }) => {
+export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird }) => {
     const theme = useTheme()
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
+
     const sortAlphabetically = (array) => {
         return array.slice().sort((a, b) => {
             // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
@@ -54,6 +58,7 @@ export const UpdateBirds = ({ isEnable }) => {
         comun: infoAveForUpdate.nombre_comun || '',
         urlWiki: infoAveForUpdate.url_wiki || '',
         urlBird: infoAveForUpdate.url_bird || '',
+        ImgDescatada: infoAveForUpdate.descatada || '',
         idAve: infoAveForUpdate.id_ave || 0,
         urlImagen: infoAveForUpdate.imagenes_aves || [],
     }
@@ -61,9 +66,16 @@ export const UpdateBirds = ({ isEnable }) => {
     const [createData, setCreateData] = React.useState(initialCreateData)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
+    const [allImageURLs, setAllImageURLs] = React.useState([]); // Nuevo estado para mantener todas las URLs de las imágenes
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(null);
+
+    // console.log('image file', imageFile)
+    // console.log('imagenurl', imageURL)
+    // console.log('IMAGENES', allImageURLs)
 
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -71,15 +83,12 @@ export const UpdateBirds = ({ isEnable }) => {
         }
         setOpenSnackbar(false);
     };
+
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
-            // Opcionalmente, puedes guardar los archivos en el estado
-            setImageFile(selectedImages);
-
             // Crear un array para almacenar las URLs de las imágenes (para mostrarlas en el formulario)
             const imageUrls = [];
-
             // Recorrer todas las imágenes seleccionadas
             for (let i = 0; i < selectedImages.length; i++) {
                 const selectedImage = selectedImages[i];
@@ -89,12 +98,19 @@ export const UpdateBirds = ({ isEnable }) => {
 
                 // Agregar la URL al array
                 imageUrls.push(imageUrl);
+                // Opcionalmente, puedes guardar los archivos en el estado
             }
-
             // Actualizar el estado con el array de URLs de imágenes
             setImageURL(imageUrls);
+
+            // Actualizar el estado que almacena todas las URL de las imágenes seleccionadas
+            setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
+
+            // Actualizar el estado con los archivos de imagen
+            setImageFile((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
         }
     };
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setCreateData({
@@ -103,7 +119,10 @@ export const UpdateBirds = ({ isEnable }) => {
         });
     };
 
-    const handleRemoveImage = () => {
+    const handleRemoveImage = (index) => {
+        // Obtener el índice de la imagen destacada antes de eliminarla
+        // const isRemovingDestacada = index === destacadaIndex;
+
         // Revocar la URL de la imagen eliminada
         URL.revokeObjectURL(imageURL[index]);
 
@@ -115,25 +134,44 @@ export const UpdateBirds = ({ isEnable }) => {
 
         // Actualizar el estado con el nuevo array de URLs
         setImageURL(updatedImageURLs);
+
+        // Si la imagen eliminada era la destacada, desmarcarla
+        // if (isRemovingDestacada) {
+        //     setDestacadaIndex(null);
+        // }
+
+        // Actualizar el estado que almacena todas las URL de las imágenes seleccionadas
+        setAllImageURLs((prevAllImageURLs) => prevAllImageURLs.filter((_, i) => i !== index))
+        // setAllImageURLs(updatedImageURLs);
+
+        // Crear una copia del array de archivos de imágenes
+        const updatedImageFiles = [...imageFile];
+
+        // Eliminar el archivo de imagen en la posición 'index'
+        updatedImageFiles.splice(index, 1);
+
+        // Actualizar el estado con el nuevo array de archivos de imágenes
+        setImageFile(updatedImageFiles);
+
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setShowBackdrop(true);
-        setLoadingMessage('Actualizando ave...');
+        setLoadingMessage('Subiendo imágenes...');
 
         try {
-            let imageUrl = '';
 
+            let imageUrl = '';
             if (imageFile && imageFile.length > 0) {
                 const formData = new FormData();
                 for (let i = 0; i < imageFile.length; i++) {
-                    formData.append('images', imageFile[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
+                    formData.append('images', imageFile[i]);
                 }
                 imageUrl = await saveImageFtpWithMessage(formData);
-
-                setLoadingMessage('Actualizando ave...'); // Restaura el mensaje después de subir la imagen
+                setLoadingMessage('Actualizando ave...');
             }
+
             if (createData.ingles) {
                 localStorage.setItem('nombreIngles', createData.ingles);
             }
@@ -143,7 +181,8 @@ export const UpdateBirds = ({ isEnable }) => {
             setShowBackdrop(false);
             setLoadingMessage('Cargando...');
             setOpenSnackbar(true);
-            // Borra los datos del formulario
+
+            // Clear form data
             setCreateData({
                 grupo: null,
                 familia: null,
@@ -161,51 +200,55 @@ export const UpdateBirds = ({ isEnable }) => {
             setImageFile([]);
         } catch (error) {
             console.error('Error:', error);
+            setErrorMessage(`Ocurrió un error: ${error.message}`);
+            setErrorSnackbarOpen(true);
+        } finally {
             setShowBackdrop(false);
         }
     };
 
+    const handleReturnSearch = () => {
+        showUpdateBird(false)
+        showSearchBird(true)
+        selectedBird(null)
+    }
+
 
     const saveImageFtpWithMessage = async (formData) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                // Realiza la carga de la imagen y espera la respuesta
-                const response = await dispatch(UpdateAveImage(formData));
-                // Verifica si la respuesta contiene la URL de la imagen
-                if (response && response.data && response.data.imageUrls) {
-                    const imageUrlString = response.data.imageUrls;
-                    resolve(imageUrlString);
-                } else {
-                    console.error('El servidor no devolvió la URL de la imagen.');
-                    reject('El servidor no devolvió la URL de la imagen.');
-                }
-            } catch (error) {
-                console.error('Error al enviar la imagen:', error);
-                reject('Error al enviar la imagen.');
+        try {
+            const response = await dispatch(UpdateAveImage(formData));
+            if (response && response.data && response.data.imageUrls) {
+                return response.data.imageUrls;
+            } else {
+                console.error('El servidor no devolvió las URLs de las imágenes.');
+                throw new Error('El servidor no devolvió las URLs de las imágenes.');
             }
-        });
+        } catch (error) {
+            console.error('Error al enviar las imágenes:', error);
+            throw new Error('Error al enviar las imágenes.');
+        }
     };
 
+
     const createBirdWithMessage = async (createData, imageUrl) => {
-        return new Promise((resolve, reject) => {
-            dispatch(actualizarAve({ ...createData, urlImagen: imageUrl }))
-                .then(() => {
-                    resolve(); // Solo resuelve la Promesa si la actualización del ave tiene éxito.
-                })
-                .catch((error) => {
-                    console.error('Error al actualizar el ave:', error);
-                    reject("Error al actualizar el ave"); // Si hay un error, resuelve la Promesa con un mensaje.
-                });
-        });
+        try {
+            await dispatch(actualizarAve({ ...createData, urlImagen: imageUrl }));
+        } catch (error) {
+            console.error('Error al actualizar el ave en la base de datos:', error);
+            throw new Error('Error al actualizar el ave.');
+        }
     };
 
 
     React.useEffect(() => {
-
         setCreateData(initialCreateData);
+    }, [infoAveForUpdate]);
 
+    React.useEffect(() => {
+        // Aquí despachas la acción para cargar las opciones al montar el componente
+        dispatch(getOptionsData());
+    }, []);
 
-    }, [infoAveForUpdate]); //
     return (
         <React.Fragment>
 
@@ -222,18 +265,27 @@ export const UpdateBirds = ({ isEnable }) => {
                     margin: '0px 0px 0px 150px',
                     backgroundColor: theme.palette.secondary.light,
                     padding: '0px 40px 30px 0px',
-                    borderRadius: '20px'
+                    borderRadius: '0px 0px 20px 20px'
                 }} >
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
                             Formulario de Actualización
                         </Typography>
-
-                        <Typography variant='h5' color='primary.light' sx={{}}>
-                            Imágenes Existente
-                            <Divider sx={{ my: 1 }} />
-                        </Typography>
-
+                        <Button
+                            sx={{
+                                marginBottom: '0px',
+                                fontSize: '1.3rem',
+                                fontWeight: 'bold',
+                                ml: '87%',
+                                color: theme.palette.secondary.main,
+                            }}
+                            variant="outline"
+                            onClick={handleReturnSearch}
+                            startIcon={<ArrowBackIcon />}
+                        >
+                            volver
+                        </Button>
+                        
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 1 }} />
@@ -265,27 +317,26 @@ export const UpdateBirds = ({ isEnable }) => {
                             >
                                 Subir Imágenes
                             </Button>
-                            
+
                         </label>
-                     
+
                         <Button onClick={handleSubmit}
                             sx={{
-                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5,textTransform: 'none',
+                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5, textTransform: 'none',
                                 '&:hover': {
                                     backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
                                     color: theme.palette.primary.light, // Cambia el color del texto en hover
                                     textTransform: 'none',
-                                    
                                 },
                             }}
                             variant="contained"
                             color="primary"
                         >Hecho</Button>
-                  
+
                         {/* Mostrar imagen cargada */}
-                        {imageURL.length > 0 && (
+                        {allImageURLs.length > 0 && (
                             <Grid container spacing={1}>
-                                {imageURL.map((imageUrl, index) => (
+                                {allImageURLs.map((imageUrl, index) => (
                                     <Grid item key={index}>
                                         <div style={{ position: 'relative' }}>
                                             <img
@@ -293,6 +344,11 @@ export const UpdateBirds = ({ isEnable }) => {
                                                 alt={`Imagen seleccionada ${index + 1}`}
                                                 style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px' }}
                                             />
+                                            {/* <Checkbox
+                                                color="primary"
+                                                checked={index === destacadaIndex}
+                                                onChange={() => handleSetDestacada(index)}
+                                            /> */}
                                             <IconButton
                                                 color="primary"
                                                 onClick={() => handleRemoveImage(index)}
@@ -403,7 +459,6 @@ export const UpdateBirds = ({ isEnable }) => {
                                 );
                             }}
                         />
-
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <TextField
@@ -418,7 +473,6 @@ export const UpdateBirds = ({ isEnable }) => {
                             margin="normal"
                             helperText='En este campo siempre separar cada zonas por ,  y no espacios'
                             sx={{ mt: -3, mb: 2 }}
-
                         />
                         <Typography variant='h5' color='primary.light' sx={{}}>
                             Información adicional
@@ -448,7 +502,6 @@ export const UpdateBirds = ({ isEnable }) => {
                                 ),
                             }}
                         />
-
                         <TextField
                             name="urlBird"
                             multiline
@@ -464,7 +517,7 @@ export const UpdateBirds = ({ isEnable }) => {
                                         <img src={ebirdLogo} alt="EBird Logo" style={{
                                             paddingRight: '5px',
                                             marginTop: '10px',
-                                            width: '130px', // Ajusta el ancho de la imagen
+                                            width: '110px', // Ajusta el ancho de la imagen
                                             height: '39px', // Ajusta la altura de la imagen
                                         }} />
                                         URL
@@ -473,14 +526,13 @@ export const UpdateBirds = ({ isEnable }) => {
                             }}
                         />
                     </Grid>
-                   
+
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={showBackdrop}
                 >
-
                     <>
                         <CircularProgress color="inherit" />
                         <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
@@ -519,6 +571,23 @@ export const UpdateBirds = ({ isEnable }) => {
                     >
                         Ver Ave
                     </Button>
+
+                </Alert>
+            </Snackbar>
+
+            {/* Snackbar for error message */}
+            <Snackbar
+                open={errorSnackbarOpen}
+                autoHideDuration={5000} // Adjust the duration as needed
+                onClose={() => setErrorSnackbarOpen(false)}
+            >
+                <Alert
+                    elevation={6}
+                    variant="filled"
+                    severity="error"
+                    onClose={() => setErrorSnackbarOpen(false)}
+                >
+                    {errorMessage}
                 </Alert>
             </Snackbar>
         </React.Fragment>

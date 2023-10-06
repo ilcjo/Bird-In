@@ -11,8 +11,8 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
  
 
   const openGallery = (foto) => {
-    console.log('Clic en la imagen, índice:', index);
-    console.log('Clic en la imagen, nombre:', foto);
+    // console.log('Clic en la imagen, índice:', index);
+    // console.log('Clic en la imagen, nombre:', foto);
     setSelectedImageIndex(foto);
     setIsGalleryOpen(true);
   };

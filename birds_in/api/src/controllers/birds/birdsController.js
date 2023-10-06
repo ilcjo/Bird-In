@@ -255,7 +255,6 @@ const sendAndCreateBird = async (
 };
 
 const findDataById = async (id) => {
-    console.log('dentro dle controler', id)
     try {
         const ave = await Aves.findOne({
             where: { id_ave: id },
@@ -305,9 +304,9 @@ const sendAndUpdateBird = async (
     urlBird,
     urlImagen,
     idAve,
-    
+
 ) => {
-   
+
     try {
         // Obtener el ave existente de la base de datos
         const existingBird = await Aves.findOne({
@@ -382,6 +381,17 @@ const sendAndUpdateBird = async (
     }
 };
 
+const findPhotosId = async (imgsIds) => {
+    try {
+
+        await Imagenes_aves.destroy({ where: { id: imgsIds } });
+        return 'Las fotografías se han borrado exitosamente'
+    } catch (error) {
+        console.error('Error al buscar fotos por ID de ave:', error);
+        throw error;
+    }
+};
+
 
 module.exports = {
     fetchOptions,
@@ -390,4 +400,5 @@ module.exports = {
     sendAndCreateBird,
     findDataById,
     sendAndUpdateBird,
+    findPhotosId
 }

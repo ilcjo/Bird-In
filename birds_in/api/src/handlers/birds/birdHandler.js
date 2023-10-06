@@ -6,6 +6,8 @@ const {
    sendAndCreateBird,
    findDataById,
    sendAndUpdateBird,
+   saveDbDescatada,
+   findPhotosId,
 
 } = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
@@ -14,7 +16,8 @@ const {
    FTP_USER,
    FTP_PASS,
 } = process.env
-const { Imagenes_aves } = require('../../db/db');
+
+const deletePhotoFromFTP = require('../../utils/deletFtp');
 
 const getFilterInfo = async (req, res) => {
 
@@ -51,7 +54,7 @@ const getFilterOptions = async (req, res,) => {
       res.status(500).send({ error: error.message })
 
    }
-}
+};
 
 const createBird = async (req, res) => {
 
@@ -140,66 +143,85 @@ const uploadImageftp = async (req, res) => {
    }
 };
 
-   const findInfoForUpdate = async (req, res) => {
-      const { id } = req.query;
-      try {
-         if (!id) {
-            return res.status(400).json({ error: 'ID de ave no proporcionado' });
-         }
-         const formDataUpdate = await findDataById(id);
-         if (!formDataUpdate) {
-            return res.status(404).json({ error: 'Ave no encontrada' });
-         }
-         return res.status(200).json(formDataUpdate);
-      } catch (error) {
-         res.status(500).json({ error: 'Error actualizando ave' });
+const findInfoForUpdate = async (req, res) => {
+   const { id } = req.query;
+   try {
+      if (!id) {
+         return res.status(400).json({ error: 'ID de ave no proporcionado' });
       }
-   };
-
-   const updateInfoBids = async (req, res) => {
-      const {
-         grupo,
-         familia,
-         pais,
-         zona,
-         cientifico,
-         ingles,
-         comun,
-         urlWiki,
-         urlBird,
-         urlImagen,
-         idAve,
-      } = req.body;
-      
-      try {
-         const succesUpdate = await sendAndUpdateBird(
-         grupo,
-         familia,
-         pais,
-         zona,
-         cientifico,
-         ingles,
-         comun,
-         urlWiki,
-         urlBird,
-         urlImagen,
-         idAve,
-         )
-         return res.status(200).json(succesUpdate)
-
-      } catch (error) {
-         res.status(500).send({ error: error.message })
+      const formDataUpdate = await findDataById(id);
+      if (!formDataUpdate) {
+         return res.status(404).json({ error: 'Ave no encontrada' });
       }
-   };
-
-
-   module.exports = {
-      getFilterInfo,
-      selectOptions,
-      getFilterOptions,
-      createBird,
-      uploadImageftp,
-      findInfoForUpdate,
-      updateInfoBids
+      return res.status(200).json(formDataUpdate);
+   } catch (error) {
+      res.status(500).json({ error: 'Error actualizando ave' });
    }
+};
+
+const updateInfoBids = async (req, res) => {
+   const {
+      grupo,
+      familia,
+      pais,
+      zona,
+      cientifico,
+      ingles,
+      comun,
+      urlWiki,
+      urlBird,
+      urlImagen,
+      idAve,
+   } = req.body;
+
+   try {
+      const succesUpdate = await sendAndUpdateBird(
+         grupo,
+         familia,
+         pais,
+         zona,
+         cientifico,
+         ingles,
+         comun,
+         urlWiki,
+         urlBird,
+         urlImagen,
+         idAve,
+      )
+      return res.status(200).json(succesUpdate)
+
+   } catch (error) {
+      res.status(500).send({ error: error.message })
+   }
+};
+const deletePhotos = async (req, res) => {
+   const { ids, urls } = req.body;
+   try {
+       const deletedFtp = await deletePhotoFromFTP(urls);
+
+       if (!deletedFtp.success) {
+           // Algunas fotos no se encontraron o hubo errores en el servidor FTP
+           console.warn('Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.');
+           return res.status(400).json({ error: 'Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.' });
+       }
+
+       // Continúa con la lógica para eliminar de la base de datos
+       const deletedDb = await findPhotosId(ids);
+       return res.status(200).json(deletedDb);
+   } catch (error) {
+       console.error('Error en el controlador deletePhotos:', error);
+       res.status(500).json({ error: 'Error interno del servidor' });
+   }
+};
+
+module.exports = {
+   getFilterInfo,
+   selectOptions,
+   getFilterOptions,
+   createBird,
+   uploadImageftp,
+   findInfoForUpdate,
+   updateInfoBids,
+   deletePhotos
+}
 

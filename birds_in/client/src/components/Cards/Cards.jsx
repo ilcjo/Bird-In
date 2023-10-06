@@ -2,12 +2,14 @@ import * as React from 'react'
 import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
 import { CarruselGallery } from '../Galeries/CarruselGallery';
 import { useTheme } from '@emotion/react';
+import { useDispatch } from 'react-redux';
+import { sendParameter } from '../../redux/actions/fetchAllBirds';
 
 
 export const Cards = ({ foto, name, index }) => {
-  console.log('soy', foto)
 
   const theme = useTheme()
+  const dispatch = useDispatch()
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
 
@@ -18,6 +20,11 @@ export const Cards = ({ foto, name, index }) => {
   const handleImageClick = (index) => {
     setSelectedImageIndex(index);
     openGallery();
+  };
+
+  const handleDetailClick = () => {
+    const selectOption = { ingles: [{ nombre: name }] };
+    dispatch(sendParameter(selectOption))
   };
 
   return (
@@ -39,15 +46,15 @@ export const Cards = ({ foto, name, index }) => {
             image={foto[selectedImageIndex].url}
             alt={name}
             key={index}
-            onClick={() => handleImageClick(selectedImageIndex)}
+            onClick={handleDetailClick}
             sx={{ objectFit: 'cover' }}
           />
         ) : (
           <Typography variant="body2">Imagen no disponible</Typography>
         )}
       </CardActionArea>
-      <CardActions disableSpacing>
-        <Typography>
+      <CardActions disableSpacing >
+        <Typography onClick={handleDetailClick} style={{ cursor: 'pointer' }}>
           {name}
         </Typography>
       </CardActions>

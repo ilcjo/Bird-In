@@ -2,8 +2,6 @@ import * as React from 'react'
 import {
     Autocomplete,
     Backdrop,
-    Box,
-    Button,
     CircularProgress,
     Grid,
     TextField,
@@ -13,10 +11,10 @@ import {
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { getInfoForUpdate } from '../../redux/actions/createBirds';
-import { UpdateBirds } from '../Forms/UpdateBirds';
+import { IndexTabsUpdates } from './IndexTabsUpdates';
 
 
-export const SearchBird = ({ changeTab, isEnable }) => {
+export const SearchBird = ({ changeTab }) => {
     const theme = useTheme();
     const dispatch = useDispatch()
     const [showBackdrop, setShowBackdrop] = React.useState(true);
@@ -42,9 +40,9 @@ export const SearchBird = ({ changeTab, isEnable }) => {
     };
     React.useEffect(() => {
         if (selectedBird) {
-          handleButtonClick();
+            handleButtonClick();
         }
-      }, [selectedBird]);
+    }, [selectedBird]);
 
 
     React.useEffect(() => {
@@ -70,8 +68,6 @@ export const SearchBird = ({ changeTab, isEnable }) => {
 
     return (
         <React.Fragment>
-
-
             {showSearchBird && (
                 <React.Fragment>
                     <Backdrop
@@ -121,28 +117,13 @@ export const SearchBird = ({ changeTab, isEnable }) => {
                                 fullWidth
                                 sx={{ mb: 3, mt: -10 }}
                             />
-                            {/* <Button
-                                variant="contained"
-                                color="primary"
-                                disabled={!selectedBird}
-                                onClick={handleButtonClick}
-                                sx={{
-                                    fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                                    '&:hover': {
-                                        backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                        color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                        textTransform: 'none'
-                                    },
-                                }}
-                            >
-                                Actualizar
-                            </Button> */}
-
                         </Grid>
                     </Grid>
                 </React.Fragment>
             )}
-            {showUpdateBird && <UpdateBirds />}
+            {showUpdateBird && < IndexTabsUpdates changeTab={changeTab} showUpdateBird={setShowUpdateBird}
+                showSearchBird={setShowSearchBird}
+                selectedBird={setSelectedBird}/>}
         </React.Fragment>
     );
 };

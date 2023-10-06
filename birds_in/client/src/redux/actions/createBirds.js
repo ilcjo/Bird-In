@@ -55,6 +55,23 @@ export const UpdateAveImage = (formData) => {
   }
 };
 
+export const UpdateAveDestacada = (formData) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post('aves/upload_destacada', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
+        },
+      });
+      // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
+      console.log('Respuesta del servidor:', response.data);
+      return response;
+    } catch (error) {
+      // Maneja los errores de la solicitud
+      console.error('Error al enviar la imagen:', error);
+    }
+  }
+};
 
 export const actualizarAve = (info) => {
   return async (dispatch) => {

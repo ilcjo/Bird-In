@@ -2,7 +2,6 @@
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { CreateBird } from '../Forms/CreateBird';
-import { UpdateBirds } from '../Forms/UpdateBirds';
 import { SearchBird } from './SearchBird';
 import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../redux/slices/createSlice';
@@ -16,18 +15,17 @@ export const IndexD = () => {
   const handleTabChange = (event, newValue) => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
-    
-  // Si el nuevo valor es 1 (pestaña "Buscar ave"), establece el estado de Redux
-  if (convertNumber === 1) {
-   
-    dispatch(setEstateInfo()); // Reemplaza con la acción que establece el estado en Redux
-  }
-};
+
+    // Si el nuevo valor es 1 (pestaña "Buscar ave"), establece el estado de Redux
+    if (convertNumber === 1) {
+
+      dispatch(setEstateInfo()); // Reemplaza con la acción que establece el estado en Redux
+    }
+  };
 
 
   return (
     <>
-
       <Tabs
         value={selectedTab}
         onChange={handleTabChange}
@@ -48,13 +46,12 @@ export const IndexD = () => {
         </Typography>}>
         </Tab>
 
-        <Tab 
-        label={<Typography variant='h5' color='white'>
-          .
-        </Typography>
-      }
-      disabled={!isFormEnabled}
-      >
+        <Tab
+          label={<Typography variant='h5'>
+            Personalizar
+          </Typography>
+          }
+        >
 
         </Tab>
 
@@ -67,12 +64,12 @@ export const IndexD = () => {
         )}
         {selectedTab === 0 && (
           <Box>
-            <SearchBird changeTab={(newValue) => setSelectedTab(newValue) } isEnable={setIsFormEnabled}/>
+            <SearchBird changeTab={(newValue) => setSelectedTab(newValue)} isEnable={setIsFormEnabled} />
           </Box>
         )}
         {selectedTab === 2 && (
           <Box>
-            {/* <UpdateBirds isEnable={setIsFormEnabled} /> */}
+            
           </Box>
         )}
 

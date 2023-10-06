@@ -55,7 +55,7 @@ export const Header = ({ isFilterOpen, setIsFilterOpen }) => {
         alt="Ave"
         style={{ width: '100vw', height: '100%', objectFit: 'cover' }}
       />
-        < MenuBar isOpen={isFilterOpen} setOpen={setIsFilterOpen}/>
+        < MenuBar ShowFilterButton={false} ShowBackButton={true} />
 
     
       <Grid item xs={12} // Controla el ancho de la columna derecha
