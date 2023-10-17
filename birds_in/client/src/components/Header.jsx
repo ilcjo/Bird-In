@@ -3,8 +3,6 @@ import { Box, Grid, } from '@mui/material'
 import { MenuBar } from './Menus/MenuBar';
 import { useSelector } from 'react-redux';
 
-
-
 export const Header = () => {
   const { allCustom } = useSelector(state => state.customizesSlice)
 
@@ -34,7 +32,6 @@ export const Header = () => {
         style={{ width: '100vw', height: '100%', objectFit: 'cover' }}
       />
         < MenuBar ShowFilterButton={false} ShowBackButton={true} />
-
     
       <Grid item xs={12} // Controla el ancho de la columna derecha
         sx={{

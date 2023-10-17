@@ -3,6 +3,7 @@ import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux'
 import { Boolean } from '../redux/slices/OpenClose';
 import { Index } from '../components/SingUpTabs/Index';
+import { LazyLoad } from '../components/utils/LazyLoad';
 
 
 export const Landing = () => {
@@ -37,14 +38,7 @@ export const Landing = () => {
     <React.Fragment>
       <Grid container component="main" sx={{ height: '100vh' }}>
 
-        <Grid item xs={false} sm={3} md={8.5}
-          sx={{
-            backgroundImage: `url(${allCustom.cover_login})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.40)', // Agregar sombra
-          }}>
+     <LazyLoad imageUrl={allCustom.cover_login}>     
           <Typography variant="body2" color="black"
             sx={{
               position: 'absolute', // Posiciona el segundo párrafo en la esquina inferior izquierda
@@ -57,7 +51,7 @@ export const Landing = () => {
             }}>
             {convertTextWithBr(allCustom.text_login)}
           </Typography>
-        </Grid>
+          </LazyLoad>
         <Grid item xs={12} sm={9} md={3.5} component={Box} elevation={6}
           sx={{
             backgroundColor: theme.palette.primary.dark,
@@ -75,7 +69,9 @@ export const Landing = () => {
             <img alt='logo' src={allCustom.logo} style={{
               width: '170px', // Establece el ancho fijo que desees
               height: 'auto', // Permite que la altura se ajuste automáticamente para mantener la proporción
-            }} >
+            }} 
+            loading="lazy"
+            >
             </img>
           </Box>
           <Box sx={{

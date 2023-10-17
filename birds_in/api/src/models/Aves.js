@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
         nombre_ingles: {
             type: DataTypes.TEXT,
             unique: true,
-            allowNull: true
+            allowNull: false
         },
         nombre_cientifico: {
             type: DataTypes.TEXT,
@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
             allowNull: true
         },
         url_bird: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        url_avi: {
             type: DataTypes.TEXT,
             allowNull: true
         },

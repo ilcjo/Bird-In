@@ -218,8 +218,6 @@ const deletePhotos = async (req, res) => {
 
 const setCoverPhoto = async (req, res) => {
    const { idFoto, idAve } = req.body
-   console.log(idFoto)
-   console.log(idAve)
    try {
       const newCover = await setDbCover(idFoto, idAve)
       return res.status(200).json(newCover);

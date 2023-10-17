@@ -8,7 +8,7 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
   const theme = useTheme()
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
- 
+
 
   const openGallery = (foto) => {
     // console.log('Clic en la imagen, índice:', index);
@@ -28,8 +28,8 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
         maxWidth: 'auto',
         minWidth: 415,
         minHeight: 280,
-        width:'200px',
-        height:'194px',
+        width: '200px',
+        height: '194px',
         position: 'relative',
         borderRadius: '15px',
         display: 'flex',
@@ -38,7 +38,7 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
         overflow: 'hidden', // Oculta cualquier contenido que se desborde
       }}
     >
-      <CardActionArea  onClick={() => openGallery(index)}>
+      <CardActionArea onClick={() => openGallery(index)}>
         <img
           src={foto}
           alt={name}
@@ -50,6 +50,7 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
             objectFit: 'cover',
             borderRadius: '15px',
           }}
+          loading="lazy"
         />
       </CardActionArea>
 

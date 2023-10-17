@@ -4,7 +4,6 @@ export const createIdString = (array) => {
 };
 
 export const creatParams = (selectedOptions) =>{
-  console.log(selectedOptions)
 let queryParams = '';
 
 if (selectedOptions.grupo && selectedOptions.grupo.length > 0) {

@@ -10,18 +10,19 @@ import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { clearToken } from '../../redux/slices/Auth';
 
-export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton }) => {
+export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton }) => {
     const dispatch = useDispatch()
     const theme = useTheme()
     const navigate = useNavigate()
     const [selectedButton, setSelectedButton] = React.useState('todo');
     // const [showFilterButton, setShowFilterButton] = React.useState(true)
 
-
     const handleButtonTodos = (button) => {
+        console.log('Button clicked:', button);
         setSelectedButton(button);
+    
         if (button === 'todo') {
-            // Si se hace clic en "Todo", obtén todos los pájaros.
+            console.log('Fetching all birds...');
             dispatch(getInfoBirds());
         }
     };
@@ -61,9 +62,9 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 }}
             >
                 {/* Logo en la esquina izquierda */}
-                
-                <img src={logoBird} alt="Logo" style={{ width: 'auto', height: '100%', marginBottom: '50px' }} />
-                
+
+                <img src={logoBird} alt="Logo" style={{ width: 'auto', height: '100%', marginBottom: '50px' }} loading="lazy" />
+
                 <Grid item sx={{ mb: 4 }}>
                     {ShowFilterButton && (
                         <Button
@@ -80,7 +81,23 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         >
                             Abrir Filtro
                         </Button>
+
                     )}
+                    {/* {showAllButton && (
+                        <Button
+                            sx={{
+                                marginBottom: '10px',
+                                fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+                                fontWeight: 'bold',
+                                color: theme.palette.primary.main,
+                            }}
+                            color="primary"
+                            variant='outline'
+                            onClick={handleButtonTodos}
+                        >
+                            Todo
+                        </Button>
+                    )} */}
                     {ShowBackButton && (
                         <Button
                             sx={{

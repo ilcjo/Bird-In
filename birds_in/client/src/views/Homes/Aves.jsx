@@ -27,7 +27,7 @@ export const Aves = () => {
 
   return (
     <React.Fragment>
-      <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} ShowFilterButton={true} ShowBackButton={true} />
+      <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} showAllButton={true} ShowFilterButton={true} ShowBackButton={true} />
       <Grid
         container
         direction="column"

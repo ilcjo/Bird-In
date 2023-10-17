@@ -5,13 +5,20 @@ import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { sendParameter } from '../../redux/actions/fetchAllBirds';
 
-export const Cards = ({ foto, name, index }) => {
+export const Cards = React.memo(({ foto, name, index }) => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
   const destacadaImage = foto.find((img) => img.destacada);
+
+  const memoizedDispatch = React.useCallback(
+    (selectOption) => {
+      dispatch(sendParameter(selectOption));
+    },
+    [dispatch]
+  );
 
   const openGallery = () => {
     setIsGalleryOpen(true);
@@ -24,7 +31,7 @@ export const Cards = ({ foto, name, index }) => {
 
   const handleDetailClick = () => {
     const selectOption = { ingles: [{ nombre: name }] };
-    dispatch(sendParameter(selectOption))
+    memoizedDispatch(selectOption);
   };
 
   return (
@@ -66,7 +73,7 @@ export const Cards = ({ foto, name, index }) => {
       />
     </Card>
   );
-};
+});
 
 
 

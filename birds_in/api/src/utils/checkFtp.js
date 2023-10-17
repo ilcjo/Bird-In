@@ -28,6 +28,7 @@ async function checkFTPConnection() {
   } finally {
     await client.close(); // Cierra la conexión, independientemente de si tuvo éxito o no
   }
+
 }
 
 // Llama a la función para verificar la conexión al FTP

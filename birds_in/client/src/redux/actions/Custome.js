@@ -2,7 +2,7 @@ import axios from 'axios'
 import { perzonalizaciones } from '../slices/customeSlice';
 
 export const getAllCustomizes = () => {
-    
+
     return async (dispatch) => {
         try {
             const response = await axios('/personalizar')
@@ -15,15 +15,18 @@ export const getAllCustomizes = () => {
 };
 
 
-export const UpdateCustomizes = (params) => {
-    
+export const UpdateCustomizes = (formData) => {
     return async (dispatch) => {
         try {
-            const response = await axios('/personalizar', params)
-            const data = response.data
-            dispatch(perzonalizaciones(data))
+            const response = await axios.post('/personalizar/update', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
+                },
+            });
+            console.log('Respuesta del servidor:', response.data);
         } catch (error) {
-            console.error("Error al obtener los datos:", error)
+            console.error("Error al obtener los datos:",  error.response.data)
         }
     }
 };
+

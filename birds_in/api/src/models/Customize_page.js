@@ -49,7 +49,7 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        cover_Flowers: {
+        cover_flowers: {
             type: DataTypes.TEXT,
             allowNull: false
         },

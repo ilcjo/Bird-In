@@ -49,7 +49,7 @@ export const PhotosDetail = () => {
                         onChange={handleChange(`panel${index}`)}
                         sx={{
                             backgroundColor: 'rgba(255, 255, 255, 0)',
-                            width: '100%', // Ocupar todo el ancho de la pantalla
+                            width: '200vh', // Ocupar todo el ancho de la pantalla
                             boxShadow: 'none',
                             top: 0, // Pegado al top
                             marginBottom: theme.spacing(2), // Espacio en la parte inferior

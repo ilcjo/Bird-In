@@ -168,7 +168,7 @@ export const CreateBird = () => {
             for (let i = 0; i < imageFile.length; i++) {
                 formData.append('images', imageFile[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
             }
-
+            
             setShowBackdrop(true);
             setLoadingMessage('Subiendo imagen...');
 
