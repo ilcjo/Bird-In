@@ -1,22 +1,22 @@
 import * as React from 'react'
-import { Backdrop, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, SnackbarContent, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, SnackbarContent, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { UpdateCustomizes } from '../../redux/actions/Custome';
+import { UpdateCustomizes, getAllCustomizes } from '../../redux/actions/Custome';
+import { useTheme } from '@emotion/react';
 
 
 export const SectionCovers = ({ title, coverKey }) => {
+    const theme = useTheme()
     const dispatch = useDispatch()
     const [selectedImageUrl, setSelectedImageUrl] = React.useState(null);
     const [uploadModalOpen, setUploadModalOpen] = React.useState(false);
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [updateSuccess, setUpdateSuccess] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-    const [loadingMessage, setLoadingMessage] = React.useState('Cargando...'); // Nuevo estado para el indicador de carga
+    const [loadingMessage, setLoadingMessage] = React.useState('Actualizando...'); // Nuevo estado para el indicador de carga
     const [uploadError, setUploadError] = React.useState(null); // Nuevo estado para manejar errores
     const [successSnackbarOpen, setSuccessSnackbarOpen] = React.useState(false);
-    console.log(uploadError)
 
-    console.log(updateSuccess)
     const { allCustom } = useSelector((state) => state.customizesSlice);
 
     const handleImageClick = (imageSrc) => {
@@ -41,7 +41,6 @@ export const SectionCovers = ({ title, coverKey }) => {
             setSelectedImageUrl(imageUrl);
         }
     };
-
 
     const handleUpload = async () => {
         setLoading(true);
@@ -73,12 +72,13 @@ export const SectionCovers = ({ title, coverKey }) => {
     const handleSuccessSnackbarClose = () => {
         setSuccessSnackbarOpen(false);
     };
-    
+
     React.useEffect(() => {
         // Cleanup function to handle component unmounting
         return () => {
             setUploadError(null);
             setSuccessSnackbarOpen(false);
+            dispatch(getAllCustomizes())
         };
     }, []); // Empty dependency array to run only once on mount
 
@@ -87,7 +87,8 @@ export const SectionCovers = ({ title, coverKey }) => {
             <Typography variant='body2' color='primary.main' sx={{ mt: 1 }}>
                 {title}
             </Typography>
-            <Button onClick={() => handleImageClick(allCustom[coverKey])}>
+            <Button
+                onClick={() => handleImageClick(allCustom[coverKey])}>
                 <img
                     src={selectedImageUrl || allCustom[coverKey]}
                     alt={`Imagen ${title}`}
@@ -96,7 +97,24 @@ export const SectionCovers = ({ title, coverKey }) => {
             </Button>
             {/* Modal para subir archivos */}
             <Dialog open={uploadModalOpen} onClose={handleCloseUploadModal}>
-                <DialogTitle>Subir Archivo</DialogTitle>
+                <DialogTitle> <Grid container alignItems="center">
+                    <Grid item>
+                        <Typography
+                            variant='h2'
+                            color='primary.main'
+                            sx={{ mr: 2 }}
+
+                        >
+                            Actualizando:
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant='h2' color='primary.light'>
+                            {title}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                </DialogTitle>
                 <DialogContent>
                     {selectedImageUrl && (
                         <img
@@ -105,7 +123,31 @@ export const SectionCovers = ({ title, coverKey }) => {
                             style={{ maxWidth: '100%', maxHeight: '400px', marginBottom: '10px' }}
                         />
                     )}
-                    <input type="file" onChange={handleFileChange} style={{ marginTop: '10px' }} />
+                    <input type="file"
+                        style={{ display: 'none' }}
+                        accept="image/*"
+                        id="image-upload-input"
+                        onChange={handleFileChange}
+
+                    />
+                    <label htmlFor="image-upload-input"> {/* Utiliza el atributo "for" para asociar el label al input */}
+                        <Button
+                            variant="outlined" // Cambia el estilo del botón a "contained" para un aspecto diferente
+                            color="primary"
+                            component="span" // Indica que es un botón para seleccionar archivo
+                            sx={{
+                                fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                    textTransform: 'none',
+                                },
+                            }} // Estilo personalizado
+                            onChange={handleFileChange}
+                        >
+                            Subir Imágenes
+                        </Button>
+                    </label>
                     {selectedFile && (
                         <Typography variant="body1" color="textSecondary" sx={{ marginTop: '10px' }}>
                             Archivo seleccionado: {selectedFile && selectedFile.name}
@@ -113,17 +155,39 @@ export const SectionCovers = ({ title, coverKey }) => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseUploadModal} color="primary">
+                    <Button
+                        sx={{
+                            fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                            },
+                        }}
+                        onClick={handleCloseUploadModal} color="primary" variant='outlined'
+                    >
                         Cancelar
                     </Button>
-                    <Button onClick={handleUpload} color="primary">
+                    <Button
+                        sx={{
+                            fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                            },
+                        }}
+                        onClick={handleUpload} color="primary" variant='contained'>
                         Subir
                     </Button>
                 </DialogActions>
                 <Backdrop open={loading} onClick={() => { }} style={{ zIndex: 1, color: '#fff' }}>
-                    <Typography variant="h6" color="inherit">
-                        {loadingMessage}
-                    </Typography>
+                    <>
+                        <CircularProgress color="inherit" />
+                        <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
+                            {loadingMessage}
+                        </Typography>
+                    </>
                 </Backdrop>
             </Dialog>
             <Snackbar

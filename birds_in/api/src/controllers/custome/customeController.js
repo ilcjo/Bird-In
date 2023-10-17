@@ -42,7 +42,7 @@ const sendParametersForUpdate = async (customizationParams) => {
             updated[param] = customizeInfo[param]
         }
         );
-        console.log('updated',updated)
+        console.log('updated', updated)
         // await Customize_page.update(updateFields, { where: { id_customize: customizeInfo.id_customize } });
         // // Guardar los cambios
         if (Object.keys(updated).length > 0) {
@@ -59,9 +59,40 @@ const sendParametersForUpdate = async (customizationParams) => {
 
 };
 
+const sendParametersForUpdateText = async (customizationParams) => {
+    console.log(customizationParams);
+    try {
+        // Obtener la primera fila, asumiendo que solo hay una fila en Customize_page
+        let customizeInfo = await Customize_page.findOne();
+
+        const updated = {};  // Crear la constante para almacenar el resultado final
+
+        Object.keys(customizationParams).forEach((param) => {
+            customizeInfo[param] = customizationParams[param];
+            updated[param] = customizeInfo[param]
+        }
+        );
+        console.log('updated', updated)
+        // await Customize_page.update(updateFields, { where: { id_customize: customizeInfo.id_customize } });
+        // // Guardar los cambios
+        if (Object.keys(updated).length > 0) {
+            // Construir y ejecutar una instrucción SQL UPDATE para actualizar los campos en la base de datos
+            await Customize_page.update(updated, { where: { id_customize: customizeInfo.id_customize } });
+        }
+
+        // Devolver el objeto customizeInfo actualizado
+        return " El texto se ha actualizado correctamente."
+    } catch (error) {
+        console.error('Error al buscar info:', error);
+        throw error;
+    }
+
+};
+
 module.exports = {
     fetchCustome,
-    sendParametersForUpdate
+    sendParametersForUpdate,
+    sendParametersForUpdateText
 }
 
 //     try {login, birds, animals, fish, land, about, admin, header, tabout, descrip, flower, tlogin, colab

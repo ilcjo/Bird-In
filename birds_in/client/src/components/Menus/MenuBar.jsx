@@ -4,8 +4,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { getInfoBirds } from '../../redux/actions/fetchAllBirds';
-import logoBird from '../../assets/images/Logo.png'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { clearToken } from '../../redux/slices/Auth';
@@ -16,11 +15,12 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
     const navigate = useNavigate()
     const [selectedButton, setSelectedButton] = React.useState('todo');
     // const [showFilterButton, setShowFilterButton] = React.useState(true)
+    const { allCustom } = useSelector((state) => state.customizesSlice);
 
     const handleButtonTodos = (button) => {
         console.log('Button clicked:', button);
         setSelectedButton(button);
-    
+
         if (button === 'todo') {
             console.log('Fetching all birds...');
             dispatch(getInfoBirds());
@@ -63,7 +63,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             >
                 {/* Logo en la esquina izquierda */}
 
-                <img src={logoBird} alt="Logo" style={{ width: 'auto', height: '100%', marginBottom: '50px' }} loading="lazy" />
+                <img src={allCustom.logo} alt="Logo" style={{ width: 'auto', height: '100%', marginBottom: '50px' }} loading="lazy" />
 
                 <Grid item sx={{ mb: 4 }}>
                     {ShowFilterButton && (

@@ -25,8 +25,20 @@ export const UpdateCustomizes = (formData) => {
             });
             console.log('Respuesta del servidor:', response.data);
         } catch (error) {
-            console.error("Error al obtener los datos:",  error.response.data)
+            console.error("Error al obtener los datos:", error.response.data)
         }
     }
 };
 
+
+export const UpdateCustomizesText = (text) => {
+    console.log(text)
+    return async (dispatch) => {
+        try {
+            const response = await axios.post('/personalizar/updateText', text);
+            console.log('Respuesta del servidor:', response.data);
+        } catch (error) {
+            console.error("Error al obtener los datos:", error.response.data)
+        }
+    }
+};

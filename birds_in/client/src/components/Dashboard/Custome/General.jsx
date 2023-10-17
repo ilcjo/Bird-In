@@ -22,7 +22,7 @@ export const General = () => {
                         Cabecera
                         <Divider sx={{ my: 1 }} />
                     </Typography>
-                    <SectionCovers title="" coverKey="header" />
+                    <SectionCovers title="Cabecera" coverKey="header" />
                 </Grid>
                 <Grid item xs={6} sm={6}>
 
@@ -30,7 +30,7 @@ export const General = () => {
                         Logo
                         <Divider sx={{ my: 1 }} />
                     </Typography>
-                    <SectionCovers title="" coverKey="logo" />
+                    <SectionCovers title="Logo" coverKey="logo" />
                 </Grid>
             </Grid>
         </React.Fragment>
