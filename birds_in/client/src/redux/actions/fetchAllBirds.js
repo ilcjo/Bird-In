@@ -46,16 +46,29 @@ export const sendParameter = (selectedOptions) => {
 };
 
 
-export const getCompleteBirds = () => {
+export const backInfo = (params) => {
   return async (dispatch) => {
     try {
-      const response = await axios('/aves/filtros?page=0&perPage=0')
-      const data = response.data
-      console.log(response.data)
-      dispatch(safeCompleteDataBids(data))
+      const response = await axios.get(`aves/filtros?${params}`);
+      const data = response.data;
+      dispatch(returnFilters(data))
     } catch (error) {
-      console.error("Error al obtener los datos:", error)
-
+      console.log('error enviando datos:', error);
     }
   };
 };
+
+
+// export const getCompleteBirds = () => {
+//   return async (dispatch) => {
+//     try {
+//       const response = await axios('/aves/filtros?page=0&perPage=0')
+//       const data = response.data
+//       console.log(response.data)
+//       dispatch(safeCompleteDataBids(data))
+//     } catch (error) {
+//       console.error("Error al obtener los datos:", error)
+
+//     }
+//   };
+// };

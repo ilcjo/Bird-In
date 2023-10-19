@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
 import { saveFilters } from '../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom'
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -47,6 +47,8 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         color: theme.palette.primary.light,
         backgroundColor: 'rgba(204,214,204,0.17)',
         borderRadius: '9px',
+        height: '55px',
+        
 
         '& .MuiInputBase-input': {
             padding: '0px',
@@ -61,8 +63,9 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         },
         '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
             // Agrega los estilos que desees para el Select
-            height: '50px',
-            // width: '180px' // Ejemplo: cambia el color del texto a azul
+            height: '40px',
+            
+            // width: '180px'
         },
 
     };
@@ -70,7 +73,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
     const actionsStyles = {
         justifyContent: 'center', // Centrar el botón horizontalmente
         margin: '0px',
-        marginTop: '20px',
+        marginTop: '10px',
         gap: '20px',
         fontWeight: 500,
         textAlign: 'center',
@@ -191,7 +194,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             cientifico: [],
             ingles: []
         });
-
     };
 
     const returnMenuClick = () => {
@@ -236,7 +238,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                     height: 'auto',
                     width: '80%',
                     borderRadius: '20px 20px 20px 20px',
-                    backgroundColor: 'rgba(0, 61, 21, 0.2)',
+                    backgroundColor: 'rgba(0, 61, 21, 0.0)',
                     padding: 2,
                     marginLeft: '90px'
                 }} >
@@ -586,9 +588,9 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                             <Button variant="outlined" color="primary" onClick={handleReset}>
                                 Resetear
                             </Button>
-                            <Button variant="outlined" color="primary" onClick={returnMenuClick}>
+                            {/* <Button variant="outlined" color="primary" onClick={returnMenuClick}>
                                 <ArrowBackIcon /> Volver
-                            </Button>
+                            </Button> */}
                             <Button variant="outlined" color="secondary" onClick={handleBack}>
                                 < CloseIcon /> Cerrar
                             </Button>

@@ -261,7 +261,11 @@ const findDataById = async (id) => {
             include: [
                 {
                     model: Imagenes_aves,
-                    attributes: ['url', 'id', 'destacada'] // Atributos que deseas de Imagenes_aves
+                    attributes: ['url', 
+                    'id', 
+                    'destacada',
+                    [Sequelize.literal('SUBSTRING_INDEX(url, "_", -1)'), 'titulo']
+                    ,] // Atributos que deseas de Imagenes_aves
                 },
                 {
                     model: Paises,

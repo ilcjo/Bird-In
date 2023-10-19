@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { Backdrop, Button, Checkbox, CircularProgress, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useSelector, useDispatch } from 'react-redux';
-import { getInfoForUpdate } from '../../../redux/actions/createBirds';
-import { sendCoverPhoto, sendPhotosDelete } from '../../../redux/actions/DeletCover';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { getInfoForUpdate } from '../../redux/actions/createBirds';
+import { sendCoverPhoto, sendPhotosDelete } from '../../redux/actions/DeletCover';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import SaveIcon from '@mui/icons-material/Save';
+import SearchIcon from '@mui/icons-material/Search';
+// import { transformWrapper, transformComponent } from 'react-pinch-zoom-pan'
 
 
 export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => {
@@ -17,7 +21,8 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [highlightedImage, setHighlightedImage] = React.useState(null);
-    
+    const imageRef = React.useRef(null);
+   
     const handleStarClick = (id, url) => {
         setHighlightedImage((prev) => {
             if (prev && prev.id === id) {
@@ -30,6 +35,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
         });
     };
 
+
     const handleSaveAsFeatured = async () => {
         try {
             if (highlightedImage) {
@@ -37,7 +43,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                 await dispatch(sendCoverPhoto(highlightedImage.id, infoAveForUpdate.id_ave));
             }
             setSnackbarOpen(true);
-            setSnackbarMessage('Imagen destacada guardada con éxito');
+            setSnackbarMessage('Portada Actual Seleccionada');
         } catch (error) {
             console.error('Error al guardar la imagen destacada:', error);
             setSnackbarOpen(true);
@@ -106,8 +112,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                     setHighlightedImage({ id: destacadaImage.id, url: destacadaImage.url });
                 }
 
-                // Una vez que obtienes la información, establece loading en false
-                setLoading(false);
+
             } catch (error) {
                 // Maneja errores en la obtención de datos
                 console.error("Error al obtener los datos:", error);
@@ -141,35 +146,56 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                 width: '80%',
                 minWidth: '170vh',
                 margin: '0px 0px 0px 150px',
-                backgroundColor: theme.palette.secondary.light,
-                padding: '0px 40px 30px 0px',
+                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                padding: '0px 40px 60px 0px',
                 borderRadius: '0px 0px 20px 20px'
             }} >
 
                 <Grid item sx={12} md={12}>
+                    <Button
+                        sx={{
+                            marginTop: '10px',
+                            marginBottom: '0px',
+                            fontSize: '1rem',
+                            fontWeight: 'bold',
+                            ml: '75%',
+                            color: theme.palette.primary.light,
+                            backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                            backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                            
+                        }}
+                        variant="outlined"
+                        onClick={handleReturnSearch}
+                        startIcon={< SearchIcon />}
+                    >
+                        Buscar Nuevo Registro
+                    </Button>
                     <Typography variant='h5' color='primary.light' sx={{}}>
                         Imágenes Existente
                         <Divider sx={{ my: 1 }} />
                     </Typography>
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         onClick={handleDeleteButtonClick}
+                        endIcon={<DeleteIcon />}
                         sx={{
                             marginTop: '10px',
                             marginBottom: '0px',
                             fontSize: '1.2rem',
                             fontWeight: 'bold',
-                            color: theme.palette.primary.dark,
+                            color: theme.palette.primary.light,
                             textTransform: 'none',
                         }}
                     >
-                        Eliminar seleccionadas
+                        Eliminar selección
                     </Button>
                     <Button
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
                         onClick={handleSaveAsFeatured}
+                        endIcon={<SaveIcon />}
                         sx={{
                             marginTop: '10px',
                             marginBottom: '0px',
@@ -177,54 +203,61 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                             fontWeight: 'bold',
                             textTransform: 'none',
                             color: theme.palette.primary.dark,
-                            ml: 4
+                            ml: 4,
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                            },
                         }}
-                    >
-                        Guardar Portada
-                    </Button>
-                    <Button
-                        sx={{
-                            marginBottom: '0px',
-                            fontSize: '1.3rem',
-                            fontWeight: 'bold',
-                            ml: '80%',
-                            color: theme.palette.secondary.main,
-                        }}
-                        variant="outline"
-                        onClick={handleReturnSearch}
-                        startIcon={<ArrowBackIcon />}
-                    >
-                        volver
+                    > Guardar Portada
                     </Button>
 
                     {infoAveForUpdate && infoAveForUpdate.imagenes_aves.length > 0 ? (
-                        <Grid container spacing={1}>
+                        <Grid container spacing={6}>
                             {infoAveForUpdate.imagenes_aves.map((imageUrl, index) => (
-                                <Grid item key={imageUrl.id}>
+                                <Grid item key={imageUrl.id} sx={{ mt: 5 , ml:10}}>
                                     <div style={{ position: 'relative' }}>
                                         <img
+                                            ref={imageRef}
                                             src={imageUrl.url}
                                             alt={`Imagen existente ${index + 1}`}
-                                            style={{ maxWidth: '250px', maxHeight: '200px', marginTop: '10px' }}
+                                            style={{ maxWidth: '250px', maxHeight: '350px' }}
+                                            loading='lazy'
                                         />
+
+                                        <Typography variant='h5' color='white'>
+                                            {imageUrl.titulo}
+                                        </Typography>
                                         <div >
-                                            <Checkbox
-                                                color="primary"
-                                                onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url)}
-                                            />
+                                            <Grid container alignItems="center" spacing={1}>
+                                                <Grid item>
+                                                    <IconButton
+                                                        aria-label="add to favorites"
+                                                        onClick={() => handleStarClick(imageUrl.id, imageUrl.url)}
+                                                        sx={{ position: 'absolute', height: '30px', mt: 1 }}
+                                                    >
+                                                        {highlightedImage && highlightedImage.id === imageUrl.id && (
+                                                            <Typography variant="h5" color="primary" sx={{ mr: 1 }}>
+                                                                Portada Actual
+                                                            </Typography>
+                                                        )}
+                                                        <CheckCircleIcon color={highlightedImage && highlightedImage.id === imageUrl.id ? "primary" : "primary.dark"} />
+                                                    </IconButton>
+                                                </Grid>
+                                                <Grid item>
 
-                                            <IconButton
-                                                aria-label="add to favorites"
-                                                onClick={() => handleStarClick(imageUrl.id, imageUrl.url)}
-                                            >
-                                                <StarBorderIcon color={highlightedImage && highlightedImage.id === imageUrl.id ? "primary" : "primary.dark"} />
-                                            </IconButton>
-                                            {highlightedImage && highlightedImage.id === imageUrl.id && (
-                                                <Typography variant="body1" color="primary" sx={{ marginLeft: 1 }}>
-                                                    Portada
-                                                </Typography>
-                                            )}
-
+                                                    <Checkbox
+                                                        color="primary"
+                                                        onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url)}
+                                                        sx={{ position: 'absolute', left: '75%' }}
+                                                    />
+                                                    <DeleteIcon color='secondary' sx={{ position: 'absolute', mt: 1.5, left: '90%', fontSize: 'medium' }} />
+                                                    <Typography variant="h4" sx={{ position: 'absolute', mt: 4, left: '75%', fontSize: 'medium', mb: 1 }} color='white'>
+                                                        Eliminar
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
 
                                         </div>
                                     </div>

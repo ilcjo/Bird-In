@@ -32,7 +32,6 @@ export const UpdateCustomizes = (formData) => {
 
 
 export const UpdateCustomizesText = (text) => {
-    console.log(text)
     return async (dispatch) => {
         try {
             const response = await axios.post('/personalizar/updateText', text);

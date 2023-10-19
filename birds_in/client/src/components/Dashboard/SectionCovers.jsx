@@ -3,7 +3,8 @@ import { Backdrop, Button, CircularProgress, Dialog, DialogActions, DialogConten
 import { useDispatch, useSelector } from 'react-redux';
 import { UpdateCustomizes, getAllCustomizes } from '../../redux/actions/Custome';
 import { useTheme } from '@emotion/react';
-
+import SaveIcon from '@mui/icons-material/Save';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 export const SectionCovers = ({ title, coverKey }) => {
     const theme = useTheme()
@@ -132,20 +133,21 @@ export const SectionCovers = ({ title, coverKey }) => {
                     />
                     <label htmlFor="image-upload-input"> {/* Utiliza el atributo "for" para asociar el label al input */}
                         <Button
-                            variant="outlined" // Cambia el estilo del botón a "contained" para un aspecto diferente
+                            variant="contained" // Cambia el estilo del botón a "contained" para un aspecto diferente
                             color="primary"
                             component="span" // Indica que es un botón para seleccionar archivo
                             sx={{
                                 fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
                                 '&:hover': {
-                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                    backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
                                     color: theme.palette.primary.light, // Cambia el color del texto en hover
                                     textTransform: 'none',
                                 },
                             }} // Estilo personalizado
                             onChange={handleFileChange}
+                            endIcon={<UploadFileIcon />}
                         >
-                            Subir Imágenes
+                            Cargar Imágenes
                         </Button>
                     </label>
                     {selectedFile && (
@@ -159,17 +161,19 @@ export const SectionCovers = ({ title, coverKey }) => {
                         sx={{
                             fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
                             '&:hover': {
-                                backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
+                                backgroundColor: theme.palette.secondary, // Cambia el color de fondo en hover
                                 color: theme.palette.primary.light, // Cambia el color del texto en hover
                                 textTransform: 'none',
                             },
                         }}
-                        onClick={handleCloseUploadModal} color="primary" variant='outlined'
+                        onClick={handleCloseUploadModal} color="secondary" variant='outlined'
                     >
                         Cancelar
                     </Button>
                     <Button
                         sx={{
+                            backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                            color: theme.palette.primary.light, // Cambia el color del texto en hover
                             fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
                             '&:hover': {
                                 backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
@@ -177,8 +181,13 @@ export const SectionCovers = ({ title, coverKey }) => {
                                 textTransform: 'none',
                             },
                         }}
-                        onClick={handleUpload} color="primary" variant='contained'>
-                        Subir
+                        onClick={handleUpload}
+                        color="primary"
+                        variant='contained'
+                        endIcon={<SaveIcon />}
+                    >
+
+                        Grabar
                     </Button>
                 </DialogActions>
                 <Backdrop open={loading} onClick={() => { }} style={{ zIndex: 1, color: '#fff' }}>
@@ -197,10 +206,8 @@ export const SectionCovers = ({ title, coverKey }) => {
             >
                 <SnackbarContent
                     message={uploadError}
-                    style={{ backgroundColor: '#d32f2f' }}
                 />
             </Snackbar>
-
             {/* Snackbar para mostrar el éxito */}
             {successSnackbarOpen && (
                 <Snackbar
@@ -209,8 +216,7 @@ export const SectionCovers = ({ title, coverKey }) => {
                     onClose={handleSuccessSnackbarClose}
                 >
                     <SnackbarContent
-                        message="Imagen actualizada con éxito."
-                        style={{ backgroundColor: '#43a047' }}
+                        message="Imagen actualizada con éxito."    
                     />
                 </Snackbar>
             )}

@@ -3,7 +3,7 @@ import { Backdrop, Button, CircularProgress, Divider, Grid, Snackbar, SnackbarCo
 import { SectionCovers } from '../SectionCovers'
 import { useDispatch, useSelector } from 'react-redux'
 import { UpdateCustomizesText } from '../../../redux/actions/Custome';
-
+import SaveIcon from '@mui/icons-material/Save';
 
 export const CoverLogin = () => {
     const theme = useTheme()
@@ -48,6 +48,35 @@ export const CoverLogin = () => {
 
         setSnackbarOpen(false);
     };
+    const labelStyles = {
+        color: theme.palette.primary.main, // Color del texto del label
+        marginTop: '-9px',
+    };
+
+    const inputStyles = {
+        // Aquí puedes agregar los estilos que desees para los inputs
+        color: theme.palette.primary.light,
+        backgroundColor: 'rgba(204,214,204,0.17)',
+        borderRadius: '9px',
+
+        '& .MuiInputBase-input': {
+            padding: '0px',
+            paddingLeft: '10px',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'none',
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main, // Color del borde en el hover
+            backgroundColor: 'rgba(204,214,204,0.17)',
+        },
+        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+            // Agrega los estilos que desees para el Select
+            height: '40px',
+            // width: '180px'
+        },
+
+    };
     return (
         <React.Fragment>
             <Grid container spacing={5} sx={{
@@ -56,7 +85,8 @@ export const CoverLogin = () => {
                 justifyContent: 'center',
                 width: '80%',
                 margin: 'auto',
-                backgroundColor: theme.palette.secondary.light,
+                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 20px 20px'
             }} >
@@ -79,21 +109,31 @@ export const CoverLogin = () => {
                         multiline
                         rows={2}
                         fullWidth
+                        InputLabelProps={{
+                            sx: labelStyles, // Estilo del label
+                        }}
+                        InputProps={{
+                            
+                            sx: inputStyles, // Estilo del input
+                        }}
+                    
                     />
                     <Button
                         sx={{
-                            fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', m: 1, textTransform: 'none',
-                            color: theme.palette.primary.main,
+                            fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', mt: 2, textTransform: 'none',
+                            backgroundColor: theme.palette.primary.dark,
+                            color: theme.palette.primary.light,
                             '&:hover': {
-                                backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
-                                color: theme.palette.primary.dark, // Cambia el color del texto en hover
+                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
                                 textTransform: 'none',
                             },
                         }}
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
+                        endIcon={<SaveIcon />}
                         onClick={handleSendToBackend}>
-                        Actualizar
+                        Grabar
                     </Button>
                 </Grid>
             </Grid>
@@ -125,7 +165,6 @@ export const CoverLogin = () => {
                 >
                     <SnackbarContent
                         message="Texto actualizado."
-                        style={{ backgroundColor: '#43a047' }}
                     />
                 </Snackbar>
             )}

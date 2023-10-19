@@ -10,6 +10,10 @@ import {
   InputAdornment,
   IconButton,
   Link as MuiLink,
+  Backdrop,
+  CircularProgress,
+  Snackbar,
+  SnackbarContent,
 } from '@mui/material';
 import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -23,6 +27,9 @@ export const RegisterForm = ({ changeTab }) => {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = React.useState(false)
   const [error, setError] = React.useState('')
+  const [successMessage, setSuccessMessage] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
   const [formData, setFormData] = React.useState({
     email: '',
     name: '',
@@ -31,8 +38,9 @@ export const RegisterForm = ({ changeTab }) => {
     passFirst: '',
   })
 
+
   const handleClose = () => {
-    dispatch(Boolean(false))
+    dispatch(Boolean(false));
     setFormData({
       name: '',
       email: '',
@@ -41,24 +49,46 @@ export const RegisterForm = ({ changeTab }) => {
       passFirst: '',
     });
   };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (formData.pass === formData.passFirst) {
-      setError('');
-      dispatch(registerData(formData))
-      handleClose()
-    } else {
-      setError('Las contraseñas no coinciden')
+
+    if (formData.pass !== formData.passFirst) {
+      setError('Las contraseñas no coinciden');
+      return;
     }
+
+    setError('');
+    setLoading(true);
+    try {
+      // Simula una solicitud asíncrona al backend para registrar al usuario
+      // Reemplaza esto con tu lógica real de registro de usuario
+      await dispatch(registerData(formData));
+      setSuccessMessage('Se ha enviado la solicitud de aprobación. Recibirás instrucciones por correo electrónico.');
+      handleClose();
+  } catch (error) {
+      console.error('Error al crear el usuario:', error.response?.data.error || error.response?.data.message);
+  
+      // Verificar si la respuesta contiene un campo 'error'
+      const errorMessage = error.response?.data.error || error.response?.data.message;
+  
+      if (errorMessage) {
+          // Mostrar un mensaje de error al usuario solo si hay un mensaje de error
+          alert(`Error: ${errorMessage}`);
+      } else {
+          // Aquí puedes manejar el caso de éxito, si lo necesitas
+          console.log('Usuario creado exitosamente');
+      }
+  } finally {
+      setLoading(false);
+  }
   };
+
 
   const handleLinkClicRk = (e) => {
     e.preventDefault();
-    const num = 0 
+    const num = 0;
     changeTab(num);
   };
-
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
     marginTop: '-9px',
@@ -124,11 +154,13 @@ export const RegisterForm = ({ changeTab }) => {
         </Typography>
         <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Ya eres miembro ?
-          <MuiLink onClick={handleLinkClicRk} color="primary.light" underline="none" sx={{ 
+          <MuiLink onClick={handleLinkClicRk} color="primary.light" underline="none" sx={{
             cursor: 'pointer',
             '&:hover': {
-              color: theme.palette.primary.main }, 
-            marginLeft: '5px' }}>
+              color: theme.palette.primary.main
+            },
+            marginLeft: '5px'
+          }}>
             Log In
           </MuiLink>
         </Typography>
@@ -235,7 +267,7 @@ export const RegisterForm = ({ changeTab }) => {
                 </InputAdornment>
               ),
             }}
-            helperText={`Al menos 6 caracteres y una mayúscula${error ? `\n${error}` : ''}`}
+            helperText={`Al menos 6 caracteres y una mayúscula${formData.passFirst && error ? `\n${error}` : ''}`}
             FormHelperTextProps={{
               sx: {
                 fontSize: '1rem',
@@ -299,7 +331,28 @@ export const RegisterForm = ({ changeTab }) => {
           </Button>
         </Grid>
       </Grid>
+      <Backdrop open={loading} onClick={() => { }} style={{ zIndex: 1, color: '#fff' }}>
+        <>
+          <CircularProgress color="inherit" />
+          <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
+            Cargando...
+          </Typography>
+        </>
+      </Backdrop>
+      {/* Snackbar para mostrar el éxito */}
+      {successMessage && (
+        <Snackbar
+          open={true}
+          autoHideDuration={10000}
+          onClose={() => setSuccessMessage('')}
+        >
+          <SnackbarContent
+            message={successMessage}
+            style={{ backgroundColor: '#43a047' }}
+          />
+        </Snackbar>
+      )}
     </Box>
   )
-}
+};
 

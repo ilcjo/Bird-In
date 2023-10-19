@@ -3,19 +3,24 @@ import { Box, Button, Grid } from '@mui/material'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { getInfoBirds } from '../../redux/actions/fetchAllBirds';
+import { backInfo, getInfoBirds } from '../../redux/actions/fetchAllBirds';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { clearToken } from '../../redux/slices/Auth';
+import { getOptionsData } from '../../redux/actions/fetchOptions';
+import HomeIcon from '@mui/icons-material/Home';
 
-export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton }) => {
+export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton, showAdmin }) => {
     const dispatch = useDispatch()
     const theme = useTheme()
     const navigate = useNavigate()
+    const admin = localStorage.getItem('tipoCliente')
+    const isAdmin = admin === 'admin'
     const [selectedButton, setSelectedButton] = React.useState('todo');
     // const [showFilterButton, setShowFilterButton] = React.useState(true)
     const { allCustom } = useSelector((state) => state.customizesSlice);
+    const parameter = useSelector(state => state.birdSlice.filters)
 
     const handleButtonTodos = (button) => {
         console.log('Button clicked:', button);
@@ -26,7 +31,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             dispatch(getInfoBirds());
         }
     };
-
+ 
     const handleFilterButtonClick = () => {
         // Cambiar el estado del filtro al hacer clic en el botón del filtro
         setIsFilterOpen(!isFilterOpen);
@@ -36,16 +41,22 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
         localStorage.clear();
         navigate('/')
         dispatch(clearToken())
-        dispatch(getInfoBirds())
         dispatch(getOptionsData())
     };
 
     const returnMenuClick = () => {
         localStorage.removeItem('nombreIngles')
         navigate('/menu')
-        dispatch(getInfoBirds())
         dispatch(getOptionsData())
     };
+
+    const adminClick = () => {
+        navigate('/panelAdministrador')
+        dispatch(getOptionsData())
+    };
+
+
+
     return (
 
         <React.Fragment>
@@ -77,7 +88,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             variant="outline"
                             color="primary"
                             onClick={handleFilterButtonClick}
-                            endIcon={<FilterAltIcon />}
+                            startIcon={<FilterAltIcon />}
                         >
                             Abrir Filtro
                         </Button>
@@ -108,11 +119,29 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             }}
                             variant="outline"
                             onClick={returnMenuClick}
-                            startIcon={<ArrowBackIcon />}
+                            startIcon={<HomeIcon />}
                         >
-                            volver
+                            Menu Principal
                         </Button>
                     )}
+                    
+                    {/* {showAdmin && isAdmin && (
+
+                        <Button
+                            sx={{
+                                marginBottom: '10px',
+                                fontSize: '1rem',
+                                fontWeight: 'bold',
+                                color: theme.palette.primary.main,
+                            }}
+                            color="primary"
+                            variant="outline"
+                            onClick={adminClick}
+                        // endIcon={<LogoutIcon />}
+                        >
+                            Regresar Admin
+                        </Button>
+                    )} */}
                     <Button
                         sx={{
                             marginBottom: '10px',

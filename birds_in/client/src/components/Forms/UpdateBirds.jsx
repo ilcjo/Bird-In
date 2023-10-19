@@ -5,6 +5,7 @@ import {
     Backdrop,
     Box,
     Button,
+    Chip,
     CircularProgress,
     Divider,
     Grid,
@@ -17,18 +18,54 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
-import { UpdateAveImage, actualizarAve } from '../../redux/actions/createBirds';
+import { UpdateAveImage, actualizarAve, getInfoForUpdate } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import wikipediaLogo from '../../assets/images/wikilogo.png'
 import ebirdLogo from '../../assets/images/Logo_ebird.png'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getOptionsData } from '../../redux/actions/fetchOptions';
+import SaveIcon from '@mui/icons-material/Save';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird }) => {
     const theme = useTheme()
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    const labelStyles = {
+        color: theme.palette.primary.main, // Color del texto del label
+        marginTop: '-10px',
+    };
+
+    const inputStyles = {
+        // Aquí puedes agregar los estilos que desees para los inputs
+        color: theme.palette.primary.light,
+        backgroundColor: 'rgba(204,214,204,0.17)',
+        borderRadius: '9px',
+        height: '80px',
+        '& .MuiInputBase-input': {
+            padding: '0px',
+            paddingLeft: '10px',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'none',
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main, // Color del borde en el hover
+            backgroundColor: 'rgba(0,56,28,0.22) ',
+        },
+        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+            // Agrega los estilos que desees para el Select
+            // height: '50px',
+            // marginTop: '100px',
+            // width: '180px' // Ejemplo: cambia el color del texto a azul
+        },
+
+    };
+
     const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
 
@@ -183,21 +220,23 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             setOpenSnackbar(true);
 
             // Clear form data
-            setCreateData({
-                grupo: null,
-                familia: null,
-                pais: [],
-                zona: '',
-                cientifico: '',
-                ingles: '',
-                comun: '',
-                urlWiki: '',
-                urlBird: '',
-                idAve: 0,
-                urlImagen: [],
-            });
+            // setCreateData({
+                // grupo: null,
+                // familia: null,
+                // pais: [],
+                // zona: '',
+                // cientifico: '',
+                // ingles: '',
+                // comun: '',
+                // urlWiki: '',
+                // urlBird: '',
+                // idAve: 0,
+                // urlImagen: [],
+            // });
             setImageURL([]);
             setImageFile([]);
+            setAllImageURLs([])
+            dispatch(getInfoForUpdate(infoAveForUpdate.id_ave))
         } catch (error) {
             console.error('Error:', error);
             setErrorMessage(`Ocurrió un error: ${error.message}`);
@@ -229,7 +268,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         }
     };
 
-
     const createBirdWithMessage = async (createData, imageUrl) => {
         try {
             await dispatch(actualizarAve({ ...createData, urlImagen: imageUrl }));
@@ -238,7 +276,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             throw new Error('Error al actualizar el ave.');
         }
     };
-
 
     React.useEffect(() => {
         setCreateData(initialCreateData);
@@ -251,7 +288,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
 
     return (
         <React.Fragment>
-
             <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -263,7 +299,8 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     justifyContent: 'center',
                     width: '80%',
                     margin: '0px 0px 0px 150px',
-                    backgroundColor: theme.palette.secondary.light,
+                    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px'
                 }} >
@@ -274,18 +311,19 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         <Button
                             sx={{
                                 marginBottom: '0px',
-                                fontSize: '1.3rem',
+                                fontSize: '1rem',
                                 fontWeight: 'bold',
-                                ml: '87%',
-                                color: theme.palette.secondary.main,
+                                ml: '75%',
+                                color: theme.palette.primary.light,
+                                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                             }}
                             variant="outline"
                             onClick={handleReturnSearch}
-                            startIcon={<ArrowBackIcon />}
+                            startIcon={<SearchIcon />}
                         >
-                            volver
+                            Buscar Nuevo Registro
                         </Button>
-                        
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 1 }} />
@@ -299,40 +337,40 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             style={{ display: 'none' }}
                             id="image-upload-input"
                         />
-
                         <label htmlFor="image-upload-input"> {/* Utiliza el atributo "for" para asociar el label al input */}
                             <Button
-                                variant="outlined" // Cambia el estilo del botón a "contained" para un aspecto diferente
+                                variant="contained" // Cambia el estilo del botón a "contained" para un aspecto diferente
                                 color="primary"
                                 component="span" // Indica que es un botón para seleccionar archivo
                                 sx={{
                                     fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
                                     '&:hover': {
-                                        backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                        backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
                                         color: theme.palette.primary.light, // Cambia el color del texto en hover
                                         textTransform: 'none',
                                     },
                                 }} // Estilo personalizado
                                 onChange={handleImageChange}
+                                endIcon={<UploadFileIcon />}
                             >
-                                Subir Imágenes
+                                Cargar Imágenes
                             </Button>
-
                         </label>
-
                         <Button onClick={handleSubmit}
                             sx={{
                                 fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5, textTransform: 'none',
+                                backgroundColor: theme.palette.primary.dark,
+                                color: theme.palette.primary.light,
                                 '&:hover': {
-                                    backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
+                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
                                     color: theme.palette.primary.light, // Cambia el color del texto en hover
                                     textTransform: 'none',
                                 },
                             }}
                             variant="contained"
                             color="primary"
-                        >Hecho</Button>
-
+                            endIcon={<SaveIcon />}
+                        >Grabar</Button>
                         {/* Mostrar imagen cargada */}
                         {allImageURLs.length > 0 && (
                             <Grid container spacing={1}>
@@ -383,6 +421,13 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                                sx: inputStyles, // Establece el estilo del input
+                            }}
                         />
                         <TextField
                             variant="filled"
@@ -392,6 +437,13 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                                sx: inputStyles, // Establece el estilo del input
+                            }}
                         />
                         <TextField
                             variant="filled"
@@ -401,6 +453,13 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                                sx: inputStyles, // Establece el estilo del input
+                            }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} sx={{ mt: -5.5 }}>
@@ -411,7 +470,18 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             getOptionLabel={(option) => option.nombre}
                             value={createData.grupo}
                             onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Grupo" />}
+                            renderInput={(params) =>
+                                <TextField {...params}
+                                    label="Grupo"
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+
+                                    }}
+                                />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             sx={{ mb: 3, mt: 1 }}
                             filterOptions={(options, state) => {
@@ -429,7 +499,18 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             getOptionLabel={(option) => option.nombre}
                             value={createData.familia}
                             onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Familia" />}
+                            renderInput={(params) =>
+                                <TextField {...params}
+                                    label="Familia"
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+
+                                    }}
+                                />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             sx={{ mb: 3 }}
                             filterOptions={(options, state) => {
@@ -440,7 +521,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                 );
                             }}
                         />
-
                         <Autocomplete
                             disablePortal
                             id="combo-box-pais"
@@ -448,7 +528,18 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             getOptionLabel={(option) => option.nombre}
                             value={createData.pais}
                             onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Países" />}
+                            renderInput={(params) =>
+                                <TextField {...params}
+                                    label="Países"
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+
+                                    }}
+                                />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
                             filterOptions={(options, state) => {
@@ -458,6 +549,19 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     option.nombre.toLowerCase().startsWith(inputValue)
                                 );
                             }}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        label={option.nombre}
+                                        {...getTagProps({ index })}
+                                        sx={{
+                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
+                                            },
+                                        }} // Ajusta los estilos aquí
+                                    />
+                                ))
+                            }
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -471,13 +575,14 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
-                            helperText='En este campo siempre separar cada zonas por ,  y no espacios'
-                            sx={{ mt: -3, mb: 2 }}
+                            sx={{ mt: -3, mb: 2, backgroundColor: 'rgba(204,214,204,0.17)', }}
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+                            }}
+                            InputProps={{
+                                style: { color: '#ccd6cc' } // Cambia el color del texto a azul (o el color que desees)
+                            }}
                         />
-                        <Typography variant='h5' color='primary.light' sx={{}}>
-                            Información adicional
-                            <Divider sx={{ my: 2 }} />
-                        </Typography>
                         <TextField
                             name="urlWiki"
                             multiline
@@ -488,18 +593,27 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             sx={{ my: 2 }}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+
                             InputProps={{
                                 startAdornment: (
                                     <InputLabel htmlFor="urlWiki" sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
-                                            paddingRight: '5px',
-                                            marginTop: '10px',
-                                            width: '39px', // Ajusta el ancho de la imagen
-                                            height: '39px', // Ajusta la altura de la imagen
-                                        }} />
-                                        URL
+                                        <Link to={createData.urlWiki} target="_blank" >
+                                            <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
+                                             paddingLeft: '10px',
+                                             marginTop: '-4px',
+                                             width: '45px', // Ajusta el ancho de la imagen
+                                             height: '35px', // Ajusta la altura de la imagen
+                                            }} />
+                                        </Link>
+
                                     </InputLabel>
+
                                 ),
+                                sx: inputStyles, // Establece el estilo del input
                             }}
                         />
                         <TextField
@@ -511,22 +625,29 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+
                             InputProps={{
                                 startAdornment: (
                                     <InputLabel htmlFor="urlBird" sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <img src={ebirdLogo} alt="EBird Logo" style={{
-                                            paddingRight: '5px',
-                                            marginTop: '10px',
-                                            width: '110px', // Ajusta el ancho de la imagen
-                                            height: '39px', // Ajusta la altura de la imagen
-                                        }} />
-                                        URL
+                                        <Link to={createData.urlBird} target="_blank" >
+                                            <img src={ebirdLogo} alt="EBird Logo" style={{
+                                                paddingRight: '0px',
+                                                // marginTop: '10px',
+                                                width: '110px', // Ajusta el ancho de la imagen
+                                                height: '39px', // Ajusta la altura de la imagen
+                                            }} />
+                                        </Link>
+
                                     </InputLabel>
                                 ),
+                                sx: inputStyles, // Establece el estilo del input
                             }}
                         />
                     </Grid>
-
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
                 <Backdrop
@@ -547,15 +668,11 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                 open={openSnackbar}
                 autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
                 onClose={handleCloseSnackbar}
+                message={'El ave se ha Actualizado correctamente.'}
             >
-                <Alert
-                    elevation={6}
-                    variant="filled"
-                    severity="success"
-                    onClose={handleCloseSnackbar}
-                >
-                    El ave se ha creado correctamente.
-                    <Button
+
+
+                {/* <Button
                         variant="contained"
                         color="secondary"
                         onClick={() => { navigate('/aves') }}
@@ -569,10 +686,10 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             },
                         }}
                     >
-                        Ver Ave
-                    </Button>
+                        Ver Ave */}
+                {/* </Button> */}
 
-                </Alert>
+
             </Snackbar>
 
             {/* Snackbar for error message */}
@@ -590,6 +707,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     {errorMessage}
                 </Alert>
             </Snackbar>
-        </React.Fragment>
+        </React.Fragment >
     );
 };

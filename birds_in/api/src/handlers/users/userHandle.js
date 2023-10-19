@@ -1,4 +1,4 @@
-const { saveRegister } = require("../../controllers/users/userController")
+const { saveRegister, getAllUsersDb } = require("../../controllers/users/userController")
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { generateToken } = require("../../utils/passport");
@@ -44,7 +44,19 @@ const loginApp = async (req, res, next) => {
     })(req, res, next)
 };
 
+
+const allUserRegister = async (req, res) => {
+    try {
+        const allUsers = await getAllUsersDb()
+        return res.status(404).json(allUsers)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+
 module.exports = {
     registerUser,
-    loginApp
+    loginApp,
+    allUserRegister
 }

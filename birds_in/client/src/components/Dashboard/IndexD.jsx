@@ -1,15 +1,36 @@
 
 import * as React from 'react'
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { CreateBird } from '../Forms/CreateBird';
 import { SearchBird } from './SearchBird';
 import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../redux/slices/createSlice';
 import { Customize } from './Customize';
+import { Usuarios } from './Usuarios/Usuarios';
+import { styled } from '@mui/system';
 
 
+const StyledTabs = styled(Tabs)(({ theme }) => ({
+  backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+  backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+  borderRadius: '10px 10px 0px 0px',
+  marginTop: '0px',
+
+  '& .Mui-selected': {
+    backgroundColor: theme.palette.secondary.light,
+  },
+}));
+const StyledTab = styled(Tab)({
+  minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
+  color: '#ccd6cc',
+  '&.Mui-selected .MuiTypography-root': {
+    color: '#C1C700',
+  },
+
+});
 export const IndexD = () => {
   const dispatch = useDispatch();
+  const theme = useTheme()
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
 
@@ -22,41 +43,50 @@ export const IndexD = () => {
 
       dispatch(setEstateInfo()); // Reemplaza con la acción que establece el estado en Redux
     }
+
   };
-
-
   return (
     <>
-      <Tabs
+      <StyledTabs
         value={selectedTab}
         onChange={handleTabChange}
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
         selectionfollowsfocu='true'
-      >
-        <Tab label={
-          <Typography variant='h5' >
-            Actualizar
-          </Typography>
-        }>
-
-        </Tab>
-        <Tab label={<Typography variant='h5' >
-          Crear
-        </Typography>}>
-        </Tab>
-
-        <Tab
-          label={<Typography variant='h5'>
-            Personalizar
-          </Typography>
+        sx={{
+          backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+          backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
+          mt: 4,
+          borderRadius: '20px 20px 0px 0px',
+          '& .Mui-selected': {
+            backgroundColor: theme.palette.secondary.light,
           }
-        >
+        }}
+      >
+        <StyledTab label={
+          <Typography variant='h5'>
+            Actualizar
+          </Typography> } />
 
-        </Tab>
+      <StyledTab label={<Typography variant='h5' >
+        Crear
+      </Typography>}
+      />
 
-      </Tabs>
+      <StyledTab
+        label={<Typography variant='h5' >
+          Personalizar
+        </Typography>
+        }/>
+      
+      <StyledTab
+        label={<Typography variant='h5' >
+          Usuarios
+        </Typography>
+        }
+      />
+    </StyledTabs >
       <div>
         {selectedTab === 1 && (
           <Box>
@@ -73,7 +103,11 @@ export const IndexD = () => {
             <Customize />
           </Box>
         )}
-
+        {selectedTab === 3 && (
+          <Box>
+            <Usuarios />
+          </Box>
+        )}
       </div>
     </>
   );

@@ -8,18 +8,25 @@ import { General } from './Custome/General';
 import { CoverLogin } from './Custome/CoverLogin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+    backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: '40%',
+    marginRight: '10%',
     marginLeft: '10%',
+    color: theme.palette.primary.main, 
     '& .Mui-selected': {
         backgroundColor: theme.palette.secondary.light,
+        
     },
 }));
 const StyledTab = styled(Tab)({
     minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
     textTransform: 'none',
+    color: '#ccd6cc',
+    '&.Mui-selected .MuiTypography-root': {
+        color: '#C1C700',
+      },
 });
 
 export const IndexCustome = () => {

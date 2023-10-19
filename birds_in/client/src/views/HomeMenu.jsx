@@ -63,7 +63,7 @@ export const HomeMenu = () => {
 
   return (
     <div>
-      <MenuBar ShowFilterButton={false} ShowBackButton={false} />
+      <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
       <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
         {sections.map((section, index) => (
           // Verifica si no es el elemento "Admin" o si el usuario es un administrador

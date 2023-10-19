@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
+import { Card, CardActionArea } from '@mui/material'
 import { CarruselGallery } from '../Galeries/CarruselGallery';
 import { useTheme } from '@emotion/react';
 

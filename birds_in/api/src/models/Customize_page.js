@@ -65,6 +65,10 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        background_aves: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        }
     }, { timestamps: false, }
     )
 }

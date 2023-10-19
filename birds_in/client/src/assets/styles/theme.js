@@ -62,8 +62,8 @@ const theme = createTheme({
       styleOverrides: {
         paper: {
           backgroundColor: 'rgba(0, 56, 28, 0.1)',
-          backdropFilter: 'blur(90px)',
-          WebkitBackdropFilter: 'blur(90px)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
           padding: '20px',       
         },
       },

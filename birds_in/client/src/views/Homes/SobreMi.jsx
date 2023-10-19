@@ -1,12 +1,20 @@
-import React from 'react'
+import * as React from 'react'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { Header } from '../../components/Header';
 import { MenuBar } from '../../components/Menus/MenuBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCustomizes } from '../../redux/actions/Custome';
 
 export const SobreMi = () => {
     const theme = useTheme()
+    const dispatch = useDispatch()
     const { allCustom } = useSelector(state => state.customizesSlice)
+    React.useEffect(() => {
+        // Cleanup function to handle component unmounting
+        return () => {
+            dispatch(getAllCustomizes())
+        };
+    }, [allCustom]); // Empty dependency array to run only once on mount
     return (
         <div>
             <Header />
@@ -66,4 +74,4 @@ export const SobreMi = () => {
             </Grid>
         </div >
     )
-}
+};

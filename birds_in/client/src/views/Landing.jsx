@@ -37,7 +37,6 @@ export const Landing = () => {
   return (
     <React.Fragment>
       <Grid container component="main" sx={{ height: '100vh' }}>
-
      <LazyLoad imageUrl={allCustom.cover_login}>     
           <Typography variant="body2" color="black"
             sx={{

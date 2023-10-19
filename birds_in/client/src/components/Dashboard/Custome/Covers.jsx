@@ -9,9 +9,11 @@ export const Covers = () => {
             <Grid container spacing={5} sx={{
                 width: '80%',
                 margin: 'auto',
-                backgroundColor: theme.palette.secondary.light,
+                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 20px 20px'
+
             }} >
                 <Grid item xs={12} sm={12}>
                     <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >

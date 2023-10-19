@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { UpdateBirds } from '../Forms/UpdateBirds'
-import { CoverDelet } from './Custome/CoverDelet'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { useTheme } from '@emotion/react';
+import { CoverDelet } from './CoverDelet';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: '23%',
+    width: '80%',
     marginLeft: '150px',
     '& .Mui-selected': {
         backgroundColor: theme.palette.secondary.light,
@@ -18,7 +18,13 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 const StyledTab = styled(Tab)({
     minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
     textTransform: 'none',
+    color: '#ccd6cc',
+    '&.Mui-selected .MuiTypography-root': {
+        color: '#C1C700',
+      },
+ 
 });
+
 
 export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, history }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
@@ -40,6 +46,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
                 indicatorColor="primary"
                 aria-label="tabsInfoActualizar"
                 selectionfollowsfocu='true'
+                
             >
                 <StyledTab label={<Typography variant='h5' >
                     Información

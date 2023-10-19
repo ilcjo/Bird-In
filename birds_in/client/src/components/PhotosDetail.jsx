@@ -1,15 +1,16 @@
 import * as React from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Divider, Grid, Typography, useTheme } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, Grid, Typography, useTheme } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { ImagesCards } from './Cards/ImagesCards'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import wikipediaLogo from '../assets/images/wikilogo.png'
 import ebirdLogo from '../assets/images/Logo_ebird.png'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const PhotosDetail = () => {
     const theme = useTheme()
     const birds = useSelector(state => state.birdSlice.infoBirds)
-    // console.log(birds)
+    const { currentFilters } = useSelector(state => state.birdSlice.infoBirds)
     const allImages = birds.flatMap(bird => bird.imagenes_aves);
     const [expanded, setExpanded] = React.useState(`panel0`);
 
@@ -38,6 +39,11 @@ export const PhotosDetail = () => {
         const filteredCountries = formattedCountries.filter((country) => country !== '');
         return filteredCountries.join(', ');
     };
+    const stepBack = () => {
+        if (currentFilters.length < 1) {
+            dispatch()
+        }
+    };
 
     return (
         <React.Fragment>
@@ -64,17 +70,29 @@ export const PhotosDetail = () => {
                                         </Typography>
                                     )}
                                     <ExpandMoreIcon />
+
                                 </div>
                             }
                             aria-controls={`panel${index}bh-content`}
                             id={`panel${index}bh-header`}
                             sx={{ position: 'relative' }}
                         >
-                            <Typography variant="h1" color='primary' sx={{ width: '33%', flexShrink: 0 }}>
-                            {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
+
+                            <Typography variant="h1" color='primary' sx={{ width: '30%', flexShrink: 0, mt: 2 }}>
+                                {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
                                 {/* <Divider sx={{ mt: 2, borderColor: 'primary.main', borderWidth: 1, width: '50vh' }} /> */}
                             </Typography>
-
+                            <Button
+                                sx={{
+                                    ml: '57%',
+                                    fontSize: '1.1rem',
+                                    fontWeight: 'bold',
+                                    color: theme.palette.primary.main,
+                                }}
+                                variant="outline"
+                                // onClick={ }
+                                startIcon={<ArrowBackIcon />}
+                            >Regresar</Button>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container spacing={5} sx={{ ml: 4 }}>
@@ -156,14 +174,14 @@ export const PhotosDetail = () => {
                                             </a>
                                         ) : (
                                             <React.Fragment>
-                                            <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
-                                                marginRight: '5px',
-                                                marginTop: '5px',
-                                                width: '30px',
-                                                height: '25px',
-                                            }} />
-                                            <span>  Wikipedia</span>
-                                        </React.Fragment>
+                                                <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
+                                                    marginRight: '5px',
+                                                    marginTop: '5px',
+                                                    width: '30px',
+                                                    height: '25px',
+                                                }} />
+                                                <span>  Wikipedia</span>
+                                            </React.Fragment>
                                         )}
                                     </Typography>
                                     <Typography >

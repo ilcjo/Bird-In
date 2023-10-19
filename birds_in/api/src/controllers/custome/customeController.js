@@ -18,7 +18,8 @@ const fetchCustome = async () => {
                 'logo',
                 'text_about',
                 'text_login',
-                'colaboradores'
+                'colaboradores',
+                'background_aves'
             ],
         });
         return getAllCutomizes

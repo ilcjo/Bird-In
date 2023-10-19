@@ -38,7 +38,7 @@ const updateCustomize = async (req, res) => {
 
 const updateTextCustomize = async (req, res) => {
     const { text } = req.body;
-    console.log('desr ahndler', text)
+   
     try {
         const updateTextDb = await sendParametersForUpdateText(text);
         return res.status(200).json({ message: updateTextDb });

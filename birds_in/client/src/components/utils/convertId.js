@@ -29,7 +29,7 @@ if (selectedOptions.cientifico && selectedOptions.cientifico.length > 0) {
   queryParams += queryParams ? '&' : '';
   queryParams += selectedOptions.cientifico.map(nombre => `nombreCientifico=${encodeURIComponent(nombre.nombre)}`).join('&');
 }
-console.log('dentro del convert',queryParams)
+
 return queryParams
 
 

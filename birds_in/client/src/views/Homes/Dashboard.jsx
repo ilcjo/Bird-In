@@ -2,23 +2,28 @@ import * as React from 'react'
 import { Grid, useTheme } from '@mui/material';
 import { Header } from '../../components/Header';
 import { IndexD } from '../../components/Dashboard/IndexD';
+import { useSelector } from 'react-redux';
+import { MenuBar } from '../../components/Menus/MenuBar';
 
 export const Dashboard = () => {
 
   const theme = useTheme()
-
+  const { allCustom } = useSelector((state) => state.customizesSlice);
   return (
     <React.Fragment>
-      <Header />
+      <MenuBar  ShowFilterButton={false} ShowBackButton={true} />
       <Grid
         container
         direction="column"
         alignItems="center"
         sx={{
-          marginTop:'72px',
+         
+          background: `url(${allCustom.header}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
-          minHeight: '100vh',
-        
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          minHeight: '90vh',
+
         }}
       >
         <IndexD />

@@ -5,6 +5,7 @@ import {
     Backdrop,
     Box,
     Button,
+    Chip,
     CircularProgress,
     Divider,
     Grid,
@@ -21,6 +22,9 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import wikipediaLogo from '../../assets/images/wikilogo.png'
 import ebirdLogo from '../../assets/images/Logo_ebird.png'
 import { getOptionsData } from '../../redux/actions/fetchOptions';
+import SaveIcon from '@mui/icons-material/Save';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+
 
 export const CreateBird = () => {
     const theme = useTheme()
@@ -168,7 +172,7 @@ export const CreateBird = () => {
             for (let i = 0; i < imageFile.length; i++) {
                 formData.append('images', imageFile[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
             }
-            
+
             setShowBackdrop(true);
             setLoadingMessage('Subiendo imagen...');
 
@@ -251,6 +255,37 @@ export const CreateBird = () => {
         dispatch(getOptionsData());
     }, []);
 
+
+    const labelStyles = {
+        color: theme.palette.primary.main, // Color del texto del label
+        marginTop: '-9px',
+    };
+
+    const inputStyles = {
+        // Aquí puedes agregar los estilos que desees para los inputs
+        color: theme.palette.primary.light,
+        backgroundColor: 'rgba(204,214,204,0.17)',
+        borderRadius: '9px',
+        height: '80px',
+        '& .MuiInputBase-input': {
+            padding: '0px',
+            paddingLeft: '10px',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'none',
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main, // Color del borde en el hover
+            backgroundColor: 'rgba(0,56,28,0.22) ',
+        },
+        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+            // Agrega los estilos que desees para el Select
+            height: '50px',
+            // width: '180px' // Ejemplo: cambia el color del texto a azul
+        },
+
+    };
+
     return (
         <React.Fragment>
             <Box
@@ -264,7 +299,8 @@ export const CreateBird = () => {
                     justifyContent: 'center',
                     width: '80%',
                     margin: '0px 0px 0px 150px',
-                    backgroundColor: theme.palette.secondary.light,
+                    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '20px'
                 }} >
@@ -293,16 +329,33 @@ export const CreateBird = () => {
                                 sx={{
                                     fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
                                     '&:hover': {
-                                        backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                        backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
                                         color: theme.palette.primary.light, // Cambia el color del texto en hover
                                         textTransform: 'none',
                                     },
                                 }} // Estilo personalizado
                                 onChange={handleImageChange}
+                                endIcon={<UploadFileIcon />}
                             >
-                                Subir Imágenes
+                                Cargar Imágenes
                             </Button>
                         </label>
+                        <Button
+                            onClick={handleSubmit}
+                            sx={{
+                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5, textTransform: 'none',
+                                backgroundColor: theme.palette.primary.dark,
+                                color: theme.palette.primary.light,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                    textTransform: 'none',
+                                },
+                            }}
+                            variant="contained"
+                            color="primary"
+                            endIcon={<SaveIcon />}
+                        >Grabar</Button>
                         {/* Mostrar imágenes seleccionadas */}
                         {imageURL.length > 0 && (
                             <Grid container spacing={1}>
@@ -349,6 +402,13 @@ export const CreateBird = () => {
                             margin="normal"
                             error={formSubmitted && createData.ingles.trim() === ''} // Check if the field is empty when the form is submitted
                             helperText={formSubmitted && createData.ingles.trim() === '' ? 'El campo "Nombre en Inglés" es obligatorio.' : ''}
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                                sx: inputStyles, // Establece el estilo del input
+                            }}
                         />
 
                         <TextField
@@ -359,6 +419,13 @@ export const CreateBird = () => {
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                                sx: inputStyles, // Establece el estilo del input
+                            }}
                         />
                         <TextField
                             variant="filled"
@@ -368,6 +435,13 @@ export const CreateBird = () => {
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                                sx: inputStyles, // Establece el estilo del input
+                            }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} sx={{ mt: -4.5 }}>
@@ -384,6 +458,14 @@ export const CreateBird = () => {
                                     label="Grupos"
                                     error={formSubmitted && !createData.grupo} // Add error state to the TextField
                                     helperText={formSubmitted && !createData.grupo ? 'El campo "Familia" es obligatorio.' : ''}
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+
+                                    }}
                                 />
                             )}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
@@ -395,7 +477,6 @@ export const CreateBird = () => {
                                     option.nombre.toLowerCase().startsWith(inputValue)
                                 );
                             }}
-
                         />
                         <Autocomplete
                             disablePortal
@@ -410,6 +491,14 @@ export const CreateBird = () => {
                                     label="Familia"
                                     error={formSubmitted && !createData.familia} // Add error state to the TextField
                                     helperText={formSubmitted && !createData.familia ? 'El campo "Familia" es obligatorio.' : ''}
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+
+                                    }}
                                 />
                             )}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
@@ -430,7 +519,20 @@ export const CreateBird = () => {
                             getOptionLabel={(option) => option.nombre}
                             value={createData.pais}
                             onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
-                            renderInput={(params) => <TextField {...params} label="Países" />}
+                            renderInput={(params) =>
+                                <TextField
+                                    {...params}
+                                    label="Países"
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+
+                                    }}
+                                    
+                                />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
                             filterOptions={(options, state) => {
@@ -440,7 +542,19 @@ export const CreateBird = () => {
                                     option.nombre.toLowerCase().startsWith(inputValue)
                                 );
                             }}
-
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        label={option.nombre}
+                                        {...getTagProps({ index })}
+                                        sx={{
+                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
+                                            },
+                                        }} // Ajusta los estilos aquí
+                                    />
+                                ))
+                            }
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -454,12 +568,14 @@ export const CreateBird = () => {
                             margin="normal"
                             multiline
                             rows={2}
-                            sx={{ mt: -3, mb: 2 }}
+                            sx={{ mt: -3, mb: 2, backgroundColor: 'rgba(204,214,204,0.17)', }}
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+                            }}
+                            InputProps={{
+                                style: { color: '#ccd6cc' } // Cambia el color del texto a azul (o el color que desees)
+                            }}
                         />
-                        <Typography variant='h5' color='primary.light' sx={{}}>
-                            Información adicional
-                            <Divider sx={{ my: 2 }} />
-                        </Typography>
                         <TextField
                             name="urlWiki"
                             multiline
@@ -470,18 +586,23 @@ export const CreateBird = () => {
                             sx={{ my: 2 }}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+
                             InputProps={{
                                 startAdornment: (
                                     <InputLabel htmlFor="urlWiki" sx={{ display: 'flex', alignItems: 'center' }}>
                                         <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
-                                            paddingRight: '5px',
-                                            marginTop: '10px',
-                                            width: '39px', // Ajusta el ancho de la imagen
-                                            height: '39px', // Ajusta la altura de la imagen
+                                            paddingLeft: '10px',
+                                            marginTop: '-4px',
+                                            width: '40px', // Ajusta el ancho de la imagen
+                                            height: '30px', // Ajusta la altura de la imagen
                                         }} />
-                                        URL
                                     </InputLabel>
                                 ),
+                                sx: inputStyles
                             }}
                         />
 
@@ -494,34 +615,24 @@ export const CreateBird = () => {
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
                             InputProps={{
                                 startAdornment: (
                                     <InputLabel htmlFor="urlBird" sx={{ display: 'flex', alignItems: 'center' }}>
                                         <img src={ebirdLogo} alt="Wikipedia Logo" style={{
-                                            paddingRight: '5px',
-                                            marginTop: '10px',
+                                            paddingRight: '0px',
+                                            // marginTop: '10px',
                                             width: '110px', // Ajusta el ancho de la imagen
                                             height: '39px', // Ajusta la altura de la imagen
                                         }} />
-                                        URL
                                     </InputLabel>
                                 ),
+                                sx: inputStyles
                             }}
                         />
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <Button onClick={handleSubmit}
-                            sx={{
-                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                    textTransform: 'none',
-                                },
-                            }}
-                            variant="contained"
-                            color="primary"
-                        >Crear</Button>
                     </Grid>
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
@@ -544,15 +655,8 @@ export const CreateBird = () => {
                 open={openSnackbar}
                 autoHideDuration={6000} // Duración en milisegundos (ajusta según tus preferencias)
                 onClose={handleCloseSnackbar}
+                message={'El ave se ha creado correctamente.'}
             >
-                <Alert
-                    elevation={6}
-                    variant="filled"
-                    severity="success"
-                    onClose={handleCloseSnackbar}
-                >
-                    El ave se ha creado correctamente.
-                </Alert>
             </Snackbar>
         </React.Fragment>
     );
