@@ -1,0 +1,8 @@
+.zoomed-image {
+    transition: transform 0.2s;
+  }
+  
+  .zoomed-image:hover {
+    transform: scale(1.5);
+    cursor: pointer;
+  }

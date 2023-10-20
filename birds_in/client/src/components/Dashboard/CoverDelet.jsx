@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Backdrop, Button, Checkbox, CircularProgress, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import { Backdrop, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { getInfoForUpdate } from '../../redux/actions/createBirds';
 import { sendCoverPhoto, sendPhotosDelete } from '../../redux/actions/DeletCover';
@@ -9,6 +9,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
 // import { transformWrapper, transformComponent } from 'react-pinch-zoom-pan'
+import '../../assets/styles/zoom.css'
 
 
 export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => {
@@ -21,8 +22,8 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [highlightedImage, setHighlightedImage] = React.useState(null);
-    const imageRef = React.useRef(null);
-   
+    const [zoomed, setZoomed] = React.useState(false);
+
     const handleStarClick = (id, url) => {
         setHighlightedImage((prev) => {
             if (prev && prev.id === id) {
@@ -33,6 +34,22 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                 return { id, url };
             }
         });
+    };
+    const handleZoomToggle = () => {
+        setZoomed(!zoomed);
+    };
+
+    const [selectedDialogImage, setSelectedDialogImage] = React.useState('');
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+
+
+    const openImageDialog = (imageUrl) => {
+        setSelectedDialogImage(imageUrl);
+        setDialogOpen(true);
+    };
+
+    const closeImageDialog = () => {
+        setDialogOpen(false);
     };
 
 
@@ -163,7 +180,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                             color: theme.palette.primary.light,
                             backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                             backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                            
+
                         }}
                         variant="outlined"
                         onClick={handleReturnSearch}
@@ -214,31 +231,31 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                     </Button>
 
                     {infoAveForUpdate && infoAveForUpdate.imagenes_aves.length > 0 ? (
-                        <Grid container spacing={6}>
+                        <Grid container spacing={1}>
                             {infoAveForUpdate.imagenes_aves.map((imageUrl, index) => (
-                                <Grid item key={imageUrl.id} sx={{ mt: 5 , ml:10}}>
-                                    <div style={{ position: 'relative' }}>
-                                        <img
-                                            ref={imageRef}
-                                            src={imageUrl.url}
-                                            alt={`Imagen existente ${index + 1}`}
-                                            style={{ maxWidth: '250px', maxHeight: '350px' }}
-                                            loading='lazy'
-                                        />
-
-                                        <Typography variant='h5' color='white'>
-                                            {imageUrl.titulo}
-                                        </Typography>
-                                        <div >
+                                <Grid item key={imageUrl.id} sx={{ mt: 5, ml: 9 }}>
+                                    <Card>
+                                        <CardActionArea onClick={() => openImageDialog(imageUrl.url)}>
+                                            <CardMedia
+                                                component="img"
+                                                alt={`Imagen existente ${index + 1}`}
+                                                height="200"
+                                                image={imageUrl.url}
+                                            />
+                                        </CardActionArea>
+                                        <CardContent sx={{ height: '110px' }}>
+                                            <Typography variant="h5" color="white">
+                                                {imageUrl.titulo}
+                                            </Typography>
                                             <Grid container alignItems="center" spacing={1}>
                                                 <Grid item>
                                                     <IconButton
                                                         aria-label="add to favorites"
                                                         onClick={() => handleStarClick(imageUrl.id, imageUrl.url)}
-                                                        sx={{ position: 'absolute', height: '30px', mt: 1 }}
+                                                        sx={{ position: 'absolute', height: '30px', mt: 2 }}
                                                     >
                                                         {highlightedImage && highlightedImage.id === imageUrl.id && (
-                                                            <Typography variant="h5" color="primary" sx={{ mr: 1 }}>
+                                                            <Typography variant="h5" color="primary" sx={{ mr: 1, ml: -1, }}>
                                                                 Portada Actual
                                                             </Typography>
                                                         )}
@@ -246,7 +263,6 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                                                     </IconButton>
                                                 </Grid>
                                                 <Grid item>
-
                                                     <Checkbox
                                                         color="primary"
                                                         onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url)}
@@ -258,9 +274,8 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
-
-                                        </div>
-                                    </div>
+                                        </CardContent>
+                                    </Card>
                                 </Grid>
                             ))}
                         </Grid>
@@ -277,6 +292,99 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                 onClose={() => setSnackbarOpen(false)}
                 message={snackbarMessage}
             />
-        </React.Fragment >
+            <Dialog open={dialogOpen} onClose={closeImageDialog}>
+                <DialogContent>
+                    <img
+                        src={selectedDialogImage}
+                        alt="Imagen en diálogo"
+                        style={{ maxWidth: '100%' }}
+                        className={`zoomed-image ${zoomed ? 'zoomed' : ''}`}
+                    />
+                </DialogContent>
+            </Dialog>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setSnackbarOpen(false)}
+                message={snackbarMessage}
+            />
+        </React.Fragment>
     );
 };
+// <Dialog open={dialogOpen} onClose={closeImageDialog}>
+//                                         <DialogContent>
+//                                             <img
+//                                                 src={selectedImage}
+//                                                 alt="Imagen en diálogo"
+//                                                 style={{ maxWidth: '100%' }}
+//                                             />
+//                                         </DialogContent>
+//                                     </Dialog>
+//                                     {/* <div className={`image-container ${zoomed ? 'zoomed' : ''}`} style={{ position: 'relative' }}>
+//                                         <button
+//                                             onClick={() => openImageDialog(imageUrl.url)}
+//                                             style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+//                                         >
+//                                             <img
+//                                                 src={imageUrl.url}
+//                                                 alt={`Imagen existente ${index + 1}`}
+//                                                 style={{ maxWidth: '250px', maxHeight: '350px' }}
+//                                             />
+//                                         </button>
+//                                         <button onClick={handleZoomToggle}>
+//                                             {zoomed ? 'Desactivar Zoom' : 'Activar Zoom'}
+//                                         </button>
+//                                         <Typography variant='h5' color='white'>
+//                                             {imageUrl.titulo}
+//                                         </Typography>
+//                                         <div > */}
+// {/* <Grid container alignItems="center" spacing={1}>
+//                                         <Grid item>
+//                                             <IconButton
+//                                                 aria-label="add to favorites"
+//                                                 onClick={() => handleStarClick(imageUrl.id, imageUrl.url)}
+//                                                 sx={{ position: 'absolute', height: '30px', mt: 1 }}
+//                                             >
+//                                                 {highlightedImage && highlightedImage.id === imageUrl.id && (
+//                                                     <Typography variant="h5" color="primary" sx={{ mr: 1 }}>
+//                                                         Portada Actual
+//                                                     </Typography>
+//                                                 )}
+//                                                 <CheckCircleIcon color={highlightedImage && highlightedImage.id === imageUrl.id ? "primary" : "primary.dark"} />
+//                                             </IconButton>
+//                                         </Grid>
+//                                         <Grid item>
+//                                             <Checkbox
+//                                                 color="primary"
+//                                                 onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url)}
+//                                                 sx={{ position: 'absolute', left: '75%' }}
+//                                             />
+//                                             <DeleteIcon color='secondary' sx={{ position: 'absolute', mt: 1.5, left: '90%', fontSize: 'medium' }} />
+//                                             <Typography variant="h4" sx={{ position: 'absolute', mt: 4, left: '75%', fontSize: 'medium', mb: 1 }} color='white'>
+//                                                 Eliminar
+//                                             </Typography>
+//                                         </Grid>
+//                                     </Grid>
+
+//                                 </div>
+//                                     </div> */}
+//                                 </Grid >
+//                             ))}
+//                         </Grid >
+//                     ) : (
+//     <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+//         No hay imágenes subidas.
+//     </Typography>
+// )}
+//                 </Grid >
+//             </Grid >
+
+//     <Snackbar
+//         open={snackbarOpen}
+//         autoHideDuration={6000}
+//         onClose={() => setSnackbarOpen(false)}
+//         message={snackbarMessage}
+//     />
+//         </React.Fragment >
+//     );
+// }; * /}

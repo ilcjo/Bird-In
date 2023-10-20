@@ -93,7 +93,7 @@ export const SectionCovers = ({ title, coverKey }) => {
                 <img
                     src={selectedImageUrl || allCustom[coverKey]}
                     alt={`Imagen ${title}`}
-                    style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px', cursor: 'pointer' }}
+                    style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px', cursor: 'pointer', borderRadius: '10px' }}
                 />
             </Button>
             {/* Modal para subir archivos */}
@@ -216,7 +216,7 @@ export const SectionCovers = ({ title, coverKey }) => {
                     onClose={handleSuccessSnackbarClose}
                 >
                     <SnackbarContent
-                        message="Imagen actualizada con éxito."    
+                        message="Imagen actualizada con éxito."
                     />
                 </Snackbar>
             )}
