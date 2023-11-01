@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { fetchInfo, loadMoreDataSuccess, returnFilters, stringParameter } from '../slices/BirdsSlice'
-import { creatParams } from '../../components/utils/convertId';
+import { fetchInfo, loadMoreDataSuccess, returnFilters, setNoMoreResults, stringParameter } from '../slices/BirdsSlice'
+import { createParams } from '../../components/utils/convertId';
 
 
 
@@ -8,8 +8,7 @@ export const getInfoBirds = () => {
   return async (dispatch) => {
     try {
       const response = await axios('/aves/filtros')
-      const data = response.data
-      console.log(response.data)
+      const data = response.data.avesFiltradas
       dispatch(fetchInfo(data))
     } catch (error) {
       console.error("Error al obtener los datos:", error)
@@ -23,8 +22,10 @@ export const loadMoreData = (currentPage, parameters) => {
     try {
       const perPages = 9
       const response = await axios(`/aves/filtros?${parameters}&page=${currentPage}&perPage=${perPages}`);
-      const data = response.data;
+      const data = response.data.avesFiltradas;
+      const result = response.data.isLastPage
       dispatch(loadMoreDataSuccess(data)); // Despacha la acción para actualizar el estado
+      dispatch(setNoMoreResults(result));
     } catch (error) {
       console.error("Error al obtener más datos:", error);
     }
@@ -34,11 +35,13 @@ export const loadMoreData = (currentPage, parameters) => {
 export const sendParameter = (selectedOptions) => {
   return async (dispatch) => {
     try {
-      const queryParams = creatParams(selectedOptions)
+      const queryParams = createParams(selectedOptions)
       const response = await axios.get(`aves/filtros?${queryParams}`);
-      const data = response.data;
+      const data = response.data.avesFiltradas;
+      const result = response.data.isLastPage
       dispatch(stringParameter(queryParams))
       dispatch(returnFilters(data))
+      dispatch(setNoMoreResults(result));
     } catch (error) {
       console.log('error enviando datos:', error);
     }
@@ -50,7 +53,7 @@ export const backInfo = (params) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(`aves/filtros?${params}`);
-      const data = response.data;
+      const data = response.data.avesFiltradas;
       dispatch(returnFilters(data))
     } catch (error) {
       console.log('error enviando datos:', error);

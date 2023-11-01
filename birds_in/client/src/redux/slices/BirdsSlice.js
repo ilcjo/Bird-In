@@ -7,6 +7,7 @@ const initialState = {
   options: [],
   saveOptions: [],
   filtersOn: false,
+  noMoreResults: false,
   currentFilters: {
     grupo: [],
     familia: [],
@@ -77,6 +78,9 @@ export const birdSlice = createSlice({
     resetInfoBird: (state) => {
       state.infoBirds = []
     },
+    setNoMoreResults: (state, action) => {
+      state.noMoreResults = action.payload;
+    },
   },
 });
 
@@ -93,6 +97,7 @@ export const {
   resetCurrentFilters,
   saveOptions,
   resetInfoBird,
-  copyInfo
+  copyInfo,
+  setNoMoreResults,
 } = birdSlice.actions;
 export default birdSlice.reducer;

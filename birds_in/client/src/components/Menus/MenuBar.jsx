@@ -70,6 +70,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     justifyContent: 'space-between', // Alinea los elementos a lo largo del eje principal (horizontal) distribuyendo el espacio sobrante entre ellos
                     alignItems: 'center', // Alinea los elementos al centro verticalmente
                     padding: '0 20px', // Agrega algún relleno para mejorar la apariencia
+                    zIndex: 10,
                 }}
             >
                 {/* Logo en la esquina izquierda */}

@@ -39,11 +39,15 @@ export const Cards = React.memo(({ foto, name, index }) => {
       maxWidth: 'auto',
       minWidth: 415,
       minHeight: 320, // Establece una altura mínima para la tarjeta
+      maxWidth: 415,
+      maxHeight: 320,
       position: 'relative',
       borderRadius: '15px',
       display: 'flex', // Establece la tarjeta como un contenedor flexible
       flexDirection: 'column', // Alinea el contenido verticalmente
       justifyContent: 'space-between', // Centra verticalmente el contenido
+      m: 3,
+      backgroundColor: 'primary.dark',
     }}>
       <CardActionArea>
         {destacadaImage && destacadaImage.url ? (
@@ -61,7 +65,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
         )}
       </CardActionArea>
       <CardActions disableSpacing>
-        <Typography onClick={handleDetailClick} style={{ cursor: 'pointer' }}>
+        <Typography variant='h2' color='primary' onClick={handleDetailClick} style={{ cursor: 'pointer' }}>
           {name}
         </Typography>
       </CardActions>

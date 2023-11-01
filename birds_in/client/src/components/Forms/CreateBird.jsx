@@ -104,8 +104,6 @@ export const CreateBird = () => {
         }
     };
 
-
-
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -190,18 +188,18 @@ export const CreateBird = () => {
                 setOpenSnackbar(true);
 
                 // Borra los datos del formulario
-                setCreateData({
-                    grupo: null,
-                    familia: null,
-                    pais: [],
-                    zona: '',
-                    cientifico: '',
-                    ingles: '',
-                    comun: '',
-                    urlWiki: '',
-                    urlBird: '',
-                    urlImagen: [],
-                });
+                // setCreateData({
+                //     grupo: null,
+                //     familia: null,
+                //     pais: [],
+                //     zona: '',
+                //     cientifico: '',
+                //     ingles: '',
+                //     comun: '',
+                //     urlWiki: '',
+                //     urlBird: '',
+                //     urlImagen: [],
+                // });
                 setImageURL([]);
                 setImageFile([]);
                 setFormSubmitted(false)

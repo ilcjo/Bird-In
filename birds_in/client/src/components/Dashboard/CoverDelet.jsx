@@ -11,7 +11,6 @@ import SearchIcon from '@mui/icons-material/Search';
 // import { transformWrapper, transformComponent } from 'react-pinch-zoom-pan'
 import '../../assets/styles/zoom.css'
 
-
 export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
@@ -34,6 +33,8 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                 return { id, url };
             }
         });
+        console.log(highlightedImage)
+        handleSaveAsFeatured()
     };
     const handleZoomToggle = () => {
         setZoomed(!zoomed);
@@ -61,6 +62,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
             }
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
+            dispatch(getInfoForUpdate(infoAveForUpdate.id_ave))
         } catch (error) {
             console.error('Error al guardar la imagen destacada:', error);
             setSnackbarOpen(true);
@@ -292,13 +294,17 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                 onClose={() => setSnackbarOpen(false)}
                 message={snackbarMessage}
             />
-            <Dialog open={dialogOpen} onClose={closeImageDialog}>
-                <DialogContent>
+            <Dialog
+                open={dialogOpen}
+                onClose={closeImageDialog}
+                fullWidth
+                maxWidth="md">
+                <DialogContent sx={{}}>
                     <img
                         src={selectedDialogImage}
                         alt="Imagen en diálogo"
                         style={{ maxWidth: '100%' }}
-                        className={`zoomed-image ${zoomed ? 'zoomed' : ''}`}
+                    // className={`zoomed-image ${zoomed ? 'zoomed' : ''}`}
                     />
                 </DialogContent>
             </Dialog>

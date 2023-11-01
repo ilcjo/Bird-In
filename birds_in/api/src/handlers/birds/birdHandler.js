@@ -9,6 +9,8 @@ const {
    saveDbDescatada,
    findPhotosId,
    setDbCover,
+   viewDb,
+   filterOptionsPaisZonas,
 
 } = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
@@ -22,9 +24,9 @@ const deletePhotoFromFTP = require('../../utils/deletFtp');
 
 const getFilterInfo = async (req, res) => {
 
-   const { familia, grupo, nombreCientifico, nombreIngles, pais, zonasNombre, page, perPage } = req.query;
+   const { familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage } = req.query;
    try {
-      const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, zonasNombre, page, perPage)
+      const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
@@ -47,13 +49,35 @@ const selectOptions = async (req, res) => {
 };
 
 const getFilterOptions = async (req, res,) => {
-   const { familia, grupo, nombreCientifico, nombreIngles, pais, zonas } = req.query;
+   const {    familia,
+      grupo,
+      nombreCientifico,
+      nombreIngles,
+      pais,
+      zonas,
+      } = req.query;
    try {
-      const newOptions = await filterOptions(familia, grupo, nombreCientifico, nombreIngles, pais, zonas)
-      return res.status(200).json(newOptions)
+      let newOptions;
+      if (zonas || pais) {
+         newOptions = await filterOptionsPaisZonas(   familia,
+            grupo,
+            nombreCientifico,
+            nombreIngles,
+            pais,
+            zonas,
+         );
+      } else {
+         newOptions = await filterOptions(   familia,
+            grupo,
+            nombreCientifico,
+            nombreIngles,
+            pais,
+            zonas,
+           );
+      }
+      return res.status(200).json(newOptions);
    } catch (error) {
       res.status(500).send({ error: error.message })
-
    }
 };
 
@@ -95,7 +119,6 @@ const createBird = async (req, res) => {
 const uploadImageftp = async (req, res) => {
    try {
       // Verifica la conexión FTP antes de continuar
-
       const client = new ftp.Client();
       const remotePath = '/';
       client.ftp.timeout = 1000000;
@@ -227,6 +250,34 @@ const setCoverPhoto = async (req, res) => {
    }
 };
 
+const pruebaView = async (req, res) => {
+   const {    familia,
+      grupo,
+      nombreCientifico,
+      nombreIngles,
+      pais,
+      zonas,
+      page,
+      perPage } = req.query;
+   try {
+      const allData = await viewDb(   familia,
+         grupo,
+         nombreCientifico,
+         nombreIngles,
+         pais,
+         zonas,
+         page,
+         perPage)
+
+      return res.status(404).json(allData);
+
+   } catch (error) {
+      console.error(error);
+      res.status(500).send('Error en el servidor');
+   }
+
+};
+
 module.exports = {
    getFilterInfo,
    selectOptions,
@@ -236,6 +287,7 @@ module.exports = {
    findInfoForUpdate,
    updateInfoBids,
    deletePhotos,
-   setCoverPhoto
+   setCoverPhoto,
+   pruebaView
 }
 

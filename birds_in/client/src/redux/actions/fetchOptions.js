@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { fetchOptions, newOptions, searchBarResult } from '../slices/BirdsSlice'
-import { creatParams } from '../../components/utils/convertId';
+import { createParams } from '../../components/utils/convertId';
 
 export const getOptionsData = () => {
   return async (dispatch) => {
@@ -17,7 +17,7 @@ export const getOptionsData = () => {
 export const fetchNewOptions = (selectedOptions) => {
   return async (dispatch) => {
     try {
-      const parameter = creatParams(selectedOptions)
+      const parameter = createParams(selectedOptions)
       const response = await axios(`aves/nuevasOpciones?${parameter}`);
       const data = response.data
       dispatch(newOptions(data))

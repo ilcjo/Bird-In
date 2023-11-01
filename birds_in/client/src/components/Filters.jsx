@@ -13,14 +13,14 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
-import { saveFilters } from '../redux/slices/BirdsSlice'
+import { saveFilters, setNoMoreResults } from '../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom'
 import CloseIcon from '@mui/icons-material/Close';
 
 
-export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
+export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -48,7 +48,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         backgroundColor: 'rgba(204,214,204,0.17)',
         borderRadius: '9px',
         height: '55px',
-        
+
 
         '& .MuiInputBase-input': {
             padding: '0px',
@@ -64,7 +64,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
             // Agrega los estilos que desees para el Select
             height: '40px',
-            
+
             // width: '180px'
         },
 
@@ -89,7 +89,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                 textTransform: 'none',
             },
         },
-
         '& .MuiButton-outlined': {
             fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
             fontWeight: 'bold', // Hacer el texto negrita
@@ -97,18 +96,40 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
         },
     };
 
-    const sortAlphabetically = (array) => {
-        return array.slice().sort((a, b) => {
-            // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
-            if (a && a.nombre && b && b.nombre) {
-                const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-                const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-                return nameA.localeCompare(nameB);
-            }
-            // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
-            return 0;
-        });
+    // const sortAlphabetically = (array) => {
+    //     return array.slice().sort((a, b) => {
+    //         // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
+    //         if (a && a.nombre && b && b.nombre) {
+    //             const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
+    //             const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
+    //             return nameA.localeCompare(nameB);
+    //         }
+    //         // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
+    //         return 0;
+    //     });
+    // };
+    const sortAlphabetically = (data) => {
+        if (Array.isArray(data)) {
+            // Si es un array, ordena alfabéticamente
+            return data.slice().sort((a, b) => {
+                if (a && a.nombre && b && b.nombre) {
+                    const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
+                    const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
+                    return nameA.localeCompare(nameB);
+                }
+                return 0;
+            });
+        } else if (typeof data === 'object' || data.length === 0) {
+            // Si es un objeto, maneja el objeto según tus necesidades
+            // Puedes convertirlo en un array antes de ordenarlo o tratarlo de otra manera
+            const dataArray = Object.values(data);
+            return dataArray; // Ordena según tus necesidades
+        } else {
+            // Maneja otros tipos de datos según sea necesario
+            return [];
+        }
     };
+
     const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
     const { nIngles, nCientifico, paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
 
@@ -164,11 +185,11 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
             });
     };
-
-
     const handleClickFiltrar = () => {
         dispatch(saveFilters(selectOption))
         dispatch(sendParameter(selectOption))
+        dispatch(setNoMoreResults(false))
+        pages(1)
         setIsFilterOpen(false);
     };
 
@@ -194,6 +215,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             cientifico: [],
             ingles: []
         });
+        dispatch(setNoMoreResults(false))
     };
 
     const returnMenuClick = () => {
@@ -236,11 +258,12 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
             <Grid component={Box}
                 sx={{
                     height: 'auto',
-                    width: '80%',
+                    // width: '80%',
                     borderRadius: '20px 20px 20px 20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
-                    padding: 2,
-                    marginLeft: '90px'
+                    padding: 3,
+                    mixWidth: "10%",
+                    // marginLeft: '60px'
                 }} >
                 {/* <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
@@ -487,7 +510,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                     //     return options.filter((option) => {
                                     //         const birdName = option.nombre.toLowerCase();
                                     //         const birdNamesArray = birdName.split(' ');
-    
+
                                     //         // Check if any of the names (first, second, or third) start with the inputValue
                                     //         return birdNamesArray.some(
                                     //             (name) => name.startsWith(inputValue)
@@ -542,7 +565,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen }) => {
                                         return options.filter((option) => {
                                             const birdName = option.nombre.toLowerCase();
                                             const birdNamesArray = birdName.split(' ');
-    
+
                                             // Check if any of the names (first, second, or third) start with the inputValue
                                             return birdNamesArray.some(
                                                 (name) => name.startsWith(inputValue)

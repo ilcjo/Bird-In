@@ -7,7 +7,7 @@ import { Filters } from '../../components/Filters'
 import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { PhotosDetail } from '../../components/PhotosDetail';
-import { resetInfoBird } from '../../redux/slices/BirdsSlice';
+import { resetInfoBird, setNoMoreResults } from '../../redux/slices/BirdsSlice';
 
 
 export const Aves = () => {
@@ -17,6 +17,7 @@ export const Aves = () => {
   const birds = useSelector(state => state.birdSlice.infoBirds)
   const parameter = useSelector(state => state.birdSlice.filters)
   const { allCustom } = useSelector((state) => state.customizesSlice);
+  const noMoreResults = useSelector((state) => state.birdSlice.noMoreResults);
   const [page, setPage] = React.useState(1);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
 
@@ -40,7 +41,7 @@ export const Aves = () => {
         direction="column"
         alignItems="center"
         sx={{
-          background: birds.length === 0 ? `url(${allCustom.background_aves}) center/cover no-repeat fixed` : 'none',
+          background: birds.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
@@ -51,9 +52,9 @@ export const Aves = () => {
           open={isFilterDialogOpen}
           onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
           fullWidth
-          maxWidth="md"
+          mixWidth="md"
         >
-          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} />
+          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {/* 
         {birds.length === 1 ? (
@@ -67,7 +68,7 @@ export const Aves = () => {
             ))}
           </Grid>
         )} */}
-        {birds.length > 2 && (
+        {birds.length > 1 && (
           <Grid item container spacing={3} justifyContent="center">
             {birds.map((bird, index) => (
               <Grid item key={index}>
@@ -75,14 +76,12 @@ export const Aves = () => {
               </Grid>
             ))}
           </Grid>
-
         )}
         {birds.length === 1 && (
           <PhotosDetail bird={birds[0]} />
         )}
-
         <Grid item>
-          {birds.length > 6 && (
+          {!noMoreResults  && (
             <Button
               sx={{
                 m: 2,

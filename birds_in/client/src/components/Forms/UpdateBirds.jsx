@@ -28,6 +28,8 @@ import { getOptionsData } from '../../redux/actions/fetchOptions';
 import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
+import { AddOptions } from './AddOptions';
 
 
 export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird }) => {
@@ -66,7 +68,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
 
     };
 
-    const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
 
     const sortAlphabetically = (array) => {
@@ -84,12 +86,13 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const sortedPaises = sortAlphabetically(paises);
     const sortedFamilias = sortAlphabetically(familias);
     const sortedGrupos = sortAlphabetically(grupos);
+    const sortedZonas = sortAlphabetically(zonas)
 
     const initialCreateData = {
         grupo: infoAveForUpdate.grupo || null,
         familia: infoAveForUpdate.familia || null,
         pais: infoAveForUpdate.paises || [],
-        zona: infoAveForUpdate.zonas || '',
+        zona: infoAveForUpdate.zonasAves || [],
         cientifico: infoAveForUpdate.nombre_cientifico || '',
         ingles: infoAveForUpdate.nombre_ingles || '',
         comun: infoAveForUpdate.nombre_comun || '',
@@ -109,6 +112,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     // console.log('image file', imageFile)
     // console.log('imagenurl', imageURL)
@@ -221,17 +225,17 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
 
             // Clear form data
             // setCreateData({
-                // grupo: null,
-                // familia: null,
-                // pais: [],
-                // zona: '',
-                // cientifico: '',
-                // ingles: '',
-                // comun: '',
-                // urlWiki: '',
-                // urlBird: '',
-                // idAve: 0,
-                // urlImagen: [],
+            // grupo: null,
+            // familia: null,
+            // pais: [],
+            // zona: '',
+            // cientifico: '',
+            // ingles: '',
+            // comun: '',
+            // urlWiki: '',
+            // urlBird: '',
+            // idAve: 0,
+            // urlImagen: [],
             // });
             setImageURL([]);
             setImageFile([]);
@@ -565,7 +569,58 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <TextField
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-zonas"
+                            options={sortedZonas}
+                            getOptionLabel={(option) => option.nombre}
+                            value={createData.zona}
+                            onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}
+                            renderInput={(params) =>
+                                <TextField {...params}
+                                    label="Zonas"
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+                                        endAdornment: (
+                                            <AddIcon
+                                                onClick={() => setIsDialogOpen(true)}
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        ),
+                                    }}
+                                />}
+                            isOptionEqualToValue={(option, value) => option.id === value?.id}
+                            multiple
+                            filterOptions={(options, state) => {
+                                // Filtra las opciones para que coincidan solo al principio de las letras
+                                const inputValue = state.inputValue.toLowerCase();
+                                return options.filter((option) =>
+                                    option.nombre.toLowerCase().startsWith(inputValue)
+                                );
+                            }}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        label={option.nombre}
+                                        {...getTagProps({ index })}
+                                        sx={{
+                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
+                                            },
+                                        }} // Ajusta los estilos aquí
+                                    />
+                                ))
+                            }
+
+                        />
+                        <AddOptions
+                            open={isDialogOpen}
+                            onClose={() => setIsDialogOpen(false)} />
+                        {/* <TextField
                             variant="filled"
                             multiline
                             name="zona"
@@ -582,7 +637,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             InputProps={{
                                 style: { color: '#ccd6cc' } // Cambia el color del texto a azul (o el color que desees)
                             }}
-                        />
+                        /> */}
                         <TextField
                             name="urlWiki"
                             multiline
@@ -603,10 +658,10 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     <InputLabel htmlFor="urlWiki" sx={{ display: 'flex', alignItems: 'center' }}>
                                         <Link to={createData.urlWiki} target="_blank" >
                                             <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
-                                             paddingLeft: '10px',
-                                             marginTop: '-4px',
-                                             width: '45px', // Ajusta el ancho de la imagen
-                                             height: '35px', // Ajusta la altura de la imagen
+                                                paddingLeft: '10px',
+                                                marginTop: '-4px',
+                                                width: '45px', // Ajusta el ancho de la imagen
+                                                height: '35px', // Ajusta la altura de la imagen
                                             }} />
                                         </Link>
 
@@ -707,6 +762,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     {errorMessage}
                 </Alert>
             </Snackbar>
+
         </React.Fragment >
     );
 };

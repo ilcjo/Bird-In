@@ -37,6 +37,16 @@ const replacePhotoInFTP = async (oldImageUrl, newImageBuffer) => {
         const newImageUrl = `https://lasavesquepasaronpormisojos.com/imagenes/customize/${newImageBuffer.filename}`;
 
         console.log('Operación completada con éxito.');
+           // Eliminar la imagen del servidor local
+           const fs = require('fs');
+           fs.unlink(newImageBuffer.path, (err) => {
+            if (err) {
+                console.error('Error al eliminar la imagen antigua del servidor local:', err);
+            } else {
+                console.log('Imagen antigua eliminada del servidor local con éxito');
+            }
+        });
+        
         return { success: true, imageUrl: newImageUrl };
     } catch (error) {
         console.error('Error al conectar con el servidor FTP o al manipular las imágenes:', error);

@@ -49,7 +49,7 @@ export const SearchBird = ({ changeTab }) => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('/aves/filtros?page=0&perPage=0');
-                const data = response.data;
+                const data = response.data.avesFiltradas;
                 const validData = data.filter((item) => item.nombre_ingles);
 
                 // Ordenar los datos válidos por "Nombre en Inglés" (englishName)

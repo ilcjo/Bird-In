@@ -1,19 +1,20 @@
 import * as React from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, Grid, Typography, useTheme } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ImagesCards } from './Cards/ImagesCards'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import wikipediaLogo from '../assets/images/wikilogo.png'
 import ebirdLogo from '../assets/images/Logo_ebird.png'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { setNoMoreResults } from '../redux/slices/BirdsSlice';
 
 export const PhotosDetail = () => {
     const theme = useTheme()
+    const dispatch = useDispatch()
     const birds = useSelector(state => state.birdSlice.infoBirds)
     const { currentFilters } = useSelector(state => state.birdSlice.infoBirds)
     const allImages = birds.flatMap(bird => bird.imagenes_aves);
     const [expanded, setExpanded] = React.useState(`panel0`);
-
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : null);
@@ -34,16 +35,44 @@ export const PhotosDetail = () => {
                 return '';
             }
         });
-
+       
         // Filtra los elementos no vacíos y une con comas
         const filteredCountries = formattedCountries.filter((country) => country !== '');
         return filteredCountries.join(', ');
     };
+
     const stepBack = () => {
         if (currentFilters.length < 1) {
             dispatch()
         }
     };
+
+
+    React.useEffect(() => {
+        // Restablece noMoreResults a false cuando se renderiza el componente
+        dispatch(setNoMoreResults(true));
+    }, [dispatch]);
+
+    // const formatZonas = (zonas) => {
+    //     if (!Array.isArray(zonas)) {
+    //         return ''; // Retorna una cadena vacía si no es un array
+    //     }
+
+    //     const formattedZonas = zonas.map((zona) => {
+    //         // Verifica si el elemento del array es un objeto con la propiedad "nombre_zona"
+    //         if (typeof zona === 'object' && zona.nombre_zona) {
+    //             return zona.nombre_zona;
+    //         } else {
+    //             // Si no es un objeto o no tiene la propiedad "nombre_zona", retorna un string vacío
+    //             return '';
+    //         }
+    //     });
+
+    //     // Filtra los elementos no vacíos y une con comas
+    //     const filteredZonas = formattedZonas.filter((zona) => zona !== '');
+    //     return filteredZonas.join(', ');
+    // };
+
 
     return (
         <React.Fragment>
@@ -58,7 +87,7 @@ export const PhotosDetail = () => {
                             width: '200vh', // Ocupar todo el ancho de la pantalla
                             boxShadow: 'none',
                             top: 0, // Pegado al top
-                            marginBottom: theme.spacing(2), // Espacio en la parte inferior
+                            marginBottom: theme.spacing(), // Espacio en la parte inferior
                         }}
                     >
                         <AccordionSummary
@@ -84,10 +113,13 @@ export const PhotosDetail = () => {
                             </Typography>
                             <Button
                                 sx={{
-                                    ml: '57%',
+                                    mt: 4,
+                                    ml: '54%',
                                     fontSize: '1.1rem',
                                     fontWeight: 'bold',
                                     color: theme.palette.primary.main,
+                                    
+
                                 }}
                                 variant="outline"
                                 // onClick={ }
@@ -123,7 +155,7 @@ export const PhotosDetail = () => {
                                     <Typography variant="h5" color="primary.light">
                                         Zonas:
                                         <Typography variant="body1" color="primary.dark" sx={{ mb: 1.5 }}>
-                                            {bird.zonas ? bird.zonas : 'No Especificado'}
+                                            {formatCountries(bird.zonasAves)}
                                         </Typography>
                                     </Typography>
 

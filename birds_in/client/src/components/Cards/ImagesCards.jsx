@@ -36,6 +36,7 @@ export const ImagesCards = ({ foto, name, index, arrayImages }) => {
         flexDirection: 'column',
         justifyContent: 'space-between',
         overflow: 'hidden', // Oculta cualquier contenido que se desborde
+        mb:5
       }}
     >
       <CardActionArea onClick={() => openGallery(index)}>

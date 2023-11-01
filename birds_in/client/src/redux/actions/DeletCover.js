@@ -29,7 +29,7 @@ export const sendCoverPhoto = (id, idAves) => {
 
             const response = axios.put('/aves/foto_portada', requestData )
             const data = response.data
-            console.log(data)
+            console.log('ave destacada',data)
         } catch (error) {
             console.error("Error al obtener los datos:", error)
 

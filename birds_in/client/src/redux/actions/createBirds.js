@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getAve, saveUrlImage } from "../slices/createSlice";
 
-
 export const saveImageFtp = (formData) => {
   return async (dispatch) => {
     try {
@@ -82,7 +81,7 @@ export const actualizarAve = (info) => {
       console.log('Respuesta del servidor:', response.data);
     } catch (error) {
       // Maneja los errores de la solicitud
-      console.error('Error al enviar la info:', error);
+      console.error('Error al actualizar:', error);
     }
   }
 };

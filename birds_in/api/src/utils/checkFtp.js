@@ -6,6 +6,7 @@ const {
   FTP_PASS,
 } = process.env
 
+
 async function checkFTPConnection() {
   const client = new ftp.Client();
 
@@ -15,10 +16,9 @@ async function checkFTPConnection() {
       user: FTP_USER,
       password: FTP_PASS,
       secure: false,
-
+    });
 
     // Si la conexión se establece correctamente, puedes hacer alguna operación de prueba, como listar directorios
- 
     console.log('Conexión FTP establecida con éxito:');
 
     return true; // Devuelve true si la conexión es exitosa
@@ -26,9 +26,8 @@ async function checkFTPConnection() {
     console.error('Error al conectarse al servidor FTP:', error);
     return false; // Devuelve false si hay un error en la conexión
   } finally {
-    await client.close(); // Cierra la conexión, independientemente de si tuvo éxito o no
+    client.close(); // Cierra la conexión, independientemente de si tuvo éxito o no
   }
-
 }
 
 // Llama a la función para verificar la conexión al FTP
@@ -39,5 +38,4 @@ checkFTPConnection().then((connected) => {
     console.log('No se pudo establecer la conexión al FTP.');
   }
 });
-
 module.exports = checkFTPConnection;

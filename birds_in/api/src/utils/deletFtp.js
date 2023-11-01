@@ -23,9 +23,18 @@ const deletePhotoFromFTP = async (urls) => {
             // Construir la nueva URL sin el dominio
             const ftpUrl = `${fileName}`;
 
+            // Eliminar el archivo del servidor local
+            const fs = require('fs');
+            fs.unlink(url, (err) => {
+                if (err) {
+                    console.error('Error al eliminar la imagen del servidor local:', err);
+                } else {
+                    console.log('Imagen eliminada del servidor local con éxito');
+                }
+            });
+
             // Eliminar el archivo del servidor FTP
             await client.remove(ftpUrl);
-
         }
 
         return { success: true };
