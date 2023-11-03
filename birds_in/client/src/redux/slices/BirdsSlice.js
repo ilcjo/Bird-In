@@ -7,7 +7,7 @@ const initialState = {
   options: [],
   saveOptions: [],
   filtersOn: false,
-  noMoreResults: false,
+  noMoreResults: true,
   currentFilters: {
     grupo: [],
     familia: [],

@@ -6,11 +6,10 @@ const {
    sendAndCreateBird,
    findDataById,
    sendAndUpdateBird,
-   saveDbDescatada,
    findPhotosId,
    setDbCover,
-   viewDb,
    filterOptionsPaisZonas,
+   getContadores,
 
 } = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
@@ -250,32 +249,14 @@ const setCoverPhoto = async (req, res) => {
    }
 };
 
-const pruebaView = async (req, res) => {
-   const {    familia,
-      grupo,
-      nombreCientifico,
-      nombreIngles,
-      pais,
-      zonas,
-      page,
-      perPage } = req.query;
+const contandoRegistros = async (req, res) => {
    try {
-      const allData = await viewDb(   familia,
-         grupo,
-         nombreCientifico,
-         nombreIngles,
-         pais,
-         zonas,
-         page,
-         perPage)
-
+      const allData = await getContadores()
       return res.status(404).json(allData);
-
    } catch (error) {
       console.error(error);
       res.status(500).send('Error en el servidor');
    }
-
 };
 
 module.exports = {
@@ -288,6 +269,6 @@ module.exports = {
    updateInfoBids,
    deletePhotos,
    setCoverPhoto,
-   pruebaView
+   contandoRegistros
 }
 

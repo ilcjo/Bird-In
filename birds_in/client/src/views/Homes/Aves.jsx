@@ -81,7 +81,7 @@ export const Aves = () => {
           <PhotosDetail bird={birds[0]} />
         )}
         <Grid item>
-          {!noMoreResults  && (
+          {!noMoreResults && (
             <Button
               sx={{
                 m: 2,

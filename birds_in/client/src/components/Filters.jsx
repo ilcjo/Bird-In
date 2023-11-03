@@ -215,7 +215,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             cientifico: [],
             ingles: []
         });
-        dispatch(setNoMoreResults(false))
+        dispatch(setNoMoreResults(true))
     };
 
     const returnMenuClick = () => {
