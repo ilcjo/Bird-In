@@ -188,7 +188,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const handleClickFiltrar = () => {
         dispatch(saveFilters(selectOption))
         dispatch(sendParameter(selectOption))
-        dispatch(setNoMoreResults(false))
         pages(1)
         setIsFilterOpen(false);
     };
@@ -218,20 +217,20 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         dispatch(setNoMoreResults(true))
     };
 
-    const returnMenuClick = () => {
-        setSelectOption({
-            grupo: [],
-            familia: [],
-            pais: [],
-            zona: [],
-            cientifico: [],
-            ingles: []
-        });
-        localStorage.removeItem('nombreIngles')
-        dispatch(getOptionsData())
-        dispatch(getInfoBirds())
-        navigate('/menu')
-    };
+    // const returnMenuClick = () => {
+    //     setSelectOption({
+    //         grupo: [],
+    //         familia: [],
+    //         pais: [],
+    //         zona: [],
+    //         cientifico: [],
+    //         ingles: []
+    //     });
+    //     localStorage.removeItem('nombreIngles')
+    //     dispatch(getOptionsData())
+    //     dispatch(getInfoBirds())
+    //     navigate('/menu')
+    // };
 
     React.useEffect(() => {
         return () => {
@@ -243,7 +242,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 cientifico: [],
                 ingles: []
             });
-            dispatch(getOptionsData())
+            // dispatch(getOptionsData())
         };
     }, []);
 

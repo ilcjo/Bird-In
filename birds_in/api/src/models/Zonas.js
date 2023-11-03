@@ -13,6 +13,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        id_paises: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
     }, { timestamps: false, }
     )
 }

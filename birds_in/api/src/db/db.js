@@ -70,7 +70,7 @@ Paises.belongsTo(Zonas, { foreignKey: 'id_paises',  })
 Aves.belongsToMany(Paises, { through: 'aves_has_paises', foreignKey: 'aves_id_ave', timestamps: false })
 Paises.belongsToMany(Aves, { through: 'aves_has_paises', foreignKey: 'paises_id_pais', timestamps: false })
 Aves.belongsToMany(Zonas, { through: 'aves_has_zonas', foreignKey: 'aves_id_ave', timestamps: false, as: 'zonasAves' })
-Zonas.belongsToMany(Aves, { through: 'aves_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false })
+Zonas.belongsToMany(Aves, { through: 'aves_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoAves' })
 
 module.exports = {
   ...db.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

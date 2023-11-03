@@ -144,7 +144,6 @@ const fetchOptions = async () => {
 };
 
 const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
-    console.log('entro a la funcion de todas menos pais zona')
     const perpage = '0'
     const page = '0'
     const allResults = await fetchFilterBirds(
@@ -267,11 +266,13 @@ const filterOptionsPaisZonas = async (familia,
                     nombre: pais.dataValues.nombre,
                 })));
         });
-
+        // console.log(paisesSet)
         const findIdPais = await obtenerIdDePais(zonas)
+        // console.log(findIdPais)
         const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
+        // console.log(newopti)
         newOptions.paises = [JSON.parse(newopti)];
-
+        // console.log(newOptions.paises)
         const zonasSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
             ave.zonasAves.forEach(zona => zonasSet.add(JSON.stringify({
@@ -283,6 +284,7 @@ const filterOptionsPaisZonas = async (familia,
             JSON.parse(zona));
     }
     if (pais) {
+        // console.log(allResults.avesFiltradas)
         // console.log('entro en pais');
         // Construir opciones de zonas basadas en las aves filtradas
         const zonasSet = new Set();
@@ -465,7 +467,6 @@ const sendAndUpdateBird = async (
     urlImagen,
     idAve,
 ) => {
-    console.log('soy el cañon pais', paises)
     try {
         // Obtener el ave existente de la base de datos
         const existingBird = await Aves.findOne({

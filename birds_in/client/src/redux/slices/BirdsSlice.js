@@ -76,7 +76,8 @@ export const birdSlice = createSlice({
       state.saveOptions = action.payload
     },
     resetInfoBird: (state) => {
-      state.infoBirds = []
+      state.infoBirds = [],
+      state.noMoreResults = true
     },
     setNoMoreResults: (state, action) => {
       state.noMoreResults = action.payload;

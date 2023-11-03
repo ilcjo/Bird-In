@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fetchOptions, newOptions, searchBarResult } from '../slices/BirdsSlice'
+import { fetchOptions, newOptions, searchBarResult, setNoMoreResults } from '../slices/BirdsSlice'
 import { createParams } from '../../components/utils/convertId';
 
 export const getOptionsData = () => {
@@ -8,6 +8,7 @@ export const getOptionsData = () => {
       const response = await axios('aves/opciones')
       const data = response.data
       dispatch(fetchOptions(data))
+      dispatch(setNoMoreResults(true))
     } catch (error) {
       console.error("Error al obtener los datos:", error)
     }

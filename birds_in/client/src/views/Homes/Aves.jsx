@@ -7,7 +7,7 @@ import { Filters } from '../../components/Filters'
 import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { PhotosDetail } from '../../components/PhotosDetail';
-import { resetInfoBird, setNoMoreResults } from '../../redux/slices/BirdsSlice';
+import { resetInfoBird } from '../../redux/slices/BirdsSlice';
 
 
 export const Aves = () => {
