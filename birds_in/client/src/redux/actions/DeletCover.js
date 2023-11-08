@@ -11,7 +11,7 @@ export const sendPhotosDelete = (ids, urls) => {
             };
             const response = await axios.delete('/aves/borrar_fotos', requestData)
             const data = response.data
-            console.log(response.data)
+            // console.log(response.data)
         } catch (error) {
             console.error("Error al obtener los datos:", error)
 
@@ -29,7 +29,7 @@ export const sendCoverPhoto = (id, idAves) => {
 
             const response = axios.put('/aves/foto_portada', requestData )
             const data = response.data
-            console.log('ave destacada',data)
+            // console.log('ave destacada',data)
         } catch (error) {
             console.error("Error al obtener los datos:", error)
 

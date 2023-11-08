@@ -4,14 +4,23 @@ const {
     borrarZonas,
     createFamilias,
     updateFamilias,
-    borrarFamilias
+    borrarFamilias,
+    borrarGrupos,
+    createGrupos,
+    updateGrupo
 } = require("../../controllers/options/optionsController");
 
 const postZonas = async (req, res) => {
     const { zona, pais } = req.body
+    console.log(zona, pais)
+    typeof(pais)
     try {
-        const options = await createZonas(zona, pais)
-        return res.status(200).json(options)
+        if (zona && !isNaN(pais) && typeof pais === 'number') {
+            const options = await createZonas(zona, pais);
+            return res.status(200).json(options);
+        }
+        return res.status(400).json('Faltan parámetros zona y/o país');
+
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
@@ -38,6 +47,7 @@ const deleteZonas = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 };
+
 const postFamilias = async (req, res) => {
     const { nombreF } = req.body
     try {
@@ -59,10 +69,42 @@ const putFamilias = async (req, res) => {
 };
 
 const deleteFamilias = async (req, res) => {
-    const { idZona } = req.query
+    const { idFamilia } = req.query
     try {
-        if (idZona) {
-            const options = await borrarFamilias(idZona)
+        if (idFamilia) {
+            const options = await borrarFamilias(idFamilia)
+            return res.status(200).json(options)
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const postGrupo = async (req, res) => {
+    const { nombreG } = req.body
+    try {
+        const options = await createGrupos(nombreG)
+        return res.status(200).json(options)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const putGrupos = async (req, res) => {
+    const { nombreG, idGrupo } = req.body
+    try {
+        const options = await updateGrupo(nombreG, idGrupo)
+        return res.status(200).json(options)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const deleteGrupos = async (req, res) => {
+    const { idGrupo } = req.query
+    try {
+        if (idGrupo) {
+            const options = await borrarGrupos(idGrupo)
             return res.status(200).json(options)
         }
     } catch (error) {
@@ -76,5 +118,8 @@ module.exports = {
     deleteZonas,
     postFamilias,
     putFamilias,
-    deleteFamilias
+    deleteFamilias,
+    postGrupo,
+    putGrupos,
+    deleteGrupos
 }

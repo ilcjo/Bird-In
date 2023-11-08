@@ -64,8 +64,8 @@ Grupos.hasOne(Aves, { foreignKey: 'grupos_id_grupo' })
 // UNO A MUCHOS
 Aves.hasMany(Imagenes_aves, { foreignKey: 'aves_id_ave' })
 Imagenes_aves.belongsTo(Aves, { foreignKey: 'aves_id_ave' })
-Zonas.hasMany(Paises, { foreignKey: 'id_paises', as: 'zonasPaises' })
-Paises.belongsTo(Zonas, { foreignKey: 'id_paises',  })
+Zonas.hasMany(Paises, { foreignKey: 'id_paises', as: 'zonasPaises' });
+Paises.belongsTo(Zonas, { foreignKey: 'id_paises' });
 // MUCHOS A MUCHOS
 Aves.belongsToMany(Paises, { through: 'aves_has_paises', foreignKey: 'aves_id_ave', timestamps: false })
 Paises.belongsToMany(Aves, { through: 'aves_has_paises', foreignKey: 'paises_id_pais', timestamps: false })

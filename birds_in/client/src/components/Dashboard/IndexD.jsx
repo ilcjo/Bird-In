@@ -8,6 +8,7 @@ import { setEstateInfo } from '../../redux/slices/createSlice';
 import { Customize } from './Customize';
 import { Usuarios } from './Usuarios/Usuarios';
 import { styled } from '@mui/system';
+import { IndexOp } from './Options/IndexOp';
 
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -67,26 +68,31 @@ export const IndexD = () => {
         <StyledTab label={
           <Typography variant='h5'>
             Actualizar
-          </Typography> } />
+          </Typography>} />
 
-      <StyledTab label={<Typography variant='h5' >
-        Crear
-      </Typography>}
-      />
+        <StyledTab label={<Typography variant='h5' >
+          Crear
+        </Typography>}
+        />
 
-      <StyledTab
-        label={<Typography variant='h5' >
-          Personalizar
-        </Typography>
-        }/>
-      
-      <StyledTab
-        label={<Typography variant='h5' >
-          Usuarios
-        </Typography>
-        }
-      />
-    </StyledTabs >
+        <StyledTab
+          label={<Typography variant='h5' >
+            Personalizar
+          </Typography>
+          } />
+        <StyledTab
+          label={<Typography variant='h5' >
+            Zonas
+          </Typography>
+          }
+        />
+        <StyledTab
+          label={<Typography variant='h5' >
+            Usuarios
+          </Typography>
+          }
+        />
+      </StyledTabs >
       <div>
         {selectedTab === 1 && (
           <Box>
@@ -103,9 +109,14 @@ export const IndexD = () => {
             <Customize />
           </Box>
         )}
-        {selectedTab === 3 && (
+        {selectedTab === 4 && (
           <Box>
             <Usuarios />
+          </Box>
+        )}
+        {selectedTab === 3 && (
+          <Box>
+            <IndexOp />
           </Box>
         )}
       </div>

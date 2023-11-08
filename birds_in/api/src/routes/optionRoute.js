@@ -5,7 +5,10 @@ const {
     deleteZonas,
     postFamilias,
     putFamilias,
-    deleteFamilias
+    deleteFamilias,
+    postGrupo,
+    putGrupos,
+    deleteGrupos
 } = require('../handlers/options/optionsHandle')
 
 const optionRouter = Router()
@@ -15,4 +18,7 @@ optionRouter.post('/crearZonas', postZonas)
     .post('/crearfamilias', postFamilias)
     .put('/actualizarFamilias', putFamilias)
     .delete('/eliminarFamilias', deleteFamilias)
+    .post('/crearGrupos', postGrupo)
+    .put('/actualizarGrupos', putGrupos)
+    .delete('/eliminarGrupos', deleteGrupos)
 module.exports = optionRouter

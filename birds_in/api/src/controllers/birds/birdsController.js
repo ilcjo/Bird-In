@@ -121,7 +121,16 @@ const fetchOptions = async () => {
         attributes: [['id_pais', 'id'], 'nombre',],
     });
     const optionsZonas = await Zonas.findAll({
-        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre'],],
+        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre'], 
+        [
+            Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'),
+            'nombre_pais'
+          ],
+    ], 
+    order: [
+        [Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'), 'ASC'],
+        ['nombre_zona', 'ASC']
+      ]
     });
     const optionsNames = await Aves.findAll({
         attributes: ['nombre_cientifico', 'nombre_ingles',]
