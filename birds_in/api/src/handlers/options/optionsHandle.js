@@ -80,7 +80,7 @@ const deleteFamilias = async (req, res) => {
 };
 
 const postGrupo = async (req, res) => {
-    const { nombreG } = req.body
+    const {nombreG, idGrupo } = req.body
     try {
         const options = await createGrupos(nombreG)
         return res.status(200).json(options)

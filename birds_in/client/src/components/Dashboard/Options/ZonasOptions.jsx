@@ -177,7 +177,7 @@ export const ZonasOptions = () => {
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
-      setErrorMessage(error);
+      setErrorMessage(String(error));
       setErrorSnackbarOpen(true)
     }
   };
@@ -283,6 +283,13 @@ export const ZonasOptions = () => {
                             fullWidth
                             value={newZonaName.idZona === item.id ? newZonaName.zona : item.nombre}
                             onChange={(e) => handleEditZona(item.id, e.target.value)}
+                            InputLabelProps={{
+                              sx: labelStyles, // Establece el estilo del label del input
+
+                          }}
+                          InputProps={{
+                              sx: inputStyles, // Establece el estilo del input
+                          }}
                           />
                         </>
                       ) : (
@@ -320,8 +327,34 @@ export const ZonasOptions = () => {
                       {editMode === index ? (
                         // Modo de edición
                         <>
-                          <Button onClick={saveChanges}>Guardar</Button>
-                          <Button onClick={handleCancelEdit}>Cancelar</Button>
+                          <Button onClick={saveChanges}
+                            sx={{
+                              fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
+                              backgroundColor: theme.palette.primary.dark,
+                              color: theme.palette.primary.light,
+                              '&:hover': {
+                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                color: theme.palette.primary.main, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                              },
+                            }}
+                            variant="outlined"
+                            color="primary"
+                          >Grabar</Button>
+                          <Button onClick={handleCancelEdit}
+                            sx={{
+                              fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
+                              // backgroundColor: theme.palette.primary.main,
+                              color: theme.palette.primary.light,
+                              '&:hover': {
+                                backgroundColor: 'red', // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                              },
+                            }}
+                            variant="contained"
+                            color="secondary"
+                          >Cancelar</Button>
                         </>
                       ) : (
                         <Grid container >

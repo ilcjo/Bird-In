@@ -67,3 +67,31 @@ export const eliminarZona = (idZona) => {
         }
     }
 };
+
+export const updateGrupo = (info) => {
+    console.log('soy lo que va back:', info)
+    return async (dispatch) => {
+        try {
+            const response = await axios.put('opciones/actualizarGrupos/', info)
+            return response.data
+        } catch (error) {
+            console.log(error);
+            throw error;
+            // throw error.response.data;
+        }
+    }
+};
+
+export const eliminarGrupo  = (id) => {
+    console.log('soy lo que va back:', id)
+    return async (dispatch) => {
+        try {
+            const response = await axios.delete(`opciones/eliminarGrupos?idGrupo=${id}`)
+            return response.data
+        } catch (error) {
+            console.log(error);
+            throw error;
+            // throw error.response.data;
+        }
+    }
+};

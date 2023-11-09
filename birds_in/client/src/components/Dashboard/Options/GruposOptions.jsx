@@ -20,14 +20,15 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { addGrupo } from '../../../redux/actions/Options';
+import { addGrupo, eliminarGrupo, updateGrupo } from '../../../redux/actions/Options';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.main,
-    ...theme.typography.h2,
+    ...theme.typography.h5,
 
 
   },
@@ -52,14 +53,81 @@ export const GruposOptions = () => {
   const dispatch = useDispatch()
   const { grupos } = useSelector(state => state.birdSlice.options)
   const [nombreGrupos, setNombreGrupos] = React.useState({
-    nombreG: ''
+    nombreG: '',
+    idGrupo: 0
   });
   const [showDrop, setShowDrop] = React.useState(false);
   const [loadingMess, setLoadingMess] = React.useState('Agregando...');
   const [openSnackb, setOpenSnackb] = React.useState(false);
   const [errorSnackbOpen, setErrorSnackbOpen] = React.useState(false);
   const [errorMess, setErrorMess] = React.useState(null);
-  console.log(nombreGrupos)
+  const [showSuccessMessages, setShowSuccessMessages] = React.useState('');
+  const [editMode, setEditMode] = React.useState(null);
+
+  const handleEditGrupo = (index, newValue) => {
+    setNombreGrupos((prevValues) => ({
+      ...prevValues,
+      nombreG: newValue, // Asigna el nuevo valor al campo zona
+      idGrupo: index, // Asigna el valor de item.id al idZona
+    }));
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Seguro que deseas eliminar este Grupo?')) {
+      try {
+        // Lógica para eliminar el elemento
+        await dispatch(eliminarGrupo(id))
+        setShowSuccessMessages('Grupo eliminado')
+        setOpenSnackb(true);
+        await dispatch(getOptionsData())
+
+      } catch (error) {
+        setErrorMess(String(error));
+        setErrorSnackbOpen(true);
+      }
+    }
+  };
+
+  const handleEditClick = (index, zona) => {
+    // Habilita el modo de edición para la fila correspondiente al índice 'index'
+    setEditMode(index);
+    setEditingZonaId(zona.id);
+  };
+
+  const handleCancelEdit = () => {
+    // Cancela el modo de edición
+    setEditMode(null);
+  };
+
+  // Función para guardar los cambios en una zona
+  const saveChanges = async () => {
+    try {
+
+      // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
+      await dispatch(updateGrupo(nombreGrupos));
+      setShowDrop(true);
+      setLoadingMess('Actualizando...');
+      setShowDrop(false);
+      setShowSuccessMessages('Zona actualizada correctamente')
+      setOpenSnackb(true);
+      await dispatch(getOptionsData());
+      setEditMode(null);
+
+      // Reiniciar los estados después de guardar los cambios
+
+      setNombreGrupos({
+        nombreG: '',
+        idGrupo: 0
+
+      });
+
+    } catch (error) {
+      console.log(error);
+      setErrorMess(String(error));
+      setErrorSnackbOpen(true);
+    }
+  };
+
   const handleAgregar = async () => {
     try {
       // Aquí puedes enviar los datos al servidor o realizar otras acciones
@@ -68,17 +136,18 @@ export const GruposOptions = () => {
       setShowDrop(true);
       setLoadingMess('Agregando..');
       setShowDrop(false)
+      setShowSuccessMessages('Grupo creado correctamente')
       setOpenSnackb(true);
       // Limpia el formulario o realiza otras acciones necesarias
       setNombreGrupos({
-        nombreG: ''
+        nombreG: '',
+        idGrupo: 0
       });
-      dispatch(getOptionsData())
+      await dispatch(getOptionsData())
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
-      console.log(error)
-      setErrorMess(error);
+      setErrorMess(String(error));
       setErrorSnackbOpen(true)
     }
   };
@@ -133,33 +202,11 @@ export const GruposOptions = () => {
       return;
     }
     setOpenSnackb(false);
+    setShowSuccessMessages('')
   };
   return (
     <div>
-      
-      <Snackbar
-        open={openSnackb}
-        autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
-        onClose={handleCloseSnackbar}
-        message={'El Grupo se agrego exitosamente'}
-      >
-      </Snackbar>
 
-      {/* Snackbar for error message */}
-      <Snackbar
-        open={errorSnackbOpen}
-        autoHideDuration={5000} // Adjust the duration as needed
-        onClose={() => setErrorSnackbOpen(false)}
-      >
-        <Alert
-          elevation={6}
-          variant="filled"
-          severity="error"
-          onClose={() => setErrorSnackbOpen(false)}
-        >
-          {errorMess}
-        </Alert>
-      </Snackbar>
       <Grid container spacing={5} sx={{
         display: 'flex',
         alignItems: 'center',
@@ -176,13 +223,93 @@ export const GruposOptions = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">GRUPOS</StyledTableCell>
-
+                  <StyledTableCell align="center" ></StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {sortedGrupos.map((item, index) => (
                   <StyledTableRow key={item.index}>
-                    <TableCell align="center" colSpan={3} style={{ color: 'white' }}>{item.nombre}</TableCell>
+                    <TableCell align="center" style={{ color: 'white' }}>
+                      {editMode === index ? (
+                        // Modo de edición
+                        <>
+                          <TextField
+                            fullWidth
+                            value={nombreGrupos.idGrupo === item.id ? nombreGrupos.nombreG : item.nombre}
+                            onChange={(e) => handleEditGrupo(item.id, e.target.value)}
+                            InputLabelProps={{
+                              sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                              sx: inputStyles, // Establece el estilo del input
+                            }}
+                          />
+                        </>
+                      ) : (
+                        // Modo de visualización
+                        item.nombre
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      {editMode === index ? (
+                        // Modo de edición
+                        <>
+                          <Button onClick={saveChanges} sx={{
+                            fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
+                            backgroundColor: theme.palette.primary.dark,
+                            color: theme.palette.primary.light,
+                            '&:hover': {
+                              backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                              color: theme.palette.primary.main, // Cambia el color del texto en hover
+                              textTransform: 'none',
+                            },
+                          }}
+                            variant="outlined"
+                            color="primary"
+                          >Grabar</Button>
+                          <Button onClick={handleCancelEdit}
+                            sx={{
+                              fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
+                              // backgroundColor: theme.palette.primary.main,
+                              color: theme.palette.primary.light,
+                              '&:hover': {
+                                backgroundColor: 'red', // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                              },
+                            }}
+                            variant="contained"
+                            color="secondary"
+                          >Cancelar</Button>
+                        </>
+                      ) : (
+                        <Grid container >
+                          <Grid item xs={12} md={6}>
+                            <Button onClick={() => handleEditClick(index, item)}
+                              sx={{
+                                fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 7, mr: -7, mt: 0.7, textTransform: 'none',
+                                // backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.primary.main,
+                                '&:hover': {
+                                  // backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                  color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                  textTransform: 'none',
+                                },
+                              }}
+                              variant="outlined"
+                              color="primary"
+                            >Editar</Button>
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <Button onClick={() => handleDelete(item.id)}
+                              color="secondary"
+                              startIcon={<DeleteForeverIcon />}
+                            ></Button>
+                          </Grid>
+                        </Grid>
+                      )}
+                    </TableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -247,6 +374,29 @@ export const GruposOptions = () => {
 
       </Backdrop>
 
+      <Snackbar
+        open={openSnackb}
+        autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
+        onClose={handleCloseSnackbar}
+        message={showSuccessMessages}
+      >
+      </Snackbar>
+
+      {/* Snackbar for error message */}
+      <Snackbar
+        open={errorSnackbOpen}
+        autoHideDuration={5000} // Adjust the duration as needed
+        onClose={() => setErrorSnackbOpen(false)}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          severity="error"
+          onClose={() => setErrorSnackbOpen(false)}
+        >
+          {errorMess}
+        </Alert>
+      </Snackbar>
     </div>
   )
 };
