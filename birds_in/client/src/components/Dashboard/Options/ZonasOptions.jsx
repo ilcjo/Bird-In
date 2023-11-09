@@ -22,19 +22,19 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { addZona } from '../../../redux/actions/Options';
+import { addZona, eliminarZona, updateZona } from '../../../redux/actions/Options';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.main,
-    ...theme.typography.h2,
-
-
+    ...theme.typography.h5,
   },
   [`&.${tableCellClasses.body}`]: {
     fontFamily: theme.typography.fontFamily,
+    
   },
 }));
 
@@ -46,8 +46,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
-
-
   },
 }));
 
@@ -55,8 +53,8 @@ export const ZonasOptions = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { zonas, paises } = useSelector(state => state.birdSlice.options)
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  // const [page, setPage] = React.useState(0);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [nombreZona, setNombreZona] = React.useState('');
   const [paisSeleccionado, setPaisSeleccionado] = React.useState(null);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -64,15 +62,113 @@ export const ZonasOptions = () => {
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState(null);
+  const [showErrorMessages, setShowErrorMessages] = React.useState(false);
+  const [showSuccessMessages, setShowSuccessMessages] = React.useState('');
+  const [editMode, setEditMode] = React.useState(null);
+  // Estados para rastrear la selección de país, la zona que se edita y el nuevo nombre
+  const [selectedPaisId, setSelectedPaisId] = React.useState(null);
+  const [editingZonaId, setEditingZonaId] = React.useState(null);
+  const [newZonaName, setNewZonaName] = React.useState({
+    idZona: 0,
+    zona: ''
+  });
+  // console.log('soy paisselected', selectedPaisId)
+  // console.log('soy zona editada', newZonaName)
+  // console.log('soy zona id', editingZonaId)
+
+  const handleDelete = (id) => {
+    if (window.confirm('¿Seguro que deseas eliminar esta zona?')) {
+      try {
+        // Lógica para eliminar el elemento
+        dispatch(eliminarZona(id))
+        setShowSuccessMessages('Zona eliminada')
+        setOpenSnackbar(true);
+        dispatch(getOptionsData())
+
+      } catch (error) {
+        setErrorMessage(String(error));
+        setErrorSnackbarOpen(true);
+      }
+    }
+  };
+  const handleEditClick = (index, zona) => {
+    // Habilita el modo de edición para la fila correspondiente al índice 'index'
+    setEditMode(index);
+    setEditingZonaId(zona.id);
+  };
+
+  const handleCancelEdit = () => {
+    // Cancela el modo de edición
+    setEditMode(null);
+  };
+
+  // Función para manejar la selección de un país en Autocomplete
+  const handlePaisSelection = (event, newValue) => {
+    if (newValue) {
+      setSelectedPaisId(newValue);
+    }
+  };
+
+  // Función para manejar la edición de una zona
+  const handleEditZona = (index, newValue) => {
+    setNewZonaName((prevValues) => ({
+      ...prevValues,
+      idZona: index, // Asigna el valor de item.id al idZona
+      zona: newValue, // Asigna el nuevo valor al campo zona
+    }));
+  };
+
+  // Función para guardar los cambios en una zona
+  const saveChanges = async () => {
+    try {
+      
+        // Define los valores a enviar, inicialmente con los valores existentes
+        const valuesToUpdate =
+        {
+          idZona: editingZonaId,
+          zona: newZonaName.zona !== null ? newZonaName.zona : null, // Si no se cambió el nombre, envía null
+          paisId: selectedPaisId ? selectedPaisId.id : 0, // Si no se cambió el país, envía 0
+        };
+
+        // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
+        await dispatch(updateZona(valuesToUpdate));
+        setShowBackdrop(true);
+        setLoadingMessage('Actualizando...');
+        setShowBackdrop(false);
+        setShowSuccessMessages('Zona actualizada correctamente')
+        setOpenSnackbar(true);
+        dispatch(getOptionsData());
+        setEditMode(null);
+
+        // Reiniciar los estados después de guardar los cambios
+        setSelectedPaisId(null);
+        setNewZonaName('');
+      
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(String(error));
+      setErrorSnackbarOpen(true);
+    }
+  };
+
+
 
   const handleAgregar = async () => {
+    if (!nombreZona || !paisSeleccionado) {
+      // Si alguno de los campos está vacío, muestra una notificación de error
+      setErrorSnackbarOpen(true);
+      setErrorMessage('Por favor, completa todos los campos.');
+      setShowErrorMessages(true);
+      return;
+    }
     try {
       // Aquí puedes enviar los datos al servidor o realizar otras acciones
-
+      setShowErrorMessages(false)
       const response = await dispatch(addZona({ zona: nombreZona, pais: paisSeleccionado.id }));
       setShowBackdrop(true);
       setLoadingMessage('Agregando..');
       setShowBackdrop(false)
+      setShowSuccessMessages('Zona creada correctamente')
       setOpenSnackbar(true);
       // Limpia el formulario o realiza otras acciones necesarias
       setNombreZona('');
@@ -145,9 +241,11 @@ export const ZonasOptions = () => {
       return;
     }
     setOpenSnackbar(false);
+    setShowSuccessMessages('')
   };
   return (
     <div>
+
       <Grid container spacing={5} sx={{
         display: 'flex',
         alignItems: 'center',
@@ -155,8 +253,6 @@ export const ZonasOptions = () => {
         width: '80%',
         minWidth: '170vh',
         margin: 'auto',
-        // backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-        // backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
         padding: '40px 40px 40px 40px',
         borderRadius: '0px 0px 20px 20px'
       }} >
@@ -165,8 +261,9 @@ export const ZonasOptions = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center" colSpan={3}>ZONA</StyledTableCell>
+                  <StyledTableCell align="center" colSpan={2}>ZONA</StyledTableCell>
                   <StyledTableCell align="center" colSpan={2}>PAÍS</StyledTableCell>
+                  <StyledTableCell align="center" colSpan={2}></StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -177,9 +274,82 @@ export const ZonasOptions = () => {
                   </TableRow>
                 ))} */}
                 {zonas.map((item, index) => (
-                  <StyledTableRow key={item.index}>
-                    <TableCell align="center" colSpan={3} style={{ color: 'white' }}>{item.nombre}</TableCell>
-                    <TableCell align="center" colSpan={2}>{item.nombre_pais}</TableCell>
+                  <StyledTableRow key={index}>
+                    <TableCell align="center" colSpan={2} style={{ color: 'white' }}>
+                      {editMode === index ? (
+                        // Modo de edición
+                        <>
+                          <TextField
+                            fullWidth
+                            value={newZonaName.idZona === item.id ? newZonaName.zona : item.nombre}
+                            onChange={(e) => handleEditZona(item.id, e.target.value)}
+                          />
+                        </>
+                      ) : (
+                        // Modo de visualización
+                        item.nombre
+                      )}
+                    </TableCell>
+                    <TableCell align="center" colSpan={2}>
+                      {editMode === index ? (
+                        // Modo de edición
+                        <Autocomplete
+                          disablePortal
+                          options={paises}
+                          getOptionLabel={(option) => option.nombre}
+                          value={selectedPaisId ? selectedPaisId : paises.find((p) => p.nombre === item.nombre_pais) || null}
+                          onChange={handlePaisSelection}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              InputProps={{
+                                ...params.InputProps,
+                                sx: inputStyles,
+                              }}
+                              isOptionEqualToValue={(option, value) => option.id === value?.id}
+                            />
+                          )}
+                        />
+                      ) : (
+                        // Modo de visualización
+                        item.nombre_pais
+                      )}
+
+                    </TableCell>
+                    <TableCell align="center" colSpan={2}>
+                      {editMode === index ? (
+                        // Modo de edición
+                        <>
+                          <Button onClick={saveChanges}>Guardar</Button>
+                          <Button onClick={handleCancelEdit}>Cancelar</Button>
+                        </>
+                      ) : (
+                        <Grid container >
+                          <Grid item xs={12} md={6}>
+                            <Button onClick={() => handleEditClick(index, item)}
+                              sx={{
+                                fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
+                                // backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.primary.main,
+                                '&:hover': {
+                                  // backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                  color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                  textTransform: 'none',
+                                },
+                              }}
+                              variant="outlined"
+                              color="primary"
+                            >Editar</Button>
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <Button onClick={() => handleDelete(item.id)}
+                              color="secondary"
+                              startIcon={<DeleteForeverIcon />}
+                            ></Button>
+                          </Grid>
+                        </Grid>
+                      )}
+                    </TableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -200,7 +370,7 @@ export const ZonasOptions = () => {
 
         }}>
 
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={6}>
 
             <TextField
               fullWidth
@@ -213,6 +383,8 @@ export const ZonasOptions = () => {
               InputProps={{
                 sx: inputStyles,
               }}
+              error={showErrorMessages && !nombreZona}
+              helperText={showErrorMessages && !nombreZona ? 'Este campo es obligatorio' : ''}
             />
           </Grid>
 
@@ -234,8 +406,10 @@ export const ZonasOptions = () => {
                     ...params.InputProps,
                     sx: inputStyles,
                   }}
+                  error={showErrorMessages && !paisSeleccionado}
+                  helperText={showErrorMessages && !paisSeleccionado ? 'Este campo es obligatorio' : ''}
                 />}
-              isOptionEqualToValue={(option, value) => option.id === value?.id}
+              isOptionEqualToValue={(option, value) => option.nombre === value?.nombre}
               filterOptions={(options, state) => {
                 // Filtra las opciones para que coincidan solo al principio de las letras
                 const inputValue = state.inputValue.toLowerCase();
@@ -245,7 +419,7 @@ export const ZonasOptions = () => {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={1}>
             <Button
               sx={{
                 fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
@@ -285,15 +459,16 @@ export const ZonasOptions = () => {
         open={openSnackbar}
         autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
         onClose={handleCloseSnackbar}
-        message={'La zona se agrego exitosamente'}
+        message={showSuccessMessages}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
       >
       </Snackbar>
-
       {/* Snackbar for error message */}
       <Snackbar
         open={errorSnackbarOpen}
         autoHideDuration={5000} // Adjust the duration as needed
         onClose={() => setErrorSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
       >
         <Alert
           elevation={6}

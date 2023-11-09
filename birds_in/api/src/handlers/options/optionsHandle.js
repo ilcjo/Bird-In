@@ -12,7 +12,6 @@ const {
 
 const postZonas = async (req, res) => {
     const { zona, pais } = req.body
-    console.log(zona, pais)
     typeof(pais)
     try {
         if (zona && !isNaN(pais) && typeof pais === 'number') {

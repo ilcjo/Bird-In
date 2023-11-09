@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {
   Alert,
-  Autocomplete,
   Backdrop,
   Button,
   CircularProgress,
@@ -12,7 +11,6 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -22,7 +20,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { addZona } from '../../../redux/actions/Options';
+import { addGrupo } from '../../../redux/actions/Options';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -46,8 +44,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
-
-
   },
 }));
 
@@ -55,33 +51,35 @@ export const GruposOptions = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { grupos } = useSelector(state => state.birdSlice.options)
- 
-  const [nombreGrupos, setNombreGrupos] = React.useState('');
-
-  const [showBackdrop, setShowBackdrop] = React.useState(false);
-  const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(null);
-
+  const [nombreGrupos, setNombreGrupos] = React.useState({
+    nombreG: ''
+  });
+  const [showDrop, setShowDrop] = React.useState(false);
+  const [loadingMess, setLoadingMess] = React.useState('Agregando...');
+  const [openSnackb, setOpenSnackb] = React.useState(false);
+  const [errorSnackbOpen, setErrorSnackbOpen] = React.useState(false);
+  const [errorMess, setErrorMess] = React.useState(null);
+  console.log(nombreGrupos)
   const handleAgregar = async () => {
     try {
       // Aquí puedes enviar los datos al servidor o realizar otras acciones
 
-      // const response = await dispatch(addZona({ zona: nombreZona, pais: paisSeleccionado.id }));
-      setShowBackdrop(true);
-      setLoadingMessage('Agregando..');
-      setShowBackdrop(false)
-      setOpenSnackbar(true);
+      const response = await dispatch(addGrupo(nombreGrupos));
+      setShowDrop(true);
+      setLoadingMess('Agregando..');
+      setShowDrop(false)
+      setOpenSnackb(true);
       // Limpia el formulario o realiza otras acciones necesarias
-      setNombreZona('');
-      setPaisSeleccionado(null);
+      setNombreGrupos({
+        nombreG: ''
+      });
       dispatch(getOptionsData())
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
-      setErrorMessage(error);
-      setErrorSnackbarOpen(true)
+      console.log(error)
+      setErrorMess(error);
+      setErrorSnackbOpen(true)
     }
   };
 
@@ -128,16 +126,40 @@ export const GruposOptions = () => {
       return 0;
     });
   };
-  const sortedGrupos= sortAlphabetically(grupos);
+  const sortedGrupos = sortAlphabetically(grupos);
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenSnackbar(false);
+    setOpenSnackb(false);
   };
   return (
     <div>
+      
+      <Snackbar
+        open={openSnackb}
+        autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
+        onClose={handleCloseSnackbar}
+        message={'El Grupo se agrego exitosamente'}
+      >
+      </Snackbar>
+
+      {/* Snackbar for error message */}
+      <Snackbar
+        open={errorSnackbOpen}
+        autoHideDuration={5000} // Adjust the duration as needed
+        onClose={() => setErrorSnackbOpen(false)}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          severity="error"
+          onClose={() => setErrorSnackbOpen(false)}
+        >
+          {errorMess}
+        </Alert>
+      </Snackbar>
       <Grid container spacing={5} sx={{
         display: 'flex',
         alignItems: 'center',
@@ -145,8 +167,6 @@ export const GruposOptions = () => {
         width: '80%',
         minWidth: '170vh',
         margin: 'auto',
-        // backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-        // backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
         padding: '40px 40px 40px 40px',
         borderRadius: '0px 0px 20px 20px'
       }} >
@@ -156,7 +176,7 @@ export const GruposOptions = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">GRUPOS</StyledTableCell>
-                 
+
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -174,13 +194,13 @@ export const GruposOptions = () => {
 
         }}>
 
-          <Grid item xs={12} md={9}>
+          <Grid item xs={12} md={11}>
 
             <TextField
               fullWidth
               label="Nombre de Grupo"
-              value={nombreGrupos}
-              onChange={(e) => setNombreGrupos(e.target.value)}
+              value={nombreGrupos.nombreG}
+              onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
               InputLabelProps={{
                 sx: labelStyles,
               }}
@@ -189,7 +209,7 @@ export const GruposOptions = () => {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={1}>
             <Button
               sx={{
                 fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
@@ -209,47 +229,24 @@ export const GruposOptions = () => {
               Agregar
             </Button>
           </Grid>
-        
-          </Grid>
-         
+
         </Grid>
+
+      </Grid>
       {/* Backdrop para mostrar durante la carga */}
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={showBackdrop}
+        open={showDrop}
       >
         <>
           <CircularProgress color="inherit" />
           <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-            {loadingMessage}
+            {loadingMess}
           </Typography>
         </>
 
       </Backdrop>
 
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
-        onClose={handleCloseSnackbar}
-        message={'La zona se agrego exitosamente'}
-      >
-      </Snackbar>
-
-      {/* Snackbar for error message */}
-      <Snackbar
-        open={errorSnackbarOpen}
-        autoHideDuration={5000} // Adjust the duration as needed
-        onClose={() => setErrorSnackbarOpen(false)}
-      >
-        <Alert
-          elevation={6}
-          variant="filled"
-          severity="error"
-          onClose={() => setErrorSnackbarOpen(false)}
-        >
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </div>
   )
 };

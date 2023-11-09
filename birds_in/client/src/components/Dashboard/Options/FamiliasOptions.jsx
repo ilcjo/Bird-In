@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {
   Alert,
-  Autocomplete,
   Backdrop,
   Button,
   CircularProgress,
@@ -12,7 +11,6 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -22,7 +20,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { addZona } from '../../../redux/actions/Options';
+import { addFamilia } from '../../../redux/actions/Options';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -46,43 +44,39 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
-
-
   },
 }));
 
 export const FamiliasOptions = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { zonas, paises } = useSelector(state => state.birdSlice.options)
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [nombreZona, setNombreZona] = React.useState('');
-  const [paisSeleccionado, setPaisSeleccionado] = React.useState(null);
-  const [showBackdrop, setShowBackdrop] = React.useState(false);
-  const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+  const { familias } = useSelector(state => state.birdSlice.options)
+
+  const [nombreFamilia, setNombreFamilia] = React.useState('');
+  const [showBack, setShowBack] = React.useState(false);
+  const [loadingMe, setLoadingMe] = React.useState('Agregando...');
+  const [openSnack, setOpenSnack] = React.useState(false);
+  const [errorSnackOpen, setErrorSnackOpen] = React.useState(false);
+  const [errorMe, setErrorMe] = React.useState(null);
 
   const handleAgregar = async () => {
     try {
       // Aquí puedes enviar los datos al servidor o realizar otras acciones
 
-      const response = await dispatch(addZona({ zona: nombreZona, pais: paisSeleccionado.id }));
-      setShowBackdrop(true);
-      setLoadingMessage('Agregando..');
-      setShowBackdrop(false)
-      setOpenSnackbar(true);
+      const response = await dispatch(addFamilia({ nombreF: nombreFamilia }));
+      setShowBack(true);
+      setLoadingMe('Agregando..');
+      setShowBack(false)
+      setOpenSnack(true);
       // Limpia el formulario o realiza otras acciones necesarias
-      setNombreZona('');
-      setPaisSeleccionado(null);
+      setNombreFamilia('');
       dispatch(getOptionsData())
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
-      setErrorMessage(error);
-      setErrorSnackbarOpen(true)
+      console.log(error)
+      setErrorMe(error);
+      setErrorSnackOpen(true)
     }
   };
 
@@ -129,22 +123,13 @@ export const FamiliasOptions = () => {
       return 0;
     });
   };
-  const sortedZonas = sortAlphabetically(zonas);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  const sortedFamilias = sortAlphabetically(familias);
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenSnackbar(false);
+    setOpenSnack(false);
   };
   return (
     <div>
@@ -165,83 +150,33 @@ export const FamiliasOptions = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center" colSpan={3}>ZONA</StyledTableCell>
-                  <StyledTableCell align="center" colSpan={2}>PAÍS</StyledTableCell>
+                  <StyledTableCell align="center">FAMILIAS</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/* {zonas.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
-                  <TableRow key={item.index}>
-                    <TableCell align="center" colSpan={3}>{item.nombre}</TableCell>
-                    <TableCell align="center" colSpan={2}>{item.nombre_pais}</TableCell>
-                  </TableRow>
-                ))} */}
-                {zonas.map((item, index) => (
+                {sortedFamilias.map((item, index) => (
                   <StyledTableRow key={item.index}>
                     <TableCell align="center" colSpan={3} style={{ color: 'white' }}>{item.nombre}</TableCell>
-                    <TableCell align="center" colSpan={2}>{item.nombre_pais}</TableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-          {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={zonas.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
         </Grid>
         <Grid container spacing={1} sx={{
           margin: 3,
-
         }}>
-
-          <Grid item xs={12} md={7}>
-
+          <Grid item xs={12} md={11}>
             <TextField
               fullWidth
-              label="Nombre de Zona"
-              value={nombreZona}
-              onChange={(e) => setNombreZona(e.target.value)}
+              label="Nombre de Familia"
+              value={nombreFamilia}
+              onChange={(e) => setNombreFamilia(e.target.value)}
               InputLabelProps={{
                 sx: labelStyles,
               }}
               InputProps={{
                 sx: inputStyles,
-              }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-paises"
-              options={paises}
-              getOptionLabel={(option) => option.nombre}
-              value={paisSeleccionado}
-              onChange={(event, newValue) => setPaisSeleccionado(newValue)}
-              renderInput={(params) =>
-                <TextField {...params}
-                  label="País"
-                  InputLabelProps={{
-                    sx: labelStyles,
-                  }}
-                  InputProps={{
-                    ...params.InputProps,
-                    sx: inputStyles,
-                  }}
-                />}
-              isOptionEqualToValue={(option, value) => option.id === value?.id}
-              filterOptions={(options, state) => {
-                // Filtra las opciones para que coincidan solo al principio de las letras
-                const inputValue = state.inputValue.toLowerCase();
-                return options.filter((option) =>
-                  option.nombre.toLowerCase().startsWith(inputValue)
-                );
               }}
             />
           </Grid>
@@ -270,38 +205,40 @@ export const FamiliasOptions = () => {
       {/* Backdrop para mostrar durante la carga */}
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={showBackdrop}
+        open={showBack}
       >
         <>
           <CircularProgress color="inherit" />
           <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-            {loadingMessage}
+            {loadingMe}
           </Typography>
         </>
 
       </Backdrop>
 
       <Snackbar
-        open={openSnackbar}
+        open={openSnack}
         autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
         onClose={handleCloseSnackbar}
-        message={'La zona se agrego exitosamente'}
+        message={'La Familia se agrego exitosamente'}
+        // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
       </Snackbar>
 
       {/* Snackbar for error message */}
       <Snackbar
-        open={errorSnackbarOpen}
+        open={errorSnackOpen}
         autoHideDuration={5000} // Adjust the duration as needed
-        onClose={() => setErrorSnackbarOpen(false)}
+        onClose={() => setErrorSnackOpen(false)}
+        // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           elevation={6}
           variant="filled"
           severity="error"
-          onClose={() => setErrorSnackbarOpen(false)}
+          onClose={() => setErrorSnackOpen(false)}
         >
-          {errorMessage}
+          {errorMe}
         </Alert>
       </Snackbar>
     </div>
