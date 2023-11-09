@@ -14,7 +14,6 @@ import {
     Snackbar,
     TextField,
     Typography,
-    setRef
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
@@ -23,13 +22,11 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import wikipediaLogo from '../../assets/images/wikilogo.png'
 import ebirdLogo from '../../assets/images/Logo_ebird.png'
 import { Link, useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getOptionsData } from '../../redux/actions/fetchOptions';
 import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
-import { AddOptions } from './AddOptions';
+
 
 
 export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird }) => {
@@ -112,11 +109,12 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
-    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
 
     // console.log('image file', imageFile)
     // console.log('imagenurl', imageURL)
     // console.log('IMAGENES', allImageURLs)
+ 
 
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -585,23 +583,28 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     InputProps={{
                                         ...params.InputProps,
                                         sx: inputStyles, // Estilo del input
-                                        endAdornment: (
-                                            <AddIcon
-                                                onClick={() => setIsDialogOpen(true)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                        ),
                                     }}
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
                             filterOptions={(options, state) => {
-                                // Filtra las opciones para que coincidan solo al principio de las letras
                                 const inputValue = state.inputValue.toLowerCase();
-                                return options.filter((option) =>
-                                    option.nombre.toLowerCase().startsWith(inputValue)
-                                );
-                            }}
+                                const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
+                              
+                                return options.filter((option) => {
+                                  if (selectedPaises.length === 0) {
+                                    return true; // No hay paises seleccionados, muestra todas las zonas
+                                  }
+                                  return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                                });
+                              }}
+                            // filterOptions={(options, state) => {
+                            //     // Filtra las opciones para que coincidan solo al principio de las letras
+                            //     const inputValue = state.inputValue.toLowerCase();
+                            //     return options.filter((option) =>
+                            //         option.nombre.toLowerCase().startsWith(inputValue)
+                            //     );
+                            // }}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
                                     <Chip
@@ -617,27 +620,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             }
 
                         />
-                        <AddOptions
-                            open={isDialogOpen}
-                            onClose={() => setIsDialogOpen(false)} />
-                        {/* <TextField
-                            variant="filled"
-                            multiline
-                            name="zona"
-                            label="Zonas"
-                            rows={3}
-                            value={createData.zona}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-                            sx={{ mt: -3, mb: 2, backgroundColor: 'rgba(204,214,204,0.17)', }}
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-                            }}
-                            InputProps={{
-                                style: { color: '#ccd6cc' } // Cambia el color del texto a azul (o el color que desees)
-                            }}
-                        /> */}
+
                         <TextField
                             name="urlWiki"
                             multiline

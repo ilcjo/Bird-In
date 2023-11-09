@@ -68,7 +68,7 @@ const putFamilias = async (req, res) => {
 };
 
 const deleteFamilias = async (req, res) => {
-    const { idFamilia } = req.query
+    const {  nombreF, idFamilia } = req.query
     try {
         if (idFamilia) {
             const options = await borrarFamilias(idFamilia)

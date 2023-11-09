@@ -20,16 +20,15 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFamilia } from '../../../redux/actions/Options';
+import { addFamilia, eliminarFamilia, updateFamilia } from '../../../redux/actions/Options';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.main,
-    ...theme.typography.h2,
-
-
+    ...theme.typography.h5,
   },
   [`&.${tableCellClasses.body}`]: {
     fontFamily: theme.typography.fontFamily,
@@ -52,30 +51,98 @@ export const FamiliasOptions = () => {
   const dispatch = useDispatch()
   const { familias } = useSelector(state => state.birdSlice.options)
 
-  const [nombreFamilia, setNombreFamilia] = React.useState('');
+  const [nombreFamilia, setNombreFamilia] = React.useState({
+    nombreF: '',
+    idFamilia: 0
+  });
   const [showBack, setShowBack] = React.useState(false);
   const [loadingMe, setLoadingMe] = React.useState('Agregando...');
   const [openSnack, setOpenSnack] = React.useState(false);
   const [errorSnackOpen, setErrorSnackOpen] = React.useState(false);
   const [errorMe, setErrorMe] = React.useState(null);
+  const [showSuccessMessages, setShowSuccessMessages] = React.useState('');
+  const [editMode, setEditMode] = React.useState(null);
+
+  const handleEditFamilia = (id, newValue) => {
+    setNombreFamilia((prevValues) => ({
+      ...prevValues,
+      nombreF: newValue, // Asigna el nuevo valor al campo zona
+      idFamilia: id, // Asigna el valor de item.id al idZona
+    }));
+  };
+
+
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Seguro que deseas eliminar esta Familia?')) {
+      try {
+        // Lógica para eliminar el elemento
+        await dispatch(eliminarFamilia(id))
+        setShowSuccessMessages('Familia eliminado')
+        setOpenSnack(true);
+        await dispatch(getOptionsData())
+
+      } catch (error) {
+        setErrorMe(String(error));
+        setErrorSnackOpen(true);
+      }
+    }
+  };
+
+  const handleEditClick = (index, zona) => {
+    // Habilita el modo de edición para la fila correspondiente al índice 'index'
+    setEditMode(index);
+  };
+
+  const handleCancelEdit = () => {
+    // Cancela el modo de edición
+    setEditMode(null);
+  };
+
+  // Función para guardar los cambios en una zona
+  const saveChanges = async () => {
+    try {
+
+      // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
+      await dispatch(updateFamilia(nombreFamilia));
+      setShowBack(true);
+      setLoadingMe('Actualizando...');
+      setShowBack(false);
+      setShowSuccessMessages('Zona actualizada correctamente')
+      setOpenSnack(true);
+      await dispatch(getOptionsData());
+      setEditMode(null);
+
+      // Reiniciar los estados después de guardar los cambios
+      setNombreFamilia({
+        nombreF: '',
+        idFamilia: 0
+      });
+
+    } catch (error) {
+      setErrorMe(String(error));
+      setErrorSnackOpen(true);
+    }
+  };
 
   const handleAgregar = async () => {
     try {
       // Aquí puedes enviar los datos al servidor o realizar otras acciones
 
-      const response = await dispatch(addFamilia({ nombreF: nombreFamilia }));
+      const response = await dispatch(addFamilia(nombreFamilia));
       setShowBack(true);
       setLoadingMe('Agregando..');
       setShowBack(false)
       setOpenSnack(true);
       // Limpia el formulario o realiza otras acciones necesarias
-      setNombreFamilia('');
-      dispatch(getOptionsData())
+      setNombreFamilia({
+        nombreF: '',
+        idFamilia: 0
+      });
+      await dispatch(getOptionsData())
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
-      console.log(error)
-      setErrorMe(error);
+      setErrorMe(String(error));
       setErrorSnackOpen(true)
     }
   };
@@ -140,8 +207,6 @@ export const FamiliasOptions = () => {
         width: '80%',
         minWidth: '170vh',
         margin: 'auto',
-        // backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-        // backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
         padding: '40px 40px 40px 40px',
         borderRadius: '0px 0px 20px 20px'
       }} >
@@ -151,12 +216,93 @@ export const FamiliasOptions = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">FAMILIAS</StyledTableCell>
+                  <StyledTableCell align="center" ></StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {sortedFamilias.map((item, index) => (
                   <StyledTableRow key={item.index}>
-                    <TableCell align="center" colSpan={3} style={{ color: 'white' }}>{item.nombre}</TableCell>
+                    <TableCell align="center" style={{ color: 'white' }}>
+                      {editMode === index ? (
+                        // Modo de edición
+                        <>
+                          <TextField
+                            fullWidth
+                            value={nombreFamilia.idFamilia === item.id ? nombreFamilia.nombreF : item.nombre}
+                            onChange={(e) => handleEditFamilia(item.id, e.target.value)}
+                            InputLabelProps={{
+                              sx: labelStyles, // Establece el estilo del label del input
+
+                            }}
+                            InputProps={{
+                              sx: inputStyles, // Establece el estilo del input
+                            }}
+                          />
+                        </>
+                      ) : (
+                        // Modo de visualización
+                        item.nombre
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      {editMode === index ? (
+                        // Modo de edición
+                        <>
+                          <Button onClick={saveChanges} sx={{
+                            fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
+                            backgroundColor: theme.palette.primary.dark,
+                            color: theme.palette.primary.light,
+                            '&:hover': {
+                              backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                              color: theme.palette.primary.main, // Cambia el color del texto en hover
+                              textTransform: 'none',
+                            },
+                          }}
+                            variant="outlined"
+                            color="primary"
+                          >Grabar</Button>
+                          <Button onClick={handleCancelEdit}
+                            sx={{
+                              fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
+                              // backgroundColor: theme.palette.primary.main,
+                              color: theme.palette.primary.light,
+                              '&:hover': {
+                                backgroundColor: 'red', // Cambia el color de fondo en hover
+                                color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                textTransform: 'none',
+                              },
+                            }}
+                            variant="contained"
+                            color="secondary"
+                          >Cancelar</Button>
+                        </>
+                      ) : (
+                        <Grid container spacing={0} >
+                          <Grid item xs={12} md={6}>
+                            <Button onClick={() => handleEditClick(index, item)}
+                              sx={{
+                                fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: -9, mr: -23, mt: 0.7, textTransform: 'none',
+                                // backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.primary.main,
+                                '&:hover': {
+                                  // backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+                                  color: theme.palette.primary.light, // Cambia el color del texto en hover
+                                  textTransform: 'none',
+                                },
+                              }}
+                              variant="outlined"
+                              color="primary"
+                            >Editar</Button>
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <Button onClick={() => handleDelete(item.id)}
+                              color="secondary"
+                              startIcon={<DeleteForeverIcon />}
+                            ></Button>
+                          </Grid>
+                        </Grid>
+                      )}
+                    </TableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -170,8 +316,8 @@ export const FamiliasOptions = () => {
             <TextField
               fullWidth
               label="Nombre de Familia"
-              value={nombreFamilia}
-              onChange={(e) => setNombreFamilia(e.target.value)}
+              value={nombreFamilia.nombreF}
+              onChange={(e) => setNombreFamilia({ ...nombreFamilia, nombreF: e.target.value })}
               InputLabelProps={{
                 sx: labelStyles,
               }}
@@ -220,8 +366,8 @@ export const FamiliasOptions = () => {
         open={openSnack}
         autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
         onClose={handleCloseSnackbar}
-        message={'La Familia se agrego exitosamente'}
-        // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        message={showSuccessMessages}
+      // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
       </Snackbar>
 
@@ -230,7 +376,7 @@ export const FamiliasOptions = () => {
         open={errorSnackOpen}
         autoHideDuration={5000} // Adjust the duration as needed
         onClose={() => setErrorSnackOpen(false)}
-        // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           elevation={6}

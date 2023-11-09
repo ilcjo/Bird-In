@@ -403,7 +403,7 @@ const sendAndCreateBird = async (
                 await createNewBird.addPaises(pais.id);
             }
             for (const zonas of zona) {
-                await createNewBird.addZonas(zonas.id);
+                await createNewBird.addZonasAves(zonas.id);
             }
             return "El ave se ha creado correctamente.";
         } else {

@@ -91,7 +91,6 @@ export const GruposOptions = () => {
   const handleEditClick = (index, zona) => {
     // Habilita el modo de edición para la fila correspondiente al índice 'index'
     setEditMode(index);
-    setEditingZonaId(zona.id);
   };
 
   const handleCancelEdit = () => {

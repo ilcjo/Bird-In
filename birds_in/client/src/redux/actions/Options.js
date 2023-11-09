@@ -41,7 +41,7 @@ export const addGrupo = (info) => {
 };
 
 export const updateZona = (info) => {
-    console.log('soy lo que va back:', info)
+
     return async (dispatch) => {
         try {
             const response = await axios.put('opciones/actualizarZonas/', info)
@@ -55,7 +55,7 @@ export const updateZona = (info) => {
 };
 
 export const eliminarZona = (idZona) => {
-    console.log('soy lo que va back:', idZona)
+
     return async (dispatch) => {
         try {
             const response = await axios.delete(`opciones/eliminarZonas?idZona=${idZona}`)
@@ -69,7 +69,7 @@ export const eliminarZona = (idZona) => {
 };
 
 export const updateGrupo = (info) => {
-    console.log('soy lo que va back:', info)
+
     return async (dispatch) => {
         try {
             const response = await axios.put('opciones/actualizarGrupos/', info)
@@ -82,11 +82,40 @@ export const updateGrupo = (info) => {
     }
 };
 
-export const eliminarGrupo  = (id) => {
-    console.log('soy lo que va back:', id)
+export const eliminarGrupo = (id) => {
+
     return async (dispatch) => {
         try {
             const response = await axios.delete(`opciones/eliminarGrupos?idGrupo=${id}`)
+            return response.data
+        } catch (error) {
+            console.log(error);
+            throw error;
+            // throw error.response.data;
+        }
+    }
+};
+
+
+export const updateFamilia = (info) => {
+
+    return async (dispatch) => {
+        try {
+            const response = await axios.put('opciones/actualizarFamilias/', info)
+            return response.data
+        } catch (error) {
+            console.log(error);
+            throw error;
+            // throw error.response.data;
+        }
+    }
+};
+
+export const eliminarFamilia = (id) => {
+
+    return async (dispatch) => {
+        try {
+            const response = await axios.delete(`opciones/eliminarFamilias?idFamilia=${id}`)
             return response.data
         } catch (error) {
             console.log(error);

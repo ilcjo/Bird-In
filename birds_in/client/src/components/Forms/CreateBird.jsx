@@ -29,7 +29,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 export const CreateBird = () => {
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { paises, familias, grupos } = useSelector(state => state.birdSlice.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -52,12 +52,13 @@ export const CreateBird = () => {
     const sortedPaises = sortAlphabetically(paises);
     const sortedFamilias = sortAlphabetically(familias);
     const sortedGrupos = sortAlphabetically(grupos);
+    const sortedZonas = sortAlphabetically(zonas);
 
     const [createData, setCreateData] = React.useState({
         grupo: null,
         familia: null,
         pais: [],
-        zona: '',
+        zona: [],
         cientifico: '',
         ingles: '',
         comun: '',
@@ -101,6 +102,7 @@ export const CreateBird = () => {
 
             // Actualizar el estado con el array de URLs de imágenes
             setImageURL(imageUrls);
+            
         }
     };
 
@@ -556,24 +558,53 @@ export const CreateBird = () => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <TextField
-                            variant="filled"
-                            name="zona"
-                            label="Zonas"
+                    <Autocomplete
+                            disablePortal
+                            id="combo-box-zonas"
+                            options={sortedZonas}
+                            getOptionLabel={(option) => option.nombre}
                             value={createData.zona}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-                            multiline
-                            rows={2}
-                            sx={{ mt: -3, mb: 2, backgroundColor: 'rgba(204,214,204,0.17)', }}
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-                            }}
-                            InputProps={{
-                                style: { color: '#ccd6cc' } // Cambia el color del texto a azul (o el color que desees)
-                            }}
+                            onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}
+                            renderInput={(params) =>
+                                <TextField {...params}
+                                    label="Zonas"
+                                    InputLabelProps={{
+                                        sx: labelStyles, // Estilo del label
+                                    }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        sx: inputStyles, // Estilo del input
+                                    }}
+                                />}
+                            isOptionEqualToValue={(option, value) => option.id === value?.id}
+                            multiple
+                            filterOptions={(options, state) => {
+                                const inputValue = state.inputValue.toLowerCase();
+                                const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
+                              
+                                return options.filter((option) => {
+                                  if (selectedPaises.length === 0) {
+                                    return true; // No hay paises seleccionados, muestra todas las zonas
+                                  }
+                                  return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                                });
+                              }}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        label={option.nombre}
+                                        {...getTagProps({ index })}
+                                        sx={{
+                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
+                                            },
+                                        }} // Ajusta los estilos aquí
+                                    />
+                                ))
+                            }
+
                         />
+
                         <TextField
                             name="urlWiki"
                             multiline
