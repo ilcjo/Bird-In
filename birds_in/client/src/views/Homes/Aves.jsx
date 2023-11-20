@@ -8,7 +8,7 @@ import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { PhotosDetail } from '../../components/PhotosDetail';
 import { resetInfoBird } from '../../redux/slices/BirdsSlice';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const Aves = () => {
 
@@ -28,6 +28,11 @@ export const Aves = () => {
     dispatch(loadMoreData(newPage, parameter));
   };
 
+  const stepBack = () => {
+    setFilterDialogOpen(true)
+    dispatch(resetInfoBird())
+
+  };
   React.useEffect(() => {
     // Se ejecuta cada vez que el componente se monta
     dispatch(resetInfoBird());
@@ -48,6 +53,7 @@ export const Aves = () => {
           minHeight: '90vh',
         }}
       >
+
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
@@ -69,16 +75,35 @@ export const Aves = () => {
           </Grid>
         )} */}
         {birds.length > 1 && (
+
           <Grid item container spacing={3} justifyContent="center">
+            <Button
+              sx={{
+                mt: 5,
+                ml: '85%',
+                fontSize: '1.1rem',
+                fontWeight: 'bold',
+                color: theme.palette.primary.main,
+                backgroundColor: 'rgba(0, 56, 28, 0.2)', // Establece el fondo transparente deseado
+                backdropFilter: 'blur(9px)', // Efecto de desenfoque de fondo
+                // textShadow: `2px 2px 3px ${theme.palette.primary.light}`,
+              }}
+              variant="outline"
+              onClick={stepBack}
+              startIcon={<ArrowBackIcon />}
+            >Regresar
+            </Button>
             {birds.map((bird, index) => (
+
               <Grid item key={index}>
                 <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
+
               </Grid>
             ))}
           </Grid>
         )}
         {birds.length === 1 && (
-          <PhotosDetail bird={birds[0]} />
+          <PhotosDetail bird={birds[0]} setIsFilterOpen={setFilterDialogOpen} />
         )}
         <Grid item>
           {!noMoreResults && (

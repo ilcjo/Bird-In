@@ -3,7 +3,7 @@ const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas } = require('../../
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 
-const DEFAULT_PER_PAGE = 9;
+const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
 const fetchFilterBirds = async (
     familia,
@@ -95,6 +95,9 @@ const fetchFilterBirds = async (
             include: includeArr,
             limit: perPageConvert,
             offset: offset,
+            order: [
+                ['nombre_ingles', 'ASC'], // Ordena por el campo 'nombre_ingles' en orden ascendente
+            ],
         });
 
         const totalResultsClausula = await Aves.count({ where: whereClause });
@@ -121,16 +124,16 @@ const fetchOptions = async () => {
         attributes: [['id_pais', 'id'], 'nombre',],
     });
     const optionsZonas = await Zonas.findAll({
-        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre'], 
+        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre'],
         [
             Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'),
             'nombre_pais'
-          ],
-    ], 
-    order: [
-        [Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'), 'ASC'],
-        ['nombre_zona', 'ASC']
-      ]
+        ],
+        ],
+        order: [
+            [Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'), 'ASC'],
+            ['nombre_zona', 'ASC']
+        ]
     });
     const optionsNames = await Aves.findAll({
         attributes: ['nombre_cientifico', 'nombre_ingles',]
@@ -390,7 +393,6 @@ const sendAndCreateBird = async (
                 nombre_ingles: converIngles,
                 nombre_cientifico: converCientifico,
                 nombre_comun: converComun,
-                // zonas: converZona,
                 url_wiki: urlWiki,
                 url_bird: urlBird,
                 grupos_id_grupo: grupo.id,
@@ -405,9 +407,16 @@ const sendAndCreateBird = async (
             for (const zonas of zona) {
                 await createNewBird.addZonasAves(zonas.id);
             }
-            return "El ave se ha creado correctamente.";
+            // Busca el ave recién creada por el nombre en inglés
+            const createdBird = await Aves.findOne({
+                where: {
+                    nombre_ingles: converIngles
+                },
+               
+            });
+            return { message: "El ave se ha creado correctamente.", bird: createdBird };
         } else {
-            return "El nombre en inglés es obligatorio.";
+            return { message: "El nombre en inglés es obligatorio.", bird: null };
         }
     } catch (error) {
         // A continuación, puedes agregar lógica para manejar errores específicos si es necesario.
@@ -621,12 +630,23 @@ const getContadores = async () => {
                 [Sequelize.Op.not]: Sequelize.literal('EXISTS (SELECT 1 FROM aves_has_paises WHERE aves.id_ave = aves_has_paises.aves_id_ave)'),
             },
         })
+        const allCountrys = await Paises.count({
+            distinct: true,
+            col: 'id_pais', // Ajusta según el nombre real de la columna en tu modelo
+            include: [{
+                model: Aves,
+                through: 'aves_has_paises',
+                attributes: [], // Evita recuperar todos los atributos de la relación
+                required: true, // Utiliza una inner join para asegurar que solo obtengas registros que tengan relaciones en aves_has_paises
+            }],
+        });
 
         const allGrupos = await Grupos.count();
         const allFamilias = await Familias.count()
         const allZonas = await Zonas.count()
 
-        return { allBirds, allEnglish, allCientifico, allComun, allGrupos, allFamilias, allZonas, }
+
+        return { allBirds, allEnglish, allCientifico, allComun, allGrupos, allFamilias, allZonas, allCountrys }
     } catch (error) {
         console.error('Error:', error);
         throw error;

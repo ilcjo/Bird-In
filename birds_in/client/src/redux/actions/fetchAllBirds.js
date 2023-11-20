@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fetchInfo, loadMoreDataSuccess, returnFilters, setNoMoreResults, stringParameter } from '../slices/BirdsSlice'
+import { fetchInfo, isOneBird, loadMoreDataSuccess, returnFilters, saveCounting, setNoMoreResults, stringParameter } from '../slices/BirdsSlice'
 import { createParams } from '../../components/utils/convertId';
 
 
@@ -20,7 +20,7 @@ export const getInfoBirds = () => {
 export const loadMoreData = (currentPage, parameters) => {
   return async (dispatch) => {
     try {
-      const perPages = 9
+      const perPages = 18
       const response = await axios(`/aves/filtros?${parameters}&page=${currentPage}&perPage=${perPages}`);
       const data = response.data.avesFiltradas;
       const result = response.data.isLastPage
@@ -36,12 +36,14 @@ export const sendParameter = (selectedOptions) => {
   return async (dispatch) => {
     try {
       const queryParams = createParams(selectedOptions)
-      const response = await axios.get(`aves/filtros?${queryParams}`);
+      const response = await axios.get(`/aves/filtros?${queryParams}`);
       const data = response.data.avesFiltradas;
       const result = response.data.isLastPage
       dispatch(stringParameter(queryParams))
       dispatch(returnFilters(data))
       dispatch(setNoMoreResults(result));
+      return data.length;
+        
     } catch (error) {
       console.log('error enviando datos:', error);
     }
@@ -52,7 +54,7 @@ export const sendParameter = (selectedOptions) => {
 export const backInfo = (params) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`aves/filtros?${params}`);
+      const response = await axios.get(`/aves/filtros?${params}`);
       const data = response.data.avesFiltradas;
       dispatch(returnFilters(data))
     } catch (error) {
@@ -60,6 +62,20 @@ export const backInfo = (params) => {
     }
   };
 };
+
+export const counting = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios('/aves/contando');
+      const inf = response.data;
+      console.log('soy respuesta',response)
+      await dispatch(saveCounting(inf))
+    } catch (error) {
+      console.log('error:', error);
+    }
+  };
+};
+
 
 
 // export const getCompleteBirds = () => {

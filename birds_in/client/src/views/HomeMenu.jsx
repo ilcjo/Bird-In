@@ -48,8 +48,6 @@ export const HomeMenu = () => {
   const admin = localStorage.getItem('tipoCliente')
   const isAdmin = admin === 'admin'
   const { allCustom } = useSelector(state => state.customizesSlice)
-
-
   // Accede a las propiedades específicas de allCustom para obtener las URL de las imágenes
   const images = {
     aves: allCustom.cover_birds,
@@ -64,7 +62,7 @@ export const HomeMenu = () => {
   return (
     <div>
       <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
-      <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
+      <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' , }}>
         {sections.map((section, index) => (
           // Verifica si no es el elemento "Admin" o si el usuario es un administrador
           (isAdmin || section.id !== 'panelAdministrador') && (
@@ -87,7 +85,7 @@ export const HomeMenu = () => {
                     left="0"
                     width='100%'
                     height='200px'
-                    bgcolor='rgba(0, 61, 21, 0.5)'
+                    bgcolor='rgba(0, 61, 21, 0.3)'
                     color="#fff"
                     display="flex"
                     flexDirection="column"
@@ -145,4 +143,4 @@ export const HomeMenu = () => {
       </Grid>
     </div>
   );
-}
+};

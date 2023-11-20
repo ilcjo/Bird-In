@@ -33,7 +33,7 @@ export const Covers = () => {
                         </Grid>
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Paisajes" coverKey="cover_land" />
-                            <SectionCovers title="Portada Sobre mí" coverKey="cover_about" />
+                            <SectionCovers title="Portada Sobre Mí" coverKey="cover_about" />
 
                         </Grid>
                         <Grid item xs={6} sm={3}>

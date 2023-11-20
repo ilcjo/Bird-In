@@ -3,6 +3,7 @@ import '@fontsource/crimson-pro';
 import '@fontsource/arsenal';
 
 
+
 const theme = createTheme({
 
   palette: {
@@ -106,7 +107,7 @@ const theme = createTheme({
     body: {
       margin: 0, // Establece el margen del cuerpo a 0
       padding: 0,
-      
+    
     },
   },
 

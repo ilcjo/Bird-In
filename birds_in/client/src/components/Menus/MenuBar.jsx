@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearToken } from '../../redux/slices/Auth';
 import { getOptionsData } from '../../redux/actions/fetchOptions';
 import HomeIcon from '@mui/icons-material/Home';
+import { isOneBird } from '../../redux/slices/BirdsSlice';
 
 export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton, showAdmin }) => {
     const dispatch = useDispatch()
@@ -35,6 +36,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
     const handleFilterButtonClick = () => {
         // Cambiar el estado del filtro al hacer clic en el botón del filtro
         setIsFilterOpen(!isFilterOpen);
+        // dispatch(isOneBird(false))
     };
 
     const onLogoutClick = () => {
@@ -42,12 +44,14 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
         navigate('/')
         dispatch(clearToken())
         dispatch(getOptionsData())
+      
     };
 
     const returnMenuClick = () => {
         localStorage.removeItem('nombreIngles')
         navigate('/menu')
         dispatch(getOptionsData())
+        dispatch(isOneBird(false))
     };
 
     const adminClick = () => {

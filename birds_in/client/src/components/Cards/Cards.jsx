@@ -26,7 +26,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
 
   const handleImageClick = (index) => {
     setSelectedImageIndex(index);
-    openGallery();
+    openGallery(true);
   };
 
   const handleDetailClick = () => {
@@ -36,10 +36,9 @@ export const Cards = React.memo(({ foto, name, index }) => {
 
   return (
     <Card sx={{
-      maxWidth: 'auto',
       minWidth: 415,
-      minHeight: 320, // Establece una altura mínima para la tarjeta
       maxWidth: 415,
+      minHeight: 320, // Establece una altura mínima para la tarjeta
       maxHeight: 320,
       position: 'relative',
       borderRadius: '15px',
@@ -69,12 +68,12 @@ export const Cards = React.memo(({ foto, name, index }) => {
           {name}
         </Typography>
       </CardActions>
-      <CarruselGallery
+      {/* <CarruselGallery
         isOpen={isGalleryOpen}
         images={foto}
         selectedIndex={selectedImageIndex}
         onClose={() => setIsGalleryOpen(false)}
-      />
+      /> */}
     </Card>
   );
 });

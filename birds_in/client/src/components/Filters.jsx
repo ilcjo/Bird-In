@@ -13,11 +13,12 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
-import { saveFilters, setNoMoreResults } from '../redux/slices/BirdsSlice'
+import { copingFilters, isOneBird, resetCurrentFilters, saveFilters, setNoMoreResults } from '../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../redux/actions/fetchOptions'
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom'
 import CloseIcon from '@mui/icons-material/Close';
+import { createParams } from './utils/convertId'
 
 
 export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
@@ -185,11 +186,21 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
             });
     };
-    const handleClickFiltrar = () => {
+
+    const handleClickFiltrar = async () => {
+        // const queryString = createParams(selectOption)
+        // console.log('dentro del filter query',queryString)
         dispatch(saveFilters(selectOption))
-        dispatch(sendParameter(selectOption))
-        pages(1)
+        const resultLength = await dispatch(sendParameter(selectOption));
+        pages(1);
         setIsFilterOpen(false);
+        dispatch(copingFilters());
+      
+        if (resultLength === 1) {
+          dispatch(isOneBird(true));
+        } else {
+          dispatch(isOneBird(false));
+        }
     };
 
     const handleBack = () => {
@@ -214,6 +225,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             cientifico: [],
             ingles: []
         });
+        dispatch(isOneBird(false))
         dispatch(setNoMoreResults(true))
     };
 
@@ -397,13 +409,27 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         return options.filter((option) => {
                                             const birdName = option.nombre.toLowerCase();
                                             const birdNamesArray = birdName.split(' ');
-
+    
                                             // Check if any of the names (first, second, or third) start with the inputValue
                                             return birdNamesArray.some(
                                                 (name) => name.startsWith(inputValue)
                                             );
                                         });
-                                    }}
+                                    }
+                                    //     (options, state) => {
+                                    //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                    //     const inputValue = state.inputValue.toLowerCase();
+                                    //     return options.filter((option) => {
+                                    //         const birdName = option.nombre.toLowerCase();
+                                    //         const birdNamesArray = birdName.split(' ');
+
+                                    //         // Check if any of the names (first, second, or third) start with the inputValue
+                                    //         return birdNamesArray.some(
+                                    //             (name) => name.startsWith(inputValue)
+                                    //         );
+                                    //     });
+                                    // }
+                                }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Países"
@@ -447,7 +473,21 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     options={sortedZonas}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
-                                    // filterOptions={(options, state) => {
+                                    filterOptions={
+                                        (options, state) => {
+                                            // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                            const inputValue = state.inputValue.toLowerCase();
+                                            return options.filter((option) => {
+                                                const birdName = option.nombre.toLowerCase();
+                                                const birdNamesArray = birdName.split(' ');
+        
+                                                // Check if any of the names (first, second, or third) start with the inputValue
+                                                return birdNamesArray.some(
+                                                    (name) => name.startsWith(inputValue)
+                                                );
+                                            });
+                                        }
+                                    //     (options, state) => {
                                     //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                     //     const inputValue = state.inputValue.toLowerCase();
                                     //     return options.filter((option) => {
@@ -459,7 +499,8 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     //             (name) => name.startsWith(inputValue)
                                     //         );
                                     //     });
-                                    // }}
+                                    // }
+                                }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
@@ -503,19 +544,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     options={sortedNCientifico}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
-                                    // filterOptions={(options, state) => {
-                                    //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                    //     const inputValue = state.inputValue.toLowerCase();
-                                    //     return options.filter((option) => {
-                                    //         const birdName = option.nombre.toLowerCase();
-                                    //         const birdNamesArray = birdName.split(' ');
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) => {
+                                            const birdName = option.nombre.toLowerCase();
+                                            const birdNamesArray = birdName.split(' ');
 
-                                    //         // Check if any of the names (first, second, or third) start with the inputValue
-                                    //         return birdNamesArray.some(
-                                    //             (name) => name.startsWith(inputValue)
-                                    //         );
-                                    //     });
-                                    // }}
+                                            // Check if any of the names (first, second, or third) start with the inputValue
+                                            return birdNamesArray.some(
+                                                (name) => name.startsWith(inputValue)
+                                            );
+                                        });
+                                    }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Científico"
@@ -558,19 +599,34 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     options={sortedNIngles}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) => {
-                                            const birdName = option.nombre.toLowerCase();
-                                            const birdNamesArray = birdName.split(' ');
+                                    filterOptions={
+                                        (options, state) => {
+                                            // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                            const inputValue = state.inputValue.toLowerCase();
+                                            return options.filter((option) => {
+                                                const birdName = option.nombre.toLowerCase();
+                                                const birdNamesArray = birdName.split(' ');
+        
+                                                // Check if any of the names (first, second, or third) start with the inputValue
+                                                return birdNamesArray.some(
+                                                    (name) => name.startsWith(inputValue)
+                                                );
+                                            });
+                                        }
+                                    //     (options, state) => {
+                                    //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                    //     const inputValue = state.inputValue.toLowerCase();
+                                    //     return options.filter((option) => {
+                                    //         const birdName = option.nombre.toLowerCase();
+                                    //         const birdNamesArray = birdName.split(' ');
 
-                                            // Check if any of the names (first, second, or third) start with the inputValue
-                                            return birdNamesArray.some(
-                                                (name) => name.startsWith(inputValue)
-                                            );
-                                        });
-                                    }}
+                                    //         // Check if any of the names (first, second, or third) start with the inputValue
+                                    //         return birdNamesArray.some(
+                                    //             (name) => name.startsWith(inputValue)
+                                    //         );
+                                    //     });
+                                    // }
+                                }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Inglés"

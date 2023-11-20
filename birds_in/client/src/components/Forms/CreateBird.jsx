@@ -102,7 +102,7 @@ export const CreateBird = () => {
 
             // Actualizar el estado con el array de URLs de imágenes
             setImageURL(imageUrls);
-            
+
         }
     };
 
@@ -165,7 +165,15 @@ export const CreateBird = () => {
         // Check if any errors exist and prevent form submission
         if (Object.values(newErrors).some((error) => error)) {
             return;
+
         }
+        // Check if there are images before attempting to submit the form
+        if (!imageFile || imageFile.length === 0) {
+            // Show an alert indicating that images are required
+            alert("Debes cargar al menos una imagen antes de enviar el formulario.");
+            return;
+        }
+
         if (imageFile && imageFile.length > 0) {
             const formData = new FormData();
             // Agregar las imágenes al formulario FormData
@@ -188,20 +196,19 @@ export const CreateBird = () => {
 
                 // Abre el Snackbar
                 setOpenSnackbar(true);
-
                 // Borra los datos del formulario
-                // setCreateData({
-                //     grupo: null,
-                //     familia: null,
-                //     pais: [],
-                //     zona: '',
-                //     cientifico: '',
-                //     ingles: '',
-                //     comun: '',
-                //     urlWiki: '',
-                //     urlBird: '',
-                //     urlImagen: [],
-                // });
+                setCreateData({
+                    grupo: null,
+                    familia: null,
+                    pais: [],
+                    zona: [],
+                    cientifico: '',
+                    ingles: '',
+                    comun: '',
+                    urlWiki: '',
+                    urlBird: '',
+                    urlImagen: [],
+                });
                 setImageURL([]);
                 setImageFile([]);
                 setFormSubmitted(false)
@@ -531,7 +538,7 @@ export const CreateBird = () => {
                                         sx: inputStyles, // Estilo del input
 
                                     }}
-                                    
+
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
@@ -558,7 +565,7 @@ export const CreateBird = () => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                    <Autocomplete
+                        <Autocomplete
                             disablePortal
                             id="combo-box-zonas"
                             options={sortedZonas}
@@ -581,14 +588,14 @@ export const CreateBird = () => {
                             filterOptions={(options, state) => {
                                 const inputValue = state.inputValue.toLowerCase();
                                 const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
-                              
+
                                 return options.filter((option) => {
-                                  if (selectedPaises.length === 0) {
-                                    return true; // No hay paises seleccionados, muestra todas las zonas
-                                  }
-                                  return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                                    if (selectedPaises.length === 0) {
+                                        return true; // No hay paises seleccionados, muestra todas las zonas
+                                    }
+                                    return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
                                 });
-                              }}
+                            }}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
                                     <Chip

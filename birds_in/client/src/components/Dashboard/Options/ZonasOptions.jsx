@@ -253,8 +253,10 @@ export const ZonasOptions = () => {
         width: '80%',
         minWidth: '170vh',
         margin: 'auto',
+        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
         padding: '40px 40px 40px 40px',
-        borderRadius: '0px 0px 20px 20px'
+        borderRadius: '20px 20px 20px 20px'
       }} >
         <Grid item sx={12} md={12}>
           <TableContainer sx={{ maxHeight: 440 }}>

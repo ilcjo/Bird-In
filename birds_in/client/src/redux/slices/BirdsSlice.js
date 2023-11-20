@@ -16,7 +16,10 @@ const initialState = {
     cientifico: [],
     ingles: [],
   },
-  filters: ''
+  filters: '',
+  copyFilters:{},
+  count: {},
+  oneBird: false
 };
 
 export const birdSlice = createSlice({
@@ -77,10 +80,19 @@ export const birdSlice = createSlice({
     },
     resetInfoBird: (state) => {
       state.infoBirds = [],
-      state.noMoreResults = true
+        state.noMoreResults = true
     },
     setNoMoreResults: (state, action) => {
       state.noMoreResults = action.payload;
+    },
+    saveCounting: (state, action) => {
+      state.count = action.payload;
+    },
+    copingFilters: (state, action) => {
+      state.copyFilters = { ...state.currentFilters }
+    },
+    isOneBird: (state, action) => {
+      state.oneBird = action.payload;
     },
   },
 });
@@ -100,5 +112,8 @@ export const {
   resetInfoBird,
   copyInfo,
   setNoMoreResults,
+  saveCounting,
+  copingFilters,
+  isOneBird
 } = birdSlice.actions;
 export default birdSlice.reducer;

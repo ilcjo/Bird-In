@@ -93,14 +93,14 @@ export const CoverLogin = () => {
 
                 <Grid item xs={6} sm={6}>
                     <Typography variant='h5' color='primary.light' sx={{ mt: -8 }} >
-                        Portada Inicio de sesión
+                        Portada inicio de sesión
                         <Divider sx={{ my: 1 }} />
                     </Typography>
                     <SectionCovers title="Inicio Portada" coverKey="cover_login" />
                 </Grid>
                 <Grid item xs={6} sm={6}>
                     <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
-                        Info foto portada Inicio de sesión
+                        Info foto portada inicio de sesión
                         <Divider sx={{ my: 1 }} />
                     </Typography>
                     <TextField

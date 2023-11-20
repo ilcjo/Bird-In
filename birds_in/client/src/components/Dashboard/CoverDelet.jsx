@@ -235,13 +235,25 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird }) => 
                     {infoAveForUpdate && infoAveForUpdate.imagenes_aves.length > 0 ? (
                         <Grid container spacing={1}>
                             {infoAveForUpdate.imagenes_aves.map((imageUrl, index) => (
-                                <Grid item key={imageUrl.id} sx={{ mt: 5, ml: 9 }}>
-                                    <Card>
+                                <Grid item key={imageUrl.id} sx={{ mt: 5, m: 'auto' }}>
+                                    <Card
+                                    sx={{
+                                        // maxWidth: 'auto',
+                                        minWidth: 415,
+                                        minHeight: 320, // Establece una altura mínima para la tarjeta
+                                        maxWidth: 415,
+                                        // maxHeight: 320,  
+                                        borderRadius: '15px',
+                                        flexDirection: 'column', // Alinea el contenido verticalmente
+                                        m: 3,
+                                        background: 'rgba(0, 78, 55, 0.5)'
+                                      }}
+                                      >
                                         <CardActionArea onClick={() => openImageDialog(imageUrl.url)}>
                                             <CardMedia
                                                 component="img"
                                                 alt={`Imagen existente ${index + 1}`}
-                                                height="200"
+                                                height="260"
                                                 image={imageUrl.url}
                                             />
                                         </CardActionArea>

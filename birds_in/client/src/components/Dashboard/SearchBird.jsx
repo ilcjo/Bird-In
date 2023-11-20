@@ -69,6 +69,7 @@ export const SearchBird = ({ changeTab }) => {
     const labelStyles = {
         color: theme.palette.primary.main, // Color del texto del label
         marginTop: '-9px',
+        ml: 10
     };
 
     const inputStyles = {
@@ -77,6 +78,8 @@ export const SearchBird = ({ changeTab }) => {
         backgroundColor: 'rgba(204,214,204,0.17)',
         borderRadius: '9px',
         height: '70px',
+        width: '70%',
+        ml: 10,
         '& .MuiInputBase-input': {
             padding: '0px',
             paddingLeft: '10px',
@@ -113,7 +116,7 @@ export const SearchBird = ({ changeTab }) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: '100vh',
+                        width: '170vh',
                         height: '40vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
@@ -130,6 +133,31 @@ export const SearchBird = ({ changeTab }) => {
                                 id="search_bird"
                                 options={birdsData}
                                 getOptionLabel={(option) => option.nombre_ingles}
+                                //     filterOptions={
+                                //         (options, state) => {
+                                //         // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                //         const inputValue = state.inputValue.toLowerCase();
+                                //         return options.filter((option) => {
+                                //             const birdName = option.nombre_ingles.toLowerCase();
+                                //             const birdNamesArray = birdName.split(' ');
+
+                                //             // Check if any of the names (first, second, or third) start with the inputValue
+                                //             return birdNamesArray.some(
+                                //                 (name) => name.startsWith(inputValue)
+                                //             );
+                                //         });
+                                //     }
+                                // }
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase();
+                                //     return options.filter((option) => {
+                                //         const birdName = option.nombre_ingles.toLowerCase();
+                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
+                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
+
+                                //         return sanitizedBirdName.includes(sanitizedInput);
+                                //     });
+                                // }}
                                 filterOptions={(options, state) => {
                                     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                     const inputValue = state.inputValue.toLowerCase();
@@ -159,7 +187,7 @@ export const SearchBird = ({ changeTab }) => {
                                         }}
                                     />
                                 )}
-                                fullWidth
+
                                 sx={{ mb: 3, mt: -10 }}
                             />
                         </Grid>

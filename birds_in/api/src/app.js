@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const mainRoutes = require('./routes/index');
+const httpProxy = require('http-proxy');
 
 require('./db/db.js');
 
@@ -13,6 +14,9 @@ server.use(cookieParser());
 server.use(express.urlencoded({ extended: true, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
 server.use(morgan('dev'));
+
+
+// Configurar CORS para permitir solo desde el frontend seguro
 server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.header('Access-Control-Allow-Credentials', 'true');

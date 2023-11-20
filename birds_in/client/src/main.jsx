@@ -15,6 +15,7 @@ import { getAllCustomizes } from './redux/actions/Custome';
 
 // Configurar la URL base de Axios
 const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
+// const api = 'http://181.48.223.2';
 const apilocal = 'http://localhost:3001';
 axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
 
