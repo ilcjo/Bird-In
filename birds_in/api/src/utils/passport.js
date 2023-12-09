@@ -42,13 +42,14 @@ passport.use(
     new JWTStrategy(
         {
             jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-            secretOrKey: JWT_SECRET_KEY, // Debes cambiar esto por una clave secreta segura
+            secretOrKey: JWT_SECRET_KEY, 
         },
         async (jwtPayload, done) => {
             try {
                 const user = await Usuarios.findByPk(jwtPayload.id);
 
-                if (user) {
+                if (user && user.status === 'approved') {
+                    console.log(user)
                     return done(null, user);
                 } else {
                     return done(null, false);

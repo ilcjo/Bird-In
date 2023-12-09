@@ -10,7 +10,8 @@ const {
    setDbCover,
    filterOptionsPaisZonas,
    getContadores,
-
+   deleteBirdDb,
+   findDataByName,
 } = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
 const {
@@ -48,17 +49,17 @@ const selectOptions = async (req, res) => {
 };
 
 const getFilterOptions = async (req, res,) => {
-   const {    familia,
+   const { familia,
       grupo,
       nombreCientifico,
       nombreIngles,
       pais,
       zonas,
-      } = req.query;
+   } = req.query;
    try {
       let newOptions;
       if (zonas || pais) {
-         newOptions = await filterOptionsPaisZonas(   familia,
+         newOptions = await filterOptionsPaisZonas(familia,
             grupo,
             nombreCientifico,
             nombreIngles,
@@ -66,13 +67,13 @@ const getFilterOptions = async (req, res,) => {
             zonas,
          );
       } else {
-         newOptions = await filterOptions(   familia,
+         newOptions = await filterOptions(familia,
             grupo,
             nombreCientifico,
             nombreIngles,
             pais,
             zonas,
-           );
+         );
       }
       return res.status(200).json(newOptions);
    } catch (error) {
@@ -182,6 +183,23 @@ const findInfoForUpdate = async (req, res) => {
    }
 };
 
+const findInfoForUpdateName = async (req, res) => {
+   const { name } = req.query;
+   try {
+      if (!name) {
+         return res.status(400).json({ error: 'ID de ave no proporcionado' });
+      }
+      const formDataUpdate = await findDataByName(name);
+      if (!formDataUpdate) {
+         return res.status(404).json({ error: 'Ave no encontrada' });
+      }
+      return res.status(200).json(formDataUpdate);
+   } catch (error) {
+      res.status(500).json({ error: 'Error actualizando ave' });
+   }
+};
+
+
 const updateInfoBids = async (req, res) => {
    const {
       grupo,
@@ -259,6 +277,16 @@ const contandoRegistros = async (req, res) => {
    }
 };
 
+const deleteBird = async (req, res) => {
+   const { id } = req.query
+   try {
+      const message = await deleteBirdDb(id)
+      return res.status(200).json(message);
+   } catch (error) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+   }
+};
+
 module.exports = {
    getFilterInfo,
    selectOptions,
@@ -269,6 +297,8 @@ module.exports = {
    updateInfoBids,
    deletePhotos,
    setCoverPhoto,
-   contandoRegistros
+   contandoRegistros,
+   deleteBird,
+   findInfoForUpdateName,
 }
 

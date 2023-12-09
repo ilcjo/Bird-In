@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { UpdateBirds } from '../Forms/UpdateBirds'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { CoverDelet } from './CoverDelet';
+import {CreateBird} from '../Forms/CreateBird'
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -26,7 +26,7 @@ const StyledTab = styled(Tab)({
 });
 
 
-export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, history }) => {
+export const IndexTabsCreate = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, history }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
 
     const handleTabChange = (event, newValue) => {
@@ -59,7 +59,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
                 {selectedTab === 0 && (
                     <React.Fragment>
                         {/* Contenido de la primera pestaña */}
-                        <UpdateBirds changeTab={changeTab} showUpdateBird={showUpdateBird}
+                        <CreateBird changeTab={changeTab} showUpdateBird={showUpdateBird}
                             showSearchBird={showSearchBird}
                             selectedBird={selectedBird} 
                             changeImagenExist={handleNavigateToCoverDelet}

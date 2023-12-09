@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
-import { createBird, saveImageFtp } from '../../redux/actions/createBirds';
+import { createBird, getInfoForUpdateName, saveImageFtp } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import wikipediaLogo from '../../assets/images/wikilogo.png'
 import ebirdLogo from '../../assets/images/Logo_ebird.png'
@@ -26,9 +26,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 
-export const CreateBird = () => {
+export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,changeImagenExist}) => {
     const theme = useTheme()
     const dispatch = useDispatch()
+    const { infoAveForUpdate } = useSelector(state => state.createBird)
     const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
@@ -197,26 +198,27 @@ export const CreateBird = () => {
                 // Abre el Snackbar
                 setOpenSnackbar(true);
                 // Borra los datos del formulario
-                setCreateData({
-                    grupo: null,
-                    familia: null,
-                    pais: [],
-                    zona: [],
-                    cientifico: '',
-                    ingles: '',
-                    comun: '',
-                    urlWiki: '',
-                    urlBird: '',
-                    urlImagen: [],
-                });
+                // setCreateData({
+                //     grupo: null,
+                //     familia: null,
+                //     pais: [],
+                //     zona: [],
+                //     cientifico: '',
+                //     ingles: '',
+                //     comun: '',
+                //     urlWiki: '',
+                //     urlBird: '',
+                //     urlImagen: [],
+                // });
                 setImageURL([]);
                 setImageFile([]);
                 setFormSubmitted(false)
+                dispatch(getInfoForUpdateName(createData.ingles))
+                // changeImagenExist()
             } catch (error) {
                 setShowBackdrop(false);
                 // Muestra el mensaje de error en caso de que ocurra un error en cualquiera de las dos promesas.
                 console.error(error);
-
                 // Muestra el mensaje de error al usuario
                 alert(`Error: ${error.message}`); // Puedes personalizar cómo muestras el mensaje de error al usuario.
             }
@@ -309,7 +311,7 @@ export const CreateBird = () => {
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
-                    borderRadius: '20px'
+                    borderRadius: '0px 0px 20px 20px'
                 }} >
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h2' color='primary' sx={{ mb: 2 }}>

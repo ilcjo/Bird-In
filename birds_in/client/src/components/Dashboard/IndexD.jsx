@@ -1,18 +1,17 @@
 
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
-import { CreateBird } from '../Forms/CreateBird';
 import { SearchBird } from './SearchBird';
 import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../redux/slices/createSlice';
 import { Customize } from './Customize';
 import { Usuarios } from './Usuarios/Usuarios';
 import { styled } from '@mui/system';
-import { IndexOp } from './Options/IndexOp';
 import { GruposOptions } from './Options/GruposOptions';
 import { FamiliasOptions } from './Options/FamiliasOptions';
 import { ZonasOptions } from './Options/ZonasOptions';
 import { Contadores } from './Contadores';
+import { IndexTabsCreate } from './IndexTabsCreate';
 
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -122,7 +121,7 @@ export const IndexD = () => {
         )}
         {selectedTab === 1 && (
           <Box>
-            <CreateBird />
+            <IndexTabsCreate />
           </Box>
         )}
         {selectedTab === 2 && (

@@ -26,7 +26,6 @@ const db = new Sequelize(`mariadb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PO
   try {
     await db.authenticate();
     console.log('Conexión a la base de datos establecida correctamente.');
-
     // Ejemplo de consulta de prueba
     // const birds = await db.query('SELECT * FROM tempo_info', { type: Sequelize.QueryTypes.SELECT });
     // console.log(birds); // Deberías ver los registros de la tabla "users" si la consulta fue exitosa.
@@ -47,7 +46,6 @@ fs.readdirSync(path.join(__dirname, '..', 'models'))
 
 // Injectamos la conexión (sequelize) a todos los modelos
 modelDefiners.forEach(model => model(db));
-
 // Capitalizamos los nombres de los modelos ie: product => Product
 let entries = Object.entries(db.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);

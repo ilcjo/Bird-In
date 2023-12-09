@@ -75,7 +75,7 @@ export const Landing = () => {
           </Box>
           <Box sx={{
             // top: '500px',
-            textAlign: 'justify',
+            textAlign: 'justify-right',
             width: '80%',
             mt: 11
           }}>

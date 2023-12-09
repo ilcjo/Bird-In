@@ -6,7 +6,6 @@ import {
   TextField,
   Typography,
   useTheme,
-  MenuItem,
   InputAdornment,
   IconButton,
   Link as MuiLink,
@@ -15,11 +14,11 @@ import {
   Snackbar,
   SnackbarContent,
 } from '@mui/material';
-import CountryList from 'react-select-country-list';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
-import { registerData } from '../../redux/actions/userLoginRegister';
+import { pendingEmail, registerData } from '../../redux/actions/userLoginRegister';
+
 
 export const RegisterForm = ({ changeTab }) => {
 
@@ -29,7 +28,7 @@ export const RegisterForm = ({ changeTab }) => {
   const [error, setError] = React.useState('')
   const [successMessage, setSuccessMessage] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [formData, setFormData] = React.useState({
     email: '',
     name: '',
@@ -49,9 +48,31 @@ export const RegisterForm = ({ changeTab }) => {
       passFirst: '',
     });
   };
+  const validatePassword = (password) => {
+    // Verificar que la contraseña tenga al menos 8 caracteres, una mayúscula y un carácter alfanumérico
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return passwordRegex.test(password);
+  };
+  
+  const validateEmail = (email) => {
+    // Verificar que el correo tenga un "@"
+    const emailRegex = /@/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    
+    if (!validatePassword(formData.pass)) {
+      setError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter alfanumérico');
+      return;
+    }
+  
+    if (!validateEmail(formData.email)) {
+      setError('El correo electrónico debe contener un "@"');
+      return;
+    }
+  
     if (formData.pass !== formData.passFirst) {
       setError('Las contraseñas no coinciden');
       return;
@@ -61,28 +82,23 @@ export const RegisterForm = ({ changeTab }) => {
     setLoading(true);
     try {
       // Simula una solicitud asíncrona al backend para registrar al usuario
-      // Reemplaza esto con tu lógica real de registro de usuario
       await dispatch(registerData(formData));
-      setSuccessMessage('Se ha enviado la solicitud de aprobación. Recibirás instrucciones por correo electrónico.');
-      handleClose();
-  } catch (error) {
-      console.error('Error al crear el usuario:', error.response?.data.error || error.response?.data.message);
-  
-      // Verificar si la respuesta contiene un campo 'error'
-      const errorMessage = error.response?.data.error || error.response?.data.message;
-  
-      if (errorMessage) {
-          // Mostrar un mensaje de error al usuario solo si hay un mensaje de error
-          alert(`Error: ${errorMessage}`);
-      } else {
-          // Aquí puedes manejar el caso de éxito, si lo necesitas
-          console.log('Usuario creado exitosamente');
-      }
-  } finally {
+      setOpenSnackbar(true)
+      setSuccessMessage('Registro exitoso, esperando aprobación')
+      await dispatch(pendingEmail(formData.email, formData.name))
+      setFormData({
+        name: '',
+        email: '',
+        pais: '',
+        pass: '',
+        passFirst: '',
+      });
+    } catch (error) {
+      alert(`Error: ${error}`);
+    } finally {
       setLoading(false);
-  }
+    }
   };
-
 
   const handleLinkClicRk = (e) => {
     e.preventDefault();
@@ -174,7 +190,7 @@ export const RegisterForm = ({ changeTab }) => {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             helperText=" "
             fullWidth
-            margin="normal"
+            // margin="normal"
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
             }}
@@ -189,7 +205,7 @@ export const RegisterForm = ({ changeTab }) => {
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            margin="normal"
+            // margin="normal"
             fullWidth
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
@@ -202,15 +218,15 @@ export const RegisterForm = ({ changeTab }) => {
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-                /* Por ejemplo, para agregar un margen izquierdo: */
+
                 fontSize: '1rem',
                 color: theme.palette.primary.light,
-                /* Agrega otros estilos que desees... */
               },
             }}
+
           />
 
-          <TextField
+          {/* <TextField
             label="País"
             name="pais"
             value={formData.pais}
@@ -228,12 +244,12 @@ export const RegisterForm = ({ changeTab }) => {
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-                /* Por ejemplo, para agregar un margen izquierdo: */
-                fontSize: '1rem',
-                color: theme.palette.primary.light,
-                /* Agrega otros estilos que desees... */
-              },
-            }}
+            /* Por ejemplo, para agregar un margen izquierdo: */
+            // fontSize: '1rem',
+            // color: theme.palette.primary.light,
+            /* Agrega otros estilos que desees... */
+          },
+          {/* }}
           >
 
             {CountryList().getData().map((country) => (
@@ -241,15 +257,15 @@ export const RegisterForm = ({ changeTab }) => {
                 {country.label}
               </MenuItem>
             ))}
-          </TextField >
-
+          </TextField > */}
           <TextField
             label="Confirmar Password"
             name="passFirst"
-            margin="normal"
+            // margin="normal"
             error={error !== ''}
             type={showPassword ? 'text' : 'password'}
             fullWidth
+            sx={{ mt: -2 }}
             InputLabelProps={{
               sx: labelStyles,
             }}
@@ -267,7 +283,7 @@ export const RegisterForm = ({ changeTab }) => {
                 </InputAdornment>
               ),
             }}
-            helperText={`Al menos 6 caracteres y una mayúscula${formData.passFirst && error ? `\n${error}` : ''}`}
+            helperText={`Al menos 8 caracteres, una mayúscula y un alfa numérico${formData.passFirst && error ? `\n${error}` : ''}`}
             FormHelperTextProps={{
               sx: {
                 fontSize: '1rem',
@@ -289,13 +305,14 @@ export const RegisterForm = ({ changeTab }) => {
             type={showPassword ? 'text' : 'password'}
             margin="normal"
             fullWidth
+            sx={{ mt: 2 }}
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
                 /* Por ejemplo, para agregar un margen izquierdo: */
                 fontSize: '1rem',
                 color: theme.palette.primary.light,
-                /* Agrega otros estilos que desees... */
+
               },
             }}
             InputLabelProps={{
@@ -342,13 +359,13 @@ export const RegisterForm = ({ changeTab }) => {
       {/* Snackbar para mostrar el éxito */}
       {successMessage && (
         <Snackbar
-          open={true}
+          open={openSnackbar}
           autoHideDuration={10000}
           onClose={() => setSuccessMessage('')}
         >
           <SnackbarContent
             message={successMessage}
-            style={{ backgroundColor: '#43a047' }}
+            
           />
         </Snackbar>
       )}

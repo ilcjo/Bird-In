@@ -2,6 +2,7 @@ const { Op, Sequelize } = require("sequelize");
 const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
+const deletePhotoFromFTP = require("../../utils/deletFtp");
 
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
@@ -412,7 +413,7 @@ const sendAndCreateBird = async (
                 where: {
                     nombre_ingles: converIngles
                 },
-               
+
             });
             return { message: "El ave se ha creado correctamente.", bird: createdBird };
         } else {
@@ -471,6 +472,55 @@ const findDataById = async (id) => {
         throw error;
     }
 };
+
+
+const findDataByName = async (name) => {
+    try {
+        const ave = await Aves.findOne({
+            where: { nombre_ingles: name },
+            include: [
+                {
+                    model: Imagenes_aves,
+                    attributes: ['url',
+                        'id',
+                        'destacada',
+                        [Sequelize.literal('SUBSTRING_INDEX(url, "_", -1)'), 'titulo']
+                        ,] // Atributos que deseas de Imagenes_aves
+                },
+                {
+                    model: Paises,
+                    attributes: ['nombre', ['id_pais', 'id']],
+                    through: {
+                        attributes: [],
+                    }, // Atributos que deseas de Paises
+                },
+                {
+                    model: Zonas,
+                    as: 'zonasAves',
+                    attributes: [['nombre_zona', 'nombre'], ['id_zona', 'id']],
+                    through: {
+                        attributes: [],
+                    }, // Atributos que deseas de Paises
+                },
+                { model: Grupos, attributes: ['nombre', ['id_grupo', 'id']] },
+                { model: Familias, attributes: ['nombre', ['id_familia', 'id']] },
+            ],
+            attributes: [
+                'id_ave',
+                'nombre_ingles',
+                'nombre_cientifico',
+                'nombre_comun',
+                'url_wiki',
+                'url_bird',] // Atributos de Aves que deseas
+        });
+        return ave;
+    } catch (error) {
+        // Manejar errores de consulta
+        console.error('Error en la consulta:', error);
+        throw error;
+    }
+};
+
 
 const sendAndUpdateBird = async (
     grupo,
@@ -653,6 +703,73 @@ const getContadores = async () => {
     }
 };
 
+// const deleteBirdDb = async (idAve) => {
+//     try {
+//         const existingRelations = await Aves.findByPk(idAve);
+//         if (!existingRelations) {
+//             throw new Error("La ave con el ID especificado no existe.");
+//         }
+//         // Elimina todas las relaciones de países asociadas al ave
+//         await existingRelations.setPaises([]);
+//         await existingRelations.setZonasAves([]);
+//         await existingRelations.setImagenes_aves([]);
+//         // Finalmente, destruir la ave
+//         await existingRelations.destroy();
+//         return "Ave eliminada correctamente junto con sus relaciones.";
+//     } catch (error) {
+//         console.error('Error:', error);
+//         throw error;
+//     }
+// };
+const deleteBirdDb = async (idAve) => {
+    try {
+        const imagenesAves = await Imagenes_aves.findAll({
+            where: {
+                aves_id_ave: idAve,
+            },
+        });
+
+        const ftpDeleteResults = await deletePhotoFromFTP(imagenesAves.map(imagen => imagen.url));
+
+        if (!ftpDeleteResults.success) {
+            // Si hay un problema al borrar las fotos del FTP, puedes manejar el error aquí
+            throw new Error("Error al borrar las fotos del FTP.");
+        }
+ 
+             // Buscar imágenes en la base de datos después de eliminarlas del FTP
+             const remainingImages = await Imagenes_aves.findAll({
+                where: {
+                    aves_id_ave: idAve,
+                },
+            });
+    
+            // Eliminar las imágenes de la base de datos si aún existen
+            await Promise.all(remainingImages.map(async (imagen) => {
+                await imagen.destroy();
+            }));
+    
+
+        // Eliminar las relaciones y la ave
+        const existingRelations = await Aves.findByPk(idAve);
+        if (!existingRelations) {
+            throw new Error("La ave con el ID especificado no existe.");
+        }
+
+        await existingRelations.setPaises([]);
+        await existingRelations.setZonasAves([]);
+        await existingRelations.setImagenes_aves([]);
+
+        // Finalmente, destruir la ave
+        await existingRelations.destroy();
+
+        return "Ave eliminada correctamente junto con sus relaciones.";
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+
 
 module.exports = {
     fetchOptions,
@@ -664,5 +781,7 @@ module.exports = {
     findPhotosId,
     setDbCover,
     getContadores,
-    filterOptionsPaisZonas
+    filterOptionsPaisZonas,
+    deleteBirdDb,
+    findDataByName
 };

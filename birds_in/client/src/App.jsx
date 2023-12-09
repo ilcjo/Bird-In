@@ -34,6 +34,7 @@ function App() {
       // setFirstLoad(false);
     }
   }, [token, isAuthenticated, navigate]);
+  
   return (
     <Routes>
       {token && (

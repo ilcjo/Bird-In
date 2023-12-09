@@ -103,4 +103,20 @@ export const getInfoForUpdate = (id) => {
   }
 };
 
+export const getInfoForUpdateName = (name) => {
+
+  return async (dispatch) => {
+    try {
+      const response = await axios(`aves/get_update_name?name=${name}`)
+      const ave = response.data
+      dispatch(getAve(ave))
+      // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
+      console.log('Respuesta del servidor:');
+    } catch (error) {
+      // Maneja los errores de la solicitud
+      console.error('Error al enviar datos:', error);
+    }
+  }
+};
+
 

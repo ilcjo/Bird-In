@@ -43,7 +43,7 @@ export const sendParameter = (selectedOptions) => {
       dispatch(returnFilters(data))
       dispatch(setNoMoreResults(result));
       return data.length;
-        
+
     } catch (error) {
       console.log('error enviando datos:', error);
     }
@@ -68,7 +68,7 @@ export const counting = () => {
     try {
       const response = await axios('/aves/contando');
       const inf = response.data;
-      console.log('soy respuesta',response)
+      console.log('soy respuesta', response)
       await dispatch(saveCounting(inf))
     } catch (error) {
       console.log('error:', error);
@@ -76,6 +76,17 @@ export const counting = () => {
   };
 };
 
+export const deleteBird = (idN) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(`/aves/borrar_ave?id=${idN}`);
+      const data = response.data;
+      return data
+    } catch (error) {
+      console.log('error enviando datos:', error);
+    }
+  };
+};
 
 
 // export const getCompleteBirds = () => {

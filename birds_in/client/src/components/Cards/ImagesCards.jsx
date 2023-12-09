@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardActions, Typography } from '@mui/material'
 import { CarruselGallery } from '../Galeries/CarruselGallery';
 
 export const ImagesCards = ({ foto, name, arrayImages }) => {
-  console.log(foto)
+  
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 

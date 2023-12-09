@@ -26,10 +26,12 @@ import { getOptionsData } from '../../redux/actions/fetchOptions';
 import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { deleteBird } from '../../redux/actions/fetchAllBirds';
 
 
 
-export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird }) => {
+export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird,changeImagenExist }) => {
     const theme = useTheme()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -109,12 +111,33 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
-
+    const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se ha Actualizado correctamente.');
 
     // console.log('image file', imageFile)
     // console.log('imagenurl', imageURL)
     // console.log('IMAGENES', allImageURLs)
- 
+
+    const handleDeleteRegistro = async () => {
+        try {
+            setShowBackdrop(true);
+            setLoadingMessage('Eliminando...');
+    
+            // Dispatch the action to delete the bird
+            await dispatch(deleteBird(infoAveForUpdate.id_ave));
+    
+            // If the delete operation is successful
+            setOpenSnackbar(true);
+            setSnackBarMessage('El Registro del Ave se ha eliminado correctamente');
+        } catch (error) {
+            console.error('Error al eliminar el registro:', error);
+            setErrorMessage(`Ocurrió un error: ${error.message}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            // This block will be executed whether there's an error or not
+            setShowBackdrop(false);
+            handleReturnSearch()
+        }
+    };
 
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -131,20 +154,16 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             // Recorrer todas las imágenes seleccionadas
             for (let i = 0; i < selectedImages.length; i++) {
                 const selectedImage = selectedImages[i];
-
                 // Crear una URL para cada imagen seleccionada
-                const imageUrl = URL.createObjectURL(selectedImage);
-
+                const imageUrl = URL.createObjectURL(selectedImage)
                 // Agregar la URL al array
                 imageUrls.push(imageUrl);
                 // Opcionalmente, puedes guardar los archivos en el estado
             }
             // Actualizar el estado con el array de URLs de imágenes
             setImageURL(imageUrls);
-
             // Actualizar el estado que almacena todas las URL de las imágenes seleccionadas
             setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
-
             // Actualizar el estado con los archivos de imagen
             setImageFile((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
         }
@@ -238,7 +257,9 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             setImageURL([]);
             setImageFile([]);
             setAllImageURLs([])
+            setSnackBarMessage('El ave se ha Actualizado correctamente.')
             dispatch(getInfoForUpdate(infoAveForUpdate.id_ave))
+            changeImagenExist()
         } catch (error) {
             console.error('Error:', error);
             setErrorMessage(`Ocurrió un error: ${error.message}`);
@@ -300,19 +321,19 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     alignItems: 'center',
                     justifyContent: 'center',
                     width: '80%',
-                    margin: '0px 0px 0px 150px',
+                    margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
-                    borderRadius: '0px 0px 20px 20px'
+                    borderRadius: '0px 0px 20px 20px',
+                    
                 }} >
+                    
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
-                            Formulario de Actualización
-                        </Typography>
                         <Button
                             sx={{
-                                marginBottom: '0px',
+                                mt:5,
+                                mb: -8,
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
                                 ml: '75%',
@@ -326,6 +347,11 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         >
                             Buscar Nuevo Registro
                         </Button>
+                       
+                        <Typography variant='h2' color='primary' sx={{ mb: 3  }}>
+                            Formulario de Actualización
+                        </Typography>
+                    
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 1 }} />
@@ -590,14 +616,14 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             filterOptions={(options, state) => {
                                 const inputValue = state.inputValue.toLowerCase();
                                 const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
-                              
+
                                 return options.filter((option) => {
-                                  if (selectedPaises.length === 0) {
-                                    return true; // No hay paises seleccionados, muestra todas las zonas
-                                  }
-                                  return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                                    if (selectedPaises.length === 0) {
+                                        return true; // No hay paises seleccionados, muestra todas las zonas
+                                    }
+                                    return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
                                 });
-                              }}
+                            }}
                             // filterOptions={(options, state) => {
                             //     // Filtra las opciones para que coincidan solo al principio de las letras
                             //     const inputValue = state.inputValue.toLowerCase();
@@ -686,6 +712,27 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             }}
                         />
                     </Grid>
+                    <Grid item xs={12}>
+                    <Button
+                            sx={{
+                                ml: '78%',
+                                mb: 0,
+                                fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none', color: 'white',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.light, // Cambia el color de fondo en hover
+                                    color: 'black', // Cambia el color del texto en hover
+                                    textTransform: 'none',
+                                },
+                            }}
+                            endIcon={<DeleteForeverIcon />}
+                            variant="contained"
+                            color='secondary'
+                            onClick={handleDeleteRegistro}
+
+                        >
+                            Eliminar Registro
+                        </Button>
+                    </Grid>
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
                 <Backdrop
@@ -698,7 +745,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             {loadingMessage}
                         </Typography>
                     </>
-
                 </Backdrop>
 
             </Box>
@@ -706,7 +752,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                 open={openSnackbar}
                 autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
                 onClose={handleCloseSnackbar}
-                message={'El ave se ha Actualizado correctamente.'}
+                message={snackBarMessage}
             >
 
 

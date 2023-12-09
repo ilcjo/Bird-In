@@ -9,9 +9,11 @@ import {
   Link as MuiLink,
   InputAdornment,
   IconButton,
+  Snackbar,
+  SnackbarContent,
 
 } from '@mui/material';
-import {  useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { loginUser } from '../../redux/actions/userLoginRegister';
@@ -21,7 +23,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { loginFailure, loginRequest } from '../../redux/slices/Auth';
 import CloseIcon from '@mui/icons-material/Close';
 export const LoginForm = ({ changeTab }) => {
- 
+
   const theme = useTheme()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -33,20 +35,21 @@ export const LoginForm = ({ changeTab }) => {
   const [errorTextPass, setErrorTextPass] = React.useState('');
   const [errorText, setErrorText] = React.useState('');
   const { loading } = useSelector((state) => state.authSlice);
-
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [approvedMessage, setApprovedMessage] = React.useState('')
   const handleClose = () => {
     dispatch(Boolean(false))
   };
 
   const handleegisterLinkClicRk = (e) => {
     e.preventDefault();
-    const numOne = 1 
+    const numOne = 1
     changeTab(numOne);
   };
 
   const handlePassLinkClicRk = (e) => {
     e.preventDefault();
-    const num = 2 
+    const num = 2
     changeTab(num);
   };
 
@@ -69,6 +72,9 @@ export const LoginForm = ({ changeTab }) => {
           } else if (error.response.data.message === 'Usuario no registrado') {
             setErrorText(error.response.data.message); // Establece el mensaje de error de correo
             setErrorTextPass(''); // Limpia el mensaje de error de contraseña si existe
+          } else if (error.response.data.message === 'Usuario no aprobado') {
+            setOpenSnackbar(true)
+            setApprovedMessage('Este usuario no ha sido aprobado. En caso de que tu cuenta sea aprobada, recibirás una notificación por correo electrónico confirmando tu autorización de acceso. ')
           } else {
             console.error('Error desconocido:', error.response.data.message);
           }
@@ -145,12 +151,14 @@ export const LoginForm = ({ changeTab }) => {
         </Typography>
         <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Aun no eres miembro ?
-          <MuiLink onClick={handleegisterLinkClicRk}  color="primary.light" underline="none" 
-          sx={{  
-            cursor: 'pointer',
-          '&:hover': {
-            color: theme.palette.primary.main },
-            marginLeft: '5px' }}>
+          <MuiLink onClick={handleegisterLinkClicRk} color="primary.light" underline="none"
+            sx={{
+              cursor: 'pointer',
+              '&:hover': {
+                color: theme.palette.primary.main
+              },
+              marginLeft: '5px'
+            }}>
             Registrarse
           </MuiLink>
         </Typography>
@@ -226,13 +234,15 @@ export const LoginForm = ({ changeTab }) => {
           />
           <Typography variant="h5">
 
-            <MuiLink  onClick={handlePassLinkClicRk}  
-            sx={{  
-              cursor: 'pointer',
-            '&:hover': {
-              color: theme.palette.primary.main },
-              marginLeft: '8px', 
-              marginTop: '10px' }} style={{ color: theme.palette.primary.main }}>
+            <MuiLink onClick={handlePassLinkClicRk}
+              sx={{
+                cursor: 'pointer',
+                '&:hover': {
+                  color: theme.palette.primary.main
+                },
+                marginLeft: '8px',
+                marginTop: '10px'
+              }} style={{ color: theme.palette.primary.main }}>
               Olvidó su contraseña?
             </MuiLink>
 
@@ -257,13 +267,24 @@ export const LoginForm = ({ changeTab }) => {
           >
             <span>Iniciar Sesión</span>
           </LoadingButton>
-          <Button 
-          onClick={handleClose} 
-          variant="outlined"
-          color='secondary'
-          startIcon={<CloseIcon />}>Cerrar</Button>
+          <Button
+            onClick={handleClose}
+            variant="outlined"
+            color='secondary'
+            startIcon={<CloseIcon />}>Cerrar</Button>
         </Grid>
       </Grid>
+      {approvedMessage && (
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={10000}
+          onClose={() => setApprovedMessage('')}
+        >
+          <SnackbarContent
+            message={approvedMessage}
+          />
+        </Snackbar>
+      )}
     </Box>
   )
 }

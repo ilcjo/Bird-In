@@ -2,7 +2,6 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const mainRoutes = require('./routes/index');
-const httpProxy = require('http-proxy');
 
 require('./db/db.js');
 
@@ -34,6 +33,9 @@ server.use((err, req, res, next) => {
   console.error(err);
   res.status(status).send(message);
 });
+
+
+
 
 module.exports = server;
 
