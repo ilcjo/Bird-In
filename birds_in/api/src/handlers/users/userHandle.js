@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { generateToken } = require("../../utils/passport");
 const { sendWelcomeEmail, sendApprovalEmail } = require("../../utils/emailService");
+const axios = require('axios')
+require('dotenv').config();
+const { APIKEY_VERIFY } = process.env;
 
 const registerUser = async (req, res) => {
     const { email, name, pais, pass } = req.body
@@ -61,7 +64,6 @@ const sendEmailUserPending = async (req, res) => {
     const { email, username } = req.query
     try {
         const response = sendWelcomeEmail(email, username)
-        console.log(response)
         return res.status(200).json(response)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -72,10 +74,27 @@ const sendEmailUserApprove = async (req, res) => {
     const { email, username } = req.query
     try {
         const response = sendApprovalEmail(email, username)
-        console.log(response)
         return res.status(200).json(response)
     } catch (error) {
         res.status(500).json({ error: error.message })
+    }
+};
+
+const verifyEmail = async (req, res) => {
+    const { email } = req.query
+    console.log('BACK EMSIL :',email)
+    try {
+        const apiKey = APIKEY_VERIFY; // Reemplaza con tu clave de API
+        const apiUrl = `https://apps.emaillistverify.com/api/verifyEmail?secret=${apiKey}&email=${email}&timeout=15`;
+        const response = await axios(apiUrl);
+        // Verifica si la respuesta de la API es "OK"
+        const isValidEmail = response.data === "ok";
+        console.log(isValidEmail)
+        // Devuelve la respuesta de la API al cliente
+        res.json({ isValidEmail });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al verificar el correo electrónico' });
     }
 };
 
@@ -85,5 +104,6 @@ module.exports = {
     loginApp,
     allUserRegister,
     sendEmailUserApprove,
-    sendEmailUserPending
+    sendEmailUserPending,
+    verifyEmail
 }

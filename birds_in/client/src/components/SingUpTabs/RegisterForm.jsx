@@ -17,7 +17,7 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
-import { pendingEmail, registerData } from '../../redux/actions/userLoginRegister';
+import { pendingEmail, registerData, verifyemail } from '../../redux/actions/userLoginRegister';
 
 
 export const RegisterForm = ({ changeTab }) => {
@@ -26,6 +26,7 @@ export const RegisterForm = ({ changeTab }) => {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = React.useState(false)
   const [error, setError] = React.useState('')
+  const [errorEmail, setErrorEmail] = React.useState('')
   const [successMessage, setSuccessMessage] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -36,8 +37,6 @@ export const RegisterForm = ({ changeTab }) => {
     pass: '',
     passFirst: '',
   })
-
-
   const handleClose = () => {
     dispatch(Boolean(false));
     setFormData({
@@ -48,36 +47,62 @@ export const RegisterForm = ({ changeTab }) => {
       passFirst: '',
     });
   };
+
   const validatePassword = (password) => {
-    // Verificar que la contraseña tenga al menos 8 caracteres, una mayúscula y un carácter alfanumérico
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-    return passwordRegex.test(password);
+    // Verificar que la contraseña tenga al menos 8 caracteres, una mayúscula, un dígito y un carácter especial
+    const atLeast8Chars = /.{8,}/;
+    const hasUpperCase = /[A-Z]/;
+    const hasDigit = /\d/;
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+    let error = '';
+
+    if (!atLeast8Chars.test(password)) {
+      error = 'La contraseña debe tener al menos 8 caracteres.';
+    } else if (!hasUpperCase.test(password)) {
+      error = 'La contraseña debe contener al menos una mayúscula.';
+    } else if (!hasDigit.test(password)) {
+      error = 'La contraseña debe contener al menos un número.';
+    } else if (!hasSpecialChar.test(password)) {
+      error = 'La contraseña debe contener al menos un carácter especial.';
+    }
+
+    setError(error);
   };
-  
-  const validateEmail = (email) => {
-    // Verificar que el correo tenga un "@"
-    const emailRegex = /@/;
-    return emailRegex.test(email);
+
+  const handlePasswordChange = (e) => {
+    validatePassword(e.target.value);
+  };
+
+  const handleEmailChange = async (e) => {
+    const email = e.target.value;
+
+    // Validación del formato del correo
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidFormat = emailRegex.test(email);
+
+    if (!isValidFormat) {
+      setErrorEmail('El correo electrónico debe tener un formato válido');
+      return;
+    }
+
+    try {
+      // Realiza la verificación de correo electrónico en el servidor
+      const response = await dispatch(verifyemail(email));
+      // Verifica la propiedad isValidEmail en la respuesta
+      const isValidEmail = response.isValidEmail;
+      if (isValidEmail) {
+        setErrorEmail('');
+      } else {
+        setErrorEmail('El correo electrónico no es válido');
+      }
+    } catch (error) {
+      console.error(`Error al verificar el correo electrónico: ${error}`);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    if (!validatePassword(formData.pass)) {
-      setError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter alfanumérico');
-      return;
-    }
-  
-    if (!validateEmail(formData.email)) {
-      setError('El correo electrónico debe contener un "@"');
-      return;
-    }
-  
-    if (formData.pass !== formData.passFirst) {
-      setError('Las contraseñas no coinciden');
-      return;
-    }
-
     setError('');
     setLoading(true);
     try {
@@ -105,6 +130,13 @@ export const RegisterForm = ({ changeTab }) => {
     const num = 0;
     changeTab(num);
   };
+
+  const isButtonDisabled = () => {
+    
+    // Deshabilita el botón si hay errores en la contraseña o en el correo electrónico
+    return error || errorEmail || !formData.name || !formData.email || !formData.passFirst;
+  };
+
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
     marginTop: '-9px',
@@ -200,11 +232,14 @@ export const RegisterForm = ({ changeTab }) => {
           />
 
           <TextField
-            label="E-mail"
+            label="Correo Electrónico"
             name="email"
             type="email"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, email: e.target.value });
+              handleEmailChange(e);
+            }}
             // margin="normal"
             fullWidth
             InputLabelProps={{
@@ -214,58 +249,24 @@ export const RegisterForm = ({ changeTab }) => {
             InputProps={{
               sx: inputStyles, // Establece el estilo del input
             }}
-            helperText=" Ejemplo: nombre@mail.com"
+            helperText={errorEmail}
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-
                 fontSize: '1rem',
-                color: theme.palette.primary.light,
+                color: theme.palette.secondary.main,
               },
             }}
 
           />
-
-          {/* <TextField
-            label="País"
-            name="pais"
-            value={formData.pais}
-            onChange={(e) => setFormData({ ...formData, pais: e.target.value })}
-            fullWidth
-            select
-            margin="normal"
-            helperText="Seleccione País de Origen"
-            InputLabelProps={{
-              sx: labelStyles, // Establece el estilo del label del input
-            }}
-            InputProps={{
-              sx: inputStyles, // Establece el estilo del input
-            }}
-            FormHelperTextProps={{
-              sx: {
-                /* Agrega los estilos que desees para el texto del helper text */
-            /* Por ejemplo, para agregar un margen izquierdo: */
-            // fontSize: '1rem',
-            // color: theme.palette.primary.light,
-            /* Agrega otros estilos que desees... */
-          },
-          {/* }}
-          >
-
-            {CountryList().getData().map((country) => (
-              <MenuItem key={country.label} value={country.label}>
-                {country.label}
-              </MenuItem>
-            ))}
-          </TextField > */}
           <TextField
-            label="Confirmar Password"
+            label="Contraseña"
             name="passFirst"
-            // margin="normal"
+            margin="normal"
             error={error !== ''}
             type={showPassword ? 'text' : 'password'}
             fullWidth
-            sx={{ mt: -2 }}
+            sx={{ mt: 2 }}
             InputLabelProps={{
               sx: labelStyles,
             }}
@@ -283,7 +284,7 @@ export const RegisterForm = ({ changeTab }) => {
                 </InputAdornment>
               ),
             }}
-            helperText={`Al menos 8 caracteres, una mayúscula y un alfa numérico${formData.passFirst && error ? `\n${error}` : ''}`}
+            helperText={error}
             FormHelperTextProps={{
               sx: {
                 fontSize: '1rem',
@@ -293,57 +294,23 @@ export const RegisterForm = ({ changeTab }) => {
             value={formData.passFirst} // Vincula este campo al valor 'passFirst' en el estado
             onChange={(e) => {
               setFormData({ ...formData, passFirst: e.target.value });
+              validatePassword(e.target.value);
             }}
           />
-          <TextField
-            label="Confirmar Password"
-            name="pass"
-            value={formData.pass}
-            error={error !== ''}
-            helperText={error}
-            onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
-            type={showPassword ? 'text' : 'password'}
-            margin="normal"
-            fullWidth
-            sx={{ mt: 2 }}
-            FormHelperTextProps={{
-              sx: {
-                /* Agrega los estilos que desees para el texto del helper text */
-                /* Por ejemplo, para agregar un margen izquierdo: */
-                fontSize: '1rem',
-                color: theme.palette.primary.light,
-
-              },
-            }}
-            InputLabelProps={{
-              sx: labelStyles, // Establece el estilo del label del input
-            }}
-            InputProps={{
-              sx: inputStyles, // Establece el estilo del input
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    onClick={() => setShowPassword(!showPassword)}
-                    onMouseDown={(event) => event.preventDefault()}
-
-                  >
-
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+          <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+            La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
+          </Typography>
         </form>
         <Grid container component={Box} sx={actionsStyles} size="medium">
-
           <Button variant="outlined" onClick={handleClose} color="primary">
             Cancelar
           </Button>
-
-
-          <Button variant="contained" onClick={handleSubmit} color="primary">
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            color="primary"
+            disabled={isButtonDisabled()}
+          >
             Crear Cuenta
           </Button>
         </Grid>
@@ -365,11 +332,82 @@ export const RegisterForm = ({ changeTab }) => {
         >
           <SnackbarContent
             message={successMessage}
-            
+
           />
         </Snackbar>
       )}
     </Box>
   )
 };
+/* <TextField
+label="Confirmar Contraseña"
+name="pass"
+value={formData.pass}
+error={error !== ''}
+helperText={error}
+onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
+type={showPassword ? 'text' : 'password'}
+margin="normal"
+fullWidth
+sx={{ mt: 2 }}
+FormHelperTextProps={{
+  sx: {
+    /* Agrega los estilos que desees para el texto del helper text */
+/* Por ejemplo, para agregar un margen izquierdo: */
+//     fontSize: '1rem',
+//     color: theme.palette.primary.light,
 
+//   },
+// }}
+// InputLabelProps={{
+//   sx: labelStyles, // Establece el estilo del label del input
+// }}
+// InputProps={{
+//   sx: inputStyles, // Establece el estilo del input
+//   endAdornment: (
+//     <InputAdornment position="end">
+//       <IconButton
+//         edge="end"
+//         onClick={() => setShowPassword(!showPassword)}
+//         onMouseDown={(event) => event.preventDefault()}
+
+//       >
+
+//         {showPassword ? <VisibilityOff /> : <Visibility />}
+//       </IconButton>
+//     </InputAdornment>
+//   ),
+// }}
+// /> */}
+/* <TextField
+         label="País"
+         name="pais"
+         value={formData.pais}
+         onChange={(e) => setFormData({ ...formData, pais: e.target.value })}
+         fullWidth
+         select
+         margin="normal"
+         helperText="Seleccione País de Origen"
+         InputLabelProps={{
+           sx: labelStyles, // Establece el estilo del label del input
+         }}
+         InputProps={{
+           sx: inputStyles, // Establece el estilo del input
+         }}
+         FormHelperTextProps={{
+           sx: {
+             /* Agrega los estilos que desees para el texto del helper text */
+/* Por ejemplo, para agregar un margen izquierdo: */
+// fontSize: '1rem',
+// color: theme.palette.primary.light,
+/* Agrega otros estilos que desees... */
+// },
+/* }}
+>
+
+  {CountryList().getData().map((country) => (
+    <MenuItem key={country.label} value={country.label}>
+      {country.label}
+    </MenuItem>
+  ))}
+</TextField > */

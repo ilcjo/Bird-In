@@ -33,13 +33,11 @@ export const registerData = (info) => {
     };
 };
 
-
 export const loginUser = (info) => {
     return async (dispatch) => {
         try {
             const response = await axios.post('login', info)
             const data = response.data
-            console.log('data logiin', data)
             localStorage.setItem("token", data.token)
             localStorage.setItem("usuarioNombre", data.nombre);
             localStorage.setItem("tipoCliente", data.tipo);
@@ -65,7 +63,6 @@ export const getUsers = () => {
 };
 
 export const pendingEmail = (email, username) => {
-    console.log(email, username)
     return async (dispatch) => {
         try {
             // Corregir la URL añadiendo el símbolo "&" y "="
@@ -78,13 +75,25 @@ export const pendingEmail = (email, username) => {
     };
 };
 
-
-
 export const approveEmail = (email, username) => {
     return async (dispatch) => {
         try {
             const response = await axios('aprobado')
-            const data = response.data 
+            const data = response.data
+        } catch (error) {
+            console.error("Error al enviar los datos:", error)
+            throw error;
+        }
+    }
+};
+
+export const verifyemail = (email) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post(`verificacion?email=${email}`);
+            const data = response.data
+            console.log('respuesta desde axios',data)
+            return data
         } catch (error) {
             console.error("Error al enviar los datos:", error)
             throw error;

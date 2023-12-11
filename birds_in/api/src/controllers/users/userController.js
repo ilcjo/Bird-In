@@ -13,8 +13,6 @@ const saveRegister = async (email, nombre, pais, pass,) => {
         });
 
         // Notificar al usuario que su registro se ha realizado correctamente.
-
-        // Notificar al usuario que su registro se ha realizado correctamente.
         return { message: 'Registro exitoso. Esperando aprobación.' };
     } catch (error) {
         // Loguea el error para facilitar la depuración
@@ -26,15 +24,10 @@ const saveRegister = async (email, nombre, pais, pass,) => {
             return { error: 'El correo electrónico ya está registrado' };
         }
 
-        // Otros errores pueden ser manejados aquí
-
         // Re-lanzar la excepción si no es un error de duplicado
         throw error;
     }
 };
-
-
-
 
 const getAllUsersDb = async () => {
     try {

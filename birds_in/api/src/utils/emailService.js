@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Función para enviar el correo
+// Función para enviar el correo a usuarios de aprobacion
 const sendWelcomeEmail = async (email, userName) => {
   try {
     const emailBodyWelcome = `
@@ -47,13 +47,9 @@ const sendWelcomeEmail = async (email, userName) => {
         
               <!-- Contenido del Correo -->
               <div style="text-align: center; padding: 20px;">
-                <h1>¡Hola ${userName}!</h1>
-                <p style="text-align: left;">Agradecemos tu interés en unirte a nuestra comunidad. Para garantizar la seguridad y la integridad de nuestra plataforma, 
-                todos los nuevos registros requieren la aprobación del administrador antes de poder acceder a la página web.</p>
-
-                <p style="text-align: left" >Una vez que hayamos completado la revisión, 
-                recibirás una notificación por correo electrónico informándote 
-                sobre el estado de tu solicitud. Si tu cuenta es aprobada, recibirás instrucciones detalladas sobre cómo acceder a la plataforma.</p>
+                <h1>¡Gracias por unirte a nuestra comunidad, ${userName}!</h1>
+                <p style="text-align: left" >"Tu cuenta está en proceso de aprobación. El proceso de aprobación puede tardar de 24 a 72 horas. 
+                Te notificaremos a través de correo electrónico tan pronto tu solicitud sea aprobada.</p>
               </div>
         
               <!-- Pie de Página -->
@@ -66,7 +62,7 @@ const sendWelcomeEmail = async (email, userName) => {
           </body>
           </html>
         `;
-        const emailAdminNewUser = `
+    const emailAdminNewUser = `
           <!DOCTYPE html>
           <html lang="en">
           <head>

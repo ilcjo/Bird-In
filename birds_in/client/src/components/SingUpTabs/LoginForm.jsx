@@ -74,7 +74,8 @@ export const LoginForm = ({ changeTab }) => {
             setErrorTextPass(''); // Limpia el mensaje de error de contraseña si existe
           } else if (error.response.data.message === 'Usuario no aprobado') {
             setOpenSnackbar(true)
-            setApprovedMessage('Este usuario no ha sido aprobado. En caso de que tu cuenta sea aprobada, recibirás una notificación por correo electrónico confirmando tu autorización de acceso. ')
+            setApprovedMessage('Este usuario no ha sido aprobado. Recibirás una notificación por correo electrónico cuando seas aprobado. ')
+            setErrorTextPass('')
           } else {
             console.error('Error desconocido:', error.response.data.message);
           }
