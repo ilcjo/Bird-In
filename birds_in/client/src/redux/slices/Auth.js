@@ -29,11 +29,11 @@ export const authSlice = createSlice({
     clearToken: (state) => {
       state.isAuthenticated = false;
     },
-    allUsers: (state) => {
+    getAllUsers: (state, action) => {
       state.users = action.payload
     }
   }
 })
 
-export const { loginRequest, loginSuccess, loginFailure, clearToken, allUsers } = authSlice.actions
+export const { loginRequest, loginSuccess, loginFailure, clearToken, getAllUsers } = authSlice.actions
 export default authSlice.reducer

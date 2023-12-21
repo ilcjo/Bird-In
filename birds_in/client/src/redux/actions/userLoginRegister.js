@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { allUsers, loginSuccess } from '../slices/Auth';
+import { getAllUsers, loginSuccess } from '../slices/Auth';
 
 export const registerData = (info) => {
     return async (dispatch) => {
@@ -49,12 +49,12 @@ export const loginUser = (info) => {
     }
 };
 
-export const getUsers = () => {
+export const getUsers = (status) => {
     return async (dispatch) => {
         try {
-            const response = await axios('register')
+            const response = await axios.post(`all?status=${status}`)
             const data = response.data
-            dispatch(allUsers(data))
+            dispatch(getAllUsers(data))
         } catch (error) {
             console.error("Error al enviar los datos:", error)
             throw error;
@@ -92,7 +92,45 @@ export const verifyemail = (email) => {
         try {
             const response = await axios.post(`verificacion?email=${email}`);
             const data = response.data
-            console.log('respuesta desde axios',data)
+            return data
+        } catch (error) {
+            console.error("Error al enviar los datos:", error)
+            throw error;
+        }
+    }
+};
+
+export const statusChangeUser = (id) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.put(`status?id=${id}`);
+            const data = response.data
+            return data
+        } catch (error) {
+            console.error("Error al enviar los datos:", error)
+            throw error;
+        }
+    }
+};
+
+export const borrarUsuario = (id) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.delete(`borrarUsuario?id=${id}`);
+            const data = response.data
+            return data
+        } catch (error) {
+            console.error("Error al enviar los datos:", error)
+            throw error;
+        }
+    }
+};
+
+export const recoverPass = (email) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.delete(`borrarUsuario?id=${email}`);
+            const data = response.data
             return data
         } catch (error) {
             console.error("Error al enviar los datos:", error)

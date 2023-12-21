@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
-import { createBird, getInfoForUpdateName, saveImageFtp } from '../../redux/actions/createBirds';
+import { createBird, duplicateNameCheck, getInfoForUpdateName, saveImageFtp } from '../../redux/actions/createBirds';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import wikipediaLogo from '../../assets/images/wikilogo.png'
 import ebirdLogo from '../../assets/images/Logo_ebird.png'
@@ -26,17 +26,21 @@ import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 
-export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,changeImagenExist}) => {
+export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
+
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { infoAveForUpdate } = useSelector(state => state.createBird)
+    
     const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
-    const [birdCreated, setBirdCreated] = React.useState(false);
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [birdCreated, setBirdCreated] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(null);
+    const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se a creado correctamente.');
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
 
     const sortAlphabetically = (array) => {
         return array.slice().sort((a, b) => {
@@ -67,6 +71,7 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
         urlBird: '',
         urlImagen: [],
     });
+    
     const [errors, setErrors] = React.useState({
         grupo: false,
         familia: false,
@@ -129,6 +134,45 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
             });
         }
     };
+
+
+    const handleInputChangeIngles = (event) => {
+        const newName = event.target.value;
+        // Si no hay duplicados, actualiza el estado createData
+        setCreateData({
+            ...createData,
+            ingles: newName,
+        });
+        // Reinicia el error al escribir
+        setErrors({
+            ...errors,
+            ingles: false,
+        });
+
+        // Reinicia el formulario
+        setFormSubmitted(false);
+
+        // Espera 500 milisegundos antes de llamar a la función para comprobar duplicados
+        setTimeout(async () => {
+            try {
+                // Llama a la función para comprobar duplicados
+                await dispatch(duplicateNameCheck(newName));
+
+
+            } catch (error) {
+                // Si hay un error, muestra un mensaje de error
+                console.error('Error al comprobar duplicados:', String(error));
+                alert('Esta ave ya existe');
+                // Restablece el valor del input
+                changeTabSearch()
+                // setCreateData({
+                //     ...createData,
+                //     ingles: '',
+                // });
+            }
+        }, 700);
+    };
+
 
     const handleRemoveImage = (index) => {
         // Revocar la URL de la imagen eliminada
@@ -194,7 +238,6 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                 setShowBackdrop(false);
                 setLoadingMessage('Cargando...');
                 setBirdCreated(true);
-
                 // Abre el Snackbar
                 setOpenSnackbar(true);
                 // Borra los datos del formulario
@@ -213,14 +256,18 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                 setImageURL([]);
                 setImageFile([]);
                 setFormSubmitted(false)
+                setSnackBarMessage('El ave se a creado correctamente.')
                 dispatch(getInfoForUpdateName(createData.ingles))
-                // changeImagenExist()
+                changeImagenExist()
             } catch (error) {
-                setShowBackdrop(false);
+                console.log('este es el error:', String(error))
                 // Muestra el mensaje de error en caso de que ocurra un error en cualquiera de las dos promesas.
-                console.error(error);
+                setErrorMessage(`Ocurrió un error: ${error}`);
+                // alert(`Error: ${error.message}`); // Puedes personalizar cómo muestras el mensaje de error al usuario.
+                setErrorSnackbarOpen(true);
                 // Muestra el mensaje de error al usuario
-                alert(`Error: ${error.message}`); // Puedes personalizar cómo muestras el mensaje de error al usuario.
+            } finally {
+                setShowBackdrop(false);
             }
         }
     };
@@ -247,7 +294,6 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
     };
 
     const createBirdWithMessage = async (createData, imageUrl) => {
-        console.log('dentro de dispatch', imageUrl)
         return new Promise((resolve, reject) => {
             dispatch(createBird({ ...createData, urlImagen: imageUrl }))
                 .then(() => {
@@ -258,6 +304,7 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                 });
         });
     };
+
 
     React.useEffect(() => {
         // Aquí despachas la acción para cargar las opciones al montar el componente
@@ -406,11 +453,19 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                             name="ingles"
                             label="Nombre en Inglés"
                             value={createData.ingles}
-                            onChange={handleInputChange}
+                            onChange={handleInputChangeIngles}
                             fullWidth
                             margin="normal"
                             error={formSubmitted && createData.ingles.trim() === ''} // Check if the field is empty when the form is submitted
-                            helperText={formSubmitted && createData.ingles.trim() === '' ? 'El campo "Nombre en Inglés" es obligatorio.' : ''}
+                            helperText={formSubmitted && createData.ingles.trim() === '' ? 'Este Campo es obligatorio *' : ''}
+                            FormHelperTextProps={{
+                                sx: {
+                                    /* Agrega los estilos que desees para el texto del helper text */
+                                    fontSize: '1.1rem',
+                                    color: theme.palette.secondary.main,
+                                    fontWeight: 'bold'
+                                },
+                            }}
                             InputLabelProps={{
                                 sx: labelStyles, // Establece el estilo del label del input
 
@@ -466,7 +521,15 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                                     {...params}
                                     label="Grupos"
                                     error={formSubmitted && !createData.grupo} // Add error state to the TextField
-                                    helperText={formSubmitted && !createData.grupo ? 'El campo "Familia" es obligatorio.' : ''}
+                                    helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
+                                    FormHelperTextProps={{
+                                        sx: {
+                                            /* Agrega los estilos que desees para el texto del helper text */
+                                            fontSize: '1.1rem',
+                                            color: theme.palette.secondary.main,
+                                            fontWeight: 'bold'
+                                        },
+                                    }}
                                     InputLabelProps={{
                                         sx: labelStyles, // Estilo del label
                                     }}
@@ -499,7 +562,15 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                                     {...params}
                                     label="Familia"
                                     error={formSubmitted && !createData.familia} // Add error state to the TextField
-                                    helperText={formSubmitted && !createData.familia ? 'El campo "Familia" es obligatorio.' : ''}
+                                    helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
+                                    FormHelperTextProps={{
+                                        sx: {
+                                            /* Agrega los estilos que desees para el texto del helper text */
+                                            fontSize: '1.1rem',
+                                            color: theme.palette.secondary.main,
+                                            fontWeight: 'bold'
+                                        },
+                                    }}
                                     InputLabelProps={{
                                         sx: labelStyles, // Estilo del label
                                     }}
@@ -587,17 +658,34 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
+                            // filterOptions={(options, state) => {
+                            //     const inputValue = state.inputValue.toLowerCase();
+                            //     const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
+
+                            //     return options.filter((option) => {
+                            //         if (selectedPaises.length === 0) {
+                            //             return true; // No hay paises seleccionados, muestra todas las zonas
+                            //         }
+                            //         return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                            //     });
+                            // }}
                             filterOptions={(options, state) => {
+                                // Filtra las opciones para que coincidan solo al principio de las letras
                                 const inputValue = state.inputValue.toLowerCase();
                                 const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
-
-                                return options.filter((option) => {
-                                    if (selectedPaises.length === 0) {
-                                        return true; // No hay paises seleccionados, muestra todas las zonas
-                                    }
-                                    return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                              
+                                const filteredByInput = options.filter((option) =>
+                                  option.nombre.toLowerCase().startsWith(inputValue)
+                                );
+                              
+                                return filteredByInput.filter((option) => {
+                                  if (selectedPaises.length === 0) {
+                                    return true; // No hay paises seleccionados, muestra todas las zonas
+                                  }
+                                  return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
                                 });
-                            }}
+                              }}
+                              
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
                                     <Chip
@@ -678,24 +766,37 @@ export const CreateBird = ({ showUpdateBird, showSearchBird, selectedBird,change
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={showBackdrop}
                 >
-
                     <>
                         <CircularProgress color="inherit" />
                         <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
                             {loadingMessage}
                         </Typography>
                     </>
-
                 </Backdrop>
-
             </Box>
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={6000} // Duración en milisegundos (ajusta según tus preferencias)
                 onClose={handleCloseSnackbar}
-                message={'El ave se ha creado correctamente.'}
+                message={snackBarMessage}
             >
             </Snackbar>
+            {/* Snackbar for error message */}
+            <Snackbar
+                open={errorSnackbarOpen}
+                autoHideDuration={5000} // Adjust the duration as needed
+                onClose={() => setErrorSnackbarOpen(false)}
+            >
+                <Alert
+                    elevation={6}
+                    variant="filled"
+                    severity="error"
+                    onClose={() => setErrorSnackbarOpen(false)}
+                >
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
+
         </React.Fragment>
     );
 };

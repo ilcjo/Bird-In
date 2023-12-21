@@ -5,17 +5,22 @@ const {
     allUserRegister,
     sendEmailUserApprove,
     sendEmailUserPending,
-    verifyEmail
+    verifyEmail,
+    changeStatus,
+    deleteUser,
+    recoverPass
 } = require('../handlers/users/userHandle')
-
 
 const userRouter = Router()
 userRouter.post('/register', registerUser)
     .post('/login', loginApp)
-    .get('/all', allUserRegister)
+    .post('/all', allUserRegister)
     .get('/bienvenido', sendEmailUserPending)
     .get('/aprobado', sendEmailUserApprove)
     .post('/verificacion', verifyEmail)
+    .put('/status', changeStatus)
+    .delete('/borrarUsuario', deleteUser)
+    .post('/recuperarContraseña', recoverPass)
 
 module.exports = userRouter
 

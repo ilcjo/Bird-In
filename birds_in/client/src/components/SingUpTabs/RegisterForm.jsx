@@ -20,22 +20,26 @@ import { Boolean } from '../../redux/slices/OpenClose';
 import { pendingEmail, registerData, verifyemail } from '../../redux/actions/userLoginRegister';
 
 
-export const RegisterForm = ({ changeTab }) => {
+export const RegisterForm = ({ changeTab, close }) => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
+  const [debouncedEmail, setDebouncedEmail] = React.useState('');
+  const debounceTimeoutRef = React.useRef(null);
+  const [isCaptchaVerified, setIsCaptchaVerified] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false)
   const [error, setError] = React.useState('')
+  const [errorName, setErrorName] = React.useState('')
   const [errorEmail, setErrorEmail] = React.useState('')
   const [successMessage, setSuccessMessage] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [isFormSubmitted, setFormSubmitted] = React.useState(false);
   const [formData, setFormData] = React.useState({
     email: '',
     name: '',
     pais: '',
     pass: '',
-    passFirst: '',
   })
   const handleClose = () => {
     dispatch(Boolean(false));
@@ -44,8 +48,24 @@ export const RegisterForm = ({ changeTab }) => {
       email: '',
       pais: '',
       pass: '',
-      passFirst: '',
     });
+  };
+
+  const handleCaptchaVerification = (value) => {
+    // value será null si el usuario no pasa la verificación, de lo contrario, contendrá el token
+    if (value) {
+      setIsCaptchaVerified(true);
+    } else {
+      setIsCaptchaVerified(false);
+    }
+  };
+
+  const handleNameChange = (e) => {
+    const name = e.target.value;
+    // Aquí puedes realizar cualquier validación adicional para el nombre si es necesario
+    setFormData({ ...formData, name: name });
+    // Si el nombre está vacío, muestra un mensaje de error
+    setErrorName(name.trim() === '' ? 'El nombre es obligatorio *' : '');
   };
 
   const validatePassword = (password) => {
@@ -74,35 +94,50 @@ export const RegisterForm = ({ changeTab }) => {
     validatePassword(e.target.value);
   };
 
-  const handleEmailChange = async (e) => {
-    const email = e.target.value;
 
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    setFormData({ ...formData, email: email });
     // Validación del formato del correo
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidFormat = emailRegex.test(email);
 
-    if (!isValidFormat) {
-      setErrorEmail('El correo electrónico debe tener un formato válido');
-      return;
-    }
+    setErrorEmail(isValidFormat ? '' : 'El correo electrónico debe tener un formato válido')
 
-    try {
-      // Realiza la verificación de correo electrónico en el servidor
-      const response = await dispatch(verifyemail(email));
-      // Verifica la propiedad isValidEmail en la respuesta
-      const isValidEmail = response.isValidEmail;
-      if (isValidEmail) {
-        setErrorEmail('');
-      } else {
-        setErrorEmail('El correo electrónico no es válido');
-      }
-    } catch (error) {
-      console.error(`Error al verificar el correo electrónico: ${error}`);
-    }
+
+    //   // Limpiar el temporizador existente
+    //   if (debounceTimeoutRef.current) {
+    //     clearTimeout(debounceTimeoutRef.current);
+    //   }
+
+    //   // Configurar un nuevo temporizador para realizar la verificación después de un retraso
+    //   debounceTimeoutRef.current = setTimeout(() => {
+    //     setDebouncedEmail(email);
+    //     verifyEmailWithServer(email);
+    //   }, 500); // Ajusta el tiempo de espera según sea necesario
+    // };
+
+    // const verifyEmailWithServer = async (email) => {
+    //   try {
+    //     // Realiza la verificación de correo electrónico en el servidor
+    //     const response = await dispatch(verifyemail(email));
+    //     // Verifica la propiedad isValidEmail en la respuesta
+    //     const isValidEmail = response.isValidEmail;
+    //     if (isValidEmail) {
+    //       setErrorEmail('');
+    //     } else {
+    //       setErrorEmail('El correo electrónico no es válido');
+    //     }
+    //   } catch (error) {
+    //     console.error(`Error al verificar el correo electrónico: ${error}`);
+    //   }
   };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setFormSubmitted(true);
+    
     setError('');
     setLoading(true);
     try {
@@ -116,8 +151,8 @@ export const RegisterForm = ({ changeTab }) => {
         email: '',
         pais: '',
         pass: '',
-        passFirst: '',
       });
+      close()
     } catch (error) {
       alert(`Error: ${error}`);
     } finally {
@@ -132,9 +167,9 @@ export const RegisterForm = ({ changeTab }) => {
   };
 
   const isButtonDisabled = () => {
-    
+
     // Deshabilita el botón si hay errores en la contraseña o en el correo electrónico
-    return error || errorEmail || !formData.name || !formData.email || !formData.passFirst;
+    return error || errorEmail || !formData.name || !formData.email || !formData.pass;
   };
 
   const labelStyles = {
@@ -219,10 +254,19 @@ export const RegisterForm = ({ changeTab }) => {
             label="Nombre Completo"
             name="name"
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            helperText=" "
+            onChange={handleNameChange}
+            error={errorName}
+            helperText={errorName}
+            FormHelperTextProps={{
+              sx: {
+                /* Agrega los estilos que desees para el texto del helper text */
+                fontSize: '1.1rem',
+                color: theme.palette.secondary.main,
+                fontWeight: 'bold'
+              },
+            }}
             fullWidth
-            // margin="normal"
+            margin="normal"
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
             }}
@@ -236,11 +280,8 @@ export const RegisterForm = ({ changeTab }) => {
             name="email"
             type="email"
             value={formData.email}
-            onChange={(e) => {
-              setFormData({ ...formData, email: e.target.value });
-              handleEmailChange(e);
-            }}
-            // margin="normal"
+            onChange={(e) => { handleEmailChange(e) }}
+            margin="normal"
             fullWidth
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
@@ -249,19 +290,21 @@ export const RegisterForm = ({ changeTab }) => {
             InputProps={{
               sx: inputStyles, // Establece el estilo del input
             }}
+            error={errorEmail}
             helperText={errorEmail}
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1rem',
+                fontSize: '1.1rem',
                 color: theme.palette.secondary.main,
+                fontWeight: 'bold'
               },
             }}
 
           />
           <TextField
             label="Contraseña"
-            name="passFirst"
+            name="pass"
             margin="normal"
             error={error !== ''}
             type={showPassword ? 'text' : 'password'}
@@ -287,19 +330,22 @@ export const RegisterForm = ({ changeTab }) => {
             helperText={error}
             FormHelperTextProps={{
               sx: {
-                fontSize: '1rem',
-                color: theme.palette.primary.light,
+                /* Agrega los estilos que desees para el texto del helper text */
+                fontSize: '1.1rem',
+                color: theme.palette.secondary,
+                fontWeight: 'bold'
               },
             }}
             value={formData.passFirst} // Vincula este campo al valor 'passFirst' en el estado
             onChange={(e) => {
-              setFormData({ ...formData, passFirst: e.target.value });
+              setFormData({ ...formData, pass: e.target.value });
               validatePassword(e.target.value);
             }}
           />
           <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
             La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
           </Typography>
+         
         </form>
         <Grid container component={Box} sx={actionsStyles} size="medium">
           <Button variant="outlined" onClick={handleClose} color="primary">

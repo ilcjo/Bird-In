@@ -257,7 +257,7 @@ const filterOptionsPaisZonas = async (familia,
     // Verificar si se proporcionó un ID de zona o un ID de país
 
     if (zonas || pais) {
-        // console.log('entre en zona || pais')
+       
         const paisNumb = parseInt(pais)
         // Filtrar las aves según el país y las zonas proporcionadas
         allResults.avesFiltradas = allResults.avesFiltradas.filter(ave => {
@@ -268,8 +268,6 @@ const filterOptionsPaisZonas = async (familia,
     }
     // Lógica para construir las opciones de paises y zonas
     if (zonas) {
-        // console.log('entro en zona')
-        // console.log(allResults.avesFiltradas)
         // Construir opciones de países basadas en las aves filtradas
         const paisesSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
@@ -279,13 +277,13 @@ const filterOptionsPaisZonas = async (familia,
                     nombre: pais.dataValues.nombre,
                 })));
         });
-        // console.log(paisesSet)
+      
         const findIdPais = await obtenerIdDePais(zonas)
-        // console.log(findIdPais)
+        
         const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
-        // console.log(newopti)
+        
         newOptions.paises = [JSON.parse(newopti)];
-        // console.log(newOptions.paises)
+        
         const zonasSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
             ave.zonasAves.forEach(zona => zonasSet.add(JSON.stringify({
@@ -420,9 +418,14 @@ const sendAndCreateBird = async (
             return { message: "El nombre en inglés es obligatorio.", bird: null };
         }
     } catch (error) {
-        // A continuación, puedes agregar lógica para manejar errores específicos si es necesario.
+        // Manejar específicamente el error de clave única duplicada
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            // Ajusta el mensaje de error según tus necesidades
+            throw new Error("El nombre en inglés ya existe.");
+        }
+        // A continuación, puedes agregar lógica para manejar otros errores específicos si es necesario.
         console.error('Error en la consulta:', error);
-        throw error;
+
     }
 };
 
@@ -703,24 +706,6 @@ const getContadores = async () => {
     }
 };
 
-// const deleteBirdDb = async (idAve) => {
-//     try {
-//         const existingRelations = await Aves.findByPk(idAve);
-//         if (!existingRelations) {
-//             throw new Error("La ave con el ID especificado no existe.");
-//         }
-//         // Elimina todas las relaciones de países asociadas al ave
-//         await existingRelations.setPaises([]);
-//         await existingRelations.setZonasAves([]);
-//         await existingRelations.setImagenes_aves([]);
-//         // Finalmente, destruir la ave
-//         await existingRelations.destroy();
-//         return "Ave eliminada correctamente junto con sus relaciones.";
-//     } catch (error) {
-//         console.error('Error:', error);
-//         throw error;
-//     }
-// };
 const deleteBirdDb = async (idAve) => {
     try {
         const imagenesAves = await Imagenes_aves.findAll({
@@ -735,19 +720,19 @@ const deleteBirdDb = async (idAve) => {
             // Si hay un problema al borrar las fotos del FTP, puedes manejar el error aquí
             throw new Error("Error al borrar las fotos del FTP.");
         }
- 
-             // Buscar imágenes en la base de datos después de eliminarlas del FTP
-             const remainingImages = await Imagenes_aves.findAll({
-                where: {
-                    aves_id_ave: idAve,
-                },
-            });
-    
-            // Eliminar las imágenes de la base de datos si aún existen
-            await Promise.all(remainingImages.map(async (imagen) => {
-                await imagen.destroy();
-            }));
-    
+
+        // Buscar imágenes en la base de datos después de eliminarlas del FTP
+        const remainingImages = await Imagenes_aves.findAll({
+            where: {
+                aves_id_ave: idAve,
+            },
+        });
+
+        // Eliminar las imágenes de la base de datos si aún existen
+        await Promise.all(remainingImages.map(async (imagen) => {
+            await imagen.destroy();
+        }));
+
 
         // Eliminar las relaciones y la ave
         const existingRelations = await Aves.findByPk(idAve);
@@ -769,6 +754,27 @@ const deleteBirdDb = async (idAve) => {
     }
 };
 
+const findNameDuplicate = async (nombre) => {
+    try {
+        const existingRelations = await Aves.findAll({
+            where: {
+                nombre_ingles: nombre
+            }
+        });
+
+        // Si encuentra aves con el mismo nombre, arroja un error
+        if (existingRelations.length > 0) {
+            throw new Error("Este Nombre en Inglés ya existe.");
+        }
+
+        // Si no encuentra aves con el mismo nombre, simplemente retorna
+        return "Nombre en Inglés disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
 
 
 module.exports = {
@@ -783,5 +789,6 @@ module.exports = {
     getContadores,
     filterOptionsPaisZonas,
     deleteBirdDb,
-    findDataByName
+    findDataByName,
+    findNameDuplicate
 };

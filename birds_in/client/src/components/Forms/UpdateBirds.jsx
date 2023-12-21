@@ -31,7 +31,8 @@ import { deleteBird } from '../../redux/actions/fetchAllBirds';
 
 
 
-export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird,changeImagenExist }) => {
+export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist }) => {
+
     const theme = useTheme()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -113,18 +114,14 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se ha Actualizado correctamente.');
 
-    // console.log('image file', imageFile)
-    // console.log('imagenurl', imageURL)
-    // console.log('IMAGENES', allImageURLs)
-
     const handleDeleteRegistro = async () => {
         try {
             setShowBackdrop(true);
             setLoadingMessage('Eliminando...');
-    
+
             // Dispatch the action to delete the bird
             await dispatch(deleteBird(infoAveForUpdate.id_ave));
-    
+
             // If the delete operation is successful
             setOpenSnackbar(true);
             setSnackBarMessage('El Registro del Ave se ha eliminado correctamente');
@@ -216,7 +213,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const handleSubmit = async (event) => {
         event.preventDefault();
         setShowBackdrop(true);
-        setLoadingMessage('Subiendo imágenes...');
 
         try {
 
@@ -226,6 +222,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                 for (let i = 0; i < imageFile.length; i++) {
                     formData.append('images', imageFile[i]);
                 }
+                setLoadingMessage('Subiendo imágenes...');
                 imageUrl = await saveImageFtpWithMessage(formData);
                 setLoadingMessage('Actualizando ave...');
             }
@@ -240,26 +237,20 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             setLoadingMessage('Cargando...');
             setOpenSnackbar(true);
 
-            // Clear form data
-            // setCreateData({
-            // grupo: null,
-            // familia: null,
-            // pais: [],
-            // zona: '',
-            // cientifico: '',
-            // ingles: '',
-            // comun: '',
-            // urlWiki: '',
-            // urlBird: '',
-            // idAve: 0,
-            // urlImagen: [],
-            // });
             setImageURL([]);
             setImageFile([]);
             setAllImageURLs([])
-            setSnackBarMessage('El ave se ha Actualizado correctamente.')
-            dispatch(getInfoForUpdate(infoAveForUpdate.id_ave))
-            changeImagenExist()
+            if (imageUrl) {
+                setSnackBarMessage('El ave se ha Actualizado correctamente.');
+                dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+                changeImagenExist();
+            } else {
+                setSnackBarMessage('El ave se ha Actualizado correctamente.');
+                dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+            }
+            // setSnackBarMessage('El ave se ha Actualizado correctamente.')
+            // dispatch(getInfoForUpdate(infoAveForUpdate.id_ave))
+            // changeImagenExist()
         } catch (error) {
             console.error('Error:', error);
             setErrorMessage(`Ocurrió un error: ${error.message}`);
@@ -273,8 +264,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         showUpdateBird(false)
         showSearchBird(true)
         selectedBird(null)
-    }
-
+    };
 
     const saveImageFtpWithMessage = async (formData) => {
         try {
@@ -326,13 +316,13 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
-                    
+
                 }} >
-                    
+
                     <Grid item xs={12} sm={12}>
                         <Button
                             sx={{
-                                mt:5,
+                                mt: 5,
                                 mb: -8,
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
@@ -347,11 +337,11 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         >
                             Buscar Nuevo Registro
                         </Button>
-                       
-                        <Typography variant='h2' color='primary' sx={{ mb: 3  }}>
+
+                        <Typography variant='h2' color='primary' sx={{ mb: 3 }}>
                             Formulario de Actualización
                         </Typography>
-                    
+
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 1 }} />
@@ -613,24 +603,34 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
+                            // filterOptions={(options, state) => {
+                            //     const inputValue = state.inputValue.toLowerCase();
+                            //     const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
+
+                            //     return options.filter((option) => {
+                            //         if (selectedPaises.length === 0) {
+                            //             return true; // No hay paises seleccionados, muestra todas las zonas
+                            //         }
+                            //         return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                            //     });
+                            // }}
                             filterOptions={(options, state) => {
+                                // Filtra las opciones para que coincidan solo al principio de las letras
                                 const inputValue = state.inputValue.toLowerCase();
                                 const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
 
-                                return options.filter((option) => {
+                                const filteredByInput = options.filter((option) =>
+                                    option.nombre.toLowerCase().startsWith(inputValue)
+                                );
+
+                                return filteredByInput.filter((option) => {
                                     if (selectedPaises.length === 0) {
                                         return true; // No hay paises seleccionados, muestra todas las zonas
                                     }
                                     return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
                                 });
                             }}
-                            // filterOptions={(options, state) => {
-                            //     // Filtra las opciones para que coincidan solo al principio de las letras
-                            //     const inputValue = state.inputValue.toLowerCase();
-                            //     return options.filter((option) =>
-                            //         option.nombre.toLowerCase().startsWith(inputValue)
-                            //     );
-                            // }}
+
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
                                     <Chip
@@ -713,7 +713,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         />
                     </Grid>
                     <Grid item xs={12}>
-                    <Button
+                        <Button
                             sx={{
                                 ml: '78%',
                                 mb: 0,

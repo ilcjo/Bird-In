@@ -30,7 +30,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: theme.palette.primary.main,
     ...theme.typography.h5,
 
-
   },
   [`&.${tableCellClasses.body}`]: {
     fontFamily: theme.typography.fontFamily,

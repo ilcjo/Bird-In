@@ -7,18 +7,20 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { loginRequest } from '../../redux/slices/Auth';
+import { recoverPass } from '../../redux/actions/userLoginRegister';
+import { useDispatch } from 'react-redux';
 
 
-export const ForgotPass = ({open}) => {
+export const ForgotPass = () => {
   const theme = useTheme()
-  const { loading, error } = useSelector((state) => state.authSlice)
-
+  const dispatch = useDispatch()
+  const [formRecover, setFormRecover] = React.useState({
+    email: ''
+  })
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginRequest());
+    dispatch(recoverPass());
   }
 
   const labelStyles = {
@@ -79,43 +81,44 @@ export const ForgotPass = ({open}) => {
   return (
     <Box sx={{ margin: '10px' }}>
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', mb: 2}}>
-            ¿Olvidaste tu contraseña?
+        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', mb: 2 }}>
+          ¿Olvidaste tu contraseña?
         </Typography>
-        <Typography variant="body1" color='primary.main' sx={{ marginLeft: '2px', mb:2}}>
-          Ingresa tu email y te enviaremos las instrucciones para recuperarla.
+        <Typography variant="body1" color='primary.main' sx={{ marginLeft: '2px', mb: 2 }}>
+          Ingresa tu correo, recibirás un correo electrónico con los pasos para recuperar tu cuenta.
         </Typography>
-
       </div>
-     
-        <form onSubmit={handleLogin} >
-          <TextField
-            label="E-mail"
-            name="email"
-            type="email"
-            // value={email}
-            // onChange={(e) => dispatch(emailUser(e.target.value))}
-            margin="normal"
-            fullWidth
-            InputLabelProps={{
-              sx: labelStyles, // Establece el estilo del label del input
 
-            }}
-            InputProps={{
-              sx: inputStyles, // Establece el estilo del input
-            }}
-            
-          />
+      <form onSubmit={handleLogin} >
+        <TextField
+          label="E-mail"
+          name="email"
+          type="email"
+          value={formRecover.email}
+          onChange={(e) => {
+            setFormRecover({ ...formRecover, email: e.target.value });
+          }}
+          margin="normal"
+          fullWidth
+          InputLabelProps={{
+            sx: labelStyles, // Establece el estilo del label del input
 
-       
-        </form>
-        <Grid container component={Box} sx={actionsStyles} size="medium">
+          }}
+          InputProps={{
+            sx: inputStyles, // Establece el estilo del input
+          }}
 
-          <Button variant="contained" onClick={handleLogin} color="primary">
-            Recuperar Contraseña
-          </Button>
-        </Grid>
-      
+        />
+
+
+      </form>
+      <Grid container component={Box} sx={actionsStyles} size="medium">
+
+        <Button variant="contained" onClick={handleLogin} color="primary">
+          Recuperar Contraseña
+        </Button>
+      </Grid>
+
     </Box>
   )
 }

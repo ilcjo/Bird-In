@@ -14,6 +14,7 @@ import { clearToken } from './redux/slices/Auth'
 import { Dashboard } from './views/Homes/Dashboard'
 import { SobreMi } from './views/Homes/SobreMi'
 import { PhotosDetail } from './components/PhotosDetail'
+import { PassRecover } from './views/PassRecover'
 
 function App() {
 
@@ -34,7 +35,7 @@ function App() {
       // setFirstLoad(false);
     }
   }, [token, isAuthenticated, navigate]);
-  
+
   return (
     <Routes>
       {token && (
@@ -56,6 +57,7 @@ function App() {
         <>
           <Route path='/' element={<Landing />} />
           <Route path='/tab' element={<Index />} />
+          <Route path='/Recover' element={<PassRecover />} />
         </>
       )}
     </Routes>

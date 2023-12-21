@@ -12,6 +12,7 @@ const {
    getContadores,
    deleteBirdDb,
    findDataByName,
+   findNameDuplicate,
 } = require("../../controllers/birds/birdsController");
 const ftp = require('basic-ftp');
 const {
@@ -112,7 +113,7 @@ const createBird = async (req, res) => {
       return res.status(200).json(succesCreate)
 
    } catch (error) {
-      res.status(500).send({ error: error.message })
+      res.status(500).json({ error: error.message })
    }
 };
 
@@ -287,6 +288,16 @@ const deleteBird = async (req, res) => {
    }
 };
 
+const checkBirdDuplicate = async (req, res) => {
+   const { name } = req.query
+   try {
+      const message = await findNameDuplicate(name)
+      return res.status(200).json(message);
+   } catch (error) {
+      res.status(500).json({ error: error.message });
+   }
+};
+
 module.exports = {
    getFilterInfo,
    selectOptions,
@@ -300,5 +311,6 @@ module.exports = {
    contandoRegistros,
    deleteBird,
    findInfoForUpdateName,
+   checkBirdDuplicate
 }
 

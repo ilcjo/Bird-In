@@ -96,7 +96,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'top',
-
+                
                 }}>
                 {birds.map((bird, index) => (
 
@@ -267,20 +267,6 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                         </AccordionDetails>
                     </Accordion>
                 ))}
-            </Grid>
-
-            <Grid container component={Box} spacing={3} justifyContent="center" sx={{
-                position: 'relative',
-                backgroundImage: `url(${fondo})`,  // Reemplaza con la ruta correcta de tu imagen
-                // backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,1) 100%), url(${fondo})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                // overflow: 'hidden',  // Oculta el desenfoque que sobresale del contenedor
-                // backdropFilter: 'blur(70px) brightness(70%)',
-                // backgroundColor: 'rgba(204,214,204,0)',
-            }}>
-                
                 <Button
                     sx={{
                         // mt: -4,
@@ -296,6 +282,27 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                     onClick={stepBack}
                     startIcon={<ArrowBackIcon />}
                 >Regresar</Button>
+            </Grid>
+
+            <Grid container component={Box} spacing={3} justifyContent="center" sx={{
+                position: 'relative',
+                backgroundImage: `url(${fondo})`,  // Reemplaza con la ruta correcta de tu imagen
+                // backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,1) 100%), url(${fondo})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                // overflow: 'hidden',  // Oculta el desenfoque que sobresale del contenedor
+                // backdropFilter: 'blur(70px) brightness(70%)',
+                // backgroundColor: 'rgba(204,214,204,0)',
+                minHeight: '50vh',
+                
+            }}>
+
+                {allImages.length === 0 && (
+                    <Typography variant="h2" color="primary.main" sx={{ mt: 4, mr: '60%',  }}>
+                        No se han subido imágenes.
+                    </Typography>
+                )}
                 {allImages.map((image, index) => (
                     <Grid item key={index}>
                         <ImagesCards

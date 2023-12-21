@@ -1,7 +1,7 @@
-const { saveRegister, getAllUsersDb } = require("../../controllers/users/userController")
+const { saveRegister, getAllUsersDb, changeApprovedStatus, deleteCompleteU } = require("../../controllers/users/userController")
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const { generateToken } = require("../../utils/passport");
+const { generateToken, generateTokenRecoverEmail } = require("../../utils/passport");
 const { sendWelcomeEmail, sendApprovalEmail } = require("../../utils/emailService");
 const axios = require('axios')
 require('dotenv').config();
@@ -9,8 +9,10 @@ const { APIKEY_VERIFY } = process.env;
 
 const registerUser = async (req, res) => {
     const { email, name, pais, pass } = req.body
+    // console.log('handler pass:',pass)
     try {
-        const hashedPassword = await bcrypt.hash(pass, 10)
+        const hashedPassword = await bcrypt.hash(pass, 5)
+        // console.log('pass haseadsa:',hashedPassword)
         const register = await saveRegister(email, name, pais, hashedPassword,)
         return res.status(200).json(register)
     } catch (error) {
@@ -52,8 +54,9 @@ const loginApp = async (req, res, next) => {
 
 
 const allUserRegister = async (req, res) => {
+    const { status } = req.query
     try {
-        const allUsers = await getAllUsersDb()
+        const allUsers = await getAllUsersDb(status)
         return res.status(200).json(allUsers)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -82,14 +85,12 @@ const sendEmailUserApprove = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
     const { email } = req.query
-    console.log('BACK EMSIL :',email)
     try {
         const apiKey = APIKEY_VERIFY; // Reemplaza con tu clave de API
         const apiUrl = `https://apps.emaillistverify.com/api/verifyEmail?secret=${apiKey}&email=${email}&timeout=15`;
         const response = await axios(apiUrl);
         // Verifica si la respuesta de la API es "OK"
         const isValidEmail = response.data === "ok";
-        console.log(isValidEmail)
         // Devuelve la respuesta de la API al cliente
         res.json({ isValidEmail });
     } catch (error) {
@@ -98,6 +99,39 @@ const verifyEmail = async (req, res) => {
     }
 };
 
+const changeStatus = async (req, res) => {
+    const { id } = req.query
+    try {
+        const response = await changeApprovedStatus(id)
+
+        return res.status(200).json(response)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const deleteUser = async (req, res) => {
+    const { id } = req.query
+    try {
+        const response = await deleteCompleteU(id)
+
+        return res.status(200).json(response)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const recoverPass = async (req, res) => {
+    const { email } = req.query
+    try {
+        const token = await generateTokenRecoverEmail(email)
+        const link = `http://http://localhost:5173/recover?token=${token}`;
+        const response = await  (email)
+        return res.status(200).json(response)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
 
 module.exports = {
     registerUser,
@@ -105,5 +139,8 @@ module.exports = {
     allUserRegister,
     sendEmailUserApprove,
     sendEmailUserPending,
-    verifyEmail
+    verifyEmail,
+    changeStatus,
+    deleteUser,
+    recoverPass
 }

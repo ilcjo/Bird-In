@@ -20,6 +20,7 @@ export const sendPhotosDelete = (ids, urls) => {
 };
 
 export const sendCoverPhoto = (id, idAves) => {
+    console.log('llega al axios', id, idAves)
     return async (dispatch) => {
         try {
             const requestData = {
@@ -29,7 +30,7 @@ export const sendCoverPhoto = (id, idAves) => {
 
             const response = axios.put('/aves/foto_portada', requestData )
             const data = response.data
-            // console.log('ave destacada',data)
+            return data
         } catch (error) {
             console.error("Error al obtener los datos:", error)
 

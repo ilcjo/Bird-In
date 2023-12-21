@@ -5,13 +5,13 @@ import { SearchBird } from './SearchBird';
 import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../redux/slices/createSlice';
 import { Customize } from './Customize';
-import { Usuarios } from './Usuarios/Usuarios';
 import { styled } from '@mui/system';
 import { GruposOptions } from './Options/GruposOptions';
 import { FamiliasOptions } from './Options/FamiliasOptions';
 import { ZonasOptions } from './Options/ZonasOptions';
 import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './IndexTabsCreate';
+import { IndexTabsUsuarios } from './Usuarios/IndexTabUsuarios';
 
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -49,6 +49,11 @@ export const IndexD = () => {
     }
 
   };
+
+  const handleNavigateToSearch= () => {
+    setSelectedTab(0); // Cambia a la pestaña de imágenes existentes
+};
+
   return (
     <>
       <StyledTabs
@@ -101,7 +106,7 @@ export const IndexD = () => {
           </Typography>
           }
         />
-         <StyledTab
+        <StyledTab
           label={<Typography variant='h5' >
             Personalizar
           </Typography>
@@ -121,7 +126,7 @@ export const IndexD = () => {
         )}
         {selectedTab === 1 && (
           <Box>
-            <IndexTabsCreate />
+            <IndexTabsCreate changeTabSearch={handleNavigateToSearch} />
           </Box>
         )}
         {selectedTab === 2 && (
@@ -144,14 +149,14 @@ export const IndexD = () => {
             <ZonasOptions />
           </Box>
         )}
-         {selectedTab === 6 && (
+        {selectedTab === 6 && (
           <Box>
             <Customize />
           </Box>
         )}
         {selectedTab === 7 && (
           <Box>
-            <Usuarios />
+            <IndexTabsUsuarios />
           </Box>
         )}
 

@@ -104,7 +104,6 @@ export const SectionCovers = ({ title, coverKey }) => {
                             variant='h2'
                             color='primary.main'
                             sx={{ mr: 2 }}
-
                         >
                             Actualizando:
                         </Typography>

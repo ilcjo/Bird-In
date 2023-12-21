@@ -62,7 +62,7 @@ export const HomeMenu = () => {
   return (
     <div>
       <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
-      <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' , }}>
+      <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center', }}>
         {sections.map((section, index) => (
           // Verifica si no es el elemento "Admin" o si el usuario es un administrador
           (isAdmin || section.id !== 'panelAdministrador') && (
@@ -115,13 +115,23 @@ export const HomeMenu = () => {
                       }
                     }}
                   >
-                    <Typography variant="h1" color="primary.main">
+                    <Typography variant="h1" color="primary.main" sx={{
+                      fontSize: { xs: '2.5rem', sm: '2rem', md: '2rem', lg: '2.5rem', xl: '2.6rem' },
+                      marginBottom: '5px',
+                      textAlign: 'center'
+                    }}>
                       {section.title}
                     </Typography>
-                    <Typography variant="h5" color="primary.light">
+                    <Typography variant="h5" color="primary.light"
+                      sx={{
+                        fontSize: { xs: '1.3rem', sm: '1.3rem', md: '1.2rem', lg: '1.3rem', xl: '1.4rem' },
+                        marginBottom: { xs: '5px', sm: '5px', md: '0px', lg: '5px', xl: '5px' },
+                        textAlign: 'center'
+                      }}>
                       {section.description}
                     </Typography>
                     <Button
+                  
                       variant="contained"
                       color="primary"
                       component={RouterLink}

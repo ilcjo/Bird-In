@@ -22,16 +22,15 @@ export const saveImageFtp = (formData) => {
 
 
 export const createBird = (formData) => {
-
   return async (dispatch) => {
     try {
       const response = await axios.post('aves/create', formData)
-
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:', response.data);
     } catch (error) {
       // Maneja los errores de la solicitud
       console.error('Error al enviar la info:', error);
+      throw error;
     }
   }
 };
@@ -115,6 +114,22 @@ export const getInfoForUpdateName = (name) => {
     } catch (error) {
       // Maneja los errores de la solicitud
       console.error('Error al enviar datos:', error);
+    }
+  }
+};
+
+export const duplicateNameCheck = (name) => {
+console.log('soy',name)
+  return async (dispatch) => {
+    try {
+      const response = await axios(`aves/duplicados?name=${name}`)
+      const ave = response.data
+      // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
+      console.log(ave)
+    } catch (error) {
+      // Maneja los errores de la solicitud
+      console.error('Error al enviar datos:', error);
+      throw error
     }
   }
 };

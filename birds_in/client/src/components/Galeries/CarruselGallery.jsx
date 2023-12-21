@@ -5,40 +5,41 @@ import Viewer from 'react-viewer';
 export const CarruselGallery = ({ isOpen, images, onClose,  selectedIndex  }) => {
   const [viewerIsOpen, setViewerIsOpen] = React.useState(false);
   const [viewerImages, setViewerImages] = React.useState([]);
-  const [viewerIndex, setViewerIndex] = React.useState(0);
+  const [viewerIndex, setViewerIndex] = React.useState(null);
 
   // Actualizar las imágenes cuando cambie la prop 'images'
   React.useEffect(() => {
     setViewerImages(images.map((image) => ({ src: image.url, alt: extractNameAfterUnderscore(image.url) })));
   }, [images]);
 
+   // Abre el visor cuando 'isOpen' cambia a 'true'
+   React.useEffect(() => {
+    if (isOpen) {
+      setViewerIsOpen(true);
+    }
+  }, [isOpen]);
+
+  // React.useEffect(() => {
+  //   // Busca el índice de la imagen en base a la URL seleccionada
+  //   const foundIndex = images.findIndex((image) => image.url === selectedIndex);
+ 
+  //     setViewerIndex(foundIndex);
+    
+  // }, [images, selectedIndex]);
+
+  // React.useEffect(() => {
+  //   return () => {
+  //     // Limpiar y restablecer estados cuando el componente se desmonta
+  //     closeViewer();
+  //   };
+  // }, []);
+  
   const closeViewer = () => {
     setViewerIndex(0);
     setViewerIsOpen(false);
     // closeGallery(false);
     onClose()
   };
-  React.useEffect(() => {
-    // Busca el índice de la imagen en base a la URL seleccionada
-    const foundIndex = images.findIndex((image) => image.url === selectedIndex);
-    // Establece el índice en el estado
-    
-      setViewerIndex(foundIndex);
-    
-  }, [selectedIndex]);
-
-  // Abre el visor cuando 'isOpen' cambia a 'true'
-  React.useEffect(() => {
-    if (isOpen) {
-      setViewerIsOpen(true);
-    }
-  }, [isOpen]);
-  React.useEffect(() => {
-    return () => {
-      // Limpiar y restablecer estados cuando el componente se desmonta
-      closeViewer();
-    };
-  }, []);
 
  const extractNameAfterUnderscore = (url) => {
     const firstUnderscoreIndex = url.indexOf('_');
@@ -55,7 +56,7 @@ export const CarruselGallery = ({ isOpen, images, onClose,  selectedIndex  }) =>
       visible={viewerIsOpen}
         onClose={closeViewer}
         images={viewerImages}
-        activeIndex={viewerIndex}
+        activeIndex={viewerImages.findIndex((image) => image.src === selectedIndex)}
         rotatable={false}  // Desactivar rotación
         rotatableKeyModifiers={[]}  // Desactivar rotación
         customToolbar={(toolbars) => {

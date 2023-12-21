@@ -22,6 +22,8 @@ import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { loginFailure, loginRequest } from '../../redux/slices/Auth';
 import CloseIcon from '@mui/icons-material/Close';
+import ReCAPTCHA from 'react-google-recaptcha';
+
 export const LoginForm = ({ changeTab }) => {
 
   const theme = useTheme()
@@ -36,6 +38,7 @@ export const LoginForm = ({ changeTab }) => {
   const [errorText, setErrorText] = React.useState('');
   const { loading } = useSelector((state) => state.authSlice);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [isCaptchaVerified, setIsCaptchaVerified] = React.useState(false);
   const [approvedMessage, setApprovedMessage] = React.useState('')
   const handleClose = () => {
     dispatch(Boolean(false))
@@ -53,8 +56,20 @@ export const LoginForm = ({ changeTab }) => {
     changeTab(num);
   };
 
+  const handleCaptchaVerification = (value) => {
+    // value será null si el usuario no pasa la verificación, de lo contrario, contendrá el token
+    if (value) {
+      setIsCaptchaVerified(true);
+    } else {
+      setIsCaptchaVerified(false);
+    }
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
+    // if (!isCaptchaVerified) {
+    //   alert('Por favor, completa la verificación CAPTCHA.');
+    //   return;
+    // }
     if (loginData.email && loginData.password) {
       try {
         dispatch(loginRequest())
@@ -234,7 +249,10 @@ export const LoginForm = ({ changeTab }) => {
             }}
           />
           <Typography variant="h5">
-
+            <ReCAPTCHA
+              sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
+              onChange={handleCaptchaVerification}
+            />
             <MuiLink onClick={handlePassLinkClicRk}
               sx={{
                 cursor: 'pointer',
@@ -252,8 +270,6 @@ export const LoginForm = ({ changeTab }) => {
 
         </form>
         <Grid container component={Box} sx={actionsStyles} size="medium">
-
-
           <Button variant="outlined" onClick={handleClose} color="primary">
             Cancelar
           </Button>

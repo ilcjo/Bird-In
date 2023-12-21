@@ -23,18 +23,46 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     
-    const handleStarClick = (id, url) => {
-        setHighlightedImage((prev) => {
-            if (prev && prev.id === id) {
-                // Deseleccionar la imagen destacada si ya estaba seleccionada
-                return null;
-            } else {
-                // Seleccionar la nueva imagen destacada
-                return { id, url };
-            }
-        });
-    };
+    // const handleStarClick = (id, url) => {
+    //     setHighlightedImage((prev) => {
+    //         if (prev && prev.id === id) {
+    //             // Deseleccionar la imagen destacada si ya estaba seleccionada
+    //             return null;
+    //         } else {
+    //             // Seleccionar la nueva imagen destacada
+    //             return { id, url };
+    //         }
+    //     });
+    // };
+    const handleSetAsCover = async (id, url, destacada) => {
+        console.log(id)
+        try {
+            // Marcar la imagen como portada actual
+            setHighlightedImage((prev) => {
 
+                // Deseleccionar la imagen destacada si ya estaba seleccionada
+                if (prev && prev.id === id) {
+                    return null;
+                } else {
+                    // Seleccionar la nueva imagen destacada
+                    return { id, url };
+                }
+            });
+            // Si la imagen es destacada, enviar la solicitud para guardarla como portada
+            await dispatch(sendCoverPhoto(id, infoAveForUpdate.id_ave));
+            setShowBackdrop(true);
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+            console.log('updatebid despues de la portada:', infoAveForUpdate)
+            setShowBackdrop(false);            
+            setSnackbarOpen(true);
+            setSnackbarMessage('Portada Actual Seleccionada');
+        } catch (error) {
+            console.error('Error al realizar la acción:', error);
+            setSnackbarOpen(true);
+            setSnackbarMessage('Error al realizar la acción');
+        }
+    };
 
     const [selectedDialogImage, setSelectedDialogImage] = React.useState('');
     const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -46,29 +74,27 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
         setIsGalleryOpen(true)
     };
 
-    const openImageDialog = (imageUrl) => {
-        setSelectedDialogImage(imageUrl);
-        setDialogOpen(true);
-    };
 
     const closeImageDialog = () => {
         setDialogOpen(false);
     };
 
-    const handleSaveAsFeatured = async () => {
-        try {
-            if (highlightedImage) {
-                // Envía el ID y la URL de la imagen destacada con destacada: true
-                await dispatch(sendCoverPhoto(highlightedImage.id, infoAveForUpdate.id_ave));
-            }
-            setSnackbarOpen(true);
-            setSnackbarMessage('Portada Actual Seleccionada');
-        } catch (error) {
-            console.error('Error al guardar la imagen destacada:', error);
-            setSnackbarOpen(true);
-            setSnackbarMessage('Error al guardar la imagen destacada');
-        }
-    };
+    // const handleSaveAsFeatured = async () => {
+    //     try {
+    //         if (highlightedImage) {
+    //             // Envía el ID y la URL de la imagen destacada con destacada: true
+    //             await dispatch(sendCoverPhoto(highlightedImage.id, infoAveForUpdate.id_ave));
+    //         }
+    //         setSnackbarOpen(true);
+    //         setSnackbarMessage('Portada Actual Seleccionada');
+    //         // setHighlightedImage(null)
+
+    //     } catch (error) {
+    //         console.error('Error al guardar la imagen destacada:', error);
+    //         setSnackbarOpen(true);
+    //         setSnackbarMessage('Error al guardar la imagen destacada');
+    //     }
+    // };
 
     const handleDeleteCheckBox = (id, url) => {
         const index = selectedImages.findIndex((img) => img.id === id);
@@ -115,51 +141,6 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
         showSearchBird(true)
         selectedBird(null)
     };
-    const fetchData = async () => {
-        try {
-            // Llama a la acción para obtener la información necesaria
-            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
-
-            // Verifica si hay una imagen destacada en la información actualizada
-            const destacadaImage = infoAveForUpdate.imagenes_aves.find((img) => img.destacada);
-
-            // Inicializa highlightedImage con la imagen destacada si existe
-            if (destacadaImage) {
-                setHighlightedImage({ id: destacadaImage.id, url: destacadaImage.url });
-            }
-
-        } catch (error) {
-            // Maneja errores en la obtención de datos
-            console.error("Error al obtener los datos:", error);
-            // Puedes decidir qué hacer en caso de error, como mostrar un mensaje al usuario.
-        }
-    };
-
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Llama a la acción para obtener la información necesaria
-                await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
-
-                // Verifica si hay una imagen destacada en la información actualizada
-                const destacadaImage = infoAveForUpdate.imagenes_aves.find((img) => img.destacada);
-
-                // Inicializa highlightedImage con la imagen destacada si existe
-                if (destacadaImage) {
-                    setHighlightedImage({ id: destacadaImage.id, url: destacadaImage.url });
-                }
-
-
-            } catch (error) {
-                // Maneja errores en la obtención de datos
-                console.error("Error al obtener los datos:", error);
-                // Puedes decidir qué hacer en caso de error, como mostrar un mensaje al usuario.
-            }
-        };
-
-        // Llama a fetchData al montar el componente
-        fetchData();
-    }, []); // La dependencia dispatch asegura que la función fetchData se vuelva a ejecutar si dispatch cambia
 
     return (
         <React.Fragment>
@@ -227,7 +208,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
                     >
                         Eliminar selección
                     </Button>
-                    <Button
+                    {/* <Button
                         variant="contained"
                         color="primary"
                         onClick={handleSaveAsFeatured}
@@ -247,7 +228,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
                             },
                         }}
                     > Guardar Portada
-                    </Button>
+                    </Button> */}
 
                     {infoAveForUpdate && infoAveForUpdate.imagenes_aves && infoAveForUpdate.imagenes_aves.length > 0 && (
                         <Grid container spacing={2} sx={{
@@ -262,9 +243,9 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
                                     <Card
                                         sx={{
                                             // maxWidth: 'auto',
-                                            minWidth: 380,
+                                            // minWidth: 380,
                                             // minHeight: 320, // Establece una altura mínima para la tarjeta
-                                            maxWidth: 380,
+                                            // maxWidth: 380,
                                             // maxHeight: 320,  
                                             borderRadius: '15px',
                                             flexDirection: 'column', // Alinea el contenido verticalmente
@@ -274,12 +255,29 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
                                         }}
                                     >
                                         <CardActionArea onClick={() => handleImageClick(imageUrl.url)}>
-                                            <CardMedia
+                                            {/* <CardMedia
                                                 component="img"
                                                 alt={`Imagen existente ${index + 1}`}
-                                                height="280"
-                                                width='420'
+                                                // height="290"
+                                                // width='450'
                                                 image={imageUrl.url}
+                                                style={{
+                                                    maxHeight: '290px', // Limita la altura de la imagen
+                                                    maxWidth: '450px', // Limita el ancho de la imagen
+                                                    objectFit: 'scale-down', // Asegura que la imagen se ajuste sin distorsionar
+                                                  }}
+                                            /> */}
+                                            <img
+                                                src={imageUrl.url}
+                                                alt={`Imagen existente ${index + 1}`}
+                                                key={index}
+                                                style={{
+                                                    width: 420,
+                                                    height: 290, // Establece la altura al 100% para ocupar todo el espacio de la tarjeta
+                                                    objectFit: 'scale-down',
+                                                    borderRadius: '15px',
+                                                }}
+                                                loading="lazy"
                                             />
 
                                         </CardActionArea>
@@ -291,7 +289,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
                                                     <Typography variant="h5" color="white">
                                                         {imageUrl.titulo}
                                                     </Typography>
-                                                    <IconButton
+                                                    {/* <IconButton
                                                         aria-label="add to favorites"
                                                         onClick={() => handleStarClick(imageUrl.id, imageUrl.url)}
                                                         sx={{ position: 'absolute', height: '30px', mt: -3, ml: '40%' }}
@@ -305,7 +303,23 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
                                                             color={highlightedImage && highlightedImage.url === imageUrl.url ? "primary" : "primary.dark"}
                                                             sx={{}}
                                                         />
-                                                    </IconButton>
+                                                    </IconButton> */
+                                                        <IconButton
+                                                            aria-label="add to favorites"
+                                                            onClick={() => handleSetAsCover(imageUrl.id, imageUrl.url, imageUrl.destacada)}
+                                                            sx={{ position: 'absolute', height: '30px', mt: -3, ml: '40%' }}
+                                                        >
+                                                            {imageUrl.destacada && (
+                                                                <Typography variant="h4" color="primary" sx={{ mr: 1, ml: 1 }}>
+                                                                    Portada Actual
+                                                                </Typography>
+                                                            )}
+                                                            <CheckCircleIcon
+                                                                color={imageUrl.destacada ? "primary" : "primary.dark"}
+                                                                sx={{}}
+                                                            />
+                                                        </IconButton>
+                                                    }
                                                 </Grid>
 
                                                 <Grid item xs={2}>

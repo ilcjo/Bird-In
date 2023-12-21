@@ -24,7 +24,6 @@ passport.use(
                 }
 
                 const isPasswordValid = await bcrypt.compare(password, user.pass);
-
                 if (isPasswordValid) {
                     return done(null, user);
                 } else {
@@ -42,14 +41,13 @@ passport.use(
     new JWTStrategy(
         {
             jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-            secretOrKey: JWT_SECRET_KEY, 
+            secretOrKey: JWT_SECRET_KEY,
         },
         async (jwtPayload, done) => {
             try {
                 const user = await Usuarios.findByPk(jwtPayload.id);
 
                 if (user && user.status === 'approved') {
-                    console.log(user)
                     return done(null, user);
                 } else {
                     return done(null, false);
@@ -70,4 +68,12 @@ const generateToken = (user) => {
     return jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '1h' }); // Cambia la duración según tus necesidades
 };
 
-module.exports = { passport, generateToken };
+const generateTokenRecoverEmail = (email) => {
+    const payload = {
+        email: email,
+    };
+    return jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '30min' });
+
+};
+
+module.exports = { passport, generateToken, generateTokenRecoverEmail };

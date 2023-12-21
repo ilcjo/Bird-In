@@ -36,44 +36,56 @@ export const Cards = React.memo(({ foto, name, index }) => {
 
   return (
     <Card sx={{
-      minWidth: 415,
-      maxWidth: 415,
-      minHeight: 320, // Establece una altura mínima para la tarjeta
-      maxHeight: 320,
+      minWidth: 420,
+      maxWidth: 420,
+      minHeight: 330, // Establece una altura mínima para la tarjeta
+      maxHeight: 330,
       position: 'relative',
       borderRadius: '15px',
       display: 'flex', // Establece la tarjeta como un contenedor flexible
       flexDirection: 'column', // Alinea el contenido verticalmente
       justifyContent: 'space-between', // Centra verticalmente el contenido
-      m: 3,
+      // m: 3,
       backgroundColor: 'primary.dark',
+      
     }}>
       <CardActionArea>
         {destacadaImage && destacadaImage.url ? (
           <CardMedia
             component="img"
-            height="260"
+            height="350"
+            width='420'
             image={destacadaImage.url}
             alt={name}
             key={index}
             onClick={handleDetailClick}
-            sx={{ objectFit: 'cover' }}
+            sx={{ objectFit: 'cover', objectPosition: 'center center ', }}
           />
         ) : (
           <Typography variant="body2">Imagen no disponible</Typography>
         )}
       </CardActionArea>
       <CardActions disableSpacing>
-        <Typography variant='h2' color='primary' onClick={handleDetailClick} style={{ cursor: 'pointer' }}>
+        <Typography 
+        variant='h2' 
+        color='primary' 
+        onClick={handleDetailClick} 
+        style={{ cursor: 'pointer' }}
+        sx={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '10px',
+          color: 'white', // Puedes ajustar el color del texto según tus preferencias
+          fontWeight: 'bold',
+          zIndex: 10, // Asegura que el texto esté encima de la imagen
+          background:  'rgba(0, 56, 28, 0.6)',
+          // width: '100%',
+          padding: '5px',
+        }} 
+        >
           {name}
         </Typography>
       </CardActions>
-      {/* <CarruselGallery
-        isOpen={isGalleryOpen}
-        images={foto}
-        selectedIndex={selectedImageIndex}
-        onClose={() => setIsGalleryOpen(false)}
-      /> */}
     </Card>
   );
 });

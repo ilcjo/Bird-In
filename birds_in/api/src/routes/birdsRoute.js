@@ -11,7 +11,8 @@ const {
     setCoverPhoto,
     contandoRegistros,
     deleteBird,
-    findInfoForUpdateName
+    findInfoForUpdateName,
+    checkBirdDuplicate
 
 } = require('../handlers/birds/birdHandler')
 const upload = require('../utils/multerConfig')
@@ -29,5 +30,6 @@ birdsRouter.get('/filtros', getFilterInfo)
     .put('/foto_portada', setCoverPhoto)
     .get('/contando', contandoRegistros)
     .delete('/borrar_ave', deleteBird)
+    .get('/duplicados', checkBirdDuplicate)
     
 module.exports = birdsRouter

@@ -76,6 +76,7 @@ export const Index = ({ open }) => {
             <RegisterForm
               changeTab={(newValue) => setSelectedTab(newValue)}
               open={open}
+              close={handleClose}
             />
           </Box>
         )}
