@@ -137,7 +137,7 @@ export const RegisterForm = ({ changeTab, close }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormSubmitted(true);
-    
+
     setError('');
     setLoading(true);
     try {
@@ -183,8 +183,6 @@ export const RegisterForm = ({ changeTab, close }) => {
     backgroundColor: 'rgba(204,214,204,0.17)',
     borderRadius: '9px',
     height: '50px',
-
-
     '& .MuiInputBase-input': {
       padding: '0px',
       paddingLeft: '10px',
@@ -345,7 +343,7 @@ export const RegisterForm = ({ changeTab, close }) => {
           <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
             La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
           </Typography>
-         
+
         </form>
         <Grid container component={Box} sx={actionsStyles} size="medium">
           <Button variant="outlined" onClick={handleClose} color="primary">

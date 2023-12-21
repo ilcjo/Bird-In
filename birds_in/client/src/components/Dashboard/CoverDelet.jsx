@@ -34,6 +34,17 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
     //         }
     //     });
     // };
+    React.useEffect(() => {
+        // Mostrar el Backdrop después de 2 segundos (2000 milisegundos)
+        setShowBackdrop(true);
+        const timeoutId = setTimeout(() => {
+          setShowBackdrop(false)
+        }, 3000);
+    
+        // Limpiar el temporizador al desmontar el componente
+        return () => clearTimeout(timeoutId);
+      }, []);
+
     const handleSetAsCover = async (id, url, destacada) => {
         console.log(id)
         try {

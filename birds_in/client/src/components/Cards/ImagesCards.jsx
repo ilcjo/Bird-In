@@ -7,7 +7,6 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
-
   const handleImageClick = (url) => {
     setSelectedImageIndex(url);
     setIsGalleryOpen(true)
