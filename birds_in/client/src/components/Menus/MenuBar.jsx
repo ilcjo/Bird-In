@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Button, Grid } from '@mui/material'
+import { Box, Button, Grid, Hidden } from '@mui/material'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -32,7 +32,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             dispatch(getInfoBirds());
         }
     };
- 
+
     const handleFilterButtonClick = () => {
         // Cambiar el estado del filtro al hacer clic en el botón del filtro
         setIsFilterOpen(!isFilterOpen);
@@ -44,7 +44,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
         navigate('/')
         dispatch(clearToken())
         dispatch(getOptionsData())
-      
+
     };
 
     const returnMenuClick = () => {
@@ -77,14 +77,19 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     zIndex: 10,
                 }}
             >
-                {/* Logo en la esquina izquierda */}
-
                 <img src={allCustom.logo} alt="Logo" style={{ width: 'auto', height: '100%', marginBottom: '50px' }} loading="lazy" />
 
-                <Grid item sx={{ mb: 4 }}>
+                <Grid item
+                    sx={{
+                        mb: 4,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                    }}>
                     {ShowFilterButton && (
                         <Button
                             sx={{
+
                                 marginBottom: '10px',
                                 fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
                                 fontWeight: 'bold',
@@ -95,7 +100,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             onClick={handleFilterButtonClick}
                             startIcon={<FilterAltIcon />}
                         >
-                            Abrir Filtro
+                            <Hidden smDown> Abrir Filtro </Hidden>
                         </Button>
 
                     )}
@@ -126,10 +131,10 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             onClick={returnMenuClick}
                             startIcon={<HomeIcon />}
                         >
-                            Menu Principal
+                            <Hidden smDown> Menu Principal </Hidden>
                         </Button>
                     )}
-                    
+
                     {/* {showAdmin && isAdmin && (
 
                         <Button
@@ -159,7 +164,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         onClick={onLogoutClick}
                         endIcon={<LogoutIcon />}
                     >
-                        Cerrar Sesión
+                        <Hidden smDown> Cerrar Sesión </Hidden>
                     </Button>
                 </Grid>
             </Grid>

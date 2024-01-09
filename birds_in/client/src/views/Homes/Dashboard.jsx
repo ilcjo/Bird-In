@@ -23,19 +23,15 @@ export const Dashboard = () => {
         direction="column"
         alignItems="center"
         sx={{
-
           background: `url(${allCustom.header}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '90vh',
-
         }}
       >
         <IndexD />
-
       </Grid>
-
     </React.Fragment>
   )
-}
+};

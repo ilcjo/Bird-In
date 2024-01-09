@@ -18,12 +18,11 @@ export const LazyLoad = ({ imageUrl, children}) => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.40)',
-        // ... otros estilos de fondo
       };
     return (
         <Grid
         item
-        xs={false}
+        xs={12}
         sm={3}
         md={8.5}
         sx={backgroundStyle}

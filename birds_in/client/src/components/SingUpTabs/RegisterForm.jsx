@@ -175,6 +175,7 @@ export const RegisterForm = ({ changeTab, close }) => {
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
     marginTop: '-9px',
+    fontSize: { xs: '1.5rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' },
   };
 
   const inputStyles = {
@@ -183,6 +184,7 @@ export const RegisterForm = ({ changeTab, close }) => {
     backgroundColor: 'rgba(204,214,204,0.17)',
     borderRadius: '9px',
     height: '50px',
+    
     '& .MuiInputBase-input': {
       padding: '0px',
       paddingLeft: '10px',
@@ -210,7 +212,7 @@ export const RegisterForm = ({ changeTab, close }) => {
     fontWeight: 500,
 
     '& .MuiButton-contained': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -221,19 +223,28 @@ export const RegisterForm = ({ changeTab, close }) => {
     },
 
     '& .MuiButton-outlined': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },
   };
 
   return (
-    <Box sx={{ margin: '10px' }} >
+    <Box sx={{ padding: 0, m: 0 }} >
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
+        <Typography variant="h2" color='primary.light'
+          sx={{
+            marginLeft: '2px',
+            fontSize: { xs: '1.4rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' }
+          }}>
           Crear Cuenta
         </Typography>
-        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+        <Typography variant="h5" color="primary.main"
+          sx={{
+            marginLeft: '5px',
+            my: '10px',
+            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+          }}>
           Ya eres miembro ?
           <MuiLink onClick={handleLinkClicRk} color="primary.light" underline="none" sx={{
             cursor: 'pointer',
@@ -246,7 +257,7 @@ export const RegisterForm = ({ changeTab, close }) => {
           </MuiLink>
         </Typography>
       </div>
-      <Grid container component={Box}  >
+      <Grid container component={Box} sx={{ padding: 0, m: 0 }} >
         <form onSubmit={handleSubmit}  >
           <TextField
             label="Nombre Completo"
@@ -258,7 +269,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1.1rem',
+                fontSize: '1rem',
                 color: theme.palette.secondary.main,
                 fontWeight: 'bold'
               },
@@ -293,7 +304,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1.1rem',
+                fontSize: '1rem',
                 color: theme.palette.secondary.main,
                 fontWeight: 'bold'
               },
@@ -329,7 +340,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1.1rem',
+                fontSize: '1rem',
                 color: theme.palette.secondary,
                 fontWeight: 'bold'
               },
@@ -340,13 +351,23 @@ export const RegisterForm = ({ changeTab, close }) => {
               validatePassword(e.target.value);
             }}
           />
-          <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+          <Typography variant="h5" color="primary.main"
+            sx={{
+              marginLeft: '8px',
+              my: '10px',
+              fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+            }}>
             La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
           </Typography>
 
         </form>
         <Grid container component={Box} sx={actionsStyles} size="medium">
-          <Button variant="outlined" onClick={handleClose} color="primary">
+          <Button
+            variant="outlined"
+            onClick={handleClose}
+            color="primary"
+            sx={{ padding: 1 }}
+          >
             Cancelar
           </Button>
           <Button
@@ -354,12 +375,14 @@ export const RegisterForm = ({ changeTab, close }) => {
             onClick={handleSubmit}
             color="primary"
             disabled={isButtonDisabled()}
+            sx={{ padding: 1 }}
           >
             Crear Cuenta
           </Button>
         </Grid>
       </Grid>
-      <Backdrop open={loading} onClick={() => { }} style={{ zIndex: 1, color: '#fff' }}>
+      <Backdrop open={loading} onClick={() => { }}
+        style={{ zIndex: 1, color: '#fff' }}>
         <>
           <CircularProgress color="inherit" />
           <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>

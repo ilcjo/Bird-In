@@ -57,9 +57,9 @@ function App() {
         <>
           <Route path='/' element={<Landing />} />
           <Route path='/tab' element={<Index />} />
-          <Route path='/Recuperar' element={<PassRecover />} />
         </>
       )}
+      <Route path='/recuperar' element={<PassRecover />} />
     </Routes>
   );
 }

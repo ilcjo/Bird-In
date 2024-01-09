@@ -12,22 +12,23 @@ export const LandsCapes = () => {
   return (
     <div>
       <Grid container >
-        <Grid item xs={12} md={6}>
-          <Typography variant='h1' sx={{ mt: '30%', ml: 50, width: '50%' }}>
-            Esta página se esta construyendo ....
-            <br/>
-            <Button variant="filled" color="primary" onClick={returnMenuClick}>
-            <ArrowBackIcon /> Volver
-          </Button>
-          </Typography>
-         
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <img src={birdBUild} alt='Página en construcción'>
+        <Grid item xs={12} md={12} lg={12}>
+        <img
+            src={birdBUild}
+            alt='Página en construcción'
+            style={{ width: 'auto', height: '20%', marginTop:'5%',  marginLeft: '30%'  }}
+          >
           </img>
+          <Typography variant='h1' sx={{ mt: '5%', ml: '20%', width: '40%' }}>
+            Esta página se esta construyendo ....
+            <br />
+            <Button variant="filled" color="primary" onClick={returnMenuClick}>
+              <ArrowBackIcon /> Volver
+            </Button>
+          </Typography>
+          
         </Grid>
       </Grid>
     </div>
   )
-
-}
+};

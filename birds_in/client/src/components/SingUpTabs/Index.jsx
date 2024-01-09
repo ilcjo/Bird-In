@@ -15,13 +15,14 @@ export const Index = ({ open }) => {
   const handleClose = () => {
     dispatch(Boolean(false))
   };
-  const handleTabChange = (event, newValue) => { 
+  const handleTabChange = (event, newValue) => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
   };
 
   const tabTitleStyles = {
     color: theme.palette.primary.light,
+    fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.7rem', xl: '1.7rem' },
     "&:hover": {
       color: theme.palette.primary.main, // Cambiar el color del texto en el hover
       cursor: 'pointer', // Cambiar el cursor a "mano" en el hover
@@ -31,12 +32,12 @@ export const Index = ({ open }) => {
   return (
     <Dialog open={open} onClose={handleClose} PaperProps={{
       sx: {
-        padding: '9px',
+        padding: { xs: '0px', sm: '0px', md: '0px', lg: '40px', xl: '40px' },
         borderRadius: '15px',
-        minHeight: '90%',
-        maxHeight: '90%',
-        minWidth: '40%',
-        maxWidth: '40%'
+        minHeight: { xs: 'auto', sm: 'auto', md: 'auto', lg: 'auto', xl: 'auto' },
+        maxHeight: { xs: 'auto', sm: 'auto', md: 'auto', lg: 'auto', xl: 'auto' },
+        minWidth: { xs: '95%', sm: '80%', md: '60%', lg: '50%', xl: '40%' },
+        maxWidth: { xs: '95%', sm: '80%', md: '60%', lg: '50%', xl: '40%' }
       }
     }}
     >

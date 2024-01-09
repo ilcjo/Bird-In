@@ -96,7 +96,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'top',
-                
+
                 }}>
                 {birds.map((bird, index) => (
 
@@ -108,7 +108,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
 
                             backgroundColor: 'rgba(204,214,204,0)', // Establece el fondo transparente deseado
                             backdropFilter: 'blur(20px)', // Efecto de desenfoque de fondo
-                            width: '200vh', // Ocupar todo el ancho de la pantalla
+                            // width: '200vh', // Ocupar todo el ancho de la pantalla
                             boxShadow: 'none',
                             top: 0, // Pegado al top
                             marginBottom: theme.spacing(), // Espacio en la parte inferior7 backgroundImage: `url(${fondo})`,  // Reemplaza con la ruta correcta de tu imagen
@@ -136,7 +136,14 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                             sx={{ position: 'relative' }}
                         >
 
-                            <Typography variant="h1" color='primary' sx={{ width: '40%', flexShrink: 0, mt: 2 }}>
+                            <Typography variant="h1" color='primary'
+                                sx={{
+                                    width: '90%',
+                                    flexShrink: 0,
+                                    mt: 2,
+                                    ml: { xs: 7, sm: 7, md: 7, lg: 7, xl: 7 },
+                                    fontSize: { xs: '2.3rem', sm: '2.3rem', md: '2.6rem', lg: '2.6rem', xl: '2.6rem' }
+                                }}>
                                 {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
                                 {/* <Divider sx={{ mt: 2, borderColor: 'primary.main', borderWidth: 1, width: '50vh' }} /> */}
                             </Typography>
@@ -147,66 +154,78 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                             borderRadius: '20px',
                         }}>
 
-                            <Grid container spacing={5} sx={{ ml: 4 }}>
+                            <Grid container spacing={5} sx={{ ml: 2, }}>
                                 {/* Contenido de la primera columna */}
-                                <Grid item xs={2.5} >
-                                    <Typography variant="h5" color="primary.main">
-                                        Nombre Inglés:  <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
+                                <Grid item xs={12} md={2.5} lg={2.5}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)' }}>
+                                        Nombre Inglés:  <Typography variant="body1" color="primary.light"
+                                            sx={{
+                                                mb: { xs: 2, sm: 2, mb: 1.5, lg: 1.5 }
+                                            }}>
                                             {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
                                         </Typography>
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
-                                    <Typography variant="h5" color="primary.main">
-                                        País: <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)' }}>
+                                        País: <Typography variant="body1" color="primary.light"
+                                            sx={{
+                                                mb: { xs: 0, sm: 0, mb: 1.5, lg: 1.5 }
+                                            }}>
                                             {formatCountries(bird.paises)}
                                         </Typography>
                                     </Typography>
                                 </Grid>
                                 {/* Contenido de la segunda columna */}
-                                <Grid item xs={2.5}>
-                                    <Typography variant="h5" color="primary.main">
+                                <Grid item xs={12} md={2.5} lg={2.5}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Nombre Común:
-                                        <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
+                                        <Typography variant="body1" color="primary.light"
+                                            sx={{
+                                                mb: { xs: 2, sm: 2, mb: 1.5, lg: 1.5 }
+                                            }}>
                                             {bird.nombre_comun ? bird.nombre_comun : 'No Especificado'}
                                         </Typography>
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
 
-                                    <Typography variant="h5" color="primary.main">
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Zonas:
-                                        <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
+                                        <Typography variant="body1" color="primary.light"
+                                            sx={{
+                                                mb: { xs: 0, sm: 0, mb: 1.5, lg: 1.5 }
+                                            }}>
                                             {formatCountries(bird.zonasAves)}
                                         </Typography>
                                     </Typography>
 
                                 </Grid>
-                                <Grid item xs={2}>
+                                <Grid item xs={12} md={2.5} lg={2.5}>
                                     {/* Contenido de la tercera columna */}
-                                    <Typography variant="h5" color="primary.main">
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Nombre Científico:
                                         <Typography variant="body1" color="primary.light">
                                             {bird.nombre_cientifico ? bird.nombre_cientifico : 'No Especificado'}
                                         </Typography>
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={2}>
-                                    <Typography variant="h5" color="primary.main">
+                                <Grid item xs={12} md={2} lg={2}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Grupo:
-                                        <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
+                                        <Typography variant="body1" color="primary.light" sx={{ mb: { xs: 2, sm: 2, mb: 1.5, lg: 1.5 } }}>
                                             {bird.grupo.nombre}
                                         </Typography>
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
 
-                                    <Typography variant="h5" color="primary.main">
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Familia:
-                                        <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
+                                        <Typography variant="body1" color="primary.light" sx={{ mb: { xs: 0, sm: 0, mb: 1.5, lg: 1.5 } }}>
                                             {bird.familia.nombre}
                                         </Typography>
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={2} >
-                                    <Typography variant="h5" color="primary.main" >
+                                <Grid item xs={12} md={2} lg={2}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }} >
                                         URLS Externas:
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
@@ -270,15 +289,22 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                 <Button
                     sx={{
                         // mt: -4,
-                        mb: 1,
+                        mb: { xs: 4, sm: 4, md: 2, lg: 2, xl: 2 },
+                        padding: 1,
                         ml: '75%',
-                        fontSize: '1.1rem',
                         fontWeight: 'bold',
-                        color: theme.palette.primary.main,
+                        color: theme.palette.primary.dark,
                         zIndex: 1,
+                        fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+                        '&:hover': {
+                            backgroundColor: theme.palette.primary.light, // Cambia el color de fondo en hover
+                            color: 'black', // Cambia el color del texto en hover
+                            textTransform: 'none',
+                            fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+                        },
 
                     }}
-                    variant="outline"
+                    variant="contained"
                     onClick={stepBack}
                     startIcon={<ArrowBackIcon />}
                 >Regresar</Button>
@@ -295,11 +321,11 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                 // backdropFilter: 'blur(70px) brightness(70%)',
                 // backgroundColor: 'rgba(204,214,204,0)',
                 minHeight: '50vh',
-                
+
             }}>
 
                 {allImages.length === 0 && (
-                    <Typography variant="h2" color="primary.main" sx={{ mt: 4, mr: '60%',  }}>
+                    <Typography variant="h2" color="primary.main" sx={{ mt: 4, mr: '60%', }}>
                         No se han subido imágenes.
                     </Typography>
                 )}

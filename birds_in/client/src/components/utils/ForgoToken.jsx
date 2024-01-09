@@ -87,7 +87,7 @@ export const ForgoToken = () => {
         loading="lazy"
       >
       </img>
-      <Grid container spacing={2} sx={{
+      <Grid container spacing={2} justifyContent="center" sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -95,19 +95,19 @@ export const ForgoToken = () => {
         margin: 'auto',
         backgroundColor: 'rgba(0, 56, 28, 0.5)', // Establece el fondo transparente deseado
         backdropFilter: 'blur(10px)', // Efecto de desenfoque de fondo
-        padding: '20px 40px 60px 40px',
+        padding: '40px 0px 40px 0px',
         borderRadius: '20px 20px 20px 20px',
 
       }}  >
 
-        <Grid item xs={12} sm={6}>
+        <Grid item >
           <Typography variant='h2' color='primary' sx={{}}>
-            Introduce el Código
+            Introducir el Código 
           </Typography>
 
         </ Grid>
-        <Grid item container xs={12} sm={12} spacing={2} justifyContent="center">
-          <Grid item xs={2} sm={2}>
+        <Grid item container xs={12} sm={12} spacing={1} justifyContent="center">
+          <Grid item xs={2} sm={1.5}>
             <TextField
               name="digit1"
               value={formData.digit1}
@@ -124,7 +124,7 @@ export const ForgoToken = () => {
               }}
             />
           </Grid>
-          <Grid item xs={2} sm={2}>
+          <Grid item xs={2} sm={1.5}>
             <TextField
               name="digit2"
               value={formData.digit2}
@@ -141,7 +141,7 @@ export const ForgoToken = () => {
               }}
             />
           </Grid>
-          <Grid item xs={2} sm={2}>
+          <Grid item xs={2} sm={1.5}>
             <TextField
               name="digit3"
               value={formData.digit3}
@@ -158,7 +158,7 @@ export const ForgoToken = () => {
               }}
             />
           </Grid>
-          <Grid item xs={2} sm={2}>
+          <Grid item xs={2} sm={1.5}>
             <TextField
               name="digit4"
               value={formData.digit4}
@@ -177,8 +177,8 @@ export const ForgoToken = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12}>
-          <Typography variant='h5' color='primary.light' sx={{ mb: 2, ml: 5 }}>
-            Digita el código de 4 dígitos que te llego por correo electrónico
+          <Typography variant='h5' color='primary.light' sx={{ mb: 2, ml: 10 }}>
+            Digite el código de 4 dígitos que le llego por correo electrónico
           </Typography>
         </Grid>
         <Button

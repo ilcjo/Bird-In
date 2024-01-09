@@ -26,6 +26,7 @@ export const ForgotPass = () => {
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
     marginTop: '-9px',
+    fontSize: { xs: '1.5rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' },
   };
 
   const inputStyles = {
@@ -34,6 +35,7 @@ export const ForgotPass = () => {
     backgroundColor: 'rgba(204,214,204,0.17)',
     borderRadius: '9px',
     height: '50px',
+
     '& .MuiInputBase-input': {
       padding: '0px',
       paddingLeft: '10px',
@@ -61,7 +63,7 @@ export const ForgotPass = () => {
     fontWeight: 500,
 
     '& .MuiButton-contained': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -72,19 +74,29 @@ export const ForgotPass = () => {
     },
 
     '& .MuiButton-outlined': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },
   };
 
   return (
-    <Box sx={{ margin: '10px' }}>
+    <Box sx={{ padding: 0, m: 0}}>
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', mb: 2 }}>
+        <Typography variant="h2" color='primary.light' 
+        sx={{ 
+          marginLeft: '2px', 
+          mb: 2,
+          fontSize: { xs: '1.4rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' }, 
+          }}>
           ¿Olvidaste tu contraseña?
         </Typography>
-        <Typography variant="body1" color='primary.main' sx={{ marginLeft: '2px', mb: 2 }}>
+        <Typography variant="body1" color='primary.main' 
+        sx={{ 
+          marginLeft: '5px',
+           mb: 2 ,
+           fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+           }}>
           Ingresa tu correo, recibirás un correo electrónico con los pasos para recuperar tu cuenta.
         </Typography>
       </div>
@@ -114,7 +126,11 @@ export const ForgotPass = () => {
       </form>
       <Grid container component={Box} sx={actionsStyles} size="medium">
 
-        <Button variant="contained" onClick={handleLogin} color="primary">
+        <Button variant="contained" 
+        onClick={handleLogin} 
+        color="primary"
+        sx={{ padding: 1 }}
+        >
           Recuperar Contraseña
         </Button>
       </Grid>

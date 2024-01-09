@@ -13,7 +13,6 @@ export const Covers = () => {
                 backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 20px 20px'
-
             }} >
                 <Grid item xs={12} sm={12}>
                     <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
@@ -24,17 +23,14 @@ export const Covers = () => {
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Aves" coverKey="cover_birds" />
                             <SectionCovers title="Portada Animales" coverKey="cover_animals" />
-
                         </Grid>
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Peces" coverKey="cover_fish" />
                             <SectionCovers title="Portada Flores" coverKey="cover_flowers" />
-
                         </Grid>
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Paisajes" coverKey="cover_land" />
                             <SectionCovers title="Portada Sobre Mí" coverKey="cover_about" />
-
                         </Grid>
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Admin" coverKey="covert_admin" />

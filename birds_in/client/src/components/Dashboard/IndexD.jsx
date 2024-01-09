@@ -19,7 +19,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
   marginTop: '0px',
-
+  fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.7rem', xl: '1.7rem' },
   '& .Mui-selected': {
     backgroundColor: theme.palette.secondary.light,
   },
@@ -27,6 +27,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 const StyledTab = styled(Tab)({
   minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
   color: '#ccd6cc',
+  fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.7rem', xl: '1.7rem' },
   '&.Mui-selected .MuiTypography-root': {
     color: '#C1C700',
   },

@@ -48,8 +48,9 @@ export const Aves = () => {
         sx={{
           background: birds.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
-          backgroundSize: 'cover',
+          backgroundSize: { xs: 'cover', sm: 'cover', md: 'cover', lg: 'cover', xl: 'cover' },
           backgroundRepeat: 'no-repeat',
+          backgroundPosition: { xs: 'right', sm: 'right', md: 'center', lg: 'center', xl: 'bottom' },
           minHeight: '90vh',
         }}
       >
@@ -58,7 +59,7 @@ export const Aves = () => {
           open={isFilterDialogOpen}
           onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
           fullWidth
-          mixWidth="md"
+          minWidth="md"
         >
           <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
@@ -80,8 +81,8 @@ export const Aves = () => {
             <Button
               sx={{
                 mt: 5,
-                ml: '85%',
-                fontSize: '1.1rem',
+                ml: { xs: '50%', sm: '50%', md: '70%', lg: '70%', xl: '70%' },
+                fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
                 fontWeight: 'bold',
                 color: theme.palette.primary.main,
                 backgroundColor: 'rgba(0, 56, 28, 0.2)', // Establece el fondo transparente deseado
@@ -94,10 +95,8 @@ export const Aves = () => {
             >Regresar
             </Button>
             {birds.map((bird, index) => (
-
               <Grid item key={index}>
                 <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
-
               </Grid>
             ))}
           </Grid>

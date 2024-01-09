@@ -23,7 +23,15 @@ export const SobreMi = () => {
                 Las aves que pasaron por mis ojos....
 
             </Typography>
-            <Typography sx={{ p: 7, mt: -4 }}>
+            <Typography
+                sx={{
+                    p: { xs: 0, sm: 1, md: 7, lg: 7, xl: 7 },
+                    mt: { xs: 0, sm: 0, md: -4, lg: -4, xl: -4 },
+                    // width: { xs: '600px',  },
+                    // ml: {xs: 0},
+                   
+
+                }}>
 
                 <Typography sx={{ ml: 20, mr: 20, textAlign: 'center' }} >
                     <Typography >

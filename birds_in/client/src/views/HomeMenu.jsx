@@ -4,7 +4,6 @@ import { Link as RouterLink } from 'react-router-dom'
 import { MenuBar } from '../components/Menus/MenuBar'
 import { useSelector } from 'react-redux'
 
-
 const sections = [
   {
     id: 'aves',
@@ -66,7 +65,11 @@ export const HomeMenu = () => {
         {sections.map((section, index) => (
           // Verifica si no es el elemento "Admin" o si el usuario es un administrador
           (isAdmin || section.id !== 'panelAdministrador') && (
-            <Grid item xs={12} sm={6} md={1.6} key={section.id} sx={{ margin: '5px', mt: 0 }}>
+            <Grid item xxs ={12} xs={12} sm={6} md={6} lg={1.7} key={section.id}
+              sx={{
+                margin: { xs: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px' },
+                mt: { xs: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px' },
+              }}>
               <div style={{ position: 'relative', overflow: 'hidden' }}>
                 <Link component={RouterLink} to={`/${section.id}`} style={{ textDecoration: 'none' }}>
                   <img
@@ -91,13 +94,13 @@ export const HomeMenu = () => {
                     flexDirection="column"
                     alignItems="center"
                     justifyContent="center"
-                    textAlign="left"
+                    textAlign="center"
                     padding="10px"
                     borderRadius="0 0 100px 100px"
-                    marginBottom="4px"
+                    marginBottom="9px"
                     sx={{
                       '& .MuiButton-contained': {
-                        fontSize: '1.3rem',
+                        fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
                         fontWeight: 'bold',
                         textTransform: 'none',
                         marginTop: '15px',
@@ -131,7 +134,6 @@ export const HomeMenu = () => {
                       {section.description}
                     </Typography>
                     <Button
-                  
                       variant="contained"
                       color="primary"
                       component={RouterLink}

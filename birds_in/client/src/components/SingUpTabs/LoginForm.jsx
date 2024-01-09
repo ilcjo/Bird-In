@@ -106,15 +106,15 @@ export const LoginForm = ({ changeTab }) => {
   const labelStyles = {
     color: theme.palette.primary.main, // Color del texto del label
     marginTop: '-9px',
+    fontSize: { xs: '1.5rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' },
   };
 
   const inputStyles = {
-    // Aquí puedes agregar los estilos que desees para los inputs
+    // Aquí  estilos que desees para los inputs
     color: theme.palette.primary.light,
     backgroundColor: 'rgba(204,214,204,0.17)',
     borderRadius: '9px',
     height: '50px',
-
 
     '& .MuiInputBase-input': {
       padding: '0px',
@@ -130,19 +130,19 @@ export const LoginForm = ({ changeTab }) => {
     '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
       // Agrega los estilos que desees para el Select
       height: '50px',
-      // width: '180px' // Ejemplo: cambia el color del texto a azul
+      // width: '180px'
     },
   };
 
   const actionsStyles = {
     justifyContent: 'center', // Centrar el botón horizontalmente
     margin: '0px',
-    marginTop: '40px',
+    marginTop: '20px',
     gap: '20px',
     fontWeight: 500,
-
+    
     '& .MuiButton-contained': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -151,21 +151,29 @@ export const LoginForm = ({ changeTab }) => {
         textTransform: 'none',
       },
     },
-
     '& .MuiButton-outlined': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },
   };
 
   return (
-    <Box sx={{ margin: '10px' }}>
+    <Box sx={{ padding: 0, m: 0 }}>
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
+        <Typography variant="h2" color='primary.light'
+          sx={{
+            marginLeft: '2px',
+            fontSize: { xs: '1.4rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' }
+          }}>
           Acceder a tu cuenta
         </Typography>
-        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+        <Typography variant="h5" color="primary.main"
+          sx={{
+            marginLeft: '5px',
+            my: '10px',
+            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+          }}>
           Aun no eres miembro ?
           <MuiLink onClick={handleegisterLinkClicRk} color="primary.light" underline="none"
             sx={{
@@ -179,7 +187,7 @@ export const LoginForm = ({ changeTab }) => {
           </MuiLink>
         </Typography>
       </div>
-      <Grid container component={Box}  >
+      <Grid container component={Box} sx={{ padding: 0, m: 0 }} >
         <form onSubmit={handleLogin} >
 
           <TextField
@@ -194,7 +202,6 @@ export const LoginForm = ({ changeTab }) => {
             fullWidth
             InputLabelProps={{
               sx: labelStyles, // Establece el estilo del label del input
-
             }}
             InputProps={{
               sx: inputStyles, // Establece el estilo del input
@@ -205,6 +212,7 @@ export const LoginForm = ({ changeTab }) => {
                 /* Por ejemplo, para agregar un margen izquierdo: */
                 fontSize: '1rem',
                 color: theme.palette.primary.light,
+                 fontWeight: 'bold'
                 /* Agrega otros estilos que desees... */
               },
             }}
@@ -240,22 +248,18 @@ export const LoginForm = ({ changeTab }) => {
 
             FormHelperTextProps={{
               sx: {
-                /* Agrega los estilos que desees para el texto del helper text */
-                /* Por ejemplo, para agregar un margen izquierdo: */
                 fontSize: '1rem',
                 color: theme.palette.primary.light,
-                /* Agrega otros estilos que desees... */
+                
               },
             }}
           />
-          <Typography variant="h5">
-            <ReCAPTCHA
-              sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
-              onChange={handleCaptchaVerification}
-            />
+          <Typography variant="h5" sx={{ mb: 3 }} >
+
             <MuiLink onClick={handlePassLinkClicRk}
               sx={{
                 cursor: 'pointer',
+                fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
                 '&:hover': {
                   color: theme.palette.primary.main
                 },
@@ -265,12 +269,14 @@ export const LoginForm = ({ changeTab }) => {
               Olvidó su contraseña?
             </MuiLink>
 
-
           </Typography>
-
+          <ReCAPTCHA
+            sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
+            onChange={handleCaptchaVerification}
+          />
         </form>
-        <Grid container component={Box} sx={actionsStyles} size="medium">
-          <Button variant="outlined" onClick={handleClose} color="primary">
+        <Grid container component={Box} sx={actionsStyles} size="medium" >
+          <Button variant="outlined" onClick={handleClose} color="primary" sx={{ padding: 1 }}>
             Cancelar
           </Button>
 
@@ -281,6 +287,7 @@ export const LoginForm = ({ changeTab }) => {
             loadingPosition="end"
             variant="contained"
             disabled={!loginData.email && !loginData.password}
+            sx={{ padding: 1 }}
           >
             <span>Iniciar Sesión</span>
           </LoadingButton>
@@ -288,7 +295,9 @@ export const LoginForm = ({ changeTab }) => {
             onClick={handleClose}
             variant="outlined"
             color='secondary'
+            sx={{ padding: 1 }}
             startIcon={<CloseIcon />}>Cerrar</Button>
+
         </Grid>
       </Grid>
       {approvedMessage && (

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
-import { CarruselGallery } from '../Galeries/CarruselGallery';
+import { Card, CardActionArea, CardActions, CardMedia, Typography } from '@mui/material'
 import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { sendParameter } from '../../redux/actions/fetchAllBirds';
@@ -36,9 +35,9 @@ export const Cards = React.memo(({ foto, name, index }) => {
 
   return (
     <Card sx={{
-      minWidth: 420,
-      maxWidth: 420,
-      minHeight: 330, // Establece una altura mínima para la tarjeta
+      minWidth: { xs: 340, sm: 420, md: 420, lg: 420, xl: 420 },
+      maxWidth: { xs: 340, sm: 420, md: 420, lg: 420, xl: 420 },
+      minHeight: 330 , // Establece una altura mínima para la tarjeta
       maxHeight: 330,
       position: 'relative',
       borderRadius: '15px',
@@ -47,7 +46,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
       justifyContent: 'space-between', // Centra verticalmente el contenido
       // m: 3,
       backgroundColor: 'primary.dark',
-      
+
     }}>
       <CardActionArea>
         {destacadaImage && destacadaImage.url ? (
@@ -66,22 +65,22 @@ export const Cards = React.memo(({ foto, name, index }) => {
         )}
       </CardActionArea>
       <CardActions disableSpacing>
-        <Typography 
-        variant='h2' 
-        color='primary' 
-        onClick={handleDetailClick} 
-        style={{ cursor: 'pointer' }}
-        sx={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '10px',
-          color: 'white', // Puedes ajustar el color del texto según tus preferencias
-          fontWeight: 'bold',
-          zIndex: 10, // Asegura que el texto esté encima de la imagen
-          background:  'rgba(0, 56, 28, 0.6)',
-          // width: '100%',
-          padding: '5px',
-        }} 
+        <Typography
+          variant='h2'
+          color='primary'
+          onClick={handleDetailClick}
+          style={{ cursor: 'pointer' }}
+          sx={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '10px',
+            color: 'white', // Puedes ajustar el color del texto según tus preferencias
+            fontWeight: 'bold',
+            zIndex: 10, // Asegura que el texto esté encima de la imagen
+            background: 'rgba(0, 56, 28, 0.6)',
+            // width: '100%',
+            padding: '5px',
+          }}
         >
           {name}
         </Typography>
