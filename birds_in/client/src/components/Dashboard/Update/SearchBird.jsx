@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { getInfoForUpdate } from '../../redux/actions/createBirds';
+import { getInfoForUpdate } from '../../../redux/actions/createBirds';
 import { IndexTabsUpdates } from './IndexTabsUpdates';
 
 

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { getAllCustomizes } from '../../redux/actions/Custome';
+import { getAllCustomizes } from '../../../redux/actions/Custome';
 import { useDispatch } from 'react-redux';
 import { IndexCustome } from './IndexCustome';
 import { Grid, useTheme } from '@mui/material';

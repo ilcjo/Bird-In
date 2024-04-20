@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Backdrop, Button, CircularProgress, Divider, Grid, Snackbar, SnackbarContent, TextField, Typography, useTheme } from '@mui/material'
-import { SectionCovers } from '../SectionCovers'
+import { SectionCovers } from '../../utils/SectionCovers'
 import { useDispatch, useSelector } from 'react-redux'
 import { UpdateCustomizesText } from '../../../redux/actions/Custome';
 import SaveIcon from '@mui/icons-material/Save';

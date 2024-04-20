@@ -1,6 +1,6 @@
 import { Divider, Grid, Typography, useTheme } from '@mui/material'
 import * as React from 'react'
-import { SectionCovers } from '../SectionCovers'
+import { SectionCovers } from '../../utils/SectionCovers'
 
 export const Covers = () => {
     const theme = useTheme()
