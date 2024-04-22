@@ -20,8 +20,8 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { addGrupo, eliminarGrupo, updateGrupo } from '../../../redux/actions/Options';
-import { getOptionsData } from '../../../redux/actions/fetchOptions';
+import { addGrupo, eliminarGrupo, updateGrupo } from '../../../../redux/actions/Options';
+import { getOptionsData } from '../../../../redux/actions/fetchOptions';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

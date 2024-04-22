@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { useTheme } from '@emotion/react';
-import { About } from './Custome/About';
-import { Covers } from './Custome/Covers';
+import { About } from './About';
+import { Covers } from './Covers';
 import styled from '@emotion/styled';
 import { Box, Tab, Tabs, Typography } from '@mui/material';
-import { General } from './Custome/General';
-import { CoverLogin } from './Custome/CoverLogin';
+import { General } from './General';
+import { CoverLogin } from './CoverLogin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado

@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { UpdateBirds } from '../Forms/UpdateBirds'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { CoverDelet } from './CoverDelet';
+import { CreateBird } from '../../Forms/CreateBird'
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -21,12 +21,12 @@ const StyledTab = styled(Tab)({
     color: '#ccd6cc',
     '&.Mui-selected .MuiTypography-root': {
         color: '#C1C700',
-      },
- 
+    },
+
 });
 
 
-export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, history }) => {
+export const IndexTabsCreate = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, history, changeTabSearch }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
 
     const handleTabChange = (event, newValue) => {
@@ -59,17 +59,17 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
                 {selectedTab === 0 && (
                     <React.Fragment>
                         {/* Contenido de la primera pestaña */}
-                        <UpdateBirds changeTab={changeTab} showUpdateBird={showUpdateBird}
+                        <CreateBird changeTabSearch={changeTabSearch} changeTab={changeTab} showUpdateBird={showUpdateBird}
                             showSearchBird={showSearchBird}
-                            selectedBird={selectedBird} 
+                            selectedBird={selectedBird}
                             changeImagenExist={handleNavigateToCoverDelet}
-                            />
+                        />
                     </React.Fragment>
                 )}
                 {selectedTab === 1 && (
                     <CoverDelet changeTab={changeTab} showUpdateBird={showUpdateBird}
-                    showSearchBird={showSearchBird}
-                    selectedBird={selectedBird} />
+                        showSearchBird={showSearchBird}
+                        selectedBird={selectedBird} />
                 )}
             </Box>
         </React.Fragment>

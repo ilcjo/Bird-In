@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { Backdrop, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { getInfoForUpdate } from '../../redux/actions/createBirds';
-import { sendCoverPhoto, sendPhotosDelete } from '../../redux/actions/DeletCover';
-// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { getInfoForUpdate } from '../../../redux/actions/createBirds';
+import { sendCoverPhoto, sendPhotosDelete } from '../../../redux/actions/DeletCover';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import SaveIcon from '@mui/icons-material/Save';
 // import { transformWrapper, transformComponent } from 'react-pinch-zoom-pan'
-import '../../assets/styles/zoom.css'
-import { CarruselGalleryDelet } from '../Galeries/CarruselGalleryDelet';
+import '../../../assets/styles/zoom.css'
+import { CarruselGalleryDelet } from '../../Galeries/CarruselGalleryDelet';
 
 export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) => {
     const theme = useTheme();
@@ -34,6 +34,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
     //         }
     //     });
     // };
+
     React.useEffect(() => {
         // Mostrar el Backdrop después de 2 segundos (2000 milisegundos)
         setShowBackdrop(true);
@@ -84,7 +85,6 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
         setSelectedImageIndex(url);
         setIsGalleryOpen(true)
     };
-
 
     const closeImageDialog = () => {
         setDialogOpen(false);

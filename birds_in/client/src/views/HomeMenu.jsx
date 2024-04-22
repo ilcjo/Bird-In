@@ -42,6 +42,12 @@ export const HomeMenu = () => {
   const admin = localStorage.getItem('tipoCliente')
   const isAdmin = admin === 'admin'
   const { allCustom } = useSelector(state => state.customizesSlice)
+  const [selectedSection, setSelectedSection] = React.useState(null);
+
+  const handleSectionClick = sectionId => {
+    setSelectedSection(sectionId); // Al hacer clic en una sección, guarda la sección en el estado
+    localStorage.setItem('panel', sectionId); // Guarda la sección seleccionada en el localStorage
+  };
   // Accede a las propiedades específicas de allCustom para obtener las URL de las imágenes
   const images = {
     aves: allCustom.cover_birds,
@@ -66,7 +72,12 @@ export const HomeMenu = () => {
                 mt: { xs: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px' },
               }}>
               <div style={{ position: 'relative', overflow: 'hidden' }}>
-                <Link component={RouterLink} to={`/${section.id}`} style={{ textDecoration: 'none' }}>
+                <Link
+                  component={RouterLink}
+                  to={`/${section.id}`}
+                  style={{ textDecoration: 'none' }}
+                  onClick={() => handleSectionClick(section.id)}
+                >
                   <img
                     src={images[section.id]} // Usa la URL de la imagen específica de allCustom
                     alt={section.title}
@@ -130,6 +141,7 @@ export const HomeMenu = () => {
                       {section.description}
                     </Typography>
                     <Button
+
                       variant="contained"
                       color="primary"
                       component={RouterLink}

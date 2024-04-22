@@ -5,6 +5,7 @@ import Auth from './slices/Auth';
 import Birds from './slices/BirdsSlice';
 import Create from './slices/createSlice';
 import customes from './slices/customeSlice'
+import landscape from './slices/LandscapeSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ const store = configureStore({
     authSlice: Auth,
     birdSlice: Birds,
     createBird: Create,
-    customizesSlice: customes
+    customizesSlice: customes,
+    landscapeSlice: landscape
   },
 });
 

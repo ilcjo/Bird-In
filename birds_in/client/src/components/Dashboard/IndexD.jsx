@@ -1,16 +1,16 @@
 
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
-import { SearchBird } from './SearchBird';
+import { SearchBird } from './Update/SearchBird';
 import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../redux/slices/createSlice';
-import { Customize } from './Customize';
+import { Customize } from './Customes/CustomizeIndex';
 import { styled } from '@mui/system';
-import { GruposOptions } from './Options/GruposOptions';
-import { FamiliasOptions } from './Options/FamiliasOptions';
-import { ZonasOptions } from './Options/ZonasOptions';
-import { Contadores } from './Contadores';
-import { IndexTabsCreate } from './IndexTabsCreate';
+import { GruposOptions } from './Aves/Options/GruposOptions';
+import { FamiliasOptions } from './Aves/Options/FamiliasOptions';
+import { ZonasOptions } from './Aves/Options/ZonasOptions';
+import { Contadores } from './Aves/Contadores';
+import { IndexTabsCreate } from './Add/IndexTabsCreate';
 import { IndexTabsUsuarios } from './Usuarios/IndexTabUsuarios';
 
 
@@ -33,10 +33,11 @@ const StyledTab = styled(Tab)({
   },
 
 });
+
 export const IndexD = () => {
   const dispatch = useDispatch();
   const theme = useTheme()
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const [selectedTab, setSelectedTab] = React.useState(1);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
 
   const handleTabChange = (event, newValue) => {
@@ -52,7 +53,7 @@ export const IndexD = () => {
   };
 
   const handleNavigateToSearch= () => {
-    setSelectedTab(0); // Cambia a la pestaña de imágenes existentes
+    setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
 };
 
   return (

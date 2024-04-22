@@ -3,7 +3,7 @@ import {
     Grid, Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { counting } from '../../redux/actions/fetchAllBirds';
+import { counting } from '../../../redux/actions/fetchAllBirds';
 
 export const Contadores = () => {
     const dispatch = useDispatch()
