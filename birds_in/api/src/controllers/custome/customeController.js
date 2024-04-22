@@ -31,7 +31,7 @@ const fetchCustome = async () => {
 };
 
 const sendParametersForUpdate = async (customizationParams) => {
-    console.log(customizationParams);
+    
     try {
         // Obtener la primera fila, asumiendo que solo hay una fila en Customize_page
         let customizeInfo = await Customize_page.findOne();
@@ -43,7 +43,6 @@ const sendParametersForUpdate = async (customizationParams) => {
             updated[param] = customizeInfo[param]
         }
         );
-        console.log('updated', updated)
         // await Customize_page.update(updateFields, { where: { id_customize: customizeInfo.id_customize } });
         // // Guardar los cambios
         if (Object.keys(updated).length > 0) {

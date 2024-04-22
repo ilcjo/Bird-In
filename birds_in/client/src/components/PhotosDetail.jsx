@@ -89,13 +89,15 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
 
     return (
         <React.Fragment>
-            <Grid container spacing={3} justifyContent="center"
+            <Grid container spacing={0} justifyContent="center"
                 sx={{
                     position: 'relative',
                     backgroundImage: `url(${fondo})`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'top',
+                    // margin: 0,
+                    // padding: 0
 
                 }}>
                 {birds.map((bird, index) => (
@@ -110,8 +112,8 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                             backdropFilter: 'blur(20px)', // Efecto de desenfoque de fondo
                             // width: '200vh', // Ocupar todo el ancho de la pantalla
                             boxShadow: 'none',
-                            top: 0, // Pegado al top
-                            marginBottom: theme.spacing(), // Espacio en la parte inferior7 backgroundImage: `url(${fondo})`,  // Reemplaza con la ruta correcta de tu imagen
+                            // top: 0, // Pegado al top
+                            // marginBottom: theme.spacing(), // Espacio en la parte inferior7 backgroundImage: `url(${fondo})`,  // Reemplaza con la ruta correcta de tu imagen
                             // '&.MuiAccordion-root': {
                             //     borderRadius: '50px', // Ajusta el valor según tus preferencias
                             //     overflow: 'hidden', // Asegúrate de que el contenido no sobresalga del borde redondeado
@@ -140,7 +142,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                 sx={{
                                     width: '90%',
                                     flexShrink: 0,
-                                    mt: 2,
+                                    // mt: 2,
                                     ml: { xs: 7, sm: 7, md: 7, lg: 7, xl: 7 },
                                     fontSize: { xs: '2.3rem', sm: '2.3rem', md: '2.6rem', lg: '2.6rem', xl: '2.6rem' }
                                 }}>
@@ -152,12 +154,13 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                         <AccordionDetails sx={{
                             backgroundColor: 'rgba(204,214,204,0.2)', // Establece el fondo transparente deseado
                             borderRadius: '20px',
+                           
                         }}>
 
-                            <Grid container spacing={5} sx={{ ml: 2, }}>
+                            <Grid container spacing={6} sx={{ ml: 2, }}>
                                 {/* Contenido de la primera columna */}
                                 <Grid item xs={12} md={2.5} lg={2.5}>
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)' }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '1.6rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)' }}>
                                         Nombre Inglés:  <Typography variant="body1" color="primary.light"
                                             sx={{
                                                 mb: { xs: 2, sm: 2, mb: 1.5, lg: 1.5 }
@@ -166,7 +169,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                         </Typography>
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)' }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '1.6rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)' }}>
                                         País: <Typography variant="body1" color="primary.light"
                                             sx={{
                                                 mb: { xs: 0, sm: 0, mb: 1.5, lg: 1.5 }
@@ -177,7 +180,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                 </Grid>
                                 {/* Contenido de la segunda columna */}
                                 <Grid item xs={12} md={2.5} lg={2.5}>
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '1.6rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Nombre Común:
                                         <Typography variant="body1" color="primary.light"
                                             sx={{
@@ -188,7 +191,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
 
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '1.6rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Zonas:
                                         <Typography variant="body1" color="primary.light"
                                             sx={{
@@ -201,7 +204,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                 </Grid>
                                 <Grid item xs={12} md={2.5} lg={2.5}>
                                     {/* Contenido de la tercera columna */}
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: 'rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Nombre Científico:
                                         <Typography variant="body1" color="primary.light">
                                             {bird.nombre_cientifico ? bird.nombre_cientifico : 'No Especificado'}
@@ -209,7 +212,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} md={2} lg={2}>
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '1.6rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Grupo:
                                         <Typography variant="body1" color="primary.light" sx={{ mb: { xs: 2, sm: 2, mb: 1.5, lg: 1.5 } }}>
                                             {bird.grupo.nombre}
@@ -217,7 +220,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
 
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '1.6rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }}>
                                         Familia:
                                         <Typography variant="body1" color="primary.light" sx={{ mb: { xs: 0, sm: 0, mb: 1.5, lg: 1.5 } }}>
                                             {bird.familia.nombre}
@@ -225,7 +228,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} md={2} lg={2}>
-                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '2rem', lg: '2rem', xl: '2rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }} >
+                                    <Typography variant="h5" color="primary.main" sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem', md: '1.6rem', lg: '1.6rem', xl: '1.6rem' }, textShadow: '-2px 3px 4px rgba(0, 0, 0, 0.4)', }} >
                                         URLS Externas:
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
                                     </Typography>
@@ -286,31 +289,10 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                         </AccordionDetails>
                     </Accordion>
                 ))}
-                <Button
-                    sx={{
-                        // mt: -4,
-                        mb: { xs: 4, sm: 4, md: 2, lg: 2, xl: 2 },
-                        padding: 1,
-                        ml: '75%',
-                        fontWeight: 'bold',
-                        color: theme.palette.primary.dark,
-                        zIndex: 1,
-                        fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
-                        '&:hover': {
-                            backgroundColor: theme.palette.primary.light, // Cambia el color de fondo en hover
-                            color: 'black', // Cambia el color del texto en hover
-                            textTransform: 'none',
-                            fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
-                        },
 
-                    }}
-                    variant="contained"
-                    onClick={stepBack}
-                    startIcon={<ArrowBackIcon />}
-                >Regresar</Button>
             </Grid>
 
-            <Grid container component={Box} spacing={3} justifyContent="center" sx={{
+            <Grid container component={Box} spacing={0} justifyContent="center" sx={{
                 position: 'relative',
                 backgroundImage: `url(${fondo})`,  // Reemplaza con la ruta correcta de tu imagen
                 // backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,1) 100%), url(${fondo})`,
@@ -320,10 +302,33 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                 // overflow: 'hidden',  // Oculta el desenfoque que sobresale del contenedor
                 // backdropFilter: 'blur(70px) brightness(70%)',
                 // backgroundColor: 'rgba(204,214,204,0)',
-                minHeight: '50vh',
+                minHeight: '75vh',
 
             }}>
+                <Button
+                    sx={{
+                        mt: { xs: 4, sm: 4, md: 4, lg: 4, xl: 4 },
+                        mb: { xs: 4, sm: 4, md: 4, lg: -2, xl: -2 },
+                        padding: 1,
+                        height: '1%',
+                        ml: '75%',
+                        fontWeight: 'bold',
+                        color: theme.palette.primary.dark,
+                        zIndex: 1,
+                        fontSize: { xs: '1rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' },
+                        '&:hover': {
+                            backgroundColor: theme.palette.primary.light, // Cambia el color de fondo en hover
+                            fontSize: { xs: '1rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' },
+                            padding: 1,
+                            height: '1%',
+                        },
 
+                    }}
+                    variant="contained"
+                    onClick={stepBack}
+                    startIcon={<ArrowBackIcon />}
+
+                >Regresar</Button>
                 {allImages.length === 0 && (
                     <Typography variant="h2" color="primary.main" sx={{ mt: 4, mr: '60%', }}>
                         No se han subido imágenes.

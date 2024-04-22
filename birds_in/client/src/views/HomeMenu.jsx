@@ -21,11 +21,6 @@ const sections = [
     description: 'Galería de peces',
   },
   {
-    id: 'flores',
-    title: 'Flora',
-    description: 'Galería de flora',
-  },
-  {
     id: 'paisajes',
     title: 'Paisajes',
     description: 'Galería de paisajes',
@@ -61,11 +56,11 @@ export const HomeMenu = () => {
   return (
     <div>
       <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
-      <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center', }}>
+      <Grid container spacing={0.5} sx={{ justifyContent: 'center', alignItems: 'center', }}>
         {sections.map((section, index) => (
           // Verifica si no es el elemento "Admin" o si el usuario es un administrador
           (isAdmin || section.id !== 'panelAdministrador') && (
-            <Grid item xxs ={12} xs={12} sm={6} md={6} lg={1.7} key={section.id}
+            <Grid item xxs={12} xs={12} sm={6} md={6} lg={2} key={section.id}
               sx={{
                 margin: { xs: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px' },
                 mt: { xs: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px' },
@@ -77,9 +72,10 @@ export const HomeMenu = () => {
                     alt={section.title}
                     style={{
                       width: '100%',
-                      height: '580px',
+                      height: '615px',
                       objectFit: 'cover',
-                      borderRadius: "0 0 100px 100px",
+                      borderRadius: "0 0 120px 120px",
+                      
                     }}
                   />
                   <Box
@@ -96,7 +92,7 @@ export const HomeMenu = () => {
                     justifyContent="center"
                     textAlign="center"
                     padding="10px"
-                    borderRadius="0 0 100px 100px"
+                    borderRadius="0 0 120px 120px"
                     marginBottom="9px"
                     sx={{
                       '& .MuiButton-contained': {

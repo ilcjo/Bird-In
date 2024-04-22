@@ -107,7 +107,7 @@ const fetchFilterBirds = async (
         // const isLastPage = offset + totalResultsClausula >= totalResults;
         const totalPages = Math.ceil(totalResultsClausula / perPageConvert); // Calcular el total de páginas
         const isLastPage = totalResults <= 8 || pageConvert >= totalPages; // Verificar si estás en la última página
-        return { avesFiltradas, isLastPage };
+        return { avesFiltradas, totalResultsClausula, isLastPage, };
     } catch (error) {
         console.error('Ocurrió un error al realizar la consulta:', error);
         throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
@@ -257,7 +257,7 @@ const filterOptionsPaisZonas = async (familia,
     // Verificar si se proporcionó un ID de zona o un ID de país
 
     if (zonas || pais) {
-       
+
         const paisNumb = parseInt(pais)
         // Filtrar las aves según el país y las zonas proporcionadas
         allResults.avesFiltradas = allResults.avesFiltradas.filter(ave => {
@@ -277,13 +277,13 @@ const filterOptionsPaisZonas = async (familia,
                     nombre: pais.dataValues.nombre,
                 })));
         });
-      
+
         const findIdPais = await obtenerIdDePais(zonas)
-        
+
         const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
-        
+
         newOptions.paises = [JSON.parse(newopti)];
-        
+
         const zonasSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
             ave.zonasAves.forEach(zona => zonasSet.add(JSON.stringify({
@@ -538,7 +538,9 @@ const sendAndUpdateBird = async (
     urlImagen,
     idAve,
 ) => {
+    
     try {
+        
         // Obtener el ave existente de la base de datos
         const existingBird = await Aves.findOne({
             where: {
@@ -559,6 +561,7 @@ const sendAndUpdateBird = async (
             grupo.id !== existingBird.grupos_id_grupo ||
             familia.id !== existingBird.familias_id_familia
         ) {
+            
             // Actualizar el registro existente en la tabla "aves" y sus relaciones
             await Aves.update(
                 {

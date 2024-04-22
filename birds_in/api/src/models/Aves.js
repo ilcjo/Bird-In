@@ -11,6 +11,7 @@ module.exports = (sequelize) => {
         },
         nombre_ingles: {
             type: DataTypes.TEXT,
+            binary: true,
             unique: true,
             allowNull: false
         },

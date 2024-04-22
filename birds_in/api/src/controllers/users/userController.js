@@ -98,6 +98,25 @@ const deleteCompleteU = async (userId) => {
     }
 };
 
+// const seetheP = async (userId) => {
+//     try {
+//         // Obtener el usuario de la base de datos
+//         const userToSee = await Usuarios.findByPk(userId);
+
+//         // Verificar si se encontró algún usuario
+//         if (!userToSee) {
+//             throw new Error('Usuario no encontrado');
+//         }
+
+//         // Devolver la contraseña del usuario (suponiendo que está almacenada en el campo "password")
+//         return userToSee.password;
+//     } catch (error) {
+//         console.error('Error al ver la contraseña:', error.message);
+//         // Manejar el error según sea necesario
+//         throw error; // O devuelve un valor por defecto, etc.
+//     }
+// }
+
 
 
 module.exports = {

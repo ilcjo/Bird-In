@@ -26,7 +26,7 @@ export const Covers = () => {
                         </Grid>
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Peces" coverKey="cover_fish" />
-                            <SectionCovers title="Portada Flores" coverKey="cover_flowers" />
+                            {/* <SectionCovers title="Portada Flores" coverKey="cover_flowers" /> */}
                         </Grid>
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Paisajes" coverKey="cover_land" />

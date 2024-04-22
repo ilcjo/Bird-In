@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreData } from '../../redux/actions/fetchAllBirds'
-import { Button, Dialog, Grid, useTheme } from '@mui/material'
+import { Button, Dialog, Grid, Typography, useTheme } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Filters } from '../../components/Filters'
 import { Cards } from '../../components/Cards/Cards'
@@ -15,6 +15,7 @@ export const Aves = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const birds = useSelector(state => state.birdSlice.infoBirds)
+  const totalAves= useSelector(state=> state.birdSlice.resultLength)
   const parameter = useSelector(state => state.birdSlice.filters)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const noMoreResults = useSelector((state) => state.birdSlice.noMoreResults);
@@ -78,11 +79,19 @@ export const Aves = () => {
         {birds.length > 1 && (
 
           <Grid item container spacing={3} justifyContent="center">
+             <Typography variant="h2" color='primary.light'
+          sx={{
+            marginLeft: '2px',
+            mt: 8,
+            fontSize: { xs: '1.4rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' },
+          }}>
+            Total de Aves:  {totalAves}
+            </Typography>
             <Button
               sx={{
                 mt: 5,
                 ml: { xs: '50%', sm: '50%', md: '70%', lg: '70%', xl: '70%' },
-                fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+                fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1rem', lg: '1rem', xl: '1rem' },
                 fontWeight: 'bold',
                 color: theme.palette.primary.main,
                 backgroundColor: 'rgba(0, 56, 28, 0.2)', // Establece el fondo transparente deseado
@@ -94,9 +103,10 @@ export const Aves = () => {
               startIcon={<ArrowBackIcon />}
             >Regresar
             </Button>
+           
             {birds.map((bird, index) => (
               <Grid item key={index}>
-                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
+                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} cantidad={totalAves}/>
               </Grid>
             ))}
           </Grid>

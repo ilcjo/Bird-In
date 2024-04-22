@@ -15,7 +15,7 @@ export const Landing = () => {
     if (!text) {
       return null;
     }
-  
+
     // Dividir el texto por comas y agregar <br /> después de cada coma
     const segments = text.split('.').map((segment, index) => (
       <React.Fragment key={index}>
@@ -23,7 +23,7 @@ export const Landing = () => {
         <br />
       </React.Fragment>
     ));
-  
+
     return (
       <React.Fragment>
         {segments}
@@ -37,30 +37,30 @@ export const Landing = () => {
   return (
     <React.Fragment>
       <Grid container component="main" sx={{ height: '100vh' }}>
-      <Grid item xs={12} sm={6} md={6} lg={8} 
-      sx={{
-          backgroundImage: `url(${allCustom.cover_login})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: {xs: '300px', sm: 'auto', md: 'auto', lg: 'auto', xl: 'auto'}
-        }}>
-     {/* <LazyLoad imageUrl={allCustom.cover_login}>      */}
+        <Grid item xs={12} sm={6} md={6} lg={8}
+          sx={{
+            backgroundImage: `url(${allCustom.cover_login})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            height: { xs: '300px', sm: 'auto', md: 'auto', lg: 'auto', xl: 'auto' }
+          }}>
+          {/* <LazyLoad imageUrl={allCustom.cover_login}>      */}
           <Typography variant="body2" color="black"
             sx={{
               position: 'absolute', // Posiciona el segundo párrafo en la esquina inferior izquierda
               bottom: 0, // Coloca el segundo párrafo en la parte inferior del contenedor
-              left: {xs: '65%', sm: '0', md: '30%', lg: '50%', xl: '55%'}, // Coloca el segundo párrafo en la esquina izquierda del contenedor
+              left: { xs: '65%', sm: '0', md: '30%', lg: '50%', xl: '50%' }, // Coloca el segundo párrafo en la esquina izquierda del contenedor
               margin: '15px', // Ajusta los márgenes según tus necesidades
               bottom: '82vh',
               fontSize: { xs: '0.8rem', sm: '1rem', md: '1.2rem', lg: '1.3rem', xl: '1.4rem' },
-              top: {xs: 0}
+              top: { xs: 0 }
               // backgroundColor: 'rgba(255, 255, 255, 0.5)',
             }}>
             {convertTextWithBr(allCustom.text_login)}
           </Typography>
           {/* </LazyLoad> */}
-          </Grid>
+        </Grid>
         <Grid item xs={12} sm={6} md={6} lg={4} component={Box} elevation={6}
           sx={{
             backgroundColor: theme.palette.primary.dark,
@@ -75,13 +75,13 @@ export const Landing = () => {
             justifyContent: 'center', // Centra horizontalmente
             // Altura mínima de la ventana gráfica
           }}>
-            <img alt='logo' src={allCustom.logo} 
-            style={{
-              minWidth: '50px',
-              width: '150px', // Establece el ancho fijo que desees
-              height: 'auto', // Permite que la altura se ajuste automáticamente para mantener la proporción
-            }} 
-            loading="lazy"
+            <img alt='logo' src={allCustom.logo}
+              style={{
+                minWidth: '50px',
+                width: '150px', // Establece el ancho fijo que desees
+                height: 'auto', // Permite que la altura se ajuste automáticamente para mantener la proporción
+              }}
+              loading="lazy"
             >
             </img>
           </Box>
@@ -97,13 +97,13 @@ export const Landing = () => {
             <Typography variant="body1" color='primary.light'>
               Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.
             </Typography>
-            <Typography variant="body1" 
-            sx={{ 
-              color: '#fff', 
-              fontWeight: 'bold', 
-              my: 2, 
-              fontFamily: 'Arsenal', 
-              fontSize: { xs: '0.8rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' }, 
+            <Typography variant="body1"
+              sx={{
+                color: '#fff',
+                fontWeight: 'bold',
+                my: 2,
+                fontFamily: 'Arsenal',
+                fontSize: { xs: '0.8rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' },
               }}>
               Fotografías por Moises Sterimberg
             </Typography>

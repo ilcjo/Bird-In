@@ -66,10 +66,10 @@ export const LoginForm = ({ changeTab }) => {
   };
   const handleLogin = async (e) => {
     e.preventDefault();
-    // if (!isCaptchaVerified) {
-    //   alert('Por favor, completa la verificación CAPTCHA.');
-    //   return;
-    // }
+    if (!isCaptchaVerified) {
+      alert('Por favor, completa la verificación CAPTCHA.');
+      return;
+    }
     if (loginData.email && loginData.password) {
       try {
         dispatch(loginRequest())
@@ -140,9 +140,9 @@ export const LoginForm = ({ changeTab }) => {
     marginTop: '20px',
     gap: '20px',
     fontWeight: 500,
-    
+
     '& .MuiButton-contained': {
-      fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.2rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -152,7 +152,7 @@ export const LoginForm = ({ changeTab }) => {
       },
     },
     '& .MuiButton-outlined': {
-      fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.2rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },
@@ -172,7 +172,7 @@ export const LoginForm = ({ changeTab }) => {
           sx={{
             marginLeft: '5px',
             my: '10px',
-            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+            fontSize: { xs: '1.1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.3rem' },
           }}>
           Aun no eres miembro ?
           <MuiLink onClick={handleegisterLinkClicRk} color="primary.light" underline="none"
@@ -212,7 +212,7 @@ export const LoginForm = ({ changeTab }) => {
                 /* Por ejemplo, para agregar un margen izquierdo: */
                 fontSize: '1rem',
                 color: theme.palette.primary.light,
-                 fontWeight: 'bold'
+                fontWeight: 'bold'
                 /* Agrega otros estilos que desees... */
               },
             }}
@@ -250,16 +250,16 @@ export const LoginForm = ({ changeTab }) => {
               sx: {
                 fontSize: '1rem',
                 color: theme.palette.primary.light,
-                
+
               },
             }}
           />
-          <Typography variant="h5" sx={{ mb: 3 }} >
+          <Typography variant="h5" sx={{ mb: 2 }} >
 
             <MuiLink onClick={handlePassLinkClicRk}
               sx={{
                 cursor: 'pointer',
-                fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+                fontSize: { xs: '1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.2rem' },
                 '&:hover': {
                   color: theme.palette.primary.main
                 },

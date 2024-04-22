@@ -4,7 +4,7 @@ import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { sendParameter } from '../../redux/actions/fetchAllBirds';
 
-export const Cards = React.memo(({ foto, name, index }) => {
+export const Cards = React.memo(({ foto, name, index, cantidad }) => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -35,8 +35,8 @@ export const Cards = React.memo(({ foto, name, index }) => {
 
   return (
     <Card sx={{
-      minWidth: { xs: 340, sm: 420, md: 420, lg: 420, xl: 420 },
-      maxWidth: { xs: 340, sm: 420, md: 420, lg: 420, xl: 420 },
+      minWidth: { xs: 340, sm: 420, md: 420, lg: 420, xl: 520 },
+      maxWidth: { xs: 340, sm: 420, md: 420, lg: 420, xl: 520 },
       minHeight: 330 , // Establece una altura mínima para la tarjeta
       maxHeight: 330,
       position: 'relative',

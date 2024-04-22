@@ -19,7 +19,8 @@ const initialState = {
   filters: '',
   copyFilters:{},
   count: {},
-  oneBird: false
+  oneBird: false,
+  resultLength: 0
 };
 
 export const birdSlice = createSlice({
@@ -29,6 +30,9 @@ export const birdSlice = createSlice({
   reducers: {
     fetchInfo: (state, action) => {
       state.infoBirds = action.payload
+    },
+    fetchLength: (state, action) => {
+      state.resultLength = action.payload
     },
     copyInfo: (state, action) => {
       state.copyInfoBirds = action.payload
@@ -114,6 +118,7 @@ export const {
   setNoMoreResults,
   saveCounting,
   copingFilters,
-  isOneBird
+  isOneBird,
+  fetchLength
 } = birdSlice.actions;
 export default birdSlice.reducer;

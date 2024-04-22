@@ -34,21 +34,21 @@ export const Contadores = () => {
                     </Typography>
 
                     <Typography variant="h2" color="primary" sx={{ mt: 2 }}>
-                        Nombre Inglés:
+                        Nombres en Inglés:
                         <Typography variant='h2' color='primary.light' sx={{ display: 'inline', ml: 3, }}>
                             {allEnglish}
                         </Typography>
                     </Typography>
 
                     <Typography variant="h2" color="primary" sx={{ mt: 2 }}>
-                        Nombre Científico:
+                        Nombres Científicos:
                         <Typography variant='h2' color='primary.light' sx={{ display: 'inline', ml: 3, }}>
                             {allCientifico}
                         </Typography>
                     </Typography>
 
                     <Typography variant="h2" color="primary" sx={{ mt: 2 }}>
-                        Nombre Común:
+                        Nombres Comunes:
                         <Typography variant='h2' color='primary.light' sx={{ display: 'inline', ml: 3, }}>
                             {allComun}
                         </Typography>
@@ -68,7 +68,7 @@ export const Contadores = () => {
                         </Typography>
                     </Typography>
                     <Typography variant="h2" color="primary" sx={{ mt: 2 }}>
-                        Número de País :
+                        Número de Países :
                         <Typography variant='h2' color='primary.light' sx={{ display: 'inline', ml: 3, }}>
                             {allCountrys}
                         </Typography>

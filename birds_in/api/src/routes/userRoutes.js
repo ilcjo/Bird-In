@@ -21,6 +21,7 @@ userRouter.post('/register', registerUser)
     .put('/status', changeStatus)
     .delete('/borrarUsuario', deleteUser)
     .post('/recuperarContraseña', recoverPass)
+    // .put('/see',seePass)
 
 module.exports = userRouter
 

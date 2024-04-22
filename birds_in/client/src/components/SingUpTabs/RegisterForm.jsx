@@ -70,7 +70,7 @@ export const RegisterForm = ({ changeTab, close }) => {
 
   const validatePassword = (password) => {
     // Verificar que la contraseña tenga al menos 8 caracteres, una mayúscula, un dígito y un carácter especial
-    const atLeast8Chars = /.{8,}/;
+    const atLeast8Chars = /.{4,}/;
     const hasUpperCase = /[A-Z]/;
     const hasDigit = /\d/;
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
@@ -83,10 +83,10 @@ export const RegisterForm = ({ changeTab, close }) => {
       error = 'La contraseña debe contener al menos una mayúscula.';
     } else if (!hasDigit.test(password)) {
       error = 'La contraseña debe contener al menos un número.';
-    } else if (!hasSpecialChar.test(password)) {
-      error = 'La contraseña debe contener al menos un carácter especial.';
+    // } else if (!hasSpecialChar.test(password)) {
+    //   error = 'La contraseña debe contener al menos un carácter especial.';
+    // }
     }
-
     setError(error);
   };
 
@@ -212,7 +212,7 @@ export const RegisterForm = ({ changeTab, close }) => {
     fontWeight: 500,
 
     '& .MuiButton-contained': {
-      fontSize: { xs: '1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.3rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
       '&:hover': {
@@ -223,7 +223,7 @@ export const RegisterForm = ({ changeTab, close }) => {
     },
 
     '& .MuiButton-outlined': {
-      fontSize: { xs: '1.2rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' }, // Aumentar el tamaño del texto a 1.2 rem
+      fontSize: { xs: '1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.3rem' }, // Aumentar el tamaño del texto a 1.2 rem
       fontWeight: 'bold', // Hacer el texto negrita
       textTransform: 'none',
     },
@@ -243,7 +243,7 @@ export const RegisterForm = ({ changeTab, close }) => {
           sx={{
             marginLeft: '5px',
             my: '10px',
-            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+            fontSize: { xs: '1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.3rem' },
           }}>
           Ya eres miembro ?
           <MuiLink onClick={handleLinkClicRk} color="primary.light" underline="none" sx={{
@@ -354,8 +354,8 @@ export const RegisterForm = ({ changeTab, close }) => {
           <Typography variant="h5" color="primary.main"
             sx={{
               marginLeft: '8px',
-              my: '10px',
-              fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.3rem', lg: '1.3rem', xl: '1.4rem' },
+              // my: '10px',
+              fontSize: { xs: '1rem', sm: '1.2rem', md: '1.2rem', lg: '1.2rem', xl: '1.3rem' },
             }}>
             La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
           </Typography>

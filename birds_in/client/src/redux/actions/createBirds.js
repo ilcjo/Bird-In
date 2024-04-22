@@ -119,7 +119,6 @@ export const getInfoForUpdateName = (name) => {
 };
 
 export const duplicateNameCheck = (name) => {
-console.log('soy',name)
   return async (dispatch) => {
     try {
       const response = await axios(`aves/duplicados?name=${name}`)

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fetchInfo, isOneBird, loadMoreDataSuccess, returnFilters, saveCounting, setNoMoreResults, stringParameter } from '../slices/BirdsSlice'
+import { fetchInfo, fetchLength, isOneBird, loadMoreDataSuccess, returnFilters, saveCounting, setNoMoreResults, stringParameter } from '../slices/BirdsSlice'
 import { createParams } from '../../components/utils/convertId';
 
 
@@ -10,6 +10,7 @@ export const getInfoBirds = () => {
       const response = await axios('/aves/filtros')
       const data = response.data.avesFiltradas
       dispatch(fetchInfo(data))
+      
     } catch (error) {
       console.error("Error al obtener los datos:", error)
 
@@ -38,12 +39,13 @@ export const sendParameter = (selectedOptions) => {
       const queryParams = createParams(selectedOptions)
       const response = await axios.get(`/aves/filtros?${queryParams}`);
       const data = response.data.avesFiltradas;
-      const result = response.data.isLastPage
+      const result = response.data.isLastPage;
+      const lenghtResult = response.data.totalResultsClausula
+      dispatch(fetchLength(lenghtResult))
       dispatch(stringParameter(queryParams))
       dispatch(returnFilters(data))
       dispatch(setNoMoreResults(result));
       return data.length;
-
     } catch (error) {
       console.log('error enviando datos:', error);
     }
