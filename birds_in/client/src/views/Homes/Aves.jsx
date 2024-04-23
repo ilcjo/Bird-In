@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Button, Dialog, Grid, useTheme } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Filters } from '../../components/Filters'
 import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
@@ -22,7 +21,7 @@ export const Aves = () => {
   const [page, setPage] = React.useState(1);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const panel = localStorage.getItem('panel')
-  
+
   const handleChangePage = () => {
     const newPage = page + 1;
     setPage(newPage);
@@ -96,13 +95,13 @@ export const Aves = () => {
         )} */}
         {birds.length > 1 && (
           <Grid item container spacing={3} justifyContent="center">
-             <Typography variant="h2" color='primary.light'
-          sx={{
-            marginLeft: '2px',
-            mt: 8,
-            fontSize: { xs: '1.4rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' },
-          }}>
-            Total de Aves:  {totalAves}
+            <Typography variant="h2" color='primary.light'
+              sx={{
+                marginLeft: '2px',
+                mt: 8,
+                fontSize: { xs: '1.4rem', sm: '1.8rem', md: '1.8rem', lg: '1.8rem', xl: '1.8rem' },
+              }}>
+              Total de Aves:  {totalAves}
             </Typography>
             <Button
               sx={{
