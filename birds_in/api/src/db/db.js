@@ -53,22 +53,48 @@ db.models = Object.fromEntries(capsEntries)
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Aves, Familias, Grupos, Imagenes_aves, Paises, Usuarios, Customize_page, Zonas } = db.models;
+const { Aves, Familias, Grupos, Imagenes_aves, Paises, Usuarios, Customize_page, Zonas, Paisajes, Imagenes_paisajes } = db.models;
+
 // UNO A UNO
 Aves.belongsTo(Familias, { foreignKey: 'familias_id_familia' })
 Familias.hasOne(Aves, { foreignKey: 'familias_id_familia' })
 Aves.belongsTo(Grupos, { foreignKey: 'grupos_id_grupo' })
 Grupos.hasOne(Aves, { foreignKey: 'grupos_id_grupo' })
+
+Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
+Paises.hasOne(Paisajes, { foreignKey: 'paises_id_pais' });
+
+Paisajes.belongsTo(Zonas, { foreignKey: 'zonas_id_zona' });
+Zonas.hasOne(Paisajes, { foreignKey: 'zonas_id_zona' });
+
 // UNO A MUCHOS
 Aves.hasMany(Imagenes_aves, { foreignKey: 'aves_id_ave' })
 Imagenes_aves.belongsTo(Aves, { foreignKey: 'aves_id_ave' })
+
 Zonas.hasMany(Paises, { foreignKey: 'id_paises', as: 'zonasPaises' });
 Paises.belongsTo(Zonas, { foreignKey: 'id_paises' });
+
+Zonas.hasMany(Paisajes, { foreignKey: 'zonas_id_zona', as: 'zonasPaisajes' });
+Paisajes.belongsTo(Zonas, { foreignKey: 'zonas_id_zona' });
+
+Paises.hasMany(Paisajes, { foreignKey: 'paises_id_pais', as: 'paisesPaisajes' });
+Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
+
+Paisajes.hasMany(Imagenes_paisajes, { foreignKey: 'paisajes_id_paisaje' })
+Imagenes_paisajes.belongsTo(Paisajes, { foreignKey: 'paisajes_id_paisaje' })
+
 // MUCHOS A MUCHOS
+
+//PaisesAves
 Aves.belongsToMany(Paises, { through: 'aves_has_paises', foreignKey: 'aves_id_ave', timestamps: false })
 Paises.belongsToMany(Aves, { through: 'aves_has_paises', foreignKey: 'paises_id_pais', timestamps: false })
+//ZonasAves
 Aves.belongsToMany(Zonas, { through: 'aves_has_zonas', foreignKey: 'aves_id_ave', timestamps: false, as: 'zonasAves' })
 Zonas.belongsToMany(Aves, { through: 'aves_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoAves' })
+//paisajesAves
+// Aves.belongsToMany(Paisajes, { through: 'aves_has_paisajes', foreignKey: 'aves_id_ave', timestamps: false, as: 'paisajesAves' });
+// Paisajes.belongsToMany(Aves, { through: 'aves_has_paisajes', foreignKey: 'paisajes_id_paisaje', timestamps: false, as: 'avesPaisajes' });
+
 
 module.exports = {
   ...db.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

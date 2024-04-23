@@ -13,11 +13,12 @@ import {
   CircularProgress,
   Snackbar,
   SnackbarContent,
+  Stack,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, } from 'react-redux';
 import { Boolean } from '../../redux/slices/OpenClose';
-import { pendingEmail, registerData, verifyemail } from '../../redux/actions/userLoginRegister';
+import { pendingEmail, registerData, } from '../../redux/actions/userLoginRegister';
 
 
 export const RegisterForm = ({ changeTab, close }) => {
@@ -172,60 +173,7 @@ export const RegisterForm = ({ changeTab, close }) => {
     return error || errorEmail || !formData.name || !formData.email || !formData.pass;
   };
 
-  const labelStyles = {
-    color: theme.palette.primary.main, // Color del texto del label
-    marginTop: '-9px',
-  };
 
-  const inputStyles = {
-    // Aquí puedes agregar los estilos que desees para los inputs
-    color: theme.palette.primary.light,
-    backgroundColor: 'rgba(204,214,204,0.17)',
-    borderRadius: '9px',
-    height: '50px',
-    '& .MuiInputBase-input': {
-      padding: '0px',
-      paddingLeft: '10px',
-    },
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'none',
-    },
-    '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: theme.palette.primary.main, // Color del borde en el hover
-      backgroundColor: 'rgba(0,56,28,0.22) ',
-    },
-    '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-      // Agrega los estilos que desees para el Select
-      height: '50px',
-      // width: '180px' // Ejemplo: cambia el color del texto a azul
-    },
-
-  };
-
-  const actionsStyles = {
-    justifyContent: 'center', // Centrar el botón horizontalmente
-    margin: '0px',
-    marginTop: '20px',
-    gap: '20px',
-    fontWeight: 500,
-
-    '& .MuiButton-contained': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
-      fontWeight: 'bold', // Hacer el texto negrita
-      textTransform: 'none',
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-        color: theme.palette.primary.light, // Cambia el color del texto en hover
-        textTransform: 'none',
-      },
-    },
-
-    '& .MuiButton-outlined': {
-      fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
-      fontWeight: 'bold', // Hacer el texto negrita
-      textTransform: 'none',
-    },
-  };
 
   return (
     <Box sx={{ margin: '10px' }} >
@@ -255,6 +203,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             onChange={handleNameChange}
             error={errorName}
             helperText={errorName}
+
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
@@ -265,12 +214,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             }}
             fullWidth
             margin="normal"
-            InputLabelProps={{
-              sx: labelStyles, // Establece el estilo del label del input
-            }}
-            InputProps={{
-              sx: inputStyles, // Establece el estilo del input
-            }}
+
           />
 
           <TextField
@@ -281,13 +225,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             onChange={(e) => { handleEmailChange(e) }}
             margin="normal"
             fullWidth
-            InputLabelProps={{
-              sx: labelStyles, // Establece el estilo del label del input
-
-            }}
-            InputProps={{
-              sx: inputStyles, // Establece el estilo del input
-            }}
+            sx={{ mt: 3 }}
             error={errorEmail}
             helperText={errorEmail}
             FormHelperTextProps={{
@@ -307,12 +245,8 @@ export const RegisterForm = ({ changeTab, close }) => {
             error={error !== ''}
             type={showPassword ? 'text' : 'password'}
             fullWidth
-            sx={{ mt: 2 }}
-            InputLabelProps={{
-              sx: labelStyles,
-            }}
+            sx={{ mt: 3 }}
             InputProps={{
-              sx: inputStyles,
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -324,7 +258,9 @@ export const RegisterForm = ({ changeTab, close }) => {
                   </IconButton>
                 </InputAdornment>
               ),
+
             }}
+
             helperText={error}
             FormHelperTextProps={{
               sx: {
@@ -340,12 +276,18 @@ export const RegisterForm = ({ changeTab, close }) => {
               validatePassword(e.target.value);
             }}
           />
-          <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+          <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px', mt: 3 }}>
             La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
           </Typography>
 
         </form>
-        <Grid container component={Box} sx={actionsStyles} size="medium">
+        <Stack spacing={2} direction="row" justifyContent="center"
+          alignItems="center"
+          sx={{
+            margin: 'auto', // Centrar horizontalmente el Stack
+            width: 'fit-content', // Ajustar el ancho al contenido
+          }}
+        >
           <Button variant="outlined" onClick={handleClose} color="primary">
             Cancelar
           </Button>
@@ -357,7 +299,7 @@ export const RegisterForm = ({ changeTab, close }) => {
           >
             Crear Cuenta
           </Button>
-        </Grid>
+        </Stack>
       </Grid>
       <Backdrop open={loading} onClick={() => { }} style={{ zIndex: 1, color: '#fff' }}>
         <>
@@ -383,75 +325,3 @@ export const RegisterForm = ({ changeTab, close }) => {
     </Box>
   )
 };
-/* <TextField
-label="Confirmar Contraseña"
-name="pass"
-value={formData.pass}
-error={error !== ''}
-helperText={error}
-onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
-type={showPassword ? 'text' : 'password'}
-margin="normal"
-fullWidth
-sx={{ mt: 2 }}
-FormHelperTextProps={{
-  sx: {
-    /* Agrega los estilos que desees para el texto del helper text */
-/* Por ejemplo, para agregar un margen izquierdo: */
-//     fontSize: '1rem',
-//     color: theme.palette.primary.light,
-
-//   },
-// }}
-// InputLabelProps={{
-//   sx: labelStyles, // Establece el estilo del label del input
-// }}
-// InputProps={{
-//   sx: inputStyles, // Establece el estilo del input
-//   endAdornment: (
-//     <InputAdornment position="end">
-//       <IconButton
-//         edge="end"
-//         onClick={() => setShowPassword(!showPassword)}
-//         onMouseDown={(event) => event.preventDefault()}
-
-//       >
-
-//         {showPassword ? <VisibilityOff /> : <Visibility />}
-//       </IconButton>
-//     </InputAdornment>
-//   ),
-// }}
-// /> */}
-/* <TextField
-         label="País"
-         name="pais"
-         value={formData.pais}
-         onChange={(e) => setFormData({ ...formData, pais: e.target.value })}
-         fullWidth
-         select
-         margin="normal"
-         helperText="Seleccione País de Origen"
-         InputLabelProps={{
-           sx: labelStyles, // Establece el estilo del label del input
-         }}
-         InputProps={{
-           sx: inputStyles, // Establece el estilo del input
-         }}
-         FormHelperTextProps={{
-           sx: {
-             /* Agrega los estilos que desees para el texto del helper text */
-/* Por ejemplo, para agregar un margen izquierdo: */
-// fontSize: '1rem',
-// color: theme.palette.primary.light,
-/* Agrega otros estilos que desees... */
-// },
-/* }}
->
-
-  {CountryList().getData().map((country) => (
-    <MenuItem key={country.label} value={country.label}>
-      {country.label}
-    </MenuItem>
-  ))}
-</TextField > */

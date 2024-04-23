@@ -10,6 +10,7 @@ import {
     TextField,
     Backdrop,
     CircularProgress,
+    Stack,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../redux/actions/fetchAllBirds'
@@ -71,31 +72,31 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     };
 
-    const actionsStyles = {
-        justifyContent: 'center', // Centrar el botón horizontalmente
-        margin: '0px',
-        marginTop: '10px',
-        gap: '20px',
-        fontWeight: 500,
-        textAlign: 'center',
+    // const actionsStyles = {
+    //     justifyContent: 'center', // Centrar el botón horizontalmente
+    //     margin: '0px',
+    //     marginTop: '10px',
+    //     gap: '20px',
+    //     fontWeight: 500,
+    //     textAlign: 'center',
 
 
-        '& .MuiButton-contained': {
-            fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
-            fontWeight: 'bold', // Hacer el texto negrita
-            textTransform: 'none',
-            '&:hover': {
-                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                textTransform: 'none',
-            },
-        },
-        '& .MuiButton-outlined': {
-            fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
-            fontWeight: 'bold', // Hacer el texto negrita
-            textTransform: 'none',
-        },
-    };
+    //     '& .MuiButton-contained': {
+    //         fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+    //         fontWeight: 'bold', // Hacer el texto negrita
+    //         textTransform: 'none',
+    //         '&:hover': {
+    //             backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+    //             color: theme.palette.primary.light, // Cambia el color del texto en hover
+    //             textTransform: 'none',
+    //         },
+    //     },
+    //     '& .MuiButton-outlined': {
+    //         fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+    //         fontWeight: 'bold', // Hacer el texto negrita
+    //         textTransform: 'none',
+    //     },
+    // };
 
     // const sortAlphabetically = (array) => {
     //     return array.slice().sort((a, b) => {
@@ -195,11 +196,11 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         pages(1);
         setIsFilterOpen(false);
         dispatch(copingFilters());
-      
+
         if (resultLength === 1) {
-          dispatch(isOneBird(true));
+            dispatch(isOneBird(true));
         } else {
-          dispatch(isOneBird(false));
+            dispatch(isOneBird(false));
         }
     };
 
@@ -409,27 +410,27 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         return options.filter((option) => {
                                             const birdName = option.nombre.toLowerCase();
                                             const birdNamesArray = birdName.split(' ');
-    
+
                                             // Check if any of the names (first, second, or third) start with the inputValue
                                             return birdNamesArray.some(
                                                 (name) => name.startsWith(inputValue)
                                             );
                                         });
                                     }
-                                    //     (options, state) => {
-                                    //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                    //     const inputValue = state.inputValue.toLowerCase();
-                                    //     return options.filter((option) => {
-                                    //         const birdName = option.nombre.toLowerCase();
-                                    //         const birdNamesArray = birdName.split(' ');
+                                        //     (options, state) => {
+                                        //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                        //     const inputValue = state.inputValue.toLowerCase();
+                                        //     return options.filter((option) => {
+                                        //         const birdName = option.nombre.toLowerCase();
+                                        //         const birdNamesArray = birdName.split(' ');
 
-                                    //         // Check if any of the names (first, second, or third) start with the inputValue
-                                    //         return birdNamesArray.some(
-                                    //             (name) => name.startsWith(inputValue)
-                                    //         );
-                                    //     });
-                                    // }
-                                }
+                                        //         // Check if any of the names (first, second, or third) start with the inputValue
+                                        //         return birdNamesArray.some(
+                                        //             (name) => name.startsWith(inputValue)
+                                        //         );
+                                        //     });
+                                        // }
+                                    }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Países"
@@ -480,27 +481,27 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             return options.filter((option) => {
                                                 const birdName = option.nombre.toLowerCase();
                                                 const birdNamesArray = birdName.split(' ');
-        
+
                                                 // Check if any of the names (first, second, or third) start with the inputValue
                                                 return birdNamesArray.some(
                                                     (name) => name.startsWith(inputValue)
                                                 );
                                             });
                                         }
-                                    //     (options, state) => {
-                                    //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                    //     const inputValue = state.inputValue.toLowerCase();
-                                    //     return options.filter((option) => {
-                                    //         const birdName = option.nombre.toLowerCase();
-                                    //         const birdNamesArray = birdName.split(' ');
+                                        //     (options, state) => {
+                                        //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                        //     const inputValue = state.inputValue.toLowerCase();
+                                        //     return options.filter((option) => {
+                                        //         const birdName = option.nombre.toLowerCase();
+                                        //         const birdNamesArray = birdName.split(' ');
 
-                                    //         // Check if any of the names (first, second, or third) start with the inputValue
-                                    //         return birdNamesArray.some(
-                                    //             (name) => name.startsWith(inputValue)
-                                    //         );
-                                    //     });
-                                    // }
-                                }
+                                        //         // Check if any of the names (first, second, or third) start with the inputValue
+                                        //         return birdNamesArray.some(
+                                        //             (name) => name.startsWith(inputValue)
+                                        //         );
+                                        //     });
+                                        // }
+                                    }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
@@ -606,30 +607,31 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             return options.filter((option) => {
                                                 const birdName = option.nombre.toLowerCase();
                                                 const birdNamesArray = birdName.split(' ');
-        
+
                                                 // Check if any of the names (first, second, or third) start with the inputValue
                                                 return birdNamesArray.some(
                                                     (name) => name.startsWith(inputValue)
                                                 );
                                             });
                                         }
-                                    //     (options, state) => {
-                                    //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                    //     const inputValue = state.inputValue.toLowerCase();
-                                    //     return options.filter((option) => {
-                                    //         const birdName = option.nombre.toLowerCase();
-                                    //         const birdNamesArray = birdName.split(' ');
+                                        //     (options, state) => {
+                                        //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
+                                        //     const inputValue = state.inputValue.toLowerCase();
+                                        //     return options.filter((option) => {
+                                        //         const birdName = option.nombre.toLowerCase();
+                                        //         const birdNamesArray = birdName.split(' ');
 
-                                    //         // Check if any of the names (first, second, or third) start with the inputValue
-                                    //         return birdNamesArray.some(
-                                    //             (name) => name.startsWith(inputValue)
-                                    //         );
-                                    //     });
-                                    // }
-                                }
+                                        //         // Check if any of the names (first, second, or third) start with the inputValue
+                                        //         return birdNamesArray.some(
+                                        //             (name) => name.startsWith(inputValue)
+                                        //         );
+                                        //     });
+                                        // }
+                                    }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Inglés"
+                                        
                                             InputLabelProps={{
                                                 sx: labelStyles, // Estilo del label
                                             }}
@@ -648,6 +650,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                                     padding: '4px 8px',
                                                     color: 'white', // Color del texto de la etiqueta
                                                     marginRight: '8px', // Espacio entre etiquetas
+                            
                                                 }}
                                             >
                                                 {option.nombre}
@@ -659,7 +662,12 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid container sx={actionsStyles}>
+                        <Stack spacing={3} direction="row" justifyContent="center"
+                            alignItems="center"
+                            sx={{
+                                margin: '20px auto', // Centrar horizontalmente el Stack
+                                width: 'fit-content', // Ajustar el ancho al contenido
+                            }} >
                             <Button variant="contained" color="primary" onClick={handleClickFiltrar}>
                                 Mostrar
                             </Button>
@@ -673,10 +681,10 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 < CloseIcon /> Cerrar
                             </Button>
 
-                        </Grid>
-                    </Grid>
-                </Grid >
-            </Grid>
-        </React.Fragment>
+                    </Stack>
+                </Grid>
+            </Grid >
+        </Grid>
+        </React.Fragment >
     )
 };

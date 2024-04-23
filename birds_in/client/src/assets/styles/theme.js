@@ -43,7 +43,7 @@ const theme = createTheme({
     h5: {
       fontSize: '1.3rem',
       fontWeight: 600,
-      
+
     },
     body1: {
       fontSize: '1.7rem',
@@ -65,7 +65,7 @@ const theme = createTheme({
           backgroundColor: 'rgba(0, 56, 28, 0.1)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
-          padding: '20px',       
+          padding: '20px',
         },
       },
     },
@@ -79,35 +79,92 @@ const theme = createTheme({
         },
       },
     },
- 
-    // MuiButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       // Estilo para el botón cuando no está en hover
-    //       backgroundColor: theme.palette.primary.main,
-    //       color: theme.palette.common.white,
-    //       '&:hover': {
-    //         // Estilo para el botón cuando se hace hover
-    //         backgroundColor: theme.palette.primary.dark,
-    //       },
-    //     },
-    //     contained: {
-    //       // Estilo para el botón variant="contained" cuando no está en hover
-    //       boxShadow: 'none',
-    //       '&:hover': {
-    //         // Estilo para el botón variant="contained" cuando se hace hover
-    //         boxShadow: 'none',
-    //       },
-    //     },
-    //   },
-    // },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          
+          // backgroundColor: 'rgba(204,214,204,0.17)',
+          borderRadius: '9px',
+          height: '50px',
+          '& .MuiInputLabel-root': {
+            color: '#C1C700', // Color del tITULO del label cuando está habilitado
+          },
+          '& .MuiInputBase-input': {
+            padding: '0px',
+            paddingLeft: '10px',
+            height: '50px',
+            // backgroundColor: 'rgba(204,214,204,0.17)',
+            borderRadius: '9px',
+            borderColor: 'none',
+            color: '#ccd6cc',
+          },
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'none',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#C1C700 !important',
+            backgroundColor: 'rgba(0,56,28,0.22)',
+            height: '55px',
+          },
+          '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+            // Agrega los estilos que desees para el Select
+            height: '50px',
+
+          },
+        },
+      },
+      defaultProps: {
+        InputLabelProps: {
+          sx: {
+            color: 'primary.main',
+            marginTop: '-9px',
+
+          },
+        },
+        InputProps: {
+          sx: {
+            color: '#ccd6cc',
+            backgroundColor: 'rgba(204,214,204,0.17)',
+            borderRadius: '9px',
+            height: '50px',
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+
+          margin: '0px',
+          marginTop: '40px',
+          gap: '20px',
+          fontWeight: 500,
+        },
+        contained: {
+          fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+          fontWeight: 'bold', // Hacer el texto negrita
+          textTransform: 'none',
+          '&:hover': {
+            backgroundColor: 'primary.dark', // Cambia el color de fondo en hover
+            color: '#ccd6cc', // Cambia el color del texto en hover
+            textTransform: 'none',
+          },
+        },
+        outlined: {
+          fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+          fontWeight: 'bold', // Hacer el texto negrita
+          textTransform: 'none',
+
+        },
+      },
+    },
   },
-  
+
   global: {
     body: {
       margin: 0, // Establece el margen del cuerpo a 0
       padding: 0,
-    
+
     },
   },
 

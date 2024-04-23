@@ -1,33 +1,11 @@
 import * as React from 'react'
-import { useTheme } from '@emotion/react';
 import { About } from './About';
 import { Covers } from './Covers';
-import styled from '@emotion/styled';
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { General } from './General';
 import { CoverLogin } from './CoverLogin';
+import { StyledTab, StyledTabs } from '../../../assets/styles/MUIstyles'
 
-const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-    backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
-    borderRadius: '10px 10px 0px 0px',
-    marginTop: '0px',
-    marginRight: '10%',
-    marginLeft: '10%',
-    color: theme.palette.primary.main, 
-    '& .Mui-selected': {
-        backgroundColor: theme.palette.secondary.light,
-        
-    },
-}));
-const StyledTab = styled(Tab)({
-    minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
-    textTransform: 'none',
-    color: '#ccd6cc',
-    '&.Mui-selected .MuiTypography-root': {
-        color: '#C1C700',
-      },
-});
 
 export const IndexCustome = () => {
     const [selectedTab, setSelectedTab] = React.useState(0);
