@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Card, CardActionArea, Typography } from '@mui/material'
-import { CarruselGallery } from '../Galeries/CarruselGallery';
+import { CarruselGallery } from '../Galeries/Aves/CarruselGallery';
 
 export const ImagesCards = ({ foto, name, arrayImages }) => {
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fetchInfo, isOneBird, loadMoreDataSuccess, returnFilters, saveCounting, setNoMoreResults, stringParameter } from '../slices/BirdsSlice'
+import { fetchInfo, howMuch, isOneBird, loadMoreDataSuccess, returnFilters, saveCounting, setNoMoreResults, stringParameter } from '../slices/BirdsSlice'
 import { createParams } from '../../components/utils/convertId';
 
 
@@ -39,9 +39,11 @@ export const sendParameter = (selectedOptions) => {
       const response = await axios.get(`/aves/filtros?${queryParams}`);
       const data = response.data.avesFiltradas;
       const result = response.data.isLastPage
+      const total = response.data.totalResultsClausula
       dispatch(stringParameter(queryParams))
       dispatch(returnFilters(data))
       dispatch(setNoMoreResults(result));
+      dispatch(howMuch(total));
       return data.length;
 
     } catch (error) {

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
-import { CarruselGallery } from '../Galeries/CarruselGallery';
 import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { sendParameter } from '../../redux/actions/fetchAllBirds';

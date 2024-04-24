@@ -107,7 +107,7 @@ const fetchFilterBirds = async (
         // const isLastPage = offset + totalResultsClausula >= totalResults;
         const totalPages = Math.ceil(totalResultsClausula / perPageConvert); // Calcular el total de páginas
         const isLastPage = totalResults <= 8 || pageConvert >= totalPages; // Verificar si estás en la última página
-        return { avesFiltradas, isLastPage };
+        return { avesFiltradas, totalResultsClausula, isLastPage };
     } catch (error) {
         console.error('Ocurrió un error al realizar la consulta:', error);
         throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
