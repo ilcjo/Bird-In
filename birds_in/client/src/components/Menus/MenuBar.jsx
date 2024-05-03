@@ -128,7 +128,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                                 marginBottom: '10px',
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
-                                color: theme.palette.primary.mdark
+                                color: theme.palette.primary.dark
                             }}
                             variant="outline"
                             onClick={returnMenuClick}

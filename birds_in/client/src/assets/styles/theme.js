@@ -2,8 +2,6 @@ import { alpha, createTheme } from '@mui/material/styles';
 import '@fontsource/crimson-pro';
 import '@fontsource/arsenal';
 
-
-
 const theme = createTheme({
 
   palette: {
@@ -20,8 +18,8 @@ const theme = createTheme({
       contrastText: '#000',
     },
     custome: {
-      light: '#ccd6cc', 
-      main: '#004E37', 
+      light: '#ccd6cc',
+      main: '#004E37',
       dark: '#A3A3A3',
       contrastText: '#ccd6cc',
     },
@@ -51,12 +49,14 @@ const theme = createTheme({
       fontWeight: 600,
 
     },
+
     body1: {
       fontSize: '1.7rem',
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
+    
     body2: {
       fontSize: '1 .5rem',
       fontWeight: 200,
@@ -88,7 +88,7 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          
+
           // backgroundColor: 'rgba(204,214,204,0.17)',
           borderRadius: '9px',
           height: '60px',
@@ -149,7 +149,7 @@ const theme = createTheme({
           fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
-          borderRadius:'50px',
+          borderRadius: '50px',
           '&:hover': {
             backgroundColor: 'primary.dark', // Cambia el color de fondo en hover
             color: '#ccd6cc', // Cambia el color del texto en hover
@@ -160,7 +160,7 @@ const theme = createTheme({
           fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
-          borderRadius:'50px',
+          borderRadius: '50px',
         },
       },
     },
@@ -177,10 +177,10 @@ const theme = createTheme({
 
   global: {
     body: {
-      
+
       margin: 0, // Establece el margen del cuerpo a 0
       padding: 0,
-      
+
 
     },
   },
