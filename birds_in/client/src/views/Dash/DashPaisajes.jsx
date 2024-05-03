@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { Grid, useTheme } from '@mui/material';
-import { IndexD } from '../../components/Dashboard/Aves/IndexD'
 import { useDispatch, useSelector } from 'react-redux';
 import { MenuBar } from '../../components/Menus/MenuBar';
 import { getUsers } from '../../redux/actions/userLoginRegister';
+import { IndexDP } from '../../components/Dashboard/Paisajes/IndexDP';
 
-export const Dashboard = () => {
+export const DashPaisajes = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const { allCustom } = useSelector((state) => state.customizesSlice);
@@ -32,8 +32,7 @@ export const Dashboard = () => {
 
         }}
       >
-        <IndexD />
-
+        <IndexDP />
       </Grid>
 
     </React.Fragment>

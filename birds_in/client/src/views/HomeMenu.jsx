@@ -9,38 +9,34 @@ const sections = [
   {
     id: 'aves',
     title: 'Aves',
-    description: 'Galería de aves',
+    description: 'Fotografías de aves',
   },
   {
     id: 'animales',
     title: 'Animales',
-    description: 'Galería de animales',
+    description: 'Fotografías de animales',
   },
   {
     id: 'peces',
     title: 'Peces',
-    description: 'Galería de peces',
-  },
-  {
-    id: 'flores',
-    title: 'Flora',
-    description: 'Galería de flora',
+    description: 'Fotografías de peces',
   },
   {
     id: 'paisajes',
     title: 'Paisajes',
-    description: 'Galería de paisajes',
+    description: 'Fotografías de paisajes',
+  },
+  {
+    id: 'flores',
+    title: 'Flores',
+    description: 'Fotografías de Flores',
   },
   {
     id: 'SobreMi',
     title: 'Sobre Mi',
     description: 'Leer sobre mi',
   },
-  {
-    id: 'panelAdministrador',
-    title: 'Admin',
-    description: 'Dashboard ',
-  },
+
 ];
 
 export const HomeMenu = () => {
@@ -54,6 +50,34 @@ export const HomeMenu = () => {
     setSelectedSection(sectionId); // Al hacer clic en una sección, guarda la sección en el estado
     localStorage.setItem('panel', sectionId); // Guarda la sección seleccionada en el localStorage
   };
+
+  const renderPanelButton = (sectionId) => {
+    if (isAdmin && sectionId !== 'SobreMi') {
+      return (
+        <Button
+          variant="outlined"
+          color="primary"
+          //   sx={{
+          //     fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold',  textTransform: 'none',
+          //     backgroundColor: theme.palette.primary.dark, mt: 0,
+          //     color: theme.palette.primary.light,
+          //     // marginTop: '10px',
+          //     '&:hover': {
+          //         backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
+          //         color: theme.palette.primary.light, // Cambia el color del texto en hover
+          //         textTransform: 'none',
+          //     },
+          // }}
+          component={RouterLink}
+          to={`/panel${sectionId}`}
+        >
+          Editar
+        </Button>
+      );
+    }
+    return null;
+  };
+
   // Accede a las propiedades específicas de allCustom para obtener las URL de las imágenes
   const images = {
     aves: allCustom.cover_birds,
@@ -67,97 +91,65 @@ export const HomeMenu = () => {
 
   return (
     <div>
-      <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
-      <Grid container spacing={1} sx={{ justifyContent: 'center', alignItems: 'center', }}>
+      <Grid container spacing={0.5} sx={{ height: '100vh', justifyContent: 'center', alignItems: 'stretch', backgroundColor: '#86ac8e' }}>
         {sections.map((section, index) => (
-          // Verifica si no es el elemento "Admin" o si el usuario es un administrador
           (isAdmin || section.id !== 'panelAdministrador') && (
-            <Grid item xs={12} sm={6} md={1.6} key={section.id} sx={{ margin: '5px', mt: 0 }}>
-              <div style={{ position: 'relative', overflow: 'hidden' }}>
-                <Link
-                  component={RouterLink}
-                  to={`/${section.id}`}
-                  style={{ textDecoration: 'none' }}
+            <Grid item xs={12} sm={6} md={2} key={section.id} sx={{ margin: '0px', mt: 0 }}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  width: '100%',
+                  height: '99%',
+                  // mt: 1
+                }}
+              >
+                <img
+                  src={images[section.id]}
+                  alt={section.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: '0px  0px 100px 100px'
+                  }}
                   onClick={() => handleSectionClick(section.id)}
-                >
-                  <img
-                    src={images[section.id]} // Usa la URL de la imagen específica de allCustom
-                    alt={section.title}
-                    style={{
-                      width: '100%',
-                      height: '580px',
-                      objectFit: 'cover',
-                      borderRadius: "0 0 100px 100px",
-                    }}
-                  />
-                  <Box
-                    position="absolute"
-                    bottom="0"
-                    left="0"
-                    width='100%'
-                    height='200px'
-                    bgcolor='rgba(0, 61, 21, 0.3)'
-                    color="#fff"
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    textAlign="left"
-                    padding="10px"
-                    borderRadius="0 0 100px 100px"
-                    marginBottom="4px"
-                    sx={{
-                      '& .MuiButton-contained': {
-                        fontSize: '1.3rem',
-                        fontWeight: 'bold',
-                        textTransform: 'none',
-                        marginTop: '15px',
-                        borderRadius: '300px',
-                        '&:hover': {
-                          backgroundColor: theme.palette.primary.light,
-                          color: theme.palette.primary.dark,
-                          textTransform: 'none',
-                        }
-                      },
-                      '& .MuiButton-outlined': {
-                        fontSize: '1.3rem',
-                        fontWeight: 'bold',
-                        textTransform: 'none',
-                      }
-                    }}
-                  >
-                    <Typography variant="h1" color="primary.main" sx={{
-                      fontSize: { xs: '2.5rem', sm: '2rem', md: '2rem', lg: '2.5rem', xl: '2.6rem' },
-                      marginBottom: '5px',
-                      textAlign: 'center'
-                    }}>
-                      {section.title}
-                    </Typography>
-                    <Typography variant="h5" color="primary.light"
-                      sx={{
-                        fontSize: { xs: '1.3rem', sm: '1.3rem', md: '1.2rem', lg: '1.3rem', xl: '1.4rem' },
-                        marginBottom: { xs: '5px', sm: '5px', md: '0px', lg: '5px', xl: '5px' },
-                        textAlign: 'center'
-                      }}>
-                      {section.description}
-                    </Typography>
-                    <Button
+                />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
+                    color: '#fff',
+                    // padding: '10px',
+                    borderRadius: ' 0px 0px 100px 100px',
 
+                  }}
+                >
+                  <Typography variant="h1" color="primary.main" sx={{ marginBottom: '6px', textAlign: 'center', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)', }}>
+                    {section.title}
+                  </Typography>
+                  <Typography variant="h4" color="primary.light" sx={{ textAlign: 'center' }}>
+                    {section.description}
+                  </Typography>
+                  <Box mt={2} sx={{ display: 'flex', justifyContent: 'center', mb: 7 }}>
+                    <Button
                       variant="contained"
                       color="primary"
                       component={RouterLink}
                       to={`/${section.id}`}
+                      sx={{ marginRight: '10px' }}
                     >
-                      {section.id === 'SobreMi'
-                        ? 'Leer' // Cambia el texto para el panel "Sobre Mi"
-                        : section.id === 'panelAdministrador' && isAdmin
-                          ? 'Ir al panel' // Cambia el texto para el panel de administrador cuando el usuario es un administrador
-                          : 'Ir galería' // Texto predeterminado para otros paneles
-                      }
+                      {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
                     </Button>
+                    {(section.id !== 'SobreMi' && section.id !== 'panelAdministrador') && (
+                      renderPanelButton(section.id)
+                    )}
                   </Box>
-                </Link>
-              </div>
+                </Box>
+              </Box>
             </Grid>
           )
         ))}

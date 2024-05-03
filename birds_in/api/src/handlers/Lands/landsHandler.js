@@ -14,29 +14,35 @@ const {
    findDataByName,
    findNameDuplicate,
 } = require("../../controllers/birds/birdsController");
+const { 
+   findNameDuplicateP, 
+   sendAndCreateLand, 
+   findDataByNameP,
+   findDataByIdP,
+   fetchFilterLands
+} = require('../../controllers/Lands/landsController');
 const ftp = require('basic-ftp');
 const {
-   FTP_HOST,
-   FTP_USER,
-   FTP_PASS,
+   FTP_HOST_2,
+   FTP_USER_2,
+   FTP_PASS_2,
 } = process.env
 
 const deletePhotoFromFTP = require('../../utils/deletFtp');
 
-const getFilterInfo = async (req, res) => {
-
-   const { familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage } = req.query;
+const getFilterInfoP = async (req, res) => {
+   const { descripcion, pais, zonas, page, perPage } = req.query;
    try {
-      const allData = await fetchFilterBirds(familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage)
+      const allData = await fetchFilterLands( descripcion, pais, zonas, page, perPage)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
       res.json(allData);
-
    } catch (error) {
       console.error(error);
       res.status(500).send('Error en el servidor');
    }
+
 };
 
 const selectOptions = async (req, res) => {
@@ -81,33 +87,20 @@ const getFilterOptions = async (req, res,) => {
    }
 };
 
-const createBird = async (req, res) => {
+const createLand = async (req, res) => {
 
    const {
-      grupo,
-      familia,
       pais,
       zona,
-      cientifico,
-      ingles,
-      comun,
-      urlWiki,
-      urlBird,
+      descripcion,
       urlImagen
-
    } = req.body;
    try {
 
-      const succesCreate = await sendAndCreateBird(
-         grupo,
-         familia,
+      const succesCreate = await sendAndCreateLand(
          pais,
          zona,
-         cientifico,
-         ingles,
-         comun,
-         urlWiki,
-         urlBird,
+         descripcion,
          urlImagen)
       return res.status(200).json(succesCreate)
 
@@ -116,16 +109,16 @@ const createBird = async (req, res) => {
    }
 };
 
-const uploadImageftp = async (req, res) => {
+const uploadImageftpPaisajes = async (req, res) => {
    try {
       // Verifica la conexión FTP antes de continuar
       const client = new ftp.Client();
-      const remotePath = '/';
+      const remotePath = '/paisajes';
       client.ftp.timeout = 1000000;
       await client.access({
-         host: FTP_HOST,
-         user: FTP_USER,
-         password: FTP_PASS,
+         host: FTP_HOST_2,
+         user: FTP_USER_2,
+         password: FTP_PASS_2,
          secure: false,
       });
 
@@ -142,7 +135,7 @@ const uploadImageftp = async (req, res) => {
          await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
 
          // Obtén la URL completa de la imagen
-         const imageUrl = `https://lasavesquepasaronpormisojos.com/imagenes/${remoteFileName}`;
+         const imageUrl = `https://lasavesquepasaronpormisojos.com/paisajes/${remoteFileName}`;
          // Agrega la URL al array de imageUrls
          imageUrls.push(imageUrl);
 
@@ -167,29 +160,29 @@ const uploadImageftp = async (req, res) => {
    }
 };
 
-const findInfoForUpdate = async (req, res) => {
+const findInfoForUpdateP = async (req, res) => {
    const { id } = req.query;
    try {
       if (!id) {
-         return res.status(400).json({ error: 'ID de ave no proporcionado' });
+         return res.status(400).json({ error: 'ID de Registro no proporcionado' });
       }
-      const formDataUpdate = await findDataById(id);
+      const formDataUpdate = await findDataByIdP(id);
       if (!formDataUpdate) {
-         return res.status(404).json({ error: 'Ave no encontrada' });
+         return res.status(404).json({ error: 'Registro no encontrada' });
       }
       return res.status(200).json(formDataUpdate);
    } catch (error) {
-      res.status(500).json({ error: 'Error actualizando ave' });
+      res.status(500).json({ error: 'Error al Recuperar Registro' });
    }
 };
 
-const findInfoForUpdateName = async (req, res) => {
+const findInfoForUpdateNameP = async (req, res) => {
    const { name } = req.query;
    try {
       if (!name) {
-         return res.status(400).json({ error: 'ID de ave no proporcionado' });
+         return res.status(400).json({ error: 'Nombre no proporcionado' });
       }
-      const formDataUpdate = await findDataByName(name);
+      const formDataUpdate = await findDataByNameP(name);
       if (!formDataUpdate) {
          return res.status(404).json({ error: 'Ave no encontrada' });
       }
@@ -287,10 +280,10 @@ const deleteBird = async (req, res) => {
    }
 };
 
-const checkBirdDuplicate = async (req, res) => {
+const checkLandsDuplicate = async (req, res) => {
    const { name } = req.query
    try {
-      const message = await findNameDuplicate(name)
+      const message = await findNameDuplicateP(name)
       return res.status(200).json(message);
    } catch (error) {
       res.status(500).json({ error: error.message });
@@ -298,18 +291,18 @@ const checkBirdDuplicate = async (req, res) => {
 };
 
 module.exports = {
-   getFilterInfo,
+   getFilterInfoP,
    selectOptions,
    getFilterOptions,
-   createBird,
-   uploadImageftp,
-   findInfoForUpdate,
+   createLand,
+   uploadImageftpPaisajes,
+   findInfoForUpdateP,
    updateInfoBids,
    deletePhotos,
    setCoverPhoto,
    contandoRegistros,
    deleteBird,
-   findInfoForUpdateName,
-   checkBirdDuplicate
+   findInfoForUpdateNameP,
+   checkLandsDuplicate
 }
 

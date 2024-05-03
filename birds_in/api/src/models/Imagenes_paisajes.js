@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             autoIncrement: true
         },
-        url: {
+        url_paisaje: {
             type: DataTypes.TEXT,
             allowNull: false
         },

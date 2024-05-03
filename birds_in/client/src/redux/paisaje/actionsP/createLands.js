@@ -1,15 +1,16 @@
 import axios from "axios";
-import { getAve, saveUrlImage } from "../slices/createSlice";
+import { getAve, saveUrlImage } from "../../slices/createSlice";
+import { getLand, saveUrlImageLand } from "../slicesP/createLandSlice";
 
-export const saveImageFtp = (formData) => {
+export const saveImageFtpLand = (formData) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post('aves/upload_image', formData, {
+      const response = await axios.post('paisajes/upload_image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
         },
       });
-      dispatch(saveUrlImage(response.data.imageUrl))
+      dispatch(saveUrlImageLand(response.data.imageUrl))
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:', response.data);
       return response;
@@ -17,13 +18,14 @@ export const saveImageFtp = (formData) => {
       // Maneja los errores de la solicitud
       console.error('Error al enviar la imagen:', error);
     }
-  };
+  }
 };
 
-export const createBird = (formData) => {
+
+export const createLand = (formData) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post('aves/create', formData)
+      const response = await axios.post('paisajes/create', formData)
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:', response.data);
     } catch (error) {
@@ -31,7 +33,7 @@ export const createBird = (formData) => {
       console.error('Error al enviar la info:', error);
       throw error;
     }
-  };
+  }
 };
 
 export const UpdateAveImage = (formData) => {
@@ -49,7 +51,7 @@ export const UpdateAveImage = (formData) => {
       // Maneja los errores de la solicitud
       console.error('Error al enviar la imagen:', error);
     }
-  };
+  }
 };
 
 export const UpdateAveDestacada = (formData) => {
@@ -67,7 +69,7 @@ export const UpdateAveDestacada = (formData) => {
       // Maneja los errores de la solicitud
       console.error('Error al enviar la imagen:', error);
     }
-  };
+  }
 };
 
 export const actualizarAve = (info) => {
@@ -81,51 +83,56 @@ export const actualizarAve = (info) => {
       // Maneja los errores de la solicitud
       console.error('Error al actualizar:', error);
     }
-  };
+  }
 };
 
-export const getInfoForUpdate = (id) => {
+
+export const getInfoForUpdateP = (id) => {
+
   return async (dispatch) => {
     try {
-      const response = await axios(`aves/get_update?id=${id}`)
+      const response = await axios(`paisajes/get_update?id=${id}`)
       const ave = response.data
-      dispatch(getAve(ave))
+      dispatch(getLand(ave))
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:');
     } catch (error) {
       // Maneja los errores de la solicitud
       console.error('Error al enviar datos:', error);
     }
-  };
+  }
 };
 
-export const getInfoForUpdateName = (name) => {
+export const getInfoForUpdateNameP = (name) => {
+
   return async (dispatch) => {
     try {
-      const response = await axios(`aves/get_update_name?name=${name}`)
+      const response = await axios(`paisajes/get_update_name?name=${name}`)
       const ave = response.data
-      dispatch(getAve(ave))
+      dispatch(getLand(ave))
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:');
     } catch (error) {
       // Maneja los errores de la solicitud
       console.error('Error al enviar datos:', error);
     }
-  };
+  }
 };
 
-export const duplicateNameCheck = (name) => {
+export const duplicateNameCheckP = (name) => {
+
   return async (dispatch) => {
     try {
-      const response = await axios(`aves/duplicados?name=${name}`)
+      const response = await axios(`paisajes/duplicados?name=${name}`)
       const ave = response.data
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
+      console.log(ave)
     } catch (error) {
       // Maneja los errores de la solicitud
       console.error('Error al enviar datos:', error);
       throw error
     }
-  };
+  }
 };
 
 

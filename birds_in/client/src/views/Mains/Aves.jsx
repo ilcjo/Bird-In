@@ -14,16 +14,15 @@ export const Aves = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const birds = useSelector(state => state.birdSlice.infoBirds)
-  const landscapes = useSelector(state => state.landscapeSlice.landscapes)
-  
+  const dataToMap = useSelector(state => state.birdSlice.infoBirds)
+
   const parameter = useSelector(state => state.birdSlice.filters)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const noMoreResults = useSelector((state) => state.birdSlice.noMoreResults);
   const [page, setPage] = React.useState(1);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const panel = localStorage.getItem('panel')
-  
+
   const handleChangePage = () => {
     const newPage = page + 1;
     setPage(newPage);
@@ -40,23 +39,23 @@ export const Aves = () => {
     dispatch(resetInfoBird());
   }, []);
 
-  let dataToMap = [];
-  switch (panel) {
-    case 'aves':
-      dataToMap = birds;
-      break;
-    case 'paisajes':
-      dataToMap = landscapes;
-      break;
-    case 'peces':
-      dataToMap = fishes;
-      break;
-    case 'flora':
-      dataToMap = flora;
-      break;
-    default:
-      dataToMap = [];
-  }
+  // let dataToMap = [];
+  // switch (panel) {
+  //   case 'aves':
+  //     dataToMap = birds;
+  //     break;
+  //   case 'paisajes':
+  //     dataToMap = landscapes;
+  //     break;
+  //   case 'peces':
+  //     dataToMap = fishes;
+  //     break;
+  //   case 'flora':
+  //     dataToMap = flora;
+  //     break;
+  //   default:
+  //     dataToMap = [];
+  // }
 
   return (
     <React.Fragment>
@@ -66,7 +65,7 @@ export const Aves = () => {
         direction="column"
         alignItems="center"
         sx={{
-          background: birds.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
+          background: dataToMap.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
@@ -94,7 +93,7 @@ export const Aves = () => {
             ))}
           </Grid>
         )} */}
-        {birds.length > 1 && (
+        {dataToMap.length > 1 && (
           <Grid item container spacing={3} justifyContent="center">
             <Button
               sx={{
@@ -120,7 +119,7 @@ export const Aves = () => {
           </Grid>
         )}
         {dataToMap.length === 1 && (
-          <PhotosDetail bird={birds[0]} setIsFilterOpen={setFilterDialogOpen} />
+          <PhotosDetail bird={dataToMap[0]} setIsFilterOpen={setFilterDialogOpen} />
         )}
         <Grid item>
           {!noMoreResults && (

@@ -5,16 +5,20 @@ import Auth from './slices/Auth';
 import Birds from './slices/BirdsSlice';
 import Create from './slices/createSlice';
 import customes from './slices/customeSlice'
-import landscape from './slices/LandscapeSlice';
+import landscapeSlice from './paisaje/slicesP/LandscapeSlice';
+import createLand from './paisaje/slicesP/createLandSlice';
 
 const store = configureStore({
   reducer: {
+    //Aves
     openCloseSlice: OpenClose,
     authSlice: Auth,
     birdSlice: Birds,
     createBird: Create,
     customizesSlice: customes,
-    landscapeSlice: landscape
+    //Paisaje
+    landscapeSlice: landscapeSlice,
+    createLand: createLand
   },
 });
 

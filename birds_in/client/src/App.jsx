@@ -1,7 +1,4 @@
-import { useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { clearToken } from './redux/slices/Auth'
+import { Routes, Route } from 'react-router-dom'
 import { PassRecover } from './views/PassRecover'
 import { HomeMenu } from './views/HomeMenu'
 import { Aves } from './views/Mains/Aves'
@@ -11,55 +8,87 @@ import { LandsCapes } from './views/Mains/LandsCapes'
 import { Peces } from './views/Mains/Peces'
 import { CarruselGallery } from './components/Galeries/Aves/CarruselGallery'
 import { SobreMi } from './views/Mains/SobreMi'
-import { Dashboard } from './views/Mains/Dashboard'
+
 import { PhotosDetail } from './components/Mains/Aves/PhotosDetail'
 import { Landing } from './views/Landing'
 import { Index } from './components/SingUpTabs/Index'
+import { DashAves } from './views/Dash/DashAves'
+import { DashPaisajes } from './views/Dash/DashPaisajes'
+import { ProtectedRoute } from './ProtectedRoute'
+import { MenuBar } from './components/Menus/MenuBar'
 
 function App() {
-
-  const token = localStorage.getItem('token');
-  const navigate = useNavigate();
-  const dispatch = useDispatch()
-  // const [firstLoad, setFirstLoad] = useState(true);
-  const { isAuthenticated } = useSelector(state => state.authSlice)
-
-  useEffect(() => {
-    if (token) {
-      if (!isAuthenticated) {
-        localStorage.clear();
-        dispatch(clearToken())
-        navigate('/')
-      }
-
-      // setFirstLoad(false);
-    }
-  }, [token, isAuthenticated, navigate]);
-
   return (
     <Routes>
-      {token && (
-        <>
-          <Route path='/menu' element={<HomeMenu />} />
-          <Route path='/aves' element={<Aves />} />
-          <Route path='/animales' element={<Animals />} />
-          <Route path='/flores' element={<Flowers />} />
-          <Route path='/paisajes' element={<LandsCapes />} />
-          <Route path='/peces' element={<Peces />} />
-          <Route path='/galeria' element={<CarruselGallery />} />
-          <Route path='/sobremi' element={<SobreMi />} />
-          <Route path='/panelAdministrador' element={<Dashboard />} />
-          <Route path='/detalle' element={<PhotosDetail />} />
-          <Route path='/' element={<Landing />} />
-        </>
-      )}
-      {!token && (
-        <>
-          <Route path='/' element={<Landing />} />
-          <Route path='/tab' element={<Index />} />
-          <Route path='/Recuperar' element={<PassRecover />} />
-        </>
-      )}
+      <Route path="/" element={<Landing />} />
+      <Route path="/tab" element={<Index />} />
+      <Route path="/Recuperar" element={<PassRecover />} />
+      <Route path="/menu"
+        element={
+          <ProtectedRoute roles={['user', 'admin']} >
+            <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
+            <HomeMenu />
+          </ProtectedRoute>
+        } />
+      <Route path="/sobremi"
+        element={
+          <ProtectedRoute roles={['user', 'admin']}>
+            <SobreMi />
+          </ProtectedRoute>
+        } />
+      <Route
+        path="/detalle"
+        element={<ProtectedRoute roles={['user', 'admin']}>
+          <PhotosDetail />
+        </ProtectedRoute>
+        } />
+      <Route path="/galeria"
+        element={
+          <ProtectedRoute roles={['user', 'admin']} >
+            <CarruselGallery />
+          </ProtectedRoute>
+        } />
+      <Route path="/aves"
+        element={
+          <ProtectedRoute roles={['user', 'admin']}>
+            <Aves />
+          </ProtectedRoute>
+        } />
+      <Route path="/animales"
+        element={
+          <ProtectedRoute roles={['user', 'admin']}>
+            <Animals />
+          </ProtectedRoute>
+        } />
+      <Route path="/flores"
+        element={
+          <ProtectedRoute roles={['user', 'admin']}>
+            <Flowers />
+          </ProtectedRoute>
+        } />
+      <Route path="/paisajes"
+        element={<ProtectedRoute roles={['user', 'admin']}>
+          <LandsCapes />
+        </ProtectedRoute>
+        } />
+      <Route path="/peces" element={
+        <ProtectedRoute roles={['user', 'admin']} >
+          <Peces />
+        </ProtectedRoute>
+      } />
+
+
+      <Route path="/panelaves" // DASHBOARDS
+        element={
+          <ProtectedRoute roles={['admin']} >
+            <DashAves />
+          </ProtectedRoute>
+        } />
+      <Route path="/panelpaisajes"
+        element={<ProtectedRoute roles={['admin']} >
+          <DashPaisajes />
+        </ProtectedRoute>
+        } />
     </Routes>
   );
 }

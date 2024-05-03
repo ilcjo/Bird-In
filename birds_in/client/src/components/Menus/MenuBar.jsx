@@ -11,6 +11,7 @@ import { clearToken } from '../../redux/slices/Auth';
 import { getOptionsData } from '../../redux/actions/fetchOptions';
 import HomeIcon from '@mui/icons-material/Home';
 import { isOneBird } from '../../redux/slices/BirdsSlice';
+import { Link } from 'react-router-dom';
 
 export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton, showAdmin }) => {
     const dispatch = useDispatch()
@@ -32,7 +33,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             dispatch(getInfoBirds());
         }
     };
- 
+
     const handleFilterButtonClick = () => {
         // Cambiar el estado del filtro al hacer clic en el botón del filtro
         setIsFilterOpen(!isFilterOpen);
@@ -44,7 +45,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
         navigate('/')
         dispatch(clearToken())
         dispatch(getOptionsData())
-      
+
     };
 
     const returnMenuClick = () => {
@@ -68,19 +69,26 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 container
                 component={Box}
                 sx={{
+                    position: 'fixed', // Establece la posición fija
+                    top: 0, // Lo coloca en la parte superior de la pantalla
+                    left: 0, // Lo coloca en la parte izquierda de la pantalla
+                    width: '100%', // Ocupa todo el ancho de la pantalla
+                    zIndex: 999, // Asegura que esté por encima del contenido
+                    // backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                    // backdropFilter: 'blur(1px)',
+                    // WebkitBackdropFilter: 'blur(10px)',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '0 20px',
                     height: '10vh',
-                    position: 'relative',
-                    backgroundColor: theme.palette.primary.dark, // Fondo semitransparente para mejorar la legibilidad
-                    justifyContent: 'space-between', // Alinea los elementos a lo largo del eje principal (horizontal) distribuyendo el espacio sobrante entre ellos
-                    alignItems: 'center', // Alinea los elementos al centro verticalmente
-                    padding: '0 20px', // Agrega algún relleno para mejorar la apariencia
-                    zIndex: 10,
                 }}
             >
                 {/* Logo en la esquina izquierda */}
-
-                <img src={allCustom.logo} alt="Logo" style={{ width: 'auto', height: '100%', marginBottom: '50px' }} loading="lazy" />
-
+                <Link to="/menu" style={{ width: 'auto', height: '110%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}>
+                    <img src={allCustom.logo} alt="Logo"
+                        style={{ width: 'auto', height: '120%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}
+                        loading="lazy" />
+                </Link>
                 <Grid item sx={{ mb: 4 }}>
                     {ShowFilterButton && (
                         <Button
@@ -88,9 +96,9 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                                 marginBottom: '10px',
                                 fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
                                 fontWeight: 'bold',
-                                color: theme.palette.primary.light,
+                                color: theme.palette.primary.dark,
                             }}
-                            variant="outline"
+                            variant="outlined"
                             color="primary"
                             onClick={handleFilterButtonClick}
                             startIcon={<FilterAltIcon />}
@@ -120,7 +128,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                                 marginBottom: '10px',
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
-                                color: theme.palette.primary.main,
+                                color: theme.palette.primary.mdark
                             }}
                             variant="outline"
                             onClick={returnMenuClick}
@@ -129,7 +137,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             Menu Principal
                         </Button>
                     )}
-                    
+
                     {/* {showAdmin && isAdmin && (
 
                         <Button
@@ -152,7 +160,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             marginBottom: '10px',
                             fontSize: '1rem',
                             fontWeight: 'bold',
-                            color: theme.palette.primary.main,
+                            color: theme.palette.primary.dark,
                         }}
                         color="primary"
                         variant="outline"

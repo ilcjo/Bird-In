@@ -11,7 +11,7 @@ import axios from 'axios';
 import { getOptionsData } from './redux/actions/fetchOptions';
 import { saveOptions } from './redux/slices/BirdsSlice';
 import { getAllCustomizes } from './redux/actions/Custome';
-
+import './index.css'
 
 // Configurar la URL base de Axios
 const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';

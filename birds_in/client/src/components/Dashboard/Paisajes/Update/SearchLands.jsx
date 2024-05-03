@@ -10,54 +10,54 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
 import { IndexTabsUpdates } from './IndexTabsUpdates';
+import { getInfoForUpdateP } from '../../../../redux/paisaje/actionsP/createLands';
 
 
-export const SearchBird = ({ changeTab }) => {
+export const SearchLands = ({ changeTab }) => {
     const theme = useTheme();
     const dispatch = useDispatch()
     const [showBackdrop, setShowBackdrop] = React.useState(true);
-    const [selectedBird, setSelectedBird] = React.useState(null);
-    const [birdsData, setBirdsData] = React.useState([]);
-    const [showUpdateBird, setShowUpdateBird] = React.useState(false);
-    const [showSearchBird, setShowSearchBird] = React.useState(true);
+    const [selectedRegister, setSelectedRegister] = React.useState(null);
+    const [registerData, setRegisterData] = React.useState([]);
+    const [showUpdateRegister, setShowUpdateRegister] = React.useState(false);
+    const [showSearchRegister, setShowSearchRegister] = React.useState(true);
 
-    const handleBirdSelect = (bird) => {
-        setSelectedBird(bird);
+    const handleRegisterSelect = (bird) => {
+        setSelectedRegister(bird);
         handleButtonClick();
     };
 
     const handleButtonClick = () => {
-        if (selectedBird) {
+        if (selectedRegister) {
             // Envía la información al action
-            dispatch(getInfoForUpdate(selectedBird.id_ave));
+            dispatch(getInfoForUpdateP(selectedRegister.id));
             // Cambia a la pestaña deseada
             // changeTab(2);
-            setShowUpdateBird(true);
-            setShowSearchBird(false);
+            setShowUpdateRegister(true);
+            setShowSearchRegister(false);
         }
     };
     React.useEffect(() => {
-        if (selectedBird) {
+        if (selectedRegister) {
             handleButtonClick();
         }
-    }, [selectedBird]);
+    }, [selectedRegister]);
 
 
     React.useEffect(() => {
         const fetchData = async () => {
             try {
                 setShowBackdrop(true)
-                const response = await axios.get('/aves/filtros?page=0&perPage=0');
-                const data = response.data.avesFiltradas;
-                const validData = data.filter((item) => item.nombre_ingles);
+                const response = await axios.get('/paisajes/filtros?page=0&perPage=0');
+                const data = response.data.RegistrosFiltrados;
+                const validData = data.filter((item) => item.descripcion);
 
-                // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
-                validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
+                // Ordenar los datos válidos por
+                validData.sort((a, b) => a.descripcion.localeCompare(b.descripcion));
 
-                localStorage.setItem('birdsData', JSON.stringify(validData));
-                setBirdsData(validData);
+                localStorage.setItem('LandsData', JSON.stringify(validData));
+                setRegisterData(validData);
 
             } catch (error) {
                 console.error("Error al obtener los datos:", error);
@@ -68,7 +68,7 @@ export const SearchBird = ({ changeTab }) => {
         };
 
         fetchData();
-    }, [showUpdateBird]);
+    }, [showUpdateRegister]);
 
     const labelStyles = {
         color: theme.palette.primary.main, // Color del texto del label
@@ -105,7 +105,7 @@ export const SearchBird = ({ changeTab }) => {
 
     return (
         <React.Fragment>
-            {showSearchBird && (
+            {showSearchRegister && (
                 <React.Fragment>
                     <Backdrop
                         open={showBackdrop}
@@ -129,14 +129,14 @@ export const SearchBird = ({ changeTab }) => {
                     }} >
                         <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
                             <Typography variant="h2" color="primary">
-                                Buscar Ave
+                                Buscar Paisaje
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={8}>
                             <Autocomplete
-                                id="search_bird"
-                                options={birdsData}
-                                getOptionLabel={(option) => option.nombre_ingles}
+                                id="search_Paisaje"
+                                options={registerData}
+                                getOptionLabel={(option) => option.descripcion}
                                 //     filterOptions={
                                 //         (options, state) => {
                                 //         // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
@@ -152,40 +152,12 @@ export const SearchBird = ({ changeTab }) => {
                                 //         });
                                 //     }
                                 // }
-                                // filterOptions={(options, state) => {
-                                //     const inputValue = state.inputValue.toLowerCase();
-                                //     return options.filter((option) => {
-                                //         const birdName = option.nombre_ingles.toLowerCase();
-                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
-                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
-
-                                //         return sanitizedBirdName.includes(sanitizedInput);
-                                //     });
-                                // }}
-                                //este FUE EL MEJOR HASTA HAORA
-                                // filterOptions={(options, state) => {
-                                //     const inputValue = state.inputValue.toLowerCase().replace(/[^a-z0-9\s-]/g, ''); // Sanitizar la entrada
-                                //     return options.filter((option) => {
-                                //         const birdName = option.nombre_ingles.toLowerCase().replace(/[^a-z0-9\s-]/g, ''); // Sanitizar el nombre del ave
-                                //         const birdNameWords = birdName.split(' '); // Dividir el nombre del ave en palabras
-                                //         const inputWords = inputValue.split(' '); // Dividir la entrada en palabras
-
-                                //         // Verificar si alguna de las palabras de entrada coincide con alguna parte del nombre del ave
-                                //         for (const inputWord of inputWords) {
-                                //             if (birdNameWords.some((word) => word.includes(inputWord))) {
-                                //                 return true;
-                                //             }
-                                //         }
-
-                                //         return false;
-                                //     });
-                                // }}
                                 filterOptions={(options, state) => {
                                     const inputValue = state.inputValue.toLowerCase(); // Convertir a minúsculas
                                     const inputWords = inputValue.split(' '); // Dividir la entrada en palabras
 
                                     return options.filter((option) => {
-                                        const birdName = option.nombre_ingles.toLowerCase(); // Convertir a minúsculas
+                                        const birdName = option.descripcion.toLowerCase(); // Convertir a minúsculas
                                         const birdWords = birdName.split(' '); // Dividir el nombre en palabras
 
                                         // Filtrar las opciones que coinciden con al menos una palabra
@@ -203,8 +175,17 @@ export const SearchBird = ({ changeTab }) => {
                                     });
                                 }}
 
+                                
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase();
+                                //     return options.filter((option) => {
+                                //         const birdName = option.descripcion.toLowerCase();
+                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
+                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
 
-
+                                //         return sanitizedBirdName.includes(sanitizedInput);
+                                //     });
+                                // }}
                                 // filterOptions={(options, state) => {
                                 //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                 //     const inputValue = state.inputValue.toLowerCase();
@@ -222,8 +203,8 @@ export const SearchBird = ({ changeTab }) => {
                                 //     // Filtra las opciones para que coincidan solo en el primer nombre
                                 //     const inputValue = state.inputValue.toLowerCase();
                                 //     return options.filter((option) => {
-                                //         const firstBirdName = option.nombre_ingles.split(' ')[0].toLowerCase();
-                                //         return firstBirdName.startsWith(inputValue);
+                                //         const firstWord = option.descripcion.split(' ')[0].toLowerCase();
+                                //         return firstWord.startsWith(inputValue);
                                 //     });
                                 // }}
                                 // filterOptions={(options, state) => {
@@ -243,12 +224,12 @@ export const SearchBird = ({ changeTab }) => {
                                 //         return secondBirdName && secondBirdName.startsWith(inputValue);
                                 //     });
                                 // }}
-                                value={selectedBird}
-                                onChange={(event, newValue) => handleBirdSelect(newValue)}
+                                value={selectedRegister}
+                                onChange={(event, newValue) => handleRegisterSelect(newValue)}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Seleccionar ave a actualizar"
+                                        label="Seleccionar Paisaje a actualizar"
                                         InputLabelProps={{
                                             sx: labelStyles, // Estilo del label
                                         }}
@@ -266,9 +247,12 @@ export const SearchBird = ({ changeTab }) => {
                     </Grid>
                 </React.Fragment>
             )}
-            {showUpdateBird && < IndexTabsUpdates changeTab={changeTab} showUpdateBird={setShowUpdateBird}
-                showSearchBird={setShowSearchBird}
-                selectedBird={setSelectedBird} />}
+            {showUpdateRegister && < IndexTabsUpdates
+                changeTab={changeTab}
+                showUpdateRegister={setShowUpdateRegister}
+                showSearchRegister={setShowSearchRegister}
+                selectedRegister={setSelectedRegister}
+            />}
         </React.Fragment>
     );
 };
