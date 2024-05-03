@@ -56,7 +56,7 @@ const theme = createTheme({
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
-    
+
     body2: {
       fontSize: '1 .5rem',
       fontWeight: 200,
