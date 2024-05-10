@@ -63,11 +63,11 @@ export const IndexD = () => {
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
-        selectionfollowsfocu='true'
+        selectionFollowsFocus='true'
         sx={{
           backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
           backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
-          mt: 4,
+          mt: 1,
           borderRadius: '20px 20px 0px 0px',
           '& .Mui-selected': {
             backgroundColor: theme.palette.secondary.light,
@@ -123,6 +123,7 @@ export const IndexD = () => {
         {selectedTab === 0 && (
           <Box>
             <SearchBird changeTab={(newValue) => setSelectedTab(newValue)} isEnable={setIsFormEnabled} />
+          
           </Box>
         )}
         {selectedTab === 1 && (

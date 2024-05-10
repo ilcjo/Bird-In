@@ -74,13 +74,13 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     left: 0, // Lo coloca en la parte izquierda de la pantalla
                     width: '100%', // Ocupa todo el ancho de la pantalla
                     zIndex: 999, // Asegura que esté por encima del contenido
-                    // backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                    // backdropFilter: 'blur(1px)',
-                    // WebkitBackdropFilter: 'blur(10px)',
+                    backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                    backdropFilter: 'blur(1px)',
+                    WebkitBackdropFilter: 'blur(10px)',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: '0 20px',
-                    height: '10vh',
+                
+                    height: '9vh',
                 }}
             >
                 {/* Logo en la esquina izquierda */}
@@ -89,14 +89,15 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         style={{ width: 'auto', height: '120%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}
                         loading="lazy" />
                 </Link>
-                <Grid item sx={{ mb: 4 }}>
+                <Grid item sx={{ mt: -4 }}>
                     {ShowFilterButton && (
                         <Button
                             sx={{
-                                marginBottom: '10px',
+                                
                                 fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
                                 fontWeight: 'bold',
-                                color: theme.palette.primary.dark,
+                                padding: 5,
+                                color: theme.palette.primary.light,
                             }}
                             variant="outlined"
                             color="primary"
@@ -125,12 +126,13 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     {ShowBackButton && (
                         <Button
                             sx={{
-                                marginBottom: '10px',
+                                margin: '0px',
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
-                                color: theme.palette.primary.dark
+                                right: '30px',
+                                color: theme.palette.primary.light
                             }}
-                            variant="outline"
+                            variant="outlined"
                             onClick={returnMenuClick}
                             startIcon={<HomeIcon />}
                         >
@@ -157,13 +159,13 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     )} */}
                     <Button
                         sx={{
-                            marginBottom: '10px',
+                            margin: '0px',
                             fontSize: '1rem',
                             fontWeight: 'bold',
-                            color: theme.palette.primary.dark,
+                            color: theme.palette.primary.light,
                         }}
                         color="primary"
-                        variant="outline"
+                        variant="outlined"
                         onClick={onLogoutClick}
                         endIcon={<LogoutIcon />}
                     >

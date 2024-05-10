@@ -39,14 +39,14 @@ export const Landing = () => {
       <Grid container component="main" sx={{ height: '100vh', position: 'relative', margin: 0, padding: 0  }}>
         {/* Contenedor de la imagen de fondo */}
         <Grid item xs={12} sx={{ position: 'absolute', width: '100%', height: '100%', margin: 0, padding: 0 }}>
-          <img src={allCustom.cover_login} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={allCustom.cover_login} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover',  backgroundPosition: 'right', margin: 'OPX' }} />
         </Grid>
 
         {/* Contenedor del contenido */}
         <Grid item xs={12} sm={6} md={5} lg={3} component={Box} elevation={6}
           sx={{
             margin: 0,
-            backgroundColor: 'rgba(0, 56, 28, 0.1)',
+            backgroundColor: 'rgba(0, 56, 28, 0.3)',
             backdropFilter: 'blur(10px)',
             padding: 1,
             display: 'flex',
@@ -56,7 +56,7 @@ export const Landing = () => {
             zIndex: 1, // Para que esté sobre el círculo
             height: '90vh', // Para que ocupe toda la altura
             left: '72%',
-            borderRadius: '0px 0px 10PX'
+            borderRadius: '0px 0px 10px 10px'
             
           }}>
 

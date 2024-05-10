@@ -29,6 +29,7 @@ export const DashAves = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '90vh',
+          
 
         }}
       >

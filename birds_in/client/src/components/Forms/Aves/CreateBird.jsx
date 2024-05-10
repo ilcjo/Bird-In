@@ -234,6 +234,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                 const imageUrl = await saveImageFtpWithMessage(formData);
                 // Restaurar el mensaje de carga si es necesario
                 setLoadingMessage('Creando ave...');
+                console.log(imageURL)
                 await createBirdWithMessage(createData, imageUrl);
                 setShowBackdrop(false);
                 setLoadingMessage('Cargando...');

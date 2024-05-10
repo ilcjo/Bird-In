@@ -9,13 +9,12 @@ import { IndexTabsCreateP } from './Add/IndexTabsCreateP';
 import { SearchLands } from './Update/SearchLands';
 
 
-
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
   backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
-  marginTop: '0px',
-
+  marginTop: '90px',
+  justifyContent: 'flex-start',
   '& .Mui-selected': {
     backgroundColor: theme.palette.secondary.light,
   },
@@ -48,7 +47,7 @@ export const IndexDP = () => {
   };
 
   const handleNavigateToSearch = () => {
-    setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
+    setSelectedTab(0); // Cambia a la pestaña de imágenes existentes
   };
 
   return (
@@ -59,16 +58,7 @@ export const IndexDP = () => {
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
-        selectionfollowsfocu='true'
-        sx={{
-          backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-          backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
-          mt: 4,
-          borderRadius: '20px 20px 0px 0px',
-          '& .Mui-selected': {
-            backgroundColor: theme.palette.secondary.light,
-          }
-        }}
+        selectionFollowsFocus='true'
       >
         <StyledTab label={
           <Typography variant='h5'>

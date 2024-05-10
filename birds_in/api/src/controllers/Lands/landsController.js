@@ -28,7 +28,7 @@ const fetchFilterLands = async (
         if (descripcion) {
             whereClause.descripcion = { [Op.like]: `%${descripcion}%` };
         }
-        
+
         const includeArr = [
             { model: Paises, attributes: ['nombre'] },
             { model: Zonas, attributes: ['nombre_zona'] },
@@ -37,7 +37,7 @@ const fetchFilterLands = async (
                 attributes: ['url_paisaje', 'destacada']
             },
         ];
-       
+
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
@@ -313,6 +313,7 @@ const sendAndCreateLand = async (
     descripcion,
     urlImagen
 ) => {
+    console.log(urlImagen)
     try {
         // Verificar si tanto el país como la zona están presentes
         if (!pais || !zona) {
@@ -324,7 +325,7 @@ const sendAndCreateLand = async (
 
         const imagenesData = urlImagen.map((imageUrl) => {
             return {
-                url: imageUrl,
+                url_paisaje: imageUrl,
             };
         });
 
@@ -333,7 +334,7 @@ const sendAndCreateLand = async (
             descripcion: converDescripcion,
             paises_id_pais: pais.id,
             zonas_id_zona: zona.id,
-            imagenes_paisajes: urlImagen.map(imageUrl => ({ url_paisajes: imageUrl }))
+            imagenes_paisajes: imagenesData
         }, {
             include: [Imagenes_paisajes]
         });
@@ -374,10 +375,10 @@ const findDataByIdP = async (id) => {
 };
 
 
-const findDataByNameP = async (name) => {
+const findDataByNameP = async (id) => {
     try {
         const Registro = await Paisajes.findOne({
-            where: { descripcion: name },
+            where: { zonas_id_zona: id },
             include: [
                 {
                     model: Imagenes_paisajes,
@@ -385,14 +386,14 @@ const findDataByNameP = async (name) => {
                         'id',
                         'destacada',
                         [Sequelize.literal('SUBSTRING_INDEX(url_paisaje, "_", -1)'), 'titulo']
-                        ,] // Atributos que deseas de Imagenes_aves
+                        ,] // Atributos que deseas de Imagenes
                 },
                 { model: Paises, attributes: ['nombre', ['id_pais', 'id']] },
                 { model: Zonas, attributes: ['nombre_zona', ['id_zona', 'id']] },
             ],
             attributes: [
                 'descripcion',
-            ] // Atributos de Aves que deseas
+            ] 
         });
         return Registro;
     } catch (error) {
@@ -632,11 +633,11 @@ const deleteBirdDb = async (idAve) => {
     }
 };
 
-const findNameDuplicateP = async (nombre) => {
+const findNameDuplicateP = async (id) => {
     try {
         const existingRelations = await Paisajes.findAll({
             where: {
-                descripcion: nombre
+                zonas_id_zona: id
             }
         });
 
@@ -644,7 +645,6 @@ const findNameDuplicateP = async (nombre) => {
         if (existingRelations.length > 0) {
             throw new Error("Este Registro ya existe.");
         }
-
         // Si no encuentra aves con el mismo nombre, simplemente retorna
         return "Registro disponible.";
 

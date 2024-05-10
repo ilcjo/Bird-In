@@ -270,7 +270,7 @@ export const CoverDeletP = ({
                                             background: 'rgba(0, 78, 55, 0.5)'
                                         }}
                                     >
-                                        <CardActionArea onClick={() => handleImageClick(imageUrl.url)}>
+                                        <CardActionArea onClick={() => handleImageClick(imageUrl.url_paisaje)}>
                                             {/* <CardMedia
                                                 component="img"
                                                 alt={`Imagen existente ${index + 1}`}
@@ -284,7 +284,7 @@ export const CoverDeletP = ({
                                                   }}
                                             /> */}
                                             <img
-                                                src={imageUrl.url}
+                                                src={imageUrl.url_paisaje}
                                                 alt={`Imagen existente ${index + 1}`}
                                                 key={index}
                                                 style={{

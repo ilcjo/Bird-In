@@ -32,7 +32,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
     const dispatch = useDispatch()
 
     const { paises, zonas } = useSelector(state => state.birdSlice.options)
-    
+
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -59,10 +59,11 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
     const sortedPaises = sortAlphabetically(paises);
     const sortedZonas = sortAlphabetically(zonas);
     const [createData, setCreateData] = React.useState({
-        
+
         pais: null,
         zona: null,
         descripcion: '',
+        urlImagen: [],
     });
 
     const [errors, setErrors] = React.useState({
@@ -128,18 +129,61 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         }
     };
 
+    const handleZonaChange = (newValue) => {
+        // const newValue= event.target.value;
+        console.log(newValue)
+
+        if (!newValue) {
+            // If newValue is null, it means the user cleared the selection, so we don't perform duplicate check
+            setCreateData({
+                ...createData,
+                zona: null,
+            });
+            return;
+        }
+    
+        // Update the zona field with the selected value
+        setCreateData({
+            ...createData,
+            zona: newValue,
+        });
+    
+        // Clear the error when the user selects a value
+        setErrors({
+            ...errors,
+            zona: false,
+        });
+    
+        // Reinicia el formulario
+        setFormSubmitted(false);
+    
+        // Wait 500 milliseconds before checking for duplicates
+        setTimeout(async () => {
+            try {
+                // Llama a la función para comprobar duplicados
+                await dispatch(duplicateNameCheckP(newValue.id)); // Assuming newValue is an object with a 'nombre' property
+            } catch (error) {
+                // Si hay un error, muestra un mensaje de error
+                console.error('Error al comprobar duplicados:', String(error));
+                alert('Este Registro ya existe');
+                // Restablece el valor del input
+                changeTabSearch()
+            }
+        }, 700);
+    };
 
     const handleInputChangeDuplicate = (event) => {
         const newName = event.target.value;
         // Si no hay duplicados, actualiza el estado createData
+
         setCreateData({
             ...createData,
-            descripcion: newName,
+            zona: newName,
         });
         // Reinicia el error al escribir
         setErrors({
             ...errors,
-            descripcion: false,
+            zona: false,
         });
 
         // Reinicia el formulario
@@ -183,12 +227,16 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
 
 
     const handleSubmit = async (event) => {
+
         event.preventDefault();
         const newErrors = {};
         setFormSubmitted(true);
 
-        if (!createData.descripcion) {
-            newErrors.descripcion = true;
+        if (!createData.pais) {
+            newErrors.pais = true;
+        }
+        if (!createData.zona) {
+            newErrors.zona = true; // Establecer un error si el campo 'zona' está vacío
         }
 
         setErrors(newErrors);
@@ -211,15 +259,14 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             for (let i = 0; i < imageFile.length; i++) {
                 formData.append('images', imageFile[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
             }
-
             setShowBackdrop(true);
             setLoadingMessage('Subiendo imagen...');
-
             try {
                 // Espera a que la imagen se suba y obtén la URL
                 const imageUrl = await saveImageFtpWithMessage(formData);
+                console.log(imageURL)
                 // Restaurar el mensaje de carga si es necesario
-                setLoadingMessage('Creando ave...');
+                setLoadingMessage('Creando  Paisaje...');
                 await createRegisterWithMessage(createData, imageUrl);
                 setShowBackdrop(false);
                 setLoadingMessage('Cargando...');
@@ -229,8 +276,8 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 setImageURL([]);
                 setImageFile([]);
                 setFormSubmitted(false)
-                setSnackBarMessage('El ave se a creado correctamente.')
-                dispatch(getInfoForUpdateNameP(createData.descripcion))
+                setSnackBarMessage('El Paisaje se a creado correctamente.')
+                dispatch(getInfoForUpdateNameP(createData.zona.id))
                 changeImagenExist()
             } catch (error) {
                 console.log('este es el error:', String(error))
@@ -250,7 +297,6 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             try {
                 // Realiza la carga de la imagen y espera la respuesta
                 const response = await dispatch(saveImageFtpLand(formData));
-
                 // Verifica si la respuesta contiene la URL de la imagen
                 if (response && response.data && response.data.imageUrls) {
                     const imageUrlString = response.data.imageUrls;
@@ -268,6 +314,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
 
     const createRegisterWithMessage = async (createData, imageUrl) => {
         return new Promise((resolve, reject) => {
+            console.log('imagen cargada en array:', imageURL)
             dispatch(createLand({ ...createData, urlImagen: imageUrl }))
                 .then(() => {
                     resolve(); // Si la creación del ave tiene éxito, resuelve la Promesa sin un mensaje.
@@ -298,7 +345,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         height: '60px',
         '& .MuiInputBase-input': {
             padding: '0px',
-            paddingLeft: '10px',
+            paddingLeft: '0px',
         },
         '& .MuiOutlinedInput-notchedOutline': {
             borderColor: 'none',
@@ -372,7 +419,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                         <Button
                             onClick={handleSubmit}
                             sx={{
-                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5, textTransform: 'none',
+                                // fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5, textTransform: 'none',
                                 backgroundColor: theme.palette.primary.dark, mt: 0,
                                 color: theme.palette.primary.light,
                                 '&:hover': {
@@ -420,44 +467,11 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                             <Divider sx={{ my: 2 }} />
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <TextField
-                            sx={{ mt: -2 }}
-                            variant="filled"
-                            type='text'
-                            name="descripcion"
-                            label="Descripción"
-                            value={createData.descripcion}
-                            onChange={handleInputChangeDuplicate}
-                            fullWidth
-                            // multiline
-                            // maxRows={4}
-                            margin="normal"
-                            error={formSubmitted && createData.descripcion.trim() === ''} // Check if the field is empty when the form is submitted
-                            helperText={formSubmitted && createData.descripcion.trim() === '' ? 'Este Campo es obligatorio *' : ''}
-                            FormHelperTextProps={{
-                                sx: {
-                                    /* Agrega los estilos que desees para el texto del helper text */
-                                    fontSize: '1.1rem',
-                                    color: theme.palette.secondary.main,
-                                    fontWeight: 'bold'
-                                },
-                            }}
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
 
-                            }}
-                            InputProps={{
-                                sx: inputStyles, // Establece el estilo del input
-                            }}
-
-                        />
-                    </Grid>
                     <Grid item xs={12} sm={6} sx={{}}>
-
-
                         <Autocomplete
                             disablePortal
+
                             id="combo-box-pais"
                             options={sortedPaises}
                             getOptionLabel={(option) => option.nombre}
@@ -466,7 +480,10 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                             renderInput={(params) =>
                                 <TextField
                                     {...params}
+                                    required
                                     label="Países"
+                                    helperText={errors.pais ? 'Este campo es obligatorio' : ''}
+                                    error={errors.pais} // Check if the field is empty when the form is submitted
                                     InputLabelProps={{
                                         sx: labelStyles, // Estilo del label
                                     }}
@@ -508,10 +525,13 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                             options={sortedZonas}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.zona}
-                            onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}
+                            onChange={(event, newValue) => handleZonaChange(newValue)}
                             renderInput={(params) =>
                                 <TextField {...params}
+                                    required
                                     label="Zonas"
+                                    error={errors.zona}
+                                    helperText={errors.zona ? 'Este campo es obligatorio' : ''}
                                     InputLabelProps={{
                                         sx: labelStyles, // Estilo del label
                                     }}
@@ -569,7 +589,38 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                         />
 
                     </Grid>
+                    <Grid item xs={12} sm={12}>
+                        <TextField
+                            sx={{ mt: -2 }}
+                            variant="filled"
+                            type='text'
+                            name="descripcion"
+                            label="Descripción"
+                            value={createData.descripcion}
+                            onChange={handleInputChange}
+                            fullWidth
+                            // multiline
+                            // maxRows={4}
+                            margin="normal"
+                            // helperText={formSubmitted && createData.descripcion.trim() === '' ? 'Este Campo es obligatorio *' : ''}
+                            FormHelperTextProps={{
+                                sx: {
+                                    /* Agrega los estilos que desees para el texto del helper text */
+                                    fontSize: '1.1rem',
+                                    color: theme.palette.secondary.main,
+                                    fontWeight: 'bold'
+                                },
+                            }}
+                            InputLabelProps={{
+                                sx: labelStyles, // Establece el estilo del label del input
 
+                            }}
+                            InputProps={{
+                                sx: inputStyles, // Establece el estilo del input
+                            }}
+
+                        />
+                    </Grid>
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
                 <Backdrop

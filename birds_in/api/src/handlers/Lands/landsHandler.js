@@ -14,9 +14,9 @@ const {
    findDataByName,
    findNameDuplicate,
 } = require("../../controllers/birds/birdsController");
-const { 
-   findNameDuplicateP, 
-   sendAndCreateLand, 
+const {
+   findNameDuplicateP,
+   sendAndCreateLand,
    findDataByNameP,
    findDataByIdP,
    fetchFilterLands
@@ -33,7 +33,7 @@ const deletePhotoFromFTP = require('../../utils/deletFtp');
 const getFilterInfoP = async (req, res) => {
    const { descripcion, pais, zonas, page, perPage } = req.query;
    try {
-      const allData = await fetchFilterLands( descripcion, pais, zonas, page, perPage)
+      const allData = await fetchFilterLands(descripcion, pais, zonas, page, perPage)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
@@ -95,6 +95,7 @@ const createLand = async (req, res) => {
       descripcion,
       urlImagen
    } = req.body;
+   console.log(urlImagen)
    try {
 
       const succesCreate = await sendAndCreateLand(
@@ -135,7 +136,7 @@ const uploadImageftpPaisajes = async (req, res) => {
          await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
 
          // Obtén la URL completa de la imagen
-         const imageUrl = `https://lasavesquepasaronpormisojos.com/paisajes/${remoteFileName}`;
+         const imageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/paisajes/${remoteFileName}`;
          // Agrega la URL al array de imageUrls
          imageUrls.push(imageUrl);
 
@@ -281,9 +282,9 @@ const deleteBird = async (req, res) => {
 };
 
 const checkLandsDuplicate = async (req, res) => {
-   const { name } = req.query
+   const { pais } = req.query
    try {
-      const message = await findNameDuplicateP(name)
+      const message = await findNameDuplicateP(pais)
       return res.status(200).json(message);
    } catch (error) {
       res.status(500).json({ error: error.message });

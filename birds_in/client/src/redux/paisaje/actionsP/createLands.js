@@ -3,6 +3,7 @@ import { getAve, saveUrlImage } from "../../slices/createSlice";
 import { getLand, saveUrlImageLand } from "../slicesP/createLandSlice";
 
 export const saveImageFtpLand = (formData) => {
+  console.log('llegue')
   return async (dispatch) => {
     try {
       const response = await axios.post('paisajes/upload_image', formData, {
@@ -104,12 +105,12 @@ export const getInfoForUpdateP = (id) => {
 };
 
 export const getInfoForUpdateNameP = (name) => {
-
+console.log(name)
   return async (dispatch) => {
     try {
       const response = await axios(`paisajes/get_update_name?name=${name}`)
-      const ave = response.data
-      dispatch(getLand(ave))
+      const registro = response.data
+      dispatch(getLand(registro))
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:');
     } catch (error) {
@@ -119,11 +120,11 @@ export const getInfoForUpdateNameP = (name) => {
   }
 };
 
-export const duplicateNameCheckP = (name) => {
+export const duplicateNameCheckP = (id) => {
 
   return async (dispatch) => {
     try {
-      const response = await axios(`paisajes/duplicados?name=${name}`)
+      const response = await axios(`paisajes/duplicados?pais=${id}`)
       const ave = response.data
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log(ave)

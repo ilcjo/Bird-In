@@ -27,7 +27,9 @@ const StyledTab = styled(Tab)({
 });
 
 
-export const IndexTabsCreateP = ({ isEnable, changeTab,
+export const IndexTabsCreateP = ({ 
+    isEnable, 
+    changeTab,
     showUpdateRegister,
     showSearchRegister,
     selectedRegister,
@@ -44,7 +46,6 @@ export const IndexTabsCreateP = ({ isEnable, changeTab,
     };
     return (
         <React.Fragment>
-            {/* ... Otro contenido */}
             <StyledTabs
                 value={selectedTab}
                 onChange={handleTabChange}
@@ -59,7 +60,7 @@ export const IndexTabsCreateP = ({ isEnable, changeTab,
                 <StyledTab label={<Typography variant='h5' >
                     Imágenes Existente
                 </Typography>} onClick={handleNavigateToCoverDelet} />
-                {/* Agrega más pestañas según sea necesario */}
+               
             </StyledTabs>
             <Box>
                 {selectedTab === 0 && (
