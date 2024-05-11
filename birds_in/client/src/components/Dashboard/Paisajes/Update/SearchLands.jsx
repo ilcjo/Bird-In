@@ -20,6 +20,7 @@ export const SearchLands = ({ changeTab }) => {
     const [showBackdrop, setShowBackdrop] = React.useState(true);
     const [selectedRegister, setSelectedRegister] = React.useState(null);
     const [registerData, setRegisterData] = React.useState([]);
+    console.log('soy register data', registerData)
     const [showUpdateRegister, setShowUpdateRegister] = React.useState(false);
     const [showSearchRegister, setShowSearchRegister] = React.useState(true);
 
@@ -51,17 +52,26 @@ export const SearchLands = ({ changeTab }) => {
                 setShowBackdrop(true)
                 const response = await axios.get('/paisajes/filtros?page=0&perPage=0');
                 const data = response.data.RegistrosFiltrados;
-                const validData = data.filter((item) => item.descripcion);
+                const validData = data.filter((item) => item.zona);
+                // Ordenar los datos válidos por nombre de zona
+                validData.sort((a, b) => a.zona.nombre_zona.localeCompare(b.zona.nombre_zona));
 
-                // Ordenar los datos válidos por
-                validData.sort((a, b) => a.descripcion.localeCompare(b.descripcion));
+                const zoneSet = new Set();
+                validData.forEach(item => {
+                    zoneSet.add(item.zona.nombre_zona);
+                });
 
-                localStorage.setItem('LandsData', JSON.stringify(validData));
-                setRegisterData(validData);
+                // Convertir el conjunto a un array y agregar un ID único a cada zona
+                const zoneOptions = Array.from(zoneSet).map((zone, index) => ({
+                    id: index,
+                    nombre_zona: zone
+                }));
 
+                // Guardar en el estado y en el almacenamiento local
+                setRegisterData(zoneOptions);
+                localStorage.setItem('LandsData', JSON.stringify(data));
             } catch (error) {
                 console.error("Error al obtener los datos:", error);
-
             } finally {
                 setShowBackdrop(false);
             }
@@ -136,7 +146,7 @@ export const SearchLands = ({ changeTab }) => {
                             <Autocomplete
                                 id="search_Paisaje"
                                 options={registerData}
-                                getOptionLabel={(option) => option.descripcion}
+                                getOptionLabel={(option) => option.nombre_zona}
                                 //     filterOptions={
                                 //         (options, state) => {
                                 //         // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
@@ -152,30 +162,30 @@ export const SearchLands = ({ changeTab }) => {
                                 //         });
                                 //     }
                                 // }
-                                filterOptions={(options, state) => {
-                                    const inputValue = state.inputValue.toLowerCase(); // Convertir a minúsculas
-                                    const inputWords = inputValue.split(' '); // Dividir la entrada en palabras
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase(); // Convertir a minúsculas
+                                //     const inputWords = inputValue.split(' '); // Dividir la entrada en palabras
 
-                                    return options.filter((option) => {
-                                        const birdName = option.descripcion.toLowerCase(); // Convertir a minúsculas
-                                        const birdWords = birdName.split(' '); // Dividir el nombre en palabras
+                                //     return options.filter((option) => {
+                                //         const name = option.nombre_zona.toLowerCase(); // Convertir a minúsculas
+                                //         const words = name.split(' '); // Dividir el nombre en palabras
 
-                                        // Filtrar las opciones que coinciden con al menos una palabra
-                                        const matches = inputWords.filter(word => birdWords.some(birdWord => birdWord.startsWith(word) && birdWord[0] === word[0]));
+                                //         // Filtrar las opciones que coinciden con al menos una palabra
+                                //         const matches = inputWords.filter(word => words.some(pWord => pWord.startsWith(word) && pWord[0] === word[0]));
 
-                                        // Organizar las coincidencias: primeras palabras primero, luego las segundas
-                                        const sortedMatches = [];
-                                        inputWords.forEach(word => {
-                                            const index = matches.findIndex(match => birdWords.some(birdWord => birdWord.startsWith(match)) && match === word);
-                                            if (index !== -1) sortedMatches.push(matches.splice(index, 1)[0]);
-                                        });
-                                        sortedMatches.push(...matches);
+                                //         // Organizar las coincidencias: primeras palabras primero, luego las segundas
+                                //         const sortedMatches = [];
+                                //         inputWords.forEach(word => {
+                                //             const index = matches.findIndex(match => words.some(pWord => pWord.startsWith(match)) && match === word);
+                                //             if (index !== -1) sortedMatches.push(matches.splice(index, 1)[0]);
+                                //         });
+                                //         sortedMatches.push(...matches);
 
-                                        return sortedMatches.length > 0; // Devolver true si hay al menos una coincidencia
-                                    });
-                                }}
+                                //         return sortedMatches.length > 0; // Devolver true si hay al menos una coincidencia
+                                //     });
+                                // }}
 
-                                
+
                                 // filterOptions={(options, state) => {
                                 //     const inputValue = state.inputValue.toLowerCase();
                                 //     return options.filter((option) => {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const sendPhotosDelete = (ids, urls) => {
+export const sendPhotosDeleteP = (ids, urls) => {
     return async (dispatch) => {
         try {
             const requestData = {
@@ -9,7 +9,7 @@ export const sendPhotosDelete = (ids, urls) => {
                     urls: urls,
                 },
             };
-            const response = await axios.delete('/aves/borrar_fotos', requestData)
+            const response = await axios.delete('/paisajes/borrar_fotos', requestData)
             const data = response.data
             // console.log(response.data)
         } catch (error) {
@@ -19,16 +19,16 @@ export const sendPhotosDelete = (ids, urls) => {
     };
 };
 
-export const sendCoverPhoto = (id, idAves) => {
-    console.log('llega al axios', id, idAves)
+export const sendCoverPhotoP = (id, idPaisaje) => {
+    console.log('llega al axios', id, idPaisaje)
     return async (dispatch) => {
         try {
             const requestData = {
                 idFoto: id,
-                idAve: idAves
+                idPaisaje: idPaisaje
             };
 
-            const response = axios.put('/aves/foto_portada', requestData )
+            const response = axios.put('/paisajes/foto_portada', requestData )
             const data = response.data
             return data
         } catch (error) {

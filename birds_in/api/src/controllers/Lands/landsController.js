@@ -347,6 +347,7 @@ const sendAndCreateLand = async (
 };
 
 const findDataByIdP = async (id) => {
+    console.log('llegue al comntroller id:', id)
     try {
         const Registro = await Paisajes.findOne({
             where: { id: id },
@@ -364,7 +365,8 @@ const findDataByIdP = async (id) => {
             ],
             attributes: [
                 'descripcion',
-            ] // Atributos de Aves que deseas
+                'id'
+            ] // Atributos
         });
         return Registro;
     } catch (error) {
@@ -393,7 +395,8 @@ const findDataByNameP = async (id) => {
             ],
             attributes: [
                 'descripcion',
-            ] 
+                'id'
+            ]
         });
         return Registro;
     } catch (error) {
@@ -496,9 +499,9 @@ const sendAndUpdateBird = async (
     }
 };
 
-const findPhotosId = async (imgsIds) => {
+const findPhotosIdPaisaje = async (imgsIds) => {
     try {
-        await Imagenes_aves.destroy({ where: { id: imgsIds } });
+        await Imagenes_paisajes.destroy({ where: { id: imgsIds } });
         return 'Las fotografías se han borrado exitosamente'
     } catch (error) {
         console.error('Error al buscar fotos por ID de ave:', error);
@@ -506,18 +509,19 @@ const findPhotosId = async (imgsIds) => {
     }
 };
 
-const setDbCover = async (idFoto, idAve) => {
+const setDbCoverPaisaje = async (idFoto, idPaisaje) => {
+    console.log('datos controles portada:', idFoto, idPaisaje)
     try {
-        // Buscar todas las imágenes asociadas al ave
-        const imagenesAve = await Imagenes_aves.findAll({ where: { aves_id_ave: idAve } });
+        // Buscar todas las imágenes asociadas al 
+        const imagenes = await Imagenes_paisajes.findAll({ where: { paisajes_id_paisaje: idPaisaje } });
         // Encontrar la imagen destacada actual, si la hay
-        const imagenDestacadaActual = imagenesAve.find((imagen) => imagen.destacada === true);
+        const imagenDestacadaActual = imagenes.find((imagen) => imagen.destacada === true);
         // Desmarcar la imagen destacada actual, si la hay
         if (imagenDestacadaActual) {
             await imagenDestacadaActual.update({ destacada: null });
         }
         // Marcar la nueva imagen como destacada
-        const imagenNuevaDestacada = await Imagenes_aves.findByPk(idFoto);
+        const imagenNuevaDestacada = await Imagenes_paisajes.findByPk(idFoto);
         if (imagenNuevaDestacada) {
             await imagenNuevaDestacada.update({ destacada: true });
             return 'La fotografía se ha destacado exitosamente';
@@ -662,8 +666,8 @@ module.exports = {
     sendAndCreateLand,
     findDataByIdP,
     sendAndUpdateBird,
-    findPhotosId,
-    setDbCover,
+    findPhotosIdPaisaje,
+    setDbCoverPaisaje,
     getContadores,
     filterOptionsPaisZonas,
     deleteBirdDb,

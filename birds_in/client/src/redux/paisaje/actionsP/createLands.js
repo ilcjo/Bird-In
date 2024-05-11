@@ -93,8 +93,9 @@ export const getInfoForUpdateP = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios(`paisajes/get_update?id=${id}`)
-      const ave = response.data
-      dispatch(getLand(ave))
+      const registro = response.data
+      console.log(registro)
+      dispatch(getLand(registro))
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:');
     } catch (error) {
@@ -124,10 +125,10 @@ export const duplicateNameCheckP = (id) => {
 
   return async (dispatch) => {
     try {
-      const response = await axios(`paisajes/duplicados?pais=${id}`)
+      const response = await axios(`paisajes/duplicados?zona=${id}`)
       const ave = response.data
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
-      console.log(ave)
+      
     } catch (error) {
       // Maneja los errores de la solicitud
       console.error('Error al enviar datos:', error);

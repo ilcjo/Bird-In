@@ -21,7 +21,9 @@ const {
     createLand,
     findInfoForUpdateNameP,
     findInfoForUpdateP,
-    getFilterInfoP
+    getFilterInfoP,
+    setCoverPhotoP,
+    deletePhotosPaisajes
 } = require('../../handlers/Lands/landsHandler')
 
 const landsRouter = Router()
@@ -33,8 +35,8 @@ landsRouter.get('/filtros', getFilterInfoP)
     .get('/get_update', findInfoForUpdateP)
     .get('/get_update_name', findInfoForUpdateNameP)
     .put('/update', updateInfoBids)
-    .delete('/borrar_fotos', deletePhotos)
-    .put('/foto_portada', setCoverPhoto)
+    .delete('/borrar_fotos', deletePhotosPaisajes)
+    .put('/foto_portada', setCoverPhotoP)
     .get('/contando', contandoRegistros)
     .delete('/borrar_ave', deleteBird)
     .get('/duplicados', checkLandsDuplicate)

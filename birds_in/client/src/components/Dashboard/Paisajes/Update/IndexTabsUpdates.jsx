@@ -3,6 +3,7 @@ import { UpdateBirds } from '../../../Forms/Aves/UpdateBirds'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { CoverDeletP } from '../Add/CoverDeletP';
+import { UpdatePaisaje } from '../../../Forms/Paisajes/UpdatePaisaje';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -49,7 +50,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab,
                 textColor='primary'
                 indicatorColor="primary"
                 aria-label="tabsInfoActualizar"
-                selectionfollowsfocu='true'
+                selectionFollowsFocus='true'
             >
                 <StyledTab label={<Typography variant='h5' >
                     Información
@@ -63,7 +64,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab,
                 {selectedTab === 0 && (
                     <React.Fragment>
                         {/* Contenido de la primera pestaña */}
-                        <UpdateBirds changeTab={changeTab}
+                        <UpdatePaisaje changeTab={changeTab}
                             showUpdateRegister={showUpdateRegister}
                             showSearchRegister={showSearchRegister}
                             selectedRegister={selectedRegister}

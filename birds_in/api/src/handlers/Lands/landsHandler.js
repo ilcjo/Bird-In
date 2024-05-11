@@ -19,16 +19,19 @@ const {
    sendAndCreateLand,
    findDataByNameP,
    findDataByIdP,
-   fetchFilterLands
+   fetchFilterLands,
+   setDbCoverPaisaje,
+   findPhotosIdPaisaje
 } = require('../../controllers/Lands/landsController');
 const ftp = require('basic-ftp');
+const { deletePhotoFromFTPPaisajes } = require('../../utils/deletFtp');
 const {
    FTP_HOST_2,
    FTP_USER_2,
    FTP_PASS_2,
 } = process.env
 
-const deletePhotoFromFTP = require('../../utils/deletFtp');
+
 
 const getFilterInfoP = async (req, res) => {
    const { descripcion, pais, zonas, page, perPage } = req.query;
@@ -95,7 +98,7 @@ const createLand = async (req, res) => {
       descripcion,
       urlImagen
    } = req.body;
-   console.log(urlImagen)
+
    try {
 
       const succesCreate = await sendAndCreateLand(
@@ -230,11 +233,11 @@ const updateInfoBids = async (req, res) => {
    }
 };
 
-const deletePhotos = async (req, res) => {
+const deletePhotosPaisajes = async (req, res) => {
    const { ids, urls } = req.body;
    try {
-      const deletedFtp = await deletePhotoFromFTP(urls);
-
+      console.log(urls)
+      const deletedFtp = await deletePhotoFromFTPPaisajes(urls);
       if (!deletedFtp.success) {
          // Algunas fotos no se encontraron o hubo errores en el servidor FTP
          console.warn('Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.');
@@ -242,7 +245,7 @@ const deletePhotos = async (req, res) => {
       }
 
       // Continúa con la lógica para eliminar de la base de datos
-      const deletedDb = await findPhotosId(ids);
+      const deletedDb = await findPhotosIdPaisaje(ids);
       return res.status(200).json(deletedDb);
    } catch (error) {
       console.error('Error en el controlador deletePhotos:', error);
@@ -250,10 +253,10 @@ const deletePhotos = async (req, res) => {
    }
 };
 
-const setCoverPhoto = async (req, res) => {
-   const { idFoto, idAve } = req.body
+const setCoverPhotoP = async (req, res) => {
+   const { idFoto, idPaisaje } = req.body
    try {
-      const newCover = await setDbCover(idFoto, idAve)
+      const newCover = await setDbCoverPaisaje(idFoto, idPaisaje)
       return res.status(200).json(newCover);
 
    } catch (error) {
@@ -282,9 +285,9 @@ const deleteBird = async (req, res) => {
 };
 
 const checkLandsDuplicate = async (req, res) => {
-   const { pais } = req.query
+   const { zona } = req.query
    try {
-      const message = await findNameDuplicateP(pais)
+      const message = await findNameDuplicateP(zona)
       return res.status(200).json(message);
    } catch (error) {
       res.status(500).json({ error: error.message });
@@ -299,8 +302,8 @@ module.exports = {
    uploadImageftpPaisajes,
    findInfoForUpdateP,
    updateInfoBids,
-   deletePhotos,
-   setCoverPhoto,
+   deletePhotosPaisajes,
+   setCoverPhotoP,
    contandoRegistros,
    deleteBird,
    findInfoForUpdateNameP,

@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { Backdrop, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+//Redux
 import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
 import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/actions/DeletCover';
+import { getInfoForUpdateP } from '../../../../redux/paisaje/actionsP/createLands';
+import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
+//iconos
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SearchIcon from '@mui/icons-material/Search';
-// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-// import SaveIcon from '@mui/icons-material/Save';
-// import { transformWrapper, transformComponent } from 'react-pinch-zoom-pan'
 import '../../../../assets/styles/zoom.css'
+//componentes
 import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDelet';
-import { getInfoForUpdateP } from '../../../../redux/paisaje/actionsP/createLands';
 
 export const CoverDeletP = ({
     showUpdateRegister,
@@ -20,10 +21,11 @@ export const CoverDeletP = ({
     const theme = useTheme();
     const dispatch = useDispatch();
     const { infoLandForUpdate } = useSelector(state => state.createLand);
-    console.log(infoLandForUpdate)
+    console.log('soy info q actulizo', infoLandForUpdate)
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [selectedImages, setSelectedImages] = React.useState([]);
+    console.log(selectedImages)
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [highlightedImage, setHighlightedImage] = React.useState(null);
@@ -52,7 +54,7 @@ export const CoverDeletP = ({
     }, []);
 
     const handleSetAsCover = async (id, url, destacada) => {
-        console.log(id)
+
         try {
             // Marcar la imagen como portada actual
             setHighlightedImage((prev) => {
@@ -66,7 +68,7 @@ export const CoverDeletP = ({
                 }
             });
             // Si la imagen es destacada, enviar la solicitud para guardarla como portada
-            await dispatch(sendCoverPhoto(id, infoLandForUpdate.id));
+            await dispatch(sendCoverPhotoP(id, infoLandForUpdate.id));
             setShowBackdrop(true);
             await new Promise((resolve) => setTimeout(resolve, 2000));
             await dispatch(getInfoForUpdateP(infoLandForUpdate.id));
@@ -113,6 +115,7 @@ export const CoverDeletP = ({
     // };
 
     const handleDeleteCheckBox = (id, url) => {
+        console.log('soy',url)
         const index = selectedImages.findIndex((img) => img.id === id);
 
         if (index === -1) {
@@ -133,10 +136,10 @@ export const CoverDeletP = ({
 
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
-            const selectedUrls = selectedImages.map((img) => img.url);
-
+            const selectedUrls = selectedImages.map((img) => img.url_paisaje);
+            console.log('imagenes url',selectedUrls)
             // Realizar la eliminación de fotos
-            await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
+            await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
 
             // Mostrar Snackbar y obtener información actualizada
             setSnackbarOpen(true);
@@ -322,7 +325,7 @@ export const CoverDeletP = ({
                                                     </IconButton> */
                                                         <IconButton
                                                             aria-label="add to favorites"
-                                                            onClick={() => handleSetAsCover(imageUrl.id, imageUrl.url, imageUrl.destacada)}
+                                                            onClick={() => handleSetAsCover(imageUrl.id, imageUrl.url_paisaje, imageUrl.destacada)}
                                                             sx={{ position: 'absolute', height: '30px', mt: -3, ml: '40%' }}
                                                         >
                                                             {imageUrl.destacada && (
@@ -341,7 +344,7 @@ export const CoverDeletP = ({
                                                 <Grid item xs={2}>
                                                     <Checkbox
                                                         color="primary"
-                                                        onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url)}
+                                                        onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url_paisaje)}
                                                         sx={{
                                                             position: 'absolute', left: '85%', mt: -3,
                                                         }}
@@ -364,7 +367,7 @@ export const CoverDeletP = ({
                             />
                         </Grid>
                     )}
-                    {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes|| infoLandForUpdate.imagenes_paisajes.length === 0 && (
+                    {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes || infoLandForUpdate.imagenes_paisajes.length === 0 && (
                         <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
                             No hay imágenes subidas.
                         </Typography>
