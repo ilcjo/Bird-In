@@ -36,8 +36,8 @@ export const Cards = React.memo(({ foto, name, index }) => {
 
   return (
     <Card sx={{
-      minWidth: 420,
-      maxWidth: 420,
+      minWidth: 520,
+      maxWidth: 520,
       minHeight: 330, // Establece una altura mínima para la tarjeta
       maxHeight: 330,
       position: 'relative',
@@ -54,13 +54,14 @@ export const Cards = React.memo(({ foto, name, index }) => {
           <CardMedia
             component="img"
             height="350"
-            width='420'
+            width='520'
             image={destacadaImage.url}
             alt={name}
             key={index}
             onClick={handleDetailClick}
             sx={{ objectFit: 'cover', objectPosition: 'center center ', }}
           />
+         
         ) : (
           <Typography variant="body2">Imagen no disponible</Typography>
         )}

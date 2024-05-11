@@ -152,6 +152,7 @@ export const SearchBird = ({ changeTab }) => {
                                 //         });
                                 //     }
                                 // }
+                                //moises actual
                                 // filterOptions={(options, state) => {
                                 //     const inputValue = state.inputValue.toLowerCase();
                                 //     return options.filter((option) => {
@@ -159,9 +160,22 @@ export const SearchBird = ({ changeTab }) => {
                                 //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
                                 //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
 
-                                //         return sanitizedBirdName.includes(sanitizedInput);
+                                //         return sanitizedBirdName.startsWith(sanitizedInput);
                                 //     });
                                 // }}
+                                filterOptions={(options, state) => {
+                                    const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                    return options.filter((option) => {
+                                        const birdName = option.nombre_ingles.toLowerCase();
+                                        
+                                        // Remover caracteres especiales excepto letras, números y espacios
+                                        const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                        const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                        
+                                        // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                        return sanitizedBirdName.startsWith(sanitizedInput);
+                                    });
+                                }}
                                 // filterOptions={(options, state) => {
                                 //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                 //     const inputValue = state.inputValue.toLowerCase();
@@ -175,14 +189,15 @@ export const SearchBird = ({ changeTab }) => {
                                 //         );
                                 //     });
                                 // }}
-                                filterOptions={(options, state) => {
-                                    // Filtra las opciones para que coincidan solo en el primer nombre
-                                    const inputValue = state.inputValue.toLowerCase();
-                                    return options.filter((option) => {
-                                        const firstBirdName = option.nombre_ingles.split(' ')[0].toLowerCase();
-                                        return firstBirdName.startsWith(inputValue);
-                                    });
-                                }}
+                                // filterOptions={(options, state) => {
+                                //     // Filtra las opciones para que coincidan solo en el primer nombre
+                                //     const inputValue = state.inputValue.toLowerCase();
+                                //     return options.filter((option) => {
+                                //         const firstBirdName = option.nombre_ingles.split(' ')[0].toLowerCase();
+                                //         return firstBirdName.startsWith(inputValue);
+                                //     });
+                                // }}
+                              
                                 // filterOptions={(options, state) => {
                                 //     // Filtra las opciones para que coincidan en el primer o segundo nombre
                                 //     const inputValue = state.inputValue.toLowerCase();

@@ -19,7 +19,8 @@ const initialState = {
   filters: '',
   copyFilters:{},
   count: {},
-  oneBird: false
+  oneBird: false,
+  total: 0
 };
 
 export const birdSlice = createSlice({
@@ -94,6 +95,9 @@ export const birdSlice = createSlice({
     isOneBird: (state, action) => {
       state.oneBird = action.payload;
     },
+    totalBird: (state, action) => {
+      state.total = action.payload;
+    },
   },
 });
 
@@ -114,6 +118,7 @@ export const {
   setNoMoreResults,
   saveCounting,
   copingFilters,
-  isOneBird
+  isOneBird,
+  totalBird
 } = birdSlice.actions;
 export default birdSlice.reducer;

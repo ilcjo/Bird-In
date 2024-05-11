@@ -96,7 +96,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'top',
-                
+
                 }}>
                 {birds.map((bird, index) => (
 
@@ -136,7 +136,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                             sx={{ position: 'relative' }}
                         >
 
-                            <Typography variant="h1" color='primary' sx={{ width: '40%', flexShrink: 0, mt: 2 }}>
+                            <Typography variant="h1" color='primary' sx={{ width: { xs:'100%', md:'40%', lg:'50%' }, flexShrink: 0, mt: 2, ml: 2 }}>
                                 {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
                                 {/* <Divider sx={{ mt: 2, borderColor: 'primary.main', borderWidth: 1, width: '50vh' }} /> */}
                             </Typography>
@@ -149,7 +149,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
 
                             <Grid container spacing={5} sx={{ ml: 4 }}>
                                 {/* Contenido de la primera columna */}
-                                <Grid item xs={2.5} >
+                                <Grid item xs={5} md={2.5} lg={2.5} >
                                     <Typography variant="h5" color="primary.main">
                                         Nombre Inglés:  <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
                                             {bird.nombre_ingles ? bird.nombre_ingles : 'No Especificado'}
@@ -163,7 +163,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                     </Typography>
                                 </Grid>
                                 {/* Contenido de la segunda columna */}
-                                <Grid item xs={2.5}>
+                                <Grid item xs={5} md={2.5} lg={2.5} >
                                     <Typography variant="h5" color="primary.main">
                                         Nombre Común:
                                         <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
@@ -180,7 +180,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                     </Typography>
 
                                 </Grid>
-                                <Grid item xs={2}>
+                                <Grid item xs={5} md={2.5} lg={2} >
                                     {/* Contenido de la tercera columna */}
                                     <Typography variant="h5" color="primary.main">
                                         Nombre Científico:
@@ -189,7 +189,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                         </Typography>
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={2}>
+                                <Grid item xs={5} md={2.5} lg={2} >
                                     <Typography variant="h5" color="primary.main">
                                         Grupo:
                                         <Typography variant="body1" color="primary.light" sx={{ mb: 1.5 }}>
@@ -205,7 +205,7 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                                         </Typography>
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={2} >
+                                <Grid item xs={5} md={2.5} lg={2}  >
                                     <Typography variant="h5" color="primary.main" >
                                         URLS Externas:
                                         {/* <Divider sx={{ mt: 0.5, mb: 1, borderColor: 'primary', borderWidth: 0.5, width: '190px' }} /> */}
@@ -295,11 +295,11 @@ export const PhotosDetail = ({ setIsFilterOpen }) => {
                 // backdropFilter: 'blur(70px) brightness(70%)',
                 // backgroundColor: 'rgba(204,214,204,0)',
                 minHeight: '50vh',
-                
+
             }}>
 
                 {allImages.length === 0 && (
-                    <Typography variant="h2" color="primary.main" sx={{ mt: 4, mr: '60%',  }}>
+                    <Typography variant="h2" color="primary.main" sx={{ mt: 4, mr: '60%', }}>
                         No se han subido imágenes.
                     </Typography>
                 )}

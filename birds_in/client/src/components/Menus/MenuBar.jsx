@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Button, Grid } from '@mui/material'
+import { Box, Button, Grid, useMediaQuery } from '@mui/material'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -59,7 +59,8 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
         dispatch(getOptionsData())
     };
 
-
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const fontSize = isMobile ? '0.7rem' : '1rem'; 
 
     return (
 
@@ -73,7 +74,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     backgroundColor: theme.palette.primary.dark, // Fondo semitransparente para mejorar la legibilidad
                     justifyContent: 'space-between', // Alinea los elementos a lo largo del eje principal (horizontal) distribuyendo el espacio sobrante entre ellos
                     alignItems: 'center', // Alinea los elementos al centro verticalmente
-                    padding: '0 20px', // Agrega algún relleno para mejorar la apariencia
+                    // padding: '0 0px', // Agrega algún relleno para mejorar la apariencia
                     zIndex: 10,
                 }}
             >
@@ -86,9 +87,10 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         <Button
                             sx={{
                                 marginBottom: '10px',
-                                fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+                                fontSize: fontSize, // Aumentar el tamaño del texto a 1.2 rem
                                 fontWeight: 'bold',
                                 color: theme.palette.primary.light,
+                                // display: isMobile ? 'none' : 'inline-flex',
                             }}
                             variant="outline"
                             color="primary"
@@ -118,9 +120,10 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         <Button
                             sx={{
                                 marginBottom: '10px',
-                                fontSize: '1rem',
+                                fontSize: fontSize,
                                 fontWeight: 'bold',
                                 color: theme.palette.primary.main,
+                                // display: isMobile ? 'none' : 'inline-flex',
                             }}
                             variant="outline"
                             onClick={returnMenuClick}
@@ -129,30 +132,14 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             Menu Principal
                         </Button>
                     )}
-                    
-                    {/* {showAdmin && isAdmin && (
-
-                        <Button
-                            sx={{
-                                marginBottom: '10px',
-                                fontSize: '1rem',
-                                fontWeight: 'bold',
-                                color: theme.palette.primary.main,
-                            }}
-                            color="primary"
-                            variant="outline"
-                            onClick={adminClick}
-                        // endIcon={<LogoutIcon />}
-                        >
-                            Regresar Admin
-                        </Button>
-                    )} */}
+                   
                     <Button
                         sx={{
                             marginBottom: '10px',
-                            fontSize: '1rem',
+                            fontSize: fontSize,
                             fontWeight: 'bold',
                             color: theme.palette.primary.main,
+                            // display: isMobile ? 'none' : 'inline-flex',
                         }}
                         color="primary"
                         variant="outline"

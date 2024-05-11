@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreData } from '../../redux/actions/fetchAllBirds'
-import { Button, Dialog, Grid, useTheme } from '@mui/material'
+import { Button, Dialog, Grid, Typography, useTheme } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Filters } from '../../components/Filters'
 import { Cards } from '../../components/Cards/Cards'
@@ -15,6 +15,7 @@ export const Aves = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const birds = useSelector(state => state.birdSlice.infoBirds)
+  const total = useSelector(state => state.birdSlice.infoBirds.total)
   const parameter = useSelector(state => state.birdSlice.filters)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const noMoreResults = useSelector((state) => state.birdSlice.noMoreResults);
@@ -76,23 +77,31 @@ export const Aves = () => {
         )} */}
         {birds.length > 1 && (
 
-          <Grid item container spacing={3} justifyContent="center">
-            <Button
-              sx={{
-                mt: 5,
-                ml: '85%',
-                fontSize: '1.1rem',
-                fontWeight: 'bold',
-                color: theme.palette.primary.main,
-                backgroundColor: 'rgba(0, 56, 28, 0.2)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(9px)', // Efecto de desenfoque de fondo
-                // textShadow: `2px 2px 3px ${theme.palette.primary.light}`,
-              }}
-              variant="outline"
-              onClick={stepBack}
-              startIcon={<ArrowBackIcon />}
-            >Regresar
-            </Button>
+          <Grid container spacing={3} justifyContent="center">
+            <Grid item md={6} xs={6}>
+              <Typography variant='h2' color='primary'
+                sx={{ mt: 5, ml: 8 }}
+              >Total de Aves:{total}</Typography>
+            </Grid>
+            <Grid item md={6} xs={6} >
+              <Button
+                sx={{
+                  mt: 5,
+                  ml: { xs: '30%', md: '70%', lg: '70%' },
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  color: theme.palette.primary.main,
+                  backgroundColor: 'rgba(0, 56, 28, 0.2)', // Establece el fondo transparente deseado
+                  backdropFilter: 'blur(9px)', // Efecto de desenfoque de fondo
+                  // textShadow: `2px 2px 3px ${theme.palette.primary.light}`,
+                }}
+                variant="outline"
+                onClick={stepBack}
+                startIcon={<ArrowBackIcon />}
+              >Regresar
+              </Button>
+            </Grid>
+
             {birds.map((bird, index) => (
 
               <Grid item key={index}>
