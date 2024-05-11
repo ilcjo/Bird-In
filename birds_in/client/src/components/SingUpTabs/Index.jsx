@@ -15,7 +15,7 @@ export const Index = ({ open }) => {
   const handleClose = () => {
     dispatch(Boolean(false))
   };
-  const handleTabChange = (event, newValue) => { 
+  const handleTabChange = (event, newValue) => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
   };
@@ -35,8 +35,8 @@ export const Index = ({ open }) => {
         borderRadius: '15px',
         minHeight: '90%',
         maxHeight: '90%',
-        minWidth: '40%',
-        maxWidth: '40%'
+        minWidth: { xs: '90%', md: '40%', lg: '40%' },
+        maxWidth: { xs: '90%', md: '40%', lg: '40%' },
       }
     }}
     >
