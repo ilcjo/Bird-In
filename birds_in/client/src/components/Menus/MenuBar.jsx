@@ -32,7 +32,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             dispatch(getInfoBirds());
         }
     };
- 
+
     const handleFilterButtonClick = () => {
         // Cambiar el estado del filtro al hacer clic en el botón del filtro
         setIsFilterOpen(!isFilterOpen);
@@ -44,7 +44,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
         navigate('/')
         dispatch(clearToken())
         dispatch(getOptionsData())
-      
+
     };
 
     const returnMenuClick = () => {
@@ -60,7 +60,8 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
     };
 
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const fontSize = isMobile ? '0.7rem' : '1rem'; 
+    const fontSize = isMobile ? '2rem' : '1rem';
+    const displayStyle = isMobile ? 'none' : 'flex';
 
     return (
 
@@ -76,6 +77,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     alignItems: 'center', // Alinea los elementos al centro verticalmente
                     // padding: '0 0px', // Agrega algún relleno para mejorar la apariencia
                     zIndex: 10,
+                    
                 }}
             >
                 {/* Logo en la esquina izquierda */}
@@ -90,14 +92,14 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                                 fontSize: fontSize, // Aumentar el tamaño del texto a 1.2 rem
                                 fontWeight: 'bold',
                                 color: theme.palette.primary.light,
-                                // display: isMobile ? 'none' : 'inline-flex',
+                                
                             }}
                             variant="outline"
                             color="primary"
                             onClick={handleFilterButtonClick}
                             startIcon={<FilterAltIcon />}
                         >
-                            Abrir Filtro
+                           {isMobile ? null : "Abrir Filtro"} 
                         </Button>
 
                     )}
@@ -123,30 +125,30 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                                 fontSize: fontSize,
                                 fontWeight: 'bold',
                                 color: theme.palette.primary.main,
-                                // display: isMobile ? 'none' : 'inline-flex',
+                                
                             }}
                             variant="outline"
                             onClick={returnMenuClick}
                             startIcon={<HomeIcon />}
                         >
-                            Menu Principal
+                            {isMobile ? null : "Menu Principal"}
                         </Button>
                     )}
-                   
+
                     <Button
                         sx={{
                             marginBottom: '10px',
                             fontSize: fontSize,
                             fontWeight: 'bold',
                             color: theme.palette.primary.main,
-                            // display: isMobile ? 'none' : 'inline-flex',
+                         
                         }}
                         color="primary"
                         variant="outline"
                         onClick={onLogoutClick}
                         endIcon={<LogoutIcon />}
                     >
-                        Cerrar Sesión
+                        {isMobile ? null : "Cerrar Sesión"}
                     </Button>
                 </Grid>
             </Grid>

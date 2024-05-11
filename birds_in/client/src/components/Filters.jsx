@@ -336,6 +336,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             key={option.id}
                                             variant="body2" // Elige el variant y otros estilos según tus necesidades
                                             sx={{
+                                                fontSize: {xs:'1.1rem', md: '1.5rem', lg: '1.5rem'},
                                                 display: 'inline-block',
                                                 padding: '4px 8px',
                                                 color: 'white', // Color del texto de la etiqueta
@@ -404,6 +405,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             key={option.id}
                                             variant="body2" // Elige el variant y otros estilos según tus necesidades
                                             sx={{
+                                                fontSize: {xs:'1.1rem', md: '1.5rem', lg: '1.5rem'},
                                                 display: 'inline-block',
                                                 padding: '4px 8px',
                                                 color: 'white', // Color del texto de la etiqueta
@@ -487,6 +489,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                                 key={option.id}
                                                 variant="body2" // Elige el variant y otros estilos según tus necesidades
                                                 sx={{
+                                                    fontSize: {xs:'1.1rem', md: '1.5rem', lg: '1.5rem'},
                                                     display: 'inline-block',
                                                     padding: '4px 8px',
                                                     color: 'white', // Color del texto de la etiqueta
@@ -571,6 +574,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                                 key={option.id}
                                                 variant="body2" // Elige el variant y otros estilos según tus necesidades
                                                 sx={{
+                                                    fontSize: {xs:'1.1rem', md: '1.5rem', lg: '1.5rem'},
                                                     display: 'inline-block',
                                                     padding: '4px 8px',
                                                     color: 'white', // Color del texto de la etiqueta
@@ -631,15 +635,17 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             InputProps={{
                                                 ...params.InputProps,
                                                 sx: inputStyles, // Estilo del input
-
+                                                
                                             }}
+                                            multiline
                                         />}
                                     renderTags={(value, getTagProps) =>
                                         value.map((option, index) => (
                                             <Typography
                                                 key={option.id}
-                                                variant="body2" // Elige el variant y otros estilos según tus necesidades
+                                                variant="body1" // Elige el variant y otros estilos según tus necesidades
                                                 sx={{
+                                                    fontSize: {xs:'1.1rem', md: '1.5rem', lg: '1.5rem'},
                                                     display: 'inline-block',
                                                     padding: '4px 8px',
                                                     color: 'white', // Color del texto de la etiqueta
@@ -722,6 +728,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                                 key={option.id}
                                                 variant="body2" // Elige el variant y otros estilos según tus necesidades
                                                 sx={{
+                                                    fontSize: {xs:'1.1rem', md: '1.5rem', lg: '1.5rem'},
                                                     display: 'inline-block',
                                                     padding: '4px 8px',
                                                     color: 'white', // Color del texto de la etiqueta
