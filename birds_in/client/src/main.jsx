@@ -21,6 +21,7 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
 
 // Realizar llamadas a la API antes de que la aplicación se monte
 // store.dispatch(getInfoBirds());
+
 store.dispatch(getOptionsData());
 store.dispatch(saveOptions());
 store.dispatch(getAllCustomizes());

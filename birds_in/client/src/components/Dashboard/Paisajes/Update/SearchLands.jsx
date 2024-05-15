@@ -10,7 +10,9 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+//COMPONENTS
 import { IndexTabsUpdates } from './IndexTabsUpdates';
+//REDUX
 import { getInfoForUpdateP } from '../../../../redux/paisaje/actionsP/createLands';
 
 

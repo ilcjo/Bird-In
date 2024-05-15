@@ -16,11 +16,11 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
-//redux
+//REDUX
 import { createBird, duplicateNameCheck, getInfoForUpdateName, saveImageFtp } from '../../../redux/actions/createBirds';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
 import { createLand, duplicateNameCheckP, getInfoForUpdateNameP, saveImageFtpLand } from '../../../redux/paisaje/actionsP/createLands';
-//icons
+//ICONS
 import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
@@ -264,7 +264,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             try {
                 // Espera a que la imagen se suba y obtén la URL
                 const imageUrl = await saveImageFtpWithMessage(formData);
-                console.log(imageURL)
+                // console.log(imageURL)
                 // Restaurar el mensaje de carga si es necesario
                 setLoadingMessage('Creando  Paisaje...');
                 await createRegisterWithMessage(createData, imageUrl);

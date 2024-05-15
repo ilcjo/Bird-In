@@ -91,16 +91,4 @@ export const deleteBird = (idN) => {
 };
 
 
-// export const getCompleteBirds = () => {
-//   return async (dispatch) => {
-//     try {
-//       const response = await axios('/aves/filtros?page=0&perPage=0')
-//       const data = response.data
-//       console.log(response.data)
-//       dispatch(safeCompleteDataBids(data))
-//     } catch (error) {
-//       console.error("Error al obtener los datos:", error)
 
-//     }
-//   };
-// };

@@ -3,8 +3,10 @@ import * as React from 'react'
 import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/system';
+//REDUX
 import { setEstateInfo } from '../../../redux/slices/createSlice';
-
+import { setStateInfoP } from '../../../redux/paisaje/slicesP/createLandSlice';
+//COMPONENTS
 import { IndexTabsCreateP } from './Add/IndexTabsCreateP';
 import { SearchLands } from './Update/SearchLands';
 
@@ -37,11 +39,9 @@ export const IndexDP = () => {
   const handleTabChange = (event, newValue) => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
-
-    // Si el nuevo valor es 1 (pestaña "Buscar ave"), establece el estado de Redux
     if (convertNumber === 1) {
 
-      dispatch(setEstateInfo()); // Reemplaza con la acción que establece el estado en Redux
+      dispatch(setStateInfoP()); // Reemplaza con la acción que establece el estado en Redux
     }
 
   };

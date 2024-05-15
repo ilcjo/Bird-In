@@ -21,7 +21,7 @@ export const createLand = createSlice({
         getLand: (state, action) => {
             state.infoLandForUpdate = action.payload
         },
-        setStateInfo: (state, action) =>{
+        setStateInfoP: (state, action) =>{
             state.infoLandForUpdate = {}
         }
     }
@@ -31,6 +31,6 @@ export const {
     saveUrlImageLand,
     idSelectedUpdate,
     getLand,
-    setStateInfo
+    setStateInfoP
 } = createLand.actions;
 export default createLand.reducer;

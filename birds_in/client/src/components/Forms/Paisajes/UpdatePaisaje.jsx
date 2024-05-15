@@ -66,7 +66,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
         },
 
     };
-
+    //ligado a options de aves, los países que están
     const { paises, zonas } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
     const { infoLandForUpdate } = useSelector(state => state.createLand);
@@ -87,13 +87,13 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
     const sortedZonas = sortAlphabetically(zonas)
 
     const initialCreateData = {
-        pais: infoAveForUpdate.paise || [],
-        zona: infoAveForUpdate.zona || [],
-        descripcion: infoAveForUpdate.descripcion || '',
-        link: infoAveForUpdate.url || '',
-        ImgDescatada: infoAveForUpdate.destacada || '',
-        idAve: infoAveForUpdate.id|| 0,
-        urlImagen: infoAveForUpdate.imagenes_paisajes || [],
+        pais: infoLandForUpdate.paise || [],
+        zona: infoLandForUpdate.zona || [],
+        descripcion: infoLandForUpdate.descripcion || '',
+        link: infoLandForUpdate.url || '',
+        ImgDescatada: infoLandForUpdate.destacada || '',
+        idAve: infoLandForUpdate.id || 0,
+        urlImagen: infoLandForUpdate.imagenes_paisajes || [],
     }
 
     const [createData, setCreateData] = React.useState(initialCreateData)
@@ -283,11 +283,12 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
     };
 
     React.useEffect(() => {
+        //cargo la data de inicio formulario
         setCreateData(initialCreateData);
-    }, [infoAveForUpdate]);
+    }, [infoLandForUpdate]);
 
     React.useEffect(() => {
-        // Aquí despachas la acción para cargar las opciones al montar el componente
+        // Aquí despachas la acción para cargar las opciones que siguen siendo aves países al montar el componente
         dispatch(getOptionsData());
     }, []);
 

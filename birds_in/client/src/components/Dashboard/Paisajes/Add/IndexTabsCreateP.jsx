@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-
+//COMPONENTS
 import { CreateLand } from '../../../Forms/Paisajes/CreateLand';
 import { CoverDeletP } from './CoverDeletP';
 
@@ -52,7 +52,7 @@ export const IndexTabsCreateP = ({
                 textColor='primary'
                 indicatorColor="primary"
                 aria-label="tabsInfoActualizar"
-                selectionfollowsfocu='true'
+                selectionFollowsFocus='true'
             >
                 <StyledTab label={<Typography variant='h5' >
                     Información
