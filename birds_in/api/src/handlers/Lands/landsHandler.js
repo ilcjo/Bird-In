@@ -21,7 +21,8 @@ const {
    findDataByIdP,
    fetchFilterLands,
    setDbCoverPaisaje,
-   findPhotosIdPaisaje
+   findPhotosIdPaisaje,
+   sendAndUpdatePaisaje
 } = require('../../controllers/Lands/landsController');
 const ftp = require('basic-ftp');
 const { deletePhotoFromFTPPaisajes } = require('../../utils/deletFtp');
@@ -188,45 +189,35 @@ const findInfoForUpdateNameP = async (req, res) => {
       }
       const formDataUpdate = await findDataByNameP(name);
       if (!formDataUpdate) {
-         return res.status(404).json({ error: 'Ave no encontrada' });
+         return res.status(404).json({ error: 'Registro no encontrado' });
       }
       return res.status(200).json(formDataUpdate);
    } catch (error) {
-      res.status(500).json({ error: 'Error actualizando ave' });
+      res.status(500).json({ error: 'Error al actualizar' });
    }
 };
 
 
-const updateInfoBids = async (req, res) => {
+const updateInfoPaisaje = async (req, res) => {
    const {
-      grupo,
-      familia,
       pais,
       zona,
-      cientifico,
-      ingles,
-      comun,
+      descripcion,
       urlWiki,
-      urlBird,
       urlImagen,
-      idAve,
+      idPaisaje,
    } = req.body;
 
    try {
-      const succesUpdate = await sendAndUpdateBird(
-         grupo,
-         familia,
+      const successUpdate = await sendAndUpdatePaisaje(
          pais,
          zona,
-         cientifico,
-         ingles,
-         comun,
+         descripcion,
          urlWiki,
-         urlBird,
          urlImagen,
-         idAve,
+         idPaisaje,
       )
-      return res.status(200).json(succesUpdate)
+      return res.status(200).json(successUpdate)
 
    } catch (error) {
       res.status(500).send({ error: error.message })
@@ -301,7 +292,7 @@ module.exports = {
    createLand,
    uploadImageftpPaisajes,
    findInfoForUpdateP,
-   updateInfoBids,
+   updateInfoPaisaje,
    deletePhotosPaisajes,
    setCoverPhotoP,
    contandoRegistros,

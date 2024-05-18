@@ -101,13 +101,13 @@ const theme = createTheme({
             height: '70px',
             // backgroundColor: 'rgba(0,56,28,0.22)',
             borderRadius: '9px',
-            borderColor: 'none',
+            borderColor: 'transparent',
             color: '#ccd6cc',
           },
           '& .MuiOutlinedInput-notchedOutline': {
             // backgroundColor: 'rgba(0,56,28,0.22)',
             backgroundColor: 'rgba(204,214,204,0.17)',
-            borderColor: 'none',
+            borderColor: 'transparent',
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#C1C700 !important',
@@ -134,6 +134,7 @@ const theme = createTheme({
             // backgroundColor: 'rgba(204,214,204,0.17)',
             borderRadius: '9px',
             height: '70px',
+
           },
         },
       },
@@ -174,8 +175,20 @@ const theme = createTheme({
   MuiAutocomplete: {
     styleOverrides: {
       root: {
-        '& .MuiInputBase-root-MuiOutlinedInput-root': {
-          height: '40px ', // Establece la altura deseada para el input del Autocomplete
+        '&.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-clttge-MuiAutocomplete-root .MuiOutlinedInput-root': {
+          height: '70px',
+          '& .MuiInputBase-input': {
+            height: '70px',
+            padding: '0px 10px',
+            display: 'flex',
+            alignItems: 'center',
+          },
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'transparent',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#C1C700',
+          },
         },
       },
     },

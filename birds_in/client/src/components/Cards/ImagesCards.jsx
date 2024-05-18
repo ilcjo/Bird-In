@@ -27,7 +27,6 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
 
         // maxWidth: '100%',
         // minWidth: 415,
-
         // minHeight: 280,
         // width: '200px',
         // height: '194px',

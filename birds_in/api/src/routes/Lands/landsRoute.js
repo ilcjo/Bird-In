@@ -23,7 +23,8 @@ const {
     findInfoForUpdateP,
     getFilterInfoP,
     setCoverPhotoP,
-    deletePhotosPaisajes
+    deletePhotosPaisajes,
+    updateInfoPaisaje
 } = require('../../handlers/Lands/landsHandler')
 
 const landsRouter = Router()
@@ -34,7 +35,7 @@ landsRouter.get('/filtros', getFilterInfoP)
     .post('/upload_image', upload.array('images'), uploadImageftpPaisajes)
     .get('/get_update', findInfoForUpdateP)
     .get('/get_update_name', findInfoForUpdateNameP)
-    .put('/update', updateInfoBids)
+    .put('/update', updateInfoPaisaje)
     .delete('/borrar_fotos', deletePhotosPaisajes)
     .put('/foto_portada', setCoverPhotoP)
     .get('/contando', contandoRegistros)

@@ -37,7 +37,9 @@ const fetchFilterLands = async (
             },
             {
                 model: Imagenes_paisajes,
-                attributes: ['url_paisaje', 'destacada']
+                attributes: [
+                    ['url_paisaje', 'url'],
+                    'destacada',]
             }
         ];
 
@@ -58,7 +60,7 @@ const fetchFilterLands = async (
                 where: { id_zona: zonas }
             });
         }
-        console.log(includeArr)
+
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
@@ -331,7 +333,7 @@ const sendAndCreateLand = async (
     descripcion,
     urlImagen
 ) => {
-    console.log(urlImagen)
+
     try {
         // Verificar si tanto el país como la zona están presentes
         if (!pais || !zona) {
@@ -372,18 +374,20 @@ const findDataByIdP = async (id) => {
             include: [
                 {
                     model: Imagenes_paisajes,
-                    attributes: ['url_paisaje',
+                    attributes: [
+                        ['url_paisaje', 'url'],
                         'id',
                         'destacada',
-                        [Sequelize.literal('SUBSTRING_INDEX(url, "_", -1)'), 'titulo']
+                        [Sequelize.literal('SUBSTRING_INDEX(url_paisaje, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_aves
                 },
                 { model: Paises, attributes: ['nombre', ['id_pais', 'id']] },
                 { model: Zonas, attributes: [['nombre_zona', 'nombre'], ['id_zona', 'id']] },
             ],
             attributes: [
+                'id',
                 'descripcion',
-                'id'
+                'url',
             ] // Atributos
         });
         return Registro;
@@ -402,7 +406,8 @@ const findDataByNameP = async (id) => {
             include: [
                 {
                     model: Imagenes_paisajes,
-                    attributes: ['url_paisaje',
+                    attributes: [
+                        ['url_paisaje', 'url'],
                         'id',
                         'destacada',
                         [Sequelize.literal('SUBSTRING_INDEX(url_paisaje, "_", -1)'), 'titulo']
@@ -412,8 +417,9 @@ const findDataByNameP = async (id) => {
                 { model: Zonas, attributes: [['nombre_zona', 'nombre'], ['id_zona', 'id']] },
             ],
             attributes: [
+                'id',
                 'descripcion',
-                'id'
+                'url',
             ]
         });
         return Registro;
@@ -425,95 +431,56 @@ const findDataByNameP = async (id) => {
 };
 
 
-const sendAndUpdateBird = async (
-    grupo,
-    familia,
-    paises,
+const sendAndUpdatePaisaje = async (
+    pais,
     zona,
-    cientifico,
-    ingles,
-    comun,
+    descripcion,
     urlWiki,
-    urlBird,
     urlImagen,
-    idAve,
+    idPaisaje,
 ) => {
     try {
-        // Obtener el ave existente de la base de datos
-        const existingBird = await Aves.findOne({
+        // Obtener el registro existente de la base de datos
+        const existingRegister = await Paisajes.findOne({
             where: {
-                id_ave: idAve,
+                id: idPaisaje,
             },
         })
 
-        if (!existingBird) {
-            throw new Error("El ave con ID especificado no existe.");
+        if (!existingRegister) {
+            throw new Error("El Registro con ID especificado no existe.");
         }
         // Verificar si los nuevos valores son diferentes de los actuales antes de actualizar
         if (
-            ingles !== existingBird.nombre_ingles ||
-            cientifico !== existingBird.nombre_cientifico ||
-            comun !== existingBird.nombre_comun ||
-            urlWiki !== existingBird.url_wiki ||
-            urlBird !== existingBird.url_bird ||
-            grupo.id !== existingBird.grupos_id_grupo ||
-            familia.id !== existingBird.familias_id_familia
+            descripcion !== existingRegister.descripcion ||
+            urlWiki !== existingRegister.url ||
+            pais.id !== existingRegister.paises_id_pais ||
+            zona.id !== existingRegister.zonas_id_zona
         ) {
             // Actualizar el registro existente en la tabla "aves" y sus relaciones
-            await Aves.update(
+            await Paisajes.update(
                 {
-                    nombre_ingles: ingles,
-                    nombre_cientifico: cientifico,
-                    nombre_comun: comun,
-                    // zonas: zona,
-                    url_wiki: urlWiki,
-                    url_bird: urlBird,
-                    grupos_id_grupo: grupo.id,
-                    familias_id_familia: familia.id,
+                    descripcion: descripcion,
+                    url: urlWiki,
+                    paises_id_pais: pais.id,
+                    zonas_id_zona: zona.id,
                 },
                 {
                     where: {
-                        id_ave: idAve,
+                        id: idPaisaje
                     },
                 }
             );
         }
         for (const imageUrl of urlImagen) {
-            await Imagenes_aves.create({
-                aves_id_ave: idAve,
-                url: imageUrl,
+            await Imagenes_paisajes.create({
+                paisajes_id_paisaje: idPaisaje,
+                url_paisaje: imageUrl,
             });
         }
-        const existingRelations = await Aves.findByPk(idAve);
-        if (existingRelations) {
-            // Elimina todas las relaciones de países asociadas al ave
-            await existingRelations.setPaises([]);
-            await existingRelations.setZonasAves([]);
-        }
-        for (const pais of paises) {
-            await existingRelations.addPaises(pais.id);
-        }
-        for (const zonita of zona) {
-            await existingRelations.addZonasAves(zonita.id);
-        }
-        // if (existingRelations) {
-        //     // Obtén todas las relaciones de países asociadas al ave
-        //     const existingPaises = await existingRelations.getPaises();
-
-        //     // Itera sobre las relaciones y elimina cada una de ellas
-        //     for (const pais of existingPaises) {
-        //         await existingRelations.removePaises(pais);
-        //     }
-        // }
-        // console.log(paises)
-        // for (const pais of paises) {
-        //     await existingRelations.addPaises(pais.id);
-        // }
-
-        return "El ave se ha actualizado correctamente.";
+        return "El Registro se ha actualizado correctamente.";
     } catch (error) {
         console.log('Error:', error);
-        // Agrega manejo de errores específicos si es necesario.
     }
 };
 
@@ -683,7 +650,7 @@ module.exports = {
     fetchFilterLands,
     sendAndCreateLand,
     findDataByIdP,
-    sendAndUpdateBird,
+    sendAndUpdatePaisaje,
     findPhotosIdPaisaje,
     setDbCoverPaisaje,
     getContadores,

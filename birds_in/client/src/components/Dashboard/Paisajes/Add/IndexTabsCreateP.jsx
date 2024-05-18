@@ -10,8 +10,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: '80%',
-    marginLeft: '150px',
+    width: 'auto',
     '& .Mui-selected': {
         backgroundColor: theme.palette.secondary.light,
     },

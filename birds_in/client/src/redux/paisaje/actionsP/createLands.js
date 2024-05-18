@@ -36,10 +36,10 @@ export const createLand = (formData) => {
   }
 };
 
-export const UpdateAveImage = (formData) => {
+export const UpdatePaisajeImage = (formData) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post('aves/upload_image', formData, {
+      const response = await axios.post('paisajes/upload_image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
         },
@@ -72,10 +72,10 @@ export const UpdateAveDestacada = (formData) => {
   }
 };
 
-export const actualizarAve = (info) => {
+export const actualizarPaisaje = (info) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put('aves/update', info)
+      const response = await axios.put('paisajes/update', info)
 
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:', response.data);
@@ -105,7 +105,7 @@ export const getInfoForUpdatePa = (id) => {
 };
 
 export const getInfoForUpdateNameP = (name) => {
-console.log(name)
+  console.log(name)
   return async (dispatch) => {
     try {
       const response = await axios(`paisajes/get_update_name?name=${name}`)
@@ -127,7 +127,7 @@ export const duplicateNameCheckP = (id) => {
       const response = await axios(`paisajes/duplicados?zona=${id}`)
       const ave = response.data
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
-      
+
     } catch (error) {
       // Maneja los errores de la solicitud
       console.error('Error al enviar datos:', error);
