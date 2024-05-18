@@ -67,7 +67,7 @@ export const IndexD = () => {
         sx={{
           backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
           backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
-          mt: 1,
+          mt: 20,
           borderRadius: '20px 20px 0px 0px',
           '& .Mui-selected': {
             backgroundColor: theme.palette.secondary.light,

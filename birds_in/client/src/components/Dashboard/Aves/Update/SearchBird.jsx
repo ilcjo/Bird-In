@@ -20,6 +20,7 @@ export const SearchBird = ({ changeTab }) => {
     const [showBackdrop, setShowBackdrop] = React.useState(true);
     const [selectedBird, setSelectedBird] = React.useState(null);
     const [birdsData, setBirdsData] = React.useState([]);
+    console.log(selectedBird)
     const [showUpdateBird, setShowUpdateBird] = React.useState(false);
     const [showSearchBird, setShowSearchBird] = React.useState(true);
 

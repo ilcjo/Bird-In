@@ -15,29 +15,50 @@ const fetchFilterLands = async (
 ) => {
     try {
         if (descripcion) {
-            descripcion = decodeURIComponent(descripcion)
+            descripcion = decodeURIComponent(descripcion);
         }
         const whereClause = {};
-        if (pais) {
-            whereClause.paises_id_pais = pais;
-        }
-        if (zonas) {
-            const zonasArray = zonas.split(',').map(Number);
-            whereClause.zonas_id_zona = zonasArray;
-        }
         if (descripcion) {
             whereClause.descripcion = { [Op.like]: `%${descripcion}%` };
         }
 
         const includeArr = [
-            { model: Paises, attributes: ['nombre'] },
-            { model: Zonas, attributes: ['nombre_zona'] },
+            {
+                model: Paises,
+                attributes: ['nombre', 'id_pais'],
+                as: 'paise'
+            },
+            {
+                model: Zonas,
+                attributes: [
+                    ['nombre_zona', 'nombre'],
+                    'id_zona'],
+                as: 'zona'
+            },
             {
                 model: Imagenes_paisajes,
                 attributes: ['url_paisaje', 'destacada']
-            },
+            }
         ];
 
+        if (pais) {
+            includeArr.push({
+                model: Paises,
+                attributes: ['nombre', 'id_pais'],
+                as: 'paise',
+                where: { id_pais: pais }
+            });
+        }
+
+        if (zonas) {
+            includeArr.push({
+                model: Zonas,
+                attributes: ['nombre', 'id_zona'],
+                as: 'zona',
+                where: { id_zona: zonas }
+            });
+        }
+        console.log(includeArr)
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
@@ -46,9 +67,6 @@ const fetchFilterLands = async (
             include: includeArr,
             limit: perPageConvert,
             offset: offset,
-            // order: [
-            //     ['nombre_ingles', 'ASC'], // Ordena por el campo 'nombre_ingles' en orden ascendente
-            // ],
         });
 
         const totalResultsClausula = await Paisajes.count({ where: whereClause });
@@ -347,7 +365,7 @@ const sendAndCreateLand = async (
 };
 
 const findDataByIdP = async (id) => {
-    console.log('llegue al comntroller id:', id)
+
     try {
         const Registro = await Paisajes.findOne({
             where: { id: id },
@@ -361,7 +379,7 @@ const findDataByIdP = async (id) => {
                         ,] // Atributos que deseas de Imagenes_aves
                 },
                 { model: Paises, attributes: ['nombre', ['id_pais', 'id']] },
-                { model: Zonas, attributes: ['nombre_zona', ['id_zona', 'id']] },
+                { model: Zonas, attributes: [['nombre_zona', 'nombre'], ['id_zona', 'id']] },
             ],
             attributes: [
                 'descripcion',
@@ -391,7 +409,7 @@ const findDataByNameP = async (id) => {
                         ,] // Atributos que deseas de Imagenes
                 },
                 { model: Paises, attributes: ['nombre', ['id_pais', 'id']] },
-                { model: Zonas, attributes: ['nombre_zona', ['id_zona', 'id']] },
+                { model: Zonas, attributes: [['nombre_zona', 'nombre'], ['id_zona', 'id']] },
             ],
             attributes: [
                 'descripcion',

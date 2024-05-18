@@ -3,7 +3,6 @@ import { getAve, saveUrlImage } from "../../slices/createSlice";
 import { getLand, saveUrlImageLand } from "../slicesP/createLandSlice";
 
 export const saveImageFtpLand = (formData) => {
-  console.log('llegue')
   return async (dispatch) => {
     try {
       const response = await axios.post('paisajes/upload_image', formData, {
@@ -88,7 +87,7 @@ export const actualizarAve = (info) => {
 };
 
 
-export const getInfoForUpdateP = (id) => {
+export const getInfoForUpdatePa = (id) => {
 
   return async (dispatch) => {
     try {

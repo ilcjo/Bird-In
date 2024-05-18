@@ -102,7 +102,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         idAve: infoAveForUpdate.id_ave || 0,
         urlImagen: infoAveForUpdate.imagenes_aves || [],
     }
-
+    console.log(initialCreateData)
     const [createData, setCreateData] = React.useState(initialCreateData)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen

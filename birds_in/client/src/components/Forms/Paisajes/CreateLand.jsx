@@ -131,7 +131,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
 
     const handleZonaChange = (newValue) => {
         // const newValue= event.target.value;
-        console.log(newValue)
+        // console.log(newValue)
 
         if (!newValue) {
             // If newValue is null, it means the user cleared the selection, so we don't perform duplicate check

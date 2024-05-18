@@ -10,10 +10,10 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: '80%',
-    marginLeft: '150px',
+    width: '100%',
+    // marginLeft: '150px',
     '& .Mui-selected': {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.custom.light,
     },
 }));
 const StyledTab = styled(Tab)({
@@ -25,7 +25,6 @@ const StyledTab = styled(Tab)({
     },
 
 });
-
 
 export const IndexTabsUpdates = ({ isEnable, changeTab,
     showUpdateRegister,
@@ -50,7 +49,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab,
                 textColor='primary'
                 indicatorColor="primary"
                 aria-label="tabsInfoActualizar"
-                selectionFollowsFocus='true'
+            // selectionFollowsFocus='true'
             >
                 <StyledTab label={<Typography variant='h5' >
                     Información

@@ -48,4 +48,23 @@ export const useStyles = makeStyles((theme) => ({
       textTransform: 'none',
     },
   },
+  styledTabs: {
+    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+    borderRadius: '10px 10px 0px 0px',
+    marginTop: '0px',
+    width: '80%',
+    marginLeft: '150px',
+    '& .Mui-selected': {
+      backgroundColor: theme.palette.secondary.light,
+    },
+  },
+  styledTab: {
+    minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
+    textTransform: 'none',
+    color: '#ccd6cc',
+    '&.Mui-selected .MuiTypography-root': {
+      color: '#C1C700',
+    },
+  },
 }));

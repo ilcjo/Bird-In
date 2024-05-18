@@ -47,7 +47,6 @@ export const Index = ({ open }) => {
           textColor='primary'
           indicatorColor="primary"
           aria-label="tabsLogin"
-          selectionfollowsfocu='true'
         >
           <Tab label={
             <Typography variant='h5' sx={tabTitleStyles}>

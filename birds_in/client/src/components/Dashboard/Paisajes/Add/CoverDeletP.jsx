@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 //Redux
 import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
 import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/actions/DeletCover';
-import { getInfoForUpdateP } from '../../../../redux/paisaje/actionsP/createLands';
+import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
 import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
 //iconos
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -71,7 +71,7 @@ export const CoverDeletP = ({
             await dispatch(sendCoverPhotoP(id, infoLandForUpdate.id));
             setShowBackdrop(true);
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            await dispatch(getInfoForUpdateP(infoLandForUpdate.id));
+            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
             console.log('update después de la portada:', infoLandForUpdate)
             setShowBackdrop(false);
             setSnackbarOpen(true);
@@ -115,7 +115,7 @@ export const CoverDeletP = ({
     // };
 
     const handleDeleteCheckBox = (id, url) => {
-        console.log('soy',url)
+        console.log('soy', url)
         const index = selectedImages.findIndex((img) => img.id === id);
 
         if (index === -1) {
@@ -137,7 +137,7 @@ export const CoverDeletP = ({
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url_paisaje);
-            console.log('imagenes url',selectedUrls)
+            console.log('imagenes url', selectedUrls)
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
 
@@ -147,7 +147,7 @@ export const CoverDeletP = ({
             setSelectedImages([])
             setShowBackdrop(false)
             setLoadingMessage('Borrando fotografías')
-            await dispatch(getInfoForUpdateP(infoLandForUpdate.id));
+            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
             setSnackbarOpen(true);

@@ -16,9 +16,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
   marginTop: '90px',
-  justifyContent: 'flex-start',
   '& .Mui-selected': {
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: theme.palette.custom.light,
   },
 }));
 const StyledTab = styled(Tab)({
@@ -58,7 +57,7 @@ export const IndexDP = () => {
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
-        selectionFollowsFocus='true'
+      // selectionFollowsFocus='true'
       >
         <StyledTab label={
           <Typography variant='h5'>

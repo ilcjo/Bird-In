@@ -12,16 +12,16 @@ const theme = createTheme({
       contrastText: '#004E37',
     },
     secondary: {
+      light: '#C1C700',
+      main: '#004E37', //verde
+      dark: '#A3A3A3',
+      contrastText: '#ccd6cc',
+    },
+    custom: {
       light: alpha('#CCD6CC', 0.17),
       main: '#f44336',
       dark: '#004E4E',
       contrastText: '#000',
-    },
-    custome: {
-      light: '#ccd6cc',
-      main: '#004E37',
-      dark: '#A3A3A3',
-      contrastText: '#ccd6cc',
     },
   },
   typography: {
@@ -88,33 +88,35 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-
           // backgroundColor: 'rgba(204,214,204,0.17)',
           borderRadius: '9px',
-          height: '60px',
+          height: '70px',
           '& .MuiInputLabel-root': {
+            height: '70px',
             color: '#C1C700', // Color del tITULO del label cuando está habilitado
           },
           '& .MuiInputBase-input': {
             padding: '0px',
             paddingLeft: '10px',
-            height: '50px',
-            // backgroundColor: 'rgba(204,214,204,0.17)',
+            height: '70px',
+            // backgroundColor: 'rgba(0,56,28,0.22)',
             borderRadius: '9px',
             borderColor: 'none',
             color: '#ccd6cc',
           },
           '& .MuiOutlinedInput-notchedOutline': {
+            // backgroundColor: 'rgba(0,56,28,0.22)',
+            backgroundColor: 'rgba(204,214,204,0.17)',
             borderColor: 'none',
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#C1C700 !important',
             backgroundColor: 'rgba(0,56,28,0.22)',
-            height: '55px',
+            height: 'auto',
           },
           '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
             // Agrega los estilos que desees para el Select
-            height: '50px',
+            height: '70px',
 
           },
         },
@@ -123,16 +125,15 @@ const theme = createTheme({
         InputLabelProps: {
           sx: {
             color: 'primary.main',
-            marginTop: '-9px',
-
+            marginTop: '-10px',
           },
         },
         InputProps: {
           sx: {
             color: '#ccd6cc',
-            backgroundColor: 'rgba(204,214,204,0.17)',
+            // backgroundColor: 'rgba(204,214,204,0.17)',
             borderRadius: '9px',
-            height: '50px',
+            height: '70px',
           },
         },
       },
@@ -142,7 +143,7 @@ const theme = createTheme({
         root: {
           margin: '0px',
           marginTop: '40px',
-          gap: '20px',
+          // gap: '20px',
           fontWeight: 500,
         },
         contained: {
@@ -151,7 +152,7 @@ const theme = createTheme({
           textTransform: 'none',
           borderRadius: '50px',
           '&:hover': {
-            backgroundColor: 'primary.dark', // Cambia el color de fondo en hover
+            backgroundColor: 'transparent', // Cambia el color de fondo en hover
             color: '#ccd6cc', // Cambia el color del texto en hover
             textTransform: 'none',
           },
@@ -161,6 +162,11 @@ const theme = createTheme({
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
           borderRadius: '50px',
+          '&:hover': {
+            backgroundColor: 'transparent', // Cambia el color de fondo en hover
+            color: '#ccd6cc', // Cambia el color del texto en hover
+            textTransform: 'none',
+          },
         },
       },
     },
@@ -169,7 +175,7 @@ const theme = createTheme({
     styleOverrides: {
       root: {
         '& .MuiInputBase-root-MuiOutlinedInput-root': {
-          height: '50px ', // Establece la altura deseada para el input del Autocomplete
+          height: '40px ', // Establece la altura deseada para el input del Autocomplete
         },
       },
     },
