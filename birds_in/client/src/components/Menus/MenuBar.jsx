@@ -82,6 +82,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     alignItems: 'center',
                     height: '9vh',
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    // gap: '10px',
                 }}
             >
                 <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}>
@@ -89,7 +90,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         style={{ width: 'auto', height: '120%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}
                         loading="lazy" />
                 </Link>
-                <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1 }}>
+                <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1, gap: '10px', }}>
                     {ShowFilterButton && (
                         <Button
                             sx={{

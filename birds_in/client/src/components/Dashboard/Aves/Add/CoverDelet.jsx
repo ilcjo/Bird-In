@@ -88,6 +88,7 @@ export const CoverDelet = ({ showUpdateBird, showSearchBird, selectedBird, }) =>
 
     const closeImageDialog = () => {
         setDialogOpen(false);
+        
     };
 
     // const handleSaveAsFeatured = async () => {

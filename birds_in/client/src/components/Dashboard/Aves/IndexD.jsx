@@ -18,10 +18,10 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
   backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
-  marginTop: '0px',
+  marginTop: '90px',
 
   '& .Mui-selected': {
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: theme.palette.custom.light,
   },
 }));
 const StyledTab = styled(Tab)({
@@ -63,14 +63,13 @@ export const IndexD = () => {
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
-        selectionFollowsFocus='true'
         sx={{
           backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
           backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
           mt: 20,
           borderRadius: '20px 20px 0px 0px',
           '& .Mui-selected': {
-            backgroundColor: theme.palette.secondary.light,
+            backgroundColor: theme.palette.custom.light,
           }
         }}
       >

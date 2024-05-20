@@ -9,8 +9,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: '80%',
-    marginLeft: '150px',
+    width: '100%',
+    boxSizing: 'border-box',
     '& .Mui-selected': {
         backgroundColor: theme.palette.secondary.light,
     },
@@ -21,8 +21,8 @@ const StyledTab = styled(Tab)({
     color: '#ccd6cc',
     '&.Mui-selected .MuiTypography-root': {
         color: '#C1C700',
-      },
- 
+    },
+
 });
 
 
@@ -38,39 +38,39 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
     };
     return (
         <React.Fragment>
-            {/* ... Otro contenido */}
-            <StyledTabs
-                value={selectedTab}
-                onChange={handleTabChange}
-                textColor='primary'
-                indicatorColor="primary"
-                aria-label="tabsInfoActualizar"
-                selectionfollowsfocu='true'
-            >
-                <StyledTab label={<Typography variant='h5' >
-                    Información
-                </Typography>} />
-                <StyledTab label={<Typography variant='h5' >
-                    Imágenes Existente
-                </Typography>} onClick={handleNavigateToCoverDelet} />
-                {/* Agrega más pestañas según sea necesario */}
-            </StyledTabs>
-            <Box>
-                {selectedTab === 0 && (
-                    <React.Fragment>
-                        {/* Contenido de la primera pestaña */}
-                        <UpdateBirds changeTab={changeTab} showUpdateBird={showUpdateBird}
-                            showSearchBird={showSearchBird}
-                            selectedBird={selectedBird} 
-                            changeImagenExist={handleNavigateToCoverDelet}
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto' }}>
+                <StyledTabs
+                    value={selectedTab}
+                    onChange={handleTabChange}
+                    textColor='primary'
+                    indicatorColor="primary"
+                    aria-label="tabsInfoActualizar"
+                >
+                    <StyledTab label={<Typography variant='h5' >
+                        Información
+                    </Typography>} />
+                    <StyledTab label={<Typography variant='h5' >
+                        Imágenes Existente
+                    </Typography>} onClick={handleNavigateToCoverDelet} />
+                    {/* Agrega más pestañas según sea necesario */}
+                </StyledTabs>
+                <Box sx={{ width: '100%', maxWidth: '100%' }}>
+                    {selectedTab === 0 && (
+                        <React.Fragment>
+                            {/* Contenido de la primera pestaña */}
+                            <UpdateBirds changeTab={changeTab} showUpdateBird={showUpdateBird}
+                                showSearchBird={showSearchBird}
+                                selectedBird={selectedBird}
+                                changeImagenExist={handleNavigateToCoverDelet}
                             />
-                    </React.Fragment>
-                )}
-                {selectedTab === 1 && (
-                    <CoverDelet changeTab={changeTab} showUpdateBird={showUpdateBird}
-                    showSearchBird={showSearchBird}
-                    selectedBird={selectedBird} />
-                )}
+                        </React.Fragment>
+                    )}
+                    {selectedTab === 1 && (
+                        <CoverDelet changeTab={changeTab} showUpdateBird={showUpdateBird}
+                            showSearchBird={showSearchBird}
+                            selectedBird={selectedBird} />
+                    )}
+                </Box>
             </Box>
         </React.Fragment>
     )

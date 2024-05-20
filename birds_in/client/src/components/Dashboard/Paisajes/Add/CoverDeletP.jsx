@@ -84,6 +84,7 @@ export const CoverDeletP = ({
 
     const closeImageDialog = () => {
         setDialogOpen(false);
+        // setSelectedImages([])
     };
 
     const handleDeleteCheckBox = (id, url) => {

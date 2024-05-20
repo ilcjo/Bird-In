@@ -26,7 +26,7 @@ const StyledTab = styled(Tab)({
 
 });
 
-export const IndexTabsUpdates = ({ isEnable, changeTab,
+export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
     showUpdateRegister,
     showSearchRegister,
     selectedRegister,
@@ -49,7 +49,6 @@ export const IndexTabsUpdates = ({ isEnable, changeTab,
                     textColor='primary'
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
-                // selectionFollowsFocus='true'
                 >
                     <StyledTab label={<Typography variant='h5' >
                         Información

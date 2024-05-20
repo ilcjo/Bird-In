@@ -58,7 +58,15 @@ export const IndexDP = () => {
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
-      // selectionFollowsFocus='true'
+        sx={{
+          backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+          backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
+          mt: 20,
+          borderRadius: '20px 20px 0px 0px',
+          '& .Mui-selected': {
+            backgroundColor: theme.palette.custom.light,
+          }
+        }}
       >
         <StyledTab label={
           <Typography variant='h5'>

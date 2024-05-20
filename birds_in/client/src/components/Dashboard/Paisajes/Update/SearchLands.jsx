@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 //COMPONENTS
-import { IndexTabsUpdates } from './IndexTabsUpdates';
+import { IndexTabsUpdatesPa } from './IndexTabsUpdates';
 //REDUX
 import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
 
@@ -174,7 +174,7 @@ export const SearchLands = ({ changeTab }) => {
                     </Grid>
                 </React.Fragment>
             )}
-            {showUpdateRegister && < IndexTabsUpdates
+            {showUpdateRegister && < IndexTabsUpdatesPa
                 changeTab={changeTab}
                 showUpdateRegister={setShowUpdateRegister}
                 showSearchRegister={setShowSearchRegister}
