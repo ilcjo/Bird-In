@@ -74,30 +74,28 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     left: 0, // Lo coloca en la parte izquierda de la pantalla
                     width: '100%', // Ocupa todo el ancho de la pantalla
                     zIndex: 999, // Asegura que esté por encima del contenido
-                    backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                    backdropFilter: 'blur(1px)',
+                    backgroundColor: 'rgba(0, 56, 28, 0.4)',
+                    backdropFilter: 'blur(2px)',
                     WebkitBackdropFilter: 'blur(10px)',
                     justifyContent: 'space-between',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
-                
                     height: '9vh',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
             >
-                {/* Logo en la esquina izquierda */}
-                <Link to="/menu" style={{ width: 'auto', height: '110%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}>
+                <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}>
                     <img src={allCustom.logo} alt="Logo"
                         style={{ width: 'auto', height: '120%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}
                         loading="lazy" />
                 </Link>
-                <Grid item sx={{ mt: -4 }}>
+                <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1 }}>
                     {ShowFilterButton && (
                         <Button
                             sx={{
-                                
-                                fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
+                                fontSize: '1rem',
                                 fontWeight: 'bold',
-                                padding: 5,
-                                color: theme.palette.primary.light,
+                                // color: theme.palette.primary.light,
                             }}
                             variant="outlined"
                             color="primary"
@@ -106,31 +104,13 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         >
                             Abrir Filtro
                         </Button>
-
                     )}
-                    {/* {showAllButton && (
-                        <Button
-                            sx={{
-                                marginBottom: '10px',
-                                fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-                                fontWeight: 'bold',
-                                color: theme.palette.primary.main,
-                            }}
-                            color="primary"
-                            variant='outline'
-                            onClick={handleButtonTodos}
-                        >
-                            Todo
-                        </Button>
-                    )} */}
                     {ShowBackButton && (
                         <Button
                             sx={{
-                                margin: '0px',
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
-                                right: '30px',
-                                color: theme.palette.primary.light
+                                // color: theme.palette.primary.light
                             }}
                             variant="outlined"
                             onClick={returnMenuClick}
@@ -139,30 +119,11 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             Menu Principal
                         </Button>
                     )}
-
-                    {/* {showAdmin && isAdmin && (
-
-                        <Button
-                            sx={{
-                                marginBottom: '10px',
-                                fontSize: '1rem',
-                                fontWeight: 'bold',
-                                color: theme.palette.primary.main,
-                            }}
-                            color="primary"
-                            variant="outline"
-                            onClick={adminClick}
-                        // endIcon={<LogoutIcon />}
-                        >
-                            Regresar Admin
-                        </Button>
-                    )} */}
                     <Button
                         sx={{
-                            margin: '0px',
                             fontSize: '1rem',
                             fontWeight: 'bold',
-                            color: theme.palette.primary.light,
+                        
                         }}
                         color="primary"
                         variant="outlined"
@@ -173,75 +134,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     </Button>
                 </Grid>
             </Grid>
+
         </React.Fragment>
     );
 };
-
-//         <React.Fragment>
-//         <Grid container component={Box} sx={{
-//       height: '6vh',
-//       position: 'relative',
-//       backgroundColor: theme.palette.primary.dark, // Fondo semitransparente para mejorar la legibilidad
-//     }}>
-//             {/* <Grid item sx={{ marginLeft: '80px', marginBottom: '10px' }}>
-//                 <Button
-//                     sx={{
-//                         fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-//                         fontWeight: 'bold', // Hacer el texto negrita
-//                     }}
-//                     color="primary"
-//                     variant='contained'
-//                     onClick={() => handleButtonClick('todo')}
-//                 >
-//                     Todo
-//                 </Button>
-//             </Grid> */}
-//             <Grid item  sx={{ mb: 4}}>
-//                 <Button sx={{
-//                     marginBottom: '10px',
-
-//                     fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
-//                     fontWeight: 'bold',
-//                     color: theme.palette.primary.light
-//                 }}
-//                     variant='outline'
-//                     color="primary"
-//                     onClick={handleFilterButtonClick}
-//                     endIcon={<FilterAltIcon />}
-//                 >
-//                     Abrir Filtro
-//                 </Button>
-//                 <Button
-//                     sx={{
-//                         marginBottom: '10px',
-//                         fontSize: '1rem',
-//                         fontWeight: 'bold',
-//                         color: theme.palette.primary.main
-//                     }}
-
-//                     variant='outline'
-//                     onClick={returnMenuClick}
-//                     startIcon={<ArrowBackIcon />}
-//                 >
-//                     volver
-//                 </Button>
-//                 <Button
-//                     sx={{
-//                         marginBottom: '10px',
-//                         fontSize: '1rem',
-//                         fontWeight: 'bold',
-//                         color: theme.palette.primary.main
-//                     }}
-//                     color="primary"
-//                     variant='outline'
-//                     onClick={onLogoutClick}
-//                     endIcon={<LogoutIcon />}
-//                 >
-//                     Cerrar Sesión
-//                 </Button>
-
-//             </Grid>
-//         </Grid>
-//         </React.Fragment>
-//     );
-// };

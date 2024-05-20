@@ -10,7 +10,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: 'auto',
+    width: '100%',
+    boxSizing: 'border-box',
     '& .Mui-selected': {
         backgroundColor: theme.palette.custom.light,
     },
@@ -41,42 +42,43 @@ export const IndexTabsUpdates = ({ isEnable, changeTab,
     };
     return (
         <React.Fragment>
-            {/* ... Otro contenido */}
-            <StyledTabs
-                value={selectedTab}
-                onChange={handleTabChange}
-                textColor='primary'
-                indicatorColor="primary"
-                aria-label="tabsInfoActualizar"
-            // selectionFollowsFocus='true'
-            >
-                <StyledTab label={<Typography variant='h5' >
-                    Información
-                </Typography>} />
-                <StyledTab label={<Typography variant='h5' >
-                    Imágenes Existente
-                </Typography>} onClick={handleNavigateToCoverDelet} />
-                {/* Agrega más pestañas según sea necesario */}
-            </StyledTabs>
-            <Box>
-                {selectedTab === 0 && (
-                    <React.Fragment>
-                        {/* Contenido de la primera pestaña */}
-                        <UpdatePaisaje changeTab={changeTab}
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto' }}>
+                <StyledTabs
+                    value={selectedTab}
+                    onChange={handleTabChange}
+                    textColor='primary'
+                    indicatorColor="primary"
+                    aria-label="tabsInfoActualizar"
+                // selectionFollowsFocus='true'
+                >
+                    <StyledTab label={<Typography variant='h5' >
+                        Información
+                    </Typography>} />
+                    <StyledTab label={<Typography variant='h5' >
+                        Imágenes Existente
+                    </Typography>} onClick={handleNavigateToCoverDelet} />
+                    {/* Agrega más pestañas según sea necesario */}
+                </StyledTabs>
+                <Box sx={{ width: '100%', maxWidth: '100%' }}>
+                    {selectedTab === 0 && (
+                        <React.Fragment>
+                            {/* Contenido de la primera pestaña */}
+                            <UpdatePaisaje changeTab={changeTab}
+                                showUpdateRegister={showUpdateRegister}
+                                showSearchRegister={showSearchRegister}
+                                selectedRegister={selectedRegister}
+                                changeImagenExist={handleNavigateToCoverDelet}
+                            />
+                        </React.Fragment>
+                    )}
+                    {selectedTab === 1 && (
+                        <CoverDeletP changeTab={changeTab}
                             showUpdateRegister={showUpdateRegister}
                             showSearchRegister={showSearchRegister}
                             selectedRegister={selectedRegister}
-                            changeImagenExist={handleNavigateToCoverDelet}
                         />
-                    </React.Fragment>
-                )}
-                {selectedTab === 1 && (
-                    <CoverDeletP changeTab={changeTab}
-                        showUpdateRegister={showUpdateRegister}
-                        showSearchRegister={showSearchRegister}
-                        selectedRegister={selectedRegister}
-                    />
-                )}
+                    )}
+                </Box>
             </Box>
         </React.Fragment>
     )

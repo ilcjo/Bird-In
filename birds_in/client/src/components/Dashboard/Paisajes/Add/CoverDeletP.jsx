@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Backdrop, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import { Backdrop, Box, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 //Redux
 import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
@@ -32,15 +32,15 @@ export const CoverDeletP = ({
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
 
-    React.useEffect(() => {
-        // Mostrar el Backdrop después de 2 segundos (2000 milisegundos)
-        setShowBackdrop(true);
-        const timeoutId = setTimeout(() => {
-            setShowBackdrop(false)
-        }, 3000);
-        // Limpiar el temporizador al desmontar el componente
-        return () => clearTimeout(timeoutId);
-    }, []);
+    // React.useEffect(() => {
+    //     // Mostrar el Backdrop después de 2 segundos (2000 milisegundos)
+    //     setShowBackdrop(true);
+    //     const timeoutId = setTimeout(() => {
+    //         setShowBackdrop(false)
+    //     }, 3000);
+    //     // Limpiar el temporizador al desmontar el componente
+    //     return () => clearTimeout(timeoutId);
+    // }, []);
 
     const handleSetAsCover = async (id, url, destacada) => {
 
@@ -61,7 +61,6 @@ export const CoverDeletP = ({
             setShowBackdrop(true);
             await new Promise((resolve) => setTimeout(resolve, 2000));
             await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
-            console.log('update después de la portada:', infoLandForUpdate)
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -105,14 +104,12 @@ export const CoverDeletP = ({
         try {
             // Mostrar el indicador de carga
             setShowBackdrop(true);
-
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url_paisaje);
             console.log('imagenes url', selectedUrls)
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
-
             // Mostrar Snackbar y obtener información actualizada
             setSnackbarOpen(true);
             setSnackbarMessage('Fotos eliminadas con éxito');
@@ -152,8 +149,9 @@ export const CoverDeletP = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 'auto',
-                margin: 'auto',
+                width: '100%',
+
+                margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                 backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                 padding: '0px 40px 30px 0px',
@@ -193,7 +191,7 @@ export const CoverDeletP = ({
 
                     <Button
                         variant="contained"
-                        color="custom"
+                        color="error"
                         onClick={handleDeleteButtonClick}
                         endIcon={<DeleteIcon />}
                         sx={{
@@ -205,14 +203,18 @@ export const CoverDeletP = ({
                         Eliminar selección
                     </Button>
 
-                    {infoLandForUpdate?.imagenes_paisajes?.length > 0 ? (
-                        <Grid container spacing={2} >
-                            {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
-                                <Grid item xs={12} sm={6} md={4} key={imageUrl.id} 
-                                sx={{ display: 'flex',
-                                mt:2,
-                                alignItems: 'center',
-                                justifyContent: 'center',}}>
+                    <Grid container>
+                        {infoLandForUpdate?.imagenes_paisajes?.length > 0 ? (
+                            <Box
+                                sx={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(3, minmax(380px, 1fr))',
+                                    gap: 5,
+                                    width: '100%',
+                                    mt: 2
+                                }}
+                            >
+                                {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
                                     <EditImageCards
                                         key={imageUrl.id}
                                         imageUrl={imageUrl}
@@ -221,21 +223,14 @@ export const CoverDeletP = ({
                                         handleSetAsCover={handleSetAsCover}
                                         handleDeleteCheckBox={handleDeleteCheckBox}
                                     />
-
-                                    <CarruselGalleryDelet
-                                        isOpen={isGalleryOpen}
-                                        images={infoLandForUpdate.imagenes_paisajes}
-                                        selectedIndex={selectedImageIndex}
-                                        onClose={() => setIsGalleryOpen(false)}
-                                    />
-                                </Grid>
-                            ))}
-                        </Grid>
-                    ) : (
-                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                            No hay imágenes subidas.
-                        </Typography>
-                    )}
+                                ))}
+                            </Box>
+                        ) : (
+                            <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                                No hay imágenes subidas.
+                            </Typography>
+                        )}
+                    </Grid>
                 </Grid>
             </Grid>
             <Snackbar

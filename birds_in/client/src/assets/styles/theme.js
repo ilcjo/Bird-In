@@ -79,7 +79,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           alignItems: 'center',
-          backgroundColor: 'rgba(0, 56, 28, 0.3)', // Establece el fondo transparente deseado
+          backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
           backdropFilter: 'blur(90px)', // Efecto de desenfoque de fondo
           WebkitBackdropFilter: 'blur(90px)', // Efecto de desenfoque de fondo para navegadores basados en Webkit
         },

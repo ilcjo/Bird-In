@@ -227,7 +227,6 @@ const updateInfoPaisaje = async (req, res) => {
 const deletePhotosPaisajes = async (req, res) => {
    const { ids, urls } = req.body;
    try {
-      console.log(urls)
       const deletedFtp = await deletePhotoFromFTPPaisajes(urls);
       if (!deletedFtp.success) {
          // Algunas fotos no se encontraron o hubo errores en el servidor FTP

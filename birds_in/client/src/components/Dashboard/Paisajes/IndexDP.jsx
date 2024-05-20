@@ -51,6 +51,7 @@ export const IndexDP = () => {
 
   return (
     <>
+
       <StyledTabs
         value={selectedTab}
         onChange={handleTabChange}
@@ -83,6 +84,7 @@ export const IndexDP = () => {
         )}
 
       </div>
+
     </>
   );
 };
