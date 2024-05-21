@@ -305,19 +305,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 //         );
                                 //     });
                                 // }}
-                                filterOptions={(options, state) => {
-                                    const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                    return options.filter((option) => {
-                                        const birdName = option.nombre.toLowerCase();
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                //     return options.filter((option) => {
+                                //         const birdName = option.nombre.toLowerCase();
 
-                                        // Remover caracteres especiales excepto letras, números y espacios
-                                        const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                        const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                //         // Remover caracteres especiales excepto letras, números y espacios
+                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
 
-                                        // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                        return sanitizedBirdName.startsWith(sanitizedInput);
-                                    });
-                                }}
+                                //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                //     });
+                                // }}
                                 loading={isFetchingOptions}
                                 renderInput={(params) =>
                                     <TextField {...params}
@@ -375,19 +375,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 //         );
                                 //     });
                                 // }}
-                                filterOptions={(options, state) => {
-                                    const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                    return options.filter((option) => {
-                                        const birdName = option.nombre.toLowerCase();
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                //     return options.filter((option) => {
+                                //         const birdName = option.nombre.toLowerCase();
 
-                                        // Remover caracteres especiales excepto letras, números y espacios
-                                        const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                        const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                //         // Remover caracteres especiales excepto letras, números y espacios
+                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
 
-                                        // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                        return sanitizedBirdName.startsWith(sanitizedInput);
-                                    });
-                                }}
+                                //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                //     });
+                                // }}
                                 renderInput={(params) =>
                                     <TextField {...params}
                                         label="Familia"
@@ -444,19 +444,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     //         );
                                     //     });
                                     // }
-                                    filterOptions={(options, state) => {
-                                        const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                        return options.filter((option) => {
-                                            const birdName = option.nombre.toLowerCase();
+                                    // filterOptions={(options, state) => {
+                                    //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                    //     return options.filter((option) => {
+                                    //         const birdName = option.nombre.toLowerCase();
 
-                                            // Remover caracteres especiales excepto letras, números y espacios
-                                            const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                            const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                    //         // Remover caracteres especiales excepto letras, números y espacios
+                                    //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                    //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
 
-                                            // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                            return sanitizedBirdName.startsWith(sanitizedInput);
-                                        });
-                                    }
+                                    //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                    //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                    //     });
+                                    // }
                                         //     (options, state) => {
                                         //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                         //     const inputValue = state.inputValue.toLowerCase();
@@ -470,7 +470,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         //         );
                                         //     });
                                         // }
-                                    }
+                                    
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Países"
@@ -529,19 +529,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     //             );
                                     //         });
                                     //     }
-                                    filterOptions={(options, state) => {
-                                        const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                        return options.filter((option) => {
-                                            const birdName = option.nombre.toLowerCase();
+                                    // filterOptions={(options, state) => {
+                                    //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                    //     return options.filter((option) => {
+                                    //         const birdName = option.nombre.toLowerCase();
 
-                                            // Remover caracteres especiales excepto letras, números y espacios
-                                            const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                            const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                    //         // Remover caracteres especiales excepto letras, números y espacios
+                                    //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                    //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
 
-                                            // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                            return sanitizedBirdName.startsWith(sanitizedInput);
-                                        });
-                                    }
+                                    //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                    //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                    //     });
+                                    // }
                                         //     (options, state) => {
                                         //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                         //     const inputValue = state.inputValue.toLowerCase();
@@ -555,7 +555,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         //         );
                                         //     });
                                         // }
-                                    }
+                                    
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
@@ -613,19 +613,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     //         );
                                     //     });
                                     // }}
-                                    filterOptions={(options, state) => {
-                                        const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                        return options.filter((option) => {
-                                            const birdName = option.nombre.toLowerCase();
+                                    // filterOptions={(options, state) => {
+                                    //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                    //     return options.filter((option) => {
+                                    //         const birdName = option.nombre.toLowerCase();
 
-                                            // Remover caracteres especiales excepto letras, números y espacios
-                                            const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                            const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                    //         // Remover caracteres especiales excepto letras, números y espacios
+                                    //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                    //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
 
-                                            // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                            return sanitizedBirdName.startsWith(sanitizedInput);
-                                        });
-                                    }}
+                                    //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                    //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                    //     });
+                                    // }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Científico"
@@ -684,19 +684,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     //             );
                                     //         });
                                     //     }
-                                    filterOptions={(options, state) => {
-                                        const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                        return options.filter((option) => {
-                                            const birdName = option.nombre.toLowerCase();
+                                    // filterOptions={(options, state) => {
+                                    //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                    //     return options.filter((option) => {
+                                    //         const birdName = option.nombre.toLowerCase();
 
-                                            // Remover caracteres especiales excepto letras, números y espacios
-                                            const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                            const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                    //         // Remover caracteres especiales excepto letras, números y espacios
+                                    //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                    //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
 
-                                            // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                            return sanitizedBirdName.startsWith(sanitizedInput);
-                                        });
-                                    }
+                                    //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                    //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                    //     });
+                                    // }
                                         //     (options, state) => {
                                         //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                         //     const inputValue = state.inputValue.toLowerCase();
@@ -710,7 +710,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         //         );
                                         //     });
                                         // }
-                                    }
+                                    
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Inglés"

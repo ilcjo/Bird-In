@@ -163,19 +163,19 @@ export const SearchBird = ({ changeTab }) => {
                                 //         return sanitizedBirdName.startsWith(sanitizedInput);
                                 //     });
                                 // }}
-                                filterOptions={(options, state) => {
-                                    const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                    return options.filter((option) => {
-                                        const birdName = option.nombre_ingles.toLowerCase();
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                //     return options.filter((option) => {
+                                //         const birdName = option.nombre_ingles.toLowerCase();
                                         
-                                        // Remover caracteres especiales excepto letras, números y espacios
-                                        const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                        const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                //         // Remover caracteres especiales excepto letras, números y espacios
+                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
                                         
-                                        // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                        return sanitizedBirdName.startsWith(sanitizedInput);
-                                    });
-                                }}
+                                //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                //     });
+                                // }}
                                 // filterOptions={(options, state) => {
                                 //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
                                 //     const inputValue = state.inputValue.toLowerCase();
