@@ -72,16 +72,16 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     position: 'fixed', // Establece la posición fija
                     top: 0, // Lo coloca en la parte superior de la pantalla
                     left: 0, // Lo coloca en la parte izquierda de la pantalla
-                    width: '100%', // Ocupa todo el ancho de la pantalla
+                    width: '90%', // Ocupa todo el ancho de la pantalla
                     zIndex: 999, // Asegura que esté por encima del contenido
                     backgroundColor: 'rgba(0, 56, 28, 0.4)',
                     backdropFilter: 'blur(2px)',
                     WebkitBackdropFilter: 'blur(10px)',
                     justifyContent: 'space-between',
-                    justifyContent: 'space-between',
                     alignItems: 'center',
                     height: '9vh',
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    
                     // gap: '10px',
                 }}
             >

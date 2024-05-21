@@ -108,11 +108,13 @@ const theme = createTheme({
             // backgroundColor: 'rgba(0,56,28,0.22)',
             backgroundColor: 'rgba(204,214,204,0.17)',
             borderColor: 'transparent',
+            height:'70px',
+            padding: '0px'
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#C1C700 !important',
             backgroundColor: 'rgba(0,56,28,0.22)',
-            height: 'auto',
+            height: '70px',
           },
           '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
             // Agrega los estilos que desees para el Select

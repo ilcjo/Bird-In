@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 //COMPONENTS
-import { IndexTabsUpdatesPa } from './IndexTabsUpdates';
+import { IndexTabsUpdatesPa } from './IndexTabsUpdatesPa';
 //REDUX
 import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
 
@@ -137,34 +137,33 @@ export const SearchLands = ({ changeTab }) => {
                                 id="search_Paisaje"
                                 options={registerData}
                                 getOptionLabel={(option) => option.zona.nombre}
-                                filterOptions={(options, state) => {
-                                    const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
-                                    return options.filter((option) => {
-                                        const birdName = option.zona.nombre.toLowerCase();
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase().trim(); // Convertir a minúsculas y quitar espacios en blanco
+                                //     return options.filter((option) => {
+                                //         const birdName = option.zona.nombre.toLowerCase();
 
-                                        // Remover caracteres especiales excepto letras, números y espacios
-                                        const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
-                                        const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
+                                //         // Remover caracteres especiales excepto letras, números y espacios
+                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s-]/g, '');
+                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s-]/g, '');
 
-                                        // Modificar para buscar coincidencias que comiencen con la entrada del usuario
-                                        return sanitizedBirdName.startsWith(sanitizedInput);
-                                    });
-                                }}
-                             
+                                //         // Modificar para buscar coincidencias que comiencen con la entrada del usuario
+                                //         return sanitizedBirdName.startsWith(sanitizedInput);
+                                //     });
+                                // }}
                                 value={selectedRegister}
                                 onChange={(event, newValue) => handleRegisterSelect(newValue)}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
                                         label="Seleccionar Paisaje a actualizar"
-                                        InputLabelProps={{
-                                            sx: labelStyles, // Estilo del label
-                                        }}
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            sx: inputStyles, // Estilo del input
+                                    // InputLabelProps={{
+                                    //     sx: labelStyles, // Estilo del label
+                                    // }}
+                                    // InputProps={{
+                                    //     ...params.InputProps,
+                                    //     sx: inputStyles, // Estilo del input
 
-                                        }}
+                                    // }}
                                     />
                                 )}
 

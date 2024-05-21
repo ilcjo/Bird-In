@@ -141,22 +141,22 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             });
             return;
         }
-    
+
         // Update the zona field with the selected value
         setCreateData({
             ...createData,
             zona: newValue,
         });
-    
+
         // Clear the error when the user selects a value
         setErrors({
             ...errors,
             zona: false,
         });
-    
+
         // Reinicia el formulario
         setFormSubmitted(false);
-    
+
         // Wait 500 milliseconds before checking for duplicates
         setTimeout(async () => {
             try {
@@ -373,21 +373,26 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '80%',
-                    margin: '0px 0px 0px 150px',
+                    width: 'auto',
+                    margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
-                    borderRadius: '0px 0px 20px 20px'
+                    borderRadius: '0px 0px 20px 20px',
+                    mb: 10,
                 }} >
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
-                            Formulario de Creación
-                        </Typography>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
-                            Subir imágenes Galería
-                            <Divider sx={{ my: 2 }} />
-                        </Typography>
+                        <Grid container alignItems="center">
+                            <Grid item xs={12} sm={9}>
+                                <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
+                                    Formulario de Creación
+                                </Typography>
+                            </Grid>
+                            <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                                Subir imágenes Galería
+                                <Divider sx={{ my: 2 }} />
+                            </Typography>
+                        </Grid>
                         {/* Input para cargar imágenes */}
                         <input
                             type="file"
@@ -460,7 +465,6 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                             </Grid>
                         )}
                     </Grid>
-
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Paisaje
@@ -642,22 +646,22 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 message={snackBarMessage}
             >
             </Snackbar>
-            {/* Snackbar for error message */}
-            <Snackbar
-                open={errorSnackbarOpen}
-                autoHideDuration={5000} // Adjust the duration as needed
-                onClose={() => setErrorSnackbarOpen(false)}
-            >
-                <Alert
-                    elevation={6}
-                    variant="filled"
-                    severity="error"
-                    onClose={() => setErrorSnackbarOpen(false)}
-                >
-                    {errorMessage}
-                </Alert>
-            </Snackbar>
+            {/* Snackbar for error message */ }
+    <Snackbar
+        open={errorSnackbarOpen}
+        autoHideDuration={5000} // Adjust the duration as needed
+        onClose={() => setErrorSnackbarOpen(false)}
+    >
+        <Alert
+            elevation={6}
+            variant="filled"
+            severity="error"
+            onClose={() => setErrorSnackbarOpen(false)}
+        >
+            {errorMessage}
+        </Alert>
+    </Snackbar>
 
-        </React.Fragment>
+        </React.Fragment >
     );
 };

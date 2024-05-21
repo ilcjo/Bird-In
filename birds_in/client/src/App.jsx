@@ -86,6 +86,7 @@ function App() {
         } />
       <Route path="/panelpaisajes"
         element={<ProtectedRoute roles={['admin']} >
+           <MenuBar ShowFilterButton={false} ShowBackButton={true} />
           <DashPaisajes />
         </ProtectedRoute>
         } />

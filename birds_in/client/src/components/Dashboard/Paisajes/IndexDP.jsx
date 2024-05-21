@@ -15,7 +15,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
   backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
-  marginTop: '90px',
+  marginTop: '110px',
   '& .Mui-selected': {
     backgroundColor: theme.palette.custom.light,
   },
@@ -39,8 +39,7 @@ export const IndexDP = () => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
     if (convertNumber === 1) {
-
-      dispatch(setStateInfoP()); // Reemplaza con la acción que establece el estado en Redux
+      dispatch(setStateInfoP());
     }
 
   };
@@ -51,7 +50,6 @@ export const IndexDP = () => {
 
   return (
     <>
-
       <StyledTabs
         value={selectedTab}
         onChange={handleTabChange}
@@ -61,7 +59,7 @@ export const IndexDP = () => {
         sx={{
           backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
           backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
-          mt: 20,
+          // mt: 20,
           borderRadius: '20px 20px 0px 0px',
           '& .Mui-selected': {
             backgroundColor: theme.palette.custom.light,
@@ -90,9 +88,7 @@ export const IndexDP = () => {
             <IndexTabsCreateP changeTabSearch={handleNavigateToSearch} />
           </Box>
         )}
-
       </div>
-
     </>
   );
 };

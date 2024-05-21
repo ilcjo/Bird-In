@@ -10,9 +10,9 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
-    width: 'auto',
+    width: '100%',
     '& .Mui-selected': {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.custom.light,
     },
 }));
 const StyledTab = styled(Tab)({
@@ -26,8 +26,8 @@ const StyledTab = styled(Tab)({
 });
 
 
-export const IndexTabsCreateP = ({ 
-    isEnable, 
+export const IndexTabsCreateP = ({
+    isEnable,
     changeTab,
     showUpdateRegister,
     showSearchRegister,
@@ -45,41 +45,44 @@ export const IndexTabsCreateP = ({
     };
     return (
         <React.Fragment>
-            <StyledTabs
-                value={selectedTab}
-                onChange={handleTabChange}
-                textColor='primary'
-                indicatorColor="primary"
-                aria-label="tabsInfoActualizar"
-                selectionFollowsFocus='true'
-            >
-                <StyledTab label={<Typography variant='h5' >
-                    Información
-                </Typography>} />
-                <StyledTab label={<Typography variant='h5' >
-                    Imágenes Existente
-                </Typography>} onClick={handleNavigateToCoverDelet} />
-               
-            </StyledTabs>
-            <Box>
-                {selectedTab === 0 && (
-                    <React.Fragment>
-                        {/* Contenido de la primera pestaña */}
-                        <CreateLand
-                            changeTabSearch={changeTabSearch}
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto' }}>
+
+                <StyledTabs
+                    value={selectedTab}
+                    onChange={handleTabChange}
+                    textColor='primary'
+                    indicatorColor="primary"
+                    aria-label="tabsInfoActualizar"
+                    selectionFollowsFocus='true'
+                >
+                    <StyledTab label={<Typography variant='h5' >
+                        Información
+                    </Typography>} />
+                    <StyledTab label={<Typography variant='h5' >
+                        Imágenes Existente
+                    </Typography>} onClick={handleNavigateToCoverDelet} />
+
+                </StyledTabs>
+                <Box sx={{ width: '100%', maxWidth: '100%' }}>
+                    {selectedTab === 0 && (
+                        <React.Fragment>
+                            {/* Contenido de la primera pestaña */}
+                            <CreateLand
+                                changeTabSearch={changeTabSearch}
+                                changeTab={changeTab}
+                                changeImagenExist={handleNavigateToCoverDelet}
+                            />
+                        </React.Fragment>
+                    )}
+                    {selectedTab === 1 && (
+                        <CoverDeletP
                             changeTab={changeTab}
-                            changeImagenExist={handleNavigateToCoverDelet}
+                            showUpdateRegister={showUpdateRegister}
+                            showSearchRegister={showSearchRegister}
+                            selectedRegister={selectedRegister}
                         />
-                    </React.Fragment>
-                )}
-                {selectedTab === 1 && (
-                    <CoverDeletP
-                        changeTab={changeTab}
-                        showUpdateRegister={showUpdateRegister}
-                        showSearchRegister={showSearchRegister}
-                        selectedRegister={selectedRegister}
-                    />
-                )}
+                    )}
+                </Box>
             </Box>
         </React.Fragment>
     )

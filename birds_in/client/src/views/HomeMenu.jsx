@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { Box, Button, Grid, Link, Typography, useTheme } from '@mui/material'
+import { Box, Button, Grid, Typography, useTheme } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
-import { MenuBar } from '../components/Menus/MenuBar'
-import { useSelector } from 'react-redux'
-
+import { useSelector } from 'react-redux';
 
 const sections = [
   {
@@ -86,7 +84,7 @@ export const HomeMenu = () => {
     flores: allCustom.cover_flowers,
     paisajes: allCustom.cover_land,
     SobreMi: allCustom.cover_about,
-    panelAdministrador: allCustom.covert_admin, // Corregir el nombre de la propiedad
+    panelAdministrador: allCustom.covert_admin,
   };
 
   return (

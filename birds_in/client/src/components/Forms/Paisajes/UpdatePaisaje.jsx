@@ -81,7 +81,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
 
     React.useEffect(() => {
         dispatch(getOptionsData());
-    }, []);
+    }, [dispatch]);
 
     //INPUT RECOGE EL VALOR SEGÚN EL NOMBRE DEL INPUT
     const handleInputChange = (event) => {
