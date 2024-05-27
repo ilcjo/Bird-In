@@ -97,6 +97,7 @@ const createLand = async (req, res) => {
       pais,
       zona,
       descripcion,
+      urlWiki,
       urlImagen
    } = req.body;
 
@@ -106,6 +107,7 @@ const createLand = async (req, res) => {
          pais,
          zona,
          descripcion,
+         urlWiki,
          urlImagen)
       return res.status(200).json(succesCreate)
 

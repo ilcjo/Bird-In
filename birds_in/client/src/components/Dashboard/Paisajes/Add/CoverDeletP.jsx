@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Backdrop, Box, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import { Alert, Backdrop, Box, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 //Redux
 import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
@@ -16,6 +16,7 @@ import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDele
 import { EditImageCards } from '../../../Cards/EditImageCards';
 
 export const CoverDeletP = ({
+    isCreate,
     showUpdateRegister,
     showSearchRegister,
     selectedRegister, }) => {
@@ -23,24 +24,16 @@ export const CoverDeletP = ({
     const dispatch = useDispatch();
     const { infoLandForUpdate } = useSelector(state => state.createLand);
     console.log('soy info q actulizo', infoLandForUpdate)
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     console.log(selectedImages)
 
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
-
-    // React.useEffect(() => {
-    //     // Mostrar el Backdrop después de 2 segundos (2000 milisegundos)
-    //     setShowBackdrop(true);
-    //     const timeoutId = setTimeout(() => {
-    //         setShowBackdrop(false)
-    //     }, 3000);
-    //     // Limpiar el temporizador al desmontar el componente
-    //     return () => clearTimeout(timeoutId);
-    // }, []);
 
     const handleSetAsCover = async (id, url, destacada) => {
 
@@ -59,15 +52,16 @@ export const CoverDeletP = ({
             // Si la imagen es destacada, enviar la solicitud para guardarla como portada
             await dispatch(sendCoverPhotoP(id, infoLandForUpdate.id));
             setShowBackdrop(true);
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setLoadingMessage('Seleccionando Portada')
+            await new Promise((resolve) => setTimeout(resolve, 5000));
             await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
         } catch (error) {
             console.error('Error al realizar la acción:', error);
-            setSnackbarOpen(true);
-            setSnackbarMessage('Error al realizar la acción');
+            setErrorMessage(`Error al realizar la acción: ${error.message}`);
+            setErrorSnackbarOpen(true);
         }
     };
 
@@ -84,7 +78,6 @@ export const CoverDeletP = ({
 
     const closeImageDialog = () => {
         setDialogOpen(false);
-        // setSelectedImages([])
     };
 
     const handleDeleteCheckBox = (id, url) => {
@@ -105,23 +98,25 @@ export const CoverDeletP = ({
         try {
             // Mostrar el indicador de carga
             setShowBackdrop(true);
+            setLoadingMessage('Borrando fotografías')
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
-            const selectedUrls = selectedImages.map((img) => img.url_paisaje);
+            const selectedUrls = selectedImages.map((img) => img.url);
             console.log('imagenes url', selectedUrls)
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
-            setSnackbarOpen(true);
-            setSnackbarMessage('Fotos eliminadas con éxito');
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSelectedImages([])
             setShowBackdrop(false)
-            setLoadingMessage('Borrando fotografías')
+            setSnackbarOpen(true);
             await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
-            setSnackbarOpen(true);
-            setSnackbarMessage('Error al eliminar fotos');
+            setErrorMessage(`Error al eliminar las fotografías: ${error.message}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
         }
     };
 
@@ -151,10 +146,10 @@ export const CoverDeletP = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-
+                minWidth: '800px',
                 margin: '0 auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+                backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 20px 20px'
             }} >
@@ -166,26 +161,27 @@ export const CoverDeletP = ({
                                 Imágenes del Paisaje
                             </Typography>
                         </Grid>
-
-                        <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
-                            <Button
-                                sx={{
-                                    fontSize: '1.1rem',
-                                    fontWeight: 'bold',
-                                    // color: theme.palette.primary.light,
-                                    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                                }}
-                                variant="outlined"
-                                onClick={handleReturnSearch}
-                                startIcon={<SearchIcon />}
-                            >
-                                Buscar Otro Registro
-                            </Button>
-                        </Grid>
+                        {!isCreate && (
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
+                                <Button
+                                    sx={{
+                                        fontSize: '1.1rem',
+                                        fontWeight: 'bold',
+                                        // color: theme.palette.primary.light,
+                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                                    }}
+                                    variant="outlined"
+                                    onClick={handleReturnSearch}
+                                    startIcon={<SearchIcon />}
+                                >
+                                    Buscar Otro Registro
+                                </Button>
+                            </Grid>
+                        )}
                     </Grid>
 
-                    <Typography variant='h5' color='primary.light' >
+                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }} >
                         Elegir Portada o Eliminar Imágenes
                         <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     </Typography>
@@ -236,10 +232,24 @@ export const CoverDeletP = ({
             </Grid>
             <Snackbar
                 open={snackbarOpen}
-                autoHideDuration={6000}
+                autoHideDuration={9000}
                 onClose={() => setSnackbarOpen(false)}
                 message={snackbarMessage}
             />
+            <Snackbar
+                open={errorSnackbarOpen}
+                autoHideDuration={9000}
+                onClose={() => setErrorSnackbarOpen(false)}
+            >
+                <Alert
+                    elevation={6}
+                    variant="filled"
+                    severity="error"
+                    onClose={() => setErrorSnackbarOpen(false)}
+                >
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
             <Dialog
                 open={dialogOpen}
                 onClose={closeImageDialog}
@@ -254,12 +264,6 @@ export const CoverDeletP = ({
                     />
                 </DialogContent>
             </Dialog>
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={() => setSnackbarOpen(false)}
-                message={snackbarMessage}
-            />
         </React.Fragment >
     );
 };

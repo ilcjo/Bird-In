@@ -331,17 +331,15 @@ const sendAndCreateLand = async (
     pais,
     zona,
     descripcion,
+    urlWiki,
     urlImagen
 ) => {
-
+    console.log(urlImagen)
     try {
         // Verificar si tanto el país como la zona están presentes
         if (!pais || !zona) {
             throw new Error('Tanto el país como la zona son obligatorios.');
         }
-
-        // Aplicar conversiones solo si la descripción está presente
-        const converDescripcion = descripcion ? descripcion.charAt(0).toUpperCase() + descripcion.slice(1).toLowerCase() : null;
 
         const imagenesData = urlImagen.map((imageUrl) => {
             return {
@@ -351,7 +349,8 @@ const sendAndCreateLand = async (
 
         // Crear un nuevo registro en la tabla "Paisajes"
         const createNewRegistro = await Paisajes.create({
-            descripcion: converDescripcion,
+            descripcion: descripcion,
+            url: urlWiki,
             paises_id_pais: pais.id,
             zonas_id_zona: zona.id,
             imagenes_paisajes: imagenesData
@@ -367,7 +366,6 @@ const sendAndCreateLand = async (
 };
 
 const findDataByIdP = async (id) => {
-
     try {
         const Registro = await Paisajes.findOne({
             where: { id: id },
@@ -489,7 +487,7 @@ const findPhotosIdPaisaje = async (imgsIds) => {
         await Imagenes_paisajes.destroy({ where: { id: imgsIds } });
         return 'Las fotografías se han borrado exitosamente'
     } catch (error) {
-        console.error('Error al buscar fotos por ID de ave:', error);
+        console.error('Error al buscar fotos por ID Paisaje:', error);
         throw error;
     }
 };

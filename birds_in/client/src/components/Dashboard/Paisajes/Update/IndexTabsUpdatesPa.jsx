@@ -6,8 +6,8 @@ import { CoverDeletP } from '../Add/CoverDeletP';
 import { UpdatePaisaje } from '../../../Forms/Paisajes/UpdatePaisaje';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+    backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     width: '100%',
@@ -42,7 +42,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
     };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '900px' }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}

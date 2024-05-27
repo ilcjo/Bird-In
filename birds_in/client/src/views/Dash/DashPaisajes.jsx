@@ -22,14 +22,12 @@ export const DashPaisajes = () => {
         direction="column"
         alignItems="center"
         sx={{
-          background: `url(${allCustom.header}) center/cover no-repeat fixed`,
+          background: `url(${allCustom.background_paisaje}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
-          // minWidth: '100vw', 
           height: '100%',
-          // width: '100%',          
           overflow: 'hidden',
           margin: 0,
         }}

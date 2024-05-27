@@ -104,17 +104,18 @@ const theme = createTheme({
             borderColor: 'transparent',
             color: '#ccd6cc',
           },
+
           '& .MuiOutlinedInput-notchedOutline': {
             // backgroundColor: 'rgba(0,56,28,0.22)',
             backgroundColor: 'rgba(204,214,204,0.17)',
             borderColor: 'transparent',
-            height:'70px',
+            height: '70px',
             padding: '0px'
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#C1C700 !important',
-            backgroundColor: 'rgba(0,56,28,0.22)',
-            height: '70px',
+            backgroundColor: 'transparent',
+            // height: '70px',
           },
           '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
             // Agrega los estilos que desees para el Select
@@ -178,10 +179,10 @@ const theme = createTheme({
     styleOverrides: {
       root: {
         '&.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-clttge-MuiAutocomplete-root .MuiOutlinedInput-root': {
-          height: '70px',
+          // height: '50px',
           '& .MuiInputBase-input': {
-            height: '70px',
-            padding: '0px 10px',
+            // height: '50px',
+            // padding: '0px 10px',
             display: 'flex',
             alignItems: 'center',
           },

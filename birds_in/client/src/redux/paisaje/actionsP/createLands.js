@@ -105,7 +105,7 @@ export const getInfoForUpdatePa = (id) => {
 };
 
 export const getInfoForUpdateNameP = (name) => {
-  console.log(name)
+ 
   return async (dispatch) => {
     try {
       const response = await axios(`paisajes/get_update_name?name=${name}`)

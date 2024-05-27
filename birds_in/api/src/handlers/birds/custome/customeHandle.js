@@ -8,6 +8,7 @@ const replacePhotoInFTP = require("../../../utils/CustomeFtp");
 const getCustomes = async (req, res) => {
     try {
         const allCustomizes = await fetchCustome()
+        console.log(allCustomizes)
         return res.status(200).json(allCustomizes);
     } catch (error) {
         res.status(500).json({ error: 'Error interno del servidor' });

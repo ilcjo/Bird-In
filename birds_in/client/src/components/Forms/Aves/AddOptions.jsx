@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export const AddOptions = ({ open, onclose }) => {
 
-
     const theme = useTheme()
     const dispatch = useDispatch()
     const [uploadModalOpen, setUploadModalOpen] = React.useState(false);

@@ -55,17 +55,6 @@ export const HomeMenu = () => {
         <Button
           variant="outlined"
           color="primary"
-          //   sx={{
-          //     fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold',  textTransform: 'none',
-          //     backgroundColor: theme.palette.primary.dark, mt: 0,
-          //     color: theme.palette.primary.light,
-          //     // marginTop: '10px',
-          //     '&:hover': {
-          //         backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-          //         color: theme.palette.primary.light, // Cambia el color del texto en hover
-          //         textTransform: 'none',
-          //     },
-          // }}
           component={RouterLink}
           to={`/panel${sectionId}`}
         >

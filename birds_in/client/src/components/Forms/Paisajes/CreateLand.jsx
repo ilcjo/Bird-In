@@ -10,6 +10,7 @@ import {
     Divider,
     Grid,
     IconButton,
+    InputAdornment,
     Snackbar,
     TextField,
     Typography
@@ -24,85 +25,58 @@ import { createLand, duplicateNameCheckP, getInfoForUpdateNameP, saveImageFtpLan
 import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import { ImageUploader } from '../../utils/ImageUploader';
+import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 
 
 export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
-
     const { paises, zonas } = useSelector(state => state.birdSlice.options)
 
-    const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
-    const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
+    const [imgLink, setImgLink] = React.useState([]); // Para mostrar la imagen seleccionada
+    const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
+    const [allImageURLs, setAllImageURLs] = React.useState([]);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const [registerCreated, setRegisterCreated] = React.useState(false);
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se a creado correctamente.');
-    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
+    const [registerCreated, setRegisterCreated] = React.useState(false);
 
-
+    const [formSubmitted, setFormSubmitted] = React.useState(false);
     const sortAlphabetically = (array) => {
         return array.slice().sort((a, b) => {
-            // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
             if (a && a.nombre && b && b.nombre) {
-                const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-                const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-                return nameA.localeCompare(nameB);
+                return a.nombre.localeCompare(b.nombre);
             }
-            // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
             return 0;
         });
     };
     const sortedPaises = sortAlphabetically(paises);
     const sortedZonas = sortAlphabetically(zonas);
-    const [createData, setCreateData] = React.useState({
 
+    const [createData, setCreateData] = React.useState({
         pais: null,
         zona: null,
         descripcion: '',
+        urlWiki: '',
         urlImagen: [],
     });
-
     const [errors, setErrors] = React.useState({
-
-        descripcion: false,
+        pais: false,
+        zona: false,
     });
 
-    const [formSubmitted, setFormSubmitted] = React.useState(false);
-    // const handleImageChange = (event) => {
-    //     const selectedImage = event.target.files[0];
-    //     if (selectedImage) {
-    //         setImageFile(selectedImage);
-    //         const imageURL = URL.createObjectURL(selectedImage);
-    //         setImageURL(imageURL);
-    //     }
-    // };
+
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
-            // Opcionalmente, puedes guardar los archivos en el estado
-            setImageFile(selectedImages);
-
-            // Crear un array para almacenar las URLs de las imágenes (para mostrarlas en el formulario)
-            const imageUrls = [];
-
-            // Recorrer todas las imágenes seleccionadas
-            for (let i = 0; i < selectedImages.length; i++) {
-                const selectedImage = selectedImages[i];
-
-                // Crear una URL para cada imagen seleccionada
-                const imageUrl = URL.createObjectURL(selectedImage);
-
-                // Agregar la URL al array
-                imageUrls.push(imageUrl);
-            }
-
-            // Actualizar el estado con el array de URLs de imágenes
-            setImageURL(imageUrls);
-
+            const imageUrls = Array.from(selectedImages).map(image => URL.createObjectURL(image));
+            setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
+            setImageFiles((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
         }
     };
 
@@ -128,33 +102,27 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             });
         }
     };
-
+    const handleLogoClick = () => {
+        if (createData.urlWiki) {
+            window.open(createData.urlWiki, '_blank');
+        }
+    };
     const handleZonaChange = (newValue) => {
-        // const newValue= event.target.value;
-        // console.log(newValue)
-
         if (!newValue) {
-            // If newValue is null, it means the user cleared the selection, so we don't perform duplicate check
             setCreateData({
                 ...createData,
                 zona: null,
             });
             return;
         }
-
-        // Update the zona field with the selected value
         setCreateData({
             ...createData,
             zona: newValue,
         });
-
-        // Clear the error when the user selects a value
         setErrors({
             ...errors,
             zona: false,
         });
-
-        // Reinicia el formulario
         setFormSubmitted(false);
 
         // Wait 500 milliseconds before checking for duplicates
@@ -172,62 +140,13 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         }, 700);
     };
 
-    const handleInputChangeDuplicate = (event) => {
-        const newName = event.target.value;
-        // Si no hay duplicados, actualiza el estado createData
-
-        setCreateData({
-            ...createData,
-            zona: newName,
-        });
-        // Reinicia el error al escribir
-        setErrors({
-            ...errors,
-            zona: false,
-        });
-
-        // Reinicia el formulario
-        setFormSubmitted(false);
-
-        // Espera 500 milisegundos antes de llamar a la función para comprobar duplicados
-        setTimeout(async () => {
-            try {
-                // Llama a la función para comprobar duplicados
-                await dispatch(duplicateNameCheckP(newName));
-
-
-            } catch (error) {
-                // Si hay un error, muestra un mensaje de error
-                console.error('Error al comprobar duplicados:', String(error));
-                alert('Este Registro ya existe');
-                // Restablece el valor del input
-                changeTabSearch()
-                // setCreateData({
-                //     ...createData,
-                //     ingles: '',
-                // });
-            }
-        }, 700);
-    };
-
-
     const handleRemoveImage = (index) => {
-        // Revocar la URL de la imagen eliminada
-        URL.revokeObjectURL(imageURL[index]);
-
-        // Crear una copia del array de URLs de imágenes
-        const updatedImageURLs = [...imageURL];
-
-        // Eliminar la URL de la imagen en la posición 'index'
-        updatedImageURLs.splice(index, 1);
-
-        // Actualizar el estado con el nuevo array de URLs
-        setImageURL(updatedImageURLs);
+        URL.revokeObjectURL(allImageURLs[index]);
+        setAllImageURLs(allImageURLs.filter((_, i) => i !== index));
+        setImageFiles(imageFiles.filter((_, i) => i !== index));
     };
-
 
     const handleSubmit = async (event) => {
-
         event.preventDefault();
         const newErrors = {};
         setFormSubmitted(true);
@@ -240,41 +159,35 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         }
 
         setErrors(newErrors);
-
-        // Check if any errors exist and prevent form submission
         if (Object.values(newErrors).some((error) => error)) {
             return;
-
         }
         // Check if there are images before attempting to submit the form
-        if (!imageFile || imageFile.length === 0) {
-            // Show an alert indicating that images are required
+        if (imageFiles.length === 0) {
             alert("Debes cargar al menos una imagen antes de enviar el formulario.");
             return;
         }
 
-        if (imageFile && imageFile.length > 0) {
+        if (imageFiles && imageFiles.length > 0) {
             const formData = new FormData();
             // Agregar las imágenes al formulario FormData
-            for (let i = 0; i < imageFile.length; i++) {
-                formData.append('images', imageFile[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
-            }
+            // for (let i = 0; i < imageFiles.length; i++) {
+            //     formData.append('images', imageFiles[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
+            // }
+            imageFiles.forEach((file) => formData.append('images', file))
             setShowBackdrop(true);
-            setLoadingMessage('Subiendo imagen...');
+            setLoadingMessage('Subiendo imágenes al Servidor...');
             try {
                 // Espera a que la imagen se suba y obtén la URL
-                const imageUrl = await saveImageFtpWithMessage(formData);
-                // console.log(imageURL)
-                // Restaurar el mensaje de carga si es necesario
-                setLoadingMessage('Creando  Paisaje...');
-                await createRegisterWithMessage(createData, imageUrl);
+                const imageUrls = await uploadImagesFtpAndSaveLinks(formData);
+                await createFullEntry(createData, imageUrls);
+                setLoadingMessage('Creando el Paisaje en la DB...');
                 setShowBackdrop(false);
-                setLoadingMessage('Cargando...');
                 setRegisterCreated(true);
-                // Abre el Snackbar
                 setOpenSnackbar(true);
-                setImageURL([]);
-                setImageFile([]);
+                setLoadingMessage('Cargando...');
+                setImgLink([]);
+                setImageFiles([]);
                 setFormSubmitted(false)
                 setSnackBarMessage('El Paisaje se a creado correctamente.')
                 dispatch(getInfoForUpdateNameP(createData.zona.id))
@@ -283,7 +196,6 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 console.log('este es el error:', String(error))
                 // Muestra el mensaje de error en caso de que ocurra un error en cualquiera de las dos promesas.
                 setErrorMessage(`Ocurrió un error: ${error}`);
-                // alert(`Error: ${error.message}`); // Puedes personalizar cómo muestras el mensaje de error al usuario.
                 setErrorSnackbarOpen(true);
                 // Muestra el mensaje de error al usuario
             } finally {
@@ -292,7 +204,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         }
     };
 
-    const saveImageFtpWithMessage = async (formData) => {
+    const uploadImagesFtpAndSaveLinks = async (formData) => {
         return new Promise(async (resolve, reject) => {
             try {
                 // Realiza la carga de la imagen y espera la respuesta
@@ -300,6 +212,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 // Verifica si la respuesta contiene la URL de la imagen
                 if (response && response.data && response.data.imageUrls) {
                     const imageUrlString = response.data.imageUrls;
+                    setImgLink(imageUrlString)
                     resolve(imageUrlString);
                 } else {
                     console.error('El servidor no devolvió la URL de la imagen.');
@@ -312,9 +225,9 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         });
     };
 
-    const createRegisterWithMessage = async (createData, imageUrl) => {
+    const createFullEntry = async (createData, imageUrl) => {
         return new Promise((resolve, reject) => {
-            console.log('imagen cargada en array:', imageURL)
+            console.log('imagenes q llegan', imageUrl)
             dispatch(createLand({ ...createData, urlImagen: imageUrl }))
                 .then(() => {
                     resolve(); // Si la creación del ave tiene éxito, resuelve la Promesa sin un mensaje.
@@ -331,37 +244,6 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         dispatch(getOptionsData());
     }, []);
 
-
-    const labelStyles = {
-        color: theme.palette.primary.main, // Color del texto del label
-        marginTop: '-9px',
-    };
-
-    const inputStyles = {
-        // Aquí puedes agregar los estilos que desees para los inputs
-        color: theme.palette.primary.light,
-        backgroundColor: 'rgba(204,214,204,0.17)',
-        borderRadius: '9px',
-        height: '60px',
-        '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '0px',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'none',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main, // Color del borde en el hover
-            backgroundColor: 'rgba(0,56,28,0.22) ',
-        },
-        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-            // Agrega los estilos que desees para el Select
-            height: '50px',
-            // width: '180px' // Ejemplo: cambia el color del texto a azul
-        },
-
-    };
-
     return (
         <React.Fragment>
             <Box
@@ -375,8 +257,8 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                     justifyContent: 'center',
                     width: 'auto',
                     margin: 'auto',
-                    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                    backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+                    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -388,242 +270,230 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                     Formulario de Creación
                                 </Typography>
                             </Grid>
-                            <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
-                                Subir imágenes Galería
-                                <Divider sx={{ my: 2 }} />
-                            </Typography>
                         </Grid>
-                        {/* Input para cargar imágenes */}
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple  // Permite la selección de múltiples imágenes
-                            onChange={handleImageChange}
-                            style={{ display: 'none' }}
-                            id="image-upload-input"
-                        />
-                        <label htmlFor="image-upload-input"> {/* Utiliza el atributo "for" para asociar el label al input */}
-                            <Button
-                                variant="contained" // Cambia el estilo del botón a "contained" para un aspecto diferente
-                                color="primary"
-                                component="span" // Indica que es un botón para seleccionar archivo
-                                sx={{
-                                    fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none', mt: 0,
-                                    '&:hover': {
-                                        backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
-                                        color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                        textTransform: 'none',
-                                    },
-                                }} // Estilo personalizado
-                                onChange={handleImageChange}
-                                endIcon={<UploadFileIcon />}
-                            >
-                                Cargar Imágenes
-                            </Button>
-                        </label>
-                        <Button
-                            onClick={handleSubmit}
-                            sx={{
-                                // fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5, textTransform: 'none',
-                                backgroundColor: theme.palette.primary.dark, mt: 0,
-                                color: theme.palette.primary.light,
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                    textTransform: 'none',
-                                },
-                            }}
-                            variant="contained"
-                            color="primary"
-                            endIcon={<SaveIcon />}
-                        >Grabar</Button>
-                        {/* Mostrar imágenes seleccionadas */}
-                        {imageURL.length > 0 && (
-                            <Grid container spacing={1}>
-                                {imageURL.map((imageUrl, index) => (
-                                    <Grid item key={index}>
-                                        <div style={{ position: 'relative' }}>
-                                            <img
-                                                src={imageUrl}
-                                                alt={`Imagen seleccionada ${index + 1}`}
-                                                style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px', }}
-                                            />
-                                            <IconButton
-                                                color="primary"
-                                                onClick={() => handleRemoveImage(index)}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '8px',
-                                                    right: '0px',
-                                                }}
-                                            >
-                                                <DisabledByDefaultIcon />
-                                            </IconButton>
-                                        </div>
-                                    </Grid>
-                                ))}
+                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                            Subir imágenes Galería
+                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                        </Typography>
+
+                        <Grid container sx={{ mt: -4 }} >
+                            <Grid item xs={12} sm={3} md={3}>
+                                <ImageUploader
+                                    allImageURLs={allImageURLs}
+                                    handleImageChange={handleImageChange}
+                                    handleRemoveImage={handleRemoveImage}
+                                />
+                            </Grid >
+                            <Grid item xs={12} sm={9} md={9} >
+                                <Button
+                                    onClick={handleSubmit}
+                                    variant="contained"
+                                    color="secondary"
+                                    endIcon={<SaveIcon />}
+                                >Grabar</Button>
                             </Grid>
-                        )}
+                        </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Paisaje
-                            <Divider sx={{ my: 2 }} />
+                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
-                    </Grid>
 
-                    <Grid item xs={12} sm={6} sx={{}}>
-                        <Autocomplete
-                            disablePortal
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-pais"
+                                    options={sortedPaises}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.pais}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
+                                    renderInput={(params) =>
+                                        <TextField
+                                            {...params}
+                                            required
+                                            label="Países"
+                                            error={errors.pais}
+                                            helperText={errors.pais ? 'Este campo es obligatorio' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                '& .MuiInputBase-input': {
+                                                    height: '30px',
+                                                },
+                                            }}
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-zonas"
+                                    options={sortedZonas}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.zona}
+                                    onChange={(event, newValue) => handleZonaChange(newValue)}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            required
+                                            label="Zonas"
+                                            error={errors.zona}
+                                            helperText={errors.zona ? 'Este campo es obligatorio' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                '& .MuiInputBase-input': {
+                                                    height: '30px',
+                                                },
+                                            }}
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    filterOptions={(options, state) => {
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        const selectedPais = createData.pais; // Obtener el país seleccionado
 
-                            id="combo-box-pais"
-                            options={sortedPaises}
-                            getOptionLabel={(option) => option.nombre}
-                            value={createData.pais}
-                            onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
-                            renderInput={(params) =>
+                                        // Si no hay país seleccionado, mostrar todas las opciones de zona
+                                        if (!selectedPais) {
+                                            return options.filter((option) =>
+                                                option.nombre.toLowerCase().startsWith(inputValue)
+                                            );
+                                        }
+
+                                        // Filtrar las zonas para que coincidan con la entrada del usuario
+                                        // y también pertenezcan al país seleccionado
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue) &&
+                                            option.nombre_pais === selectedPais.nombre
+                                        );
+                                    }}
+                                />
+
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12} sm={12}>
                                 <TextField
-                                    {...params}
-                                    required
-                                    label="Países"
-                                    helperText={errors.pais ? 'Este campo es obligatorio' : ''}
-                                    error={errors.pais} // Check if the field is empty when the form is submitted
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
+                                    sx={{ my: 2, backgroundColor: 'rgba(204,214,204,0.17)', 
+                                        '& .MuiFilledInput-root': {
+                                            borderRadius: '9px',
+                                            borderColor: '#C1C700',
+                                            '&:hover': {
+                                                backgroundColor: 'transparent', // Maintain background color on hover
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&.Mui-focused': {
+                                                backgroundColor: 'transparent', // Maintain background color on focus
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&::before': {
+                                                backgroundColor: 'transparent',
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&:hover::before': {
+                                                backgroundColor: 'transparent',
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&.Mui-focused::before': {
+                                                backgroundColor: 'transparent',
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                        },
+                                    }}
+                                    name="descripcion"
+                                    label="Descripción"
+                                    value={createData.descripcion}
+                                    onChange={handleInputChange}
+                                    type='text'
+                                    variant="filled"
+                                    margin="normal"
+                                    fullWidth
+                                />
+                            </Grid>
+
+                            <Grid item sx={12} md={12}>
+                                <TextField
+                                    name="urlWiki"
+                                    label='URL Wiki'
+                                    variant="filled"
+                                    value={createData.urlWiki}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    shrink='true'
+                                    sx={{
+                                        backgroundColor: 'rgba(204,214,204,0.17)',
+                                        '& .MuiFilledInput-root': {
+                                            borderRadius: '9px',
+                                            borderColor: '#C1C700',
+                                            '&:hover': {
+                                                backgroundColor: 'transparent', // Maintain background color on hover
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&.Mui-focused': {
+                                                backgroundColor: 'transparent', // Maintain background color on focus
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&::before': {
+                                                backgroundColor: 'transparent',
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&:hover::before': {
+                                                backgroundColor: 'transparent',
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                            '&.Mui-focused::before': {
+                                                backgroundColor: 'transparent',
+                                                borderColor: '#C1C700',
+                                                borderRadius: '9px',
+                                            },
+                                        },
+
                                     }}
                                     InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
+                                        startAdornment: (
+                                            <InputAdornment position="start">
 
+                                                <IconButton onClick={handleLogoClick}
+                                                    sx={{
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                    }}
+                                                >
+                                                    <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
                                     }}
-
-                                />}
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            multiple={false}
-                            filterOptions={(options, state) => {
-                                // Filtra las opciones para que coincidan solo al principio de las letras
-                                const inputValue = state.inputValue.toLowerCase();
-                                return options.filter((option) =>
-                                    option.nombre.toLowerCase().startsWith(inputValue)
-                                );
-                            }}
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Chip
-                                        label={option.nombre}
-                                        {...getTagProps({ index })}
-                                        sx={{
-                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
-                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
-                                            },
-                                        }} // Ajusta los estilos aquí
-                                    />
-                                ))
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-zonas"
-                            options={sortedZonas}
-                            getOptionLabel={(option) => option.nombre}
-                            value={createData.zona}
-                            onChange={(event, newValue) => handleZonaChange(newValue)}
-                            renderInput={(params) =>
-                                <TextField {...params}
-                                    required
-                                    label="Zonas"
-                                    error={errors.zona}
-                                    helperText={errors.zona ? 'Este campo es obligatorio' : ''}
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
-                                    }}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
-                                    }}
-                                />}
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            multiple={false}
-                            // filterOptions={(options, state) => {
-                            //     const inputValue = state.inputValue.toLowerCase();
-                            //     const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
-
-                            //     return options.filter((option) => {
-                            //         if (selectedPaises.length === 0) {
-                            //             return true; // No hay paises seleccionados, muestra todas las zonas
-                            //         }
-                            //         return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
-                            //     });
-                            // }}
-                            filterOptions={(options, state) => {
-                                const inputValue = state.inputValue.toLowerCase();
-                                const selectedPais = createData.pais; // Obtener el país seleccionado
-
-                                // Si no hay país seleccionado, mostrar todas las opciones de zona
-                                if (!selectedPais) {
-                                    return options.filter((option) =>
-                                        option.nombre.toLowerCase().startsWith(inputValue)
-                                    );
-                                }
-
-                                // Filtrar las zonas para que coincidan con la entrada del usuario
-                                // y también pertenezcan al país seleccionado
-                                return options.filter((option) =>
-                                    option.nombre.toLowerCase().startsWith(inputValue) &&
-                                    option.nombre_pais === selectedPais.nombre
-                                );
-                            }}
-
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Chip
-                                        label={option.nombre}
-                                        {...getTagProps({ index })}
-                                        sx={{
-                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
-                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
-                                            },
-                                        }} // Ajusta los estilos aquí
-                                    />
-                                ))
-                            }
-
-                        />
-
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <TextField
-                            sx={{ mt: -2 }}
-                            variant="filled"
-                            type='text'
-                            name="descripcion"
-                            label="Descripción"
-                            value={createData.descripcion}
-                            onChange={handleInputChange}
-                            fullWidth
-                            // multiline
-                            // maxRows={4}
-                            margin="normal"
-                            // helperText={formSubmitted && createData.descripcion.trim() === '' ? 'Este Campo es obligatorio *' : ''}
-                            FormHelperTextProps={{
-                                sx: {
-                                    /* Agrega los estilos que desees para el texto del helper text */
-                                    fontSize: '1.1rem',
-                                    color: theme.palette.secondary.main,
-                                    fontWeight: 'bold'
-                                },
-                            }}
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-
-                            }}
-                            InputProps={{
-                                sx: inputStyles, // Establece el estilo del input
-                            }}
-
-                        />
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
                 {/* Backdrop para mostrar durante la carga */}
@@ -641,26 +511,26 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             </Box>
             <Snackbar
                 open={openSnackbar}
-                autoHideDuration={6000} // Duración en milisegundos (ajusta según tus preferencias)
+                autoHideDuration={10000} // Duración en milisegundos (ajusta según tus preferencias)
                 onClose={handleCloseSnackbar}
                 message={snackBarMessage}
             >
             </Snackbar>
-            {/* Snackbar for error message */ }
-    <Snackbar
-        open={errorSnackbarOpen}
-        autoHideDuration={5000} // Adjust the duration as needed
-        onClose={() => setErrorSnackbarOpen(false)}
-    >
-        <Alert
-            elevation={6}
-            variant="filled"
-            severity="error"
-            onClose={() => setErrorSnackbarOpen(false)}
-        >
-            {errorMessage}
-        </Alert>
-    </Snackbar>
+            {/* Snackbar for error message */}
+            <Snackbar
+                open={errorSnackbarOpen}
+                autoHideDuration={5000} // Adjust the duration as needed
+                onClose={() => setErrorSnackbarOpen(false)}
+            >
+                <Alert
+                    elevation={6}
+                    variant="filled"
+                    severity="error"
+                    onClose={() => setErrorSnackbarOpen(false)}
+                >
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
 
         </React.Fragment >
     );

@@ -70,38 +70,6 @@ export const SearchLands = ({ changeTab }) => {
         fetchData();
     }, [showUpdateRegister]);
 
-    const labelStyles = {
-        color: theme.palette.primary.main, // Color del texto del label
-        marginTop: '-9px',
-        ml: 10
-    };
-
-    const inputStyles = {
-        // Aquí puedes agregar los estilos que desees para los inputs
-        color: theme.palette.primary.light,
-        backgroundColor: 'rgba(204,214,204,0.17)',
-        borderRadius: '9px',
-        height: '70px',
-        width: '70%',
-        ml: 10,
-        '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '10px',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'none',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main, // Color del borde en el hover
-            backgroundColor: 'rgba(0,56,28,0.22) ',
-        },
-        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-            // Agrega los estilos que desees para el Select
-            height: '50px',
-            // width: '180px' // Ejemplo: cambia el color del texto a azul
-        },
-
-    };
 
     return (
         <React.Fragment>
@@ -122,8 +90,8 @@ export const SearchLands = ({ changeTab }) => {
                         justifyContent: 'center',
                         width: '170vh',
                         height: '40vh',
-                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                        backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+                        backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
                         marginTop: '1px',
                         borderRadius: '20px',
                     }} >

@@ -68,6 +68,10 @@ module.exports = (sequelize) => {
         background_aves: {
             type: DataTypes.TEXT,
             allowNull: true
+        },
+        background_paisaje: {
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     }, { timestamps: false, }
     )

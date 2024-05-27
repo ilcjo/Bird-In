@@ -227,15 +227,14 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                     justifyContent: 'center',
                     width: 'auto',
                     margin: 'auto',
-                    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                    backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+                    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
-
+                    mb: 10,
                 }} >
 
                     <Grid item xs={12} sm={12}>
-
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
                                 <Typography variant='h2' color='primary' >
@@ -305,7 +304,6 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                                             label="Países"
                                         />}
                                     isOptionEqualToValue={(option, value) => option.nombre === value?.nombre}
-
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>

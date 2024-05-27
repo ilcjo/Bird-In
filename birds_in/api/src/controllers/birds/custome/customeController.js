@@ -19,7 +19,8 @@ const fetchCustome = async () => {
                 'text_about',
                 'text_login',
                 'colaboradores',
-                'background_aves'
+                'background_aves',
+                'background_paisaje'
             ],
         });
         return getAllCutomizes
