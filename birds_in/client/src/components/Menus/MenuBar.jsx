@@ -74,20 +74,20 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                     left: 0, // Lo coloca en la parte izquierda de la pantalla
                     width: '100%', // Ocupa todo el ancho de la pantalla
                     zIndex: 999, // Asegura que esté por encima del contenido
-                    backgroundColor: 'rgba(0, 56, 28, 0.4)',
-                    backdropFilter: 'blur(2px)',
+                    backgroundColor: 'rgba(32,60,18, 0.1)',
+                    backdropFilter: 'blur(9px)',
                     WebkitBackdropFilter: 'blur(10px)',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     height: '9vh',
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                    
+
                     // gap: '10px',
                 }}
             >
                 <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}>
                     <img src={allCustom.logo} alt="Logo"
-                        style={{ width: 'auto', height: '120%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}
+                        style={{ width: 'auto', height: '120%', marginBottom: '52px', backgroundColor: '#103300', borderRadius: ' 0px 0px 50px 50px', }}
                         loading="lazy" />
                 </Link>
                 <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1, gap: '10px', }}>
@@ -124,7 +124,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         sx={{
                             fontSize: '1rem',
                             fontWeight: 'bold',
-                        
+
                         }}
                         color="primary"
                         variant="outlined"

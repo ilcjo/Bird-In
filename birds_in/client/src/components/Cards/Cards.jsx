@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, CardActionArea, CardActions, CardMedia, IconButton, Typography } from '@mui/material'
+import { Card, CardActionArea, CardActions, CardMedia, Divider, IconButton, Typography } from '@mui/material'
 import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { sendParameter } from '../../redux/actions/fetchAllBirds';
@@ -37,53 +37,60 @@ export const Cards = React.memo(({ foto, name, index }) => {
     <Card sx={{
       minWidth: 420,
       maxWidth: 420,
-      minHeight: 330, // Establece una altura mínima para la tarjeta
+      minHeight: 330,
       maxHeight: 330,
       position: 'relative',
-      borderRadius: '15px',
-      display: 'flex', // Establece la tarjeta como un contenedor flexible
-      flexDirection: 'column', // Alinea el contenido verticalmente
-      justifyContent: 'space-between', // Centra verticalmente el contenido
-      // m: 3,
-      backgroundColor: 'primary.dark',
-      
+      borderRadius: '6px',
+      display: 'flex', 
+      flexDirection: 'column', 
+      justifyContent: 'space-between', 
+      backgroundColor: '#103300',
+
     }}>
       <CardActionArea>
         {destacadaImage && destacadaImage.url ? (
-          <CardMedia
-            component="img"
-            height="350"
-            width='420'
-            image={destacadaImage.url}
-            alt={name}
-            key={index}
-            onClick={handleDetailClick}
-            sx={{ objectFit: 'cover', objectPosition: 'center center ', }}
-          />
+          <div style={{ position: 'relative' }}>
+            <CardMedia
+              component="img"
+              height="350"
+              width='420'
+              image={destacadaImage.url}
+              alt={name}
+              key={index}
+              onClick={handleDetailClick}
+              sx={{
+                objectFit: 'cover', objectPosition: 'center center ',
+                background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: 20,
+              width: '100%',
+              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
+              padding: '30px'
+            }}>
+              <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
+              <Typography
+                variant='h2'
+                color='primary'
+                onClick={handleDetailClick}
+                style={{ cursor: 'pointer' }}
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                {name}
+              </Typography>
+            </div>
+          </div>
         ) : (
           <Typography variant="body2">Imagen no disponible</Typography>
         )}
       </CardActionArea>
       <CardActions disableSpacing>
-        <Typography 
-        variant='h2' 
-        color='primary' 
-        onClick={handleDetailClick} 
-        style={{ cursor: 'pointer' }}
-        sx={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '10px',
-          color: 'white', // Puedes ajustar el color del texto según tus preferencias
-          fontWeight: 'bold',
-          zIndex: 10, // Asegura que el texto esté encima de la imagen
-          background:  'rgba(0, 56, 28, 0.6)',
-          // width: '100%',
-          padding: '5px',
-        }} 
-        >
-          {name}
-        </Typography>
+
       </CardActions>
     </Card>
   );

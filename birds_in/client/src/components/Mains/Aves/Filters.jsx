@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getInfoBirds, sendParameter } from '../../../redux/actions/fetchAllBirds'
-import { copingFilters, isOneBird, resetCurrentFilters, saveFilters, setNoMoreResults } from '../../../redux/slices/BirdsSlice'
+import { cargando, copingFilters, isOneBird, resetCurrentFilters, saveFilters, setNoMoreResults } from '../../../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../../../redux/actions/fetchOptions'
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom'
@@ -35,81 +35,9 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             dispatch(sendParameter(selectOption));
             localStorage.removeItem('nombreIngles')
             setIsFilterOpen(false)
-
         }
     }, [nombreIngles]);
 
-    const labelStyles = {
-        color: theme.palette.primary.main, // Color del texto del label
-        marginTop: '-9px',
-    };
-
-    const inputStyles = {
-        // Aquí puedes agregar los estilos que desees para los inputs
-        color: theme.palette.primary.light,
-        backgroundColor: 'rgba(204,214,204,0.17)',
-        borderRadius: '9px',
-        height: '55px',
-
-
-        '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '10px',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'none',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main, // Color del borde en el hover
-            backgroundColor: 'rgba(204,214,204,0.17)',
-        },
-        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-            // Agrega los estilos que desees para el Select
-            height: '40px',
-
-            // width: '180px'
-        },
-
-    };
-
-    // const actionsStyles = {
-    //     justifyContent: 'center', // Centrar el botón horizontalmente
-    //     margin: '0px',
-    //     marginTop: '10px',
-    //     gap: '20px',
-    //     fontWeight: 500,
-    //     textAlign: 'center',
-
-
-    //     '& .MuiButton-contained': {
-    //         fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
-    //         fontWeight: 'bold', // Hacer el texto negrita
-    //         textTransform: 'none',
-    //         '&:hover': {
-    //             backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-    //             color: theme.palette.primary.light, // Cambia el color del texto en hover
-    //             textTransform: 'none',
-    //         },
-    //     },
-    //     '& .MuiButton-outlined': {
-    //         fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
-    //         fontWeight: 'bold', // Hacer el texto negrita
-    //         textTransform: 'none',
-    //     },
-    // };
-
-    // const sortAlphabetically = (array) => {
-    //     return array.slice().sort((a, b) => {
-    //         // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
-    //         if (a && a.nombre && b && b.nombre) {
-    //             const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-    //             const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-    //             return nameA.localeCompare(nameB);
-    //         }
-    //         // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
-    //         return 0;
-    //     });
-    // };
     const sortAlphabetically = (data) => {
         if (Array.isArray(data)) {
             // Si es un array, ordena alfabéticamente
@@ -142,6 +70,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const sortedNCientifico = sortAlphabetically(nCientifico);
     const sortedNIngles = sortAlphabetically(nIngles);
 
+    const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],
         familia: [],
@@ -151,8 +80,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         ingles: [],
         ...selectOptionFromSlice,
     });
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
+
 
     // React.useEffect(() => {
     //     if (isFilterOpen) {
@@ -189,18 +117,26 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     };
 
     const handleClickFiltrar = async () => {
-        // const queryString = createParams(selectOption)
-        // console.log('dentro del filter query',queryString)
-        dispatch(saveFilters(selectOption))
-        const resultLength = await dispatch(sendParameter(selectOption));
-        pages(1);
         setIsFilterOpen(false);
-        dispatch(copingFilters());
+        dispatch(saveFilters(selectOption));
+        dispatch(cargando(true));
 
-        if (resultLength === 1) {
-            dispatch(isOneBird(true));
-        } else {
-            dispatch(isOneBird(false));
+        try {
+            const resultLength = await dispatch(sendParameter(selectOption));
+
+            pages(1);
+            dispatch(copingFilters());
+
+            if (resultLength === 1) {
+                dispatch(isOneBird(true));
+            } else {
+                dispatch(isOneBird(false));
+            }
+        } catch (error) {
+            console.error("Error occurred during filtering:", error);
+            // Manejar el error según sea necesario
+        } finally {
+            dispatch(cargando(false)) // Establecer isLoading en false después de la solicitud
         }
     };
 
@@ -226,7 +162,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             cientifico: [],
             ingles: []
         });
-        dispatch(isOneBird(false))
+        dispatch(isOneBird(null))
         dispatch(setNoMoreResults(true))
     };
 
@@ -261,12 +197,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     return (
         <React.Fragment>
-            {/* <Backdrop
-                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}
-                open={isLoading} // Show the backdrop when loading is true
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop> */}
             <Grid component={Box}
                 sx={{
                     height: 'auto',
@@ -274,17 +204,16 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     borderRadius: '20px 20px 20px 20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
                     padding: 3,
-                    mixWidth: "10%",
+                    // mixWidth: "10%",
                     // marginLeft: '60px'
                 }} >
-                {/* <Grid item >
+                <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
-                        Filtros
+                        Búsqueda Avanzada de Ave
                     </Typography>
-                </Grid> */}
+                </Grid>
                 <Grid item container alignItems="center">
                     <Grid xs={12} >
-                        {/* Grupo */}
                         <FormControl sx={{ m: 1, width: '95%' }}>
                             <Autocomplete
                                 multiple
@@ -293,29 +222,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 onChange={(event, newValue) => handleOptionChange('grupo', newValue)}
                                 options={sortedGrupos}
                                 getOptionLabel={(option) => option.nombre}
-                                filterOptions={(options, state) => {
-                                    // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                    const inputValue = state.inputValue.toLowerCase();
-                                    return options.filter((option) => {
-                                        const birdName = option.nombre.toLowerCase();
-                                        const birdNamesArray = birdName.split(' ');
-
-                                        // Check if any of the names (first, second, or third) start with the inputValue
-                                        return birdNamesArray.some(
-                                            (name) => name.startsWith(inputValue)
-                                        );
-                                    });
-                                }}
                                 loading={isFetchingOptions}
                                 renderInput={(params) =>
                                     <TextField {...params}
                                         label="Grupo"
-                                        InputLabelProps={{
-                                            sx: labelStyles, // Estilo del label
-                                        }}
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            sx: inputStyles, // Estilo del input
+                                        sx={{
+                                            '& .MuiInputBase-input': {
+                                                height: '30px',
+                                            },
                                         }}
                                     />}
                                 renderTags={(value, getTagProps) =>
@@ -349,28 +263,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 options={sortedFamilias}
                                 getOptionLabel={(option) => option.nombre}
                                 loading={isFetchingOptions}
-                                filterOptions={(options, state) => {
-                                    // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                    const inputValue = state.inputValue.toLowerCase();
-                                    return options.filter((option) => {
-                                        const birdName = option.nombre.toLowerCase();
-                                        const birdNamesArray = birdName.split(' ');
-
-                                        // Check if any of the names (first, second, or third) start with the inputValue
-                                        return birdNamesArray.some(
-                                            (name) => name.startsWith(inputValue)
-                                        );
-                                    });
-                                }}
                                 renderInput={(params) =>
                                     <TextField {...params}
                                         label="Familia"
-                                        InputLabelProps={{
-                                            sx: labelStyles, // Estilo del label
-                                        }}
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            sx: inputStyles, // Estilo del input
+                                        sx={{
+                                            '& .MuiInputBase-input': {
+                                                height: '30px',
+                                            },
                                         }}
                                     />}
                                 renderTags={(value, getTagProps) =>
@@ -404,43 +303,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     options={sortedPaises}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) => {
-                                            const birdName = option.nombre.toLowerCase();
-                                            const birdNamesArray = birdName.split(' ');
-
-                                            // Check if any of the names (first, second, or third) start with the inputValue
-                                            return birdNamesArray.some(
-                                                (name) => name.startsWith(inputValue)
-                                            );
-                                        });
-                                    }
-                                        //     (options, state) => {
-                                        //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                        //     const inputValue = state.inputValue.toLowerCase();
-                                        //     return options.filter((option) => {
-                                        //         const birdName = option.nombre.toLowerCase();
-                                        //         const birdNamesArray = birdName.split(' ');
-
-                                        //         // Check if any of the names (first, second, or third) start with the inputValue
-                                        //         return birdNamesArray.some(
-                                        //             (name) => name.startsWith(inputValue)
-                                        //         );
-                                        //     });
-                                        // }
-                                    }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Países"
-                                            InputLabelProps={{
-                                                sx: labelStyles, // Estilo del label
-                                            }}
-                                            InputProps={{
-                                                ...params.InputProps,
-                                                sx: inputStyles, // Estilo del input
-
+                                            sx={{
+                                                '& .MuiInputBase-input': {
+                                                    height: '30px',
+                                                },
                                             }}
                                         />}
                                     renderTags={(value, getTagProps) =>
@@ -474,44 +343,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     options={sortedZonas}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
-                                    filterOptions={
-                                        (options, state) => {
-                                            // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                            const inputValue = state.inputValue.toLowerCase();
-                                            return options.filter((option) => {
-                                                const birdName = option.nombre.toLowerCase();
-                                                const birdNamesArray = birdName.split(' ');
-
-                                                // Check if any of the names (first, second, or third) start with the inputValue
-                                                return birdNamesArray.some(
-                                                    (name) => name.startsWith(inputValue)
-                                                );
-                                            });
-                                        }
-                                        //     (options, state) => {
-                                        //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                        //     const inputValue = state.inputValue.toLowerCase();
-                                        //     return options.filter((option) => {
-                                        //         const birdName = option.nombre.toLowerCase();
-                                        //         const birdNamesArray = birdName.split(' ');
-
-                                        //         // Check if any of the names (first, second, or third) start with the inputValue
-                                        //         return birdNamesArray.some(
-                                        //             (name) => name.startsWith(inputValue)
-                                        //         );
-                                        //     });
-                                        // }
-                                    }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
-                                            InputLabelProps={{
-                                                sx: labelStyles, // Estilo del label
-                                            }}
-                                            InputProps={{
-                                                ...params.InputProps,
-                                                sx: inputStyles, // Estilo del input
-
+                                            sx={{
+                                                '& .MuiInputBase-input': {
+                                                    height: '30px',
+                                                },
                                             }}
                                         />}
                                     renderTags={(value, getTagProps) =>
@@ -545,29 +383,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     options={sortedNCientifico}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) => {
-                                            const birdName = option.nombre.toLowerCase();
-                                            const birdNamesArray = birdName.split(' ');
 
-                                            // Check if any of the names (first, second, or third) start with the inputValue
-                                            return birdNamesArray.some(
-                                                (name) => name.startsWith(inputValue)
-                                            );
-                                        });
-                                    }}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Científico"
-                                            InputLabelProps={{
-                                                sx: labelStyles, // Estilo del label
-                                            }}
-                                            InputProps={{
-                                                ...params.InputProps,
-                                                sx: inputStyles, // Estilo del input
-
+                                            sx={{
+                                                '& .MuiInputBase-input': {
+                                                    height: '30px',
+                                                },
                                             }}
                                         />}
                                     renderTags={(value, getTagProps) =>
@@ -600,44 +423,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     options={sortedNIngles}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
-                                    filterOptions={
-                                        (options, state) => {
-                                            // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                            const inputValue = state.inputValue.toLowerCase();
-                                            return options.filter((option) => {
-                                                const birdName = option.nombre.toLowerCase();
-                                                const birdNamesArray = birdName.split(' ');
-
-                                                // Check if any of the names (first, second, or third) start with the inputValue
-                                                return birdNamesArray.some(
-                                                    (name) => name.startsWith(inputValue)
-                                                );
-                                            });
-                                        }
-                                        //     (options, state) => {
-                                        //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                        //     const inputValue = state.inputValue.toLowerCase();
-                                        //     return options.filter((option) => {
-                                        //         const birdName = option.nombre.toLowerCase();
-                                        //         const birdNamesArray = birdName.split(' ');
-
-                                        //         // Check if any of the names (first, second, or third) start with the inputValue
-                                        //         return birdNamesArray.some(
-                                        //             (name) => name.startsWith(inputValue)
-                                        //         );
-                                        //     });
-                                        // }
-                                    }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Nombre Inglés"
-                                        
-                                            InputLabelProps={{
-                                                sx: labelStyles, // Estilo del label
-                                            }}
-                                            InputProps={{
-                                                ...params.InputProps,
-                                                sx: inputStyles, // Estilo del input
+                                            sx={{
+                                                '& .MuiInputBase-input': {
+                                                    height: '30px',
+                                                },
                                             }}
                                         />}
                                     renderTags={(value, getTagProps) =>
@@ -650,7 +442,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                                     padding: '4px 8px',
                                                     color: 'white', // Color del texto de la etiqueta
                                                     marginRight: '8px', // Espacio entre etiquetas
-                            
                                                 }}
                                             >
                                                 {option.nombre}
@@ -674,17 +465,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             <Button variant="outlined" color="primary" onClick={handleReset}>
                                 Resetear
                             </Button>
-                            {/* <Button variant="outlined" color="primary" onClick={returnMenuClick}>
-                                <ArrowBackIcon /> Volver
-                            </Button> */}
-                            <Button variant="outlined" color="secondary" onClick={handleBack}>
+                            <Button variant="outlined" color="error" onClick={handleBack}>
                                 < CloseIcon /> Cerrar
                             </Button>
-
-                    </Stack>
-                </Grid>
-            </Grid >
-        </Grid>
+                        </Stack>
+                    </Grid>
+                </Grid >
+            </Grid>
         </React.Fragment >
     )
 };

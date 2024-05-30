@@ -17,10 +17,11 @@ const initialState = {
     ingles: [],
   },
   filters: '',
-  copyFilters:{},
+  copyFilters: {},
   count: {},
-  oneBird: false,
-  total:0
+  oneBird: null,
+  total: 0,
+  loading: false
 };
 
 export const birdSlice = createSlice({
@@ -98,10 +99,14 @@ export const birdSlice = createSlice({
     howMuch: (state, action) => {
       state.total = action.payload;
     },
+    cargando: (state, action) => {
+      state.loading = action.payload
+    },
   },
 });
 
 export const {
+  cargando,
   fetchInfo,
   loadMoreDataSuccess,
   fetchOptions,

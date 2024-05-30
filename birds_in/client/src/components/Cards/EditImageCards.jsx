@@ -8,7 +8,7 @@ export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsC
     return (
 
         <Card sx={{
-            borderRadius: '10px', width: 380, minWidth: 400, margin: 0, flexDirection: 'column',background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)' 
+            borderRadius: '6px', width: 380, minWidth: 400, margin: 0, flexDirection: 'column',background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)' 
 
         }}>
             <CardActionArea

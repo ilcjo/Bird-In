@@ -8,12 +8,14 @@ const theme = createTheme({
     primary: {
       light: '#ccd6cc',
       main: '#C1C700',
-      dark: '#004E37',
+      dark: '#103300',
+      // dark: '#004E37',
       contrastText: '#004E37',
     },
     secondary: {
       light: '#C1C700',
-      main: '#004E37', //verde
+      main: '#103300',
+      // main: '#004E37', //verde
       dark: '#A3A3A3',
       contrastText: '#ccd6cc',
     },
@@ -68,7 +70,7 @@ const theme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: 'rgba(0, 56, 28, 0.3)',
+          backgroundColor: 'rgba(16, 51, 0, 0.3)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           padding: '20px',
@@ -79,7 +81,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           alignItems: 'center',
-          backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+          backgroundColor: 'rgba(16, 51, 0, 0.1)', // Establece el fondo transparente deseado
           backdropFilter: 'blur(90px)', // Efecto de desenfoque de fondo
           WebkitBackdropFilter: 'blur(90px)', // Efecto de desenfoque de fondo para navegadores basados en Webkit
         },

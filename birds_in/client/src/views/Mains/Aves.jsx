@@ -1,32 +1,37 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreData } from '../../redux/actions/fetchAllBirds'
-import { Button, Dialog, Grid, useTheme } from '@mui/material'
+import { Box, Button, Dialog, Divider, Grid, Typography, useTheme } from '@mui/material'
 import { Filters } from '../../components/Mains/Aves/Filters'
 import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { PhotosDetail } from '../../components/Mains/Aves/PhotosDetail';
-import { resetInfoBird } from '../../redux/slices/BirdsSlice';
+import { isOneBird, resetInfoBird } from '../../redux/slices/BirdsSlice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { Loading } from '../../components/utils/Loading'
 export const Aves = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const dataToMap = useSelector(state => state.birdSlice.infoBirds)
-
-  const parameter = useSelector(state => state.birdSlice.filters)
+  const { loading, infoBirds, filters, noMoreResults, oneBird } = useSelector(state => state.birdSlice)
   const { allCustom } = useSelector((state) => state.customizesSlice);
-  const noMoreResults = useSelector((state) => state.birdSlice.noMoreResults);
-  const [page, setPage] = React.useState(1);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
+  const [page, setPage] = React.useState(1);
+  const [showBackdrop, setShowBackdrop] = React.useState(false);
+  const [loadingMessage, setLoadingMessage] = React.useState('Cargando..')
+ 
   const panel = localStorage.getItem('panel')
 
   const handleChangePage = () => {
     const newPage = page + 1;
     setPage(newPage);
-    dispatch(loadMoreData(newPage, parameter));
+    setShowBackdrop(true); // Mostrar Backdrop al cargar más datos
+    setLoadingMessage('Cargando Más Aves..')
+    dispatch(loadMoreData(newPage, filters)).then(() => {
+      setShowBackdrop(false); // Ocultar Backdrop una vez que los datos se cargan
+    });
   };
 
   const stepBack = () => {
@@ -35,27 +40,19 @@ export const Aves = () => {
 
   };
   React.useEffect(() => {
-    // Se ejecuta cada vez que el componente se monta
     dispatch(resetInfoBird());
+    dispatch(isOneBird(null))
   }, []);
 
-  // let dataToMap = [];
-  // switch (panel) {
-  //   case 'aves':
-  //     dataToMap = birds;
-  //     break;
-  //   case 'paisajes':
-  //     dataToMap = landscapes;
-  //     break;
-  //   case 'peces':
-  //     dataToMap = fishes;
-  //     break;
-  //   case 'flora':
-  //     dataToMap = flora;
-  //     break;
-  //   default:
-  //     dataToMap = [];
-  // }
+  React.useEffect(() => {
+    if (loading) {
+      setShowBackdrop(true);
+      setLoadingMessage('Buscando Resultados...');
+    } else {
+      setShowBackdrop(false);
+    }
+  }, [loading]);
+
 
   return (
     <React.Fragment>
@@ -64,82 +61,144 @@ export const Aves = () => {
         container
         direction="column"
         alignItems="center"
+        justifyContent="center"
         sx={{
-          background: dataToMap.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
+          background: infoBirds.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
-          minHeight: '90vh',
+          minHeight: '100vh',
+          padding: 8
         }}
       >
-
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
-          fullWidth
-          mixWidth="md"
+          fullWidth='true'
+          maxWidth='md'
         >
           <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
-        {/* 
-        {birds.length === 1 ? (
-          <PhotosDetail bird={birds[0]} />
-        ) : (
-          <Grid item container spacing={3} justifyContent="center">
-            {birds.map((bird, index) => (
-              <Grid item key={index}>
-                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
+        {infoBirds.length > 1 && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              // maxWidth: '1200px',
+              margin: 'auto',
+              backgroundColor: 'rgba(32,60,18, 0.2)',
+              backdropFilter: 'blur(8px)',
+              padding: '40px',
+              borderRadius: '20px',
+              mb: 10,
+              mt: 10
+            }}
+          >
+            <Grid container
+              alignItems="baseline"
+              justifyContent="space-between"
+              spacing={2}
+              sx={{ width: '100%' }}>
+              <Grid item>
+                <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center' }}>
+                  Resultados
+                  <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
+                </Typography>
+                <Typography variant='h6' color='white'>
+                  Total de Aves Filtradas: 0
+                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                </Typography>
               </Grid>
-            ))}
-          </Grid>
-        )} */}
-        {dataToMap.length > 1 && (
-          <Grid item container spacing={3} justifyContent="center">
-            <Button
-              sx={{
-                mt: 5,
-                ml: '85%',
-                fontSize: '1.1rem',
-                fontWeight: 'bold',
-                color: theme.palette.primary.main,
-                backgroundColor: 'rgba(0, 56, 28, 0.2)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(9px)', // Efecto de desenfoque de fondo
-                // textShadow: `2px 2px 3px ${theme.palette.primary.light}`,
-              }}
-              variant="outline"
-              onClick={stepBack}
-              startIcon={<ArrowBackIcon />}
-            >Regresar
-            </Button>
-            {dataToMap.map((bird, index) => (
-              <Grid item key={index}>
-                <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
+              <Grid item >
+                <Button
+                  sx={{
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    alignSelf: 'center',
+                  }}
+                  variant="outlined"
+                  onClick={stepBack}
+                  startIcon={<ArrowBackIcon />}
+                >Regresar
+                </Button>
               </Grid>
-            ))}
-          </Grid>
+            </Grid>
+            <Grid container spacing={3} justifyContent="center">
+              {infoBirds.map((bird, index) => (
+                <Grid item key={index}>
+                  <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
+                </Grid>
+              ))}
+            </Grid>
+            {!noMoreResults && (
+              <Button
+                sx={{
+                  m: 2,
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  color: theme.palette.primary.main,
+                  borderRadius: '800px',
+                }}
+                variant="outline"
+                onClick={handleChangePage}
+              >
+                Más
+                <ExpandMoreIcon style={{ fontSize: '3rem', position: 'absolute', top: '100%', left: '50%', transform: 'translate(-50%, -50%)', marginTop: '5px' }} />
+              </Button>
+            )}
+          </Box>
         )}
-        {dataToMap.length === 1 && (
-          <PhotosDetail bird={dataToMap[0]} setIsFilterOpen={setFilterDialogOpen} />
+        {infoBirds.length === 1 && (
+          <PhotosDetail bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} />
         )}
-        <Grid item>
-          {!noMoreResults && (
-            <Button
-              sx={{
-                m: 2,
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                textTransform: 'none',
-                color: theme.palette.primary.main,
-                borderRadius: '800px',
-              }}
-              variant="outline"
-              onClick={handleChangePage}
-            >
-              <ExpandMoreIcon style={{ fontSize: '3rem' }} />
-            </Button>
-          )}
-        </Grid>
+        {oneBird === false && infoBirds.length === 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              // maxWidth: '1200px',
+              margin: 'auto',
+              backgroundColor: 'rgba(32,60,18, 0.2)',
+              backdropFilter: 'blur(8px)',
+              padding: '40px',
+              borderRadius: '20px',
+              mb: 10,
+              mt: 10
+            }}
+          >
+            <Grid container
+              alignItems="baseline"
+              justifyContent="space-between"
+              spacing={2}
+              sx={{ width: '100%' }}>
+              <Grid item>
+                <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center' }}>
+                  Resultados
+                  <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
+                </Typography>
+                <Typography variant='h6' color='white'>
+                  Total de Aves Filtradas: 0
+                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                </Typography>
+                <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                  No  Existen Resultados.
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
       </Grid>
+      <Loading
+        message={loadingMessage}
+        open={showBackdrop}
+      />
     </React.Fragment >
   );
 };
