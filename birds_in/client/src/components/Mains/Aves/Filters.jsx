@@ -132,6 +132,23 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             } else {
                 dispatch(isOneBird(false));
             }
+            setIsFetchingOptions(true); // Activa el indicador de carga
+            // Realiza la solicitud para obtener las opciones completas
+            dispatch(getOptionsData())
+                .then(() => {
+                    setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
+                })
+                .catch(() => {
+                    setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
+                });
+            setSelectOption({
+                grupo: [],
+                familia: [],
+                pais: [],
+                zona: [],
+                cientifico: [],
+                ingles: []
+            });
         } catch (error) {
             console.error("Error occurred during filtering:", error);
             // Manejar el error según sea necesario
@@ -209,7 +226,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 }} >
                 <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
-                        Búsqueda Avanzada de Ave
+                        Búsqueda Avanzada de Aves
                     </Typography>
                 </Grid>
                 <Grid item container alignItems="center">
@@ -436,12 +453,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         value.map((option, index) => (
                                             <Typography
                                                 key={option.id}
-                                                variant="body2" // Elige el variant y otros estilos según tus necesidades
+                                                // variant="body2"
                                                 sx={{
                                                     display: 'inline-block',
                                                     padding: '4px 8px',
-                                                    color: 'white', // Color del texto de la etiqueta
-                                                    marginRight: '8px', // Espacio entre etiquetas
+                                                    color: 'white',
+                                                    marginRight: '8px',
+                                                    fontSize: { sx: '0.8rem',  },
                                                 }}
                                             >
                                                 {option.nombre}
