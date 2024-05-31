@@ -1,47 +1,78 @@
-import React from 'react'
-import { Box, Grid, } from '@mui/material'
-import { MenuBar } from './Menus/MenuBar';
+import * as React from 'react'
+import { Box, Divider, Typography, useTheme, } from '@mui/material'
 import { useSelector } from 'react-redux';
+import { formatData } from './utils/formatFuntion';
 
-export const Header = () => {
-  const { allCustom } = useSelector(state => state.customizesSlice)
+export const Header = ({ imageUrl, bird }) => {
+  const theme = useTheme()
+  console.log(bird)
 
   return (
-
-    <Grid container component={Box} sx={{
-      height: '15vh',
-      width: '100%',
-      position: 'relative',
-      backgroundColor: 'rgba(255, 255, 255, 0)', // Fondo semitransparente para mejorar la legibilidad
-    }}>
-
+    <Box
+      component="div"
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height: '80vh',
+        display: 'flex',
+      }}
+    >
       <Box
+        component="div"
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
+          width: '70%',
           height: '100%',
-          background: 'linear-gradient(rgba(137, 138, 108, 0), rgba(0, 61, 21, 100))',
-          opacity: 0.9,
+          backgroundImage: `url(${imageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          boxShadow: 3,
         }}
       />
-      <img
-        src={allCustom.header}
-        alt="Ave"
-        style={{ width: '100vw', height: '100%', objectFit: 'cover' }}
-      />
-        < MenuBar ShowFilterButton={false} ShowBackButton={true} />
-    
-      <Grid item xs={12} // Controla el ancho de la columna derecha
+      <Box
+        component="div"
         sx={{
-          position: 'absolute',
-          top: '80%',
-          right: '15%', // Ajusta la posición derecha
-          transform: 'translate(50%, -50%)',
+          width: '30%',
+          height: '100%',
+          backgroundColor: 'rgba(16, 51, 0, 0.9)',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          padding: 5,
         }}
       >
-      </Grid>
-    </Grid>
+        {bird.map((data, index) => (
+          <React.Fragment key={index}>
+            <Box sx={{ ml: 0 }} >
+              <Typography variant="h4" color='primary.light' sx={{ mb: 0 }}>
+                Nombre en Inglés:
+              </Typography>
+              <Typography variant='h1' color='primary'sx={{ mb: 4 }}>
+                {data.nombre_ingles || 'N/A'}
+              </Typography>
+              <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
+              <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }} >
+                Nombre Científico:
+              </Typography>
+              <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
+                {data.nombre_cientifico || 'N/A'}
+              </Typography>
+              <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
+                Nombre Común:
+              </Typography>
+              <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
+                {data.nombre_comun || 'N/A'}
+              </Typography>
+              <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
+                País:
+              </Typography>
+              <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
+                {formatData(data.paises) || 'N/A'}
+              </Typography>
+            </Box>
+          </React.Fragment>
+        ))}
+      </Box>
+    </Box>
   )
 };

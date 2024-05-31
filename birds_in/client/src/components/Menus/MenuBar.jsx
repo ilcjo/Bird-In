@@ -69,7 +69,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 container
                 component={Box}
                 sx={{
-                    position: 'fixed', // Establece la posición fija
+                    // position: 'fixed', // Establece la posición fija
                     top: 0, // Lo coloca en la parte superior de la pantalla
                     left: 0, // Lo coloca en la parte izquierda de la pantalla
                     width: '100%', // Ocupa todo el ancho de la pantalla

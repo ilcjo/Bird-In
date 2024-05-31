@@ -9,13 +9,14 @@ import { Peces } from './views/Mains/Peces'
 import { CarruselGallery } from './components/Galeries/Aves/CarruselGallery'
 import { SobreMi } from './views/Mains/SobreMi'
 
-import { PhotosDetail } from './components/Mains/Aves/PhotosDetail'
+
 import { Landing } from './views/Landing'
 import { Index } from './components/SingUpTabs/Index'
 import { DashAves } from './views/Dash/DashAves'
 import { DashPaisajes } from './views/Dash/DashPaisajes'
 import { ProtectedRoute } from './ProtectedRoute'
 import { MenuBar } from './components/Menus/MenuBar'
+import { PhotosDetailAves } from './components/Mains/Aves/PhotosDetailAves'
 
 function App() {
   return (
@@ -39,7 +40,7 @@ function App() {
       <Route
         path="/detalle"
         element={<ProtectedRoute roles={['user', 'admin']}>
-          <PhotosDetail />
+          <PhotosDetailAves />
         </ProtectedRoute>
         } />
       <Route path="/galeria"

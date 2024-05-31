@@ -2,15 +2,16 @@ import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Box, Button, Dialog, Divider, Grid, Typography, useTheme } from '@mui/material'
-import { Filters } from '../../components/Mains/Aves/Filters'
+import { FiltersAves } from '../../components/Mains/Aves/FiltersAves'
 import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
-import { PhotosDetail } from '../../components/Mains/Aves/PhotosDetail';
 import { isOneBird, resetInfoBird } from '../../redux/slices/BirdsSlice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Loading } from '../../components/utils/Loading'
+import { DetailContainer } from '../../components/utils/DetailContainer'
+import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves'
 export const Aves = () => {
 
   const theme = useTheme()
@@ -21,7 +22,7 @@ export const Aves = () => {
   const [page, setPage] = React.useState(1);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Cargando..')
- 
+
   const panel = localStorage.getItem('panel')
 
   const handleChangePage = () => {
@@ -37,8 +38,8 @@ export const Aves = () => {
   const stepBack = () => {
     setFilterDialogOpen(true)
     dispatch(resetInfoBird())
-
   };
+
   React.useEffect(() => {
     dispatch(resetInfoBird());
     dispatch(isOneBird(null))
@@ -57,6 +58,7 @@ export const Aves = () => {
   return (
     <React.Fragment>
       <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} showAllButton={true} ShowFilterButton={true} ShowBackButton={true} showAdmin={true} />
+      {/* <DetailContainer /> */}
       <Grid
         container
         direction="column"
@@ -64,7 +66,6 @@ export const Aves = () => {
         justifyContent="center"
         sx={{
           background: infoBirds.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
-          backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
@@ -73,11 +74,11 @@ export const Aves = () => {
       >
         <Dialog
           open={isFilterDialogOpen}
-          onClose={() => setFilterDialogOpen(false)} // Cierra el diálogo al hacer clic en cerrar
+          onClose={() => setFilterDialogOpen(false)}
           fullWidth='true'
           maxWidth='md'
         >
-          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
+          <FiltersAves isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {infoBirds.length > 1 && (
           <Box
@@ -87,7 +88,6 @@ export const Aves = () => {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              // maxWidth: '1200px',
               margin: 'auto',
               backgroundColor: 'rgba(32,60,18, 0.2)',
               backdropFilter: 'blur(8px)',
@@ -153,7 +153,7 @@ export const Aves = () => {
           </Box>
         )}
         {infoBirds.length === 1 && (
-          <PhotosDetail bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} />
+          <PhotosDetailAves bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} />
         )}
         {oneBird === false && infoBirds.length === 0 && (
           <Box
@@ -195,6 +195,7 @@ export const Aves = () => {
           </Box>
         )}
       </Grid>
+      
       <Loading
         message={loadingMessage}
         open={showBackdrop}

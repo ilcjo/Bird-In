@@ -8,24 +8,20 @@ import {
     useTheme,
     Autocomplete,
     TextField,
-    Backdrop,
-    CircularProgress,
     Stack,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { getInfoBirds, sendParameter } from '../../../redux/actions/fetchAllBirds'
+//ESTADOS GLOBALES
+import {  sendParameter } from '../../../redux/actions/fetchAllBirds'
 import { cargando, copingFilters, isOneBird, resetCurrentFilters, saveFilters, setNoMoreResults } from '../../../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../../../redux/actions/fetchOptions'
-// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate } from 'react-router-dom'
+//ICONS
 import CloseIcon from '@mui/icons-material/Close';
-import { createParams } from '../../utils/convertId'
 
 
-export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
+export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     const nombreIngles = localStorage.getItem('nombreIngles');
 
     React.useEffect(() => {
@@ -81,18 +77,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         ...selectOptionFromSlice,
     });
 
-
-    // React.useEffect(() => {
-    //     if (isFilterOpen) {
-    //         setIsLoading(true); // Set loading to true when filters are open
-    //         // Actualiza selectOption solo si isFilterOpen es true
-    //         setSelectOption((prevSelectOption) => ({
-    //             ...prevSelectOption,
-    //             ...selectOptionFromSlice,
-    //         }));
-    //         setIsLoading(false); // Set loading to false after options are loaded
-    //     }
-    // }, [isFilterOpen, selectOptionFromSlice]);
 
     const handleOptionChange = (category, newValue) => {
         setIsFetchingOptions(true); // Activa el indicador de carga
@@ -183,20 +167,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         dispatch(setNoMoreResults(true))
     };
 
-    // const returnMenuClick = () => {
-    //     setSelectOption({
-    //         grupo: [],
-    //         familia: [],
-    //         pais: [],
-    //         zona: [],
-    //         cientifico: [],
-    //         ingles: []
-    //     });
-    //     localStorage.removeItem('nombreIngles')
-    //     dispatch(getOptionsData())
-    //     dispatch(getInfoBirds())
-    //     navigate('/menu')
-    // };
 
     React.useEffect(() => {
         return () => {
@@ -208,7 +178,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 cientifico: [],
                 ingles: []
             });
-            // dispatch(getOptionsData())
         };
     }, []);
 
@@ -217,12 +186,9 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             <Grid component={Box}
                 sx={{
                     height: 'auto',
-                    // width: '80%',
                     borderRadius: '20px 20px 20px 20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
                     padding: 3,
-                    // mixWidth: "10%",
-                    // marginLeft: '60px'
                 }} >
                 <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
@@ -256,9 +222,10 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             variant="body2" // Elige el variant y otros estilos según tus necesidades
                                             sx={{
                                                 display: 'inline-block',
-                                                padding: '4px 8px',
-                                                color: 'white', // Color del texto de la etiqueta
-                                                marginRight: '8px', // Espacio entre etiquetas
+                                                fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
+                                                color: 'white',
+                                                ml: 2,
+                                                mt: 1
                                             }}
                                         >
                                             {option.nombre}
@@ -296,9 +263,10 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             variant="body2" // Elige el variant y otros estilos según tus necesidades
                                             sx={{
                                                 display: 'inline-block',
-                                                padding: '4px 8px',
-                                                color: 'white', // Color del texto de la etiqueta
-                                                marginRight: '8px', // Espacio entre etiquetas
+                                                fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
+                                                color: 'white',
+                                                ml: 2,
+                                                mt: 1
                                             }}
                                         >
                                             {option.nombre}
@@ -336,9 +304,10 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                                 variant="body2" // Elige el variant y otros estilos según tus necesidades
                                                 sx={{
                                                     display: 'inline-block',
-                                                    padding: '4px 8px',
-                                                    color: 'white', // Color del texto de la etiqueta
-                                                    marginRight: '8px', // Espacio entre etiquetas
+                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
+                                                    color: 'white',
+                                                    ml: 2,
+                                                    mt: 1
                                                 }}
                                             >
                                                 {option.nombre}
@@ -376,9 +345,10 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                                 variant="body2" // Elige el variant y otros estilos según tus necesidades
                                                 sx={{
                                                     display: 'inline-block',
-                                                    padding: '4px 8px',
-                                                    color: 'white', // Color del texto de la etiqueta
-                                                    marginRight: '8px', // Espacio entre etiquetas
+                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
+                                                    color: 'white',
+                                                    ml: 2,
+                                                    mt: 1
                                                 }}
                                             >
                                                 {option.nombre}
@@ -414,12 +384,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         value.map((option, index) => (
                                             <Typography
                                                 key={option.id}
-                                                variant="body2" // Elige el variant y otros estilos según tus necesidades
+                                                variant="body1"
                                                 sx={{
                                                     display: 'inline-block',
-                                                    padding: '4px 8px',
-                                                    color: 'white', // Color del texto de la etiqueta
-                                                    marginRight: '8px', // Espacio entre etiquetas
+                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
+                                                    color: 'white',
+                                                    ml: 2,
+                                                    mt: 1
                                                 }}
                                             >
                                                 {option.nombre}
@@ -453,13 +424,13 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         value.map((option, index) => (
                                             <Typography
                                                 key={option.id}
-                                                // variant="body2"
+                                                variant="body1"
                                                 sx={{
                                                     display: 'inline-block',
-                                                    padding: '4px 8px',
+                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
                                                     color: 'white',
-                                                    marginRight: '8px',
-                                                    fontSize: { sx: '0.8rem',  },
+                                                    ml: 2,
+                                                    mt: 1
                                                 }}
                                             >
                                                 {option.nombre}
