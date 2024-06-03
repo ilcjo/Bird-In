@@ -50,7 +50,7 @@ const deletePhotoFromFTP = async (urls) => {
 };
 
 const deletePhotoFromFTPPaisajes = async (urls) => {
-    console.log(urls)
+    // console.log(urls)
     const client = new ftp.Client();
 
     try {

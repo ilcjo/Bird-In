@@ -27,7 +27,9 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { ImageUploader } from '../../utils/ImageUploader';
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
+//COMPONENTES
 import { Loading } from '../../utils/Loading';
+import { StyledTextField } from '../../../assets/styles/MUIstyles';
 
 
 export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
@@ -44,10 +46,10 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
-    const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se a creado correctamente.');
+    const [snackBarMessage, setSnackBarMessage] = React.useState('El Paisaje se a creado correctamente.');
     const [registerCreated, setRegisterCreated] = React.useState(false);
-
     const [formSubmitted, setFormSubmitted] = React.useState(false);
+
     const sortAlphabetically = (array) => {
         return array.slice().sort((a, b) => {
             if (a && a.nombre && b && b.nombre) {
@@ -103,11 +105,13 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             });
         }
     };
+
     const handleLogoClick = () => {
         if (createData.urlWiki) {
             window.open(createData.urlWiki, '_blank');
         }
     };
+
     const handleZonaChange = (newValue) => {
         if (!newValue) {
             setCreateData({
@@ -195,10 +199,8 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 changeImagenExist()
             } catch (error) {
                 console.log('este es el error:', String(error))
-                // Muestra el mensaje de error en caso de que ocurra un error en cualquiera de las dos promesas.
                 setErrorMessage(`Ocurrió un error: ${error}`);
                 setErrorSnackbarOpen(true);
-                // Muestra el mensaje de error al usuario
             } finally {
                 setShowBackdrop(false);
             }
@@ -228,13 +230,13 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
 
     const createFullEntry = async (createData, imageUrl) => {
         return new Promise((resolve, reject) => {
-            console.log('imagenes q llegan', imageUrl)
+            // console.log('imagenes q llegan', imageUrl)
             dispatch(createLand({ ...createData, urlImagen: imageUrl }))
                 .then(() => {
                     resolve(); // Si la creación del ave tiene éxito, resuelve la Promesa sin un mensaje.
                 })
                 .catch((error) => {
-                    reject("Error al crear el ave"); // Si hay un error, resuelve la Promesa con un mensaje.
+                    reject("Error al crear el Paisaje"); // Si hay un error, resuelve la Promesa con un mensaje.
                 });
         });
     };
@@ -273,7 +275,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                             </Grid>
                         </Grid>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
-                            Subir imágenes Galería
+                            Subir imágenes a Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
@@ -389,39 +391,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                         </Grid>
                         <Grid container spacing={1}>
                             <Grid item xs={12} sm={12}>
-                                <TextField
-                                    sx={{
-                                        my: 2, backgroundColor: 'rgba(204,214,204,0.17)',
-                                        '& .MuiFilledInput-root': {
-                                            borderRadius: '9px',
-                                            borderColor: '#C1C700',
-                                            '&:hover': {
-                                                backgroundColor: 'transparent', // Maintain background color on hover
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&.Mui-focused': {
-                                                backgroundColor: 'transparent', // Maintain background color on focus
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&::before': {
-                                                backgroundColor: 'transparent',
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&:hover::before': {
-                                                backgroundColor: 'transparent',
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&.Mui-focused::before': {
-                                                backgroundColor: 'transparent',
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                        },
-                                    }}
+                                <StyledTextField
                                     name="descripcion"
                                     label="Descripción"
                                     value={createData.descripcion}
@@ -434,7 +404,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                             </Grid>
 
                             <Grid item sx={12} md={12}>
-                                <TextField
+                                <StyledTextField
                                     name="urlWiki"
                                     label='URL Wiki'
                                     variant="filled"
@@ -442,39 +412,6 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                     onChange={handleInputChange}
                                     fullWidth
                                     shrink='true'
-                                    sx={{
-                                        backgroundColor: 'rgba(204,214,204,0.17)',
-                                        '& .MuiFilledInput-root': {
-                                            borderRadius: '9px',
-                                            borderColor: '#C1C700',
-                                            '&:hover': {
-                                                backgroundColor: 'transparent', // Maintain background color on hover
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&.Mui-focused': {
-                                                backgroundColor: 'transparent', // Maintain background color on focus
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&::before': {
-                                                backgroundColor: 'transparent',
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&:hover::before': {
-                                                backgroundColor: 'transparent',
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                            '&.Mui-focused::before': {
-                                                backgroundColor: 'transparent',
-                                                borderColor: '#C1C700',
-                                                borderRadius: '9px',
-                                            },
-                                        },
-
-                                    }}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">

@@ -1,11 +1,13 @@
 
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
-import { SearchBird } from './Update/SearchBird';
-import { useDispatch } from 'react-redux';
-import { setEstateInfo } from '../../../redux/slices/createSlice';
-import { Customize } from './Customes/CustomizeIndex';
 import { styled } from '@mui/system';
+import { useDispatch } from 'react-redux';
+//ESTADOS GLOBALES
+import { setEstateInfo } from '../../../redux/slices/createSlice';
+//COMPONENTS
+import { SearchBird } from './Update/SearchBird';
+import { Customize } from './Customes/CustomizeIndex';
 import { GruposOptions } from './Options/GruposOptions';
 import { FamiliasOptions } from './Options/FamiliasOptions';
 import { ZonasOptions } from './Options/ZonasOptions';
@@ -18,8 +20,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
   backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
-  marginTop: '90px',
-
+  marginTop: '110px',
   '& .Mui-selected': {
     backgroundColor: theme.palette.custom.light,
   },
@@ -30,7 +31,6 @@ const StyledTab = styled(Tab)({
   '&.Mui-selected .MuiTypography-root': {
     color: '#C1C700',
   },
-
 });
 
 export const IndexD = () => {
@@ -42,11 +42,8 @@ export const IndexD = () => {
   const handleTabChange = (event, newValue) => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
-
-    // Si el nuevo valor es 1 (pestaña "Buscar ave"), establece el estado de Redux
     if (convertNumber === 1) {
-
-      dispatch(setEstateInfo()); // Reemplaza con la acción que establece el estado en Redux
+      dispatch(setEstateInfo()); 
     }
 
   };
@@ -64,9 +61,8 @@ export const IndexD = () => {
         indicatorColor="primary"
         aria-label="tabsAdmin"
         sx={{
-          backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-          backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
-          mt: 20,
+          backgroundColor: 'rgba(0, 56, 28, 0.1)',
+          backdropFilter: 'blur(2px)',
           borderRadius: '20px 20px 0px 0px',
           '& .Mui-selected': {
             backgroundColor: theme.palette.custom.light,
@@ -77,7 +73,6 @@ export const IndexD = () => {
           <Typography variant='h5'>
             Actualizar
           </Typography>} />
-
         <StyledTab label={<Typography variant='h5' >
           Crear
         </Typography>}
@@ -122,7 +117,7 @@ export const IndexD = () => {
         {selectedTab === 0 && (
           <Box>
             <SearchBird changeTab={(newValue) => setSelectedTab(newValue)} isEnable={setIsFormEnabled} />
-          
+        
           </Box>
         )}
         {selectedTab === 1 && (

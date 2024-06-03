@@ -1,38 +1,39 @@
 import * as React from 'react'
-import { Box, Divider, Typography, useTheme, } from '@mui/material'
-import { useSelector } from 'react-redux';
-import { formatData } from './utils/formatFuntion';
+import { Box, Button, Divider, Grid, Typography, useTheme, } from '@mui/material'
+import { formatData } from './utils/formatDetail';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export const Header = ({ imageUrl, bird }) => {
+export const Header = ({ imageUrl, bird, back }) => {
   const theme = useTheme()
-  console.log(bird)
-
+  // console.log(bird)
   return (
     <Box
       component="div"
       sx={{
         position: 'relative',
         width: '100%',
-        height: '80vh',
+        height: '90vh',
         display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
       }}
     >
       <Box
         component="div"
         sx={{
-          width: '70%',
-          height: '100%',
+          width: {xs:'100%', md: '70%', lg: '70%'},
+          height: { xs: '500PX', md: '100%' },
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           boxShadow: 3,
+          borderRadius: '0px 0px 10px 0px',
         }}
       />
       <Box
         component="div"
         sx={{
-          width: '30%',
-          height: '100%',
+          width: { xs: '100%', md: '30%' },
+          height: { xs: '90%', md: '100%' },
           backgroundColor: 'rgba(16, 51, 0, 0.9)',
           backdropFilter: 'blur(10px)',
           display: 'flex',
@@ -43,35 +44,115 @@ export const Header = ({ imageUrl, bird }) => {
       >
         {bird.map((data, index) => (
           <React.Fragment key={index}>
-            <Box sx={{ ml: 0 }} >
-              <Typography variant="h4" color='primary.light' sx={{ mb: 0 }}>
-                Nombre en Inglés:
-              </Typography>
-              <Typography variant='h1' color='primary'sx={{ mb: 4 }}>
-                {data.nombre_ingles || 'N/A'}
-              </Typography>
-              <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
-              <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }} >
-                Nombre Científico:
-              </Typography>
-              <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
-                {data.nombre_cientifico || 'N/A'}
-              </Typography>
-              <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
-                Nombre Común:
-              </Typography>
-              <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
-                {data.nombre_comun || 'N/A'}
-              </Typography>
-              <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
-                País:
-              </Typography>
-              <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
-                {formatData(data.paises) || 'N/A'}
-              </Typography>
+            <Grid container spacing={1} sx={{ mt: 4 }}>
+              <Grid item xs={12}>
+                <Typography variant='h6' color='primary.light' sx={{ mb: 2 }}>
+                  {data.familia.nombre || 'N/A'} / {data.grupo.nombre || 'N/A'}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} >
+                <Typography variant="h4" color='primary.light' >
+                  Nombre en Inglés:
+                  <Typography variant='h1' color='primary' >
+                    {data.nombre_ingles || 'N/A'}
+                  </Typography>
+                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '30%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
+                </Typography>
+                <Button
+                  sx={{
+                    mt: -2,
+                    fontSize: '0.8rem',
+                    alignSelf: 'center',
+                    textTransform: 'none',
+                    padding: '1px 1px',
+                  }}
+                  variant="outlined"
+                  href={data.url_wiki}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Wiki
+                </Button>
+                <Button
+                  sx={{
+                    mt: -2,
+                    fontSize: '0.8rem',
+                    ml: 2,
+                    alignSelf: 'center',
+                    textTransform: 'none',
+                    padding: '1px 1px',
+                  }}
+                  variant="outlined"
+                  href={data.url_bird}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  eBird
+                </Button>
+
+              </Grid>
+              <Grid item xs={12}>
+
+              </Grid>
+            </Grid>
+            <Box sx={{
+              backgroundColor: 'rgba(16, 51, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              p: 2,
+              borderRadius: '10px',
+            }} >
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }} >
+                    Nombre Científico:
+                    <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
+                      {data.nombre_cientifico || 'N/A'}
+                    </Typography>
+                  </Typography>
+                  <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
+                    Nombre Común:
+                    <Typography variant='h6' color='primary.light'>
+                      {data.nombre_comun || 'N/A'}
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
+                    País:
+                    <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
+                      {formatData(data.paises) || 'N/A'}
+                    </Typography>
+                  </Typography>
+                  <Typography variant="h4" color="primary.light">
+                    Zonas:
+                    <Typography variant="h6" color="primary.light" sx={{ mb: 1.5 }}>
+                      {formatData(data.zonasAves) || 'N/A'}
+                    </Typography>
+                  </Typography>
+                </Grid>
+              </Grid>
             </Box>
           </React.Fragment>
         ))}
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 1,
+            right: '100%',
+          }}
+        >
+          <Button
+            color='primary'
+            variant="contained"
+            onClick={back}
+            startIcon={<ArrowBackIcon />}
+            sx={{ borderRadius: '0px 0px 10px 0px' }}
+          >
+            Regresar
+          </Button>
+        </Box>
       </Box>
     </Box>
   )

@@ -17,7 +17,6 @@ export const SobreMi = () => {
     }, [allCustom]); // Empty dependency array to run only once on mount
     return (
         <div>
-            <Header />
             <MenuBar ShowBackButton={true} ShowFilterButton={false} />
             <Typography variant='h1' color='primary' sx={{ m: 5, textAlign: 'center', }}>
                 Las aves que pasaron por mis ojos....

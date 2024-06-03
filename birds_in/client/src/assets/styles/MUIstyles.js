@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 export const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -54,3 +54,40 @@ export const useInputStyles = () => {
         },
     };
 };
+
+export const StyledTextField = styled(TextField)(({ theme }) => ({
+    // my: 2,
+    backgroundColor: 'rgba(204,214,204,0.17)',
+    height:'70px',
+    '& .MuiFilledInput-root': {
+        borderRadius: '9px',
+        borderColor: '#C1C700',
+        height:'70px',
+        
+        '&:hover': {
+            backgroundColor: 'transparent', // Maintain background color on hover
+            borderColor: '#C1C700',
+            borderRadius: '9px',
+        },
+        '&.Mui-focused': {
+            backgroundColor: 'transparent', // Maintain background color on focus
+            borderColor: '#C1C700',
+            borderRadius: '9px',
+        },
+        '&::before': {
+            backgroundColor: 'transparent',
+            borderColor: '#C1C700',
+            borderRadius: '9px',
+        },
+        '&:hover::before': {
+            backgroundColor: 'transparent',
+            borderColor: '#C1C700',
+            borderRadius: '9px',
+        },
+        '&.Mui-focused::before': {
+            backgroundColor: 'transparent',
+            borderColor: '#C1C700',
+            borderRadius: '9px',
+        },
+    },
+}));

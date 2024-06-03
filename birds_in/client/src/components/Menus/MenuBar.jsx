@@ -55,13 +55,6 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
         dispatch(isOneBird(false))
     };
 
-    const adminClick = () => {
-        navigate('/panelAdministrador')
-        dispatch(getOptionsData())
-    };
-
-
-
     return (
 
         <React.Fragment>
@@ -69,25 +62,22 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 container
                 component={Box}
                 sx={{
-                    // position: 'fixed', // Establece la posición fija
+                    position: 'fixed', // Establece la posición fija
                     top: 0, // Lo coloca en la parte superior de la pantalla
                     left: 0, // Lo coloca en la parte izquierda de la pantalla
                     width: '100%', // Ocupa todo el ancho de la pantalla
                     zIndex: 999, // Asegura que esté por encima del contenido
-                    backgroundColor: 'rgba(32,60,18, 0.1)',
+                    // backgroundColor: 'rgba(32,60,18, 0.8)',
                     backdropFilter: 'blur(9px)',
-                    WebkitBackdropFilter: 'blur(10px)',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    height: '9vh',
+                    height: '5.5vh',
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-
-                    // gap: '10px',
                 }}
             >
                 <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: ' 0px 0px 50px 50px', }}>
                     <img src={allCustom.logo} alt="Logo"
-                        style={{ width: 'auto', height: '120%', marginBottom: '52px', backgroundColor: '#103300', borderRadius: ' 0px 0px 50px 50px', }}
+                        style={{ width: 'auto', height: '220%', marginBottom: '52px', backgroundColor: '#103300', borderRadius: ' 0px 0px 50px 50px', }}
                         loading="lazy" />
                 </Link>
                 <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1, gap: '10px', }}>
@@ -96,10 +86,9 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             sx={{
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
-                                // color: theme.palette.primary.light,
+                                color: 'white'
                             }}
-                            variant="outlined"
-                            color="primary"
+                            variant="text"
                             onClick={handleFilterButtonClick}
                             startIcon={<FilterAltIcon />}
                         >
@@ -111,9 +100,9 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                             sx={{
                                 fontSize: '1rem',
                                 fontWeight: 'bold',
-                                // color: theme.palette.primary.light
+                                color: 'white'
                             }}
-                            variant="outlined"
+                            variant="text"
                             onClick={returnMenuClick}
                             startIcon={<HomeIcon />}
                         >
@@ -124,10 +113,9 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                         sx={{
                             fontSize: '1rem',
                             fontWeight: 'bold',
-
+                            color: 'red'
                         }}
-                        color="primary"
-                        variant="outlined"
+                        variant="text"
                         onClick={onLogoutClick}
                         endIcon={<LogoutIcon />}
                     >

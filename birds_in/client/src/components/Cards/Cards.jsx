@@ -3,6 +3,7 @@ import { Card, CardActionArea, CardActions, CardMedia, Divider, IconButton, Typo
 import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { sendParameter } from '../../redux/actions/fetchAllBirds';
+import { Loading } from '../utils/Loading';
 
 export const Cards = React.memo(({ foto, name, index }) => {
 
@@ -10,6 +11,8 @@ export const Cards = React.memo(({ foto, name, index }) => {
   const dispatch = useDispatch()
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
+  const [showBackdrop, setShowBackdrop] = React.useState(false);
+  const [loadingMessage, setLoadingMessage] = React.useState('Cargando..')
   const destacadaImage = foto.find((img) => img.destacada);
 
   const memoizedDispatch = React.useCallback(
@@ -29,8 +32,13 @@ export const Cards = React.memo(({ foto, name, index }) => {
   };
 
   const handleDetailClick = () => {
+    setShowBackdrop(true);
     const selectOption = { ingles: [{ nombre: name }] };
     memoizedDispatch(selectOption);
+    setTimeout(() => {
+      setShowBackdrop(false); // Desactivar el estado de carga después de 2 segundos
+      setIsGalleryOpen(true);
+    }, 2000);
   };
 
   return (
@@ -41,9 +49,9 @@ export const Cards = React.memo(({ foto, name, index }) => {
       maxHeight: 330,
       position: 'relative',
       borderRadius: '6px',
-      display: 'flex', 
-      flexDirection: 'column', 
-      justifyContent: 'space-between', 
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
       backgroundColor: '#103300',
 
     }}>
@@ -90,8 +98,11 @@ export const Cards = React.memo(({ foto, name, index }) => {
         )}
       </CardActionArea>
       <CardActions disableSpacing>
-
       </CardActions>
+      <Loading
+        message={loadingMessage}
+        open={showBackdrop}
+      />
     </Card>
   );
 });

@@ -92,15 +92,15 @@ const theme = createTheme({
         root: {
           // backgroundColor: 'rgba(204,214,204,0.17)',
           borderRadius: '9px',
-          height: '70px',
+          // height: '70px',
           '& .MuiInputLabel-root': {
-            height: '70px',
+            // height: '70px',
             color: '#C1C700', // Color del tITULO del label cuando está habilitado
           },
           '& .MuiInputBase-input': {
             padding: '0px',
             paddingLeft: '10px',
-            height: '70px',
+            // height: '70px',
             // backgroundColor: 'rgba(0,56,28,0.22)',
             borderRadius: '9px',
             borderColor: 'transparent',
@@ -111,7 +111,7 @@ const theme = createTheme({
             // backgroundColor: 'rgba(0,56,28,0.22)',
             backgroundColor: 'rgba(204,214,204,0.17)',
             borderColor: 'transparent',
-            height: '70px',
+            // height: '70px',
             padding: '0px'
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
@@ -121,7 +121,7 @@ const theme = createTheme({
           },
           '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
             // Agrega los estilos que desees para el Select
-            height: '70px',
+            // height: '70px',
 
           },
         },
@@ -138,7 +138,7 @@ const theme = createTheme({
             color: '#ccd6cc',
             // backgroundColor: 'rgba(204,214,204,0.17)',
             borderRadius: '9px',
-            height: '70px',
+            // height: '70px',
 
           },
         },

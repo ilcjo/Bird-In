@@ -22,6 +22,7 @@ const {
 } = process.env
 
 const deletePhotoFromFTP = require('../../utils/deletFtp');
+const { connectToFtp, uploadImages } = require('../../utils/FTPUpoad');
 
 const getFilterInfo = async (req, res) => {
 
@@ -166,6 +167,24 @@ const uploadImageftp = async (req, res) => {
       res.status(500).json({ error: 'Error al cargar las imágenes en FTP' });
    }
 };
+
+// const uploadImageftp = async (req, res) => {
+//    const client = new ftp.Client();
+//    client.ftp.timeout = 1000000;
+
+//    try {
+//       await connectToFtp(client);
+//       const imageUrls = await uploadImages(client, req.files);
+//       await client.close();
+
+//       res.status(200).json({ message: 'Imágenes subidas con éxito al servidor FTP', imageUrls });
+//    } catch (error) {
+//       console.error('Error durante el proceso de subida de imágenes:', error);
+//       res.status(500).json({ error: 'Error durante el proceso de subida de imágenes', uploaded: error.uploaded });
+//    } finally {
+//       client.close();
+//    }
+// };
 
 const findInfoForUpdate = async (req, res) => {
    const { id } = req.query;

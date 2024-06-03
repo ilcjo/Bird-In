@@ -10,7 +10,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Loading } from '../../components/utils/Loading'
-import { DetailContainer } from '../../components/utils/DetailContainer'
 import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves'
 export const Aves = () => {
 
@@ -58,7 +57,6 @@ export const Aves = () => {
   return (
     <React.Fragment>
       <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} showAllButton={true} ShowFilterButton={true} ShowBackButton={true} showAdmin={true} />
-      {/* <DetailContainer /> */}
       <Grid
         container
         direction="column"
@@ -69,17 +67,22 @@ export const Aves = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
-          padding: 8
+          p: infoBirds.length === 1 ? 0 : 8
         }}
       >
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => setFilterDialogOpen(false)}
-          fullWidth='true'
+          fullWidth={true}
           maxWidth='md'
         >
           <FiltersAves isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
+        {infoBirds.length === 1 && (
+          <Grid container>
+            <PhotosDetailAves bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} />
+          </Grid>
+        )}
         {infoBirds.length > 1 && (
           <Box
             sx={{
@@ -94,7 +97,7 @@ export const Aves = () => {
               padding: '40px',
               borderRadius: '20px',
               mb: 10,
-              mt: 10
+              mt: 10,
             }}
           >
             <Grid container
@@ -152,9 +155,7 @@ export const Aves = () => {
             )}
           </Box>
         )}
-        {infoBirds.length === 1 && (
-          <PhotosDetailAves bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} />
-        )}
+
         {oneBird === false && infoBirds.length === 0 && (
           <Box
             sx={{
@@ -165,7 +166,7 @@ export const Aves = () => {
               width: '100%',
               // maxWidth: '1200px',
               margin: 'auto',
-              backgroundColor: 'rgba(32,60,18, 0.2)',
+              backgroundColor: 'rgba(32,60,18, 0.5)',
               backdropFilter: 'blur(8px)',
               padding: '40px',
               borderRadius: '20px',
@@ -195,7 +196,7 @@ export const Aves = () => {
           </Box>
         )}
       </Grid>
-      
+
       <Loading
         message={loadingMessage}
         open={showBackdrop}

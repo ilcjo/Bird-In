@@ -2,7 +2,7 @@ const ftp = require('basic-ftp');
 const { FTP_HOST, FTP_USER, FTP_PASS } = process.env;
 
 const replacePhotoInFTP = async (oldImageUrl, newImageBuffer) => {
-    console.log('soy url en funcion:', oldImageUrl, 'soy imagen en funcion', newImageBuffer)
+    // console.log('soy url en funcion:', oldImageUrl, 'soy imagen en funcion', newImageBuffer)
     const client = new ftp.Client();
 
     try {

@@ -1,19 +1,18 @@
 import * as React from 'react';
 import { Alert, Backdrop, Box, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-//Redux
-import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/actions/DeletCover';
+import '../../../../assets/styles/zoom.css'
+//GLOBAL STATE
 import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
 import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
-//iconos
+//ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SearchIcon from '@mui/icons-material/Search';
-import '../../../../assets/styles/zoom.css'
-//componentes
+//COMPONENTS
 import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDelet';
 import { EditImageCards } from '../../../Cards/EditImageCards';
+import { Loading } from '../../../utils/Loading';
 
 export const CoverDeletP = ({
     isCreate,
@@ -23,17 +22,17 @@ export const CoverDeletP = ({
     const theme = useTheme();
     const dispatch = useDispatch();
     const { infoLandForUpdate } = useSelector(state => state.createLand);
-    console.log('soy info q actulizo', infoLandForUpdate)
-    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
-    const [showBackdrop, setShowBackdrop] = React.useState(false);
+    // console.log('soy info q actulizo', infoLandForUpdate)
     const [selectedImages, setSelectedImages] = React.useState([]);
+    const [highlightedImage, setHighlightedImage] = React.useState(null);
+    const [showBackdrop, setShowBackdrop] = React.useState(false);
+    const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
-    console.log(selectedImages)
+    // console.log(selectedImages)
 
-    const [highlightedImage, setHighlightedImage] = React.useState(null);
-    const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
 
     const handleSetAsCover = async (id, url, destacada) => {
 
@@ -81,7 +80,7 @@ export const CoverDeletP = ({
     };
 
     const handleDeleteCheckBox = (id, url) => {
-        console.log('soy', url)
+        // console.log('soy', url)
         const index = selectedImages.findIndex((img) => img.id === id);
         if (index === -1) {
             // No existe en el array, agregarlo
@@ -128,19 +127,10 @@ export const CoverDeletP = ({
 
     return (
         <React.Fragment>
-            {/* Muestra el Backdrop mientras se cargan las imágenes */}
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            <Loading
+                message={loadingMessage}
                 open={showBackdrop}
-            >
-                <>
-                    <CircularProgress color="inherit" />
-                    <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-                        {loadingMessage}
-                    </Typography>
-                </>
-
-            </Backdrop>
+            />
             <Grid container spacing={5} sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -148,7 +138,7 @@ export const CoverDeletP = ({
                 width: '100%',
                 minWidth: '800px',
                 margin: '0 auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                 backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 20px 20px'
