@@ -64,18 +64,16 @@ export const CoverDelet = ({
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
-    // const handleImageClick = (url) => {
-    //     console.log(url)
-    //     setSelectedImageIndex(url);
-    //     setIsGalleryOpen(true)
-    // };
 
     const handleImageClick = (url) => {
+        console.log('dentro del handleimage:', url)
         setSelectedImageIndex(url); // Establecer la URL de la imagen seleccionada
+        setIsGalleryOpen(true);
     };
 
     const handleCloseGallery = () => {
         setSelectedImageIndex(null); // Restablecer el estado de la imagen seleccionada
+        setIsGalleryOpen(false);
     };
 
 
@@ -232,7 +230,7 @@ export const CoverDelet = ({
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            <Dialog
+            {/* <Dialog
                 open={dialogOpen}
                 onClose={closeImageDialog}
                 fullWidth
@@ -245,15 +243,15 @@ export const CoverDelet = ({
                         style={{ maxWidth: '100%' }}
                     />
                 </DialogContent>
-            </Dialog>
-            {/* {selectedImageIndex && (
+            </Dialog> */}
+            {isGalleryOpen && (
                 <CarruselGalleryDelet
-                    isOpen={true}
+                    isOpen={isGalleryOpen}
                     images={infoAveForUpdate?.imagenes_aves || []}
                     selectedIndex={selectedImageIndex}
                     onClose={handleCloseGallery}
                 />
-            )} */}
+            )}
         </React.Fragment>
     );
 };
