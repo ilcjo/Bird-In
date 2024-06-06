@@ -43,14 +43,14 @@ export const IndexD = () => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
     if (convertNumber === 1) {
-      dispatch(setEstateInfo()); 
+      dispatch(setEstateInfo());
     }
 
   };
 
-  const handleNavigateToSearch= () => {
-    setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
-};
+  const handleNavigateToSearch = () => {
+    setSelectedTab(0);
+  };
 
   return (
     <>
@@ -117,7 +117,7 @@ export const IndexD = () => {
         {selectedTab === 0 && (
           <Box>
             <SearchBird changeTab={(newValue) => setSelectedTab(newValue)} isEnable={setIsFormEnabled} />
-        
+
           </Box>
         )}
         {selectedTab === 1 && (

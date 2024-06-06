@@ -73,7 +73,6 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         zona: false,
     });
 
-
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {

@@ -14,6 +14,7 @@ export const sendPhotosDelete = (ids, urls) => {
             // console.log(response.data)
         } catch (error) {
             console.error("Error al obtener los datos:", error)
+            throw error
 
         }
     };
@@ -33,6 +34,7 @@ export const sendCoverPhoto = (id, idAves) => {
             return data
         } catch (error) {
             console.error("Error al obtener los datos:", error)
+            throw error
 
         }
     };

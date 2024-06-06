@@ -9,7 +9,6 @@ import {
     Grid,
     IconButton,
     InputAdornment,
-    InputLabel,
     Snackbar,
     TextField,
     Typography,
@@ -21,10 +20,8 @@ import { createBird, duplicateNameCheck, getInfoForUpdateName, saveImageFtp } fr
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
 //ICONS
 import SaveIcon from '@mui/icons-material/Save';
-import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-import wikipediaLogo from '../../../assets/images/wikilogo.png'
-import ebirdLogo from '../../../assets/images/Logo_ebird.png'
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
+//COMPONENTS
 import { Loading } from '../../utils/Loading';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
@@ -79,31 +76,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
         familia: false,
         ingles: false,
     });
-    // const handleImageChange = (event) => {
-    //     const selectedImages = event.target.files;
-    //     if (selectedImages.length > 0) {
-    //         // Opcionalmente, puedes guardar los archivos en el estado
-    //         setImageFile(selectedImages);
-
-    //         // Crear un array para almacenar las URLs de las imágenes (para mostrarlas en el formulario)
-    //         const imageUrls = [];
-
-    //         // Recorrer todas las imágenes seleccionadas
-    //         for (let i = 0; i < selectedImages.length; i++) {
-    //             const selectedImage = selectedImages[i];
-
-    //             // Crear una URL para cada imagen seleccionada
-    //             const imageUrl = URL.createObjectURL(selectedImage);
-
-    //             // Agregar la URL al array
-    //             imageUrls.push(imageUrl);
-    //         }
-
-    //         // Actualizar el estado con el array de URLs de imágenes
-    //         setImageURL(imageUrls);
-
-    //     }
-    // };
+   
 
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
@@ -168,28 +141,10 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                 alert('Esta ave ya existe');
                 // Restablece el valor del input
                 changeTabSearch()
-                // setCreateData({
-                //     ...createData,
-                //     ingles: '',
-                // });
             }
         }, 700);
     };
 
-
-    // const handleRemoveImage = (index) => {
-    //     // Revocar la URL de la imagen eliminada
-    //     URL.revokeObjectURL(imageURL[index]);
-
-    //     // Crear una copia del array de URLs de imágenes
-    //     const updatedImageURLs = [...imageURL];
-
-    //     // Eliminar la URL de la imagen en la posición 'index'
-    //     updatedImageURLs.splice(index, 1);
-
-    //     // Actualizar el estado con el nuevo array de URLs
-    //     setImageURL(updatedImageURLs);
-    // };
 
     const handleRemoveImage = (index) => {
         URL.revokeObjectURL(allImageURLs[index]);
@@ -229,10 +184,6 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
 
         if (imageFiles && imageFiles.length > 0) {
             const formData = new FormData();
-            // Agregar las imágenes al formulario FormData
-            // for (let i = 0; i < imageFile.length; i++) {
-            //     formData.append('images', imageFile[i]); // El nombre 'images' debe coincidir con el nombre del campo en el servidor
-            // }
             imageFiles.forEach((file) => formData.append('images', file))
             setShowBackdrop(true);
             setLoadingMessage('Subiendo imágenes al Servidor...');
@@ -294,11 +245,17 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                 });
         });
     };
-    const handleLogoClick = () => {
+    const handleLogoClickW = () => {
         if (createData.urlWiki) {
             window.open(createData.urlWiki, '_blank');
         }
     };
+    const handleLogoClickB = () => {
+        if (createData.urlBird) {
+            window.open(createData.urlBird, '_blank');
+        }
+    };
+
 
     React.useEffect(() => {
         // Aquí despachas la acción para cargar las opciones al montar el componente
@@ -370,7 +327,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                     onChange={handleInputChangeIngles}
                                     type='text'
                                     variant="filled"
-                                    margin="none"
+                                    margin="dense"
                                     fullWidth
                                     error={formSubmitted && createData.ingles.trim() === ''} // Check if the field is empty when the form is submitted
                                     helperText={formSubmitted && createData.ingles.trim() === '' ? 'Este Campo es obligatorio *' : ''}
@@ -415,6 +372,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                         <TextField
                                             {...params}
                                             label="Grupos"
+                                            margin='dense'
                                             error={formSubmitted && !createData.grupo} // Add error state to the TextField
                                             helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
                                             FormHelperTextProps={{
@@ -454,20 +412,18 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                         <TextField
                                             {...params}
                                             label="Familia"
+                                            margin="none"
                                             error={formSubmitted && !createData.familia} // Add error state to the TextField
                                             helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
                                             FormHelperTextProps={{
                                                 sx: {
-                                                    /* Agrega los estilos que desees para el texto del helper text */
                                                     fontSize: '1.1rem',
-                                                    // color: theme.palette.secondary.main,
                                                     fontWeight: 'bold'
                                                 },
                                             }}
                                             sx={{
                                                 mb: 1,
                                                 '& .MuiInputBase-input': {
-                                                    // height: '30px',
                                                 },
                                             }}
 
@@ -484,6 +440,11 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                     }}
 
                                 />
+
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12} sm={12}>
                                 <Autocomplete
                                     disablePortal
                                     multiple
@@ -496,6 +457,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                         <TextField
                                             {...params}
                                             label="Países"
+                                            margin="dense"
                                         />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
 
@@ -522,10 +484,6 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                         ))
                                     }
                                 />
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={1}>
-                            <Grid item xs={12} sm={12}>
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-zonas"
@@ -536,7 +494,8 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
-                                            
+                                            margin="dense"
+
                                         />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
                                     multiple
@@ -583,11 +542,12 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                     onChange={handleInputChange}
                                     fullWidth
                                     shrink='true'
+                                    margin="dense"
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
 
-                                                <IconButton onClick={handleLogoClick}
+                                                <IconButton onClick={handleLogoClickW}
                                                     sx={{
                                                         zIndex: 1,
                                                         '&:hover': {
@@ -602,25 +562,34 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                     }}
                                 />
 
-                                <TextField
+                                <StyledTextField
                                     name="urlBird"
-                                    multiline
-                                    rows={1}
+                                    label='URL Wiki'
                                     variant="filled"
                                     value={createData.urlBird}
                                     onChange={handleInputChange}
+                                    margin="dense"
                                     fullWidth
-                                    margin="normal"
+                                    shrink='true'
                                     InputProps={{
                                         startAdornment: (
-                                            <InputLabel htmlFor="urlBird" sx={{ display: 'flex', alignItems: 'center' }}>
-                                                <img src={ebirdLogo} alt="Wikipedia Logo" style={{
-                                                    paddingRight: '0px',
-                                                    // marginTop: '10px',
-                                                    width: '110px', // Ajusta el ancho de la imagen
-                                                    height: '39px', // Ajusta la altura de la imagen
-                                                }} />
-                                            </InputLabel>
+                                            <InputAdornment position="start">
+
+                                                <IconButton onClick={handleLogoClickB}
+                                                    sx={{
+                                                        // height: '26px',
+                                                        color: 'white',
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                    }}
+                                                >
+                                                    eBird
+                                                    {/* <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} /> */}
+                                                </IconButton>
+                                            </InputAdornment>
+
                                         ),
 
                                     }}

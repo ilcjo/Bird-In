@@ -49,16 +49,13 @@ const theme = createTheme({
     h5: {
       fontSize: '1.3rem',
       fontWeight: 600,
-
     },
-
     body1: {
       fontSize: '1.7rem',
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
-
     body2: {
       fontSize: '1 .5rem',
       fontWeight: 200,
@@ -112,11 +109,13 @@ const theme = createTheme({
             backgroundColor: 'rgba(204,214,204,0.17)',
             borderColor: 'transparent',
             // height: '70px',
-            padding: '0px'
+            padding: '0px',
+            borderRadius: '9px',
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#C1C700 !important',
             backgroundColor: 'transparent',
+            borderRadius: '9px',
             // height: '70px',
           },
           '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {

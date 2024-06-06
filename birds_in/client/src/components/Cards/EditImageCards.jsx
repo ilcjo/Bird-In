@@ -4,7 +4,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
 
 export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsCover, handleDeleteCheckBox }) => {
-    console.log(imageUrl)
+    // console.log(imageUrl)
     return (
         <Card sx={{
             borderRadius: '6px', 

@@ -63,7 +63,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
         idPaisaje: infoLandForUpdate.id || 0,
         urlImagen: infoLandForUpdate.imagenes_paisajes || [],
     }
-    console.log(infoAveForUpdate)
+    // console.log(infoAveForUpdate)
     const [createData, setCreateData] = React.useState(initialCreateData)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen

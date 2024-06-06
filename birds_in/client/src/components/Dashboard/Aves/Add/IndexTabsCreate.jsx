@@ -45,7 +45,7 @@ export const IndexTabsCreate = ({
     };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '800px' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px' }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -73,7 +73,10 @@ export const IndexTabsCreate = ({
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDelet changeTab={changeTab} showUpdateBird={showUpdateBird}
+                        <CoverDelet
+                            isCreate={true}
+                            changeTab={changeTab}
+                            showUpdateBird={showUpdateBird}
                             showSearchBird={showSearchBird}
                             selectedBird={selectedBird} />
                     )}

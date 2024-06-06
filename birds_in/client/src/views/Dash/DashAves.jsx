@@ -23,20 +23,18 @@ export const DashAves = () => {
         direction="column"
         alignItems="center"
         sx={{
-
           background: `url(${allCustom.header}) center/cover no-repeat fixed`,
           backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
-          minHeight: '90vh',
-          
-
+          minHeight: '100vh',
+          height: '100%',
+          overflow: 'hidden',
+          margin: 0,
         }}
       >
         <IndexD />
-
       </Grid>
-
     </React.Fragment>
   )
 }

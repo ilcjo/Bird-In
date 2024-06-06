@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Backdrop, Box, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import { Alert, Box, Button, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
 //GLOBAL STATE
@@ -7,7 +7,6 @@ import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLan
 import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
 //ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SearchIcon from '@mui/icons-material/Search';
 //COMPONENTS
 import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDelet';
@@ -64,9 +63,6 @@ export const CoverDeletP = ({
         }
     };
 
-    const [selectedDialogImage, setSelectedDialogImage] = React.useState('');
-    const [dialogOpen, setDialogOpen] = React.useState(false);
-
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('')
         ;
@@ -75,9 +71,6 @@ export const CoverDeletP = ({
         setIsGalleryOpen(true)
     };
 
-    const closeImageDialog = () => {
-        setDialogOpen(false);
-    };
 
     const handleDeleteCheckBox = (id, url) => {
         // console.log('soy', url)
@@ -97,19 +90,19 @@ export const CoverDeletP = ({
         try {
             // Mostrar el indicador de carga
             setShowBackdrop(true);
-            setLoadingMessage('Borrando fotografías')
+            setLoadingMessage('Borrando Fotografías Seleccionadas')
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
-            console.log('imagenes url', selectedUrls)
+            // console.log('imagenes url', selectedUrls)
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
+            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
             setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSelectedImages([])
             setShowBackdrop(false)
             setSnackbarOpen(true);
-            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
             setErrorMessage(`Error al eliminar las fotografías: ${error.message}`);
@@ -240,20 +233,12 @@ export const CoverDeletP = ({
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            <Dialog
-                open={dialogOpen}
-                onClose={closeImageDialog}
-                fullWidth
-                maxWidth="md">
-                <DialogContent sx={{}}>
-                    <img
-                        src={selectedDialogImage}
-                        alt="Imagen en diálogo"
-                        style={{ maxWidth: '100%' }}
-                    // className={`zoomed-image ${zoomed ? 'zoomed' : ''}`}
-                    />
-                </DialogContent>
-            </Dialog>
+            <CarruselGalleryDelet
+                isOpen={isGalleryOpen}
+                images={infoLandForUpdate.imagenes_aves}
+                selectedIndex={selectedImageIndex}
+                onClose={() => setIsGalleryOpen(false)}
+            />
         </React.Fragment >
     );
 };

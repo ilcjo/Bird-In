@@ -21,8 +21,8 @@ const {
    FTP_PASS,
 } = process.env
 
-const deletePhotoFromFTP = require('../../utils/deletFtp');
-const { connectToFtp, uploadImages } = require('../../utils/FTPUpoad');
+const { deletePhotoFromFTP } = require('../../utils/deletFtp');
+// const { connectToFtp, uploadImages } = require('../../utils/FTPUpoad');
 
 const getFilterInfo = async (req, res) => {
 
@@ -263,7 +263,7 @@ const deletePhotos = async (req, res) => {
       if (!deletedFtp.success) {
          // Algunas fotos no se encontraron o hubo errores en el servidor FTP
          console.warn('Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.');
-         return res.status(400).json({ error: 'Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.' });
+         return res.status(404).json({ error: 'Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.' });
       }
 
       // Continúa con la lógica para eliminar de la base de datos
@@ -271,7 +271,7 @@ const deletePhotos = async (req, res) => {
       return res.status(200).json(deletedDb);
    } catch (error) {
       console.error('Error en el controlador deletePhotos:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
+      res.status(500).json({ error: 'Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.' });
    }
 };
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Backdrop, Button, Card, CardActionArea, CardContent, CardMedia, Checkbox, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import { Alert, Box, Button, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
 //GLOBAL STATE
@@ -7,7 +7,6 @@ import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
 import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/actions/DeletCover';
 //ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SearchIcon from '@mui/icons-material/Search';
 //COMPONENTS
 import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDelet';
@@ -15,6 +14,7 @@ import { Loading } from '../../../utils/Loading';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 
 export const CoverDelet = ({
+    isCreate,
     showUpdateBird,
     showSearchBird,
     selectedBird, }) => {
@@ -61,20 +61,23 @@ export const CoverDelet = ({
         }
     };
 
-    const [selectedDialogImage, setSelectedDialogImage] = React.useState('');
-    const [dialogOpen, setDialogOpen] = React.useState(false);
-
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
+
+    // const handleImageClick = (url) => {
+    //     console.log(url)
+    //     setSelectedImageIndex(url);
+    //     setIsGalleryOpen(true)
+    // };
+
     const handleImageClick = (url) => {
-        setSelectedImageIndex(url);
-        setIsGalleryOpen(true)
+        setSelectedImageIndex(url); // Establecer la URL de la imagen seleccionada
     };
 
-    const closeImageDialog = () => {
-        setDialogOpen(false);
-
+    const handleCloseGallery = () => {
+        setSelectedImageIndex(null); // Restablecer el estado de la imagen seleccionada
     };
+
 
     const handleDeleteCheckBox = (id, url) => {
         const index = selectedImages.findIndex((img) => img.id === id);
@@ -93,18 +96,18 @@ export const CoverDelet = ({
         try {
             // Mostrar el indicador de carga
             setShowBackdrop(true);
-            setLoadingMessage('Borrando fotografías')
+            setLoadingMessage('Borrando Fotografías Seleccionadas')
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
+            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
             setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSelectedImages([])
             setShowBackdrop(false)
             setSnackbarOpen(true);
-            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
             setErrorMessage(`Error al eliminar las fotografías: ${error.message}`);
@@ -145,24 +148,27 @@ export const CoverDelet = ({
                                 Imágenes del Ave
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <Button
-                                sx={{
-                                    fontSize: '1.1rem',
-                                    fontWeight: 'bold',
-                                    backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                                    backdropFilter: 'blur(2px)',
-                                }}
-                                variant="outlined"
-                                onClick={handleReturnSearch}
-                                startIcon={<SearchIcon />}
-                            >
-                                Buscar Otro Registro
-                            </Button>
-                        </Grid>
+                        {!isCreate && (
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
+                                <Button
+                                    sx={{
+                                        fontSize: '1.1rem',
+                                        fontWeight: 'bold',
+                                        // color: theme.palette.primary.light,
+                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                                    }}
+                                    variant="outlined"
+                                    onClick={handleReturnSearch}
+                                    startIcon={<SearchIcon />}
+                                >
+                                    Buscar Otro Registro
+                                </Button>
+                            </Grid>
+                        )}
                     </Grid>
-                
-                
+
+
                     <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
@@ -190,7 +196,7 @@ export const CoverDelet = ({
                                 {infoAveForUpdate.imagenes_aves.map((image, index) => (
                                     <EditImageCards
                                         key={image.id}
-                                        imageUrl={image.url}
+                                        imageUrl={image}
                                         index={index}
                                         handleImageClick={handleImageClick}
                                         handleSetAsCover={handleSetAsCover}
@@ -240,12 +246,14 @@ export const CoverDelet = ({
                     />
                 </DialogContent>
             </Dialog>
+            {/* {selectedImageIndex && (
+                <CarruselGalleryDelet
+                    isOpen={true}
+                    images={infoAveForUpdate?.imagenes_aves || []}
+                    selectedIndex={selectedImageIndex}
+                    onClose={handleCloseGallery}
+                />
+            )} */}
         </React.Fragment>
     );
 };
-// <CarruselGalleryDelet
-//     isOpen={isGalleryOpen}
-//     images={infoAveForUpdate.imagenes_aves}
-//     selectedIndex={selectedImageIndex}
-//     onClose={() => setIsGalleryOpen(false)}
-// />
