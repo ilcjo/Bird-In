@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { UpdateBirds } from '../../../Forms/Aves/UpdateBirds'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { UpdateBirds } from '../../../Forms/Aves/UpdateBirds'
 import { styled } from '@mui/system';
 import { CoverDelet } from '../Add/CoverDelet';
 
@@ -12,7 +12,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     width: '100%',
     boxSizing: 'border-box',
     '& .Mui-selected': {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.custom.light,
     },
 }));
 const StyledTab = styled(Tab)({
@@ -38,7 +38,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
     };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '900px' }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}

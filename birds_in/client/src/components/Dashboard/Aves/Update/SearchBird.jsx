@@ -10,8 +10,10 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
+//COMPONENTS
 import { IndexTabsUpdates } from './IndexTabsUpdates';
+//ESTADOS GLOBALES
+import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
 
 
 export const SearchBird = ({ changeTab }) => {
@@ -20,7 +22,7 @@ export const SearchBird = ({ changeTab }) => {
     const [showBackdrop, setShowBackdrop] = React.useState(true);
     const [selectedBird, setSelectedBird] = React.useState(null);
     const [birdsData, setBirdsData] = React.useState([]);
-    console.log(selectedBird)
+    // console.log(selectedBird)
     const [showUpdateBird, setShowUpdateBird] = React.useState(false);
     const [showSearchBird, setShowSearchBird] = React.useState(true);
 
@@ -70,39 +72,6 @@ export const SearchBird = ({ changeTab }) => {
 
         fetchData();
     }, [showUpdateBird]);
-
-    const labelStyles = {
-        color: theme.palette.primary.main, // Color del texto del label
-        marginTop: '-9px',
-        ml: 10
-    };
-
-    const inputStyles = {
-        // Aquí puedes agregar los estilos que desees para los inputs
-        color: theme.palette.primary.light,
-        backgroundColor: 'rgba(204,214,204,0.17)',
-        borderRadius: '9px',
-        height: '70px',
-        width: '70%',
-        ml: 10,
-        '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '10px',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'none',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main, // Color del borde en el hover
-            backgroundColor: 'rgba(0,56,28,0.22) ',
-        },
-        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-            // Agrega los estilos que desees para el Select
-            height: '50px',
-            // width: '180px' // Ejemplo: cambia el color del texto a azul
-        },
-
-    };
 
     return (
         <React.Fragment>
@@ -227,7 +196,7 @@ export const SearchBird = ({ changeTab }) => {
                                 //         return firstBirdName.startsWith(inputValue);
                                 //     });
                                 // }}
-                                
+
                                 // filterOptions={(options, state) => {
                                 //     // Filtra las opciones para que coincidan en el primer o segundo nombre
                                 //     const inputValue = state.inputValue.toLowerCase();
@@ -250,15 +219,7 @@ export const SearchBird = ({ changeTab }) => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Seleccionar ave a actualizar"
-                                        InputLabelProps={{
-                                            sx: labelStyles, // Estilo del label
-                                        }}
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            sx: inputStyles, // Estilo del input
-
-                                        }}
+                                        label="Seleccionar Ave a Actualizar"
                                     />
                                 )}
 
@@ -268,9 +229,12 @@ export const SearchBird = ({ changeTab }) => {
                     </Grid>
                 </React.Fragment>
             )}
-            {showUpdateBird && < IndexTabsUpdates changeTab={changeTab} showUpdateBird={setShowUpdateBird}
+            {showUpdateBird && < IndexTabsUpdates
+                changeTab={changeTab}
+                showUpdateBird={setShowUpdateBird}
                 showSearchBird={setShowSearchBird}
-                selectedBird={setSelectedBird} />}
+                selectedBird={setSelectedBird} 
+                />}
         </React.Fragment>
     );
 };

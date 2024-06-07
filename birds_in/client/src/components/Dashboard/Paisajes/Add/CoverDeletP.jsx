@@ -65,12 +65,18 @@ export const CoverDeletP = ({
 
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('')
-        ;
+
     const handleImageClick = (url) => {
+        setShowBackdrop(false);
+        setLoadingMessage('Cargando..')
         setSelectedImageIndex(url);
         setIsGalleryOpen(true)
     };
 
+    const handleCloseGallery = () => {
+        setSelectedImageIndex(null); // Restablecer el estado de la imagen seleccionada
+        setIsGalleryOpen(false);
+    };
 
     const handleDeleteCheckBox = (id, url) => {
         // console.log('soy', url)
@@ -183,34 +189,37 @@ export const CoverDeletP = ({
                         Eliminar selección
                     </Button>
 
-                    <Grid container>
-                        {infoLandForUpdate?.imagenes_paisajes?.length > 0 ? (
-                            <Box
-                                sx={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(3, minmax(380px, 1fr))',
-                                    gap: 5,
-                                    width: '100%',
-                                    mt: 2
-                                }}
-                            >
-                                {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
+                    {infoLandForUpdate && infoLandForUpdate.imagenes_paisajes && infoLandForUpdate.imagenes_paisajes.length > 0 && (
+                        <Grid container spacing={2} sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            m: 0
+                        }}>
+                            {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
+                                <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
                                     <EditImageCards
-                                        key={imageUrl.id}
                                         imageUrl={imageUrl}
                                         index={index}
                                         handleImageClick={handleImageClick}
                                         handleSetAsCover={handleSetAsCover}
                                         handleDeleteCheckBox={handleDeleteCheckBox}
                                     />
-                                ))}
-                            </Box>
-                        ) : (
-                            <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                                No hay imágenes subidas.
-                            </Typography>
-                        )}
-                    </Grid>
+                                </Grid>
+                            ))}
+                            <CarruselGalleryDelet
+                                isOpen={isGalleryOpen}
+                                images={infoLandForUpdate.imagenes_paisajes}
+                                selectedIndex={selectedImageIndex}
+                                onClose={handleCloseGallery}
+                            />
+                        </Grid>
+                    )}
+                    {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes || infoLandForUpdate.imagenes_paisajes.length === 0 && (
+                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                            No hay imágenes subidas.
+                        </Typography>
+                    )}
                 </Grid>
             </Grid>
             <Snackbar
@@ -233,12 +242,6 @@ export const CoverDeletP = ({
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            <CarruselGalleryDelet
-                isOpen={isGalleryOpen}
-                images={infoLandForUpdate.imagenes_aves}
-                selectedIndex={selectedImageIndex}
-                onClose={() => setIsGalleryOpen(false)}
-            />
         </React.Fragment >
     );
 };

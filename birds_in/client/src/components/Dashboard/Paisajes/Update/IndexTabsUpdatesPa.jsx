@@ -1,12 +1,11 @@
 import * as React from 'react'
-import { UpdateBirds } from '../../../Forms/Aves/UpdateBirds'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { CoverDeletP } from '../Add/CoverDeletP';
 import { UpdatePaisaje } from '../../../Forms/Paisajes/UpdatePaisaje';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
     backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',

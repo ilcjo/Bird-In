@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Box, Button, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
 //GLOBAL STATE
@@ -66,7 +66,9 @@ export const CoverDelet = ({
 
 
     const handleImageClick = (url) => {
-        console.log('dentro del handleimage:', url)
+        // console.log('dentro del handleimage:', url)
+        setShowBackdrop(false);
+        setLoadingMessage('Cargando..')
         setSelectedImageIndex(url); // Establecer la URL de la imagen seleccionada
         setIsGalleryOpen(true);
     };
@@ -165,8 +167,6 @@ export const CoverDelet = ({
                             </Grid>
                         )}
                     </Grid>
-
-
                     <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
@@ -180,34 +180,37 @@ export const CoverDelet = ({
                     >
                         Eliminar selección
                     </Button>
-                    <Grid container>
-                        {infoAveForUpdate?.imagenes_aves?.length > 0 ? (
-                            <Box
-                                sx={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(3, minmax(380px, 1fr))',
-                                    gap: 5,
-                                    width: '100%',
-                                    mt: 2
-                                }}
-                            >
-                                {infoAveForUpdate.imagenes_aves.map((image, index) => (
+                    {infoAveForUpdate && infoAveForUpdate.imagenes_aves && infoAveForUpdate.imagenes_aves.length > 0 && (
+                        <Grid container spacing={2} sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            m: 0
+                        }}>
+                            {infoAveForUpdate.imagenes_aves.map((imageUrl, index) => (
+                                <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
                                     <EditImageCards
-                                        key={image.id}
-                                        imageUrl={image}
+                                        imageUrl={imageUrl}
                                         index={index}
                                         handleImageClick={handleImageClick}
                                         handleSetAsCover={handleSetAsCover}
                                         handleDeleteCheckBox={handleDeleteCheckBox}
                                     />
-                                ))}
-                            </Box>
-                        ) : (
-                            <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                                No hay imágenes subidas.
-                            </Typography>
-                        )}
-                    </Grid>
+                                </Grid>
+                            ))}
+                            <CarruselGalleryDelet
+                                isOpen={isGalleryOpen}
+                                images={infoAveForUpdate.imagenes_aves}
+                                selectedIndex={selectedImageIndex}
+                                onClose={handleCloseGallery}
+                            />
+                        </Grid>
+                    )}
+                    {!infoAveForUpdate || !infoAveForUpdate.imagenes_aves || infoAveForUpdate.imagenes_aves.length === 0 && (
+                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                            No hay imágenes subidas.
+                        </Typography>
+                    )}
                 </Grid>
             </Grid>
             <Snackbar
@@ -230,28 +233,6 @@ export const CoverDelet = ({
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            {/* <Dialog
-                open={dialogOpen}
-                onClose={closeImageDialog}
-                fullWidth
-                maxWidth="md"
-            >
-                <DialogContent>
-                    <img
-                        src={selectedDialogImage}
-                        alt="Imagen en diálogo"
-                        style={{ maxWidth: '100%' }}
-                    />
-                </DialogContent>
-            </Dialog> */}
-            {isGalleryOpen && (
-                <CarruselGalleryDelet
-                    isOpen={isGalleryOpen}
-                    images={infoAveForUpdate?.imagenes_aves || []}
-                    selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
-                />
-            )}
         </React.Fragment>
     );
-};
+}

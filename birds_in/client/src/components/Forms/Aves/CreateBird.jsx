@@ -45,18 +45,6 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
     const [birdCreated, setBirdCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
 
-    const sortAlphabetically = (array) => {
-        return array.slice().sort((a, b) => {
-            if (a && a.nombre && b && b.nombre) {
-                return a.nombre.localeCompare(b.nombre);
-            }
-            return 0;
-        });
-    };
-    const sortedPaises = sortAlphabetically(paises);
-    const sortedFamilias = sortAlphabetically(familias);
-    const sortedGrupos = sortAlphabetically(grupos);
-    const sortedZonas = sortAlphabetically(zonas);
 
     const [createData, setCreateData] = React.useState({
         grupo: null,
@@ -364,7 +352,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
-                                    options={sortedGrupos}
+                                    options={grupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
                                     onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
@@ -404,7 +392,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
-                                    options={sortedFamilias}
+                                    options={familias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
                                     onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
@@ -449,7 +437,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                     disablePortal
                                     multiple
                                     id="combo-box-pais"
-                                    options={sortedPaises}
+                                    options={paises}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
@@ -487,7 +475,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-zonas"
-                                    options={sortedZonas}
+                                    options={zonas}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.zona}
                                     onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}

@@ -117,12 +117,15 @@ const fetchFilterBirds = async (
 const fetchOptions = async () => {
     const optionsGrupos = await Grupos.findAll({
         attributes: ['nombre', ['id_grupo', 'id']],
+        order: [['nombre', 'ASC']]
     });
     const optionsFamilias = await Familias.findAll({
-        attributes: ['nombre', ['id_familia', 'id']]
+        attributes: ['nombre', ['id_familia', 'id']],
+        order: [['nombre', 'ASC']]
     })
     const optionsPaises = await Paises.findAll({
         attributes: [['id_pais', 'id'], 'nombre',],
+        order: [['nombre', 'ASC']]
     });
     const optionsZonas = await Zonas.findAll({
         attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre'],
@@ -132,18 +135,21 @@ const fetchOptions = async () => {
         ],
         ],
         order: [
-            [Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'), 'ASC'],
             ['nombre_zona', 'ASC']
         ]
     });
     const optionsNames = await Aves.findAll({
-        attributes: ['nombre_cientifico', 'nombre_ingles',]
+        attributes: ['nombre_cientifico', 'nombre_ingles',],
+        order: [
+            ['nombre_cientifico', 'ASC'], // Ordenar nombres científicos alfabéticamente
+            ['nombre_ingles', 'ASC'] // Ordenar nombres ingleses alfabéticamente
+        ]
     })
     // const nombresGrupos = mapFieldValues(optionsGrupos, 'nombre', 'id_grupo')
     // const nombreFamilias = mapFieldValues(optionsFamilias, 'nombre', 'id_familia')
     // const nombrePaises = mapFieldValues(optionsPaises, 'nombre', 'id_pais')
-    const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles')
-    const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico')
+    const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles');
+    const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico');
     // const nombrezonas = mapFieldValues(optionsZonas, 'nombre_zona', 'id_zona')
 
     return {
@@ -257,7 +263,7 @@ const filterOptionsPaisZonas = async (familia,
     // Verificar si se proporcionó un ID de zona o un ID de país
 
     if (zonas || pais) {
-       
+
         const paisNumb = parseInt(pais)
         // Filtrar las aves según el país y las zonas proporcionadas
         allResults.avesFiltradas = allResults.avesFiltradas.filter(ave => {
@@ -277,13 +283,13 @@ const filterOptionsPaisZonas = async (familia,
                     nombre: pais.dataValues.nombre,
                 })));
         });
-      
+
         const findIdPais = await obtenerIdDePais(zonas)
-        
+
         const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
-        
+
         newOptions.paises = [JSON.parse(newopti)];
-        
+
         const zonasSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
             ave.zonasAves.forEach(zona => zonasSet.add(JSON.stringify({

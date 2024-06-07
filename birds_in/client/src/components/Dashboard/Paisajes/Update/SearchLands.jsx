@@ -22,7 +22,7 @@ export const SearchLands = ({ changeTab }) => {
     const [showBackdrop, setShowBackdrop] = React.useState(true);
     const [selectedRegister, setSelectedRegister] = React.useState(null);
     const [registerData, setRegisterData] = React.useState([]);
-    console.log('registro seleccionado', registerData)
+    // console.log('registro seleccionado', registerData)
     const [showUpdateRegister, setShowUpdateRegister] = React.useState(false);
     const [showSearchRegister, setShowSearchRegister] = React.useState(true);
 
@@ -90,7 +90,7 @@ export const SearchLands = ({ changeTab }) => {
                         justifyContent: 'center',
                         width: '170vh',
                         height: '40vh',
-                        backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
+                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                         backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
                         marginTop: '1px',
                         borderRadius: '20px',
@@ -123,15 +123,8 @@ export const SearchLands = ({ changeTab }) => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Seleccionar Paisaje a actualizar"
-                                    // InputLabelProps={{
-                                    //     sx: labelStyles, // Estilo del label
-                                    // }}
-                                    // InputProps={{
-                                    //     ...params.InputProps,
-                                    //     sx: inputStyles, // Estilo del input
-
-                                    // }}
+                                        label="Seleccionar Paisaje a Actualizar"
+                                    
                                     />
                                 )}
 

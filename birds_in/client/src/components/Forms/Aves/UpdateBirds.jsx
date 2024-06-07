@@ -14,22 +14,23 @@ import {
     Snackbar,
     TextField,
     Typography,
+    useTheme,
 } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+//ESTADOS GLOBALES
 import { useDispatch, useSelector } from 'react-redux';
-import { useTheme } from '@emotion/react';
 import { UpdateAveImage, actualizarAve, getInfoForUpdate } from '../../../redux/actions/createBirds';
-import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import { getOptionsData } from '../../../redux/actions/fetchOptions';
+import { deleteBird } from '../../../redux/actions/fetchAllBirds';
+//ICONS
 import wikipediaLogo from '../../../assets/images/wikilogo.png'
 import ebirdLogo from '../../../assets/images/Logo_ebird.png'
-import { Link, useNavigate } from 'react-router-dom';
-import { getOptionsData } from '../../../redux/actions/fetchOptions';
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import SaveIcon from '@mui/icons-material/Save';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SearchIcon from '@mui/icons-material/Search';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { deleteBird } from '../../../redux/actions/fetchAllBirds';
-
-
+//COMPONENTS
 
 export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist }) => {
 
@@ -37,56 +38,8 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const labelStyles = {
-        color: theme.palette.primary.main, // Color del texto del label
-        marginTop: '-10px',
-    };
-
-    const inputStyles = {
-        // Aquí puedes agregar los estilos que desees para los inputs
-        color: theme.palette.primary.light,
-        backgroundColor: 'rgba(204,214,204,0.17)',
-        borderRadius: '9px',
-        height: '80px',
-        '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '10px',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'none',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main, // Color del borde en el hover
-            backgroundColor: 'rgba(0,56,28,0.22) ',
-        },
-        '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-            // Agrega los estilos que desees para el Select
-            // height: '50px',
-            // marginTop: '100px',
-            // width: '180px' // Ejemplo: cambia el color del texto a azul
-        },
-
-    };
-
     const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
-
-    const sortAlphabetically = (array) => {
-        return array.slice().sort((a, b) => {
-            // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
-            if (a && a.nombre && b && b.nombre) {
-                const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-                const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-                return nameA.localeCompare(nameB);
-            }
-            // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
-            return 0;
-        });
-    };
-    const sortedPaises = sortAlphabetically(paises);
-    const sortedFamilias = sortAlphabetically(familias);
-    const sortedGrupos = sortAlphabetically(grupos);
-    const sortedZonas = sortAlphabetically(zonas)
 
     const initialCreateData = {
         grupo: infoAveForUpdate.grupo || null,
@@ -102,7 +55,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         idAve: infoAveForUpdate.id_ave || 0,
         urlImagen: infoAveForUpdate.imagenes_aves || [],
     }
-    console.log(initialCreateData)
+    // console.log(initialCreateData)
     const [createData, setCreateData] = React.useState(initialCreateData)
     const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
@@ -310,27 +263,17 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '80%',
+                    width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                     backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
-
+                    mb: 10,
                 }} >
 
                     <Grid item xs={12} sm={12}>
                         <Button
-                            sx={{
-                                mt: 5,
-                                mb: -8,
-                                fontSize: '1rem',
-                                fontWeight: 'bold',
-                                ml: '75%',
-                                color: theme.palette.primary.light,
-                                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                            }}
                             variant="outline"
                             onClick={handleReturnSearch}
                             startIcon={<SearchIcon />}
@@ -439,13 +382,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-
-                            }}
-                            InputProps={{
-                                sx: inputStyles, // Establece el estilo del input
-                            }}
                         />
                         <TextField
                             variant="filled"
@@ -455,13 +391,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-
-                            }}
-                            InputProps={{
-                                sx: inputStyles, // Establece el estilo del input
-                            }}
                         />
                         <TextField
                             variant="filled"
@@ -471,34 +400,20 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-
-                            }}
-                            InputProps={{
-                                sx: inputStyles, // Establece el estilo del input
-                            }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} sx={{ mt: -5.5 }}>
                         <Autocomplete
                             disablePortal
                             id="combo-box-grupos"
-                            options={sortedGrupos}
+                            options={grupos}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.grupo}
                             onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
                             renderInput={(params) =>
                                 <TextField {...params}
                                     label="Grupo"
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
-                                    }}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
-
-                                    }}
+                                   
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             sx={{ mb: 3, mt: 1 }}
@@ -513,21 +428,13 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         <Autocomplete
                             disablePortal
                             id="combo-box-familias"
-                            options={sortedFamilias}
+                            options={familias}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.familia}
                             onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
                             renderInput={(params) =>
                                 <TextField {...params}
                                     label="Familia"
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
-                                    }}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
-
-                                    }}
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             sx={{ mb: 3 }}
@@ -542,21 +449,13 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         <Autocomplete
                             disablePortal
                             id="combo-box-pais"
-                            options={sortedPaises}
+                            options={paises}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.pais}
                             onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
                             renderInput={(params) =>
                                 <TextField {...params}
                                     label="Países"
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
-                                    }}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
-
-                                    }}
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
@@ -586,20 +485,14 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         <Autocomplete
                             disablePortal
                             id="combo-box-zonas"
-                            options={sortedZonas}
+                            options={zonas}
                             getOptionLabel={(option) => option.nombre}
                             value={createData.zona}
                             onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}
                             renderInput={(params) =>
                                 <TextField {...params}
                                     label="Zonas"
-                                    InputLabelProps={{
-                                        sx: labelStyles, // Estilo del label
-                                    }}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: inputStyles, // Estilo del input
-                                    }}
+                                    
                                 />}
                             isOptionEqualToValue={(option, value) => option.id === value?.id}
                             multiple
@@ -657,11 +550,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             sx={{ my: 2 }}
                             fullWidth
                             margin="normal"
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-
-                            }}
-
                             InputProps={{
                                 startAdornment: (
                                     <InputLabel htmlFor="urlWiki" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -677,7 +565,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     </InputLabel>
 
                                 ),
-                                sx: inputStyles, // Establece el estilo del input
+                               
                             }}
                         />
                         <TextField
@@ -689,11 +577,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             onChange={handleInputChange}
                             fullWidth
                             margin="normal"
-                            InputLabelProps={{
-                                sx: labelStyles, // Establece el estilo del label del input
-
-                            }}
-
                             InputProps={{
                                 startAdornment: (
                                     <InputLabel htmlFor="urlBird" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -708,7 +591,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
 
                                     </InputLabel>
                                 ),
-                                sx: inputStyles, // Establece el estilo del input
+                              
                             }}
                         />
                     </Grid>
