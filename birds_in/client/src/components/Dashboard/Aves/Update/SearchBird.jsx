@@ -14,12 +14,14 @@ import { useDispatch } from 'react-redux';
 import { IndexTabsUpdates } from './IndexTabsUpdates';
 //ESTADOS GLOBALES
 import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
+import { Loading } from '../../../utils/Loading';
 
 
 export const SearchBird = ({ changeTab }) => {
     const theme = useTheme();
     const dispatch = useDispatch()
-    const [showBackdrop, setShowBackdrop] = React.useState(true);
+    const [showBackdrop, setShowBackdrop] = React.useState(false);
+    const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [selectedBird, setSelectedBird] = React.useState(null);
     const [birdsData, setBirdsData] = React.useState([]);
     // console.log(selectedBird)
@@ -32,15 +34,20 @@ export const SearchBird = ({ changeTab }) => {
     };
 
     const handleButtonClick = () => {
+        setShowBackdrop(true)
+        setLoadingMessage('Cargando...');
         if (selectedBird) {
             // Envía la información al action
+           
             dispatch(getInfoForUpdate(selectedBird.id_ave));
             // Cambia a la pestaña deseada
             // changeTab(2);
             setShowUpdateBird(true);
             setShowSearchBird(false);
+
         }
     };
+    
     React.useEffect(() => {
         if (selectedBird) {
             handleButtonClick();
@@ -52,12 +59,13 @@ export const SearchBird = ({ changeTab }) => {
         const fetchData = async () => {
             try {
                 setShowBackdrop(true)
+                setLoadingMessage('Cargando Todas las Aves Por Favor Espere...');
                 const response = await axios.get('/aves/filtros?page=0&perPage=0');
                 const data = response.data.avesFiltradas;
                 const validData = data.filter((item) => item.nombre_ingles);
 
                 // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
-                validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
+                // validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
 
                 localStorage.setItem('birdsData', JSON.stringify(validData));
                 setBirdsData(validData);
@@ -77,15 +85,10 @@ export const SearchBird = ({ changeTab }) => {
         <React.Fragment>
             {showSearchBird && (
                 <React.Fragment>
-                    <Backdrop
+                    <Loading
+                        message={loadingMessage}
                         open={showBackdrop}
-                        sx={{
-                            zIndex: (theme) => theme.zIndex.drawer + 1,
-                            color: '#fff',
-                        }}
-                    >
-                        <CircularProgress color="inherit" />
-                    </Backdrop>
+                    />
                     <Grid container spacing={1} sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -107,113 +110,6 @@ export const SearchBird = ({ changeTab }) => {
                                 id="search_bird"
                                 options={birdsData}
                                 getOptionLabel={(option) => option.nombre_ingles}
-                                //     filterOptions={
-                                //         (options, state) => {
-                                //         // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                //         const inputValue = state.inputValue.toLowerCase();
-                                //         return options.filter((option) => {
-                                //             const birdName = option.nombre_ingles.toLowerCase();
-                                //             const birdNamesArray = birdName.split(' ');
-
-                                //             // Check if any of the names (first, second, or third) start with the inputValue
-                                //             return birdNamesArray.some(
-                                //                 (name) => name.startsWith(inputValue)
-                                //             );
-                                //         });
-                                //     }
-                                // }
-                                // filterOptions={(options, state) => {
-                                //     const inputValue = state.inputValue.toLowerCase();
-                                //     return options.filter((option) => {
-                                //         const birdName = option.nombre_ingles.toLowerCase();
-                                //         const sanitizedInput = inputValue.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
-                                //         const sanitizedBirdName = birdName.replace(/[^a-z0-9\s]/g, ''); // Eliminar caracteres especiales
-
-                                //         return sanitizedBirdName.includes(sanitizedInput);
-                                //     });
-                                // }}
-                                //este FUE EL MEJOR HASTA HAORA
-                                // filterOptions={(options, state) => {
-                                //     const inputValue = state.inputValue.toLowerCase().replace(/[^a-z0-9\s-]/g, ''); // Sanitizar la entrada
-                                //     return options.filter((option) => {
-                                //         const birdName = option.nombre_ingles.toLowerCase().replace(/[^a-z0-9\s-]/g, ''); // Sanitizar el nombre del ave
-                                //         const birdNameWords = birdName.split(' '); // Dividir el nombre del ave en palabras
-                                //         const inputWords = inputValue.split(' '); // Dividir la entrada en palabras
-
-                                //         // Verificar si alguna de las palabras de entrada coincide con alguna parte del nombre del ave
-                                //         for (const inputWord of inputWords) {
-                                //             if (birdNameWords.some((word) => word.includes(inputWord))) {
-                                //                 return true;
-                                //             }
-                                //         }
-
-                                //         return false;
-                                //     });
-                                // }}
-                                // filterOptions={(options, state) => {
-                                //     const inputValue = state.inputValue.toLowerCase(); // Convertir a minúsculas
-                                //     const inputWords = inputValue.split(' '); // Dividir la entrada en palabras
-
-                                //     return options.filter((option) => {
-                                //         const birdName = option.nombre_ingles.toLowerCase(); // Convertir a minúsculas
-                                //         const birdWords = birdName.split(' '); // Dividir el nombre en palabras
-
-                                //         // Filtrar las opciones que coinciden con al menos una palabra
-                                //         const matches = inputWords.filter(word => birdWords.some(birdWord => birdWord.startsWith(word) && birdWord[0] === word[0]));
-
-                                //         // Organizar las coincidencias: primeras palabras primero, luego las segundas
-                                //         const sortedMatches = [];
-                                //         inputWords.forEach(word => {
-                                //             const index = matches.findIndex(match => birdWords.some(birdWord => birdWord.startsWith(match)) && match === word);
-                                //             if (index !== -1) sortedMatches.push(matches.splice(index, 1)[0]);
-                                //         });
-                                //         sortedMatches.push(...matches);
-
-                                //         return sortedMatches.length > 0; // Devolver true si hay al menos una coincidencia
-                                //     });
-                                // }}
-
-
-
-                                // filterOptions={(options, state) => {
-                                //     // Filtra las opciones para que coincidan en el primer, segundo o tercer nombre
-                                //     const inputValue = state.inputValue.toLowerCase();
-                                //     return options.filter((option) => {
-                                //         const birdName = option.nombre_ingles.toLowerCase();
-                                //         const birdNamesArray = birdName.split(' ');
-
-                                //         // Check if any of the names (first, second, or third) start with the inputValue
-                                //         return birdNamesArray.some(
-                                //             (name) => name.startsWith(inputValue)
-                                //         );
-                                //     });
-                                // }}
-                                // filterOptions={(options, state) => {
-                                //     // Filtra las opciones para que coincidan solo en el primer nombre
-                                //     const inputValue = state.inputValue.toLowerCase();
-                                //     return options.filter((option) => {
-                                //         const firstBirdName = option.nombre_ingles.split(' ')[0].toLowerCase();
-                                //         return firstBirdName.startsWith(inputValue);
-                                //     });
-                                // }}
-
-                                // filterOptions={(options, state) => {
-                                //     // Filtra las opciones para que coincidan en el primer o segundo nombre
-                                //     const inputValue = state.inputValue.toLowerCase();
-                                //     return options.filter((option) => {
-                                //         const birdNamesArray = option.nombre_ingles.split(' ').map(name => name.toLowerCase());
-
-                                //         // Busca en el primer nombre
-                                //         const firstBirdName = birdNamesArray[0];
-                                //         if (firstBirdName.startsWith(inputValue)) {
-                                //             return true;
-                                //         }
-
-                                //         // Si no se encuentra en el primer nombre, busca en el segundo nombre
-                                //         const secondBirdName = birdNamesArray[1];
-                                //         return secondBirdName && secondBirdName.startsWith(inputValue);
-                                //     });
-                                // }}
                                 value={selectedBird}
                                 onChange={(event, newValue) => handleBirdSelect(newValue)}
                                 renderInput={(params) => (
@@ -233,8 +129,8 @@ export const SearchBird = ({ changeTab }) => {
                 changeTab={changeTab}
                 showUpdateBird={setShowUpdateBird}
                 showSearchBird={setShowSearchBird}
-                selectedBird={setSelectedBird} 
-                />}
+                selectedBird={setSelectedBird}
+            />}
         </React.Fragment>
     );
 };

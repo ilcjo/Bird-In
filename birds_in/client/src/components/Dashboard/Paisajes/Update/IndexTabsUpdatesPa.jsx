@@ -41,7 +41,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
     };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '900px' }}>
+            <Box sx={{ width: '100%', maxWidth: '95%', margin: '0 auto', minWidth: '900px' }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}

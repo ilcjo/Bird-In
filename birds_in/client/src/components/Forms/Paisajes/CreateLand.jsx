@@ -18,13 +18,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 //REDUX
-import { createBird, duplicateNameCheck, getInfoForUpdateName, saveImageFtp } from '../../../redux/actions/createBirds';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
 import { createLand, duplicateNameCheckP, getInfoForUpdateNameP, saveImageFtpLand } from '../../../redux/paisaje/actionsP/createLands';
 //ICONS
 import SaveIcon from '@mui/icons-material/Save';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { ImageUploader } from '../../utils/ImageUploader';
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 //COMPONENTES

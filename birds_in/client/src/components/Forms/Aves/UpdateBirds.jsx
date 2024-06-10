@@ -2,40 +2,35 @@ import * as  React from 'react'
 import {
     Alert,
     Autocomplete,
-    Backdrop,
     Box,
     Button,
     Chip,
-    CircularProgress,
     Divider,
     Grid,
     IconButton,
-    InputLabel,
+    InputAdornment,
     Snackbar,
     TextField,
     Typography,
     useTheme,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-//ESTADOS GLOBALES
 import { useDispatch, useSelector } from 'react-redux';
+//ESTADOS GLOBALES
+import { deleteBird } from '../../../redux/actions/fetchAllBirds';
 import { UpdateAveImage, actualizarAve, getInfoForUpdate } from '../../../redux/actions/createBirds';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
-import { deleteBird } from '../../../redux/actions/fetchAllBirds';
 //ICONS
-import wikipediaLogo from '../../../assets/images/wikilogo.png'
-import ebirdLogo from '../../../assets/images/Logo_ebird.png'
-import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //COMPONENTS
+import { Loading } from '../../utils/Loading';
+import { ImageUploader } from '../../utils/ImageUploader';
+import { StyledTextField } from '../../../assets/styles/MUIstyles';
 
 export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist }) => {
 
     const theme = useTheme()
-    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
@@ -57,8 +52,8 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     }
     // console.log(initialCreateData)
     const [createData, setCreateData] = React.useState(initialCreateData)
-    const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
-    const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
+    const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
+    const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]); // Nuevo estado para mantener todas las URLs de las imágenes
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
@@ -67,57 +62,14 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se ha Actualizado correctamente.');
 
-    const handleDeleteRegistro = async () => {
-        try {
-            setShowBackdrop(true);
-            setLoadingMessage('Eliminando...');
+    React.useEffect(() => {
+        setCreateData(initialCreateData);
+    }, [infoAveForUpdate]);
 
-            // Dispatch the action to delete the bird
-            await dispatch(deleteBird(infoAveForUpdate.id_ave));
-
-            // If the delete operation is successful
-            setOpenSnackbar(true);
-            setSnackBarMessage('El Registro del Ave se ha eliminado correctamente');
-        } catch (error) {
-            console.error('Error al eliminar el registro:', error);
-            setErrorMessage(`Ocurrió un error: ${error.message}`);
-            setErrorSnackbarOpen(true);
-        } finally {
-            // This block will be executed whether there's an error or not
-            setShowBackdrop(false);
-            handleReturnSearch()
-        }
-    };
-
-    const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpenSnackbar(false);
-    };
-
-    const handleImageChange = (event) => {
-        const selectedImages = event.target.files;
-        if (selectedImages.length > 0) {
-            // Crear un array para almacenar las URLs de las imágenes (para mostrarlas en el formulario)
-            const imageUrls = [];
-            // Recorrer todas las imágenes seleccionadas
-            for (let i = 0; i < selectedImages.length; i++) {
-                const selectedImage = selectedImages[i];
-                // Crear una URL para cada imagen seleccionada
-                const imageUrl = URL.createObjectURL(selectedImage)
-                // Agregar la URL al array
-                imageUrls.push(imageUrl);
-                // Opcionalmente, puedes guardar los archivos en el estado
-            }
-            // Actualizar el estado con el array de URLs de imágenes
-            setImageURL(imageUrls);
-            // Actualizar el estado que almacena todas las URL de las imágenes seleccionadas
-            setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
-            // Actualizar el estado con los archivos de imagen
-            setImageFile((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
-        }
-    };
+    React.useEffect(() => {
+        // Aquí despachas la acción para cargar las opciones al montar el componente
+        dispatch(getOptionsData());
+    }, [dispatch]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -127,83 +79,80 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         });
     };
 
+    const handleDeleteRegistro = async () => {
+        try {
+            setShowBackdrop(true);
+            setLoadingMessage('Eliminando...');
+            await dispatch(deleteBird(infoAveForUpdate.id_ave));
+            setOpenSnackbar(true);
+            setSnackBarMessage('El Registro del Ave se ha eliminado correctamente');
+        } catch (error) {
+            console.error('Error al eliminar el registro:', error);
+            setErrorMessage(`Ocurrió un error: ${error.message}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+            handleReturnSearch()
+        }
+    };
+
+    const handleImageChange = (event) => {
+        const selectedImages = event.target.files;
+        if (selectedImages.length > 0) {
+            const imageUrls = Array.from(selectedImages).map(image => URL.createObjectURL(image));
+            setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
+            setImageFiles((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
+        }
+    };
+
+
     const handleRemoveImage = (index) => {
-        // Obtener el índice de la imagen destacada antes de eliminarla
-        // const isRemovingDestacada = index === destacadaIndex;
-
-        // Revocar la URL de la imagen eliminada
-        URL.revokeObjectURL(imageURL[index]);
-
-        // Crear una copia del array de URLs de imágenes
-        const updatedImageURLs = [...imageURL];
-
-        // Eliminar la URL de la imagen en la posición 'index'
+        URL.revokeObjectURL(imageLink[index]);
+        const updatedImageURLs = [...imageLink];
         updatedImageURLs.splice(index, 1);
-
-        // Actualizar el estado con el nuevo array de URLs
-        setImageURL(updatedImageURLs);
-
-        // Si la imagen eliminada era la destacada, desmarcarla
-        // if (isRemovingDestacada) {
-        //     setDestacadaIndex(null);
-        // }
-
-        // Actualizar el estado que almacena todas las URL de las imágenes seleccionadas
-        setAllImageURLs((prevAllImageURLs) => prevAllImageURLs.filter((_, i) => i !== index))
-        // setAllImageURLs(updatedImageURLs);
-
-        // Crear una copia del array de archivos de imágenes
-        const updatedImageFiles = [...imageFile];
-
-        // Eliminar el archivo de imagen en la posición 'index'
+        setImageLink(updatedImageURLs);
+        setAllImageURLs((prevAllImageURLs) => prevAllImageURLs.filter((_, i) => i !== index));
+        const updatedImageFiles = [...imageFiles];
         updatedImageFiles.splice(index, 1);
-
-        // Actualizar el estado con el nuevo array de archivos de imágenes
-        setImageFile(updatedImageFiles);
-
+        setImageFiles(updatedImageFiles);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setShowBackdrop(true);
-
         try {
-
             let imageUrl = '';
-            if (imageFile && imageFile.length > 0) {
+            if (imageFiles && imageFiles.length > 0) {
                 const formData = new FormData();
-                for (let i = 0; i < imageFile.length; i++) {
-                    formData.append('images', imageFile[i]);
+                for (let i = 0; i < imageFiles.length; i++) {
+                    formData.append('images', imageFiles[i]);
                 }
-                setLoadingMessage('Subiendo imágenes...');
-                imageUrl = await saveImageFtpWithMessage(formData);
-                setLoadingMessage('Actualizando ave...');
+                setLoadingMessage('Subiendo Imágenes al Servidor...');
+                imageUrl = await uploadImagesFtpAndSaveLinks(formData);
+                setLoadingMessage('Actualizando Ave...');
             }
 
             if (createData.ingles) {
                 localStorage.setItem('nombreIngles', createData.ingles);
             }
 
-            await createBirdWithMessage(createData, imageUrl);
+            await createFullEntry(createData, imageUrl);
 
             setShowBackdrop(false);
-            setLoadingMessage('Cargando...');
+            setLoadingMessage('Actualización en proceso...');
             setOpenSnackbar(true);
 
-            setImageURL([]);
-            setImageFile([]);
+            setImageLink([]);
+            setImageFiles([]);
             setAllImageURLs([])
             if (imageUrl) {
-                setSnackBarMessage('El ave se ha Actualizado correctamente.');
+                setSnackBarMessage('El Ave se ha Actualizado correctamente.');
                 dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
                 changeImagenExist();
             } else {
-                setSnackBarMessage('El ave se ha Actualizado correctamente.');
+                setSnackBarMessage('El Ave se ha Actualizado correctamente.');
                 dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
             }
-            // setSnackBarMessage('El ave se ha Actualizado correctamente.')
-            // dispatch(getInfoForUpdate(infoAveForUpdate.id_ave))
-            // changeImagenExist()
         } catch (error) {
             console.error('Error:', error);
             setErrorMessage(`Ocurrió un error: ${error.message}`);
@@ -219,7 +168,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         selectedBird(null)
     };
 
-    const saveImageFtpWithMessage = async (formData) => {
+    const uploadImagesFtpAndSaveLinks = async (formData) => {
         try {
             const response = await dispatch(UpdateAveImage(formData));
             if (response && response.data && response.data.imageUrls) {
@@ -234,7 +183,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         }
     };
 
-    const createBirdWithMessage = async (createData, imageUrl) => {
+    const createFullEntry = async (createData, imageUrl) => {
         try {
             await dispatch(actualizarAve({ ...createData, urlImagen: imageUrl }));
         } catch (error) {
@@ -243,14 +192,26 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         }
     };
 
-    React.useEffect(() => {
-        setCreateData(initialCreateData);
-    }, [infoAveForUpdate]);
 
-    React.useEffect(() => {
-        // Aquí despachas la acción para cargar las opciones al montar el componente
-        dispatch(getOptionsData());
-    }, []);
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnackbar(false);
+    };
+
+
+    const handleLogoClickW = () => {
+        if (createData.urlWiki) {
+            window.open(createData.urlWiki, '_blank');
+        }
+    };
+    
+    const handleLogoClickB = () => {
+        if (createData.urlBird) {
+            window.open(createData.urlBird, '_blank');
+        }
+    };
 
     return (
         <React.Fragment>
@@ -271,365 +232,299 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
                 }} >
-
                     <Grid item xs={12} sm={12}>
-                        <Button
-                            variant="outline"
-                            onClick={handleReturnSearch}
-                            startIcon={<SearchIcon />}
-                        >
-                            Buscar Nuevo Registro
-                        </Button>
+                        <Grid container alignItems="center">
+                            <Grid item xs={12} sm={9}>
+                                <Typography variant='h2' color='primary' sx={{ mb: 3 }}>
+                                    Formulario de Actualización
+                                </Typography>
+                            </Grid>
 
-                        <Typography variant='h2' color='primary' sx={{ mb: 3 }}>
-                            Formulario de Actualización
-                        </Typography>
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <Button
+                                    sx={{
+                                        fontSize: '1.1rem',
+                                        fontWeight: 'bold',
+                                        // color: theme.palette.primary.light,
+                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                                    }}
+                                    variant="outlined"
+                                    onClick={handleReturnSearch}
+                                    startIcon={<SearchIcon />}
+                                >
+                                    Buscar Nuevo Registro
+                                </Button>
+                            </Grid>
+                        </Grid>
+
+
 
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
-                            <Divider sx={{ my: 1 }} />
+                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
-                        {/* Input para cargar imágenes */}
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple  // Permite la selección de múltiples imágenes
-                            onChange={handleImageChange}
-                            style={{ display: 'none' }}
-                            id="image-upload-input"
-                        />
-                        <label htmlFor="image-upload-input"> {/* Utiliza el atributo "for" para asociar el label al input */}
-                            <Button
-                                variant="contained" // Cambia el estilo del botón a "contained" para un aspecto diferente
-                                color="primary"
-                                component="span" // Indica que es un botón para seleccionar archivo
-                                sx={{
-                                    fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                                    '&:hover': {
-                                        backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
-                                        color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                        textTransform: 'none',
-                                    },
-                                }} // Estilo personalizado
-                                onChange={handleImageChange}
-                                endIcon={<UploadFileIcon />}
-                            >
-                                Cargar Imágenes
-                            </Button>
-                        </label>
-                        <Button onClick={handleSubmit}
-                            sx={{
-                                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 5, textTransform: 'none',
-                                backgroundColor: theme.palette.primary.dark,
-                                color: theme.palette.primary.light,
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                    textTransform: 'none',
-                                },
-                            }}
-                            variant="contained"
-                            color="primary"
-                            endIcon={<SaveIcon />}
-                        >Grabar</Button>
-                        {/* Mostrar imagen cargada */}
-                        {allImageURLs.length > 0 && (
-                            <Grid container spacing={1}>
-                                {allImageURLs.map((imageUrl, index) => (
-                                    <Grid item key={index}>
-                                        <div style={{ position: 'relative' }}>
-                                            <img
-                                                src={imageUrl}
-                                                alt={`Imagen seleccionada ${index + 1}`}
-                                                style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px' }}
-                                            />
-                                            {/* <Checkbox
-                                                color="primary"
-                                                checked={index === destacadaIndex}
-                                                onChange={() => handleSetDestacada(index)}
-                                            /> */}
-                                            <IconButton
-                                                color="primary"
-                                                onClick={() => handleRemoveImage(index)}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '8px',
-                                                    right: '0px',
-                                                }}
-                                            >
-                                                <DisabledByDefaultIcon />
-                                            </IconButton>
-                                        </div>
-                                    </Grid>
-                                ))}
+                        <Grid container sx={{ mt: -4 }} >
+                            <Grid item xs={12} sm={3} md={3}>
+                                <ImageUploader
+                                    allImageURLs={allImageURLs}
+                                    handleImageChange={handleImageChange}
+                                    handleRemoveImage={handleRemoveImage}
+                                />
+                            </Grid >
+                            <Grid item xs={12} sm={9} md={9} >
+                                <Button onClick={handleSubmit}
+                                    variant="contained"
+                                    color="secondary"
+                                    endIcon={<SaveIcon />}
+                                >Grabar</Button>
                             </Grid>
-                        )}
+                        </Grid>
                     </Grid>
-
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Datos del Ave
-                            <Divider sx={{ my: 2 }} />
+                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6} sx={{ mt: -6 }}>
 
-                        <TextField
-                            variant="filled"
-                            name="ingles"
-                            label="Nombre en Ingles"
-                            value={createData.ingles}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <TextField
-                            variant="filled"
-                            name="comun"
-                            label="Nombre común"
-                            value={createData.comun}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <TextField
-                            variant="filled"
-                            name="cientifico"
-                            label="Nombre cientifico"
-                            value={createData.cientifico}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6} sx={{ mt: -5.5 }}>
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-grupos"
-                            options={grupos}
-                            getOptionLabel={(option) => option.nombre}
-                            value={createData.grupo}
-                            onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                            renderInput={(params) =>
-                                <TextField {...params}
-                                    label="Grupo"
-                                   
-                                />}
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            sx={{ mb: 3, mt: 1 }}
-                            filterOptions={(options, state) => {
-                                // Filtra las opciones para que coincidan solo al principio de las letras
-                                const inputValue = state.inputValue.toLowerCase();
-                                return options.filter((option) =>
-                                    option.nombre.toLowerCase().startsWith(inputValue)
-                                );
-                            }}
-                        />
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-familias"
-                            options={familias}
-                            getOptionLabel={(option) => option.nombre}
-                            value={createData.familia}
-                            onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                            renderInput={(params) =>
-                                <TextField {...params}
-                                    label="Familia"
-                                />}
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            sx={{ mb: 3 }}
-                            filterOptions={(options, state) => {
-                                // Filtra las opciones para que coincidan solo al principio de las letras
-                                const inputValue = state.inputValue.toLowerCase();
-                                return options.filter((option) =>
-                                    option.nombre.toLowerCase().startsWith(inputValue)
-                                );
-                            }}
-                        />
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-pais"
-                            options={paises}
-                            getOptionLabel={(option) => option.nombre}
-                            value={createData.pais}
-                            onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
-                            renderInput={(params) =>
-                                <TextField {...params}
-                                    label="Países"
-                                />}
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            multiple
-                            filterOptions={(options, state) => {
-                                // Filtra las opciones para que coincidan solo al principio de las letras
-                                const inputValue = state.inputValue.toLowerCase();
-                                return options.filter((option) =>
-                                    option.nombre.toLowerCase().startsWith(inputValue)
-                                );
-                            }}
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Chip
-                                        label={option.nombre}
-                                        {...getTagProps({ index })}
-                                        sx={{
-                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
-                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
-                                            },
-                                        }} // Ajusta los estilos aquí
-                                    />
-                                ))
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-zonas"
-                            options={zonas}
-                            getOptionLabel={(option) => option.nombre}
-                            value={createData.zona}
-                            onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}
-                            renderInput={(params) =>
-                                <TextField {...params}
-                                    label="Zonas"
-                                    
-                                />}
-                            isOptionEqualToValue={(option, value) => option.id === value?.id}
-                            multiple
-                            // filterOptions={(options, state) => {
-                            //     const inputValue = state.inputValue.toLowerCase();
-                            //     const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <StyledTextField
+                                    name="ingles"
+                                    label="Nombre en Ingles"
+                                    value={createData.ingles}
+                                    onChange={handleInputChange}
+                                    variant="filled"
+                                    margin="dense"
+                                    fullWidth
+                                />
+                                <StyledTextField
+                                    name="comun"
+                                    label="Nombre común"
+                                    value={createData.comun}
+                                    onChange={handleInputChange}
+                                    variant="filled"
+                                    margin="dense"
+                                    fullWidth
+                                />
+                                <StyledTextField
+                                    name="cientifico"
+                                    label="Nombre cientifico"
+                                    value={createData.cientifico}
+                                    onChange={handleInputChange}
+                                    variant="filled"
+                                    margin="dense"
+                                    fullWidth
+                                />
+                            </Grid>
 
-                            //     return options.filter((option) => {
-                            //         if (selectedPaises.length === 0) {
-                            //             return true; // No hay paises seleccionados, muestra todas las zonas
-                            //         }
-                            //         return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
-                            //     });
-                            // }}
-                            filterOptions={(options, state) => {
-                                // Filtra las opciones para que coincidan solo al principio de las letras
-                                const inputValue = state.inputValue.toLowerCase();
-                                const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
+                            <Grid item xs={12} sm={6}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-grupos"
+                                    options={grupos}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.grupo}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Grupo"
+                                            margin='dense'
 
-                                const filteredByInput = options.filter((option) =>
-                                    option.nombre.toLowerCase().startsWith(inputValue)
-                                );
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3, mt: 1 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-familias"
+                                    options={familias}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.familia}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Familia"
+                                            margin="dense"
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                />
 
-                                return filteredByInput.filter((option) => {
-                                    if (selectedPaises.length === 0) {
-                                        return true; // No hay paises seleccionados, muestra todas las zonas
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12} sm={12}>
+                                <Autocomplete
+                                    disablePortal
+                                    multiple
+                                    id="combo-box-pais"
+                                    options={paises}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.pais}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Países"
+                                            margin="dense"
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip
+                                                label={option.nombre}
+                                                {...getTagProps({ index })}
+                                                sx={{
+                                                    backgroundColor: 'secondary.light',
+                                                    color: 'white',
+                                                    '& .MuiChip-label': {
+                                                        fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
+                                                    }
+                                                }}
+                                            />
+                                        ))
                                     }
-                                    return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
-                                });
-                            }}
+                                />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-zonas"
+                                    options={zonas}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.zona}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Zonas"
+                                            margin="dense"
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    multiple
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        const selectedPaises = createData.pais || []; // Asegúrate de que selectedPaises sea un array
 
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Chip
-                                        label={option.nombre}
-                                        {...getTagProps({ index })}
-                                        sx={{
-                                            backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
-                                                fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
-                                            },
-                                        }} // Ajusta los estilos aquí
-                                    />
-                                ))
-                            }
+                                        const filteredByInput = options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
 
-                        />
+                                        return filteredByInput.filter((option) => {
+                                            if (selectedPaises.length === 0) {
+                                                return true; // No hay paises seleccionados, muestra todas las zonas
+                                            }
+                                            return selectedPaises.some((pais) => option.nombre_pais === pais.nombre);
+                                        });
+                                    }}
 
-                        <TextField
-                            name="urlWiki"
-                            multiline
-                            rows={1}
-                            variant="filled"
-                            value={createData.urlWiki}
-                            onChange={handleInputChange}
-                            sx={{ my: 2 }}
-                            fullWidth
-                            margin="normal"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputLabel htmlFor="urlWiki" sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <Link to={createData.urlWiki} target="_blank" >
-                                            <img src={wikipediaLogo} alt="Wikipedia Logo" style={{
-                                                paddingLeft: '10px',
-                                                marginTop: '-4px',
-                                                width: '45px', // Ajusta el ancho de la imagen
-                                                height: '35px', // Ajusta la altura de la imagen
-                                            }} />
-                                        </Link>
+                                    renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip
+                                                label={option.nombre}
+                                                {...getTagProps({ index })}
+                                                sx={{
+                                                    backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                        fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
+                                                    },
+                                                }} // Ajusta los estilos aquí
+                                            />
+                                        ))
+                                    }
 
-                                    </InputLabel>
+                                />
+                            </Grid>
 
-                                ),
-                               
-                            }}
-                        />
-                        <TextField
-                            name="urlBird"
-                            multiline
-                            rows={1}
-                            variant="filled"
-                            value={createData.urlBird}
-                            onChange={handleInputChange}
-                            fullWidth
-                            margin="normal"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputLabel htmlFor="urlBird" sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <Link to={createData.urlBird} target="_blank" >
-                                            <img src={ebirdLogo} alt="EBird Logo" style={{
-                                                paddingRight: '0px',
-                                                // marginTop: '10px',
-                                                width: '110px', // Ajusta el ancho de la imagen
-                                                height: '39px', // Ajusta la altura de la imagen
-                                            }} />
-                                        </Link>
+                            <Grid item xs={12} sm={12}>
+                                <StyledTextField
+                                    name="urlWiki"
+                                    label='URL Wiki'
+                                    variant="filled"
+                                    value={createData.urlWiki}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    shrink='true'
+                                    margin="dense"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
 
-                                    </InputLabel>
-                                ),
-                              
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            sx={{
-                                ml: '78%',
-                                mb: 0,
-                                fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none', color: 'white',
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.light, // Cambia el color de fondo en hover
-                                    color: 'black', // Cambia el color del texto en hover
-                                    textTransform: 'none',
-                                },
-                            }}
-                            endIcon={<DeleteForeverIcon />}
-                            variant="contained"
-                            color='secondary'
-                            onClick={handleDeleteRegistro}
+                                                <IconButton onClick={handleLogoClickW}
+                                                    sx={{
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                    }}
+                                                >
+                                                    <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
 
-                        >
-                            Eliminar Registro
-                        </Button>
+                                <StyledTextField
+                                    name="urlBird"
+                                    label='URL'
+                                    variant="filled"
+                                    value={createData.urlBird}
+                                    onChange={handleInputChange}
+                                    margin="dense"
+                                    fullWidth
+                                    shrink='true'
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+
+                                                <IconButton onClick={handleLogoClickB}
+                                                    sx={{
+                                                        // height: '26px',
+                                                        color: 'white',
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                    }}
+                                                >
+                                                    eBird
+                                                    {/* <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} /> */}
+                                                </IconButton>
+                                            </InputAdornment>
+
+                                        ),
+
+                                    }}
+                                />
+
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
-                {/* Backdrop para mostrar durante la carga */}
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                <Loading
+                    message={loadingMessage}
                     open={showBackdrop}
-                >
-                    <>
-                        <CircularProgress color="inherit" />
-                        <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-                            {loadingMessage}
-                        </Typography>
-                    </>
-                </Backdrop>
-
+                />
             </Box>
             <Snackbar
                 open={openSnackbar}

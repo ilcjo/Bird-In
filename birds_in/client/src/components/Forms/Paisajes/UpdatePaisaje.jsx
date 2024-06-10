@@ -12,13 +12,11 @@ import {
     Snackbar,
     TextField,
     Typography,
+    useTheme,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTheme } from '@emotion/react';
-import { Link, useNavigate } from 'react-router-dom';
 //REDUX
 import { deleteBird } from '../../../redux/actions/fetchAllBirds';
-import { UpdateAveImage, actualizarAve, getInfoForUpdate } from '../../../redux/actions/createBirds';
 import { UpdatePaisajeImage, actualizarPaisaje, getInfoForUpdatePa } from '../../../redux/paisaje/actionsP/createLands';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
 //ICONS
@@ -26,8 +24,6 @@ import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 //COMPONENTS
 import { ImageUploader } from '../../utils/ImageUploader';
 
@@ -144,15 +140,15 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                 for (let i = 0; i < imageFile.length; i++) {
                     formData.append('images', imageFile[i]);
                 }
-                setLoadingMessage('Subiendo imágenes...');
+                setLoadingMessage('Subiendo Imágenes...');
                 imageUrl = await saveImageFtpWithMessage(formData);
-                setLoadingMessage('Actualizando ...');
+                setLoadingMessage('Actualizando Paisaje...');
             }
 
             await createWithMessage(createData, imageUrl);
 
             setShowBackdrop(false);
-            setLoadingMessage('Cargando...');
+            setLoadingMessage('Actualización en proceso...');
             setOpenSnackbar(true);
 
             setImageURL([]);

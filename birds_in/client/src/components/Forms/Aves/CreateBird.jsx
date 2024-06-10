@@ -64,7 +64,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
         familia: false,
         ingles: false,
     });
-   
+
 
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
@@ -248,7 +248,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
     React.useEffect(() => {
         // Aquí despachas la acción para cargar las opciones al montar el componente
         dispatch(getOptionsData());
-    }, []);
+    }, [dispatch]);
 
     return (
         <React.Fragment>
@@ -277,6 +277,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                                 </Typography>
                             </Grid>
                         </Grid>
+
                         <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
                             Subir imágenes a Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
@@ -552,7 +553,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
 
                                 <StyledTextField
                                     name="urlBird"
-                                    label='URL Wiki'
+                                    label='URL'
                                     variant="filled"
                                     value={createData.urlBird}
                                     onChange={handleInputChange}
