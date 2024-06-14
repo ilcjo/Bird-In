@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Box, Button, Dialog, DialogContent, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
 //GLOBAL STATE
@@ -12,14 +12,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDelet';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 import { Loading } from '../../../utils/Loading';
+import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
 
 export const CoverDeletP = ({
     isCreate,
     showUpdateRegister,
     showSearchRegister,
     selectedRegister, }) => {
+
     const theme = useTheme();
     const dispatch = useDispatch();
+    const nombreP = localStorage.getItem('nombrePaisaje') || 'del Paisaje';
     const { infoLandForUpdate } = useSelector(state => state.createLand);
     // console.log('soy info q actulizo', infoLandForUpdate)
     const [selectedImages, setSelectedImages] = React.useState([]);
@@ -124,6 +127,14 @@ export const CoverDeletP = ({
         selectedRegister(null)
     };
 
+    React.useEffect(() => {
+        if (isCreate) {
+            setSelectedImages([]);
+            dispatch(getLand({}))
+            // localStorage.removeItem('nombreIngles')
+        }
+    }, [isCreate])
+
     return (
         <React.Fragment>
             <Loading
@@ -147,7 +158,7 @@ export const CoverDeletP = ({
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h2' color='primary' >
-                                Imágenes del Paisaje
+                                Imágenes {nombreP ? ` ${nombreP}` : 'del Paisaje'}
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -180,11 +191,7 @@ export const CoverDeletP = ({
                         color="error"
                         onClick={handleDeleteButtonClick}
                         endIcon={<DeleteIcon />}
-                        sx={{
-                            mt: 0,
-                            mb: 2,
-                            color: theme.palette.primary.light,
-                        }}
+                        sx={{ mt: 0, mb: 2, color: 'primary.light' }}
                     >
                         Eliminar selección
                     </Button>

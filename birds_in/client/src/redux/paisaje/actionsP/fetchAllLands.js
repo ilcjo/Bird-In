@@ -78,14 +78,15 @@ export const counting = () => {
   };
 };
 
-export const deleteBird = (idN) => {
+export const deleteLand = (idN) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(`/aves/borrar_ave?id=${idN}`);
+      const response = await axios.delete(`/paisajes/borrar_registro?id=${idN}`);
       const data = response.data;
       return data
     } catch (error) {
       console.log('error enviando datos:', error);
+      throw error;
     }
   };
 };

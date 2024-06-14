@@ -47,16 +47,16 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
     const [registerCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
 
-    const sortAlphabetically = (array) => {
-        return array.slice().sort((a, b) => {
-            if (a && a.nombre && b && b.nombre) {
-                return a.nombre.localeCompare(b.nombre);
-            }
-            return 0;
-        });
-    };
-    const sortedPaises = sortAlphabetically(paises);
-    const sortedZonas = sortAlphabetically(zonas);
+    // const sortAlphabetically = (array) => {
+    //     return array.slice().sort((a, b) => {
+    //         if (a && a.nombre && b && b.nombre) {
+    //             return a.nombre.localeCompare(b.nombre);
+    //         }
+    //         return 0;
+    //     });
+    // };
+    // const sortedPaises = sortAlphabetically(paises);
+    // const sortedZonas = sortAlphabetically(zonas);
 
     const [createData, setCreateData] = React.useState({
         pais: null,
@@ -181,6 +181,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             try {
                 // Espera a que la imagen se suba y obtén la URL
                 const imageUrls = await uploadImagesFtpAndSaveLinks(formData);
+                localStorage.setItem('nombrePaisaje', JSON.stringify(createData.zona.nombre))
                 await createFullEntry(createData, imageUrls);
                 setLoadingMessage('Creando el Paisaje en la DB...');
                 setShowBackdrop(false);
@@ -191,8 +192,10 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 setImageFiles([]);
                 setFormSubmitted(false)
                 setSnackBarMessage('El Paisaje se a creado correctamente.')
-                dispatch(getInfoForUpdateNameP(createData.zona.id))
-                changeImagenExist()
+                setTimeout(() => {
+                    dispatch(getInfoForUpdateNameP(createData.zona.id))
+                    changeImagenExist();
+                }, 1500);
             } catch (error) {
                 console.log('este es el error:', String(error))
                 setErrorMessage(`Ocurrió un error: ${error}`);
@@ -241,7 +244,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
     React.useEffect(() => {
         // Aquí despachas la acción para cargar las opciones al montar el componente
         dispatch(getOptionsData());
-    }, []);
+    }, [dispatch]);
 
     return (
         <React.Fragment>
@@ -304,7 +307,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-pais"
-                                    options={sortedPaises}
+                                    options={paises}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
@@ -323,24 +326,24 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                             }}
                                             sx={{
                                                 '& .MuiInputBase-input': {
-                                                    height: '30px',
+                                                    // height: '30px',
                                                 },
                                             }}
                                         />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // filterOptions={(options, state) => {
-                                    //     const inputValue = state.inputValue.toLowerCase();
-                                    //     return options.filter((option) =>
-                                    //         option.nombre.toLowerCase().startsWith(inputValue)
-                                    //     );
-                                    // }}
+                                // filterOptions={(options, state) => {
+                                //     const inputValue = state.inputValue.toLowerCase();
+                                //     return options.filter((option) =>
+                                //         option.nombre.toLowerCase().startsWith(inputValue)
+                                //     );
+                                // }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-zonas"
-                                    options={sortedZonas}
+                                    options={zonas}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.zona}
                                     onChange={(event, newValue) => handleZonaChange(newValue)}
@@ -358,7 +361,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                             }}
                                             sx={{
                                                 '& .MuiInputBase-input': {
-                                                    height: '30px',
+                                                    // height: '30px',
                                                 },
                                             }}
                                         />}

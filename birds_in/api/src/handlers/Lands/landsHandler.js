@@ -2,17 +2,9 @@ require('dotenv').config();
 const {
    fetchOptions,
    filterOptions,
-   fetchFilterBirds,
-   sendAndCreateBird,
-   findDataById,
-   sendAndUpdateBird,
-   findPhotosId,
-   setDbCover,
    filterOptionsPaisZonas,
    getContadores,
    deleteBirdDb,
-   findDataByName,
-   findNameDuplicate,
 } = require("../../controllers/birds/birdsController");
 const {
    findNameDuplicateP,
@@ -22,7 +14,8 @@ const {
    fetchFilterLands,
    setDbCoverPaisaje,
    findPhotosIdPaisaje,
-   sendAndUpdatePaisaje
+   sendAndUpdatePaisaje,
+   deleteRegisterDb
 } = require('../../controllers/Lands/landsController');
 const ftp = require('basic-ftp');
 const { deletePhotoFromFTPPaisajes } = require('../../utils/deletFtp');
@@ -266,10 +259,10 @@ const contandoRegistros = async (req, res) => {
    }
 };
 
-const deleteBird = async (req, res) => {
+const deletePaisaje = async (req, res) => {
    const { id } = req.query
    try {
-      const message = await deleteBirdDb(id)
+      const message = await deleteRegisterDb(id)
       return res.status(200).json(message);
    } catch (error) {
       res.status(500).json({ error: 'Error interno del servidor' });
@@ -297,7 +290,7 @@ module.exports = {
    deletePhotosPaisajes,
    setCoverPhotoP,
    contandoRegistros,
-   deleteBird,
+   deletePaisaje,
    findInfoForUpdateNameP,
    checkLandsDuplicate
 }

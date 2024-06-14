@@ -12,15 +12,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDelet';
 import { Loading } from '../../../utils/Loading';
 import { EditImageCards } from '../../../Cards/EditImageCards';
+import { getAve } from '../../../../redux/slices/createSlice';
 
 export const CoverDelet = ({
     isCreate,
     showUpdateBird,
     showSearchBird,
     selectedBird, }) => {
-
+// console.log(isCreate)
     const theme = useTheme();
     const dispatch = useDispatch();
+    const nombreAve = localStorage.getItem('nombreIngles') || 'del Ave';
     const { infoAveForUpdate } = useSelector(state => state.createBird);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
@@ -118,10 +120,19 @@ export const CoverDelet = ({
     };
 
     const handleReturnSearch = () => {
+        localStorage.removeItem('nombreIngles')
         showUpdateBird(false)
         showSearchBird(true)
         selectedBird(null)
     };
+
+    React.useEffect(() => {
+        if (isCreate) {
+            setSelectedImages([]);
+            dispatch(getAve({}))
+            // localStorage.removeItem('nombreIngles')
+        }
+    }, [isCreate])
 
     return (
         <React.Fragment>
@@ -145,7 +156,7 @@ export const CoverDelet = ({
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h2' color='primary'>
-                                Imágenes del Ave
+                                Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
                             </Typography>
                         </Grid>
                         {!isCreate && (

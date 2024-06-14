@@ -2,7 +2,7 @@ const { Op, Sequelize } = require("sequelize");
 const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
-const deletePhotoFromFTP = require("../../utils/deletFtp");
+const { deletePhotoFromFTP } = require("../../utils/deletFtp");
 
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
@@ -550,71 +550,73 @@ const sendAndUpdateBird = async (
             where: {
                 id_ave: idAve,
             },
-        })
+        });
 
         if (!existingBird) {
             throw new Error("El ave con ID especificado no existe.");
         }
+
         // Verificar si los nuevos valores son diferentes de los actuales antes de actualizar
-        if (
-            ingles !== existingBird.nombre_ingles ||
-            cientifico !== existingBird.nombre_cientifico ||
-            comun !== existingBird.nombre_comun ||
-            urlWiki !== existingBird.url_wiki ||
-            urlBird !== existingBird.url_bird ||
-            grupo.id !== existingBird.grupos_id_grupo ||
-            familia.id !== existingBird.familias_id_familia
-        ) {
+        const cambios = {
+            nombre_ingles: ingles !== existingBird.nombre_ingles ? ingles : undefined,
+            nombre_cientifico: cientifico !== existingBird.nombre_cientifico ? cientifico : undefined,
+            nombre_comun: comun !== existingBird.nombre_comun ? comun : undefined,
+            url_wiki: urlWiki !== existingBird.url_wiki ? urlWiki : undefined,
+            url_bird: urlBird !== existingBird.url_bird ? urlBird : undefined,
+            grupos_id_grupo: grupo.id !== existingBird.grupos_id_grupo ? grupo.id : undefined,
+            familias_id_familia: familia.id !== existingBird.familias_id_familia ? familia.id : undefined,
+        };
+
+        // Filtrar valores undefined
+        const cambiosFiltrados = Object.fromEntries(Object.entries(cambios).filter(([key, value]) => value !== undefined));
+
+        if (Object.keys(cambiosFiltrados).length > 0) {
+            // Si nombre_ingles es diferente, hacer el cambio en dos pasos
+            if (cambiosFiltrados.nombre_ingles) {
+                const temporalName = `temp_${Math.random().toString(36).substring(2, 15)}`;
+
+                await Aves.update(
+                    { nombre_ingles: temporalName },
+                    { where: { id_ave: idAve } }
+                );
+
+                await Aves.update(
+                    { nombre_ingles: ingles },
+                    { where: { id_ave: idAve } }
+                );
+
+                delete cambiosFiltrados.nombre_ingles;
+            }
+
             // Actualizar el registro existente en la tabla "aves" y sus relaciones
-            await Aves.update(
-                {
-                    nombre_ingles: ingles,
-                    nombre_cientifico: cientifico,
-                    nombre_comun: comun,
-                    // zonas: zona,
-                    url_wiki: urlWiki,
-                    url_bird: urlBird,
-                    grupos_id_grupo: grupo.id,
-                    familias_id_familia: familia.id,
+            await Aves.update(cambiosFiltrados, {
+                where: {
+                    id_ave: idAve,
                 },
-                {
-                    where: {
-                        id_ave: idAve,
-                    },
-                }
-            );
+            });
         }
+
         for (const imageUrl of urlImagen) {
             await Imagenes_aves.create({
                 aves_id_ave: idAve,
                 url: imageUrl,
             });
         }
+
         const existingRelations = await Aves.findByPk(idAve);
         if (existingRelations) {
             // Elimina todas las relaciones de países asociadas al ave
             await existingRelations.setPaises([]);
             await existingRelations.setZonasAves([]);
         }
+
         for (const pais of paises) {
             await existingRelations.addPaises(pais.id);
         }
+
         for (const zonita of zona) {
             await existingRelations.addZonasAves(zonita.id);
         }
-        // if (existingRelations) {
-        //     // Obtén todas las relaciones de países asociadas al ave
-        //     const existingPaises = await existingRelations.getPaises();
-
-        //     // Itera sobre las relaciones y elimina cada una de ellas
-        //     for (const pais of existingPaises) {
-        //         await existingRelations.removePaises(pais);
-        //     }
-        // }
-        // console.log(paises)
-        // for (const pais of paises) {
-        //     await existingRelations.addPaises(pais.id);
-        // }
 
         return "El ave se ha actualizado correctamente.";
     } catch (error) {
@@ -632,6 +634,7 @@ const findPhotosId = async (imgsIds) => {
         throw error;
     }
 };
+
 
 const setDbCover = async (idFoto, idAve) => {
     try {

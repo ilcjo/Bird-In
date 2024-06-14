@@ -54,8 +54,8 @@ export const Landing = () => {
             alignItems: 'center',
             position: 'relative',
             zIndex: 1, // Para que esté sobre el círculo
-            height: '90vh', // Para que ocupe toda la altura
-            left: '72%',
+            height: { xs: '100vh', sm: '100vh', md: '90vh', lg: '90vh', xl: '90vh' }, // Para que ocupe toda la altura
+            left: { xs: '0%', sm: '40%', md: '72%', lg: '72%', xl: '72%' },
             borderRadius: '0px 0px 10px 10px'
             
           }}>
@@ -93,7 +93,7 @@ export const Landing = () => {
             <Typography variant="body1" sx={{ color: '#fff', fontWeight: 'bold', my: 2, fontFamily: 'Arsenal', fontSize: { xs: '0.8rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' } }}>Fotografías por Moises Sterimberg</Typography>
           </Box>
 
-          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '45%', sm: '85%', md: '76%', lg: '76%', xl: '76%' } }}>Iniciar sesión</Button>
+          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '70%', sm: '90%', md: '73%', lg: '76%', xl: '76%' } }}>Iniciar sesión</Button>
           <Index open={open} />
         </Grid>
       </Grid>

@@ -86,6 +86,8 @@ export const deleteBird = (idN) => {
       return data
     } catch (error) {
       console.log('error enviando datos:', error);
+      throw error;
+
     }
   };
 };

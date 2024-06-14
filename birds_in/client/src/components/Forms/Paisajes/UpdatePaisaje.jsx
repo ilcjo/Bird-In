@@ -8,6 +8,7 @@ import {
     CircularProgress,
     Divider,
     Grid,
+    IconButton,
     InputAdornment,
     Snackbar,
     TextField,
@@ -16,7 +17,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 //REDUX
-import { deleteBird } from '../../../redux/actions/fetchAllBirds';
+import { deleteLand } from '../../../redux/paisaje/actionsP/fetchAllLands';
 import { UpdatePaisajeImage, actualizarPaisaje, getInfoForUpdatePa } from '../../../redux/paisaje/actionsP/createLands';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
 //ICONS
@@ -26,29 +27,30 @@ import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //COMPONENTS
 import { ImageUploader } from '../../utils/ImageUploader';
+import { Loading } from '../../utils/Loading';
+import { StyledTextField } from '../../../assets/styles/MUIstyles';
 
 
-export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist }) => {
+export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSearchRegister, selectedRegister, changeImagenExist }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
 
     const { paises, zonas } = useSelector(state => state.birdSlice.options)
-    const { infoAveForUpdate } = useSelector(state => state.createBird)
     const { infoLandForUpdate } = useSelector(state => state.createLand);
 
-    const sortAlphabetically = (array) => {
-        return array.slice().sort((a, b) => {
-            if (a && a.nombre && b && b.nombre) {
-                const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-                const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-                return nameA.localeCompare(nameB);
-            }
-            return 0;
-        });
-    };
-    const sortedPaises = sortAlphabetically(paises);
-    const sortedZonas = sortAlphabetically(zonas)
+    // const sortAlphabetically = (array) => {
+    //     return array.slice().sort((a, b) => {
+    //         if (a && a.nombre && b && b.nombre) {
+    //             const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
+    //             const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
+    //             return nameA.localeCompare(nameB);
+    //         }
+    //         return 0;
+    //     });
+    // };
+    // const sortedPaises = sortAlphabetically(paises);
+    // const sortedZonas = sortAlphabetically(zonas)
 
     const initialCreateData = {
         pais: infoLandForUpdate.paise || [],
@@ -92,17 +94,20 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
     const handleDeleteRegistro = async () => {
         try {
             setShowBackdrop(true);
-            setLoadingMessage('Eliminando...');
-            await dispatch(deleteBird(infoAveForUpdate.id_ave));
+            setLoadingMessage('Eliminando Registro del Paisaje...');
+            await dispatch(deleteLand(infoLandForUpdate.id));
             setOpenSnackbar(true);
-            setSnackBarMessage('El Registro del Ave se ha eliminado correctamente');
+            setSnackBarMessage('El Registro del Paisaje se ha eliminado correctamente');
+            setTimeout(() => {
+                handleReturnSearch()
+            }, 2000);
         } catch (error) {
             console.error('Error al eliminar el registro:', error);
             setErrorMessage(`Ocurrió un error: ${error.message}`);
             setErrorSnackbarOpen(true);
         } finally {
             setShowBackdrop(false);
-            handleReturnSearch()
+
         }
     };
 
@@ -141,11 +146,11 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                     formData.append('images', imageFile[i]);
                 }
                 setLoadingMessage('Subiendo Imágenes...');
-                imageUrl = await saveImageFtpWithMessage(formData);
+                imageUrl = await uploadImagesFtpAndSaveLinks(formData);
                 setLoadingMessage('Actualizando Paisaje...');
             }
 
-            await createWithMessage(createData, imageUrl);
+            await createFullEntry(createData, imageUrl);
 
             setShowBackdrop(false);
             setLoadingMessage('Actualización en proceso...');
@@ -171,13 +176,18 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
         }
     };
 
+    const handleLogoClickW = () => {
+        if (createData.urlWiki) {
+            window.open(createData.urlWiki, '_blank');
+        }
+    };
     const handleReturnSearch = () => {
-        showUpdateBird(false)
-        showSearchBird(true)
-        selectedBird(null)
+        showUpdateRegister(false)
+        showSearchRegister(true)
+        selectedRegister(null)
     };
     //GUARDA FTP CREA EL NOMBRE
-    const saveImageFtpWithMessage = async (formData) => {
+    const uploadImagesFtpAndSaveLinks = async (formData) => {
         try {
             const response = await dispatch(UpdatePaisajeImage(formData));
             if (response && response.data && response.data.imageUrls) {
@@ -193,12 +203,12 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
     };
 
     //GUARDA DB EL HTTP+NOMBRE
-    const createWithMessage = async (createData, imageUrl) => {
+    const createFullEntry = async (createData, imageUrl) => {
         try {
             await dispatch(actualizarPaisaje({ ...createData, urlImagen: imageUrl }));
         } catch (error) {
-            console.error('Error al actualizar el ave en la base de datos:', error);
-            throw new Error('Error al actualizar el ave.');
+            console.error('Error al actualizar el Paisaje en la base de datos:', error);
+            throw new Error('Error al actualizar el Paisaje.');
         }
     };
 
@@ -291,7 +301,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-pais"
-                                    options={sortedPaises}
+                                    options={paises}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
@@ -306,14 +316,14 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-zonas"
-                                    options={sortedZonas}
+                                    options={zonas}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.zona}
                                     onChange={(event, newValue) => setCreateData({ ...createData, zona: newValue })}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
-                                            sx={{ mb: 4, height: '70px' }}
+                                            sx={{ mb: 2}}
                                         />}
                                     isOptionEqualToValue={(option, value) => option.nombre === value?.nombre}
                                 />
@@ -321,23 +331,19 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                         </Grid>
                         <Grid container spacing={1}>
                             <Grid item sx={12} md={12}>
-                                <TextField
+                                <StyledTextField
                                     name="descripcion"
                                     label='Descripción'
+                                    variant="filled"
                                     value={createData.descripcion}
                                     onChange={handleInputChange}
-                                    variant="filled"
-                                    margin="normal"
                                     fullWidth
                                     shrink='true'
-                                    sx={{
-                                        my: 2, backgroundColor: 'rgba(204,214,204,0.17)',
-                                    }}
                                 />
                             </Grid>
 
                             <Grid item sx={12} md={12}>
-                                <TextField
+                                < StyledTextField
                                     name="urlWiki"
                                     label='URL Wiki'
                                     variant="filled"
@@ -345,14 +351,21 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                                     onChange={handleInputChange}
                                     fullWidth
                                     shrink='true'
-                                    sx={{
-                                        backgroundColor: 'rgba(204,214,204,0.17)'
-                                    }}
+                                    margin="dense"
                                     InputProps={{
-
                                         startAdornment: (
                                             <InputAdornment position="start">
-                                                <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '24px', height: '24px' }} />
+
+                                                <IconButton onClick={handleLogoClickW}
+                                                    sx={{
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                    }}
+                                                >
+                                                    <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
+                                                </IconButton>
                                             </InputAdornment>
                                         ),
                                     }}
@@ -374,19 +387,10 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateBird, showSearchB
                         </Grid>
                     </Grid>
                 </Grid>
-                {/* Backdrop para mostrar durante la carga */}
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                <Loading
+                    message={loadingMessage}
                     open={showBackdrop}
-                >
-                    <>
-                        <CircularProgress color="inherit" />
-                        <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-                            {loadingMessage}
-                        </Typography>
-                    </>
-                </Backdrop>
-
+                />
             </Box>
             <Snackbar
                 open={openSnackbar}

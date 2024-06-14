@@ -24,7 +24,6 @@ export const DashAves = () => {
         alignItems="center"
         sx={{
           background: `url(${allCustom.header}) center/cover no-repeat fixed`,
-          backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',

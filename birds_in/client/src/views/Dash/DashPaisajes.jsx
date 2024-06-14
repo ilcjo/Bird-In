@@ -23,7 +23,7 @@ export const DashPaisajes = () => {
         alignItems="center"
         sx={{
           background: `url(${allCustom.background_paisaje}) center/cover no-repeat fixed`,
-          backgroundColor: theme.palette.secondary.light,
+          // backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',

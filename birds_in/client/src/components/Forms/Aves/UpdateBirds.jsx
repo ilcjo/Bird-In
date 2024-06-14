@@ -16,17 +16,18 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 //ESTADOS GLOBALES
-import { deleteBird } from '../../../redux/actions/fetchAllBirds';
 import { UpdateAveImage, actualizarAve, getInfoForUpdate } from '../../../redux/actions/createBirds';
 import { getOptionsData } from '../../../redux/actions/fetchOptions';
+import { deleteBird } from '../../../redux/actions/fetchAllBirds';
 //ICONS
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //COMPONENTS
-import { Loading } from '../../utils/Loading';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
+import { Loading } from '../../utils/Loading';
 
 export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist }) => {
 
@@ -82,17 +83,20 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const handleDeleteRegistro = async () => {
         try {
             setShowBackdrop(true);
-            setLoadingMessage('Eliminando...');
+            setLoadingMessage('Eliminando Registro del Ave...');
             await dispatch(deleteBird(infoAveForUpdate.id_ave));
             setOpenSnackbar(true);
             setSnackBarMessage('El Registro del Ave se ha eliminado correctamente');
+            setTimeout(() => {
+                handleReturnSearch()
+            }, 2000);
         } catch (error) {
             console.error('Error al eliminar el registro:', error);
             setErrorMessage(`Ocurrió un error: ${error.message}`);
             setErrorSnackbarOpen(true);
+           
         } finally {
             setShowBackdrop(false);
-            handleReturnSearch()
         }
     };
 
@@ -206,7 +210,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             window.open(createData.urlWiki, '_blank');
         }
     };
-    
+
     const handleLogoClickB = () => {
         if (createData.urlBird) {
             window.open(createData.urlBird, '_blank');
@@ -517,6 +521,19 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     }}
                                 />
 
+                            </Grid>
+                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <Button
+                                    endIcon={<DeleteForeverIcon />}
+                                    variant="contained"
+                                    color='custom'
+                                    onClick={handleDeleteRegistro}
+                                    sx={{
+                                        color: theme.palette.primary.light,
+                                    }}
+                                >
+                                    Eliminar Registro
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>

@@ -179,6 +179,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
             try {
                 // Espera a que la imagen se suba y obtén la URL
                 const imageUrls = await uploadImagesFtpAndSaveLinks(formData);
+                localStorage.setItem('nombreIngles', JSON.stringify(createData.ingles))
                 await createFullEntry(createData, imageUrls);
                 setLoadingMessage('Creando el Ave en la DB...');
                 setShowBackdrop(false);
@@ -189,8 +190,11 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                 setImageFiles([]);
                 setFormSubmitted(false)
                 setSnackBarMessage('El ave se a creado correctamente.')
-                dispatch(getInfoForUpdateName(createData.ingles))
-                changeImagenExist()
+                // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
+                setTimeout(() => {
+                    dispatch(getInfoForUpdateName(createData.ingles));
+                    changeImagenExist();
+                }, 1500); // 10000 milisegundos = 10 segundos
             } catch (error) {
                 console.log('este es el error:', String(error))
                 setErrorMessage(`Ocurrió un error: ${error}`);

@@ -1,8 +1,6 @@
 import * as React from 'react'
 import {
     Autocomplete,
-    Backdrop,
-    CircularProgress,
     Grid,
     TextField,
     Typography,
@@ -29,6 +27,7 @@ export const SearchBird = ({ changeTab }) => {
     const [showSearchBird, setShowSearchBird] = React.useState(true);
 
     const handleBirdSelect = (bird) => {
+        localStorage.setItem('nombreIngles',JSON.stringify(bird.nombre_ingles))
         setSelectedBird(bird);
         handleButtonClick();
     };
@@ -38,7 +37,7 @@ export const SearchBird = ({ changeTab }) => {
         setLoadingMessage('Cargando...');
         if (selectedBird) {
             // Envía la información al action
-           
+
             dispatch(getInfoForUpdate(selectedBird.id_ave));
             // Cambia a la pestaña deseada
             // changeTab(2);
@@ -47,7 +46,7 @@ export const SearchBird = ({ changeTab }) => {
 
         }
     };
-    
+
     React.useEffect(() => {
         if (selectedBird) {
             handleButtonClick();
@@ -67,7 +66,8 @@ export const SearchBird = ({ changeTab }) => {
                 // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
                 // validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
 
-                localStorage.setItem('birdsData', JSON.stringify(validData));
+                // localStorage.setItem('birdsData', JSON.stringify(validData));
+
                 setBirdsData(validData);
 
             } catch (error) {

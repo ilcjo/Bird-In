@@ -2,7 +2,8 @@ const { Op, Sequelize } = require("sequelize");
 const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas, Paisajes, Imagenes_paisajes } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
-const deletePhotoFromFTP = require("../../utils/deletFtp");
+const { deletePhotoFromFTPPaisajes } = require("../../utils/deletFtp");
+
 
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
@@ -572,15 +573,16 @@ const getContadores = async () => {
     }
 };
 
-const deleteBirdDb = async (idAve) => {
+const deleteRegisterDb = async (id) => {
+    // console.log(id)
     try {
-        const imagenesAves = await Imagenes_aves.findAll({
+        const imagenes = await Imagenes_paisajes.findAll({
             where: {
-                aves_id_ave: idAve,
+                paisajes_id_paisaje: id,
             },
         });
-
-        const ftpDeleteResults = await deletePhotoFromFTP(imagenesAves.map(imagen => imagen.url));
+        // console.log(imagenesAves)
+        const ftpDeleteResults = await deletePhotoFromFTPPaisajes(imagenes.map(imagen => imagen.url_paisaje));
 
         if (!ftpDeleteResults.success) {
             // Si hay un problema al borrar las fotos del FTP, puedes manejar el error aquí
@@ -588,9 +590,9 @@ const deleteBirdDb = async (idAve) => {
         }
 
         // Buscar imágenes en la base de datos después de eliminarlas del FTP
-        const remainingImages = await Imagenes_aves.findAll({
+        const remainingImages = await Imagenes_paisajes.findAll({
             where: {
-                aves_id_ave: idAve,
+                paisajes_id_paisaje: id,
             },
         });
 
@@ -601,19 +603,19 @@ const deleteBirdDb = async (idAve) => {
 
 
         // Eliminar las relaciones y la ave
-        const existingRelations = await Aves.findByPk(idAve);
+        const existingRelations = await Paisajes.findByPk(id);
         if (!existingRelations) {
-            throw new Error("La ave con el ID especificado no existe.");
+            throw new Error("El Registro con el ID especificado no existe.");
         }
 
-        await existingRelations.setPaises([]);
-        await existingRelations.setZonasAves([]);
-        await existingRelations.setImagenes_aves([]);
+        // await existingRelations.setPaises([]);
+        // await existingRelations.setZonasAves([]);
+        // await existingRelations.setImagenes_paisajes([]);
 
         // Finalmente, destruir la ave
         await existingRelations.destroy();
 
-        return "Ave eliminada correctamente junto con sus relaciones.";
+        return "Paisaje eliminada correctamente junto con sus relaciones.";
     } catch (error) {
         console.error('Error:', error);
         throw error;
@@ -653,7 +655,7 @@ module.exports = {
     setDbCoverPaisaje,
     getContadores,
     filterOptionsPaisZonas,
-    deleteBirdDb,
+    deleteRegisterDb,
     findDataByNameP,
     findNameDuplicateP
 };
