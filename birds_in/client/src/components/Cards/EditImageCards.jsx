@@ -18,7 +18,7 @@ export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsC
                 <IconButton
                     aria-label="set as cover"
                     onClick={(e) => { e.stopPropagation(); handleSetAsCover(imageUrl.id, imageUrl.url, imageUrl.destacada); }}
-                    sx={{ position: 'absolute', top: 5, right: 30, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                    sx={{ position: 'absolute', top: 5, left: 30, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                 >
                     {
                         imageUrl.destacada === true ? (
@@ -38,7 +38,7 @@ export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsC
                                 <BeenhereIcon fontSize='medium' sx={{ mb: 0.5, color: 'yellow' }} />
                             </Box>
                         ) : (
-                            <BookmarkIcon color="secondary" fontSize='medium' />
+                            <BookmarkIcon color="primary" fontSize='medium' />
                         )
                     }
                 </IconButton>

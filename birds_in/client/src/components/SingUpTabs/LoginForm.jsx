@@ -45,7 +45,7 @@ export const LoginForm = ({ changeTab }) => {
     dispatch(Boolean(false))
   };
 
-  const handleegisterLinkClicRk = (e) => {
+  const handleRegisterLinkClick = (e) => {
     e.preventDefault();
     const numOne = 1
     changeTab(numOne);
@@ -65,6 +65,7 @@ export const LoginForm = ({ changeTab }) => {
       setIsCaptchaVerified(false);
     }
   };
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     // if (!isCaptchaVerified) {
@@ -104,8 +105,6 @@ export const LoginForm = ({ changeTab }) => {
     }
   };
 
-  
-
   return (
     <Box sx={{ margin: '10px' }}>
       <div>
@@ -114,7 +113,7 @@ export const LoginForm = ({ changeTab }) => {
         </Typography>
         <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
           Aun no eres miembro ?
-          <MuiLink onClick={handleegisterLinkClicRk} color="primary.light" underline="none"
+          <MuiLink onClick={handleRegisterLinkClick} color="primary.light" underline="none"
             sx={{
               cursor: 'pointer',
               '&:hover': {
@@ -162,22 +161,18 @@ export const LoginForm = ({ changeTab }) => {
             onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
             error={errorTextPass !== ''}
             helperText={errorTextPass}
-           
             InputProps={{
-              
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     edge="end"
                     onClick={() => setShowPassword(!showPassword)}
-
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
@@ -188,7 +183,7 @@ export const LoginForm = ({ changeTab }) => {
               },
             }}
           />
-          <Typography variant="h5" sx={{mb: 5, mt:2}}>
+          <Typography variant="h5" sx={{ mb: 5, mt: 2 }}>
             {/* <ReCAPTCHA
               sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
               onChange={handleCaptchaVerification}
@@ -201,12 +196,10 @@ export const LoginForm = ({ changeTab }) => {
                 },
                 marginLeft: '8px',
                 marginTop: '10px',
-                
+
               }} style={{ color: theme.palette.primary.main }}>
               Olvidó su contraseña?
             </MuiLink>
-
-
           </Typography>
 
         </form>
@@ -216,11 +209,10 @@ export const LoginForm = ({ changeTab }) => {
             margin: 'auto', // Centrar horizontalmente el Stack
             width: 'fit-content', // Ajustar el ancho al contenido
           }}
-         >
+        >
           <Button variant="outlined" onClick={handleClose} color="primary">
             Cancelar
           </Button>
-
           <LoadingButton
             onClick={handleLogin}
             endIcon={<SendIcon />}
@@ -234,7 +226,7 @@ export const LoginForm = ({ changeTab }) => {
           <Button
             onClick={handleClose}
             variant="outlined"
-            color='secondary'
+            color='error'
             startIcon={<CloseIcon />}>Cerrar</Button>
         </Stack>
       </Grid>

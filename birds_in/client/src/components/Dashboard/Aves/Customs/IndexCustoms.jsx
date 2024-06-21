@@ -7,7 +7,7 @@ import { CoverLogin } from './CoverLogin';
 import { StyledTab, StyledTabs } from '../../../../assets/styles/MUIstyles'
 
 
-export const IndexCustome = () => {
+export const IndexCustoms = () => {
     const [selectedTab, setSelectedTab] = React.useState(0);
 
     const handleTabChange = (event, newValue) => {
@@ -22,7 +22,6 @@ export const IndexCustome = () => {
                 textColor='primary'
                 indicatorColor="primary"
                 aria-label="tabsInfoActualizar"
-                selectionfollowsfocu='true'
             >
                 <StyledTab label={<Typography variant='h5' >Portadas</Typography>} />
                 <StyledTab label={<Typography variant='h5' >Inicio de Sesión</Typography>} onClick={() => setSelectedTab(1)} />

@@ -4,14 +4,14 @@ import { useTheme } from '@mui/material/styles';
 
 export const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)',
-    backdropFilter: 'blur(5px)',
+    backdropFilter: 'blur(2px)',
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     marginRight: '10%',
     marginLeft: '10%',
     color: theme.palette.primary.main, 
     '& .Mui-selected': {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.custom.light,
     },
 }));
 

@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 //ESTADOS GLOBALES
-import {  sendParameter } from '../../../redux/actions/fetchAllBirds'
+import { sendParameter } from '../../../redux/actions/fetchAllBirds'
 import { cargando, copingFilters, isOneBird, resetCurrentFilters, saveFilters, setNoMoreResults } from '../../../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../../../redux/actions/fetchOptions'
 //ICONS
@@ -188,11 +188,11 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     height: 'auto',
                     borderRadius: '20px 20px 20px 20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
-                    padding: 3,
+                    padding: { xs: 0, md: 2 },
                 }} >
                 <Grid item >
-                    <Typography variant="h2" color='primary.light' sx={{ m: 1 }}>
-                        Búsqueda Avanzada de Aves
+                    <Typography variant="h2" color='primary.light' sx={{ m: 1, mt: -1 }}>
+                        Búsqueda Avanzada
                     </Typography>
                 </Grid>
                 <Grid item container alignItems="center">
@@ -211,7 +211,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         label="Grupo"
                                         sx={{
                                             '& .MuiInputBase-input': {
-                                                height: '30px',
+                                                height: '26px',
                                             },
                                         }}
                                     />}
@@ -252,7 +252,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         label="Familia"
                                         sx={{
                                             '& .MuiInputBase-input': {
-                                                height: '30px',
+                                                height: '26px',
                                             },
                                         }}
                                     />}
@@ -293,7 +293,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             label="Países"
                                             sx={{
                                                 '& .MuiInputBase-input': {
-                                                    height: '30px',
+                                                    height: '26px',
                                                 },
                                             }}
                                         />}
@@ -334,7 +334,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             label="Zonas"
                                             sx={{
                                                 '& .MuiInputBase-input': {
-                                                    height: '30px',
+                                                    height: '26px',
                                                 },
                                             }}
                                         />}
@@ -376,7 +376,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             label="Nombre Científico"
                                             sx={{
                                                 '& .MuiInputBase-input': {
-                                                    height: '30px',
+                                                    height: '26px',
                                                 },
                                             }}
                                         />}
@@ -416,7 +416,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                             label="Nombre Inglés"
                                             sx={{
                                                 '& .MuiInputBase-input': {
-                                                    height: '30px',
+                                                    height: '26px',
                                                 },
                                             }}
                                         />}
@@ -442,7 +442,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 />
                             </FormControl>
                         </Grid>
-                        <Stack spacing={3} direction="row" justifyContent="center"
+                        <Stack spacing={1} direction="row" justifyContent="center"
                             alignItems="center"
                             sx={{
                                 margin: '20px auto', // Centrar horizontalmente el Stack

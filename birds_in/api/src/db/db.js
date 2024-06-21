@@ -53,7 +53,7 @@ db.models = Object.fromEntries(capsEntries)
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Aves, Familias, Grupos, Imagenes_aves, Paises, Usuarios, Customize_page, Zonas, Paisajes, Imagenes_paisajes } = db.models;
+const { Aves, Familias, Grupos, Imagenes_aves, Paises, Usuarios, Customize_page, Zonas, Paisajes, Imagenes_paisajes, Token } = db.models;
 
 // UNO A UNO
 Aves.belongsTo(Familias, { foreignKey: 'familias_id_familia' })

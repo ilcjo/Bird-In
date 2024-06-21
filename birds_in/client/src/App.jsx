@@ -17,6 +17,7 @@ import { DashPaisajes } from './views/Dash/DashPaisajes'
 import { ProtectedRoute } from './ProtectedRoute'
 import { MenuBar } from './components/Menus/MenuBar'
 import { PhotosDetailAves } from './components/Mains/Aves/PhotosDetailAves'
+import { TimeOut } from './components/utils/TimeOut'
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/tab" element={<Index />} />
       <Route path="/Recuperar" element={<PassRecover />} />
-      <Route path="/menu"
+      <Route path='/tiempo' element={<TimeOut />} />
+      <Route path="/menu" 
         element={
           <ProtectedRoute roles={['user', 'admin']} >
             <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
@@ -87,7 +89,7 @@ function App() {
         } />
       <Route path="/panelpaisajes"
         element={<ProtectedRoute roles={['admin']} >
-           <MenuBar ShowFilterButton={false} ShowBackButton={true} />
+          <MenuBar ShowFilterButton={false} ShowBackButton={true} />
           <DashPaisajes />
         </ProtectedRoute>
         } />

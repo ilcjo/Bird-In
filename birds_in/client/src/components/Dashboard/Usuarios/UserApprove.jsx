@@ -99,19 +99,6 @@ export const UserApprove = () => {
   };
 
 
-  const sortAlphabetically = (array) => {
-    return array.slice().sort((a, b) => {
-      // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
-      if (a && a.nombre && b && b.nombre) {
-        const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-        const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-        return nameA.localeCompare(nameB);
-      }
-      // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
-      return 0;
-    });
-  };
-  const sortedNombres = sortAlphabetically(users);
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
@@ -148,7 +135,7 @@ export const UserApprove = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sortedNombres.map((item, index) => (
+                {users.map((item, index) => (
                   <StyledTableRow key={item.index}>
                     <TableCell align="center" style={{ color: 'white' }}>
                       {item.nombre}

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux'
@@ -93,7 +94,7 @@ export const Landing = () => {
             <Typography variant="body1" sx={{ color: '#fff', fontWeight: 'bold', my: 2, fontFamily: 'Arsenal', fontSize: { xs: '0.8rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' } }}>Fotografías por Moises Sterimberg</Typography>
           </Box>
 
-          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '70%', sm: '90%', md: '73%', lg: '76%', xl: '76%' } }}>Iniciar sesión</Button>
+          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '70%', sm: '90%', md: '73%', lg: '70%', xl: '70%' } }}>Iniciar sesión</Button>
           <Index open={open} />
         </Grid>
       </Grid>

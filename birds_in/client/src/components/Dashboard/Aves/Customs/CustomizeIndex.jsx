@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { getAllCustomizes } from '../../../../redux/actions/Custome';
 import { useDispatch } from 'react-redux';
-import { IndexCustome } from './IndexCustome';
+import { IndexCustoms } from './IndexCustoms';
 import { Grid, useTheme } from '@mui/material';
 
 
@@ -16,7 +16,7 @@ export const Customize = () => {
 
     return (
         <React.Fragment>
-            <IndexCustome />
+            <IndexCustoms />
             <Grid container spacing={5} sx={{
                 display: 'flex',
                 alignItems: 'center',

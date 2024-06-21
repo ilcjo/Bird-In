@@ -2,7 +2,7 @@
 
 const nodemailer = require('nodemailer');
 require('dotenv').config();
-const {EMAIL_PASS, EMAIL_USER} = process.env
+const { EMAIL_PASS, EMAIL_USER } = process.env
 
 // Configurar Nodemailer
 const transporter = nodemailer.createTransport({
@@ -205,7 +205,7 @@ const sendApprovalEmail = async (email, userName) => {
   }
 };
 // Función para enviar el correo de aprobación
-const sendEmailRecoverPass = async (email, token) => {
+const sendEmailRecoverPass = async (email, link) => {
   try {
     const emailBodyApproval = `
           <!DOCTYPE html>
@@ -214,7 +214,7 @@ const sendEmailRecoverPass = async (email, token) => {
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Aprobación de cuenta</title>
+            <title>Recuperación de Contraseña</title>
             <style>
               /* Establecer el ancho del contenedor principal */
               .email-container {
@@ -237,8 +237,9 @@ const sendEmailRecoverPass = async (email, token) => {
         
               <!-- Contenido del Correo -->
               <div style="text-align: center; padding: 20px;">
-                <p style="text-align: left;"> Número de verificación: </p>
-              </div>
+                        <p style="text-align: left;">Para recuperar tu contraseña, haz clic en el siguiente enlace:</p>
+                        <p style="text-align: center;"><a href="${link}">${link}</a></p>
+                    </div>
         
               <!-- Pie de Página -->
               <div style="background-color: #f1f1f1; padding: 10px; text-align: center;">
@@ -252,7 +253,7 @@ const sendEmailRecoverPass = async (email, token) => {
         `;
 
     const mailOptions = {
-      from:  'ileanacanofotografia@gmail.com',
+      from: 'ileanacanofotografia@gmail.com',
       to: email,
       subject: 'Recuperación de contraseña las Aves',
       html: emailBodyApproval,
@@ -262,12 +263,12 @@ const sendEmailRecoverPass = async (email, token) => {
     const info = await transporter.sendMail(mailOptions);
 
     // Registro del correo enviado
-    console.log(`Correo de aprobación enviado a ${email}: ${info.response}`);
+    console.log(`Correo de recuperación enviado a ${email}: ${info.response}`);
   } catch (error) {
     // Manejo de errores
-    console.error('Error al enviar el correo de aprobación:', error.message);
-    throw new Error('Error al enviar el correo de aprobación de cuenta');
+    console.error('Error al enviar el correo de recuperación:', error.message);
+    throw new Error('Error al enviar el correo de recuperación de cuenta');
   }
 };
 
-module.exports = { sendWelcomeEmail, sendApprovalEmail };
+module.exports = { sendWelcomeEmail, sendApprovalEmail, sendEmailRecoverPass };

@@ -15,7 +15,7 @@ export const Aves = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, infoBirds, filters, noMoreResults, oneBird } = useSelector(state => state.birdSlice)
+  const { loading, infoBirds, filters, noMoreResults, oneBird, total } = useSelector(state => state.birdSlice)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
@@ -67,7 +67,7 @@ export const Aves = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
-          p: infoBirds.length === 1 ? 0 : 8
+          p: infoBirds.length === 1 ? 0 : 2
         }}
       >
         <Dialog
@@ -79,7 +79,7 @@ export const Aves = () => {
           <FiltersAves isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {infoBirds.length === 1 && (
-          <Grid container>
+          <Grid container >
             <PhotosDetailAves bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} />
           </Grid>
         )}
@@ -103,24 +103,25 @@ export const Aves = () => {
             <Grid container
               alignItems="baseline"
               justifyContent="space-between"
-              spacing={2}
+              spacing={1}
               sx={{ width: '100%' }}>
-              <Grid item>
+              <Grid item xs={12} sm={6} lg={6}>
                 <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center' }}>
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
                 <Typography variant='h6' color='white'>
-                  Total de Aves Filtradas: 0
+                  Total de Aves Filtradas: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
               </Grid>
-              <Grid item >
+              <Grid item xs={12} sm={6} lg={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
                 <Button
                   sx={{
                     fontSize: '1rem',
                     fontWeight: 'bold',
-                    alignSelf: 'center',
+                    mt: { xs: 0, md: 0 },
+                    mb: { xs: 3, md: 0 }
                   }}
                   variant="outlined"
                   onClick={stepBack}

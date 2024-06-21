@@ -43,8 +43,8 @@ export const Cards = React.memo(({ foto, name, index }) => {
 
   return (
     <Card sx={{
-      minWidth: 420,
-      maxWidth: 420,
+      minWidth: { xs: 380, lg: 405 },
+      maxWidth: { xs: 380, lg: 405 },
       minHeight: 330,
       maxHeight: 330,
       position: 'relative',
@@ -61,7 +61,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
             <CardMedia
               component="img"
               height="350"
-              width='420'
+              width='400'
               image={destacadaImage.url}
               alt={name}
               key={index}

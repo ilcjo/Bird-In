@@ -383,7 +383,7 @@ const sendAndCreateBird = async (
             throw new Error('El nombre en inglés es obligatorio.');
         }
         // Aplicar conversiones solo si los datos opcionales están presentes
-        const converIngles = ingles ? ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase() : null;
+        // const converIngles = ingles ? ingles.charAt(0).toUpperCase() + ingles.slice(1).toLowerCase() : null;
         const converCientifico = cientifico ? cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase() : null;
         const converComun = comun ? comun.charAt(0).toUpperCase() + comun.slice(1).toLowerCase() : null;
         // const converZona = zona ? zona.charAt(0).toUpperCase() + zona.slice(1).toLowerCase() : null;
@@ -393,9 +393,9 @@ const sendAndCreateBird = async (
             };
         });
         // Crear un nuevo registro en la tabla "aves" solo si el nombre en inglés está presente
-        if (converIngles) {
+        if (ingles) {
             const createNewBird = await Aves.create({
-                nombre_ingles: converIngles,
+                nombre_ingles: ingles,
                 nombre_cientifico: converCientifico,
                 nombre_comun: converComun,
                 url_wiki: urlWiki,
@@ -415,7 +415,7 @@ const sendAndCreateBird = async (
             // Busca el ave recién creada por el nombre en inglés
             const createdBird = await Aves.findOne({
                 where: {
-                    nombre_ingles: converIngles
+                    nombre_ingles: ingles
                 },
 
             });

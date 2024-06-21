@@ -1,5 +1,7 @@
-const { Usuarios } = require('../../db/db');
+const { Usuarios, Token } = require('../../db/db');
 const { sendApprovalEmail } = require('../../utils/emailService');
+const { format } = require('date-fns');
+const bcrypt = require('bcrypt');
 
 const saveRegister = async (email, nombre, pais, pass,) => {
     try {
@@ -37,9 +39,16 @@ const getAllUsersDb = async (status) => {
             where: {
                 status: status,
             },
+            order: [['nombre', 'ASC']], // Ordenar por nombre en orden ascendente (alfabético)
         });
+        // Formatear la fecha createdAt para que solo muestre la parte de la fecha
+        const usersWithFormattedDate = users.map(user => ({
+            ...user.dataValues,
+            createdAt: format(new Date(user.createdAt), 'yyyy-MM-dd') // Formatear la fecha
+        }));
+
         // Notificar al usuario que su registro se ha realizado correctamente.
-        return users
+        return usersWithFormattedDate;
     } catch (error) {
         // Manejar errores, por ejemplo, si no se puede crear el usuario.
         console.error('Error al registrar usuario:', error);
@@ -54,17 +63,17 @@ const changeApprovedStatus = async (userId) => {
 
         // Verificar si el usuario existe
         if (!userToUpdate) {
-            throw new Error ('Usuario no encontrado.' );
+            throw new Error('Usuario no encontrado.');
         }
 
         // Actualizar el estado a 'approved'
         await userToUpdate.update({ status: 'approved' });
-          // Enviar el correo de aprobación
+        // Enviar el correo de aprobación
         const emailResponse = await sendApprovalEmail(
-            
-                userToUpdate.email,
-                userToUpdate.nombre,
-            
+
+            userToUpdate.email,
+            userToUpdate.nombre,
+
         );
 
         // Puedes hacer algo con emailResponse si es necesario
@@ -97,12 +106,72 @@ const deleteCompleteU = async (userId) => {
         throw error;
     }
 };
+const verifyTokenDb = async (token) => {
+    try {
+        const tokenRecord = await Token.findOne({ where: { token: token } });
 
+        if (!tokenRecord) {
+            return 'Token inválido';
+        }
+
+        if (tokenRecord.expiresAt < new Date()) {
+            return 'Token expirado';
+        }
+
+        return tokenRecord;
+    } catch (error) {
+        throw new Error(error.message); // Lanzar el error para manejarlo en el contexto donde se llama
+    }
+};
+
+const saveTokenToDatabase = async (token, email) => {
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutos a partir de ahora
+
+    await Token.create({
+        token: token,
+        email: email,
+        expiresAt: expiresAt,
+        used: false
+    });
+};
+
+const updatePass = async (pass, token) => {
+    try {
+        // Buscar el token en la base de datos
+        const tokenRecord = await Token.findOne({ where: { token: token } });
+
+        if (!tokenRecord) {
+            throw new Error('Token no encontrado');
+        }
+
+        // Obtener el correo electrónico del tokenRecord
+        const userEmail = tokenRecord.email;
+
+        // Buscar al usuario en la base de datos de usuarios
+        const userRecord = await Usuarios.findOne({ where: { email: userEmail } });
+
+        if (!userRecord) {
+            throw new Error('Usuario no encontrado');
+        }
+        // Actualizar la contraseña del usuario
+        userRecord.pass = hashPassword(pass);
+
+        // Guardar los cambios en la base de datos
+        await userRecord.save();
+
+        return { message: 'Contraseña actualizada correctamente' };
+    } catch (error) {
+        throw new Error(error.message); // Lanzar el error para manejarlo en el contexto donde se llama
+    }
+};
 
 
 module.exports = {
     saveRegister,
     getAllUsersDb,
     changeApprovedStatus,
-    deleteCompleteU
+    deleteCompleteU,
+    verifyTokenDb,
+    saveTokenToDatabase,
+    updatePass
 }

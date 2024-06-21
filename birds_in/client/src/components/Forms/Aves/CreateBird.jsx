@@ -237,6 +237,7 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                 });
         });
     };
+    
     const handleLogoClickW = () => {
         if (createData.urlWiki) {
             window.open(createData.urlWiki, '_blank');

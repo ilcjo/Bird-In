@@ -13,7 +13,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     width: '100%',
     // marginLeft: '150px',
     '& .Mui-selected': {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.custom.light,
     },
 }));
 const StyledTab = styled(Tab)({

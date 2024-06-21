@@ -97,8 +97,8 @@ export const SearchBird = ({ changeTab }) => {
                         height: '40vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                        marginTop: '1px',
-                        borderRadius: '20px',
+                        marginTop: 'auto',
+                        borderRadius: '10px',
                     }} >
                         <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
                             <Typography variant="h2" color="primary">

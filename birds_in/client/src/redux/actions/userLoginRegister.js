@@ -129,7 +129,7 @@ export const borrarUsuario = (id) => {
 export const recoverPass = (email) => {
     return async (dispatch) => {
         try {
-            const response = await axios.delete(`borrarUsuario?id=${email}`);
+            const response = await axios.post(`recuperar?email=${email}`);
             const data = response.data
             return data
         } catch (error) {
@@ -138,3 +138,30 @@ export const recoverPass = (email) => {
         }
     }
 };
+
+
+export const verifyToken = (token) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`verificar?token=${token}`);
+            const data = response.data;
+            return data
+        } catch (error) {
+            console.error("Error al verificar el token:", error);
+            throw error;
+        }
+    };
+}
+
+export const changePassToken = (pass, token) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`cambio?pass=${pass}&token=${token}`);
+            const data = response.data;
+            return data
+        } catch (error) {
+            console.error("Error al verificar el token:", error);
+            throw error;
+        }
+    };
+}

@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../../redux/slices/createSlice';
 //COMPONENTS
 import { SearchBird } from './Update/SearchBird';
-import { Customize } from './Customes/CustomizeIndex';
+import { Customize } from './Customs/CustomizeIndex';
 import { GruposOptions } from './Options/GruposOptions';
 import { FamiliasOptions } from './Options/FamiliasOptions';
 import { ZonasOptions } from './Options/ZonasOptions';

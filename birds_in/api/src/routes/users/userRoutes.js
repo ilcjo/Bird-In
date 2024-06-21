@@ -8,7 +8,9 @@ const {
     verifyEmail,
     changeStatus,
     deleteUser,
-    recoverPass
+    recoverPass,
+    verifyTokenRecover,
+    changePassRecover
 } = require('../../handlers/users/userHandle')
 
 const userRouter = Router()
@@ -20,7 +22,9 @@ userRouter.post('/register', registerUser)
     .post('/verificacion', verifyEmail)
     .put('/status', changeStatus)
     .delete('/borrarUsuario', deleteUser)
-    .post('/recuperarContraseña', recoverPass)
+    .post('/recuperar', recoverPass)
+    .get('/verificar', verifyTokenRecover)
+    .post('/cambio', changePassRecover)
 
 module.exports = userRouter
 

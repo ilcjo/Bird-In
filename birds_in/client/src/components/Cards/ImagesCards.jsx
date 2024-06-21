@@ -25,7 +25,7 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
     <Card
       sx={{
         borderRadius: '6px',
-        width: 380, minWidth: 400, margin: 0,
+        width: { xs: 360, md: 390 }, minWidth: { xs: 360, md: 390 }, margin: 0,
         flexDirection: 'column',
         overflow: 'hidden', // Oculta cualquier contenido que se desborde
 
@@ -41,10 +41,10 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
           key={foto}
           loading="lazy"
           style={{
-            width: 420,
+            width: { xs: 360, md: 'auto' },
             height: 290, // Establece la altura al 100% para ocupar todo el espacio de la tarjeta
             objectFit: 'scale-down',
-            borderRadius: '15px',
+            // borderRadius: '15px',
           }}
         />
       </CardActionArea>

@@ -87,8 +87,11 @@ export const HomeMenu = () => {
                   position: 'relative',
                   overflow: 'hidden',
                   width: '100%',
-                  height: '99%',
-                  // mt: 1
+                  height: { xs: '600px', md: '99%' }, // Altura fija para XS y altura automática para MD y superiores
+                  minHeight: {
+                    xs: '600px' // Altura mínima para XS
+                  },
+                  borderRadius: { xs: 0, md: '0px 0px 100px 100px' }
                 }}
               >
                 <img
@@ -98,7 +101,7 @@ export const HomeMenu = () => {
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    borderRadius: '0px  0px 100px 100px'
+                    borderRadius: { xs: 0, md: '0px 0px 100px 100px' }
                   }}
                   onClick={() => handleSectionClick(section.id)}
                 />
@@ -110,12 +113,10 @@ export const HomeMenu = () => {
                     width: '100%',
                     background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
                     color: '#fff',
-                    // padding: '10px',
-                    borderRadius: ' 0px 0px 100px 100px',
-
+                    borderRadius: { xs: 0, md: '0px 0px 100px 100px' },
                   }}
                 >
-                  <Typography variant="h1" color="primary.main" sx={{ marginBottom: '6px', textAlign: 'center', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)', }}>
+                  <Typography variant="h1" color="primary.main" sx={{ marginBottom: '6px', textAlign: 'center', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }}>
                     {section.title}
                   </Typography>
                   <Typography variant="h4" color="primary.light" sx={{ textAlign: 'center' }}>

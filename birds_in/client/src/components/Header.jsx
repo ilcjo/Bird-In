@@ -12,16 +12,17 @@ export const Header = ({ imageUrl, bird, back }) => {
       sx={{
         position: 'relative',
         width: '100%',
-        height: '90vh',
+        height: { xs: 'auto', md: '90vh' },
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
+        
       }}
     >
       <Box
         component="div"
         sx={{
-          width: {xs:'100%', md: '70%', lg: '70%'},
-          height: { xs: '500PX', md: '100%' },
+          width: { xs: '100%', md: '70%', lg: '70%' },
+          height: { xs: '500px', md: '100%' },
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -33,18 +34,19 @@ export const Header = ({ imageUrl, bird, back }) => {
         component="div"
         sx={{
           width: { xs: '100%', md: '30%' },
-          height: { xs: '90%', md: '100%' },
+          height: { xs: 'auto', md: '100%' },
           backgroundColor: 'rgba(16, 51, 0, 0.9)',
           backdropFilter: 'blur(10px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'flex-start',
           padding: 5,
+          // borderRadius: '0px 0px 0px 0px',
         }}
       >
         {bird.map((data, index) => (
           <React.Fragment key={index}>
-            <Grid container spacing={1} sx={{ mt: 4 }}>
+            <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
                 <Typography variant='h6' color='primary.light' sx={{ mb: 2 }}>
                   {data.familia.nombre || 'N/A'} / {data.grupo.nombre || 'N/A'}
@@ -97,8 +99,8 @@ export const Header = ({ imageUrl, bird, back }) => {
               </Grid>
             </Grid>
             <Box sx={{
-              backgroundColor: 'rgba(16, 51, 0, 0.5)',
-              backdropFilter: 'blur(10px)',
+              // backgroundColor: 'rgba(16, 51, 0, 0.5)',
+              // backdropFilter: 'blur(10px)',
               p: 2,
               borderRadius: '10px',
             }} >
@@ -139,8 +141,8 @@ export const Header = ({ imageUrl, bird, back }) => {
         <Box
           sx={{
             position: 'absolute',
-            bottom: 1,
-            right: '100%',
+            bottom: { xs: 566, md: 1 },
+            right: { xs: '0%', md: '100%' },
           }}
         >
           <Button

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Button, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Button, Divider, Grid, Typography, useTheme } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ImagesCards } from '../../Cards/ImagesCards'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -38,7 +38,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen }) => {
     };
 
     React.useEffect(() => {
-        // Restablece noMoreResults a false cuando se renderiza el componente
+        // Restablece noMoreResults a false cuando se render el componente
         dispatch(setNoMoreResults(true));
     }, [dispatch]);
 
@@ -52,7 +52,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen }) => {
             {mainImage && (
                 <Header imageUrl={mainImage} bird={birds} back={stepBack} />
             )}
-            <Grid container spacing={3} sx={{ background: '#86ac8e', p: 8 }}>
+            <Grid container spacing={0} sx={{ background: '#86ac8e', p: { xs: 2, md: 5 } }}>
                 {/* Galería de imágenes */}
                 <Box
                     sx={{
@@ -64,21 +64,32 @@ export const PhotosDetailAves = ({ setIsFilterOpen }) => {
                         margin: 'auto',
                         backgroundColor: 'rgba(32,60,18, 0.5)',
                         backdropFilter: 'blur(8px)',
-                        padding: '40px',
+                        padding: { xs: '10px', md: '40px' },
                         borderRadius: '20px',
                         mb: 10
                     }}
                 >
-
                     <Grid container spacing={2} justifyContent="center" sx={{ mt: -2 }}>
                         <Grid item xs={12}>
                             <Typography variant='h2' color='primary' sx={{ display: 'flex', alignItems: 'center', ml: 4 }}>
                                 Galería de Imágenes
                             </Typography>
+                            <Box sx={{ ml: 4 }}>
+                                <Divider
+                                    sx={{
+                                        my: 2,
+                                        borderColor: theme.palette.primary.main,
+                                        width: '25%',
+                                        height: '2px',
+                                        borderBottomWidth: '3px',
+                                        borderRadius: '10px',
+                                    }}
+                                />
+                            </Box>
                         </Grid>
 
                         {allImages.length === 0 && (
-                            <Typography variant="h2" color="primary.main" sx={{ mt: 4, mr: '60%' }}>
+                            <Typography variant="h2" color="primary.main" sx={{ mt: 4, textAlign: 'left', ml: 4 }}>
                                 No se han subido imágenes.
                             </Typography>
                         )}
@@ -91,7 +102,6 @@ export const PhotosDetailAves = ({ setIsFilterOpen }) => {
                                 />
                             </Grid>
                         ))}
-
                     </Grid>
                 </Box>
             </Grid>
@@ -99,6 +109,6 @@ export const PhotosDetailAves = ({ setIsFilterOpen }) => {
                 message={loadingMessage}
                 open={showBackdrop}
             />
-        </React.Fragment >
+        </React.Fragment>
     )
 };

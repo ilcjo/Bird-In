@@ -3,7 +3,7 @@ import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 //COMPONENTS
 import { CreateBird } from '../../../Forms/Aves/CreateBird'
-import { CoverDelet } from './CoverDelet';
+import { CoverDelete } from './CoverDelete';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -73,7 +73,7 @@ export const IndexTabsCreate = ({
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDelet
+                        <CoverDelete
                             isCreate={true}
                             changeTab={changeTab}
                             showUpdateBird={showUpdateBird}

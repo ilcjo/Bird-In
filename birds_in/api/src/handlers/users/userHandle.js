@@ -1,8 +1,8 @@
-const { saveRegister, getAllUsersDb, changeApprovedStatus, deleteCompleteU } = require("../../controllers/users/userController")
+const { saveRegister, getAllUsersDb, changeApprovedStatus, deleteCompleteU, verifyTokenDb, saveTokenToDatabase, updatePass } = require("../../controllers/users/userController")
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { generateToken, generateTokenRecoverEmail } = require("../../utils/passport");
-const { sendWelcomeEmail, sendApprovalEmail } = require("../../utils/emailService");
+const { sendWelcomeEmail, sendApprovalEmail, sendEmailRecoverPass } = require("../../utils/emailService");
 const axios = require('axios')
 require('dotenv').config();
 const { APIKEY_VERIFY } = process.env;
@@ -125,11 +125,40 @@ const recoverPass = async (req, res) => {
     const { email } = req.query
     try {
         const token = await generateTokenRecoverEmail(email)
-        const link = `http://http://localhost:5173/recover?token=${token}`;
-        const response = await  (email)
-        return res.status(200).json(response)
+        await saveTokenToDatabase(token, email);
+        const link = `http://localhost:5173/recuperar?token=${token}`;
+        await sendEmailRecoverPass(email, link)
+        return res.status(200).json({ message: 'Correo de recuperación enviado.' })
     } catch (error) {
         res.status(500).json({ error: error.message })
+    }
+};
+const changePassRecover= async (req, res) => {
+    const { pass, token } = req.query
+    try {
+        const response = await updatePass(pass, token)
+        return res.status(200).json({ message: 'Contraseña Actualizada.' })
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const verifyTokenRecover = async (req, res) => {
+    const { token } = req.query;
+
+    try {
+        const tokenStatus = await verifyTokenDb(token);
+        // console.log(tokenStatus)
+        if (tokenStatus === 'Token inválido') {
+            return res.status(400).send('Token inválido');
+        } else if (tokenStatus === 'Token expirado') {
+            return res.status(400).send('Token expirado');
+        }
+
+        return res.status(200).send('Token válido');
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
 
@@ -142,5 +171,7 @@ module.exports = {
     verifyEmail,
     changeStatus,
     deleteUser,
-    recoverPass
+    recoverPass,
+    verifyTokenRecover,
+    changePassRecover
 }

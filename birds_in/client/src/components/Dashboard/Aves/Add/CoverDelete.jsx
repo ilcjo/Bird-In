@@ -14,7 +14,7 @@ import { Loading } from '../../../utils/Loading';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 import { getAve } from '../../../../redux/slices/createSlice';
 
-export const CoverDelet = ({
+export const CoverDelete = ({
     isCreate,
     showUpdateBird,
     showSearchBird,
