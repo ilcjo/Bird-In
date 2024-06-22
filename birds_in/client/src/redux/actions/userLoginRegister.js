@@ -156,7 +156,20 @@ export const verifyToken = (token) => {
 export const changePassToken = (pass, token) => {
     return async (dispatch) => {
         try {
-            const response = await axios.get(`cambio?pass=${pass}&token=${token}`);
+            const response = await axios.post(`cambio?pass=${pass}&token=${token}`);
+            const data = response.data;
+            return data
+        } catch (error) {
+            console.error("Error al verificar el token:", error);
+            throw error;
+        }
+    };
+}
+
+export const changePassDirect = (pass, userId) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post(`cambioDirecto?pass=${pass}&userId=${userId}`);
             const data = response.data;
             return data
         } catch (error) {

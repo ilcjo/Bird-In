@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Button, Divider, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ImagesCards } from '../../Cards/ImagesCards'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -88,12 +88,12 @@ export const PhotosDetailAves = ({ setIsFilterOpen }) => {
                             </Box>
                         </Grid>
 
-                        {allImages.length === 0 && (
+                        {allImages?.length === 0 && (
                             <Typography variant="h2" color="primary.main" sx={{ mt: 4, textAlign: 'left', ml: 4 }}>
                                 No se han subido imágenes.
                             </Typography>
                         )}
-                        {allImages.map((image, index) => (
+                        {allImages?.map((image, index) => (
                             <Grid item key={index}>
                                 <ImagesCards
                                     foto={image.url}

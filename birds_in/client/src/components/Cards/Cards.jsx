@@ -35,6 +35,8 @@ export const Cards = React.memo(({ foto, name, index }) => {
     setShowBackdrop(true);
     const selectOption = { ingles: [{ nombre: name }] };
     memoizedDispatch(selectOption);
+     // Guardar la información del ave seleccionada en localStorage
+     localStorage.setItem('selectedBird', JSON.stringify(selectOption));
     setTimeout(() => {
       setShowBackdrop(false); // Desactivar el estado de carga después de 2 segundos
       setIsGalleryOpen(true);

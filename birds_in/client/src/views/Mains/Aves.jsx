@@ -37,6 +37,7 @@ export const Aves = () => {
   const stepBack = () => {
     setFilterDialogOpen(true)
     dispatch(resetInfoBird())
+    dispatch(isOneBird(null))
   };
 
   React.useEffect(() => {

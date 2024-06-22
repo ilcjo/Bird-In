@@ -34,37 +34,24 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         }
     }, [nombreIngles]);
 
-    const sortAlphabetically = (data) => {
-        if (Array.isArray(data)) {
-            // Si es un array, ordena alfabéticamente
-            return data.slice().sort((a, b) => {
-                if (a && a.nombre && b && b.nombre) {
-                    const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-                    const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-                    return nameA.localeCompare(nameB);
-                }
-                return 0;
-            });
-        } else if (typeof data === 'object' || data.length === 0) {
-            // Si es un objeto, maneja el objeto según tus necesidades
-            // Puedes convertirlo en un array antes de ordenarlo o tratarlo de otra manera
-            const dataArray = Object.values(data);
-            return dataArray; // Ordena según tus necesidades
-        } else {
-            // Maneja otros tipos de datos según sea necesario
-            return [];
-        }
-    };
 
     const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
-    const { nIngles, nCientifico, paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
+    const {
+        nIngles = [],
+        nCientifico = [],
+        paises = [],
+        familias = [],
+        grupos = [],
+        zonas = []
+    } = useSelector(state => state.birdSlice.options);
+    
 
-    const sortedPaises = sortAlphabetically(paises);
-    const sortedFamilias = sortAlphabetically(familias);
-    const sortedGrupos = sortAlphabetically(grupos);
-    const sortedZonas = sortAlphabetically(zonas);
-    const sortedNCientifico = sortAlphabetically(nCientifico);
-    const sortedNIngles = sortAlphabetically(nIngles);
+    // const sortedPaises = sortAlphabetically(paises);
+    // const sortedFamilias = sortAlphabetically(familias);
+    // const sortedGrupos = sortAlphabetically(grupos);
+    // const sortedZonas = sortAlphabetically(zonas);
+    // const sortedNCientifico = sortAlphabetically(nCientifico);
+    // const sortedNIngles = sortAlphabetically(nIngles);
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
@@ -170,6 +157,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     React.useEffect(() => {
         return () => {
+            dispatch(getOptionsData());
             setSelectOption({
                 grupo: [],
                 familia: [],
@@ -195,15 +183,15 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                         Búsqueda Avanzada
                     </Typography>
                 </Grid>
-                <Grid item container alignItems="center">
-                    <Grid xs={12} >
+                <Grid container alignItems="center">
+                    <Grid item xs={12} >
                         <FormControl sx={{ m: 1, width: '95%' }}>
                             <Autocomplete
                                 multiple
                                 id='grupoUnico'
                                 value={selectOption.grupo}
                                 onChange={(event, newValue) => handleOptionChange('grupo', newValue)}
-                                options={sortedGrupos}
+                                options={grupos || []}
                                 getOptionLabel={(option) => option.nombre}
                                 loading={isFetchingOptions}
                                 renderInput={(params) =>
@@ -233,7 +221,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     ))
                                 }
                                 isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={grupos.length === 0}
+                                disabled={grupos?.length === 0}
                             />
                         </FormControl>
                     </Grid>
@@ -244,7 +232,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 multiple
                                 value={selectOption.familia}
                                 onChange={(event, newValue) => handleOptionChange('familia', newValue)}
-                                options={sortedFamilias}
+                                options={familias || []}
                                 getOptionLabel={(option) => option.nombre}
                                 loading={isFetchingOptions}
                                 renderInput={(params) =>
@@ -274,7 +262,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     ))
                                 }
                                 isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={familias.length === 0}
+                                disabled={familias?.length === 0}
                             />
                         </FormControl>
                         <Grid />
@@ -285,7 +273,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     multiple
                                     value={selectOption.pais}
                                     onChange={(event, newValue) => handleOptionChange('pais', newValue)}
-                                    options={sortedPaises}
+                                    options={paises || []}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
                                     renderInput={(params) =>
@@ -315,7 +303,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={paises.length === 0}
+                                    disabled={paises?.length === 0}
                                 />
                             </FormControl>
                         </Grid>
@@ -326,7 +314,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     multiple
                                     value={selectOption.zona}
                                     onChange={(event, newValue) => handleOptionChange('zona', newValue)}
-                                    options={sortedZonas}
+                                    options={zonas || []}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
                                     renderInput={(params) =>
@@ -356,18 +344,18 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={zonas.length === 0}
+                                    disabled={zonas?.length === 0}
                                 />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            {/* Cientifico */}
+                            {/* Científico */}
                             <FormControl sx={{ m: 1, width: '95%' }}>
                                 <Autocomplete
                                     multiple
                                     value={selectOption.cientifico}
                                     onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
-                                    options={sortedNCientifico}
+                                    options={nCientifico || []}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
 
@@ -398,7 +386,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nCientifico.length === 0}
+                                    disabled={nCientifico?.length === 0}
                                 />
                             </FormControl>
                         </Grid>
@@ -408,7 +396,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                     multiple
                                     value={selectOption.ingles}
                                     onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
-                                    options={sortedNIngles}
+                                    options={nIngles || []}
                                     getOptionLabel={(option) => option.nombre}
                                     loading={isFetchingOptions}
                                     renderInput={(params) =>
@@ -438,7 +426,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                         ))
                                     }
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nIngles.length === 0}
+                                    disabled={nIngles?.length === 0}
                                 />
                             </FormControl>
                         </Grid>

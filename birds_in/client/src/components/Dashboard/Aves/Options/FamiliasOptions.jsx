@@ -298,7 +298,7 @@ export const FamiliasOptions = () => {
                           </Grid>
                           <Grid item xs={12} md={6}>
                             <Button onClick={() => handleDelete(item.id)}
-                              color="secondary"
+                              color="error"
                               startIcon={<DeleteForeverIcon />}
                             ></Button>
                           </Grid>

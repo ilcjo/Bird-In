@@ -42,7 +42,6 @@ export const IndexTabsUsuarios = ({ }) => {
                 textColor='primary'
                 indicatorColor="primary"
                 aria-label="tabsInfoActualizar"
-                selectionfollowsfocu='true'
             >
                 <StyledTab label={<Typography variant='h5' >
                     Todos

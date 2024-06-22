@@ -1,4 +1,4 @@
-const { saveRegister, getAllUsersDb, changeApprovedStatus, deleteCompleteU, verifyTokenDb, saveTokenToDatabase, updatePass } = require("../../controllers/users/userController")
+const { saveRegister, getAllUsersDb, changeApprovedStatus, deleteCompleteU, verifyTokenDb, saveTokenToDatabase, updatePass, updatePassDb } = require("../../controllers/users/userController")
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { generateToken, generateTokenRecoverEmail } = require("../../utils/passport");
@@ -133,11 +133,11 @@ const recoverPass = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 };
-const changePassRecover= async (req, res) => {
+const changePassRecover = async (req, res) => {
     const { pass, token } = req.query
     try {
         const response = await updatePass(pass, token)
-        return res.status(200).json({ message: 'Contraseña Actualizada.' })
+        return res.status(200).json(response)
 
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -162,6 +162,16 @@ const verifyTokenRecover = async (req, res) => {
     }
 };
 
+const changePassDirect = async (req, res) => {
+    const { pass, userId } = req.query
+    try {
+        const response = await updatePassDb(pass, userId )
+        return res.status(200).json(response)
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
 module.exports = {
     registerUser,
     loginApp,
@@ -173,5 +183,6 @@ module.exports = {
     deleteUser,
     recoverPass,
     verifyTokenRecover,
-    changePassRecover
+    changePassRecover,
+    changePassDirect
 }

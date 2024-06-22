@@ -5,6 +5,8 @@ import {
   Button,
   CircularProgress,
   Grid,
+  IconButton,
+  InputAdornment,
   Snackbar,
   Table,
   TableBody,
@@ -12,6 +14,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
   styled,
   tableCellClasses,
@@ -19,7 +22,10 @@ import {
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector, } from 'react-redux';
-import { borrarUsuario, getUsers, statusChangeUser, } from '../../../redux/actions/userLoginRegister';
+import { borrarUsuario, changePassDirect, getUsers, } from '../../../redux/actions/userLoginRegister';
+import { Loading } from '../../utils/Loading';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -55,6 +61,9 @@ export const AllUsers = () => {
   const [errorSnackbOpen, setErrorSnackbOpen] = React.useState(false);
   const [errorMess, setErrorMess] = React.useState(null);
   const [showSuccessMessages, setShowSuccessMessages] = React.useState('');
+  const [editingUserId, setEditingUserId] = React.useState(null); // Estado para manejar la edición de contraseña
+  const [newPassword, setNewPassword] = React.useState(''); // Estado para manejar la nueva contraseña
+  const [showPassword, setShowPassword] = React.useState(false);
 
   React.useEffect(() => {
     // Disparar la acción para obtener todos los usuarios pending al montar el componente
@@ -68,8 +77,11 @@ export const AllUsers = () => {
 
       // Si el usuario confirma, procede con la eliminación
       if (isConfirmed) {
+        setShowDrop(true)
+        setLoadingMess('Eliminando Usuario')
         // Lógica para eliminar el elemento
         await dispatch(borrarUsuario(id));
+        setShowDrop(false)
         setShowSuccessMessages(`Usuario ${nombreUsuario} eliminado`);
         setOpenSnackb(true);
         await dispatch(getUsers('approved'));
@@ -78,11 +90,38 @@ export const AllUsers = () => {
         console.log('Eliminación cancelada por el usuario');
       }
     } catch (error) {
+      setShowDrop(false)
+      setErrorMess(String(error));
+      setErrorSnackbOpen(true);
+
+    }
+  };
+
+  const handleUpdatePasswordClick = (userId) => {
+    setEditingUserId(userId);
+  };
+
+  const handlePasswordChange = (event) => {
+    setNewPassword(event.target.value);
+  };
+
+  const handleUpdatePasswordSubmit = async (userId) => {
+    setShowDrop(true)
+    setLoadingMess('Actualizando Contraseña')
+    try {
+      await dispatch(changePassDirect(newPassword, userId,));
+      setShowSuccessMessages('Contraseña actualizada correctamente');
+      setShowDrop(false)
+      setOpenSnackb(true);
+      setEditingUserId(null);
+      setNewPassword('');
+      await dispatch(getUsers('approved')); // Actualizar la lista de usuarios después de cambiar la contraseña
+    } catch (error) {
+      setShowDrop(false)
       setErrorMess(String(error));
       setErrorSnackbOpen(true);
     }
   };
-
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
@@ -91,31 +130,37 @@ export const AllUsers = () => {
     setOpenSnackb(false);
     setShowSuccessMessages('')
   };
+  const handleCancelEdit = () => {
+    setEditingUserId(null);
+    setNewPassword('');
+  };
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <div>
-
       <Grid container spacing={5} sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         width: 'auto',
-        //  minWidth: '180vh',
         margin: 'auto',
         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-        padding: '0px 40px 60px 10px',
-        borderRadius: '0px 0px 20px 20px'
+        padding: '0px 40px 30px 0px',
+        borderRadius: '0px 0px 20px 20px',
       }} >
         <Grid item sx={12} md={12}>
-          <TableContainer sx={{ maxHeight: 440, minWidth: '160vh' }}>
+          <TableContainer sx={{}}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">NOMBRE</StyledTableCell>
                   <StyledTableCell align="center">CORREO</StyledTableCell>
-                  <StyledTableCell align="center">TIPO DE USUARIO</StyledTableCell>
-                  <StyledTableCell align="center">FECHA REGISTRO</StyledTableCell>
-                  <StyledTableCell align="center" ></StyledTableCell>
+                  <StyledTableCell align="center">TIPO USUARIO</StyledTableCell>
+                  {/* <StyledTableCell align="center">Fecha Registro</StyledTableCell> */}
+                  <StyledTableCell align="center">ACTUALIZAR CONTRASEÑA</StyledTableCell>
+                  <StyledTableCell align="center" >ELIMINAR</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -130,13 +175,66 @@ export const AllUsers = () => {
                     <TableCell align="center" style={{ color: 'white' }}>
                       {item.tipo}
                     </TableCell>
-                    <TableCell align="center" style={{ color: 'white' }}>
+                    {/* <TableCell align="center" style={{ color: 'white' }}>
                       {item.createdAt}
+                    </TableCell> */}
+
+                    <TableCell align="center">
+                      {editingUserId === item.id ? (
+                        <>
+                          <TextField
+                            type={showPassword ? 'text' : 'password'}
+                            value={newPassword}
+                            onChange={handlePasswordChange}
+                            placeholder="Nueva Contraseña"
+                            size="small"
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    onClick={toggleShowPassword}
+                                    edge="end"
+                                  >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                          <Button
+                            onClick={() => handleUpdatePasswordSubmit(item.id)}
+                            color="primary"
+                            variant="contained"
+                            size="small"
+                            sx={{ ml: 1 }}
+                          >
+                            Enviar
+                          </Button>
+                          <Button
+                            onClick={handleCancelEdit}
+                            color="error"
+                            variant="contained"
+                            size="small"
+                            sx={{ ml: 1 }}
+                          >
+                            Cancelar
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          onClick={() => handleUpdatePasswordClick(item.id)}
+                          color="primary"
+                          variant="contained"
+                          size="small"
+                        >
+                          Actualizar
+                        </Button>
+                      )}
                     </TableCell>
                     <TableCell align="center">
                       <Grid item xs={12} md={6}>
                         <Button onClick={() => handleApprove(item.id, item.nombre)}
-                          color="secondary"
+                          color="error"
                           startIcon={<DeleteForeverIcon />}
                         ></Button>
                       </Grid>
@@ -149,17 +247,10 @@ export const AllUsers = () => {
         </Grid>
       </Grid>
       {/* Backdrop para mostrar durante la carga */}
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      <Loading
+        message={loadingMess}
         open={showDrop}
-      >
-        <>
-          <CircularProgress color="inherit" />
-          <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-            {loadingMess}
-          </Typography>
-        </>
-      </Backdrop>
+      />
 
       <Snackbar
         open={openSnackb}

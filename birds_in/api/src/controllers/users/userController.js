@@ -154,14 +154,32 @@ const updatePass = async (pass, token) => {
             throw new Error('Usuario no encontrado');
         }
         // Actualizar la contraseña del usuario
-        userRecord.pass = hashPassword(pass);
-
-        // Guardar los cambios en la base de datos
-        await userRecord.save();
+        // Actualizar la contraseña del usuario
+        const hashedPassword = await bcrypt.hash(pass, 5);
+        await Usuarios.update({ pass: hashedPassword }, { where: { email: userEmail } });
 
         return { message: 'Contraseña actualizada correctamente' };
     } catch (error) {
         throw new Error(error.message); // Lanzar el error para manejarlo en el contexto donde se llama
+    }
+};
+
+const updatePassDb = async (pass, userId) => {
+    try {
+        // Buscar al usuario en la base de datos de usuarios
+        const userRecord = await Usuarios.findOne({ where: { id: userId } });
+
+        if (!userRecord) {
+            throw new Error('Usuario no encontrado');
+        }
+
+        // Actualizar la contraseña del usuario
+        const hashedPassword = await bcrypt.hash(pass, 5);
+        await Usuarios.update({ pass: hashedPassword }, { where: { id: userId } });
+
+        return { message: 'Contraseña actualizada correctamente' };
+    } catch (error) {
+        throw new Error(`Error al actualizar la contraseña: ${error.message}`); // Lanzar el error con un mensaje más claro
     }
 };
 
@@ -173,5 +191,6 @@ module.exports = {
     deleteCompleteU,
     verifyTokenDb,
     saveTokenToDatabase,
-    updatePass
+    updatePass,
+    updatePassDb
 }

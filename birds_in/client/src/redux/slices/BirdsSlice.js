@@ -28,6 +28,9 @@ export const birdSlice = createSlice({
   initialState,
 
   reducers: {
+    setBirdInfo(state, action) {
+      state.infoBirds = action.payload;
+    },
     fetchInfo: (state, action) => {
       state.infoBirds = action.payload
     },
@@ -123,6 +126,7 @@ export const {
   saveCounting,
   copingFilters,
   isOneBird,
-  howMuch
+  howMuch,
+  setBirdInfo
 } = birdSlice.actions;
 export default birdSlice.reducer;

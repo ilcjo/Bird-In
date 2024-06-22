@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading } from './Loading';
 import axios from 'axios';
 import { changePassToken } from '../../redux/actions/userLoginRegister';
@@ -31,6 +31,7 @@ export const Recover = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
+  console.log(token)
   const [formData, setFormData] = useState({
     passFirst: '',
     passSecond: '',
@@ -38,11 +39,12 @@ export const Recover = () => {
   const [tokenValid, setTokenValid] = useState(false);
   const [tokenExpired, setTokenExpired] = useState(false); // Nuevo estado para verificar si el token ha expirado
   const location = useLocation();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const tokenUrl = searchParams.get('token');
-
+    setToken(tokenUrl);
     const verifyToken = async () => {
       if (tokenUrl) {
         try {
@@ -91,8 +93,9 @@ export const Recover = () => {
       setFormData({
         passFirst: '',
         passSecond: '',
-      });
-
+      }); setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (error) {
       alert(`Error: ${error}`);
     } finally {
@@ -123,18 +126,35 @@ export const Recover = () => {
 
   if (tokenExpired) {
     return (
+
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
+          minHeight: 'auto',
           padding: '20px',
+          backgroundColor: 'rgba(32,60,18, 0.2)',
+          backdropFilter: 'blur(8px)',
+          borderRadius: '20px',
         }}
       >
-        <Typography variant="h6" color="error">
-          El token ha expirado o es inválido. Por favor, solicite un nuevo enlace.
+        <img
+          src={allCustom.logo}
+          alt="Logo"
+          style={{
+            width: '130px',
+            height: 'auto',
+            marginBottom: '20px',
+            borderRadius: '50%',
+            backgroundColor: '#103300',
+          }}
+          loading="lazy"
+        />
+
+        <Typography variant="h5" color="primary.light" align="center">
+          El token que a solicitado ha expirado o es inválido. Por favor, solicite un nuevo enlace.
         </Typography>
       </Box>
     );
