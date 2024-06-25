@@ -126,7 +126,7 @@ const recoverPass = async (req, res) => {
     try {
         const token = await generateTokenRecoverEmail(email)
         await saveTokenToDatabase(token, email);
-        const link = `http://localhost:5173/recuperar?token=${token}`;
+        const link = `https://lasavesquepasaronpormisojos.com/recuperar?token=${token}`;
         await sendEmailRecoverPass(email, link)
         return res.status(200).json({ message: 'Correo de recuperación enviado.' })
     } catch (error) {

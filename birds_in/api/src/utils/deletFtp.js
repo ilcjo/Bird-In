@@ -1,4 +1,7 @@
 const ftp = require('basic-ftp');
+const path = require('path');
+const fs = require('fs');
+const { deleteAllFilesInFolder, deleteAllFilesInUploadFolder } = require('./deletAllInUpload');
 const {
     FTP_HOST,
     FTP_USER,
@@ -25,19 +28,31 @@ const deletePhotoFromFTP = async (urls) => {
 
             // Construir la nueva URL sin el dominio
             const ftpUrl = `${fileName}`;
-
+            // console.log(`Intentando eliminar del FTP: ${ftpUrl}`);
             // Eliminar el archivo del servidor local
-            const fs = require('fs');
-            fs.unlink(url, (err) => {
-                if (err) {
-                    console.error('Error al eliminar la imagen del servidor local:', err);
-                } else {
-                    console.log('Imagen eliminada del servidor local con éxito');
-                }
-            });
+            //     const fs = require('fs');
+            //     fs.unlink(url, (err) => {
+            //         if (err) {
+            //             console.error('Error al eliminar la imagen del servidor local:', err);
+            //         } else {
+            //             console.log('Imagen eliminada del servidor local con éxito');
+            //         }
+            //     });
 
+            //     // Eliminar el archivo del servidor FTP
+            //     await client.remove(ftpUrl);
+            // }
             // Eliminar el archivo del servidor FTP
-            await client.remove(ftpUrl);
+            try {
+                await client.remove(ftpUrl);
+                console.log(`Imagen eliminada del servidor FTP con éxito: ${ftpUrl}`);
+            } catch (ftpError) {
+                console.error(`Error al eliminar la imagen del servidor FTP: ${ftpUrl}`, ftpError);
+                continue; // Pasar a la siguiente URL si hay un error
+            }
+
+            // Eliminar todos los archivos en la carpeta 'upload' local
+            deleteAllFilesInUploadFolder();
         }
 
         return { success: true };
@@ -61,7 +76,7 @@ const deletePhotoFromFTPPaisajes = async (urls) => {
             secure: false,
         });
         await client.cd('paisajes');
-      
+
         for (const url of urls) {
             // Extraer el nombre del archivo de la URL
             const fileName = url.split('/').pop();

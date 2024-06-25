@@ -14,7 +14,9 @@ const {
    findDataByName,
    findNameDuplicate,
 } = require("../../controllers/birds/birdsController");
+const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
+const { VistaAvesOrdenadaAll } = require('../../db/db');
 const {
    FTP_HOST,
    FTP_USER,
@@ -316,6 +318,60 @@ const checkBirdDuplicate = async (req, res) => {
    }
 };
 
+const getAllAvesAsExcel = async (req, res) => {
+   try {
+      // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
+      const aves = await VistaAvesOrdenadaAll.findAll();
+
+      // Crea un nuevo workbook y worksheet con exceljs
+      const workbook = new exceljs.Workbook();
+      const worksheet = workbook.addWorksheet('Aves');
+
+      // Define las columnas en tu archivo Excel
+      worksheet.columns = [
+         { header: 'Nombre Inglés', key: 'nombre_ingles', width: 20 },
+         { header: 'Nombre Científico', key: 'nombre_cientifico', width: 20 },
+         { header: 'Nombre Común', key: 'nombre_comun', width: 20 },
+         { header: 'Nombre Grupo', key: 'nombre_grupo', width: 20 },
+         { header: 'Nombre Familia', key: 'nombre_familia', width: 20 },
+         { header: 'Paises', key: 'paises', width: 20 },
+         { header: 'Zonas', key: 'zonas', width: 20 },
+         { header: 'URL eBird', key: 'url_Ebird', width: 20 },
+         { header: 'URL Wiki', key: 'url_wiki', width: 20 },
+         { header: 'Imágenes', key: 'imagenes', width: 20 },
+         // Añade más columnas según los datos que quieras incluir en tu archivo Excel
+      ];
+
+      // Agrega las filas al worksheet con los datos de las aves
+      aves.forEach((ave) => {
+         worksheet.addRow({
+            nombre_ingles: ave.nombre_ingles,
+            nombre_cientifico: ave.nombre_cientifico,
+            nombre_comun: ave.nombre_comun,
+            nombre_grupo: ave.nombre_grupo,
+            nombre_familia: ave.nombre_familia,
+            paises: ave.paises,
+            zonas: ave.zonas,
+            url_Ebird: ave.url_Ebird,
+            url_wiki: ave.url_wiki,
+            imagenes: ave.imagenes,
+         });
+      });
+
+      // Configura la respuesta HTTP para descargar el archivo Excel
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=aves.xlsx');
+
+      // Escribe el workbook en el flujo de respuesta (response stream)
+      await workbook.xlsx.write(res);
+      res.end();
+
+   } catch (error) {
+      console.error('Error al descargar el archivo Excel:', error);
+      res.status(500).json({ message: 'Error al descargar el archivo Excel' });
+   }
+};
+
 module.exports = {
    getFilterInfo,
    selectOptions,
@@ -329,6 +385,7 @@ module.exports = {
    contandoRegistros,
    deleteBird,
    findInfoForUpdateName,
-   checkBirdDuplicate
+   checkBirdDuplicate,
+   getAllAvesAsExcel
 }
 

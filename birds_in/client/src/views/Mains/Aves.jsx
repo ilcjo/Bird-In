@@ -81,7 +81,7 @@ export const Aves = () => {
         </Dialog>
         {infoBirds.length === 1 && (
           <Grid container >
-            <PhotosDetailAves bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} />
+            <PhotosDetailAves bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
           </Grid>
         )}
         {infoBirds.length > 1 && (
@@ -95,7 +95,7 @@ export const Aves = () => {
               margin: 'auto',
               backgroundColor: 'rgba(32,60,18, 0.2)',
               backdropFilter: 'blur(8px)',
-              padding: '40px',
+              padding: '0px',
               borderRadius: '20px',
               mb: 10,
               mt: 10,
@@ -106,12 +106,12 @@ export const Aves = () => {
               justifyContent="space-between"
               spacing={1}
               sx={{ width: '100%' }}>
-              <Grid item xs={12} sm={6} lg={6}>
-                <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center' }}>
+              <Grid item xs={12} sm={6} lg={6} >
+                <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center', marginLeft: '20px', mt: 5 }}>
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white'>
+                <Typography variant='h6' color='white' sx={{ marginLeft: '20px' }}>
                   Total de Aves Filtradas: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
@@ -122,7 +122,9 @@ export const Aves = () => {
                     fontSize: '1rem',
                     fontWeight: 'bold',
                     mt: { xs: 0, md: 0 },
-                    mb: { xs: 3, md: 0 }
+                    mb: { xs: 3, md: 0 },
+                    marginRight: '20px',
+                    marginLeft: { xs: '20px', md: 0 },
                   }}
                   variant="outlined"
                   onClick={stepBack}

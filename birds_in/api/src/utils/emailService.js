@@ -10,8 +10,10 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true, // Usa SSL
   auth: {
-    user: 'ileanacanofotografia@gmail.com',
-    pass: 'xtitgtakwxgiqavl',
+    user: EMAIL_USER,
+    pass: EMAIL_PASS,
+    // user: 'ileanacanofotografia@gmail.com',
+    // pass: 'xtitgtakwxgiqavl',
   },
 });
 
@@ -253,7 +255,7 @@ const sendEmailRecoverPass = async (email, link) => {
         `;
 
     const mailOptions = {
-      from: 'ileanacanofotografia@gmail.com',
+      from: EMAIL_USER,
       to: email,
       subject: 'Recuperación de contraseña las Aves',
       html: emailBodyApproval,

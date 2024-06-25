@@ -8,7 +8,7 @@ export const getOptionsData = () => {
       const response = await axios('aves/opciones')
       const data = response.data
       dispatch(fetchOptions(data))
-      dispatch(setNoMoreResults(true))
+      // dispatch(setNoMoreResults(true))
     } catch (error) {
       console.error("Error al obtener los datos:", error)
     }

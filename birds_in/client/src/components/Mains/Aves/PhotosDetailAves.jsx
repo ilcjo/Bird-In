@@ -8,7 +8,8 @@ import { sendParameter } from '../../../redux/actions/fetchAllBirds';
 import { Header } from '../../Header';
 import { Loading } from '../../utils/Loading';
 
-export const PhotosDetailAves = ({ setIsFilterOpen }) => {
+export const PhotosDetailAves = ({ setIsFilterOpen, setPage, bird }) => {
+    console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
     const { copyFilters, oneBird } = useSelector(state => state.birdSlice)
@@ -24,6 +25,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen }) => {
             switch (oneBird) {
                 case false:
                     dispatch(sendParameter(copyFilters));
+                    setPage(1)
                     break;
                 case true:
                     setIsFilterOpen(true);

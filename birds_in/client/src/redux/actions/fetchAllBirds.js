@@ -92,6 +92,26 @@ export const deleteBird = (idN) => {
   };
 };
 
+export const getExcelAves = () => async (dispatch) => {
+  try {
+    const response = await axios.get('/aves/descargar-excel-aves', {
+      responseType: 'blob', // Importante para recibir el archivo como blob
+    });
+
+    // Crear un enlace para descargar el archivo
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'aves.xlsx'); // nombre del archivo
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    console.error('Error al descargar el archivo Excel:', error);
+  }
+};
+
+
 
 // export const getCompleteBirds = () => {
 //   return async (dispatch) => {

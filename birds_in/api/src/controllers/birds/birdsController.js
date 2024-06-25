@@ -1,8 +1,9 @@
 const { Op, Sequelize } = require("sequelize");
-const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas } = require('../../db/db');
+const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas, VistaAvesOrdenadaAll } = require('../../db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 const { deletePhotoFromFTP } = require("../../utils/deletFtp");
+
 
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
@@ -100,14 +101,16 @@ const fetchFilterBirds = async (
                 ['nombre_ingles', 'ASC'], // Ordena por el campo 'nombre_ingles' en orden ascendente
             ],
         });
-
-        const totalResultsClausula = await Aves.count({ where: whereClause });
+        // console.log(whereClause,'soy clausula')
+        // console.log(includeArr,'soy include')
+        const totalResultsCount = await Aves.count({ where: whereClause, });
+        // console.log(totalResultsCount)
         const totalResults = avesFiltradas.length
         // const isLastPage = (pageConvert * perPageConvert) >= totalResultsClausula;
         // const isLastPage = offset + totalResultsClausula >= totalResults;
-        const totalPages = Math.ceil(totalResultsClausula / perPageConvert); // Calcular el total de páginas
+        const totalPages = Math.ceil(totalResultsCount / perPageConvert); // Calcular el total de páginas
         const isLastPage = totalResults <= 8 || pageConvert >= totalPages; // Verificar si estás en la última página
-        return { avesFiltradas, totalResultsClausula, isLastPage };
+        return { avesFiltradas, totalResultsCount, isLastPage };
     } catch (error) {
         console.error('Ocurrió un error al realizar la consulta:', error);
         throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
@@ -786,6 +789,8 @@ const findNameDuplicate = async (nombre) => {
 };
 
 
+
+
 module.exports = {
     fetchOptions,
     filterOptions,
@@ -799,5 +804,5 @@ module.exports = {
     filterOptionsPaisZonas,
     deleteBirdDb,
     findDataByName,
-    findNameDuplicate
+    findNameDuplicate,
 };
