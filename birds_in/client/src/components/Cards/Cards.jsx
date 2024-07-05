@@ -35,8 +35,8 @@ export const Cards = React.memo(({ foto, name, index }) => {
     setShowBackdrop(true);
     const selectOption = { ingles: [{ nombre: name }] };
     memoizedDispatch(selectOption);
-     // Guardar la información del ave seleccionada en localStorage
-     localStorage.setItem('selectedBird', JSON.stringify(selectOption));
+    // Guardar la información del ave seleccionada en localStorage
+    localStorage.setItem('selectedBird', JSON.stringify(selectOption));
     setTimeout(() => {
       setShowBackdrop(false); // Desactivar el estado de carga después de 2 segundos
       setIsGalleryOpen(true);
@@ -46,7 +46,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
   return (
     <Card sx={{
       minWidth: { xs: 380, lg: 430 },
-      maxWidth: { xs: 380, lg: 430},
+      maxWidth: { xs: 380, lg: 430 },
       minHeight: 330,
       maxHeight: 330,
       position: 'relative',
@@ -55,9 +55,23 @@ export const Cards = React.memo(({ foto, name, index }) => {
       flexDirection: 'column',
       justifyContent: 'space-between',
       backgroundColor: '#103300',
+      transition: 'transform 0.3s ease-out', // Transición para el efecto de agrandamiento del título y divider
+      '&:hover': {
+        transform: 'scale(1.02)', // Escala aumentada al hacer hover
+      },
+      '&:hover .divider': {
+        width: '50%',
+        transition: 'transform 0.3s ease-out', // Ancho del divider al hacer hover
+      },
+      '&:hover .title': {
+        fontSize: '2rem', // Tamaño de fuente más grande al hacer hover
+        color: 'white'
+      },
 
     }}>
-      <CardActionArea>
+      <CardActionArea sx={{
+        position: 'relative',
+      }}>
         {destacadaImage && destacadaImage.url ? (
           <div style={{ position: 'relative' }}>
             <CardMedia
@@ -71,6 +85,10 @@ export const Cards = React.memo(({ foto, name, index }) => {
               sx={{
                 objectFit: 'cover', objectPosition: 'center center ',
                 background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
+                transition: 'opacity 0.3s ease-in-out',
+                '&:hover': {
+                  opacity: 0.8, // Opacidad reducida al hacer hover
+                },
               }}
             />
             <div style={{
@@ -78,10 +96,16 @@ export const Cards = React.memo(({ foto, name, index }) => {
               bottom: 20,
               width: '100%',
               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
-              padding: '30px'
+              padding: '30px',
+              transition: 'transform 0.3s ease-out', // Transición para la posición del divider y título
+              '&:hover': {
+                transform: 'translateX(-50%) scale(1.1)', // Escala aumentada y posición del título al hacer hover
+              },
+
             }}>
-              <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
+              <Divider className="divider" sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
               <Typography
+              className="title"
                 variant='h2'
                 color='primary'
                 onClick={handleDetailClick}

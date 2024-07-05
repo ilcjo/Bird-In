@@ -9,7 +9,7 @@ import { Header } from '../../Header';
 import { Loading } from '../../utils/Loading';
 
 export const PhotosDetailAves = ({ setIsFilterOpen, setPage, bird }) => {
-    console.log(setPage)
+    // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
     const { copyFilters, oneBird } = useSelector(state => state.birdSlice)

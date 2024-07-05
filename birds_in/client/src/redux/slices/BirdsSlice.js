@@ -19,8 +19,8 @@ const initialState = {
   copyFilters: {},
   count: {},
   oneBird: null,
+  loading: false,
   total: 0,
-  loading: false
 };
 
 export const birdSlice = createSlice({

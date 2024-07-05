@@ -27,7 +27,7 @@ export const SearchBird = ({ changeTab }) => {
     const [showSearchBird, setShowSearchBird] = React.useState(true);
 
     const handleBirdSelect = (bird) => {
-        localStorage.setItem('nombreIngles',JSON.stringify(bird.nombre_ingles))
+        localStorage.setItem('nombreIngles', JSON.stringify(bird.nombre_ingles))
         setSelectedBird(bird);
         handleButtonClick();
     };

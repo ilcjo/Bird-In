@@ -95,10 +95,11 @@ export const Aves = () => {
               margin: 'auto',
               backgroundColor: 'rgba(32,60,18, 0.2)',
               backdropFilter: 'blur(8px)',
-              padding: '0px',
+              paddingBottom: '50px',
               borderRadius: '20px',
               mb: 10,
               mt: 10,
+              
             }}
           >
             <Grid container

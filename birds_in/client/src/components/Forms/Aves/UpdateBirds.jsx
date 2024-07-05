@@ -64,6 +64,19 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se ha Actualizado correctamente.');
 
     React.useEffect(() => {
+        setShowBackdrop(true); // Mostrar el backdrop al inicio
+        setLoadingMessage('Cargando..'); // Ejemplo de mensaje de carga completada (ajusta según necesites)
+
+        const timer = setTimeout(() => {
+            setShowBackdrop(false); // Cerrar el backdrop después de 5 segundos
+        }, 3000);
+
+        return () => {
+            clearTimeout(timer); // Limpiar el temporizador al desmontar el componente
+        };
+    }, []);
+
+    React.useEffect(() => {
         setCreateData(initialCreateData);
     }, [infoAveForUpdate]);
 
@@ -94,7 +107,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             console.error('Error al eliminar el registro:', error);
             setErrorMessage(`Ocurrió un error: ${error.message}`);
             setErrorSnackbarOpen(true);
-           
+
         } finally {
             setShowBackdrop(false);
         }

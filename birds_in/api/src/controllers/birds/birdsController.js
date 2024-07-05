@@ -4,118 +4,247 @@ const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 const { deletePhotoFromFTP } = require("../../utils/deletFtp");
 
-
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
-const fetchFilterBirds = async (
-    familia,
-    grupo,
-    nombreCientifico,
-    nombreIngles,
-    pais,
-    zonas,
-    page,
-    perPage
-) => {
+
+const decodeQueryParam = (param) => {
+    return param ? decodeURIComponent(param) : null;
+};
+
+const buildWhereClause = (familia, grupo, nombreCientifico, nombreIngles) => {
+    const whereClause = {};
+    if (familia) {
+        whereClause.familias_id_familia = familia;
+    }
+    if (grupo) {
+        const grupoArray = grupo.split(',').map(Number);
+        whereClause.grupos_id_grupo = grupoArray;
+    }
+    if (nombreCientifico) {
+        whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
+    }
+    if (nombreIngles) {
+        whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
+    }
+    return whereClause;
+};
+
+const buildIncludeArray = () => {
+    return [
+        { model: Grupos, as: 'grupo', attributes: ['nombre'] },
+        { model: Familias, as: 'familia', attributes: ['nombre'] },
+        {
+            model: Paises, // El mismo alias que en la definición de la asociación
+            attributes: ['nombre', 'id_pais'],
+            through: {
+                attributes: []
+            }
+        },
+        {
+            model: Zonas,
+            as: 'zonasAves', // El mismo alias que en la definición de la asociación
+            attributes: [['nombre_zona', 'nombre'], 'id_zona'],
+            through: {
+                attributes: ['zonas_id_zona']
+            }
+        },
+        {
+            model: Imagenes_aves,
+            as: 'imagenes_aves',
+            attributes: ['url', 'destacada']
+        },
+
+    ];
+};
+
+const buildIncludeForPais = (pais) => {
+    return {
+        model: Paises,
+        attributes: ['nombre', 'id_pais'],
+        through: {
+            attributes: [],
+        },
+        where: { id_pais: pais }
+    };
+};
+
+const buildIncludeForZonas = (zonas) => {
+    return {
+        model: Zonas,
+        as: 'zonasAves',
+        attributes: ['nombre_zona', 'id_zona'],
+        through: {
+            attributes: [],
+        },
+        where: {
+            id_zona: zonas,
+        },
+    };
+};
+
+const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage) => {
     try {
-        if (nombreCientifico) {
-            nombreCientifico = decodeURIComponent(nombreCientifico)
-        }
-        if (nombreIngles) {
-            nombreIngles = decodeURIComponent(nombreIngles);
-        }
-        const whereClause = {};
-        if (familia) {
-            whereClause.familias_id_familia = familia;
-        }
-        if (grupo) {
-            const grupoArray = grupo.split(',').map(Number);
-            whereClause.grupos_id_grupo = grupoArray;
-        }
-        if (nombreCientifico) {
-            whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
-        }
-        if (nombreIngles) {
-            whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
-        }
+        nombreCientifico = decodeQueryParam(nombreCientifico);
+        nombreIngles = decodeQueryParam(nombreIngles);
 
-
-        const includeArr = [
-            { model: Grupos, as: 'grupo', attributes: ['nombre'] },
-            { model: Familias, as: 'familia', attributes: ['nombre'] },
-            {
-                model: Paises, // El mismo alias que en la definición de la asociación
-                attributes: ['nombre', 'id_pais'],
-                through: {
-                    attributes: []
-                }
-            },
-            {
-                model: Imagenes_aves,
-                as: 'imagenes_aves',
-                attributes: ['url', 'destacada']
-            },
-            {
-                model: Zonas,
-                as: 'zonasAves', // El mismo alias que en la definición de la asociación
-                attributes: [['nombre_zona', 'nombre'], 'id_zona'],
-                through: {
-                    attributes: ['zonas_id_zona']
-                }
-            },
-        ];
+        const whereClause = buildWhereClause(familia, grupo, nombreCientifico, nombreIngles);
+        let includeArr = buildIncludeArray();
+        
         if (pais) {
-            includeArr.push({
-                model: Paises,
-                attributes: ['nombre', 'id_pais'],
-                through: {
-                    attributes: [],
-                },
-                where: { id_pais: pais }
-            });
+            includeArr.push(buildIncludeForPais(pais));
         }
-        if (zonas) {
-            includeArr.push({
-                model: Zonas,
-                as: 'zonasAves',
-                attributes: ['nombre_zona', 'id_zona'],
-                through: {
-                    attributes: [],
-                },
-                where: {
-                    id_zona: zonas, // Filtra por el id_zona proporcionado
-                },
 
-            });
+        if (zonas) {
+            includeArr.push(buildIncludeForZonas(zonas));
         }
 
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
+
         const avesFiltradas = await Aves.findAll({
             where: whereClause,
             include: includeArr,
             limit: perPageConvert,
             offset: offset,
-            order: [
-                ['nombre_ingles', 'ASC'], // Ordena por el campo 'nombre_ingles' en orden ascendente
-            ],
+            order: [['nombre_ingles', 'ASC']],
         });
-        // console.log(whereClause,'soy clausula')
-        // console.log(includeArr,'soy include')
-        const totalResultsCount = await Aves.count({ where: whereClause, });
-        // console.log(totalResultsCount)
-        const totalResults = avesFiltradas.length
-        // const isLastPage = (pageConvert * perPageConvert) >= totalResultsClausula;
-        // const isLastPage = offset + totalResultsClausula >= totalResults;
-        const totalPages = Math.ceil(totalResultsCount / perPageConvert); // Calcular el total de páginas
-        const isLastPage = totalResults <= 8 || pageConvert >= totalPages; // Verificar si estás en la última página
+
+        let totalResultsCount;
+
+        if (pais) {
+            totalResultsCount = await Aves.count({
+                include: [buildIncludeForPais(pais)]
+            });
+        } else if (zonas) {
+            totalResultsCount = await Aves.count({
+                include: [buildIncludeForZonas(zonas)]
+            });
+        } else {
+            totalResultsCount = await Aves.count({ where: whereClause });
+        }
+
+        const totalPages = Math.ceil(totalResultsCount / perPageConvert);
+        const isLastPage = totalResultsCount <= 8 || pageConvert >= totalPages;
+
         return { avesFiltradas, totalResultsCount, isLastPage };
     } catch (error) {
         console.error('Ocurrió un error al realizar la consulta:', error);
-        throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
+        throw new Error('Error al realizar la consulta de aves');
     }
 };
+
+
+
+// const DEFAULT_PER_PAGE = 18;
+// const DEFAULT_PAGE = 1;
+// const fetchFilterBirds = async (
+//     familia,
+//     grupo,
+//     nombreCientifico,
+//     nombreIngles,
+//     pais,
+//     zonas,
+//     page,
+//     perPage
+// ) => {
+//     try {
+//         if (nombreCientifico) {
+//             nombreCientifico = decodeURIComponent(nombreCientifico)
+//         }
+//         if (nombreIngles) {
+//             nombreIngles = decodeURIComponent(nombreIngles);
+//         }
+//         const whereClause = {};
+//         if (familia) {
+//             whereClause.familias_id_familia = familia;
+//         }
+//         if (grupo) {
+//             const grupoArray = grupo.split(',').map(Number);
+//             whereClause.grupos_id_grupo = grupoArray;
+//         }
+//         if (nombreCientifico) {
+//             whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
+//         }
+//         if (nombreIngles) {
+//             whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
+//         }
+
+
+//         const includeArr = [
+//             { model: Grupos, as: 'grupo', attributes: ['nombre'] },
+//             { model: Familias, as: 'familia', attributes: ['nombre'] },
+//             {
+//                 model: Paises, // El mismo alias que en la definición de la asociación
+//                 attributes: ['nombre', 'id_pais'],
+//                 through: {
+//                     attributes: []
+//                 }
+//             },
+//             {
+//                 model: Imagenes_aves,
+//                 as: 'imagenes_aves',
+//                 attributes: ['url', 'destacada']
+//             },
+//             {
+//                 model: Zonas,
+//                 as: 'zonasAves', // El mismo alias que en la definición de la asociación
+//                 attributes: [['nombre_zona', 'nombre'], 'id_zona'],
+//                 through: {
+//                     attributes: ['zonas_id_zona']
+//                 }
+//             },
+//         ];
+//         if (pais) {
+//             includeArr.push({
+//                 model: Paises,
+//                 attributes: ['nombre', 'id_pais'],
+//                 through: {
+//                     attributes: [],
+//                 },
+//                 where: { id_pais: pais }
+//             });
+//         }
+//         if (zonas) {
+//             includeArr.push({
+//                 model: Zonas,
+//                 as: 'zonasAves',
+//                 attributes: ['nombre_zona', 'id_zona'],
+//                 through: {
+//                     attributes: [],
+//                 },
+//                 where: {
+//                     id_zona: zonas, // Filtra por el id_zona proporcionado
+//                 },
+
+//             });
+//         }
+
+//         const pageConvert = Number(page) || DEFAULT_PAGE;
+//         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
+//         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
+//         const avesFiltradas = await Aves.findAll({
+//             where: whereClause,
+//             include: includeArr,
+//             limit: perPageConvert,
+//             offset: offset,
+//             order: [
+//                 ['nombre_ingles', 'ASC'], // Ordena por el campo 'nombre_ingles' en orden ascendente
+//             ],
+//         });
+
+//         const totalResultsClausula = await Aves.count({ where: whereClause });
+//         const totalResults = avesFiltradas.length
+//         // const isLastPage = (pageConvert * perPageConvert) >= totalResultsClausula;
+//         // const isLastPage = offset + totalResultsClausula >= totalResults;
+//         const totalPages = Math.ceil(totalResultsClausula / perPageConvert); // Calcular el total de páginas
+//         const isLastPage = totalResults <= 8 || pageConvert >= totalPages; // Verificar si estás en la última página
+//         return { avesFiltradas, totalResultsClausula, isLastPage };
+//     } catch (error) {
+//         console.error('Ocurrió un error al realizar la consulta:', error);
+//         throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
+//     }
+// };
 
 const fetchOptions = async () => {
     const optionsGrupos = await Grupos.findAll({

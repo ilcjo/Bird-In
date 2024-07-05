@@ -24,8 +24,10 @@ export const loadMoreData = (currentPage, parameters) => {
       const response = await axios(`/aves/filtros?${parameters}&page=${currentPage}&perPage=${perPages}`);
       const data = response.data.avesFiltradas;
       const result = response.data.isLastPage
+      const total = response.data.totalResultsCount
       dispatch(loadMoreDataSuccess(data)); // Despacha la acción para actualizar el estado
       dispatch(setNoMoreResults(result));
+      dispatch(howMuch(total));
     } catch (error) {
       console.error("Error al obtener más datos:", error);
     }
@@ -39,7 +41,7 @@ export const sendParameter = (selectedOptions) => {
       const response = await axios.get(`/aves/filtros?${queryParams}`);
       const data = response.data.avesFiltradas;
       const result = response.data.isLastPage
-      const total = response.data.totalResultsClausula
+      const total = response.data.totalResultsCount
       dispatch(stringParameter(queryParams))
       dispatch(returnFilters(data))
       dispatch(setNoMoreResults(result));
@@ -58,7 +60,9 @@ export const backInfo = (params) => {
     try {
       const response = await axios.get(`/aves/filtros?${params}`);
       const data = response.data.avesFiltradas;
+      const total = response.data.totalResultsCount
       dispatch(returnFilters(data))
+      dispatch(howMuch(total));
     } catch (error) {
       console.log('error enviando datos:', error);
     }

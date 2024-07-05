@@ -80,7 +80,11 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               sx={{
                 fontSize: '1rem',
                 fontWeight: 'bold',
-                color: 'white'
+                color: 'white',
+                '&:hover': {
+                  borderBottom: '2px solid white',
+                  borderRadius: '0px'
+                },
               }}
               variant="text"
               onClick={handleFilterButtonClick}
@@ -94,7 +98,12 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               sx={{
                 fontSize: '1rem',
                 fontWeight: 'bold',
-                color: 'white'
+                color: 'white',
+                '&:hover': {
+                  borderBottom: '2px solid white',
+                  borderRadius: '0px',
+                  
+                },
               }}
               variant="text"
               onClick={returnMenuClick}
@@ -107,6 +116,11 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             sx={{
               fontSize: '1rem',
               fontWeight: 'bold',
+              '&:hover': {
+                borderBottom: '2px solid white',
+                borderRadius: '0px',
+                color:'white'
+              },
             }}
             variant="text"
             onClick={onLogoutClick}
