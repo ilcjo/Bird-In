@@ -68,10 +68,10 @@ export const LoginForm = ({ changeTab }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // if (!isCaptchaVerified) {
-    //   alert('Por favor, completa la verificación CAPTCHA.');
-    //   return;
-    // }
+    if (!isCaptchaVerified) {
+      alert('Por favor, completa la verificación CAPTCHA.');
+      return;
+    }
     if (loginData.email && loginData.password) {
       try {
         dispatch(loginRequest())
@@ -178,10 +178,10 @@ export const LoginForm = ({ changeTab }) => {
             }}
           />
           <Typography variant="h5" sx={{ mb: 5, mt: 2 }}>
-            {/* <ReCAPTCHA
+            <ReCAPTCHA
               sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
               onChange={handleCaptchaVerification}
-            /> */}
+            />
             <MuiLink onClick={handlePassLinkClicRk}
               sx={{
                 cursor: 'pointer',

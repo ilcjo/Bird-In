@@ -35,9 +35,11 @@ export const loadMoreData = (currentPage, parameters) => {
 };
 
 export const sendParameter = (selectedOptions) => {
+  // console.log(selectedOptions, 'soy parametros que llegan')
   return async (dispatch) => {
     try {
       const queryParams = createParams(selectedOptions)
+      // console.log(queryParams, 'soy queryparams')
       const response = await axios.get(`/aves/filtros?${queryParams}`);
       const data = response.data.avesFiltradas;
       const result = response.data.isLastPage

@@ -338,6 +338,7 @@ const getAllAvesAsExcel = async (req, res) => {
          { header: 'Zonas', key: 'zonas', width: 20 },
          { header: 'URL eBird', key: 'url_Ebird', width: 20 },
          { header: 'URL Wiki', key: 'url_wiki', width: 20 },
+         { header: 'Portada', key: 'tiene_portada', width: 20 },
          { header: 'Imágenes', key: 'imagenes', width: 20 },
          // Añade más columnas según los datos que quieras incluir en tu archivo Excel
       ];
@@ -354,6 +355,7 @@ const getAllAvesAsExcel = async (req, res) => {
             zonas: ave.zonas,
             url_Ebird: ave.url_Ebird,
             url_wiki: ave.url_wiki,
+            tiene_portada: ave.tiene_portada,
             imagenes: ave.imagenes,
          });
       });

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Card, CardActionArea, CardContent, Checkbox, Grid, IconButton, Typography } from '@mui/material';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import BeenhereIcon from '@mui/icons-material/Beenhere';
+import BeenhereTwoToneIcon from '@mui/icons-material/BeenhereTwoTone';
+import TurnedInTwoToneIcon from '@mui/icons-material/TurnedInTwoTone';
 
 export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsCover, handleDeleteCheckBox }) => {
     // console.log(imageUrl)
@@ -35,10 +35,10 @@ export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsC
                                 <Typography variant="h4" color='primary' sx={{ mb: 0.5, color: 'white', m:0.5 }}>
                                     Portada
                                 </Typography>
-                                <BeenhereIcon fontSize='medium' sx={{ mb: 0.5, color: 'yellow' }} />
+                                <BeenhereTwoToneIcon fontSize="large" sx={{ mb: 0.5, color: 'yellow', }} />
                             </Box>
                         ) : (
-                            <BookmarkIcon color="primary" fontSize='medium' />
+                            <TurnedInTwoToneIcon color="primary" fontSize="large" sx={{ mb: 0.5, color: 'orange',}} />
                         )
                     }
                 </IconButton>

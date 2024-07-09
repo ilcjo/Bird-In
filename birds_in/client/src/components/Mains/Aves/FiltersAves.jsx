@@ -44,14 +44,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         grupos = [],
         zonas = []
     } = useSelector(state => state.birdSlice.options);
-    
-
-    // const sortedPaises = sortAlphabetically(paises);
-    // const sortedFamilias = sortAlphabetically(familias);
-    // const sortedGrupos = sortAlphabetically(grupos);
-    // const sortedZonas = sortAlphabetically(zonas);
-    // const sortedNCientifico = sortAlphabetically(nCientifico);
-    // const sortedNIngles = sortAlphabetically(nIngles);
+  
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
@@ -89,6 +82,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     const handleClickFiltrar = async () => {
         setIsFilterOpen(false);
+        // console.log(selectOption)
         dispatch(saveFilters(selectOption));
         dispatch(cargando(true));
 

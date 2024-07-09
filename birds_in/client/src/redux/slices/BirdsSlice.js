@@ -58,7 +58,7 @@ export const birdSlice = createSlice({
         grupo: grupo.map(option => ({ id: option.id, nombre: option.nombre })),
         familia: familia.map(option => ({ id: option.id, nombre: option.nombre })),
         pais: pais.map(option => ({ id: option.id, nombre: option.nombre })),
-        zonas: zona.map(option => ({ id: option.id, nombre: option.nombre })),
+        zona: zona.map(option => ({ id: option.id, nombre: option.nombre })),
         cientifico: cientifico.map(option => ({ id: option.id, nombre: option.nombre })),
         ingles: ingles.map(option => ({ id: option.id, nombre: option.nombre })),
       };

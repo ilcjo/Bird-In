@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize")
 
 module.exports = (sequelize) => {
-    sequelize.define('VistaAvesOrdenadaAll', {
+    sequelize.define('vistaAvesOrdenadaAll', {
         nombre_ingles: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -40,6 +40,10 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         imagenes: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        tiene_portada: {
             type: DataTypes.STRING,
             allowNull: false,
         },

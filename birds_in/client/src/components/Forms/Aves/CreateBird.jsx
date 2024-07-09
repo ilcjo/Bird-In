@@ -27,7 +27,7 @@ import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 
 
-export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
+export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages,  }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
@@ -193,7 +193,8 @@ export const CreateBird = ({ changeImagenExist, changeTabSearch }) => {
                 // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
                 setTimeout(() => {
                     dispatch(getInfoForUpdateName(createData.ingles));
-                    changeImagenExist();
+                    changeImagenTab(1);
+                    isImages(true)
                 }, 1500); // 10000 milisegundos = 10 segundos
             } catch (error) {
                 console.log('este es el error:', String(error))

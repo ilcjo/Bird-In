@@ -270,11 +270,10 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     onClick={handleReturnSearch}
                                     startIcon={<SearchIcon />}
                                 >
-                                    Buscar Nuevo Registro
+                                    Buscar Otro Registro
                                 </Button>
                             </Grid>
                         </Grid>
-
 
 
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >

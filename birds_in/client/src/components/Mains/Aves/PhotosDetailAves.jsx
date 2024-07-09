@@ -21,6 +21,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage, bird }) => {
 
     const stepBack = () => {
         setShowBackdrop(true)
+        console.log(copyFilters, 'regreso copy filter')
         setTimeout(() => {
             switch (oneBird) {
                 case false:

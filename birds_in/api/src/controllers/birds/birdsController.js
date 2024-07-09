@@ -111,13 +111,19 @@ const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, 
         });
 
         let totalResultsCount;
-
-        if (pais) {
+        if (pais && zonas) {
             totalResultsCount = await Aves.count({
+                where: whereClause,
+                include: [buildIncludeForPais(pais), buildIncludeForZonas(zonas)]
+            });
+        } else if (pais) {
+            totalResultsCount = await Aves.count({
+                where: whereClause,
                 include: [buildIncludeForPais(pais)]
             });
         } else if (zonas) {
             totalResultsCount = await Aves.count({
+                where: whereClause,
                 include: [buildIncludeForZonas(zonas)]
             });
         } else {

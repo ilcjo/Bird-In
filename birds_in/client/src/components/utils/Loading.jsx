@@ -17,3 +17,4 @@ export const Loading = ({ message, open }) => {
         </Backdrop>
     )
 }
+

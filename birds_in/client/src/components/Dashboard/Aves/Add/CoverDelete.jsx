@@ -18,8 +18,11 @@ export const CoverDelete = ({
     isCreate,
     showUpdateBird,
     showSearchBird,
-    selectedBird, }) => {
-// console.log(isCreate)
+    selectedBird,
+    setCoverSelected,
+    
+}) => {
+// console.log(setCoverSelected)
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombreAve = localStorage.getItem('nombreIngles') || 'del Ave';
@@ -56,12 +59,21 @@ export const CoverDelete = ({
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
+            setCoverSelected(true)
         } catch (error) {
             console.error('Error al realizar la acción:', error);
             setErrorMessage(`Error al realizar la acción: ${error.message}`);
             setErrorSnackbarOpen(true);
         }
     };
+
+    // React.useEffect(() => {
+    //     // Verificar si ya hay una portada seleccionada cuando el componente se monta
+    //     if (infoAveForUpdate && infoAveForUpdate.imagenes_aves) {
+    //         const portadaSeleccionada = infoAveForUpdate.imagenes_aves.some((img) => img.destacada === true);
+    //         setCoverSelected(portadaSeleccionada); // Actualizar el estado de la portada seleccionada
+    //     }
+    // }, [infoAveForUpdate,]);
 
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');

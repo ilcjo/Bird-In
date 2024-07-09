@@ -35,14 +35,27 @@ export const IndexTabsCreate = ({
     history,
     changeTabSearch }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
-
+    const [coverSelected, setCoverSelected] = React.useState(false);
+    const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
+    
+    //si pasa a la otra pestaña que confirme el cover este 
     const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
+        console.log(coverSelected, 'dentro')
+        if (newValue === 0 && !coverSelected) {
+            // Si se intenta cambiar a la pestaña de imágenes existentes sin una portada seleccionada, muestra el diálogo de advertencia
+            alert("Debes Seleccionar una Portada.");
+        } else {
+            setSelectedTab(newValue);
+            setImagesExistTabEnabled(false)
+            setCoverSelected(false)
+        }
+    };
+ 
+    //función que determina si tiene cover en true
+    const handleSetCoverSelected = (isSelected) => {
+        setCoverSelected(isSelected);
     };
 
-    const handleNavigateToCoverDelet = () => {
-        setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
-    };
     return (
         <React.Fragment>
             <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px' }}>
@@ -56,19 +69,26 @@ export const IndexTabsCreate = ({
                     <StyledTab label={<Typography variant='h5' >
                         Información
                     </Typography>} />
-                    <StyledTab label={<Typography variant='h5' >
-                        Imágenes Existente
-                    </Typography>} onClick={handleNavigateToCoverDelet} />
+                    <StyledTab
+                        label={<Typography variant='h5' >
+                            Imágenes Existente
+                        </Typography>}
+                        disabled={!imagesExistTabEnabled} // Deshabilitar la pestaña si no hay imágenes
+                    />
                     {/* Agrega más pestañas según sea necesario */}
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%', }}>
                     {selectedTab === 0 && (
                         <React.Fragment>
                             {/* Contenido de la primera pestaña */}
-                            <CreateBird changeTabSearch={changeTabSearch} changeTab={changeTab} showUpdateBird={showUpdateBird}
+                            <CreateBird
+                                changeTabSearch={changeTabSearch}
+                                changeTab={changeTab}
+                                showUpdateBird={showUpdateBird}
                                 showSearchBird={showSearchBird}
                                 selectedBird={selectedBird}
-                                changeImagenExist={handleNavigateToCoverDelet}
+                                changeImagenTab={() => setSelectedTab(1)}
+                                isImages={() => setImagesExistTabEnabled(true)}
                             />
                         </React.Fragment>
                     )}
@@ -78,7 +98,9 @@ export const IndexTabsCreate = ({
                             changeTab={changeTab}
                             showUpdateBird={showUpdateBird}
                             showSearchBird={showSearchBird}
-                            selectedBird={selectedBird} />
+                            selectedBird={selectedBird}
+                            setCoverSelected={handleSetCoverSelected}
+                        />
                     )}
                 </Box>
             </Box>

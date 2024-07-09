@@ -36,6 +36,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
     const handleNavigateToCoverDelet = () => {
         setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
     };
+    
     return (
         <React.Fragment>
             <Box sx={{ width: '100%', maxWidth: '95%', margin: '0 auto',  }}>
