@@ -73,6 +73,7 @@ export const IndexD = () => {
           <Typography variant='h5'>
             Actualizar
           </Typography>} />
+          
         <StyledTab label={<Typography variant='h5' >
           Crear
         </Typography>}

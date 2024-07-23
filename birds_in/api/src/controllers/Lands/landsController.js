@@ -4,92 +4,61 @@ const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 const { deletePhotoFromFTPPaisajes } = require("../../utils/deletFtp");
 
-
-const DEFAULT_PER_PAGE = 18;
+const DEFAULT_PER_PAGE = 8;
 const DEFAULT_PAGE = 1;
-const fetchFilterLands = async (
-    descripcion,
-    pais,
-    zonas,
-    page,
-    perPage
-) => {
+
+const fetchFilterLands = async (pais, zona, page, perPage) => {
+    // console.log('filter', pais, zona)
     try {
-        if (descripcion) {
-            descripcion = decodeURIComponent(descripcion);
-        }
         const whereClause = {};
-        if (descripcion) {
-            whereClause.descripcion = { [Op.like]: `%${descripcion}%` };
-        }
 
-        const includeArr = [
-            {
-                model: Paises,
-                attributes: ['nombre', 'id_pais'],
-                as: 'paise'
-            },
-            {
-                model: Zonas,
-                attributes: [
-                    ['nombre_zona', 'nombre'],
-                    'id_zona'],
-                as: 'zona'
-            },
-            {
-                model: Imagenes_paisajes,
-                attributes: [
-                    ['url_paisaje', 'url'],
-                    'destacada',]
-            }
-        ];
-
+        // Condiciones para el where de Paisajes
         if (pais) {
-            includeArr.push({
-                model: Paises,
-                attributes: ['nombre', 'id_pais'],
-                as: 'paise',
-                where: { id_pais: pais }
-            });
+            whereClause.paises_id_pais = pais;
         }
-
-        if (zonas) {
-            includeArr.push({
-                model: Zonas,
-                attributes: ['nombre', 'id_zona'],
-                as: 'zona',
-                where: { id_zona: zonas }
-            });
+        if (zona) {
+            whereClause.zonas_id_zona = zona;
         }
-
+        // console.log(whereClause)
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
+
+        // Obtén los paisajes filtrados junto con los países y zonas asociados
         const RegistrosFiltrados = await Paisajes.findAll({
             where: whereClause,
-            include: includeArr,
+            include: [
+                {
+                    model: Paises,
+                    attributes: ['nombre', 'id_pais'],
+                },
+                {
+                    model: Zonas,
+                    attributes: [['nombre_zona', 'nombre'], 'id_zona'],
+                },
+                {
+                    model: Imagenes_paisajes,
+                    attributes: [['url_paisaje', 'url'], 'destacada']
+                }
+            ],
             limit: perPageConvert,
-            offset: offset,
+            offset: offset
         });
 
-        const totalResultsClausula = await Paisajes.count({ where: whereClause });
-        const totalResults = RegistrosFiltrados.length
-        const totalPages = Math.ceil(totalResultsClausula / perPageConvert); // Calcular el total de páginas
-        const isLastPage = totalResults <= 8 || pageConvert >= totalPages; // Verificar si estás en la última página
-        return { RegistrosFiltrados, totalResultsClausula, isLastPage };
+        // Obtén el total de paisajes para calcular el total de páginas
+        const totalResults = await Paisajes.count({ where: whereClause });
+
+        const totalPages = Math.ceil(totalResults / perPageConvert);
+        const isLastPage = pageConvert >= totalPages;
+
+        return { RegistrosFiltrados, totalResults, isLastPage };
     } catch (error) {
         console.error('Ocurrió un error al realizar la consulta:', error);
         throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
     }
 };
 
-const fetchOptions = async () => {
-    const optionsGrupos = await Grupos.findAll({
-        attributes: ['nombre', ['id_grupo', 'id']],
-    });
-    const optionsFamilias = await Familias.findAll({
-        attributes: ['nombre', ['id_familia', 'id']]
-    })
+const fetchOptionsLand = async () => {
     const optionsPaises = await Paises.findAll({
         attributes: [['id_pais', 'id'], 'nombre',],
     });
@@ -105,22 +74,9 @@ const fetchOptions = async () => {
             ['nombre_zona', 'ASC']
         ]
     });
-    const optionsNames = await Aves.findAll({
-        attributes: ['nombre_cientifico', 'nombre_ingles',]
-    })
-    // const nombresGrupos = mapFieldValues(optionsGrupos, 'nombre', 'id_grupo')
-    // const nombreFamilias = mapFieldValues(optionsFamilias, 'nombre', 'id_familia')
-    // const nombrePaises = mapFieldValues(optionsPaises, 'nombre', 'id_pais')
-    const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles')
-    const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico')
-    // const nombrezonas = mapFieldValues(optionsZonas, 'nombre_zona', 'id_zona')
 
     return {
-        grupos: optionsGrupos,
-        familias: optionsFamilias,
         paises: optionsPaises,
-        nIngles: nombreIngles,
-        nCientifico: nombreCientifico,
         zonas: optionsZonas
     }
 };
@@ -128,7 +84,7 @@ const fetchOptions = async () => {
 const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
     const perpage = '0'
     const page = '0'
-    const allResults = await fetchFilterBirds(
+    const allResults = await fetchFilterLands(
         grupo,
         familia,
         pais,
@@ -194,148 +150,59 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
     return newOptions;
 };
 
-const filterOptionsPaisZonas = async (familia,
-    grupo,
-    nombreCientifico,
-    nombreIngles,
-    pais,
-    zonas,
-) => {
-
-    const perpage = '0'
-    const page = '0'
-    const allResults = await fetchFilterBirds(
-        familia,
-        grupo,
-        nombreCientifico,
-        nombreIngles,
-        pais,
-        zonas,
-        page,
-        perpage)
-
+const filterOptionsPaisZonasPaisaje = async (pais, zona) => {
+    // console.log('primera', zona, pais);
+    const perpage = '0';
+    const page = '0';
+    const { RegistrosFiltrados } = await fetchFilterLands(pais, zona, page, perpage);
+    // console.log(RegistrosFiltrados)
     const newOptions = {
-        grupos: [],
-        familias: [],
         paises: [],
         zonas: [],
-        nIngles: [],
-        nCientifico: [],
     };
-
-    // Verificar si se proporcionó un ID de zona o un ID de país
-
-    if (zonas || pais) {
-
-        const paisNumb = parseInt(pais)
-        // Filtrar las aves según el país y las zonas proporcionadas
-        allResults.avesFiltradas = allResults.avesFiltradas.filter(ave => {
-            const meetsPaisCriteria = !pais || ave.paises.some(paisAve => paisAve.dataValues.id_pais === paisNumb);
-            const meetsZonasCriteria = !zonas || ave.zonasAves.some(zona => zonas.includes(zona.dataValues.id_zona));
-            return meetsPaisCriteria && meetsZonasCriteria;
-        });
-    }
-    // Lógica para construir las opciones de paises y zonas
-    if (zonas) {
-        // Construir opciones de países basadas en las aves filtradas
+    if (zona) {
         const paisesSet = new Set();
-        allResults.avesFiltradas.forEach(ave => {
-            ave.paises.forEach(pais =>
+        RegistrosFiltrados.forEach(paisaje => {
+            if (paisaje.paise) {
                 paisesSet.add(JSON.stringify({
-                    id: pais.dataValues.id_pais,
-                    nombre: pais.dataValues.nombre,
-                })));
+                    id: paisaje.paise.dataValues.id_pais,
+                    nombre: paisaje.paise.dataValues.nombre,
+                }));
+            }
         });
-
-        const findIdPais = await obtenerIdDePais(zonas)
-
-        const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
-
-        newOptions.paises = [JSON.parse(newopti)];
-
-        const zonasSet = new Set();
-        allResults.avesFiltradas.forEach(ave => {
-            ave.zonasAves.forEach(zona => zonasSet.add(JSON.stringify({
-                id: zona.dataValues.id_zona,
-                nombre: zona.dataValues.nombre
-            })));
-        });
-        newOptions.zonas = Array.from(zonasSet).map(zona =>
-            JSON.parse(zona));
+        // console.log(paisesSet);
+        newOptions.paises = Array.from(paisesSet).map(pais => JSON.parse(pais));
     }
+
     if (pais) {
-        // console.log(allResults.avesFiltradas)
-        // console.log('entro en pais');
-        // Construir opciones de zonas basadas en las aves filtradas
         const zonasSet = new Set();
-        allResults.avesFiltradas.forEach(ave => {
-            ave.zonasAves.forEach(zona =>
+
+        RegistrosFiltrados.forEach(paisaje => {
+            if (paisaje.zona) {
+                // console.log('paisaje.zona:', paisaje.zona); 
                 zonasSet.add(JSON.stringify({
-                    id: zona.dataValues.id_zona,
-                    nombre: zona.dataValues.nombre,
-                })));
+                    id: paisaje.zona.dataValues.id_zona,
+                    nombre: paisaje.zona.dataValues.nombre,
+                }));
+            }
         });
-
-        // console.log(zonasSet);
-        const findIdZonas = await obtenerIdDeZonas(pais);
-        // console.log(findIdZonas);
-        const newOptionsZona = Array.from(zonasSet).filter(zona => findIdZonas.includes(JSON.parse(zona).id));
-
-        // Transformar el formato de newOptionsZona
-        const transformedOptionsZona = newOptionsZona.map(option => ({
-            id: JSON.parse(option).id,
-            nombre: JSON.parse(option).nombre,
-        }));
-        // console.log(transformedOptionsZona)
-        newOptions.zonas = transformedOptionsZona
-        // console.log(newOptions.zonas);
-
-        const paisSet = new Set();
-        allResults.avesFiltradas.forEach(ave => {
-            ave.paises.forEach(zona => paisSet.add(JSON.stringify({
-                id: zona.dataValues.id_pais,
-                nombre: zona.dataValues.nombre
-            })));
-        });
-        // console.log(paisSet)
-        newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa))
+        // console.log(zonasSet,'soy');
+        newOptions.zonas = Array.from(zonasSet).map(zona => JSON.parse(zona));
     }
-    const gruposSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        gruposSet.add(JSON.stringify({
-            id: ave.dataValues.grupos_id_grupo,
-            nombre: ave.grupo.dataValues.nombre
-        }));
-    });
-    const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
-    newOptions.grupos = gruposArray
-    const familiasSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        familiasSet.add(JSON.stringify({
-            id: ave.dataValues.familias_id_familia,
-            nombre: ave.familia.dataValues.nombre
-        }));
-    });
-    const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
-    newOptions.familias = familiasArray;
 
-    const nombresCientificos = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
-    newOptions.nCientifico = nombresCientificos;
-    const nombresIngles = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_ingles })))];
-    newOptions.nIngles = nombresIngles;
-    // const listaZona = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.zonas })))];
-    // newOptions.zonas = listaZona;
     return newOptions;
 };
+
 
 const sendAndCreateLand = async (
     pais,
     zona,
     descripcion,
     urlWiki,
-    urlImagen
+    urlImagen,
+    map
 ) => {
-    console.log(urlImagen)
+    // console.log(urlImagen)
     try {
         // Verificar si tanto el país como la zona están presentes
         if (!pais || !zona) {
@@ -352,6 +219,7 @@ const sendAndCreateLand = async (
         const createNewRegistro = await Paisajes.create({
             descripcion: descripcion,
             url: urlWiki,
+            map: map,
             paises_id_pais: pais.id,
             zonas_id_zona: zona.id,
             imagenes_paisajes: imagenesData
@@ -387,6 +255,7 @@ const findDataByIdP = async (id) => {
                 'id',
                 'descripcion',
                 'url',
+                'map'
             ] // Atributos
         });
         return Registro;
@@ -419,6 +288,7 @@ const findDataByNameP = async (id) => {
                 'id',
                 'descripcion',
                 'url',
+                'map'
             ]
         });
         return Registro;
@@ -437,6 +307,7 @@ const sendAndUpdatePaisaje = async (
     urlWiki,
     urlImagen,
     idPaisaje,
+    map
 ) => {
     try {
         // Obtener el registro existente de la base de datos
@@ -454,7 +325,8 @@ const sendAndUpdatePaisaje = async (
             descripcion !== existingRegister.descripcion ||
             urlWiki !== existingRegister.url ||
             pais.id !== existingRegister.paises_id_pais ||
-            zona.id !== existingRegister.zonas_id_zona
+            zona.id !== existingRegister.zonas_id_zona ||
+            map !== existingRegister.map
         ) {
             // Actualizar el registro existente en la tabla "aves" y sus relaciones
             await Paisajes.update(
@@ -463,6 +335,7 @@ const sendAndUpdatePaisaje = async (
                     url: urlWiki,
                     paises_id_pais: pais.id,
                     zonas_id_zona: zona.id,
+                    map: map
                 },
                 {
                     where: {
@@ -494,7 +367,7 @@ const findPhotosIdPaisaje = async (imgsIds) => {
 };
 
 const setDbCoverPaisaje = async (idFoto, idPaisaje) => {
-    console.log('datos controles portada:', idFoto, idPaisaje)
+    // console.log('datos controles portada:', idFoto, idPaisaje)
     try {
         // Buscar todas las imágenes asociadas al 
         const imagenes = await Imagenes_paisajes.findAll({ where: { paisajes_id_paisaje: idPaisaje } });
@@ -645,7 +518,7 @@ const findNameDuplicateP = async (id) => {
 
 
 module.exports = {
-    fetchOptions,
+    fetchOptionsLand,
     filterOptions,
     fetchFilterLands,
     sendAndCreateLand,
@@ -654,7 +527,7 @@ module.exports = {
     findPhotosIdPaisaje,
     setDbCoverPaisaje,
     getContadores,
-    filterOptionsPaisZonas,
+    filterOptionsPaisZonasPaisaje,
     deleteRegisterDb,
     findDataByNameP,
     findNameDuplicateP

@@ -12,6 +12,8 @@ import { getOptionsData } from './redux/actions/fetchOptions';
 import { saveOptions } from './redux/slices/BirdsSlice';
 import { getAllCustomizes } from './redux/actions/Custome';
 import './index.css'
+import { getOptionsDataP } from './redux/paisaje/actionsP/fetchOptionsLand.js';
+import { saveOptionsP } from './redux/paisaje/slicesP/LandscapeSlice.js';
 
 // Configurar la URL base de Axios
 const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
@@ -25,6 +27,8 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
 store.dispatch(getOptionsData());
 store.dispatch(saveOptions());
 store.dispatch(getAllCustomizes());
+store.dispatch(getOptionsDataP());
+store.dispatch(saveOptionsP());
 
 const root = createRoot(document.getElementById('root'));
 root.render(

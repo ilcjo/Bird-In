@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 //ESTADOS GLOBALES
 import { sendParameter } from '../../../redux/actions/fetchAllBirds'
-import { cargando, copingFilters, isOneBird, resetCurrentFilters, saveFilters, setNoMoreResults } from '../../../redux/slices/BirdsSlice'
+import { cargando, copingFilters, isOneBird, saveFilters, setNoMoreResults } from '../../../redux/slices/BirdsSlice'
 import { fetchNewOptions, getOptionsData } from '../../../redux/actions/fetchOptions'
 //ICONS
 import CloseIcon from '@mui/icons-material/Close';

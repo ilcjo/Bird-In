@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { CoverDeletP } from '../Add/CoverDeletP';
+import { CoverDeleteP } from '../Add/CoverDeleteP';
 import { UpdatePaisaje } from '../../../Forms/Paisajes/UpdatePaisaje';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -36,7 +36,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
         setSelectedTab(newValue);
     };
 
-    const handleNavigateToCoverDelet = () => {
+    const handleNavigateToCoverDelete = () => {
         setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
     };
     return (
@@ -54,7 +54,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                     </Typography>} />
                     <StyledTab label={<Typography variant='h5' >
                         Imágenes Existente
-                    </Typography>} onClick={handleNavigateToCoverDelet} />
+                    </Typography>} onClick={handleNavigateToCoverDelete} />
                     {/* Agrega más pestañas según sea necesario */}
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%' }}>
@@ -65,12 +65,13 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                                 showUpdateRegister={showUpdateRegister}
                                 showSearchRegister={showSearchRegister}
                                 selectedRegister={selectedRegister}
-                                changeImagenExist={handleNavigateToCoverDelet}
+                                changeImagenExist={handleNavigateToCoverDelete}
                             />
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDeletP changeTab={changeTab}
+                        <CoverDeleteP
+                            changeTab={changeTab}
                             showUpdateRegister={showUpdateRegister}
                             showSearchRegister={showSearchRegister}
                             selectedRegister={selectedRegister}

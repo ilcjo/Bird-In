@@ -8,10 +8,9 @@ const landsRouter = require('./Lands/landsRoute');
 
 const mainRouter = Router();
 
-mainRouter.use('/aves', birdsRouter)
 mainRouter.use('/', userRouter)
 mainRouter.use('/personalizar', customeRouter)
+mainRouter.use('/aves', birdsRouter)
 mainRouter.use('/opciones', optionRouter)
 mainRouter.use('/paisajes', landsRouter)
-
 module.exports = mainRouter

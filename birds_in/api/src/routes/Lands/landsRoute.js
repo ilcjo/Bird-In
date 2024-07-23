@@ -10,13 +10,15 @@ const {
     setCoverPhotoP,
     deletePhotosPaisajes,
     updateInfoPaisaje,
-    deletePaisaje
+    deletePaisaje,
+    selectOptionsP,
+    getFilterOptionsP
 } = require('../../handlers/Lands/landsHandler')
 
 const landsRouter = Router()
 landsRouter.get('/filtros', getFilterInfoP)
-    // .get('/opciones', selectOptions)
-    // .get('/nuevasOpciones', getFilterOptions)
+    .get('/opciones', selectOptionsP)
+    .get('/nuevasOpciones', getFilterOptionsP)
     .post('/create', createLand)
     .post('/upload_image', upload.array('images'), uploadImageftpPaisajes)
     .get('/get_update', findInfoForUpdateP)

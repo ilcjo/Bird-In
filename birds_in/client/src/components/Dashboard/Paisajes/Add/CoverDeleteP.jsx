@@ -14,11 +14,13 @@ import { EditImageCards } from '../../../Cards/EditImageCards';
 import { Loading } from '../../../utils/Loading';
 import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
 
-export const CoverDeletP = ({
+export const CoverDeleteP = ({
     isCreate,
     showUpdateRegister,
     showSearchRegister,
-    selectedRegister, }) => {
+    selectedRegister,
+    setCoverSelected,
+}) => {
 
     const theme = useTheme();
     const dispatch = useDispatch();
@@ -59,6 +61,9 @@ export const CoverDeletP = ({
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
+            if (setCoverSelected) {
+                setCoverSelected(true);
+            }
         } catch (error) {
             console.error('Error al realizar la acción:', error);
             setErrorMessage(`Error al realizar la acción: ${error.message}`);
@@ -122,6 +127,7 @@ export const CoverDeletP = ({
     };
 
     const handleReturnSearch = () => {
+        localStorage.removeItem('nombrePaisaje')
         showUpdateRegister(false)
         showSearchRegister(true)
         selectedRegister(null)

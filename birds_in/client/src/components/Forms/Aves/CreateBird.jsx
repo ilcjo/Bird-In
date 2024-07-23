@@ -27,7 +27,7 @@ import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 
 
-export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages,  }) => {
+export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
@@ -195,7 +195,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages,  }) => 
                     dispatch(getInfoForUpdateName(createData.ingles));
                     changeImagenTab(1);
                     isImages(true)
-                }, 1500); // 10000 milisegundos = 10 segundos
+                }, 1500); // 10000 mili segundos = 10 segundos
             } catch (error) {
                 console.log('este es el error:', String(error))
                 setErrorMessage(`Ocurrió un error: ${error}`);
@@ -238,7 +238,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages,  }) => 
                 });
         });
     };
-    
+
     const handleLogoClickW = () => {
         if (createData.urlWiki) {
             window.open(createData.urlWiki, '_blank');

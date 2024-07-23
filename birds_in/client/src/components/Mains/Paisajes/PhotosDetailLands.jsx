@@ -5,36 +5,39 @@ import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 //REDUX
-import { resetInfoBird, setNoMoreResults } from '../../../redux/slices/BirdsSlice';
+import { resetInfoBird, } from '../../../redux/slices/BirdsSlice';
 import { sendParameter } from '../../../redux/actions/fetchAllBirds';
 //COMPONENTS
 import { ImagesCards } from '../../Cards/ImagesCards'
 import { Header } from '../../Header';
 import { Loading } from '../../utils/Loading';
+import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
+import { resetInfoLand, setNoMoreResults } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { HeaderLand } from '../../HeaderLand';
 
-export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
+export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { copyFilters, oneBird } = useSelector(state => state.birdSlice)
-    const birds = useSelector(state => state.birdSlice.infoBirds)
-    const allImages = birds.flatMap(bird => bird.imagenes_aves);
+    const { copyFiltersP, oneLand } = useSelector(state => state.landscapeSlice)
+    const Register = useSelector(state => state.landscapeSlice.infoLands)
+    const allImages = Register.flatMap(bird => bird.imagenes_paisajes);
     const mainImage = allImages.find(image => image.destacada) ? allImages.find(image => image.destacada).url : null;
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..')
 
     const stepBack = () => {
         setShowBackdrop(true)
-        console.log(copyFilters, 'regreso copy filter')
+        console.log(copyFiltersP, 'regreso copy filter')
         setTimeout(() => {
-            switch (oneBird) {
+            switch (oneLand) {
                 case false:
-                    dispatch(sendParameter(copyFilters));
+                    dispatch(sendParameterP(copyFiltersP));
                     setPage(1)
                     break;
                 case true:
                     setIsFilterOpen(true);
-                    dispatch(resetInfoBird())
+                    dispatch(resetInfoLand())
                     setShowBackdrop(false)
                     break;
                 default:
@@ -57,7 +60,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
 
         <React.Fragment>
             {mainImage && (
-                <Header imageUrl={mainImage} bird={birds} back={stepBack} />
+                <HeaderLand imageUrl={mainImage} register={Register} back={stepBack} />
             )}
             <Grid container spacing={0} sx={{ background: '#86ac8e', p: { xs: 2, md: 5 } }}>
                 {/* Galería de imágenes */}

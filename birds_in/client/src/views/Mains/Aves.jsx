@@ -1,16 +1,21 @@
 import * as React from 'react'
+//LIBRARY
 import { useDispatch, useSelector } from 'react-redux'
-import { loadMoreData } from '../../redux/actions/fetchAllBirds'
 import { Box, Button, Dialog, Divider, Grid, Typography, useTheme } from '@mui/material'
-import { FiltersAves } from '../../components/Mains/Aves/FiltersAves'
-import { Cards } from '../../components/Cards/Cards'
-import { MenuBar } from '../../components/Menus/MenuBar'
-import { isOneBird, resetInfoBird } from '../../redux/slices/BirdsSlice';
+//ICONS
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
+//COMPONENTS
+import { Cards } from '../../components/Cards/Cards'
+import { FiltersAves } from '../../components/Mains/Aves/FiltersAves'
+import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
 import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves'
+//REDUX
+import { isOneBird, resetInfoBird } from '../../redux/slices/BirdsSlice';
+import { loadMoreData } from '../../redux/actions/fetchAllBirds'
+
 export const Aves = () => {
 
   const theme = useTheme()
@@ -73,7 +78,7 @@ export const Aves = () => {
       >
         <Dialog
           open={isFilterDialogOpen}
-          onClose={() => setFilterDialogOpen(false)}
+          onClose={() => {}}
           fullWidth={true}
           maxWidth='md'
         >
@@ -99,7 +104,7 @@ export const Aves = () => {
               borderRadius: '20px',
               mb: 10,
               mt: 10,
-              
+
             }}
           >
             <Grid container

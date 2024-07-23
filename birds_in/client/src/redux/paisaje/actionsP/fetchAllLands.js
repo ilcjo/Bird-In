@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { fetchInfo, howMuch, isOneBird, loadMoreDataSuccess, returnFilters, saveCounting, setNoMoreResults, stringParameter } from '../../slices/BirdsSlice'
+import { fetchInfo, isOneBird, loadMoreDataSuccess, saveCounting, } from '../../slices/BirdsSlice'
 import { createParams } from '../../../components/utils/convertId';
+import { howMuch, returnFilters, setNoMoreResults, stringParameter } from '../slicesP/LandscapeSlice';
 
 
 
@@ -32,14 +33,16 @@ export const loadMoreData = (currentPage, parameters) => {
   };
 };
 
-export const sendParameter = (selectedOptions) => {
+export const sendParameterP = (selectedOptions) => {
+  console.log(selectedOptions)
   return async (dispatch) => {
     try {
       const queryParams = createParams(selectedOptions)
-      const response = await axios.get(`/aves/filtros?${queryParams}`);
-      const data = response.data.avesFiltradas;
+      console.log(queryParams, 'queryparam que se va a enviar')
+      const response = await axios.get(`/paisajes/filtros?${queryParams}`);
+      const data = response.data.RegistrosFiltrados;
       const result = response.data.isLastPage
-      const total = response.data.totalResultsClausula
+      const total = response.data.totalResults
       dispatch(stringParameter(queryParams))
       dispatch(returnFilters(data))
       dispatch(setNoMoreResults(result));
@@ -57,7 +60,7 @@ export const backInfo = (params) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(`/aves/filtros?${params}`);
-      const data = response.data.avesFiltradas;
+      const data = response.data.RegistrosFiltrados;
       dispatch(returnFilters(data))
     } catch (error) {
       console.log('error enviando datos:', error);

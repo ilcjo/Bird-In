@@ -40,10 +40,10 @@ export const IndexTabsCreate = ({
     
     //si pasa a la otra pestaña que confirme el cover este 
     const handleTabChange = (event, newValue) => {
-        console.log(coverSelected, 'dentro')
+        // console.log(coverSelected, 'dentro')
         if (newValue === 0 && !coverSelected) {
             // Si se intenta cambiar a la pestaña de imágenes existentes sin una portada seleccionada, muestra el diálogo de advertencia
-            alert("Debes Seleccionar una Portada.");
+            alert("Debe Seleccionar una Portada.");
         } else {
             setSelectedTab(newValue);
             setImagesExistTabEnabled(false)
@@ -83,10 +83,6 @@ export const IndexTabsCreate = ({
                             {/* Contenido de la primera pestaña */}
                             <CreateBird
                                 changeTabSearch={changeTabSearch}
-                                changeTab={changeTab}
-                                showUpdateBird={showUpdateBird}
-                                showSearchBird={showSearchBird}
-                                selectedBird={selectedBird}
                                 changeImagenTab={() => setSelectedTab(1)}
                                 isImages={() => setImagesExistTabEnabled(true)}
                             />

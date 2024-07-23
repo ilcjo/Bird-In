@@ -21,7 +21,7 @@ export const sendPhotosDelete = (ids, urls) => {
 };
 
 export const sendCoverPhoto = (id, idAves) => {
-    console.log('llega al axios', id, idAves)
+    // console.log('llega al axios', id, idAves)
     return async (dispatch) => {
         try {
             const requestData = {

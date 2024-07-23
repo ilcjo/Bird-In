@@ -20,7 +20,7 @@ export const sendPhotosDeleteP = (ids, urls) => {
 };
 
 export const sendCoverPhotoP = (id, idPaisaje) => {
-    console.log('llega al axios', id, idPaisaje)
+    // console.log('llega al axios', id, idPaisaje)
     return async (dispatch) => {
         try {
             const requestData = {

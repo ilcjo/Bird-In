@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getAve, saveUrlImage } from "../../slices/createSlice";
 import { getLand, saveUrlImageLand } from "../slicesP/createLandSlice";
 
 export const saveImageFtpLand = (formData) => {
@@ -54,23 +53,23 @@ export const UpdatePaisajeImage = (formData) => {
   }
 };
 
-export const UpdateAveDestacada = (formData) => {
-  return async (dispatch) => {
-    try {
-      const response = await axios.post('aves/upload_destacada', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
-        },
-      });
-      // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
-      console.log('Respuesta del servidor:', response.data);
-      return response;
-    } catch (error) {
-      // Maneja los errores de la solicitud
-      console.error('Error al enviar la imagen:', error);
-    }
-  }
-};
+// export const UpdateAveDestacada = (formData) => {
+//   return async (dispatch) => {
+//     try {
+//       const response = await axios.post('aves/upload_destacada', formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
+//         },
+//       });
+//       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
+//       console.log('Respuesta del servidor:', response.data);
+//       return response;
+//     } catch (error) {
+//       // Maneja los errores de la solicitud
+//       console.error('Error al enviar la imagen:', error);
+//     }
+//   }
+// };
 
 export const actualizarPaisaje = (info) => {
   return async (dispatch) => {

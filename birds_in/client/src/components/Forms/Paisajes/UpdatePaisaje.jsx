@@ -2,10 +2,8 @@ import * as  React from 'react'
 import {
     Alert,
     Autocomplete,
-    Backdrop,
     Box,
     Button,
-    CircularProgress,
     Divider,
     Grid,
     IconButton,
@@ -25,6 +23,7 @@ import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import PlaceIcon from '@mui/icons-material/Place';
 //COMPONENTS
 import { ImageUploader } from '../../utils/ImageUploader';
 import { Loading } from '../../utils/Loading';
@@ -39,19 +38,6 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
     const { paises, zonas } = useSelector(state => state.birdSlice.options)
     const { infoLandForUpdate } = useSelector(state => state.createLand);
 
-    // const sortAlphabetically = (array) => {
-    //     return array.slice().sort((a, b) => {
-    //         if (a && a.nombre && b && b.nombre) {
-    //             const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-    //             const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-    //             return nameA.localeCompare(nameB);
-    //         }
-    //         return 0;
-    //     });
-    // };
-    // const sortedPaises = sortAlphabetically(paises);
-    // const sortedZonas = sortAlphabetically(zonas)
-
     const initialCreateData = {
         pais: infoLandForUpdate.paise || [],
         zona: infoLandForUpdate.zona || [],
@@ -60,10 +46,11 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
         ImgDescatada: infoLandForUpdate.destacada || '',
         idPaisaje: infoLandForUpdate.id || 0,
         urlImagen: infoLandForUpdate.imagenes_paisajes || [],
+        map: infoLandForUpdate.map || '',
     }
     // console.log(infoAveForUpdate)
     const [createData, setCreateData] = React.useState(initialCreateData)
-    const [imageURL, setImageURL] = React.useState([]); // Para mostrar la imagen seleccionada
+    const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFile, setImageFile] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]); // Nuevo estado para mantener todas las URLs de las imágenes
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -72,6 +59,19 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se ha Actualizado correctamente.');
+
+    React.useEffect(() => {
+        setShowBackdrop(true); // Mostrar el backdrop al inicio
+        setLoadingMessage('Cargando..'); // Ejemplo de mensaje de carga completada (ajusta según necesites)
+
+        const timer = setTimeout(() => {
+            setShowBackdrop(false); // Cerrar el backdrop después de 5 segundos
+        }, 3000);
+
+        return () => {
+            clearTimeout(timer); // Limpiar el temporizador al desmontar el componente
+        };
+    }, []);
 
     React.useEffect(() => {
         setCreateData(initialCreateData);
@@ -116,7 +116,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
             const imageUrls = Array.from(selectedImages).map(image => URL.createObjectURL(image));
-            setImageURL(imageUrls);
+            // setImageURL(imageUrls);
             setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
             setImageFile((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
         }
@@ -124,8 +124,8 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
 
     //ELIMINAR IMÁGENES
     const handleRemoveImage = (index) => {
-        URL.revokeObjectURL(imageURL[index]);
-        const updatedImageURLs = [...imageURL];
+        URL.revokeObjectURL(imageLink[index]);
+        const updatedImageURLs = [...imageLink];
         updatedImageURLs.splice(index, 1);
         setImageURL(updatedImageURLs);
         setAllImageURLs((prevAllImageURLs) => prevAllImageURLs.filter((_, i) => i !== index));
@@ -145,18 +145,20 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                 for (let i = 0; i < imageFile.length; i++) {
                     formData.append('images', imageFile[i]);
                 }
-                setLoadingMessage('Subiendo Imágenes...');
+                setLoadingMessage('Subiendo Imágenes al Servidor...');
                 imageUrl = await uploadImagesFtpAndSaveLinks(formData);
                 setLoadingMessage('Actualizando Paisaje...');
             }
-
+            if (createData.zona.nombre) {
+                localStorage.setItem('nombrePaisaje', JSON.stringify(createData.zona.nombre))
+            }
             await createFullEntry(createData, imageUrl);
 
             setShowBackdrop(false);
             setLoadingMessage('Actualización en proceso...');
             setOpenSnackbar(true);
 
-            setImageURL([]);
+            setImageLink([]);
             setImageFile([]);
             setAllImageURLs([])
             if (imageUrl) {
@@ -181,6 +183,13 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
             window.open(createData.urlWiki, '_blank');
         }
     };
+    
+    const handleMapsClick = () => {
+        if (createData.map) {
+            window.open(createData.map, '_blank');
+        }
+    };
+
     const handleReturnSearch = () => {
         showUpdateRegister(false)
         showSearchRegister(true)
@@ -243,7 +252,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' >
+                                <Typography variant='h2' color='primary' sx={{ mb: 3 }} >
                                     Formulario de Actualización
                                 </Typography>
                             </Grid>
@@ -323,7 +332,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Zonas"
-                                            sx={{ mb: 2}}
+                                            sx={{ mb: 2 }}
                                         />}
                                     isOptionEqualToValue={(option, value) => option.nombre === value?.nombre}
                                 />
@@ -365,6 +374,34 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                                                     }}
                                                 >
                                                     <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={12} >
+                                <StyledTextField
+                                    label="URL de Google Maps"
+                                    variant="filled"
+                                    fullWidth
+                                    name="map"
+                                    value={createData.map}
+                                    onChange={handleInputChange}
+                                    margin='dense'
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <IconButton onClick={handleMapsClick}
+                                                    sx={{
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                        color: theme.palette.primary.light
+                                                    }}
+                                                >
+                                                    <PlaceIcon />
                                                 </IconButton>
                                             </InputAdornment>
                                         ),

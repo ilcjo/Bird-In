@@ -16,7 +16,9 @@ const {
    setDbCoverPaisaje,
    findPhotosIdPaisaje,
    sendAndUpdatePaisaje,
-   deleteRegisterDb
+   deleteRegisterDb,
+   fetchOptionsLand,
+   filterOptionsPaisZonasPaisaje
 } = require('../../controllers/Lands/landsController');
 const ftp = require('basic-ftp');
 const { deletePhotoFromFTPPaisajes } = require('../../utils/deletFtp');
@@ -29,9 +31,9 @@ const {
 
 
 const getFilterInfoP = async (req, res) => {
-   const { descripcion, pais, zonas, page, perPage } = req.query;
+   const { pais, zonas, page, perPage } = req.query;
    try {
-      const allData = await fetchFilterLands(descripcion, pais, zonas, page, perPage)
+      const allData = await fetchFilterLands(pais, zonas, page, perPage)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
@@ -43,40 +45,26 @@ const getFilterInfoP = async (req, res) => {
 
 };
 
-const selectOptions = async (req, res) => {
+const selectOptionsP = async (req, res) => {
    try {
-      const getAllOptions = await fetchOptions()
+      const getAllOptions = await fetchOptionsLand()
       return res.status(200).json(getAllOptions)
    } catch (error) {
       res.status(500).json({ error: error.message })
    }
 };
 
-const getFilterOptions = async (req, res,) => {
-   const { familia,
-      grupo,
-      nombreCientifico,
-      nombreIngles,
+const getFilterOptionsP = async (req, res,) => {
+   const {
       pais,
-      zonas,
+      zona,
    } = req.query;
    try {
       let newOptions;
-      if (zonas || pais) {
-         newOptions = await filterOptionsPaisZonas(familia,
-            grupo,
-            nombreCientifico,
-            nombreIngles,
+      if (zona || pais) {
+         newOptions = await filterOptionsPaisZonasPaisaje(
             pais,
-            zonas,
-         );
-      } else {
-         newOptions = await filterOptions(familia,
-            grupo,
-            nombreCientifico,
-            nombreIngles,
-            pais,
-            zonas,
+            zona,
          );
       }
       return res.status(200).json(newOptions);
@@ -86,13 +74,13 @@ const getFilterOptions = async (req, res,) => {
 };
 
 const createLand = async (req, res) => {
-
    const {
       pais,
       zona,
       descripcion,
       urlWiki,
-      urlImagen
+      urlImagen,
+      map
    } = req.body;
 
    try {
@@ -102,7 +90,8 @@ const createLand = async (req, res) => {
          zona,
          descripcion,
          urlWiki,
-         urlImagen)
+         urlImagen,
+         map)
       return res.status(200).json(succesCreate)
 
    } catch (error) {
@@ -202,8 +191,8 @@ const updateInfoPaisaje = async (req, res) => {
       urlWiki,
       urlImagen,
       idPaisaje,
+      map
    } = req.body;
-
    try {
       const successUpdate = await sendAndUpdatePaisaje(
          pais,
@@ -212,6 +201,7 @@ const updateInfoPaisaje = async (req, res) => {
          urlWiki,
          urlImagen,
          idPaisaje,
+         map
       )
       return res.status(200).json(successUpdate)
 
@@ -282,8 +272,8 @@ const checkLandsDuplicate = async (req, res) => {
 
 module.exports = {
    getFilterInfoP,
-   selectOptions,
-   getFilterOptions,
+   selectOptionsP,
+   getFilterOptionsP,
    createLand,
    uploadImageftpPaisajes,
    findInfoForUpdateP,

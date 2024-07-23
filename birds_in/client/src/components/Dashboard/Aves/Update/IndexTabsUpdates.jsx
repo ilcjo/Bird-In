@@ -33,7 +33,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
         setSelectedTab(newValue);
     };
 
-    const handleNavigateToCoverDelet = () => {
+    const handleNavigateToCoverDelete = () => {
         setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
     };
     
@@ -52,7 +52,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
                     </Typography>} />
                     <StyledTab label={<Typography variant='h5' >
                         Imágenes Existente
-                    </Typography>} onClick={handleNavigateToCoverDelet} />
+                    </Typography>} onClick={handleNavigateToCoverDelete} />
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%' }}>
                     {selectedTab === 0 && (
@@ -62,7 +62,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
                                 showUpdateBird={showUpdateBird}
                                 showSearchBird={showSearchBird}
                                 selectedBird={selectedBird}
-                                changeImagenExist={handleNavigateToCoverDelet}
+                                changeImagenExist={handleNavigateToCoverDelete}
                             />
                         </React.Fragment>
                     )}

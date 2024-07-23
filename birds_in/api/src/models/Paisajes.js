@@ -18,6 +18,11 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: null
     },
+    map: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: null
+  },
   });
 
 };

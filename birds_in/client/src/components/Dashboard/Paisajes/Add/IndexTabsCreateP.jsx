@@ -3,7 +3,7 @@ import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 //COMPONENTS
 import { CreateLand } from '../../../Forms/Paisajes/CreateLand';
-import { CoverDeletP } from './CoverDeletP';
+import { CoverDeleteP } from './CoverDeleteP';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -35,17 +35,31 @@ export const IndexTabsCreateP = ({
     history,
     changeTabSearch }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
+    const [coverSelected, setCoverSelected] = React.useState(false);
+    const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
 
     const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
+        if (newValue === 0 && !coverSelected) {
+            // Si se intenta cambiar a la pestaña de imágenes existentes sin una portada seleccionada, muestra el diálogo de advertencia
+            alert("Debe Seleccionar una Portada.");
+        } else {
+            setSelectedTab(newValue);
+            setImagesExistTabEnabled(false)
+            setCoverSelected(false)
+        }
     };
 
-    const handleNavigateToCoverDelet = () => {
-        setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
+    //función que determina si tiene cover en true
+    const handleSetCoverSelected = (isSelected) => {
+        setCoverSelected(isSelected);
     };
+
+    // const handleNavigateToCoverDelet = () => {
+    //     setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
+    // };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth:'800px' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '800px' }}>
 
                 <StyledTabs
                     value={selectedTab}
@@ -57,29 +71,32 @@ export const IndexTabsCreateP = ({
                     <StyledTab label={<Typography variant='h5' >
                         Información
                     </Typography>} />
-                    <StyledTab label={<Typography variant='h5' >
-                        Imágenes Existente
-                    </Typography>} onClick={handleNavigateToCoverDelet} />
+                    <StyledTab
+                        label={<Typography variant='h5' >
+                            Imágenes Existente
+                        </Typography>}
+                        disabled={!imagesExistTabEnabled} />
 
                 </StyledTabs>
-                <Box sx={{ width: '100%', maxWidth: '100%',  }}>
+                <Box sx={{ width: '100%', maxWidth: '100%', }}>
                     {selectedTab === 0 && (
                         <React.Fragment>
                             {/* Contenido de la primera pestaña */}
                             <CreateLand
                                 changeTabSearch={changeTabSearch}
-                                changeTab={changeTab}
-                                changeImagenExist={handleNavigateToCoverDelet}
+                                changeImagenTab={() => setSelectedTab(1)}
+                                isImages={() => setImagesExistTabEnabled(true)}
                             />
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDeletP
+                        <CoverDeleteP
                             isCreate={true}
                             changeTab={changeTab}
                             showUpdateRegister={showUpdateRegister}
                             showSearchRegister={showSearchRegister}
                             selectedRegister={selectedRegister}
+                            setCoverSelected={handleSetCoverSelected}
                         />
                     )}
                 </Box>

@@ -8,16 +8,15 @@ const initialState = {
     filtersOn: false,
     noMoreResults: true,
     currentFiltersP: {
-        pais: [],
+        paises: [],
         zona: [],
-        descripcion: [],
     },
     filtersP: '',
     copyFiltersP: {},
     count: {},
     oneLand: false,
-    total: 0
-
+    loading: false,
+    total: 0,
 };
 
 export const landscapeSlice = createSlice({
@@ -47,11 +46,10 @@ export const landscapeSlice = createSlice({
             state.currentPage = action.payload
         },
         saveFilters: (state, action) => {
-            const { pais, zona, descripcion } = action.payload
+            const { pais, zona } = action.payload
             state.currentFiltersP = {
-                pais: pais.map(option => ({ id: option.id, nombre: option.nombre })),
+                paises: pais.map(option => ({ id: option.id, nombre: option.nombre })),
                 zonas: zona.map(option => ({ id: option.id, nombre: option.nombre })),
-                ingles: descripcion.map(option => ({ id: option.id, nombre: option.nombre })),
             };
         },
         stringParameter: (state, action) => {
@@ -62,16 +60,15 @@ export const landscapeSlice = createSlice({
         },
         resetCurrentFilters: (state) => {
             state.currentFiltersP = {
-                pais: [],
+                paises: [],
                 zona: [],
-                descripcion: [],
             };
         },
-        saveOptions: (state, action) => {
+        saveOptionsP: (state, action) => {
             state.saveOptionsP = action.payload
         },
-        resetInfoBird: (state) => {
-            state.infoLands= [],
+        resetInfoLand: (state) => {
+            state.infoLands = [],
                 state.noMoreResults = true
         },
         setNoMoreResults: (state, action) => {
@@ -83,16 +80,19 @@ export const landscapeSlice = createSlice({
         copingFilters: (state, action) => {
             state.copyFiltersP = { ...state.currentFiltersP }
         },
-        isOneBird: (state, action) => {
+        isOneLand: (state, action) => {
             state.oneLand = action.payload;
         },
         howMuch: (state, action) => {
             state.total = action.payload;
         },
+        cargando: (state, action) => {
+            state.loading = action.payload
+        },
     }
 });
 
 export const {
-
+    fetchInfo, copyInfo, loadMoreDataSuccess, fetchOptions, returnFilters, newOptions, setCurrentPage, saveFilters, stringParameter, searchBarResult, resetCurrentFilters, saveOptionsP, resetInfoLand, setNoMoreResults, saveCounting, copingFilters, isOneLand, howMuch, cargando
 } = landscapeSlice.actions;
 export default landscapeSlice.reducer;

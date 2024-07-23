@@ -20,9 +20,8 @@ export const CoverDelete = ({
     showSearchBird,
     selectedBird,
     setCoverSelected,
-    
 }) => {
-// console.log(setCoverSelected)
+
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombreAve = localStorage.getItem('nombreIngles') || 'del Ave';
@@ -33,8 +32,8 @@ export const CoverDelete = ({
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-    const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [errorMessage, setErrorMessage] = React.useState(null);
+    const [snackbarMessage, setSnackbarMessage] = React.useState('');
 
     const handleSetAsCover = async (id, url, destacada) => {
         // console.log(id)
@@ -59,7 +58,9 @@ export const CoverDelete = ({
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
-            setCoverSelected(true)
+            if (setCoverSelected) {
+                setCoverSelected(true);
+            }
         } catch (error) {
             console.error('Error al realizar la acción:', error);
             setErrorMessage(`Error al realizar la acción: ${error.message}`);
@@ -193,7 +194,7 @@ export const CoverDelete = ({
                     <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
+                    <Divider sx={{ my: 2,borderColor: theme.palette.primary.main, }} />
                     <Button
                         variant="contained"
                         color="error"

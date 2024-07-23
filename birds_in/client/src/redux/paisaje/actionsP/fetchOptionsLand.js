@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { fetchOptions, newOptions, searchBarResult, setNoMoreResults } from '../../slices/BirdsSlice'
 import { createParams } from '../../../components/utils/convertId';
+import { fetchOptions, newOptions, setNoMoreResults } from '../slicesP/LandscapeSlice';
 
-export const getOptionsData = () => {
+export const getOptionsDataP = () => {
   return async (dispatch) => {
     try {
       const response = await axios('aves/opciones')
@@ -15,25 +15,13 @@ export const getOptionsData = () => {
   }
 };
 
-export const fetchNewOptions = (selectedOptions) => {
+export const fetchNewOptionsP = (selectedOptions) => {
   return async (dispatch) => {
     try {
       const parameter = createParams(selectedOptions)
-      const response = await axios(`aves/nuevasOpciones?${parameter}`);
+      const response = await axios(`paisajes/nuevasOpciones?${parameter}`);
       const data = response.data
       dispatch(newOptions(data))
-    } catch (error) {
-      console.log('error enviando datos:', error)
-    }
-  }
-};
-
-export const searchBar = (name) => {
-  return async (dispatch) => {
-    try {
-      const response = await axios(`aves/filtros?nombreIngles=${name}`)
-      const result = response.data
-      dispatch(searchBarResult(result))
     } catch (error) {
       console.log('error enviando datos:', error)
     }

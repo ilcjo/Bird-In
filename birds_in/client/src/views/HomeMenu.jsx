@@ -87,38 +87,36 @@ export const HomeMenu = () => {
                 margin: '0px',
                 mt: 0,
                 transition: 'filter 0.5s ease-in-out',
-                filter: hoveredSection && hoveredSection !== section.id ? 'blur(4px)' : 'none',
+                filter: 'none',
               }}
-              onMouseEnter={() => setHoveredSection(section.id)}
-              onMouseLeave={() => setHoveredSection(null)}
             >
               <Box
                 sx={{
                   position: 'relative',
-                  width: hoveredSection === section.id ? '110%' : '100%',
+                  width: '100%',
                   height: { xs: '600px', md: '100%' }, // Altura fija para XS y altura automática para MD y superiores
                   minHeight: { xs: '600px' }, // Altura mínima para XS
                   borderRadius: { xs: 0, md: '0px 0px 0px 0px' },
                   transition: 'transform 0.5s ease-in-out, border-radius 0.3s ease-in-out',
-                  zIndex: hoveredSection === section.id ? 10 : 1, // Asegura que el elemento tenga un zIndex base
-                  transform: hoveredSection === section.id ? 'scale(1.1)' : 'scale(1)',
+                  zIndex: 1, // Asegura que el elemento tenga un zIndex base
+                  transform: 'scale(1)',
                   animation: `fadeIn 1s ease-out ${index * 0.5}s both`,
-                  // '&:hover': {
-                  //   borderRadius: '0px 0px 50px 50px',
-                  //   transform: 'scale(1.01)',
-                  //   zIndex: 10,
-                  // },
-                  // '&:hover::before': {
-                  //   content: '""',
-                  //   position: 'absolute',
-                  //   top: 0,
-                  //   left: 0,
-                  //   width: '100%',
-                  //   height: '100%',
-                  //   backgroundColor: 'rgba(16, 51, 0, 0.1)', // Establece el fondo transparente deseado
-                  //   backdropFilter: 'blur(4px)', // Efecto blur
-                  //   zIndex: 2, // Asegura que el blur esté encima
-                  // },
+                  '&:hover': {
+                    borderRadius: '0px 0px 50px 50px',
+                    transform: 'scale(1.06)',
+                    zIndex: 10,
+                  },
+                  '&:hover::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)', // Establece el fondo transparente deseado
+                    zIndex: 2, // Asegura que el blur esté encima
+                    transition: 'filter 0.3s ease-in-out',
+                  },
                   '&:hover .title': {
                     fontSize: '2.8rem', // Tamaño de fuente más grande al hacer hover
                     color: 'white'

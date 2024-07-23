@@ -2,11 +2,8 @@ import * as  React from 'react'
 import {
     Alert,
     Autocomplete,
-    Backdrop,
     Box,
     Button,
-    Chip,
-    CircularProgress,
     Divider,
     Grid,
     IconButton,
@@ -23,13 +20,14 @@ import { createLand, duplicateNameCheckP, getInfoForUpdateNameP, saveImageFtpLan
 //ICONS
 import SaveIcon from '@mui/icons-material/Save';
 import { ImageUploader } from '../../utils/ImageUploader';
+import PlaceIcon from '@mui/icons-material/Place';
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 //COMPONENTES
 import { Loading } from '../../utils/Loading';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 
 
-export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
+export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
@@ -47,24 +45,15 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
     const [registerCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
 
-    // const sortAlphabetically = (array) => {
-    //     return array.slice().sort((a, b) => {
-    //         if (a && a.nombre && b && b.nombre) {
-    //             return a.nombre.localeCompare(b.nombre);
-    //         }
-    //         return 0;
-    //     });
-    // };
-    // const sortedPaises = sortAlphabetically(paises);
-    // const sortedZonas = sortAlphabetically(zonas);
-
     const [createData, setCreateData] = React.useState({
         pais: null,
         zona: null,
         descripcion: '',
         urlWiki: '',
         urlImagen: [],
+        map: ''
     });
+    // console.log(createData)
     const [errors, setErrors] = React.useState({
         pais: false,
         zona: false,
@@ -107,8 +96,14 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
             window.open(createData.urlWiki, '_blank');
         }
     };
+    const handleMapsClick = () => {
+        if (createData.map) {
+            window.open(createData.map, '_blank');
+        }
+    };
 
-    const handleZonaChange = (newValue) => {
+    const handleZonaChange = (event, newValue) => {
+        console.log(newValue, 'llegando')
         if (!newValue) {
             setCreateData({
                 ...createData,
@@ -119,6 +114,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
         setCreateData({
             ...createData,
             zona: newValue,
+            map: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(newValue.nombre)}`,
         });
         setErrors({
             ...errors,
@@ -136,7 +132,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Este Registro ya existe');
                 // Restablece el valor del input
-                changeTabSearch()
+                changeTabSearch();
             }
         }, 700);
     };
@@ -194,7 +190,8 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                 setSnackBarMessage('El Paisaje se a creado correctamente.')
                 setTimeout(() => {
                     dispatch(getInfoForUpdateNameP(createData.zona.id))
-                    changeImagenExist();
+                    changeImagenTab(1);
+                    isImages(true)
                 }, 1500);
             } catch (error) {
                 console.log('este es el error:', String(error))
@@ -229,7 +226,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
 
     const createFullEntry = async (createData, imageUrl) => {
         return new Promise((resolve, reject) => {
-            // console.log('imagenes q llegan', imageUrl)
+            // console.log('imágenes q llegan', imageUrl)
             dispatch(createLand({ ...createData, urlImagen: imageUrl }))
                 .then(() => {
                     resolve(); // Si la creación del ave tiene éxito, resuelve la Promesa sin un mensaje.
@@ -306,7 +303,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                             <Grid item xs={12} sm={6}>
                                 <Autocomplete
                                     disablePortal
-                                    id="combo-box-pais"
+                                    id="combo-box"
                                     options={paises}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
@@ -315,7 +312,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                         <TextField
                                             {...params}
                                             required
-                                            label="Países"
+                                            label="Seleccionar País"
                                             error={errors.pais}
                                             helperText={errors.pais ? 'Este campo es obligatorio' : ''}
                                             FormHelperTextProps={{
@@ -346,11 +343,11 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                     options={zonas}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.zona}
-                                    onChange={(event, newValue) => handleZonaChange(newValue)}
+                                    onChange={handleZonaChange}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             required
-                                            label="Zonas"
+                                            label="Seleccionar Zona"
                                             error={errors.zona}
                                             helperText={errors.zona ? 'Este campo es obligatorio' : ''}
                                             FormHelperTextProps={{
@@ -365,7 +362,7 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                                 },
                                             }}
                                         />}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    isOptionEqualToValue={(option, value) => option.id === value.id}
                                     filterOptions={(options, state) => {
                                         const inputValue = state.inputValue.toLowerCase();
                                         const selectedPais = createData.pais; // Obtener el país seleccionado
@@ -414,7 +411,6 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
-
                                                 <IconButton onClick={handleLogoClick}
                                                     sx={{
                                                         zIndex: 1,
@@ -424,6 +420,35 @@ export const CreateLand = ({ changeImagenExist, changeTabSearch }) => {
                                                     }}
                                                 >
                                                     <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={12} >
+                                <StyledTextField
+                                    label="URL de Google Maps"
+                                    variant="filled"
+                                    fullWidth
+                                    name="map"
+                                    value={createData.map}
+                                    onChange={handleInputChange}
+                                    margin='dense'
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+
+                                                <IconButton onClick={handleMapsClick}
+                                                    sx={{
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                        color: theme.palette.primary.light
+                                                    }}
+                                                >
+                                                    <PlaceIcon />
                                                 </IconButton>
                                             </InputAdornment>
                                         ),
