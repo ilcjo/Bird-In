@@ -923,9 +923,6 @@ const findNameDuplicate = async (nombre) => {
     }
 };
 
-
-
-
 module.exports = {
     fetchOptions,
     filterOptions,
