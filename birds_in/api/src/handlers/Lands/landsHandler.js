@@ -1,13 +1,6 @@
 
 require('dotenv').config();
 const {
-   fetchOptions,
-   filterOptions,
-   filterOptionsPaisZonas,
-   getContadores,
-   deleteBirdDb,
-} = require("../../controllers/birds/birdsController");
-const {
    findNameDuplicateP,
    sendAndCreateLand,
    findDataByNameP,
@@ -20,20 +13,20 @@ const {
    fetchOptionsLand,
    filterOptionsPaisZonasPaisaje
 } = require('../../controllers/Lands/landsController');
+
 const ftp = require('basic-ftp');
-const { deletePhotoFromFTPPaisajes } = require('../../utils/deletFtp');
+const { deletePhotoFromFTPPaisajes } = require('../../services/deletFtp');
 const {
    FTP_HOST_2,
    FTP_USER_2,
    FTP_PASS_2,
 } = process.env
 
-
-
 const getFilterInfoP = async (req, res) => {
    const { pais, zonas, page, perPage } = req.query;
    try {
       const allData = await fetchFilterLands(pais, zonas, page, perPage)
+      // console.log(allData, 'DATA')
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }

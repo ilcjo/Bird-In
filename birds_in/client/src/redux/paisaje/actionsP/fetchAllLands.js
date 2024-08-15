@@ -34,7 +34,7 @@ export const loadMoreData = (currentPage, parameters) => {
 };
 
 export const sendParameterP = (selectedOptions) => {
-  console.log(selectedOptions)
+  console.log(selectedOptions,'llega las opciones antes de query')
   return async (dispatch) => {
     try {
       const queryParams = createParams(selectedOptions)

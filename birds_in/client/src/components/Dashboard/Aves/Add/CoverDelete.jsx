@@ -163,7 +163,8 @@ export const CoverDelete = ({
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
                 padding: '0px 40px 30px 0px',
-                borderRadius: '0px 0px 20px 20px'
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container alignItems="center">

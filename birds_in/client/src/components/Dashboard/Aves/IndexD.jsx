@@ -7,13 +7,10 @@ import { useDispatch } from 'react-redux';
 import { setEstateInfo } from '../../../redux/slices/createSlice';
 //COMPONENTS
 import { SearchBird } from './Update/SearchBird';
-import { Customize } from './Customs/CustomizeIndex';
 import { GruposOptions } from './Options/GruposOptions';
 import { FamiliasOptions } from './Options/FamiliasOptions';
-import { ZonasOptions } from './Options/ZonasOptions';
 import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './Add/IndexTabsCreate';
-import { IndexTabsUsuarios } from '../Usuarios/IndexTabUsuarios';
 
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -52,6 +49,14 @@ export const IndexD = () => {
     setSelectedTab(0);
   };
 
+  React.useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const tab = query.get('tab');
+    if (tab) {
+      setSelectedTab(Number(tab));
+    }
+  }, [location]);
+  
   return (
     <>
       <StyledTabs
@@ -73,7 +78,7 @@ export const IndexD = () => {
           <Typography variant='h5'>
             Actualizar
           </Typography>} />
-          
+
         <StyledTab label={<Typography variant='h5' >
           Crear
         </Typography>}
@@ -96,7 +101,7 @@ export const IndexD = () => {
           </Typography>
           }
         />
-        <StyledTab
+        {/* <StyledTab
           label={<Typography variant='h5' >
             Zonas
           </Typography>
@@ -112,13 +117,12 @@ export const IndexD = () => {
             Usuarios
           </Typography>
           }
-        />
+        /> */}
       </StyledTabs >
       <div>
         {selectedTab === 0 && (
           <Box>
             <SearchBird changeTab={(newValue) => setSelectedTab(newValue)} isEnable={setIsFormEnabled} />
-
           </Box>
         )}
         {selectedTab === 1 && (
@@ -141,21 +145,21 @@ export const IndexD = () => {
             <GruposOptions />
           </Box>
         )}
-        {selectedTab === 5 && (
+        {/* {selectedTab === 5 && (
           <Box>
             <ZonasOptions />
           </Box>
-        )}
-        {selectedTab === 6 && (
+        )} */}
+        {/* {selectedTab === 6 && (
           <Box>
             <Customize />
           </Box>
-        )}
-        {selectedTab === 7 && (
+        )} */}
+        {/* {selectedTab === 7 && (
           <Box>
             <IndexTabsUsuarios />
           </Box>
-        )}
+        )} */}
 
       </div>
     </>

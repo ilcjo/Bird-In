@@ -60,7 +60,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                 <Box sx={{ width: '100%', maxWidth: '100%' }}>
                     {selectedTab === 0 && (
                         <React.Fragment>
-                            {/* Contenido de la primera pestaña */}
+
                             <UpdatePaisaje changeTab={changeTab}
                                 showUpdateRegister={showUpdateRegister}
                                 showSearchRegister={showSearchRegister}

@@ -8,19 +8,19 @@ export const createParams = (selectedOptions) => {
   let queryParams = '';
 
   if (selectedOptions.grupo && selectedOptions.grupo.length > 0) {
-    queryParams += `grupo=${selectedOptions.grupo.map(ave => ave.id).join('&grupo=')}`;
+    queryParams += `grupo=${selectedOptions.grupo.map(item => item.id).join('&grupo=')}`;
   }
   if (selectedOptions.familia && selectedOptions.familia.length > 0) {
     queryParams += queryParams ? '&' : '';
-    queryParams += `familia=${selectedOptions.familia.map(ave => ave.id).join('&familia=')}`;
+    queryParams += `familia=${selectedOptions.familia.map(item => item.id).join('&familia=')}`;
   }
   if (selectedOptions.pais && selectedOptions.pais.length > 0) {
     queryParams += queryParams ? '&' : '';
-    queryParams += `pais=${selectedOptions.pais.map(ave => ave.id).join('&pais=')}`;
+    queryParams += `pais=${selectedOptions.pais.map(item => item.id).join('&pais=')}`;
   }
   if (selectedOptions.zona && selectedOptions.zona.length > 0) {
     queryParams += queryParams ? '&' : '';
-    queryParams += `zonas=${selectedOptions.zona.map(ave => ave.id).join('&zonas=')}`;
+    queryParams += `zonas=${selectedOptions.zona.map(item => item.id).join('&zonas=')}`;
   }
   if (selectedOptions.ingles && selectedOptions.ingles.length > 0) {
     queryParams += queryParams ? '&' : '';

@@ -12,7 +12,7 @@ const {
     verifyTokenRecover,
     changePassRecover,
     changePassDirect
-} = require('../../handlers/users/userHandle')
+} = require('../../handlers/settings/users/userHandle')
 
 const userRouter = Router()
 userRouter.post('/register', registerUser)

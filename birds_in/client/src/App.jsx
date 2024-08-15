@@ -18,6 +18,7 @@ import { ProtectedRoute } from './ProtectedRoute'
 import { MenuBar } from './components/Menus/MenuBar'
 import { PhotosDetailAves } from './components/Mains/Aves/PhotosDetailAves'
 import { TimeOut } from './components/utils/TimeOut'
+import { DashSettings } from './views/Dash/DashSettings'
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
       <Route path="/menu" 
         element={
           <ProtectedRoute roles={['user', 'admin']} >
-            <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} />
+            <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} ShowMantButton={true} />
             <HomeMenu />
           </ProtectedRoute>
         } />
@@ -91,6 +92,12 @@ function App() {
         element={<ProtectedRoute roles={['admin']} >
           <MenuBar ShowFilterButton={false} ShowBackButton={true} />
           <DashPaisajes />
+        </ProtectedRoute>
+        } />
+         <Route path="/mantenimiento"
+        element={<ProtectedRoute roles={['admin']} >
+          <MenuBar ShowFilterButton={false} ShowBackButton={true} />
+          <DashSettings />
         </ProtectedRoute>
         } />
     </Routes>

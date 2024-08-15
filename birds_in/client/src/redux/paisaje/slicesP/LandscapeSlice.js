@@ -8,7 +8,7 @@ const initialState = {
     filtersOn: false,
     noMoreResults: true,
     currentFiltersP: {
-        paises: [],
+        pais: [],
         zona: [],
     },
     filtersP: '',
@@ -48,8 +48,8 @@ export const landscapeSlice = createSlice({
         saveFilters: (state, action) => {
             const { pais, zona } = action.payload
             state.currentFiltersP = {
-                paises: pais.map(option => ({ id: option.id, nombre: option.nombre })),
-                zonas: zona.map(option => ({ id: option.id, nombre: option.nombre })),
+                pais: pais.map(option => ({ id: option.id, nombre: option.nombre })),
+                zona: zona.map(option => ({ id: option.id, nombre: option.nombre })),
             };
         },
         stringParameter: (state, action) => {
@@ -60,7 +60,7 @@ export const landscapeSlice = createSlice({
         },
         resetCurrentFilters: (state) => {
             state.currentFiltersP = {
-                paises: [],
+                pais: [],
                 zona: [],
             };
         },

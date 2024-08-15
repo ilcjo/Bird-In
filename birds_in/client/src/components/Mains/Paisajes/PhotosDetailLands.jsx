@@ -4,9 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-//REDUX
-import { resetInfoBird, } from '../../../redux/slices/BirdsSlice';
-import { sendParameter } from '../../../redux/actions/fetchAllBirds';
 //COMPONENTS
 import { ImagesCards } from '../../Cards/ImagesCards'
 import { Header } from '../../Header';
@@ -72,7 +69,7 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                         justifyContent: 'center',
                         width: '100%',
                         margin: 'auto',
-                        backgroundColor: 'rgba(32,60,18, 0.5)',
+                        backgroundColor: 'rgba(0, 56, 28, 0.3)',
                         backdropFilter: 'blur(8px)',
                         padding: { xs: '10px', md: '40px' },
                         borderRadius: '20px',

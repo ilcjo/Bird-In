@@ -88,7 +88,7 @@ export const SearchLands = ({ changeTab }) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: '170vh',
+                        width: '145vh',
                         height: '40vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                         backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo

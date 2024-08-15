@@ -16,14 +16,14 @@ const {
 } = require("../../controllers/birds/birdsController");
 const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
-const { VistaAvesOrdenadaAll } = require('../../db/db');
 const {
    FTP_HOST,
    FTP_USER,
    FTP_PASS,
 } = process.env
 
-const { deletePhotoFromFTP } = require('../../utils/deletFtp');
+const { deletePhotoFromFTP } = require('../../services/deletFtp');
+const vistaAvesOrdenadaAll = require('../../config/db/db');
 // const { connectToFtp, uploadImages } = require('../../utils/FTPUpoad');
 
 const getFilterInfo = async (req, res) => {
@@ -321,7 +321,7 @@ const checkBirdDuplicate = async (req, res) => {
 const getAllAvesAsExcel = async (req, res) => {
    try {
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
-      const aves = await VistaAvesOrdenadaAll.findAll();
+      const aves = await vistaAvesOrdenadaAll.findAll();
 
       // Crea un nuevo workbook y worksheet con exceljs
       const workbook = new exceljs.Workbook();

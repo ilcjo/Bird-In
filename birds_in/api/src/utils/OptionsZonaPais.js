@@ -1,4 +1,6 @@
-const { Zonas } = require('../db/db');
+// 
+
+const Zonas = require("../config/db/db");
 
 const obtenerIdDeZonas = async (idPais) => {
     // console.log('LLEGUE A ID ZONA')
@@ -17,9 +19,8 @@ const obtenerIdDeZonas = async (idPais) => {
 };
 
 const obtenerIdDePais = async (idZona) => {
-    // console.log('LLEGUE A IDPAIS')
-     // Realiza una consulta para obtener los IDs de zonas relacionadas al país
-     const zonas = await Zonas.findAll({
+    // Realiza una consulta para obtener los IDs de zonas relacionadas al país
+    const zonas = await Zonas.findAll({
         where: {
             id_zona: idZona, // Supongamos que el campo que relaciona las zonas con los países se llama id_pais
         },

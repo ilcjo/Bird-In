@@ -1,3 +1,166 @@
+// import * as React from 'react';
+// import { Box, Button, Divider, Typography, useTheme } from '@mui/material';
+// import { Link as RouterLink } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
+// import Slider from 'react-slick';
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+
+// const sections = [
+//   { id: 'aves', title: 'Aves', description: 'Fotografías de aves' },
+//   { id: 'animales', title: 'Animales', description: 'Fotografías de animales' },
+//   { id: 'peces', title: 'Peces', description: 'Fotografías de peces' },
+//   { id: 'paisajes', title: 'Paisajes', description: 'Fotografías de paisajes' },
+//   { id: 'flores', title: 'Flores', description: 'Fotografías de Flores' },
+//   { id: 'SobreMi', title: 'Sobre Mi', description: 'Leer sobre mi' },
+//   // Add more sections here
+// ];
+
+// export const HomeMenu = () => {
+//   const theme = useTheme();
+//   const admin = localStorage.getItem('tipoCliente');
+//   const isAdmin = admin === 'admin';
+//   const { allCustom } = useSelector((state) => state.customizesSlice);
+//   const sliderRef = React.useRef(null);
+
+//   // Access image URLs
+//   const images = {
+//     aves: allCustom.cover_birds,
+//     animales: allCustom.cover_animals,
+//     peces: allCustom.cover_fish,
+//     flores: allCustom.cover_flowers,
+//     paisajes: allCustom.cover_land,
+//     SobreMi: allCustom.cover_about,
+//     // Add more images here
+//   };
+
+//   const settings = {
+//     dots: false,
+//     infinite: true,
+//     speed: 500,
+//     slidesToShow: 3, // Number of items to show at once
+//     slidesToScroll: 1,
+//     autoplay: false,
+//     // arrows: true,
+//     responsive: [
+//       {
+//         breakpoint: 960,
+//         settings: {
+//           slidesToShow: 2,
+//         },
+//       },
+//       {
+//         breakpoint: 600,
+//         settings: {
+//           slidesToShow: 1,
+//         },
+//       },
+//     ],
+//   };
+
+//   const handleMouseEnter = (direction) => {
+//     if (sliderRef.current) {
+//       if (direction === 'left') {
+//         sliderRef.current.slickPrev();
+//       } else {
+//         sliderRef.current.slickNext();
+//       }
+//     }
+//   };
+
+//   return (
+//     <Box sx={{ backgroundColor: '#103300', padding: '20px', height: 'auto', position: 'relative' }}>
+      
+//       <Box
+//         sx={{
+//           position: 'absolute',
+//           top: 0,
+//           left: 0,
+//           bottom: 0,
+//           width: '10%',
+//           zIndex: 10,
+//         }}
+//         onMouseEnter={() => handleMouseEnter('left')}
+//       />
+
+//       <Box
+//         sx={{
+//           position: 'absolute',
+//           top: 0,
+//           right: 0,
+//           bottom: 0,
+//           width: '10%',
+//           zIndex: 10,
+//         }}
+//         onMouseEnter={() => handleMouseEnter('right')}
+//       />
+
+//       <Slider ref={sliderRef} {...settings}>
+//         {sections.map((section, index) => (
+//           <Box key={section.id} sx={{ padding: '0 2px' }}>
+//             <Box
+//               sx={{
+//                 position: 'relative',
+//                 borderRadius: '20px',
+//                 overflow: 'hidden',
+//                 transition: 'transform 0.5s ease-in-out',
+//                 '&:hover': { transform: 'scale(1.05)' },
+//               }}
+//             >
+//               <img
+//                 src={images[section.id]}
+//                 alt={section.title}
+//                 style={{ width: '100%', height: '95vh', objectFit: 'cover' }}
+//               />
+//               <Box
+//                 sx={{
+//                   position: 'absolute',
+//                   bottom: 0,
+//                   left: 0,
+//                   width: '100%',
+//                   padding: '20px',
+//                   background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
+//                   color: '#fff',
+//                 }}
+//               >
+//                 <Typography variant="h5" color="primary.main">
+//                   {section.title}
+//                 </Typography>
+//                 <Divider sx={{ my: 1, borderColor: theme.palette.primary.main }} />
+//                 <Typography variant="body1" color="primary.light">
+//                   {section.description}
+//                 </Typography>
+//                 <Box mt={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+//                   <Button
+//                     variant="contained"
+//                     color="primary"
+//                     component={RouterLink}
+//                     to={`/${section.id}`}
+//                     sx={{ marginRight: '10px' }}
+//                   >
+//                     {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
+//                   </Button>
+//                   {isAdmin && section.id !== 'SobreMi' && (
+//                     <Button
+//                       variant="outlined"
+//                       color="primary"
+//                       component={RouterLink}
+//                       to={`/panel${section.id}`}
+//                     >
+//                       Editar
+//                     </Button>
+//                   )}
+//                 </Box>
+//               </Box>
+//             </Box>
+//           </Box>
+//         ))}
+//       </Slider>
+//     </Box>
+//   );
+// };
+
+
 import * as React from 'react';
 import { Box, Button, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';

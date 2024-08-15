@@ -10,8 +10,9 @@ import { backInfo, getInfoBirds } from '../../redux/actions/fetchAllBirds';
 import { clearToken } from '../../redux/slices/Auth';
 import { getOptionsData } from '../../redux/actions/fetchOptions';
 import { isOneBird } from '../../redux/slices/BirdsSlice';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton, showAdmin }) => {
+export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton, showAdmin, ShowMantButton }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -51,6 +52,11 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
     dispatch(isOneBird(false));
   };
 
+  const mantClick = () => {
+    navigate('/mantenimiento');
+    dispatch(getOptionsData());
+  };
+
   return (
     <React.Fragment>
       <Grid
@@ -75,6 +81,25 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             loading="lazy" />
         </Link>
         <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1, gap: '10px' }}>
+          {ShowMantButton && (
+            <Button
+              sx={{
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                color: 'white',
+                '&:hover': {
+                  borderBottom: '2px solid white',
+                  borderRadius: '0px',
+
+                },
+              }}
+              variant="text"
+              onClick={mantClick}
+              startIcon={<SettingsIcon />}
+            >
+              {!isMobile && 'Mantenimiento'}
+            </Button>
+          )}
           {ShowFilterButton && (
             <Button
               sx={{
@@ -102,7 +127,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 '&:hover': {
                   borderBottom: '2px solid white',
                   borderRadius: '0px',
-                  
+
                 },
               }}
               variant="text"
@@ -116,16 +141,17 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             sx={{
               fontSize: '1rem',
               fontWeight: 'bold',
+              color: 'white',
               '&:hover': {
                 borderBottom: '2px solid white',
                 borderRadius: '0px',
-                color:'white'
+                color: 'white'
               },
             }}
             variant="text"
             onClick={onLogoutClick}
             endIcon={<LogoutIcon />}
-            color='secondary'
+          // color='primary'
           >
             {!isMobile && 'Cerrar Sesión'}
           </Button>

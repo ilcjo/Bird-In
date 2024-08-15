@@ -122,6 +122,7 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         <React.Fragment>
             <Grid component={Box}
                 sx={{
+                    // width: '90%',
                     height: 'auto',
                     borderRadius: '20px 20px 20px 20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
@@ -135,7 +136,7 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 <Grid container alignItems="center">
                         <Grid item xs={12}>
                             {/*Pais */}
-                            <FormControl sx={{ m: 1, width: '95%' }}>
+                            <FormControl sx={{ m: 1, width: '90%' }}>
                                 <Autocomplete
                                     multiple
                                     value={selectOption.pais}
@@ -176,7 +177,7 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                         </Grid>
                         <Grid item xs={12}>
                             {/* Zona */}
-                            <FormControl sx={{ m: 1, width: '95%' }}>
+                            <FormControl sx={{ m: 1, width: '90%' }}>
                                 <Autocomplete
                                     multiple
                                     value={selectOption.zona}

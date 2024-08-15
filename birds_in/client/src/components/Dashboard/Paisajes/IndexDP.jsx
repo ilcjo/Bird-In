@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
 //REDUX
 import { setStateInfoP } from '../../../redux/paisaje/slicesP/createLandSlice';
 //COMPONENTS
@@ -31,6 +32,7 @@ const StyledTab = styled(Tab)({
 export const IndexDP = () => {
   const dispatch = useDispatch();
   const theme = useTheme()
+  const navigate = useNavigate()
   const [selectedTab, setSelectedTab] = React.useState(1);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
 
@@ -40,11 +42,14 @@ export const IndexDP = () => {
     if (convertNumber === 1) {
       dispatch(setStateInfoP());
     }
-
   };
 
   const handleNavigateToSearch = () => {
     setSelectedTab(0); // Cambia a la pestaña de imágenes existentes
+  };
+
+  const handleNavigateToPanelAves = () => {
+    navigatew('/panelaves?tab=5'); // Assumes you have a router setup to handle this path
   };
 
   return (
@@ -57,7 +62,7 @@ export const IndexDP = () => {
         aria-label="tabsAdmin"
         sx={{
           backgroundColor: 'rgba(0, 56, 28, 0.1)',
-          backdropFilter: 'blur(8px)', 
+          backdropFilter: 'blur(8px)',
           borderRadius: '20px 20px 0px 0px',
           '& .Mui-selected': {
             backgroundColor: theme.palette.custom.light,
@@ -73,7 +78,6 @@ export const IndexDP = () => {
           Crear
         </Typography>}
         />
-
       </StyledTabs >
       <div>
         {selectedTab === 0 && (

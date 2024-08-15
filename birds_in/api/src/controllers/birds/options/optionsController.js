@@ -1,4 +1,4 @@
-const { Aves, Grupos, Familias, Paises, Zonas } = require('../../../db/db');
+const {Aves, Familias, Grupos, Zonas} = require("../../../config/db/db");
 
 const createZonas = async (zona, paisId) => {
     try {

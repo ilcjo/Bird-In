@@ -1,8 +1,8 @@
 const { Op, Sequelize } = require("sequelize");
-const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas, VistaAvesOrdenadaAll } = require('../../db/db');
+const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas, VistaAvesOrdenadaAll } = require('../../config/db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
-const { deletePhotoFromFTP } = require("../../utils/deletFtp");
+const { deletePhotoFromFTP } = require("../../services/deletFtp");
 
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;

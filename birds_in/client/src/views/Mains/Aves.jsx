@@ -98,7 +98,7 @@ export const Aves = () => {
               justifyContent: 'center',
               width: '100%',
               margin: 'auto',
-              backgroundColor: 'rgba(32,60,18, 0.2)',
+              backgroundColor: 'rgba(0, 56, 28, 0.1)',
               backdropFilter: 'blur(8px)',
               paddingBottom: '50px',
               borderRadius: '20px',

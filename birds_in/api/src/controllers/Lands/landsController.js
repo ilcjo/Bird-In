@@ -1,10 +1,8 @@
-const { Op, Sequelize } = require("sequelize");
-const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas, Paisajes, Imagenes_paisajes } = require('../../db/db');
-const mapFieldValues = require('../../utils/mapOptions');
-const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
-const { deletePhotoFromFTPPaisajes } = require("../../utils/deletFtp");
+const { Sequelize } = require("sequelize");
+const { deletePhotoFromFTPPaisajes } = require("../../services/deletFtp");
+const { Paisajes, Paises, Imagenes_paisajes, Zonas } = require("../../config/db/db");
 
-const DEFAULT_PER_PAGE = 8;
+const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
 
 const fetchFilterLands = async (pais, zona, page, perPage) => {
@@ -81,74 +79,7 @@ const fetchOptionsLand = async () => {
     }
 };
 
-const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
-    const perpage = '0'
-    const page = '0'
-    const allResults = await fetchFilterLands(
-        grupo,
-        familia,
-        pais,
-        nombreIngles,
-        nombreCientifico,
-        zonas,
-        page,
-        perpage)
 
-    const newOptions = {
-        grupos: [],
-        familias: [],
-        paises: [],
-        zonas: [],
-        nIngles: [],
-        nCientifico: [],
-    };
-
-    const gruposSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        gruposSet.add(JSON.stringify({
-            id: ave.dataValues.grupos_id_grupo,
-            nombre: ave.grupo.dataValues.nombre
-        }));
-    });
-    const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
-    newOptions.grupos = gruposArray
-    const familiasSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        familiasSet.add(JSON.stringify({
-            id: ave.dataValues.familias_id_familia,
-            nombre: ave.familia.dataValues.nombre
-        }));
-    });
-    const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
-    newOptions.familias = familiasArray;
-
-    const paisesSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        ave.paises.forEach(pais => paisesSet.add(JSON.stringify({
-            id: pais.dataValues.id_pais,
-            nombre: pais.dataValues.nombre
-        })));
-    });
-    newOptions.paises = Array.from(paisesSet).map(pais =>
-        JSON.parse(pais));
-
-    const zonasSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        ave.zonasAves.forEach(zona => zonasSet.add(JSON.stringify({
-            id: zona.dataValues.id_zona,
-            nombre: zona.dataValues.nombre
-        })));
-    });
-    newOptions.zonas = Array.from(zonasSet).map(zona =>
-        JSON.parse(zona));
-    const nombresCientificos = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
-    newOptions.nCientifico = nombresCientificos;
-    const nombresIngles = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_ingles })))];
-    newOptions.nIngles = nombresIngles;
-    // const listaZona = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.zonas })))];
-    // newOptions.zonas = listaZona;
-    return newOptions;
-};
 
 const filterOptionsPaisZonasPaisaje = async (pais, zona) => {
     // console.log('primera', zona, pais);
@@ -391,60 +322,6 @@ const setDbCoverPaisaje = async (idFoto, idPaisaje) => {
     }
 };
 
-const getContadores = async () => {
-    try {
-        const allBirds = await Aves.count();
-        const allEnglish = await Aves.count({
-            where: {
-                nombre_ingles: {
-                    [Sequelize.Op.not]: null, // El nombre en inglés no es nulo
-                    [Sequelize.Op.not]: ''    // El nombre en inglés no está vacío
-                }
-            }
-        });
-        const allCientifico = await Aves.count({
-            where: {
-                nombre_cientifico: {
-                    [Sequelize.Op.not]: null, // El nombre en inglés no es nulo
-                    [Sequelize.Op.not]: ''    // El nombre en inglés no está vacío
-                }
-            }
-        });
-        const allComun = await Aves.count({
-            where: {
-                nombre_comun: {
-                    [Sequelize.Op.not]: null, // El nombre en inglés no es nulo
-                    [Sequelize.Op.not]: ''    // El nombre en inglés no está vacío
-                }
-            }
-        });
-        const withoutContry = await Aves.count({
-            where: {
-                [Sequelize.Op.not]: Sequelize.literal('EXISTS (SELECT 1 FROM aves_has_paises WHERE aves.id_ave = aves_has_paises.aves_id_ave)'),
-            },
-        })
-        const allCountrys = await Paises.count({
-            distinct: true,
-            col: 'id_pais', // Ajusta según el nombre real de la columna en tu modelo
-            include: [{
-                model: Aves,
-                through: 'aves_has_paises',
-                attributes: [], // Evita recuperar todos los atributos de la relación
-                required: true, // Utiliza una inner join para asegurar que solo obtengas registros que tengan relaciones en aves_has_paises
-            }],
-        });
-
-        const allGrupos = await Grupos.count();
-        const allFamilias = await Familias.count()
-        const allZonas = await Zonas.count()
-
-
-        return { allBirds, allEnglish, allCientifico, allComun, allGrupos, allFamilias, allZonas, allCountrys }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-};
 
 const deleteRegisterDb = async (id) => {
     // console.log(id)
@@ -519,14 +396,12 @@ const findNameDuplicateP = async (id) => {
 
 module.exports = {
     fetchOptionsLand,
-    filterOptions,
     fetchFilterLands,
     sendAndCreateLand,
     findDataByIdP,
     sendAndUpdatePaisaje,
     findPhotosIdPaisaje,
     setDbCoverPaisaje,
-    getContadores,
     filterOptionsPaisZonasPaisaje,
     deleteRegisterDb,
     findDataByNameP,

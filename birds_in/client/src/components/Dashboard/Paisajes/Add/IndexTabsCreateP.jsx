@@ -59,7 +59,7 @@ export const IndexTabsCreateP = ({
     // };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '800px' }}>
+            <Box sx={{ width: '100%', maxWidth: '70%', margin: '0 auto', minWidth: '800px' }}>
 
                 <StyledTabs
                     value={selectedTab}

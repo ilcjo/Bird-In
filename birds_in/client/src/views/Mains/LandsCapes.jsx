@@ -82,8 +82,8 @@ export const LandsCapes = () => {
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => { }}
-          fullWidth={true}
-          maxWidth='md'
+          fullWidth={false}
+          // maxWidth='md'
         >
           <FiltersLands isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
@@ -101,7 +101,7 @@ export const LandsCapes = () => {
               justifyContent: 'center',
               width: '100%',
               margin: 'auto',
-              backgroundColor: 'rgba(32,60,18, 0.2)',
+              backgroundColor: 'rgba(0, 56, 28, 0.1)',
               backdropFilter: 'blur(8px)',
               paddingBottom: '50px',
               borderRadius: '20px',
@@ -121,7 +121,7 @@ export const LandsCapes = () => {
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
                 <Typography variant='h6' color='white' sx={{ marginLeft: '20px' }}>
-                  Total de Aves Filtradas: {total}
+                  Total de Paisajes Filtrados: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
               </Grid>
