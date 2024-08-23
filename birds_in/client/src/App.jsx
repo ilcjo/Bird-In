@@ -6,7 +6,7 @@ import { Animals } from './views/Mains/Animals'
 import { Flowers } from './views/Mains/Flowers'
 import { LandsCapes } from './views/Mains/LandsCapes'
 import { Peces } from './views/Mains/Peces'
-import { CarruselGallery } from './components/Galeries/Aves/CarruselGallery'
+import { CarruselGallery } from './components/Gallery/CarruselGallery'
 import { SobreMi } from './views/Mains/SobreMi'
 
 

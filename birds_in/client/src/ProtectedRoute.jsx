@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch, } from 'react-redux';
-import { clearToken } from './redux/slices/Auth';
+import { clearToken } from './redux/settings/slices/Auth';
 
 export const ProtectedRoute = ({ element, roles, children }) => {
     const isAuthenticated = localStorage.getItem('token');

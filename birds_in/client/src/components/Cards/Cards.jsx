@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Card, CardActionArea, CardActions, CardMedia, Divider, IconButton, Typography } from '@mui/material'
 import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
-import { sendParameter } from '../../redux/actions/fetchAllBirds';
 import { Loading } from '../utils/Loading';
+import { sendParameter } from '../../redux/birds/actions/filterAction';
 
 export const Cards = React.memo(({ foto, name, index }) => {
 

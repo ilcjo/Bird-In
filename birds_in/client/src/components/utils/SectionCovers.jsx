@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Backdrop, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, SnackbarContent, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { UpdateCustomizes, getAllCustomizes } from '../../redux/actions/Custome';
 import { useTheme } from '@emotion/react';
 import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { getAllCustomizes, UpdateCustomizes } from '../../redux/settings/actions/Custom';
 
 export const SectionCovers = ({ title, coverKey }) => {
     const theme = useTheme()

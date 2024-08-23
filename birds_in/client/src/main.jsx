@@ -1,19 +1,21 @@
 import * as React from 'react';
+import axios from 'axios';
 import { createRoot } from "react-dom/client";// Importar createRoot
-import { Provider } from 'react-redux';
-import store from './redux/store';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
-import App from './App.jsx';
 import theme from './assets/styles/theme.js';
 import { CssBaseline } from '@mui/material';
-import axios from 'axios';
-import { getOptionsData } from './redux/actions/fetchOptions';
-import { saveOptions } from './redux/slices/BirdsSlice';
-import { getAllCustomizes } from './redux/actions/Custome';
+//components
+import App from './App.jsx';
 import './index.css'
+//redux
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import { getOptionsData } from './redux/birds/actions/fetchOptions.js';
+import { saveOptions } from './redux/birds/slices/FilterSlice.js';
 import { getOptionsDataP } from './redux/paisaje/actionsP/fetchOptionsLand.js';
 import { saveOptionsP } from './redux/paisaje/slicesP/LandscapeSlice.js';
+import { getAllCustomizes } from './redux/settings/actions/Custom.js';
 
 // Configurar la URL base de Axios
 const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';

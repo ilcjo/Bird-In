@@ -13,14 +13,16 @@ import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
 import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves'
 //REDUX
-import { isOneBird, resetInfoBird } from '../../redux/slices/BirdsSlice';
-import { loadMoreData } from '../../redux/actions/fetchAllBirds'
+import { isOneBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
+import { loadMoreData } from '../../redux/birds/actions/infoAction';
+
 
 export const Aves = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, infoBirds, filters, noMoreResults, oneBird, total } = useSelector(state => state.birdSlice)
+  const { loading, infoBirds, oneBird, total } = useSelector(state => state.birdSlice)
+  const { filters, noMoreResults } = useSelector(state => state.filterSlice)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
@@ -78,7 +80,7 @@ export const Aves = () => {
       >
         <Dialog
           open={isFilterDialogOpen}
-          onClose={() => {}}
+          onClose={() => { }}
           fullWidth={true}
           maxWidth='md'
         >

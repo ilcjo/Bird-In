@@ -1,9 +1,12 @@
 import * as React from 'react'
 import { Backdrop, Button, CircularProgress, Divider, Grid, Snackbar, SnackbarContent, TextField, Typography, useTheme } from '@mui/material'
-import { SectionCovers } from '../../../utils/SectionCovers'
 import { useDispatch, useSelector } from 'react-redux'
-import { UpdateCustomizesText } from '../../../../redux/actions/Custome';
+//components
+import { SectionCovers } from '../../../utils/SectionCovers'
+//icons
 import SaveIcon from '@mui/icons-material/Save';
+//redux
+import { UpdateCustomizesText } from '../../../../redux/settings/actions/Custom';
 
 export const CoverLogin = () => {
     const theme = useTheme()

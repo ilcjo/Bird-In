@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Grid, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../../redux/actions/userLoginRegister';
+import { getUsers } from '../../redux/settings/actions/userLoginRegister';
 import { IndexSet } from '../../components/Dashboard/Settings/IndexSet';
 
 export const DashSettings = () => {

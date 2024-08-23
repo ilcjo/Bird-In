@@ -15,10 +15,12 @@ import {
   SnackbarContent,
   Stack,
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch, } from 'react-redux';
-import { Boolean } from '../../redux/slices/OpenClose';
-import { pendingEmail, registerData, } from '../../redux/actions/userLoginRegister';
+//icons
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+//redux
+import { Boolean } from '../../redux/settings/slices/OpenClose';
+import { pendingEmail, registerData, } from '../../redux/settings/actions/userLoginRegister';
 
 
 export const RegisterForm = ({ changeTab, close }) => {

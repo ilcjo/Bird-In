@@ -9,9 +9,11 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { recoverPass } from '../../redux/actions/userLoginRegister';
 import { useDispatch } from 'react-redux';
+//components
 import { Loading } from '../utils/Loading';
+//redux
+import { recoverPass } from '../../redux/settings/actions/userLoginRegister';
 
 
 export const ForgotPass = () => {

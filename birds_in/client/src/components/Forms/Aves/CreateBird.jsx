@@ -14,10 +14,7 @@ import {
     Typography,
     useTheme
 } from '@mui/material';
-//ESTADOS GLOBALES
 import { useDispatch, useSelector } from 'react-redux';
-import { createBird, duplicateNameCheck, getInfoForUpdateName, saveImageFtp } from '../../../redux/actions/createBirds';
-import { getOptionsData } from '../../../redux/actions/fetchOptions';
 //ICONS
 import SaveIcon from '@mui/icons-material/Save';
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
@@ -25,6 +22,10 @@ import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 import { Loading } from '../../utils/Loading';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
+//redux
+import { createBird, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/birds/actions/crudAction';
+import { saveImageFtp } from '../../../redux/birds/actions/photosAction';
+import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
 
 
 export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -32,7 +33,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filterSlice.options)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);

@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Backdrop, Button, CircularProgress, Divider, Grid, Snackbar, SnackbarContent, TextField, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { UpdateCustomizesText } from '../../../../redux/actions/Custome';
+//icons
 import SaveIcon from '@mui/icons-material/Save';
+//redux
+import { UpdateCustomizesText } from '../../../../redux/settings/actions/Custom';
 
 
 export const About = () => {

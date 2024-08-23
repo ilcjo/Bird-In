@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux'
-import { Boolean } from '../redux/slices/OpenClose';
 import { Index } from '../components/SingUpTabs/Index';
 import { LazyLoad } from '../components/utils/LazyLoad';
+import { Boolean } from '../redux/settings/slices/OpenClose';
 
 
 export const Landing = () => {

@@ -10,9 +10,9 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 //COMPONENTS
 import { IndexTabsUpdates } from './IndexTabsUpdates';
-//ESTADOS GLOBALES
-import { getInfoForUpdate } from '../../../../redux/actions/createBirds';
 import { Loading } from '../../../utils/Loading';
+import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
+//redux
 
 
 export const SearchBird = ({ changeTab }) => {
@@ -53,7 +53,9 @@ export const SearchBird = ({ changeTab }) => {
         }
     }, [selectedBird]);
 
-
+    //tengo una idea de hacer una rta 
+    //donde solo busque lso nombre después busco el ave 
+    //que selecciona y si pone la info, para hacerlo mas rápido
     React.useEffect(() => {
         const fetchData = async () => {
             try {

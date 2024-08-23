@@ -1,24 +1,23 @@
-
 import { configureStore } from '@reduxjs/toolkit';
-import OpenClose from './slices/OpenClose';
-import Auth from './slices/Auth';
-import Birds from './slices/BirdsSlice';
-import Create from './slices/createSlice';
-import customes from './slices/customeSlice'
-import landscapeSlice from './paisaje/slicesP/LandscapeSlice';
+import Auth from './settings/slices/Auth';
+import Custom from './settings/slices/customSlice';
+import Info from './birds/slices/InfoSlice';
+import Update from './birds/slices/UpdateSlice';
+import land from './paisaje/slicesP/LandscapeSlice';
 import createLand from './paisaje/slicesP/createLandSlice';
+import OpenClose from './settings/slices/OpenClose';
+import filter from './birds/slices/FilterSlice';
 
 const store = configureStore({
   reducer: {
-    //Aves
-    openCloseSlice: OpenClose,
     authSlice: Auth,
-    birdSlice: Birds,
-    createBird: Create,
-    customizesSlice: customes,
-    //Paisaje
-    landscapeSlice: landscapeSlice,
-    createLand: createLand
+    openCloseSlice: OpenClose,
+    customizesSlice: Custom,
+    birdSlice: Info,
+    createBird: Update,
+    landscapeSlice: land,
+    createLand: createLand,
+    filterSlice: filter
   },
 });
 

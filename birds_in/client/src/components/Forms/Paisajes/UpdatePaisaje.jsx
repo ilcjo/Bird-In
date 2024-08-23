@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 //REDUX
 import { deleteLand } from '../../../redux/paisaje/actionsP/fetchAllLands';
 import { UpdatePaisajeImage, actualizarPaisaje, getInfoForUpdatePa } from '../../../redux/paisaje/actionsP/createLands';
-import { getOptionsData } from '../../../redux/actions/fetchOptions';
 //ICONS
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 import SaveIcon from '@mui/icons-material/Save';
@@ -28,6 +27,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { Loading } from '../../utils/Loading';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
+import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
 
 
 export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSearchRegister, selectedRegister, changeImagenExist }) => {
@@ -35,7 +35,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, zonas } = useSelector(state => state.birdSlice.options)
+    const { paises, zonas } = useSelector(state => state.filterSlice.options)
     const { infoLandForUpdate } = useSelector(state => state.createLand);
 
     const initialCreateData = {

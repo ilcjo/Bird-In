@@ -1,10 +1,10 @@
 import * as React from 'react'
+import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { styled } from '@mui/system';
 import { About } from './About';
 import { Covers } from './Covers';
-import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { General } from './General';
 import { CoverLogin } from './CoverLogin';
-import { styled } from '@mui/system';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado

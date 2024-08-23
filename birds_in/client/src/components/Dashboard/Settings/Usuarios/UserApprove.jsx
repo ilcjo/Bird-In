@@ -22,7 +22,7 @@ import { useDispatch, useSelector, } from 'react-redux';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 //REDUX
-import { borrarUsuario, getUsers, statusChangeUser, } from '../../../../redux/actions/userLoginRegister';
+import { borrarUsuario, getUsers, statusChangeUser, } from '../../../../redux/settings/actions/userLoginRegister';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

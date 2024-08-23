@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Grid } from '@mui/material'
-import { LazyLoad } from '../components/utils/LazyLoad'
 import { useSelector } from 'react-redux'
+import { LazyLoad } from '../components/utils/LazyLoad'
 import { Recover } from '../components/utils/Recover'
 
 export const PassRecover = () => {

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Grid, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { MenuBar } from '../../components/Menus/MenuBar';
-import { getUsers } from '../../redux/actions/userLoginRegister';
+import { getUsers } from '../../redux/settings/actions/userLoginRegister';
 import { IndexDP } from '../../components/Dashboard/Paisajes/IndexDP';
 
 export const DashPaisajes = () => {

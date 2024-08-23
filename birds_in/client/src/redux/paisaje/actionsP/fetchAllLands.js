@@ -1,29 +1,16 @@
 import axios from 'axios'
-import { fetchInfo, isOneBird, loadMoreDataSuccess, saveCounting, } from '../../slices/BirdsSlice'
+// import { fetchInfo, isOneBird, loadMoreDataSuccess, saveCounting, } from '../../slices/BirdsSlice'
 import { createParams } from '../../../components/utils/convertId';
-import { howMuch, returnFilters, setNoMoreResults, stringParameter } from '../slicesP/LandscapeSlice';
+import { howMuch, loadMoreDataSuccess, returnFilters, saveCounting, setNoMoreResults, stringParameter } from '../slicesP/LandscapeSlice';
 
 
-
-export const getInfoBirds = () => {
-  return async (dispatch) => {
-    try {
-      const response = await axios('/aves/filtros')
-      const data = response.data.avesFiltradas
-      dispatch(fetchInfo(data))
-    } catch (error) {
-      console.error("Error al obtener los datos:", error)
-
-    }
-  };
-};
 
 export const loadMoreData = (currentPage, parameters) => {
   return async (dispatch) => {
     try {
       const perPages = 18
-      const response = await axios(`/aves/filtros?${parameters}&page=${currentPage}&perPage=${perPages}`);
-      const data = response.data.avesFiltradas;
+      const response = await axios(`/paisajes/filtros?${parameters}&page=${currentPage}&perPage=${perPages}`);
+      const data = response.data.RegistrosFiltrados;
       const result = response.data.isLastPage
       dispatch(loadMoreDataSuccess(data)); // Despacha la acción para actualizar el estado
       dispatch(setNoMoreResults(result));
@@ -34,7 +21,7 @@ export const loadMoreData = (currentPage, parameters) => {
 };
 
 export const sendParameterP = (selectedOptions) => {
-  console.log(selectedOptions,'llega las opciones antes de query')
+  // console.log(selectedOptions,'llega las opciones antes de query')
   return async (dispatch) => {
     try {
       const queryParams = createParams(selectedOptions)

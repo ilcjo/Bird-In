@@ -1,8 +1,8 @@
 import React from 'react'
-import birdBUild from '../../assets/images/pablita-bird-1.gif'
 import { Button, Grid, Typography } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import birdBUild from '../../assets/images/pablita-bird-1.gif'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const Animals = () => {
   const navigate = useNavigate()

@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector, } from 'react-redux';
 //REDUX
-import { borrarUsuario, changePassDirect, getUsers, } from '../../../../redux/actions/userLoginRegister';
+import { borrarUsuario, changePassDirect, getUsers, } from '../../../../redux/settings/actions/userLoginRegister'
 //COMPONENTS
 import { Loading } from '../../../utils/Loading';
 //ICONS

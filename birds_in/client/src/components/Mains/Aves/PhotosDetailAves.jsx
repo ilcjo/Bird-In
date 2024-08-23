@@ -4,19 +4,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-//REDUX
-import { resetInfoBird, setNoMoreResults } from '../../../redux/slices/BirdsSlice';
-import { sendParameter } from '../../../redux/actions/fetchAllBirds';
 //COMPONENTS
 import { ImagesCards } from '../../Cards/ImagesCards'
 import { Header } from '../../Header';
 import { Loading } from '../../utils/Loading';
+//REDUX
+import { sendParameter } from '../../../redux/birds/actions/filterAction';
+import { resetInfoBird } from '../../../redux/birds/slices/InfoSlice';
+import { setNoMoreResults } from '../../../redux/birds/slices/FilterSlice';
 
 export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { copyFilters, oneBird } = useSelector(state => state.birdSlice)
+    const { oneBird } = useSelector(state => state.birdSlice)
+    const { copyFilters } = useSelector(state => state.filterSlice)
     const birds = useSelector(state => state.birdSlice.infoBirds)
     const allImages = birds.flatMap(bird => bird.imagenes_aves);
     const mainImage = allImages.find(image => image.destacada) ? allImages.find(image => image.destacada).url : null;
@@ -25,10 +27,11 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
 
     const stepBack = () => {
         setShowBackdrop(true)
-        console.log(copyFilters, 'regreso copy filter')
+        // console.log(copyFilters, 'regreso copy filter')
         setTimeout(() => {
             switch (oneBird) {
                 case false:
+                    console.log(copyFilters)
                     dispatch(sendParameter(copyFilters));
                     setPage(1)
                     break;

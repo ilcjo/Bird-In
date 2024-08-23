@@ -15,7 +15,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 //REDUX
-import { getOptionsData } from '../../../redux/actions/fetchOptions';
 import { createLand, duplicateNameCheckP, getInfoForUpdateNameP, saveImageFtpLand } from '../../../redux/paisaje/actionsP/createLands';
 //ICONS
 import SaveIcon from '@mui/icons-material/Save';
@@ -25,13 +24,14 @@ import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 //COMPONENTES
 import { Loading } from '../../utils/Loading';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
+import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
 
 
 export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { paises, zonas } = useSelector(state => state.birdSlice.options)
+    const { paises, zonas } = useSelector(state => state.filterSlice.options)
 
     const [imgLink, setImgLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen

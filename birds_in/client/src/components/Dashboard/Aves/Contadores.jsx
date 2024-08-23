@@ -1,9 +1,7 @@
 import * as React from 'react'
-import {
-    Grid, Typography,
-} from '@mui/material';
+import { Grid, Typography, } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { counting } from '../../../redux/actions/fetchAllBirds';
+import { counting } from '../../../redux/birds/actions/infoAction';
 
 export const Contadores = () => {
     const dispatch = useDispatch()

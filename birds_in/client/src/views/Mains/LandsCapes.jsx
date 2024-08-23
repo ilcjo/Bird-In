@@ -7,7 +7,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 //COMPONENTS
-import { Cards } from '../../components/Cards/Cards';
 import { FiltersLands } from '../../components/Mains/Paisajes/FiltersLands';
 import { MenuBar } from '../../components/Menus/MenuBar';
 import { Loading } from '../../components/utils/Loading';

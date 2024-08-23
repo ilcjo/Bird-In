@@ -17,7 +17,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading } from './Loading';
 import axios from 'axios';
-import { changePassToken } from '../../redux/actions/userLoginRegister';
+import { changePassToken } from '../../redux/settings/actions/userLoginRegister';
 
 export const Recover = () => {
   const theme = useTheme();

@@ -11,12 +11,15 @@ import {
     Stack,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-//ESTADOS GLOBALES
-import { sendParameter } from '../../../redux/actions/fetchAllBirds'
-import { cargando, copingFilters, isOneBird, saveFilters, setNoMoreResults } from '../../../redux/slices/BirdsSlice'
-import { fetchNewOptions, getOptionsData } from '../../../redux/actions/fetchOptions'
 //ICONS
 import CloseIcon from '@mui/icons-material/Close';
+//ESTADOS GLOBALES
+import { sendParameter } from '../../../redux/birds/actions/filterAction';
+import { fetchNewOptions, getOptionsData } from '../../../redux/birds/actions/fetchOptions';
+import { saveFilters } from '../../../redux/birds/slices/FilterSlice';
+import { cargando, isOneBird } from '../../../redux/birds/slices/InfoSlice';
+import { copingFilters } from '../../../redux/birds/slices/FilterSlice';
+import { setNoMoreResults } from '../../../redux/birds/slices/FilterSlice';
 
 
 export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
@@ -35,7 +38,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     }, [nombreIngles]);
 
 
-    const selectOptionFromSlice = useSelector((state) => state.birdSlice.currentFilters);
+    const selectOptionFromSlice = useSelector((state) => state.filterSlice.currentFilters);
     const {
         nIngles = [],
         nCientifico = [],
@@ -43,7 +46,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         familias = [],
         grupos = [],
         zonas = []
-    } = useSelector(state => state.birdSlice.options);
+    } = useSelector(state => state.filterSlice.options);
   
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);

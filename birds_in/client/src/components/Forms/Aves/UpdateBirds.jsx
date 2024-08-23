@@ -15,10 +15,6 @@ import {
     useTheme,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-//ESTADOS GLOBALES
-import { UpdateAveImage, actualizarAve, getInfoForUpdate } from '../../../redux/actions/createBirds';
-import { getOptionsData } from '../../../redux/actions/fetchOptions';
-import { deleteBird } from '../../../redux/actions/fetchAllBirds';
 //ICONS
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 import SaveIcon from '@mui/icons-material/Save';
@@ -28,13 +24,17 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 import { Loading } from '../../utils/Loading';
+//redux
+import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
+import { actualizarAve, deleteBird, getInfoForUpdate } from '../../../redux/birds/actions/crudAction';
+import { UpdateAveImage } from '../../../redux/birds/actions/photosAction';
 
 export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.birdSlice.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filterSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
 
     const initialCreateData = {

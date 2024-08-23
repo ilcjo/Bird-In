@@ -1,16 +1,19 @@
 import * as React from 'react';
-import { Box, Button, Grid, useMediaQuery } from '@mui/material';
+//Icons
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+//Library
+import { Box, Button, Grid, useMediaQuery } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { useNavigate, Link } from 'react-router-dom';
-import { backInfo, getInfoBirds } from '../../redux/actions/fetchAllBirds';
-import { clearToken } from '../../redux/slices/Auth';
-import { getOptionsData } from '../../redux/actions/fetchOptions';
-import { isOneBird } from '../../redux/slices/BirdsSlice';
-import SettingsIcon from '@mui/icons-material/Settings';
+//redux
+import { clearToken } from '../../redux/settings/slices/Auth';
+import { isOneBird } from '../../redux/birds/slices/InfoSlice';
+import { getOptionsData } from '../../redux/birds/actions/fetchOptions';
+import { getInfoBirds } from '../../redux/birds/actions/infoAction';
 
 export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowBackButton, showAllButton, showAdmin, ShowMantButton }) => {
   const dispatch = useDispatch();
@@ -25,11 +28,11 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detecta si es móvil
 
   const handleButtonTodos = (button) => {
-    console.log('Button clicked:', button);
+    // console.log('Button clicked:', button);
     setSelectedButton(button);
 
     if (button === 'todo') {
-      console.log('Fetching all birds...');
+      // console.log('Fetching all birds...');
       dispatch(getInfoBirds());
     }
   };

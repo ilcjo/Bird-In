@@ -1,12 +1,15 @@
 import * as React from 'react'
 import { Fab, Grid, useTheme } from '@mui/material';
-import { IndexD } from '../../components/Dashboard/Aves/IndexD'
 import { useDispatch, useSelector } from 'react-redux';
+//components
+import { IndexD } from '../../components/Dashboard/Aves/IndexD'
 import { MenuBar } from '../../components/Menus/MenuBar';
-import { getUsers } from '../../redux/actions/userLoginRegister';
-import DownloadIcon from '@mui/icons-material/Download';
 import { Loading } from '../../components/utils/Loading';
-import { getExcelAves } from '../../redux/actions/fetchAllBirds';
+//icons
+import DownloadIcon from '@mui/icons-material/Download';
+//redux
+import { getUsers } from '../../redux/settings/actions/userLoginRegister';
+import { getExcelAves } from '../../redux/birds/actions/crudAction';
 
 export const DashAves = () => {
   const dispatch = useDispatch();

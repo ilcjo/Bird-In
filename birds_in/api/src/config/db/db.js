@@ -13,7 +13,7 @@ const {
 } = process.env
 
 const db = new Sequelize(`mariadb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
-  logging: console.log,
+  // logging: console.log,
   dialectOptions: {
     connectTimeout: 30000, // Aumenta el tiempo de conexión a 30 segundos (30000 ms)
   },
@@ -134,7 +134,7 @@ Mamiferos.belongsToMany(Zonas, { through: 'mamiferos_has_zonas', foreignKey: 'ma
 Zonas.belongsToMany(Mamiferos, { through: 'mamiferos_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoMamiferos' })
 //PaisesReptiles (REPTILES)
 Reptiles.belongsToMany(Paises, { through: 'reptiles_has_paises', foreignKey: 'reptiles_id_reptil', timestamps: false })
-Paises.belongsToMany(Mamiferos, { through: 'reptiles_has_paises', foreignKey: 'paises_id_pais', timestamps: false })
+Paises.belongsToMany(Reptiles, { through: 'reptiles_has_paises', foreignKey: 'paises_id_pais', timestamps: false })
 //ZonasReptiles
 Reptiles.belongsToMany(Zonas, { through: 'reptiles_has_zonas', foreignKey: 'reptiles_id_reptil', timestamps: false, as: 'zonasReptiles' })
 Zonas.belongsToMany(Reptiles, { through: 'reptiles_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoReptiles' })

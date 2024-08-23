@@ -3,7 +3,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { Header } from '../../components/Header';
 import { MenuBar } from '../../components/Menus/MenuBar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCustomizes } from '../../redux/actions/Custome';
+import { getAllCustomizes } from '../../redux/settings/actions/Custom';
 
 export const SobreMi = () => {
     const theme = useTheme()

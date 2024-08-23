@@ -3,14 +3,14 @@ import * as React from 'react'
 import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/system';
 import { useDispatch } from 'react-redux';
-//ESTADOS GLOBALES
-import { setEstateInfo } from '../../../redux/slices/createSlice';
 //COMPONENTS
 import { SearchBird } from './Update/SearchBird';
-import { GruposOptions } from './Options/GruposOptions';
-import { FamiliasOptions } from './Options/FamiliasOptions';
+import { GruposEdit } from './Class/GruposEdit';
+import { FamiliasEdit } from './Class/FamiliasEdit';
 import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './Add/IndexTabsCreate';
+//redux
+import { setEstateInfo } from '../../../redux/birds/slices/UpdateSlice';
 
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -137,17 +137,17 @@ export const IndexD = () => {
         )}
         {selectedTab === 3 && (
           <Box>
-            <FamiliasOptions />
+            <FamiliasEdit />
           </Box>
         )}
         {selectedTab === 4 && (
           <Box>
-            <GruposOptions />
+            <GruposEdit />
           </Box>
         )}
         {/* {selectedTab === 5 && (
           <Box>
-            <ZonasOptions />
+            <ZonasEdit />
           </Box>
         )} */}
         {/* {selectedTab === 6 && (

@@ -9,7 +9,7 @@ import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/ac
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 //COMPONENTS
-import { CarruselGalleryDelet } from '../../../Galeries/Aves/CarruselGalleryDelet';
+import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 import { Loading } from '../../../utils/Loading';
 import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
@@ -220,7 +220,7 @@ export const CoverDeleteP = ({
                                     />
                                 </Grid>
                             ))}
-                            <CarruselGalleryDelet
+                            <CarruselGalleryDelete
                                 isOpen={isGalleryOpen}
                                 images={infoLandForUpdate.imagenes_paisajes}
                                 selectedIndex={selectedImageIndex}

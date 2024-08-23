@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs, Typography, useTheme } from '@mui/material';
-import { RegisterForm } from './RegisterForm';
 import { useDispatch } from 'react-redux';
-import { Boolean } from '../../redux/slices/OpenClose';
+//components
+import { RegisterForm } from './RegisterForm';
 import { LoginForm } from './LoginForm';
 import { ForgotPass } from './ForgotPass';
+//redux
+import { Boolean } from '../../redux/settings/slices/OpenClose';
 
 
 export const Index = ({ open }) => {

@@ -21,11 +21,14 @@ import {
   tableCellClasses,
   useTheme
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { addZona, eliminarZona, updateZona } from '../../../redux/actions/Options';
-import { getOptionsData } from '../../../redux/actions/fetchOptions';
+//icons
+import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { addZona, eliminarZona, updateZona } from '../../../redux/settings/actions/CrudZonaPais';
+import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
+//redux
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,7 +56,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export const ZonasOptions = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { zonas, paises } = useSelector(state => state.birdSlice.options)
+  const { zonas, paises } = useSelector(state => state.filterSlice.options)
   // const [page, setPage] = React.useState(0);
   // const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [nombreZona, setNombreZona] = React.useState('');

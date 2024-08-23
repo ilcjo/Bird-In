@@ -89,7 +89,7 @@ const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, 
 
         const whereClause = buildWhereClause(familia, grupo, nombreCientifico, nombreIngles);
         let includeArr = buildIncludeArray();
-        
+
         if (pais) {
             includeArr.push(buildIncludeForPais(pais));
         }
@@ -388,7 +388,7 @@ const filterOptionsPaisZonas = async (familia,
         zonas,
         page,
         perpage)
-
+    // console.log(allResults)
     const newOptions = {
         grupos: [],
         familias: [],
@@ -410,6 +410,7 @@ const filterOptionsPaisZonas = async (familia,
             return meetsPaisCriteria && meetsZonasCriteria;
         });
     }
+    // console.log(allResults.avesFiltradas.paises)
     // Lógica para construir las opciones de paises y zonas
     if (zonas) {
         // Construir opciones de países basadas en las aves filtradas

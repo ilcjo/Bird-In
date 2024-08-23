@@ -14,16 +14,18 @@ import {
   Stack,
 
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
+//icons
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { loginUser } from '../../redux/actions/userLoginRegister';
-import { Boolean } from '../../redux/slices/OpenClose';
 import SendIcon from '@mui/icons-material/Send';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { loginFailure, loginRequest } from '../../redux/slices/Auth';
 import CloseIcon from '@mui/icons-material/Close';
-import ReCAPTCHA from 'react-google-recaptcha';
+//redux
+import { loginFailure, loginRequest } from '../../redux/settings/slices/Auth';
+import { Boolean } from '../../redux/settings/slices/OpenClose';
+import { loginUser } from '../../redux/settings/actions/userLoginRegister';
 
 export const LoginForm = ({ changeTab }) => {
 
