@@ -7,17 +7,34 @@ import land from './paisaje/slicesP/LandscapeSlice';
 import createLand from './paisaje/slicesP/createLandSlice';
 import OpenClose from './settings/slices/OpenClose';
 import filter from './birds/slices/FilterSlice';
+import data from './mamiferos/slices/InfoSlice';
+import updateInfo from './mamiferos/slices/UpdateSlice';
+import filters from './mamiferos/slices/FilterSlice';
+import filtersReptil from './reptiles/slices/FilterSlice';
+import dataReptil from './reptiles/slices/InfoSlice';
+import updateInfoR from './reptiles/slices/UpdateSlice';
 
 const store = configureStore({
   reducer: {
     authSlice: Auth,
     openCloseSlice: OpenClose,
     customizesSlice: Custom,
+    //aves
     birdSlice: Info,
     createBird: Update,
+    filterSlice: filter,
+    //paisajes
     landscapeSlice: land,
     createLand: createLand,
-    filterSlice: filter
+    //mamiferos
+    dataSlice: data,
+    updateSlice: updateInfo,
+    filters: filters,
+    //reptiles
+    dataReptil: dataReptil,
+    updateReptil: updateInfoR,
+    filterRep: filtersReptil,
+
   },
 });
 

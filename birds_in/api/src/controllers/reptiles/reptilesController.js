@@ -51,7 +51,7 @@ const buildIncludeArray = () => {
         {
             model: Imagenes_reptiles,
             as: 'imagenes_reptiles',
-            attributes: ['url_reptil', 'destacada']
+            attributes: [['url_reptil', 'url'], 'destacada']
         },
 
     ];
@@ -181,7 +181,7 @@ const fetchOptions = async () => {
 
     return {
         grupos: optionsGrupos,
-        Familias: optionsFamilias,
+        familias: optionsFamilias,
         paises: optionsPaises,
         nIngles: nombreIngles,
         nCientifico: nombreCientifico,
@@ -190,9 +190,9 @@ const fetchOptions = async () => {
 };
 
 const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
-    const perpage = '0'
-    const page = '0'
-    const allResults = await fetchFilterInsect(
+    const perpage = '0';
+    const page = '0';
+    const allResults = await fetchFilterRegister(
         grupo,
         familia,
         pais,
@@ -200,11 +200,12 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
         nombreCientifico,
         zonas,
         page,
-        perpage)
+        perpage
+    );
 
     const newOptions = {
         grupos: [],
-        Familias: [],
+        familias: [],
         paises: [],
         zonas: [],
         nIngles: [],
@@ -213,61 +214,75 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
 
     const gruposSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        gruposSet.add(JSON.stringify({
-            id: registro.dataValues.grupos_id_grupo,
-            nombre: registro.grupo.dataValues.nombre
-        }));
+        if (registro.dataValues && registro.grupos_reptile && registro.grupos_reptile.dataValues) {
+            gruposSet.add(JSON.stringify({
+                id: registro.dataValues.grupos_id_grupo,
+                nombre: registro.grupos_reptile.dataValues.nombre
+            }));
+        }
     });
-    const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
-    newOptions.grupos = gruposArray
+    newOptions.grupos = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
+
     const familiasSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        familiasSet.add(JSON.stringify({
-            id: registro.dataValues.familias_id_familia,
-            nombre: registro.familia.dataValues.nombre
-        }));
+        if (registro.dataValues && registro.familias_reptile && registro.familias_reptile.dataValues) {
+            familiasSet.add(JSON.stringify({
+                id: registro.dataValues.familias_id_familia,
+                nombre: registro.familias_reptile.dataValues.nombre
+            }));
+        }
     });
-    const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
-    newOptions.Familias = familiasArray;
+    newOptions.familias = Array.from(familiasSet).map(item => JSON.parse(item));
 
     const paisesSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        registro.paises.forEach(pais => paisesSet.add(JSON.stringify({
-            id: pais.dataValues.id_pais,
-            nombre: pais.dataValues.nombre
-        })));
+        if (registro.paises && Array.isArray(registro.paises)) {
+            registro.paises.forEach(pais => {
+                if (pais.dataValues) {
+                    paisesSet.add(JSON.stringify({
+                        id: pais.dataValues.id_pais,
+                        nombre: pais.dataValues.nombre
+                    }));
+                }
+            });
+        }
     });
-    newOptions.paises = Array.from(paisesSet).map(pais =>
-        JSON.parse(pais));
+    newOptions.paises = Array.from(paisesSet).map(pais => JSON.parse(pais));
 
     const zonasSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        registro.zonasReptiles.forEach(zona => zonasSet.add(JSON.stringify({
-            id: zona.dataValues.id_zona,
-            nombre: zona.dataValues.nombre
-        })));
+        if (registro.zonasReptiles && Array.isArray(registro.zonasReptiles)) {
+            registro.zonasReptiles.forEach(zona => {
+                if (zona.dataValues) {
+                    zonasSet.add(JSON.stringify({
+                        id: zona.dataValues.id_zona,
+                        nombre: zona.dataValues.nombre
+                    }));
+                }
+            });
+        }
     });
-    newOptions.zonas = Array.from(zonasSet).map(zona =>
-        JSON.parse(zona));
-    const nombresCientificos = [...new Set(allResults.registrosFiltrados.map(registro => ({ id: registro.id_reptil, nombre: registro.dataValues.nombre_cientifico })))];
+    newOptions.zonas = Array.from(zonasSet).map(zona => JSON.parse(zona));
+
+    const nombresCientificos = [...new Set(allResults.registrosFiltrados.map(registro => ({
+        id: registro.id_reptil,
+        nombre: registro.dataValues ? registro.dataValues.nombre_cientifico : null
+    })))];
     newOptions.nCientifico = nombresCientificos;
-    const nombresIngles = [...new Set(allResults.registrosFiltrados.map(registro => ({ id: registro.id_reptil, nombre: registro.dataValues.nombre_ingles })))];
+
+    const nombresIngles = [...new Set(allResults.registrosFiltrados.map(registro => ({
+        id: registro.id_reptil,
+        nombre: registro.dataValues ? registro.dataValues.nombre_ingles : null
+    })))];
     newOptions.nIngles = nombresIngles;
-    // const listaZona = [...new Set(allResults.map(registro => ({ id: registro.id_reptil, nombre: registro.dataValues.zonas })))];
-    // newOptions.zonas = listaZona;
+
     return newOptions;
 };
 
-const filterOptionsPaisZonas = async (familia,
-    grupo,
-    nombreCientifico,
-    nombreIngles,
-    pais,
-    zonas,
-) => {
 
-    const perpage = '0'
-    const page = '0'
+const filterOptionsPaisZonas = async (familia, grupo, nombreCientifico, nombreIngles, pais, zonas) => {
+    const perpage = '0';
+    const page = '0';
     const allResults = await fetchFilterRegister(
         familia,
         grupo,
@@ -276,11 +291,12 @@ const filterOptionsPaisZonas = async (familia,
         pais,
         zonas,
         page,
-        perpage)
+        perpage
+    );
 
     const newOptions = {
         grupos: [],
-        Familias: [],
+        familias: [],
         paises: [],
         zonas: [],
         nIngles: [],
@@ -288,111 +304,138 @@ const filterOptionsPaisZonas = async (familia,
     };
 
     // Verificar si se proporcionó un ID de zona o un ID de país
-
     if (zonas || pais) {
+        const paisNumb = parseInt(pais);
 
-        const paisNumb = parseInt(pais)
-        // Filtrar las Reptiles según el país y las zonas proporcionadas
+        // Filtrar las Mamiferos según el país y las zonas proporcionadas
         allResults.registrosFiltrados = allResults.registrosFiltrados.filter(registro => {
-            const meetsPaisCriteria = !pais || registro.paises.some(paisAve => paisAve.dataValues.id_pais === paisNumb);
-            const meetsZonasCriteria = !zonas || registro.zonasReptiles.some(zona => zonas.includes(zona.dataValues.id_zona));
+            const meetsPaisCriteria = !pais || registro.paises.some(pais => pais.dataValues && pais.dataValues.id_pais === paisNumb);
+            const meetsZonasCriteria = !zonas || registro.zonasMamiferos.some(zona => zonas.includes(zona.dataValues && zona.dataValues.id_zona));
             return meetsPaisCriteria && meetsZonasCriteria;
         });
     }
-    // Lógica para construir las opciones de paises y zonas
+
+    // Lógica para construir las opciones de países y zonas
     if (zonas) {
-        // Construir opciones de países basadas en las Reptiles filtradas
+        // Construir opciones de países basadas en las Mamiferos filtradas
         const paisesSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            registro.paises.forEach(pais =>
-                paisesSet.add(JSON.stringify({
-                    id: pais.dataValues.id_pais,
-                    nombre: pais.dataValues.nombre,
-                })));
+            if (registro.paises && Array.isArray(registro.paises)) {
+                registro.paises.forEach(pais => {
+                    if (pais.dataValues) {
+                        paisesSet.add(JSON.stringify({
+                            id: pais.dataValues.id_pais,
+                            nombre: pais.dataValues.nombre,
+                        }));
+                    }
+                });
+            }
         });
 
-        const findIdPais = await obtenerIdDePais(zonas)
+        const findIdPais = await obtenerIdDePais(zonas);
 
         const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
 
-        newOptions.paises = [JSON.parse(newopti)];
+        newOptions.paises = newopti.map(pais => JSON.parse(pais));
 
         const zonasSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            registro.zonasReptiles.forEach(zona => zonasSet.add(JSON.stringify({
-                id: zona.dataValues.id_zona,
-                nombre: zona.dataValues.nombre
-            })));
+            if (registro.zonasReptiles && Array.isArray(registro.zonasReptiles)) {
+                registro.zonasReptiles.forEach(zona => {
+                    if (zona.dataValues) {
+                        zonasSet.add(JSON.stringify({
+                            id: zona.dataValues.id_zona,
+                            nombre: zona.dataValues.nombre
+                        }));
+                    }
+                });
+            }
         });
-        newOptions.zonas = Array.from(zonasSet).map(zona =>
-            JSON.parse(zona));
+        newOptions.zonas = Array.from(zonasSet).map(zona => JSON.parse(zona));
     }
+
     if (pais) {
-        // console.log(allResults.registrosFiltrados)
-        // console.log('entro en pais');
-        // Construir opciones de zonas basadas en las Reptiles filtradas
+        // Construir opciones de zonas basadas en las Mamiferos filtradas
         const zonasSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            registro.zonasReptiles.forEach(zona =>
-                zonasSet.add(JSON.stringify({
-                    id: zona.dataValues.id_zona,
-                    nombre: zona.dataValues.nombre,
-                })));
+            if (registro.zonasMamiferos && Array.isArray(registro.zonasMamiferos)) {
+                registro.zonasMamiferos.forEach(zona => {
+                    if (zona.dataValues) {
+                        zonasSet.add(JSON.stringify({
+                            id: zona.dataValues.id_zona,
+                            nombre: zona.dataValues.nombre,
+                        }));
+                    }
+                });
+            }
         });
 
-        // console.log(zonasSet);
         const findIdZonas = await obtenerIdDeZonas(pais);
-        // console.log(findIdZonas);
         const newOptionsZona = Array.from(zonasSet).filter(zona => findIdZonas.includes(JSON.parse(zona).id));
 
-        // Transformar el formato de newOptionsZona
-        const transformedOptionsZona = newOptionsZona.map(option => ({
+        newOptions.zonas = newOptionsZona.map(option => ({
             id: JSON.parse(option).id,
             nombre: JSON.parse(option).nombre,
         }));
-        // console.log(transformedOptionsZona)
-        newOptions.zonas = transformedOptionsZona
-        // console.log(newOptions.zonas);
 
         const paisSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            registro.paises.forEach(zona => paisSet.add(JSON.stringify({
-                id: zona.dataValues.id_pais,
-                nombre: zona.dataValues.nombre
-            })));
+            if (registro.paises && Array.isArray(registro.paises)) {
+                registro.paises.forEach(pais => {
+                    if (pais.dataValues) {
+                        paisSet.add(JSON.stringify({
+                            id: pais.dataValues.id_pais,
+                            nombre: pais.dataValues.nombre
+                        }));
+                    }
+                });
+            }
         });
-        // console.log(paisSet)
-        newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa))
+        newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa));
     }
+
+    // Construir opciones de grupos
     const gruposSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        gruposSet.add(JSON.stringify({
-            id: registro.dataValues.grupos_id_grupo,
-            nombre: registro.grupo.dataValues.nombre
-        }));
+        if (registro.dataValues && registro.grupo && registro.grupo.dataValues) {
+            gruposSet.add(JSON.stringify({
+                id: registro.dataValues.grupos_id_grupo,
+                nombre: registro.grupo.dataValues.nombre
+            }));
+        }
     });
-    const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
-    newOptions.grupos = gruposArray
+    newOptions.grupos = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
+
+    // Construir opciones de familias
     const familiasSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        familiasSet.add(JSON.stringify({
-            id: registro.dataValues.familias_id_familia,
-            nombre: registro.familia.dataValues.nombre
-        }));
+        if (registro.dataValues && registro.familia && registro.familia.dataValues) {
+            familiasSet.add(JSON.stringify({
+                id: registro.dataValues.familias_id_familia,
+                nombre: registro.familia.dataValues.nombre
+            }));
+        }
     });
-    const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
-    newOptions.Familias = familiasArray;
+    newOptions.familias = Array.from(familiasSet).map(item => JSON.parse(item));
 
-    const nombresCientificos = [...new Set(allResults.registrosFiltrados.map(registro => ({ id: registro.id_reptil, nombre: registro.dataValues.nombre_cientifico })))];
+    // Construir opciones de nombres científicos
+    const nombresCientificos = [...new Set(allResults.registrosFiltrados.map(registro => ({
+        id: registro.id_mamifero,
+        nombre: registro.dataValues ? registro.dataValues.nombre_cientifico : null
+    })))];
     newOptions.nCientifico = nombresCientificos;
-    const nombresIngles = [...new Set(allResults.registrosFiltrados.map(registro => ({ id: registro.id_reptil, nombre: registro.dataValues.nombre_ingles })))];
+
+    // Construir opciones de nombres en inglés
+    const nombresIngles = [...new Set(allResults.registrosFiltrados.map(registro => ({
+        id: registro.id_mamifero,
+        nombre: registro.dataValues ? registro.dataValues.nombre_ingles : null
+    })))];
     newOptions.nIngles = nombresIngles;
-    // const listaZona = [...new Set(allResults.map(registro => ({ id: registro.id_reptil, nombre: registro.dataValues.zonas })))];
-    // newOptions.zonas = listaZona;
+
     return newOptions;
 };
 
-const sendAndCreateRegister= async (
+const sendAndCreateRegister = async (
     grupo,
     familia,
     paises,

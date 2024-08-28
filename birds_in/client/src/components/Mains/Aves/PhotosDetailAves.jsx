@@ -6,15 +6,16 @@ import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 //COMPONENTS
 import { ImagesCards } from '../../Cards/ImagesCards'
-import { Header } from '../../Header';
+
 import { Loading } from '../../utils/Loading';
 //REDUX
-import { sendParameter } from '../../../redux/birds/actions/filterAction';
 import { resetInfoBird } from '../../../redux/birds/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/birds/slices/FilterSlice';
+import { HeaderAves } from './HeaderAves';
+import { sendParameter } from '../../../redux/birds/actions/filterAction';
 
 export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
-    // console.log(setPage)
+    console.log(setPage, 'dentro')
     const theme = useTheme()
     const dispatch = useDispatch()
     const { oneBird } = useSelector(state => state.birdSlice)
@@ -57,10 +58,9 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
     }, []);
 
     return (
-
         <React.Fragment>
             {mainImage && (
-                <Header imageUrl={mainImage} bird={birds} back={stepBack} />
+                <HeaderAves imageUrl={mainImage} bird={birds} back={stepBack} />
             )}
             <Grid container spacing={0} sx={{ background: '#86ac8e', p: { xs: 2, md: 5 } }}>
                 {/* Galería de imágenes */}

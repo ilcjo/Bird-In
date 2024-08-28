@@ -148,15 +148,15 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           margin: '0px',
-          marginTop: '40px',
-          // gap: '20px',
+          marginTop: '0px',
+          gap: '0px',
           fontWeight: 500,
         },
         contained: {
-          fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+          fontSize: '1.2rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
-          borderRadius: '50px',
+          borderRadius: '5px',
           '&:hover': {
             backgroundColor: 'transparent', // Cambia el color de fondo en hover
             color: '#ccd6cc', // Cambia el color del texto en hover
@@ -164,10 +164,10 @@ const theme = createTheme({
           },
         },
         outlined: {
-          fontSize: '1.3rem', // Aumentar el tamaño del texto a 1.2 rem
+          fontSize: '1.2rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
-          borderRadius: '50px',
+          borderRadius: '5px',
           '&:hover': {
             backgroundColor: 'transparent', // Cambia el color de fondo en hover
             color: '#ccd6cc', // Cambia el color del texto en hover

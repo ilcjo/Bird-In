@@ -6,7 +6,7 @@ import { Loading } from '../utils/Loading';
 import { sendParameter } from '../../redux/birds/actions/filterAction';
 
 export const Cards = React.memo(({ foto, name, index }) => {
-
+  // console.log(foto)
   const theme = useTheme()
   const dispatch = useDispatch()
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
@@ -14,7 +14,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
   const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Cargando..')
   const destacadaImage = foto.find((img) => img.destacada);
-
+  // console.log(destacadaImage)
   const memoizedDispatch = React.useCallback(
     (selectOption) => {
       dispatch(sendParameter(selectOption));
@@ -36,7 +36,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
     const selectOption = { ingles: [{ nombre: name }] };
     memoizedDispatch(selectOption);
     // Guardar la información del ave seleccionada en localStorage
-    localStorage.setItem('selectedBird', JSON.stringify(selectOption));
+    localStorage.setItem('selectedRegistro', JSON.stringify(selectOption));
     setTimeout(() => {
       setShowBackdrop(false); // Desactivar el estado de carga después de 2 segundos
       setIsGalleryOpen(true);
@@ -105,7 +105,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
             }}>
               <Divider className="divider" sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
               <Typography
-              className="title"
+                className="title"
                 variant='h2'
                 color='primary'
                 onClick={handleDetailClick}

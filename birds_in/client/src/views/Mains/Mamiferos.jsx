@@ -8,19 +8,22 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 //COMPONENTS
 import { Cards } from '../../components/Cards/Cards'
-import { FiltersAves } from '../../components/Mains/Aves/FiltersAves'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
-import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves'
+import { Filters } from '../../components/Mains/Mamiferos/Filters';
+import { PhotosDetail } from '../../components/Mains/Mamiferos/PhotosDetail';
 //REDUX
-import { isOneBird, resetInfoBird } from '../../redux/slices/BirdsSlice';
-import { loadMoreData } from '../../redux/actions/fetchAllBirds'
+import { loadMoreData } from '../../redux/mamiferos/actions/infoAction';
+import { isOneR, resetInfo, } from '../../redux/mamiferos/slices/InfoSlice';
+import { CardsMamiferos } from '../../components/Cards/Mamiferos/CardsMamiferos';
+
 
 export const Mamiferos = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, infoBirds, filters, noMoreResults, oneBird, total } = useSelector(state => state.birdSlice)
+  const { loading, info, isOne, total } = useSelector(state => state.dataSlice)
+  const { filters, noMoreResults } = useSelector(state => state.filters)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
@@ -33,7 +36,7 @@ export const Mamiferos = () => {
     const newPage = page + 1;
     setPage(newPage);
     setShowBackdrop(true); // Mostrar Backdrop al cargar más datos
-    setLoadingMessage('Cargando Más Aves..')
+    setLoadingMessage('Cargando Más Resultados..')
     dispatch(loadMoreData(newPage, filters)).then(() => {
       setShowBackdrop(false); // Ocultar Backdrop una vez que los datos se cargan
     });
@@ -41,13 +44,13 @@ export const Mamiferos = () => {
 
   const stepBack = () => {
     setFilterDialogOpen(true)
-    dispatch(resetInfoBird())
-    dispatch(isOneBird(null))
+    dispatch(resetInfo())
+    dispatch(isOneR(null))
   };
 
   React.useEffect(() => {
-    dispatch(resetInfoBird());
-    dispatch(isOneBird(null))
+    dispatch(resetInfo());
+    dispatch(isOneR(null))//falta
   }, []);
 
   React.useEffect(() => {
@@ -69,27 +72,27 @@ export const Mamiferos = () => {
         alignItems="center"
         justifyContent="center"
         sx={{
-          background: infoBirds.length === 1 ? 'none' : `url(${allCustom.background_aves}) center/cover no-repeat fixed`,
+          background: info.length === 1 ? 'none' : `url(${allCustom.background_mamifero}) center/cover no-repeat fixed`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
-          p: infoBirds.length === 1 ? 0 : 2
+          p: info.length === 1 ? 0 : 2
         }}
       >
         <Dialog
           open={isFilterDialogOpen}
-          onClose={() => {}}
+          onClose={() => { }}
           fullWidth={true}
           maxWidth='md'
         >
-          <FiltersAves isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
+          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
-        {infoBirds.length === 1 && (
+        {info.length === 1 && (
           <Grid container >
-            <PhotosDetailAves bird={infoBirds[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
+            <PhotosDetail bird={info[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
           </Grid>
         )}
-        {infoBirds.length > 1 && (
+        {info.length > 1 && (
           <Box
             sx={{
               display: 'flex',
@@ -118,7 +121,7 @@ export const Mamiferos = () => {
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
                 <Typography variant='h6' color='white' sx={{ marginLeft: '20px' }}>
-                  Total de Aves Filtradas: {total}
+                  Total de Registros Filtrados: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
               </Grid>
@@ -140,9 +143,9 @@ export const Mamiferos = () => {
               </Grid>
             </Grid>
             <Grid container spacing={3} justifyContent="center">
-              {infoBirds.map((bird, index) => (
+              {info.map((registro, index) => (
                 <Grid item key={index}>
-                  <Cards foto={bird.imagenes_aves} name={bird.nombre_ingles} />
+                  <CardsMamiferos foto={registro.imagenes_mamiferos} name={registro.nombre_ingles} />
                 </Grid>
               ))}
             </Grid>
@@ -166,7 +169,7 @@ export const Mamiferos = () => {
           </Box>
         )}
 
-        {oneBird === false && infoBirds.length === 0 && (
+        {isOne === false && info.length === 0 && (
           <Box
             sx={{
               display: 'flex',
@@ -195,7 +198,7 @@ export const Mamiferos = () => {
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
                 <Typography variant='h6' color='white'>
-                  Total de Aves Filtradas: 0
+                  Total de Resultados Filtrados: 0
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
                 <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>

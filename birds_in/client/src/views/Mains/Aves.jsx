@@ -16,7 +16,6 @@ import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves'
 import { isOneBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
 import { loadMoreData } from '../../redux/birds/actions/infoAction';
 
-
 export const Aves = () => {
 
   const theme = useTheme()

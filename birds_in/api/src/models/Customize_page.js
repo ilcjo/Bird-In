@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 
+
 module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('customize_page', {
@@ -8,10 +9,6 @@ module.exports = (sequelize) => {
             primaryKey: true,
             allowNull: false,
             autoIncrement: true
-        },
-        cover_login: {
-            type: DataTypes.TEXT,
-            allowNull: false
         },
         cover_birds: {
             type: DataTypes.TEXT,
@@ -33,11 +30,11 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        covert_admin: {
+        cover_reptile: {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        header: {
+        cover_insect: {
             type: DataTypes.TEXT,
             allowNull: false
         },
@@ -48,10 +45,6 @@ module.exports = (sequelize) => {
         first_about: {
             type: DataTypes.TEXT,
             allowNull: true
-        },
-        cover_flowers: {
-            type: DataTypes.TEXT,
-            allowNull: false
         },
         text_login: {
             type: DataTypes.TEXT,
@@ -72,7 +65,28 @@ module.exports = (sequelize) => {
         background_paisaje: {
             type: DataTypes.TEXT,
             allowNull: true
-        }
+        },
+        background_login: {
+            type: DataTypes.TEXT,
+            allowNull: false
+        },
+        background_reptile: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_insect: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_fish: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_mamiferos: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+
     }, { timestamps: false, }
     )
 };

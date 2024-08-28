@@ -6,8 +6,7 @@ import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 //COMPONENTS
 import { ImagesCards } from '../../Cards/ImagesCards'
-import { HeaderLand } from '../../HeaderLand';
-import { Header } from '../../Header';
+import { HeaderLand } from './HeaderLand';
 import { Loading } from '../../utils/Loading';
 //redux
 import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';

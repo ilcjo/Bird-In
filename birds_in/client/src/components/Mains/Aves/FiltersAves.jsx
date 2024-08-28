@@ -14,12 +14,12 @@ import { useDispatch, useSelector } from 'react-redux'
 //ICONS
 import CloseIcon from '@mui/icons-material/Close';
 //ESTADOS GLOBALES
-import { sendParameter } from '../../../redux/birds/actions/filterAction';
 import { fetchNewOptions, getOptionsData } from '../../../redux/birds/actions/fetchOptions';
 import { saveFilters } from '../../../redux/birds/slices/FilterSlice';
 import { cargando, isOneBird } from '../../../redux/birds/slices/InfoSlice';
 import { copingFilters } from '../../../redux/birds/slices/FilterSlice';
 import { setNoMoreResults } from '../../../redux/birds/slices/FilterSlice';
+import { sendParameter } from '../../../redux/birds/actions/filterAction';
 
 
 export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {

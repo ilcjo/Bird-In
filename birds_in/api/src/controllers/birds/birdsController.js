@@ -312,7 +312,7 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
         zonas,
         page,
         perpage)
-
+// console.log(allResults)
     const newOptions = {
         grupos: [],
         familias: [],

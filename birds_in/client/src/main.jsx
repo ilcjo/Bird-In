@@ -18,7 +18,8 @@ import { saveOptionsP } from './redux/paisaje/slicesP/LandscapeSlice.js';
 import { getAllCustomizes } from './redux/settings/actions/Custom.js';
 
 // Configurar la URL base de Axios
-const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
+// const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
+const api = 'https://pruebabird.onrender.com';
 // const api = 'http://181.48.223.2';
 const apilocal = 'http://localhost:3001';
 axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;

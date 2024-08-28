@@ -154,7 +154,6 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         if (!createData.zona) {
             newErrors.zona = true; // Establecer un error si el campo 'zona' está vacío
         }
-
         setErrors(newErrors);
         if (Object.values(newErrors).some((error) => error)) {
             return;
@@ -164,7 +163,6 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             alert("Debes cargar al menos una imagen antes de enviar el formulario.");
             return;
         }
-
         if (imageFiles && imageFiles.length > 0) {
             const formData = new FormData();
             // Agregar las imágenes al formulario FormData
@@ -236,7 +234,6 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 });
         });
     };
-
 
     React.useEffect(() => {
         // Aquí despachas la acción para cargar las opciones al montar el componente

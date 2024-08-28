@@ -44,6 +44,7 @@ const getFilterOptions = async (req, res,) => {
       pais,
       zonas,
    } = req.query;
+   // console.log(zonas,'llegue')
    try {
       let newOptions;
       if (zonas || pais) {
@@ -82,6 +83,7 @@ const createMamifero = async (req, res) => {
       urlImagen
 
    } = req.body;
+   
    try {
 
       const successCreate = await sendAndCreateRegister(

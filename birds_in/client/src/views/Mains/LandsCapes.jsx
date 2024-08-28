@@ -71,7 +71,7 @@ export const LandsCapes = () => {
         alignItems="center"
         justifyContent="center"
         sx={{
-          background: infoLands.length === 1 ? 'none' : `url(${allCustom.filter_back_land}) center/cover no-repeat fixed`,
+          background: infoLands.length === 1 ? 'none' : `url(${allCustom.background_paisaje}) center/cover no-repeat fixed`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',

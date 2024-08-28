@@ -2,8 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 import { PassRecover } from './views/PassRecover'
 import { HomeMenu } from './views/HomeMenu'
 import { Aves } from './views/Mains/Aves'
-import { Animals } from './views/Mains/Animals'
-import { Flowers } from './views/Mains/Flowers'
 import { LandsCapes } from './views/Mains/LandsCapes'
 import { Peces } from './views/Mains/Peces'
 import { CarruselGallery } from './components/Gallery/CarruselGallery'
@@ -19,6 +17,10 @@ import { MenuBar } from './components/Menus/MenuBar'
 import { PhotosDetailAves } from './components/Mains/Aves/PhotosDetailAves'
 import { TimeOut } from './components/utils/TimeOut'
 import { DashSettings } from './views/Dash/DashSettings'
+import { Mamiferos } from './views/Mains/Mamiferos'
+import { DashAnimales } from './views/Dash/DashAnimales'
+import { Reptiles } from './views/Mains/Reptiles'
+import { Insects } from './views/Mains/Insects'
 
 function App() {
   return (
@@ -27,7 +29,7 @@ function App() {
       <Route path="/tab" element={<Index />} />
       <Route path="/Recuperar" element={<PassRecover />} />
       <Route path='/tiempo' element={<TimeOut />} />
-      <Route path="/menu" 
+      <Route path="/menu"
         element={
           <ProtectedRoute roles={['user', 'admin']} >
             <MenuBar ShowFilterButton={false} ShowBackButton={false} showAdmin={false} ShowMantButton={true} />
@@ -58,16 +60,22 @@ function App() {
             <Aves />
           </ProtectedRoute>
         } />
-      <Route path="/animales"
+      <Route path="/mamiferos"
         element={
           <ProtectedRoute roles={['user', 'admin']}>
-            <Animals />
+            <Mamiferos />
           </ProtectedRoute>
         } />
-      <Route path="/flores"
+      <Route path="/reptiles"
         element={
           <ProtectedRoute roles={['user', 'admin']}>
-            <Flowers />
+            <Reptiles />
+          </ProtectedRoute>
+        } />
+           <Route path="/insectos"
+        element={
+          <ProtectedRoute roles={['user', 'admin']}>
+            <Insects />
           </ProtectedRoute>
         } />
       <Route path="/paisajes"
@@ -94,7 +102,13 @@ function App() {
           <DashPaisajes />
         </ProtectedRoute>
         } />
-         <Route path="/mantenimiento"
+      <Route path="/panelmamiferos"
+        element={<ProtectedRoute roles={['admin']} >
+          <MenuBar ShowFilterButton={false} ShowBackButton={true} />
+          <DashAnimales />
+        </ProtectedRoute>
+        } />
+      <Route path="/mantenimiento"
         element={<ProtectedRoute roles={['admin']} >
           <MenuBar ShowFilterButton={false} ShowBackButton={true} />
           <DashSettings />

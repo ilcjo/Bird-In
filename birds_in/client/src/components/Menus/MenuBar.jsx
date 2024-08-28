@@ -78,7 +78,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '52px', backgroundColor: '#004E37', borderRadius: '0px 0px 50px 50px' }}>
+        <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '100px', backgroundColor: '#004E37', borderRadius: '0px 0px 50px 50px' }}>
           <img src={allCustom.logo} alt="Logo"
             style={{ width: 'auto', height: '220%', marginBottom: '52px', backgroundColor: '#103300', borderRadius: '0px 0px 50px 50px' }}
             loading="lazy" />
@@ -93,7 +93,6 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 '&:hover': {
                   borderBottom: '2px solid white',
                   borderRadius: '0px',
-
                 },
               }}
               variant="text"

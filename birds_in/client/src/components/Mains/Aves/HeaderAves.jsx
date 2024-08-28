@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Box, Button, Divider, Grid, Typography, useTheme, } from '@mui/material'
-import { formatData } from './utils/formatDetail';
+import { formatData } from '../../utils/formatDetail';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export const Header = ({ imageUrl, bird, back }) => {
+export const HeaderAves = ({ imageUrl, bird, back }) => {
   const theme = useTheme()
   // console.log(bird)
   return (
