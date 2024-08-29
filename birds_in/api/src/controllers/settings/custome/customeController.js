@@ -24,6 +24,12 @@ const fetchCustome = async () => {
                 'background_insect',
                 'background_mamiferos',
                 'background_fish',
+                'background_update_ave',
+                'background_update_mamifero',
+                'background_update_reptil',
+                'background_update_insect',
+                'background_update_land',
+                'background_update_fish',
             ],
         });
         return getAllCutomizes
@@ -35,7 +41,7 @@ const fetchCustome = async () => {
 };
 
 const sendParametersForUpdate = async (customizationParams) => {
-    console.log(customizationParams);
+    // console.log(customizationParams);
     try {
         // Obtener la primera fila, asumiendo que solo hay una fila en Customize_page
         let customizeInfo = await Customize_page.findOne();

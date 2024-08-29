@@ -11,9 +11,8 @@ import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 //redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/birds/actions/photosAction';
-import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
-import { getAve } from '../../../../redux/birds/slices/UpdateSlice';
+import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/mamiferos/actions/photosAction';
+import { getInfoForUpdate } from '../../../../redux/mamiferos/actions/crudAction';
 import { getRegistro } from '../../../../redux/mamiferos/slices/UpdateSlice';
 
 export const CoverDelete = ({
@@ -26,7 +25,7 @@ export const CoverDelete = ({
 
     const theme = useTheme();
     const dispatch = useDispatch();
-    const nombreRegistro = localStorage.getItem('nombreIngles') || 'del Registro';
+    const nombre = localStorage.getItem('nombreIngles') || 'del ';
     const { infoForUpdate } = useSelector(state => state.updateSlice);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
@@ -164,7 +163,7 @@ export const CoverDelete = ({
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h2' color='primary'>
-                                Imágenes {nombreRegistro ? ` ${nombreRegistro}` : 'del Registro'}
+                                Imágenes {nombre ? ` ${nombre}` : 'del '}
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -189,7 +188,7 @@ export const CoverDelete = ({
                     <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                    <Divider sx={{ my: 2,borderColor: theme.palette.primary.main, }} />
                     <Button
                         variant="contained"
                         color="error"
@@ -199,14 +198,14 @@ export const CoverDelete = ({
                     >
                         Eliminar selección
                     </Button>
-                    {infoForUpdate && infoForUpdate.imagenes_aves && infoForUpdate.imagenes_aves.length > 0 && (
+                    {infoForUpdate && infoForUpdate.imagenes_mamiferos && infoForUpdate.imagenes_mamiferos.length > 0 && (
                         <Grid container spacing={2} sx={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             m: 0
                         }}>
-                            {infoForUpdate.imagenes_aves.map((imageUrl, index) => (
+                            {infoForUpdate.imagenes_mamiferos.map((imageUrl, index) => (
                                 <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
                                     <EditImageCards
                                         imageUrl={imageUrl}
@@ -219,13 +218,13 @@ export const CoverDelete = ({
                             ))}
                             <CarruselGalleryDelete
                                 isOpen={isGalleryOpen}
-                                images={infoForUpdate.imagenes_aves}
+                                images={infoForUpdate.imagenes_mamiferos}
                                 selectedIndex={selectedImageIndex}
                                 onClose={handleCloseGallery}
                             />
                         </Grid>
                     )}
-                    {!infoForUpdate || !infoForUpdate.imagenes_aves || infoForUpdate.imagenes_aves.length === 0 && (
+                    {!infoForUpdate || !infoForUpdate.imagenes_mamiferos || infoForUpdate.imagenes_mamiferos.length === 0 && (
                         <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
                             No hay imágenes subidas.
                         </Typography>

@@ -22,8 +22,8 @@ export const IndexClass = () => {
         borderRadius: '0px 0px 20px 20px'
       }} >
         <ZonasEdit />
-        <GruposEdit />
         <FamiliasEdit />
+        <GruposEdit />
       </Grid>
 
     </div>

@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 //COMPONENTS
+import { CreateBird } from '../../../Forms/Aves/CreateBird'
 import { CoverDelete } from '../Photos/CoverDelete';
-import { CreateForm } from '../../../Forms/Mamiferos/CreateForm';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -37,7 +37,7 @@ export const IndexTabsCreate = ({
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [coverSelected, setCoverSelected] = React.useState(false);
     const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
-
+    
     //si pasa a la otra pestaña que confirme el cover este 
     const handleTabChange = (event, newValue) => {
         // console.log(coverSelected, 'dentro')
@@ -50,7 +50,7 @@ export const IndexTabsCreate = ({
             setCoverSelected(false)
         }
     };
-
+ 
     //función que determina si tiene cover en true
     const handleSetCoverSelected = (isSelected) => {
         setCoverSelected(isSelected);
@@ -81,7 +81,7 @@ export const IndexTabsCreate = ({
                     {selectedTab === 0 && (
                         <React.Fragment>
                             {/* Contenido de la primera pestaña */}
-                            <CreateForm
+                            <CreateBird
                                 changeTabSearch={changeTabSearch}
                                 changeImagenTab={() => setSelectedTab(1)}
                                 isImages={() => setImagesExistTabEnabled(true)}

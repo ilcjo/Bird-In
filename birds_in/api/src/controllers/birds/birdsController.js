@@ -924,6 +924,20 @@ const findNameDuplicate = async (nombre) => {
     }
 };
 
+const findAllEnglishNames = async () => {
+    try {
+        const aves = await Aves.findAll({
+            attributes: ['nombre_ingles', 'id_ave'], // Only fetches the 'nombre_ingles' attribute
+        });
+        return aves; // Returns an array of objects, each containing 'nombre_ingles'
+    } catch (error) {
+        // Handle query errors
+        console.error('Error fetching English names:', error);
+        throw error;
+    }
+};
+
+
 module.exports = {
     fetchOptions,
     filterOptions,
@@ -938,4 +952,5 @@ module.exports = {
     deleteBirdDb,
     findDataByName,
     findNameDuplicate,
+    findAllEnglishNames
 };

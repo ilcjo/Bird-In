@@ -7,7 +7,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 //COMPONENTS
-import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
 import { Filters } from '../../components/Mains/Mamiferos/Filters';
@@ -72,7 +71,7 @@ export const Mamiferos = () => {
         alignItems="center"
         justifyContent="center"
         sx={{
-          background: info.length === 1 ? 'none' : `url(${allCustom.background_mamifero}) center/cover no-repeat fixed`,
+          background: info.length === 1 ? 'none' : `url(${allCustom.background_mamiferos}) center/cover no-repeat fixed`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
@@ -107,7 +106,6 @@ export const Mamiferos = () => {
               borderRadius: '20px',
               mb: 10,
               mt: 10,
-
             }}
           >
             <Grid container
@@ -168,7 +166,6 @@ export const Mamiferos = () => {
             )}
           </Box>
         )}
-
         {isOne === false && info.length === 0 && (
           <Box
             sx={{
@@ -209,7 +206,6 @@ export const Mamiferos = () => {
           </Box>
         )}
       </Grid>
-
       <Loading
         message={loadingMessage}
         open={showBackdrop}

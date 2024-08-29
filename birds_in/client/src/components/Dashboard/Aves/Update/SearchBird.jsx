@@ -27,6 +27,7 @@ export const SearchBird = ({ changeTab }) => {
     const [showSearchBird, setShowSearchBird] = React.useState(true);
 
     const handleBirdSelect = (bird) => {
+        console.log(bird)
         localStorage.setItem('nombreIngles', JSON.stringify(bird.nombre_ingles))
         setSelectedBird(bird);
         handleButtonClick();
@@ -37,13 +38,11 @@ export const SearchBird = ({ changeTab }) => {
         setLoadingMessage('Cargando...');
         if (selectedBird) {
             // Envía la información al action
-
             dispatch(getInfoForUpdate(selectedBird.id_ave));
             // Cambia a la pestaña deseada
             // changeTab(2);
             setShowUpdateBird(true);
             setShowSearchBird(false);
-
         }
     };
 
@@ -61,17 +60,13 @@ export const SearchBird = ({ changeTab }) => {
             try {
                 setShowBackdrop(true)
                 setLoadingMessage('Cargando Todas las Aves Por Favor Espere...');
-                const response = await axios.get('/aves/filtros?page=0&perPage=0');
-                const data = response.data.avesFiltradas;
-                const validData = data.filter((item) => item.nombre_ingles);
-
+                const response = await axios.get('/aves/nombres');
+                const data = response.data;
+                // const validData = data.filter((item) => item.nombre_ingles);
                 // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
                 // validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
-
                 // localStorage.setItem('birdsData', JSON.stringify(validData));
-
-                setBirdsData(validData);
-
+                setBirdsData(data);
             } catch (error) {
                 console.error("Error al obtener los datos:", error);
 

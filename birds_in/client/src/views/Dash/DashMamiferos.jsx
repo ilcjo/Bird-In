@@ -9,12 +9,12 @@ import { Loading } from '../../components/utils/Loading';
 import DownloadIcon from '@mui/icons-material/Download';
 //redux
 import { getUsers } from '../../redux/settings/actions/userLoginRegister';
-import { getExcel } from '../../redux/mamiferos/actions/crudAction';
 
-export const DashAnimales = () => {
+export const DashMamiferos = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const { allCustom } = useSelector((state) => state.customizesSlice);
+  // console.log(allCustom)
   const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
 
@@ -27,7 +27,7 @@ export const DashAnimales = () => {
     try {
       setShowBackdrop(true);
       setLoadingMessage('Generando Excel, por favor espere...');
-      await dispatch(getExcel());
+      // await dispatch(getExcelAves());
     } catch (error) {
       console.log('Este es el error:', String(error));
     } finally {
@@ -43,7 +43,7 @@ export const DashAnimales = () => {
         direction="column"
         alignItems="center"
         sx={{
-          background: `url(${allCustom.header}) center/cover no-repeat fixed`,
+          background: `url(${allCustom.background_update_mamifero}) center/cover no-repeat fixed`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',

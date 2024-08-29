@@ -18,9 +18,9 @@ import { PhotosDetailAves } from './components/Mains/Aves/PhotosDetailAves'
 import { TimeOut } from './components/utils/TimeOut'
 import { DashSettings } from './views/Dash/DashSettings'
 import { Mamiferos } from './views/Mains/Mamiferos'
-import { DashAnimales } from './views/Dash/DashAnimales'
 import { Reptiles } from './views/Mains/Reptiles'
 import { Insects } from './views/Mains/Insects'
+import { DashMamiferos } from './views/Dash/DashMamiferos'
 
 function App() {
   return (
@@ -72,7 +72,7 @@ function App() {
             <Reptiles />
           </ProtectedRoute>
         } />
-           <Route path="/insectos"
+      <Route path="/insectos"
         element={
           <ProtectedRoute roles={['user', 'admin']}>
             <Insects />
@@ -105,7 +105,7 @@ function App() {
       <Route path="/panelmamiferos"
         element={<ProtectedRoute roles={['admin']} >
           <MenuBar ShowFilterButton={false} ShowBackButton={true} />
-          <DashAnimales />
+          <DashMamiferos />
         </ProtectedRoute>
         } />
       <Route path="/mantenimiento"

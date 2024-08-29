@@ -13,6 +13,7 @@ const {
    deleteBirdDb,
    findDataByName,
    findNameDuplicate,
+   findAllEnglishNames,
 } = require("../../controllers/birds/birdsController");
 const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
@@ -36,6 +37,16 @@ const getFilterInfo = async (req, res) => {
       }
       res.json(allData);
 
+   } catch (error) {
+      console.error(error);
+      res.status(500).send('Error en el servidor');
+   }
+};
+
+const getAllNombres = async (req, res) => {
+   try {
+      const allData = await findAllEnglishNames()
+      res.status(200).json(allData);
    } catch (error) {
       console.error(error);
       res.status(500).send('Error en el servidor');
@@ -388,6 +399,7 @@ module.exports = {
    deleteBird,
    findInfoForUpdateName,
    checkBirdDuplicate,
-   getAllAvesAsExcel
+   getAllAvesAsExcel,
+   getAllNombres
 }
 

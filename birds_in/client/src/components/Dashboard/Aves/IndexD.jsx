@@ -91,33 +91,16 @@ export const IndexD = () => {
         />
         <StyledTab
           label={<Typography variant='h5' >
+            Grupos
+          </Typography>
+          }
+          />
+        <StyledTab
+          label={<Typography variant='h5' >
             Familias
           </Typography>
           }
         />
-        <StyledTab
-          label={<Typography variant='h5' >
-            Grupos
-          </Typography>
-          }
-        />
-        {/* <StyledTab
-          label={<Typography variant='h5' >
-            Zonas
-          </Typography>
-          }
-        />
-        <StyledTab
-          label={<Typography variant='h5' >
-            Personalizar
-          </Typography>
-          } />
-        <StyledTab
-          label={<Typography variant='h5' >
-            Usuarios
-          </Typography>
-          }
-        /> */}
       </StyledTabs >
       <div>
         {selectedTab === 0 && (
@@ -137,30 +120,14 @@ export const IndexD = () => {
         )}
         {selectedTab === 3 && (
           <Box>
-            <FamiliasEdit />
+            <GruposEdit />
           </Box>
         )}
         {selectedTab === 4 && (
           <Box>
-            <GruposEdit />
+            <FamiliasEdit />
           </Box>
         )}
-        {/* {selectedTab === 5 && (
-          <Box>
-            <ZonasEdit />
-          </Box>
-        )} */}
-        {/* {selectedTab === 6 && (
-          <Box>
-            <Customize />
-          </Box>
-        )} */}
-        {/* {selectedTab === 7 && (
-          <Box>
-            <IndexTabsUsuarios />
-          </Box>
-        )} */}
-
       </div>
     </>
   );

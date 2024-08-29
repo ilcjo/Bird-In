@@ -43,7 +43,7 @@ export const DashAves = () => {
         direction="column"
         alignItems="center"
         sx={{
-          background: `url(${allCustom.header}) center/cover no-repeat fixed`,
+          background: `url(${allCustom.background_update_ave}) center/cover no-repeat fixed`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',

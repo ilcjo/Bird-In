@@ -8,9 +8,9 @@ import { GruposEdit } from './Class/GruposEdit';
 import { FamiliasEdit } from './Class/FamiliasEdit';
 import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './Add/IndexTabsCreate';
-//redux
-import { setEstateInfo } from '../../../redux/mamiferos/slices/UpdateSlice';
 import { Search } from './Update/Search';
+//redux
+import { setEstateInfo } from '../../../redux/birds/slices/UpdateSlice';
 
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -56,7 +56,7 @@ export const IndexD = () => {
       setSelectedTab(Number(tab));
     }
   }, [location]);
-  
+
   return (
     <>
       <StyledTabs
@@ -91,13 +91,13 @@ export const IndexD = () => {
         />
         <StyledTab
           label={<Typography variant='h5' >
-            Familias
+            Grupos
           </Typography>
           }
         />
         <StyledTab
           label={<Typography variant='h5' >
-            Grupos
+            Familias
           </Typography>
           }
         />
@@ -120,15 +120,14 @@ export const IndexD = () => {
         )}
         {selectedTab === 3 && (
           <Box>
-            <FamiliasEdit />
+            <GruposEdit />
           </Box>
         )}
         {selectedTab === 4 && (
           <Box>
-            <GruposEdit />
+            <FamiliasEdit />
           </Box>
         )}
-
       </div>
     </>
   );

@@ -290,7 +290,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
-                        <Grid container sx={{ mt: -4 }} >
+                        <Grid container sx={{}} >
                             <Grid item xs={12} sm={3} md={3}>
                                 <ImageUploader
                                     allImageURLs={allImageURLs}
@@ -357,6 +357,46 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
+
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-familias"
+                                    options={familias}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.familia}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Familia"
+                                            margin="none"
+                                            error={formSubmitted && !createData.familia} // Add error state to the TextField
+                                            helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                mb: 1,
+                                                '& .MuiInputBase-input': {
+                                                },
+                                            }}
+
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+
+                                />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
@@ -397,46 +437,6 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         );
                                     }}
                                 />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-familias"
-                                    options={familias}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Familia"
-                                            margin="none"
-                                            error={formSubmitted && !createData.familia} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    fontSize: '1.1rem',
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                },
-                                            }}
-
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-
-                                />
-
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

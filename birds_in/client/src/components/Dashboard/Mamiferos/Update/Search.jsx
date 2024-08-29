@@ -22,12 +22,14 @@ export const Search = ({ changeTab }) => {
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [selected, setSelected] = React.useState(null);
     const [Data, setData] = React.useState([]);
+    // console.log(selected)
     const [showUpdate, setShowUpdate] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(true);
 
-    const handleSelect = (item) => {
-        localStorage.setItem('nombreIngles', JSON.stringify(item.nombre_ingles))
-        setSelected(item);
+    const handleSelect = (registro) => {
+        console.log(registro)
+        localStorage.setItem('nombreIngles', JSON.stringify(registro.nombre_ingles))
+        setSelected(registro);
         handleButtonClick();
     };
 
@@ -36,13 +38,11 @@ export const Search = ({ changeTab }) => {
         setLoadingMessage('Cargando...');
         if (selected) {
             // Envía la información al action
-
             dispatch(getInfoForUpdate(selected.id_mamifero));
             // Cambia a la pestaña deseada
             // changeTab(2);
             setShowUpdate(true);
             setShowSearch(false);
-
         }
     };
 
@@ -59,13 +59,14 @@ export const Search = ({ changeTab }) => {
         const fetchData = async () => {
             try {
                 setShowBackdrop(true)
-                setLoadingMessage('Cargando Todos los Registros Por Favor Espere...');
-                const response = await axios.get('/mamiferos/filtros?page=0&perPage=0');
-                const data = response.data.registrosFiltrados;
-                const validData = data.filter((item) => item.nombre_ingles);
-
-                setData(validData);
-
+                setLoadingMessage('Cargando Todos las Mamiferos Por Favor Espere...');
+                const response = await axios.get('/mamiferos/nombres');
+                const data = response.data;
+                // const validData = data.filter((item) => item.nombre_ingles);
+                // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
+                // validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
+                // localStorage.setItem('sData', JSON.stringify(validData));
+                setData(data);
             } catch (error) {
                 console.error("Error al obtener los datos:", error);
 
@@ -98,12 +99,12 @@ export const Search = ({ changeTab }) => {
                     }} >
                         <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
                             <Typography variant="h2" color="primary">
-                                Buscar Registro
+                                Buscar Ave
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={8}>
                             <Autocomplete
-                                id="search_registro"
+                                id="search_"
                                 options={Data}
                                 getOptionLabel={(option) => option.nombre_ingles}
                                 value={selected}
@@ -111,7 +112,7 @@ export const Search = ({ changeTab }) => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Seleccionar Registro a Actualizar"
+                                        label="Seleccionar Ave a Actualizar"
                                     />
                                 )}
 

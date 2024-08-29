@@ -86,6 +86,30 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        background_update_ave: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_update_mamifero: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_update_reptil: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_update_insect: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_update_land: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_update_fish: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
 
     }, { timestamps: false, }
     )

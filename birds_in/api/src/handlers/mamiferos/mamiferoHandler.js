@@ -8,8 +8,18 @@ const {
 } = process.env
 
 const vistaAvesOrdenadaAll = require('../../config/db/db');
-const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister } = require('../../controllers/mamiferos/mamiferoController');
+const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister, findAllEnglishNames } = require('../../controllers/mamiferos/mamiferoController');
 const { deletePhotoFromFTPMamiferos } = require('../../services/deletFtp');
+
+const getAllNombres = async (req, res) => {
+   try {
+      const allData = await findAllEnglishNames()
+      res.status(200).json(allData);
+   } catch (error) {
+      console.error(error);
+      res.status(500).send('Error en el servidor');
+   }
+};
 
 const getFilterInfo = async (req, res) => {
 
@@ -350,7 +360,8 @@ module.exports = {
    setCoverPhoto,
    contandoRegistros,
    deleteRegistro,
-   checkRegisterDuplicate
+   checkRegisterDuplicate,
+   getAllNombres
 
 }
 
