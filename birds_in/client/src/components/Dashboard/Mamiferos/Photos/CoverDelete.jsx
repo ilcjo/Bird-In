@@ -25,7 +25,7 @@ export const CoverDelete = ({
 
     const theme = useTheme();
     const dispatch = useDispatch();
-    const nombre = localStorage.getItem('nombreIngles') || 'del ';
+    const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
     const { infoForUpdate } = useSelector(state => state.updateSlice);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
@@ -51,11 +51,11 @@ export const CoverDelete = ({
                 }
             });
             // Si la imagen es destacada, enviar la solicitud para guardarla como portada
-            await dispatch(sendCoverPhoto(id, infoForUpdate.id_ave));
+            await dispatch(sendCoverPhoto(id, infoForUpdate.id_mamifero));
             setShowBackdrop(true);
             setLoadingMessage('Seleccionando Portada')
             await new Promise((resolve) => setTimeout(resolve, 5000));
-            await dispatch(getInfoForUpdate(infoForUpdate.id_ave));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -111,7 +111,7 @@ export const CoverDelete = ({
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
-            await dispatch(getInfoForUpdate(infoForUpdate.id_ave));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));
             setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSelectedImages([])
             setShowBackdrop(false)
@@ -163,7 +163,7 @@ export const CoverDelete = ({
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h2' color='primary'>
-                                Imágenes {nombre ? ` ${nombre}` : 'del '}
+                                Imágenes {nombre ? ` ${nombre}` : 'del Registro '}
                             </Typography>
                         </Grid>
                         {!isCreate && (

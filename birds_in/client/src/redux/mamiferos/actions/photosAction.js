@@ -77,13 +77,13 @@ export const UpdateDestacada = (formData) => {
     };
 };
 
-export const sendCoverPhoto = (id, idAves) => {
+export const sendCoverPhoto = (id, idRegistro) => {
     // console.log('llega al axios', id, idAves)
     return async (dispatch) => {
         try {
             const requestData = {
                 idFoto: id,
-                idAve: idAves
+                idRegistro: idRegistro
             };
 
             const response = axios.put('/mamiferos/foto_portada', requestData )

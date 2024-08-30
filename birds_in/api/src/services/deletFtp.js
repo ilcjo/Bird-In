@@ -151,10 +151,10 @@ const deletePhotoFromFTPInsectos = async (urls) => {
 };
 
 const deletePhotoFromFTPMamiferos = async (urls) => {
-    // console.log(urls)
     const client = new ftp.Client();
 
     try {
+        // Conectar al servidor FTP
         await client.access({
             host: FTP_HOST_2,
             user: FTP_USER_2,
@@ -163,35 +163,44 @@ const deletePhotoFromFTPMamiferos = async (urls) => {
         });
         await client.cd('mamiferos');
 
+        const fs = require('fs');
+
+        // Recorrer todas las URLs para eliminar
         for (const url of urls) {
-            // Extraer el nombre del archivo de la URL
             const fileName = url.split('/').pop();
+            // console.log(fileName, ':foto:');
 
-            // Construir la nueva URL sin el dominio
-            const ftpUrl = `${fileName}`;
-
-            // Eliminar el archivo del servidor local
-            const fs = require('fs');
-            fs.unlink(url, (err) => {
-                if (err) {
-                    console.error('Error al eliminar la imagen del servidor local:', err);
-                } else {
+            // Verificar si el archivo existe antes de eliminar
+            if (fs.existsSync(url)) {
+                try {
+                    await fs.promises.unlink(url);
                     console.log('Imagen eliminada del servidor local con éxito');
+                } catch (err) {
+                    console.error('Error al eliminar la imagen del servidor local:', err);
                 }
-            });
+            } else {
+                console.warn('El archivo no existe en la ruta especificada:', url);
+            }
 
-            // Eliminar el archivo del servidor FTP
-            await client.remove(ftpUrl);
+            // Intentar eliminar el archivo del servidor FTP
+            try {
+                await client.remove(fileName);
+                console.log('Imagen eliminada del servidor FTP con éxito');
+            } catch (ftpError) {
+                console.error('Error al eliminar la imagen del servidor FTP:', ftpError);
+                return { success: false };  // Retornar false si hay un error en el FTP
+            }
         }
 
-        return { success: true };
+        return { success: true }; // Retornar true si todas las eliminaciones fueron exitosas
     } catch (error) {
-        console.error('Error al conectar con el servidor FTP:', error);
+        console.error('Error al conectar con el servidor FTP o al eliminar una imagen:', error);
         return { success: false };
     } finally {
         await client.close();
     }
 };
+
 
 const deletePhotoFromFTPReptiles = async (urls) => {
     // console.log(urls)

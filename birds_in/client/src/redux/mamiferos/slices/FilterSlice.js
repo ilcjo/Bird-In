@@ -58,7 +58,7 @@ export const filters = createSlice({
         ingles: [],
       };
     },
-    saveOptions: (state, action) => {
+    saveOptionsM: (state, action) => {
       state.saveOptions = action.payload
     },
     setNoMoreResults: (state, action) => {
@@ -76,7 +76,7 @@ export const {
   saveFilters,
   stringParameter,
   resetCurrentFilters,
-  saveOptions,
+  saveOptionsM,
   setNoMoreResults,
   copingFilters,
   setCurrentPage

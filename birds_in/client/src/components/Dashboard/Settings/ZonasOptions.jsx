@@ -134,10 +134,10 @@ export const ZonasOptions = () => {
         paisId: selectedPaisId ? selectedPaisId.id : 0, // Si no se cambió el país, envía 0
       };
 
-      // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
-      await dispatch(updateZona(valuesToUpdate));
       setShowBackdrop(true);
       setLoadingMessage('Actualizando...');
+      // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
+      await dispatch(updateZona(valuesToUpdate));
       setShowBackdrop(false);
       setShowSuccessMessages('Zona actualizada correctamente')
       setOpenSnackbar(true);
@@ -247,6 +247,7 @@ export const ZonasOptions = () => {
     setOpenSnackbar(false);
     setShowSuccessMessages('')
   };
+
   return (
     <React.Fragment>
       <Grid container spacing={5} sx={{
@@ -254,7 +255,7 @@ export const ZonasOptions = () => {
         alignItems: 'center',
         justifyContent: 'center',
         width: '90%',
-        minWidth: '1200x',
+        minWidth: '1200xp',
         margin: '0 auto',
         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
@@ -276,7 +277,6 @@ export const ZonasOptions = () => {
             </Typography>
           </Grid>
           <Grid item xs={12} md={5} >
-
             <TextField
               fullWidth
               label="Nombre de Zona"
@@ -349,8 +349,8 @@ export const ZonasOptions = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center" colSpan={2}>ZONA</StyledTableCell>
-                  <StyledTableCell align="center" colSpan={2}>PAÍS</StyledTableCell>
+                  <StyledTableCell align="center" colSpan={2}>Zona</StyledTableCell>
+                  <StyledTableCell align="center" colSpan={2}>Pais</StyledTableCell>
                   <StyledTableCell align="center" colSpan={2}>Acción</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -431,7 +431,7 @@ export const ZonasOptions = () => {
                           >Cancelar</Button>
                         </>
                       ) : (
-                        <Grid container >
+                        <Grid container sx={{ maxHeight: 450 , minWidth: 450 }} >
                           <Grid item xs={12} md={6}>
                             <Button onClick={() => handleEditClick(index, item)}
                               sx={{
@@ -483,7 +483,7 @@ export const ZonasOptions = () => {
 
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={5000} // Duración en milisegundos (ajusta según tus preferencias)
+        autoHideDuration={5000} // Duración en mili segundos (ajusta según tus preferencias)
         onClose={handleCloseSnackbar}
         message={showSuccessMessages}
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}

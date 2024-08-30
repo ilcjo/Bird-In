@@ -93,7 +93,7 @@ const createMamifero = async (req, res) => {
       urlImagen
 
    } = req.body;
-   
+
    try {
 
       const successCreate = await sendAndCreateRegister(
@@ -139,7 +139,7 @@ const uploadImageftp = async (req, res) => {
          await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
 
          // Obtén la URL completa de la imagen
-         const imageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/mamiferos${remoteFileName}`;
+         const imageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/mamiferos/${remoteFileName}`;
          // Agrega la URL al array de imageUrls
          imageUrls.push(imageUrl);
 
@@ -236,7 +236,7 @@ const deletePhotos = async (req, res) => {
    const { ids, urls } = req.body;
    try {
       const deletedFtp = await deletePhotoFromFTPMamiferos(urls);
-
+      console.log(deletedFtp)
       if (!deletedFtp.success) {
          // Algunas fotos no se encontraron o hubo errores en el servidor FTP
          console.warn('Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.');

@@ -23,8 +23,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //redux
-import { addFamilia, eliminarFamilia, updateFamilia } from '../../../../redux/birds/actions/CrudClass';
-import { getOptionsData } from '../../../../redux/birds/actions/fetchOptions';
+import { addFamilia, eliminarFamilia, updateFamilia } from '../../../../redux/mamiferos/actions/CrudClass';
+import { getOptionsDataM } from '../../../../redux/mamiferos/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -51,7 +51,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export const FamiliasEdit = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { familias } = useSelector(state => state.filterSlice.options)
+  const { familias } = useSelector(state => state.filters.options)
 
   const [nombreFamilia, setNombreFamilia] = React.useState({
     nombreF: '',
@@ -77,11 +77,14 @@ export const FamiliasEdit = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Seguro que deseas eliminar esta Familia?')) {
       try {
+        setShowBack(true);
+        setLoadingMe('Eliminando..')
         // Lógica para eliminar el elemento
         await dispatch(eliminarFamilia(id))
-        setShowSuccessMessages('Familia eliminado')
+        setShowBack(false);
+        setShowSuccessMessages('Familia eliminada')
         setOpenSnack(true);
-        await dispatch(getOptionsData())
+        await dispatch(getOptionsDataM())
 
       } catch (error) {
         setErrorMe(String(error));
@@ -103,15 +106,14 @@ export const FamiliasEdit = () => {
   // Función para guardar los cambios en una zona
   const saveChanges = async () => {
     try {
-
+      setLoadingMe('Actualizando...');
+      setShowBack(true);
       // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
       await dispatch(updateFamilia(nombreFamilia));
-      setShowBack(true);
-      setLoadingMe('Actualizando...');
       setShowBack(false);
-      setShowSuccessMessages('Zona actualizada correctamente')
+      setShowSuccessMessages('Familia actualizada correctamente')
       setOpenSnack(true);
-      await dispatch(getOptionsData());
+      await dispatch(getOptionsDataM());
       setEditMode(null);
 
       // Reiniciar los estados después de guardar los cambios
@@ -140,7 +142,7 @@ export const FamiliasEdit = () => {
         nombreF: '',
         idFamilia: 0
       });
-      await dispatch(getOptionsData())
+      await dispatch(getOptionsDataM())
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior

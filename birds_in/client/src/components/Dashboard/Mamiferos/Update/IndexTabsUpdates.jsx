@@ -26,7 +26,6 @@ const StyledTab = styled(Tab)({
 
 });
 
-
 export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, selected, history }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
 

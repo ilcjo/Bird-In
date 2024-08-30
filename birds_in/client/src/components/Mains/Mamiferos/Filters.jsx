@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import CloseIcon from '@mui/icons-material/Close';
 //ESTADOS GLOBALES
 import { sendParameter } from '../../../redux/mamiferos/actions/filterAction';
-import { fetchNewOptions, getOptionsData } from '../../../redux/mamiferos/actions/fetchOptions';
+import { fetchNewOptions, getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
 import { saveFilters } from '../../../redux/mamiferos/slices/FilterSlice';
 import { cargando, isOneR } from '../../../redux/mamiferos/slices/InfoSlice';
 import { copingFilters } from '../../../redux/mamiferos/slices/FilterSlice';
@@ -132,7 +132,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const handleReset = () => {
         setIsFetchingOptions(true); // Activa el indicador de carga
         // Realiza la solicitud para obtener las opciones completas
-        dispatch(getOptionsData())
+        dispatch(getOptionsDataM())
             .then(() => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
             })
@@ -154,7 +154,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     React.useEffect(() => {
         return () => {
-            dispatch(getOptionsData());
+            dispatch(getOptionsDataM());
             setSelectOption({
                 grupo: [],
                 familia: [],

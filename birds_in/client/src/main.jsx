@@ -16,6 +16,8 @@ import { saveOptions } from './redux/birds/slices/FilterSlice.js';
 import { getOptionsDataP } from './redux/paisaje/actionsP/fetchOptionsLand.js';
 import { saveOptionsP } from './redux/paisaje/slicesP/LandscapeSlice.js';
 import { getAllCustomizes } from './redux/settings/actions/Custom.js';
+import { getOptionsDataM } from './redux/mamiferos/actions/fetchOptions.js';
+import { saveOptionsM } from './redux/mamiferos/slices/FilterSlice.js';
 
 // Configurar la URL base de Axios
 // const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
@@ -32,6 +34,8 @@ store.dispatch(saveOptions());
 store.dispatch(getAllCustomizes());
 store.dispatch(getOptionsDataP());
 store.dispatch(saveOptionsP());
+store.dispatch(getOptionsDataM());
+store.dispatch(saveOptionsM());
 
 const root = createRoot(document.getElementById('root'));
 root.render(

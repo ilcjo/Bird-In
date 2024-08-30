@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Grid } from '@mui/material';
 //components
-import { ZonasEdit } from './ZonasEdit';
 import { GruposEdit } from './GruposEdit';
 import { FamiliasEdit } from './FamiliasEdit';
 

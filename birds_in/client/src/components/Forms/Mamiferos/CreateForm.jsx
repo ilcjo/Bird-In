@@ -23,9 +23,9 @@ import { Loading } from '../../utils/Loading';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 //redux
-import { createBird, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/birds/actions/crudAction';
-import { saveImageFtp } from '../../../redux/birds/actions/photosAction';
-import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
+import { createBird, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/mamiferos/actions/crudAction';
+import { saveImageFtp } from '../../../redux/mamiferos/actions/photosAction';
+import { getOptionsData } from '../../../redux/mamiferos/actions/fetchOptions';
 
 
 export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -308,7 +308,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
-                            Datos del Ave
+                            Datos del Registro
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 

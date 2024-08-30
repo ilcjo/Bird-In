@@ -25,9 +25,12 @@ import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 import { Loading } from '../../utils/Loading';
 //redux
-import { getOptionsData } from '../../../redux/mamiferos/actions/fetchOptions';
+import { getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
 import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/mamiferos/actions/crudAction';
 import { UpdateImage } from '../../../redux/mamiferos/actions/photosAction';
+// import { getOptionsData } from '../../../redux/mamiferos/actions/fetchOptions';
+// import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/mamiferos/actions/crudAction';
+// import { UpdateImage } from '../../../redux/mamiferos/actions/photosAction';
 
 export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, selected, changeImagenExist }) => {
 
@@ -81,8 +84,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
 
     React.useEffect(() => {
         // Aquí despachas la acción para cargar las opciones al montar el componente
-        dispatch(getOptionsData());
-    }, [dispatch]);
+        dispatch(getOptionsDataM());
+    }, []);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -201,7 +204,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
 
     const createFullEntry = async (createData, imageUrl) => {
         try {
-            await dispatch(actualizar({ ...createData, urlImagen: imageUrl }));
+            await dispatch(actualizarRegistro({ ...createData, urlImagen: imageUrl }));
         } catch (error) {
             console.error('Error al actualizar el registro en la base de datos:', error);
             throw new Error('Error al actualizar el registro.');
@@ -273,7 +276,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
-                        <Grid container sx={{ mt: -4 }} >
+                        <Grid container sx={{}} >
                             <Grid item xs={12} sm={3} md={3}>
                                 <ImageUploader
                                     allImageURLs={allImageURLs}
@@ -292,7 +295,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
-                            Datos del
+                            Datos del Registro
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 

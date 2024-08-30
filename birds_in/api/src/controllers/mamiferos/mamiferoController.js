@@ -507,7 +507,7 @@ const findDataById = async (id) => {
             include: [
                 {
                     model: Imagenes_mamiferos,
-                    attributes: ['url_mamifero',
+                    attributes: [['url_mamifero', 'url'],
                         'id',
                         'destacada',
                         [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
@@ -554,7 +554,7 @@ const findDataByName = async (name) => {
             include: [
                 {
                     model: Imagenes_mamiferos,
-                    attributes: ['url_mamifero',
+                    attributes: [['url_mamifero', 'url'],
                         'id',
                         'destacada',
                         [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
