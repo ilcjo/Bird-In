@@ -23,9 +23,9 @@ import { Loading } from '../../utils/Loading';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 //redux
-import { createBird, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/mamiferos/actions/crudAction';
+import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/mamiferos/actions/crudAction';
 import { saveImageFtp } from '../../../redux/mamiferos/actions/photosAction';
-import { getOptionsData } from '../../../redux/mamiferos/actions/fetchOptions';
+import { getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
 
 
 export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -33,7 +33,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filterSlice.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filters.options)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -43,7 +43,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se a creado correctamente.');
-    const [birdCreated, setBirdCreated] = React.useState(false);
+    const [RegisterCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
 
 
@@ -65,7 +65,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         ingles: false,
     });
 
-
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
@@ -74,7 +73,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             setImageFiles((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
         }
     };
-
 
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -89,7 +87,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             ...createData,
             [name]: value,
         });
-
         // Clear the error when the user starts typing in the input field
         if (errors[name]) {
             setErrors({
@@ -98,7 +95,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             });
         }
     };
-
 
     const handleInputChangeIngles = (event) => {
         const newName = event.target.value;
@@ -112,21 +108,17 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             ...errors,
             ingles: false,
         });
-
         // Reinicia el formulario
         setFormSubmitted(false);
-
-        // Espera 500 milisegundos antes de llamar a la función para comprobar duplicados
+        // Espera 500 mili segundos antes de llamar a la función para comprobar duplicados
         setTimeout(async () => {
             try {
                 // Llama a la función para comprobar duplicados
                 await dispatch(duplicateNameCheck(newName));
-
-
             } catch (error) {
                 // Si hay un error, muestra un mensaje de error
                 console.error('Error al comprobar duplicados:', String(error));
-                alert('Esta ave ya existe');
+                alert('Este Registro ya existe');
                 // Restablece el valor del input
                 changeTabSearch()
             }
@@ -147,21 +139,16 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         if (!createData.grupo) {
             newErrors.grupo = true;
         }
-
         if (!createData.familia) {
             newErrors.familia = true;
         }
-
         if (!createData.ingles) {
             newErrors.ingles = true;
         }
-
         setErrors(newErrors);
-
         // Check if any errors exist and prevent form submission
         if (Object.values(newErrors).some((error) => error)) {
             return;
-
         }
         // Check if there are images before attempting to submit the form
         if (!imageFiles || imageFiles.length === 0) {
@@ -169,27 +156,25 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             alert("Debes cargar al menos una imagen antes de enviar el formulario.");
             return;
         }
-
         if (imageFiles && imageFiles.length > 0) {
             const formData = new FormData();
             imageFiles.forEach((file) => formData.append('images', file))
             setShowBackdrop(true);
             setLoadingMessage('Subiendo imágenes al Servidor...');
-
             try {
                 // Espera a que la imagen se suba y obtén la URL
                 const imageUrls = await uploadImagesFtpAndSaveLinks(formData);
                 localStorage.setItem('nombreIngles', JSON.stringify(createData.ingles))
                 await createFullEntry(createData, imageUrls);
-                setLoadingMessage('Creando el Ave en la DB...');
+                setLoadingMessage('Creando el Registro en la DB...');
                 setShowBackdrop(false);
-                setBirdCreated(true);
+                setRegisterCreated(true);
                 setOpenSnackbar(true);
                 setLoadingMessage('Cargando...');
                 setImageLink([]);
                 setImageFiles([]);
                 setFormSubmitted(false)
-                setSnackBarMessage('El ave se a creado correctamente.')
+                setSnackBarMessage('El Registro se a creado correctamente.')
                 // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
                 setTimeout(() => {
                     dispatch(getInfoForUpdateName(createData.ingles));
@@ -229,12 +214,12 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
     const createFullEntry = async (createData, imageUrl) => {
         return new Promise((resolve, reject) => {
-            dispatch(createBird({ ...createData, urlImagen: imageUrl }))
+            dispatch(createRegistro({ ...createData, urlImagen: imageUrl }))
                 .then(() => {
                     resolve(); // Si la creación del ave tiene éxito, resuelve la Promesa sin un mensaje.
                 })
                 .catch((error) => {
-                    reject("Error al crear el ave"); // Si hay un error, resuelve la Promesa con un mensaje.
+                    reject("Error al crear el Registro"); // Si hay un error, resuelve la Promesa con un mensaje.
                 });
         });
     };
@@ -244,16 +229,10 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             window.open(createData.urlWiki, '_blank');
         }
     };
-    const handleLogoClickB = () => {
-        if (createData.urlBird) {
-            window.open(createData.urlBird, '_blank');
-        }
-    };
-
 
     React.useEffect(() => {
         // Aquí despachas la acción para cargar las opciones al montar el componente
-        dispatch(getOptionsData());
+        dispatch(getOptionsDataM());
     }, [dispatch]);
 
     return (
@@ -333,16 +312,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     }}
                                 />
                                 <StyledTextField
-                                    name="cientifico"
-                                    label="Nombre científico"
-                                    value={createData.cientifico}
-                                    onChange={handleInputChange}
-                                    type='text'
-                                    variant="filled"
-                                    margin="dense"
-                                    fullWidth
-                                />
-                                <StyledTextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
@@ -352,9 +321,60 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     margin="dense"
                                     fullWidth
                                 />
+                                <StyledTextField
+                                    name="cientifico"
+                                    label="Nombre científico"
+                                    value={createData.cientifico}
+                                    onChange={handleInputChange}
+                                    type='text'
+                                    variant="filled"
+                                    margin="dense"
+                                    fullWidth
+                                />
+
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
+
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-familias"
+                                    options={familias}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.familia}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Familia"
+                                            margin="none"
+                                            error={formSubmitted && !createData.familia} // Add error state to the TextField
+                                            helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                mb: 1,
+                                                '& .MuiInputBase-input': {
+                                                },
+                                            }}
+
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+
+                                />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
@@ -395,46 +415,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         );
                                     }}
                                 />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-familias"
-                                    options={familias}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Familia"
-                                            margin="none"
-                                            error={formSubmitted && !createData.familia} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    fontSize: '1.1rem',
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                },
-                                            }}
-
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-
-                                />
-
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

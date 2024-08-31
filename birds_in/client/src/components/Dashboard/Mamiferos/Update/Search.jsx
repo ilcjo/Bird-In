@@ -27,7 +27,7 @@ export const Search = ({ changeTab }) => {
     const [showSearch, setShowSearch] = React.useState(true);
 
     const handleSelect = (registro) => {
-        console.log(registro)
+        // console.log(registro)
         localStorage.setItem('nombreIngles', JSON.stringify(registro.nombre_ingles))
         setSelected(registro);
         handleButtonClick();
@@ -99,7 +99,7 @@ export const Search = ({ changeTab }) => {
                     }} >
                         <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
                             <Typography variant="h2" color="primary">
-                                Buscar Ave
+                                Buscar Registro
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={8}>
@@ -112,7 +112,7 @@ export const Search = ({ changeTab }) => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Seleccionar Ave a Actualizar"
+                                        label="Seleccionar Registro a Actualizar"
                                     />
                                 )}
 

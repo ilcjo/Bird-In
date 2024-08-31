@@ -236,7 +236,7 @@ const deletePhotos = async (req, res) => {
    const { ids, urls } = req.body;
    try {
       const deletedFtp = await deletePhotoFromFTPMamiferos(urls);
-      console.log(deletedFtp)
+      // console.log(deletedFtp)
       if (!deletedFtp.success) {
          // Algunas fotos no se encontraron o hubo errores en el servidor FTP
          console.warn('Error al eliminar fotos del servidor FTP. No se eliminaron de la base de datos.');

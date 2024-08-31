@@ -280,7 +280,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
-                        <Grid container sx={{ mt: -4 }} >
+                        <Grid container sx={{ mt: 0 }} >
                             <Grid item xs={12} sm={3} md={3}>
                                 <ImageUploader
                                     allImageURLs={allImageURLs}
@@ -335,6 +335,29 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
+
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-familias"
+                                    options={familias}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.familia}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Familia"
+                                            margin="dense"
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
@@ -358,29 +381,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                         );
                                     }}
                                 />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-familias"
-                                    options={familias}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Familia"
-                                            margin="dense"
-                                        />}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                />
-
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

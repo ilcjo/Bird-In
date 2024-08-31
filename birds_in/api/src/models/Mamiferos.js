@@ -26,6 +26,14 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        // grupos_id_grupo: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: 'grupos_mamiferos', // Nombre de la tabla asociada
+        //         key: 'id_grupo' // Nombre de la columna clave primaria en la tabla asociada
+        //     },
+        //     allowNull: false
+        // },
     }, { timestamps: true, }
     )
 }

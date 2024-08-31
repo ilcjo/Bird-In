@@ -12,6 +12,7 @@ import { sendParameter } from '../../../redux/mamiferos/actions/filterAction';
 import { resetInfo } from '../../../redux/mamiferos/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/mamiferos/slices/FilterSlice';
 import { Header } from './Header';
+import { CopyRight } from '../../CopyRight';
 
 export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)
@@ -112,6 +113,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
                             </Grid>
                         ))}
                     </Grid>
+                    <CopyRight.Photo/>
                 </Box>
             </Grid>
             <Loading

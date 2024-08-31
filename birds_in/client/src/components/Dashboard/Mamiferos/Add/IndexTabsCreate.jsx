@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 //COMPONENTS
-import { CreateBird } from '../../../Forms/Aves/CreateBird'
 import { CoverDelete } from '../Photos/CoverDelete';
+import { CreateForm } from '../../../Forms/Mamiferos/CreateForm';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -29,9 +29,9 @@ const StyledTab = styled(Tab)({
 export const IndexTabsCreate = ({
     isEnable,
     changeTab,
-    showUpdateBird,
-    showSearchBird,
-    selectedBird,
+    showUpdate,
+    showSearch,
+    selected,
     history,
     changeTabSearch }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
@@ -81,7 +81,7 @@ export const IndexTabsCreate = ({
                     {selectedTab === 0 && (
                         <React.Fragment>
                             {/* Contenido de la primera pestaña */}
-                            <CreateBird
+                            <CreateForm
                                 changeTabSearch={changeTabSearch}
                                 changeImagenTab={() => setSelectedTab(1)}
                                 isImages={() => setImagesExistTabEnabled(true)}
@@ -92,9 +92,9 @@ export const IndexTabsCreate = ({
                         <CoverDelete
                             isCreate={true}
                             changeTab={changeTab}
-                            showUpdateBird={showUpdateBird}
-                            showSearchBird={showSearchBird}
-                            selectedBird={selectedBird}
+                            showUpdate={showUpdate}
+                            showSearch={showSearch}
+                            selected={selected}
                             setCoverSelected={handleSetCoverSelected}
                         />
                     )}

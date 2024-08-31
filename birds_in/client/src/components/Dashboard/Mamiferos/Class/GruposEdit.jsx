@@ -78,12 +78,14 @@ export const GruposEdit = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Seguro que deseas eliminar este Grupo?')) {
       try {
+        setShowDrop(true)
+        setLoadingMess('Eliminando..')
         // Lógica para eliminar el elemento
         await dispatch(eliminarGrupo(id))
-        setShowSuccessMessages('Grupo eliminado')
-        setOpenSnackb(true);
         await dispatch(getOptionsDataM())
-
+        setShowDrop(false)
+        setShowSuccessMessages('Grupo Eliminado Exitosamente')
+        setOpenSnackb(true);
       } catch (error) {
         setErrorMess(String(error));
         setErrorSnackbOpen(true);
@@ -104,15 +106,14 @@ export const GruposEdit = () => {
   // Función para guardar los cambios en una zona
   const saveChanges = async () => {
     try {
-
-      // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
-      await dispatch(updateGrupo(nombreGrupos));
       setShowDrop(true);
       setLoadingMess('Actualizando...');
+      // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
+      await dispatch(updateGrupo(nombreGrupos));
+      await dispatch(getOptionsDataM());
       setShowDrop(false);
       setShowSuccessMessages('Grupo actualizado correctamente')
       setOpenSnackb(true);
-      await dispatch(getOptionsDataM());
       setEditMode(null);
       // Reiniciar los estados después de guardar los cambios
       setNombreGrupos({
@@ -129,11 +130,11 @@ export const GruposEdit = () => {
 
   const handleAgregar = async () => {
     try {
-      // Aquí puedes enviar los datos al servidor o realizar otras acciones
-
-      const response = await dispatch(addGrupo(nombreGrupos));
       setShowDrop(true);
       setLoadingMess('Agregando..');
+      // Aquí puedes enviar los datos al servidor o realizar otras acciones
+      const response = await dispatch(addGrupo(nombreGrupos));
+      await dispatch(getOptionsDataM())
       setShowDrop(false)
       setShowSuccessMessages('Grupo creado correctamente')
       setOpenSnackb(true);
@@ -142,7 +143,6 @@ export const GruposEdit = () => {
         nombreG: '',
         idGrupo: 0
       });
-      await dispatch(getOptionsDataM())
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
@@ -251,7 +251,7 @@ export const GruposEdit = () => {
                 mt: -1.5,
               }}
               variant="contained"
-              color="secondary"
+              color="primary"
               startIcon={<AddIcon />}
               onClick={handleAgregar}
             >
@@ -261,7 +261,7 @@ export const GruposEdit = () => {
         </Grid>
         <Grid item sx={12} md={12}>
           <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
-            Lista Grupos
+            Lista  de Grupos
             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
           </Typography>
           <TableContainer sx={{ maxHeight: 450, }}>

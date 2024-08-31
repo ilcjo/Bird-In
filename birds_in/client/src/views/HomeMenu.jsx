@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Typography, IconButton, Divider, useTheme } from '@mui/material';
+import { Box, Button, Typography, IconButton, Divider, useTheme, useMediaQuery } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -15,11 +15,13 @@ const sections = [
 ];
 
 export const HomeMenu = () => {
-  const theme = useTheme()
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSobreMi, setShowSobreMi] = React.useState(false);
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const admin = localStorage.getItem('tipoCliente');
   const isAdmin = admin === 'admin';
+
   // Access image URLs
   const images = {
     aves: allCustom.cover_birds,
@@ -38,101 +40,109 @@ export const HomeMenu = () => {
         padding: '0px',
         minHeight: '100vh',
         display: 'grid',
-        gridTemplateColumns: showSobreMi ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)',
+        gridTemplateColumns: isMobile ? 'repeat(1, 1fr)' : (showSobreMi ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)'),
         gridTemplateRows: 'repeat(2, 1fr)',
-        gap: '3px',
+        gap: '1px',
         transition: 'grid-template-columns 0.5s ease-in-out',
       }}
     >
       {sections.map((section) => (
-       <Box
-       key={section.id}
-       sx={{
-         position: 'relative',
-         overflow: 'hidden',
-         transition: 'transform 0.5s ease-in-out',
-         '&:hover': { transform: 'scale(1)' },
-         height: '49vh',
-       }}
-     >
-       <img
-         src={images[section.id]}
-         alt={section.title}
-         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-       />
-       <Box
-         sx={{
-           position: 'absolute',
-           bottom: 0,
-           left: 0,
-           width: '100%',
-           padding: '20px',
-           background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
-           color: '#fff',
-           display: 'flex',
-           justifyContent: 'space-between', // Distribuye el espacio entre el título y los botones
-           alignItems: 'center', // Centra verticalmente el contenido
-         }}
-       >
-         <Typography variant="h2" color="primary.main">
-           {section.title}
-         <Divider sx={{ my:1, borderColor: theme.palette.primary.light,borderWidth: '1.3px', borderRadius: '2px' }} />
-         </Typography>
-         <Box>
-           <Button
-             variant="contained"
-             color="primary"
-             component={RouterLink}
-             to={`/${section.id}`}
-             sx={{ marginLeft: '10px' }}
-           >
-             {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
-           </Button>
-           {isAdmin && section.id !== 'SobreMi' && (
-             <Button
-               variant="outlined"
-               color="primary"
-               component={RouterLink}
-               to={`/panel${section.id}`}
-               sx={{ marginLeft: '10px' }}
-             >
-               Editar
-             </Button>
-           )}
-         </Box>
-       </Box>
-     </Box>
-     
+        <Box
+          key={section.id}
+          sx={{
+            position: 'relative',
+            overflow: 'hidden',
+            transition: 'transform 0.5s ease-in-out',
+            '&:hover': { transform: 'scale(1)' },
+            height: '49vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end', // Align content at the bottom
+            gridColumn: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
+            gridRow: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
+          }}
+        >
+          <img
+            src={images[section.id]}
+            alt={section.title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 5px' }}
+          />
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
+              color: '#fff',
+            }}
+          >
+            <Typography variant="h2" color="primary.main" sx={{ mb: '-5px', ml: 2 }}>
+              <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '15%' }} />
+              {section.title}
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between', // Distribute space between title and buttons
+                alignItems: 'center', // Center content vertically
+              }}
+            >
+              <Box sx={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+                {isAdmin && section.id !== 'SobreMi' && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    component={RouterLink}
+                    to={`/panel${section.id}`}
+                  >
+                    Editar
+                  </Button>
+                )}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={RouterLink}
+                  to={`/${section.id}`}
+                >
+                  {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       ))}
 
       {/* Flecha para mostrar/cerrar "Sobre Mi" */}
-      <IconButton
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          right: showSobreMi ? '25%' : 0, // Cambia la posición si la pestaña está abierta
-          transform: 'translateY(-50%)',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          '&:hover': {
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          },
-          zIndex: 2, // Asegura que la flecha esté sobre las imágenes
-        }}
-        onClick={() => setShowSobreMi(!showSobreMi)} // Alterna entre mostrar y cerrar la pestaña
-      >
-        {showSobreMi ? (
-          <ArrowBackIcon sx={{ color: '#fff', fontSize: '2rem' }} />
-        ) : (
-          <ArrowForwardIcon sx={{ color: '#fff', fontSize: '2rem' }} />
-        )}
-      </IconButton>
+      {!isMobile && (
+        <IconButton
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            right: showSobreMi ? '25%' : 0, // Changes position if tab is open
+            transform: 'translateY(-50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            },
+            zIndex: 2, // Ensure the arrow is above the images
+          }}
+          onClick={() => setShowSobreMi(!showSobreMi)} // Toggle between showing and hiding the tab
+        >
+          {showSobreMi ? (
+            <ArrowBackIcon sx={{ color: '#fff', fontSize: '2rem' }} />
+          ) : (
+            <ArrowForwardIcon sx={{ color: '#fff', fontSize: '2rem' }} />
+          )}
+        </IconButton>
+      )}
 
       {/* Panel "Sobre Mi" */}
-      {showSobreMi && (
+      {isMobile || showSobreMi ? (
         <Box
           sx={{
-            gridColumn: '4 / span 1',
-            gridRow: '1 / span 2',
+            gridColumn: isMobile ? 'auto' : (showSobreMi ? '4 / span 1' : 'auto'),
+            gridRow: isMobile ? 'auto' : (showSobreMi ? '1 / span 2' : 'auto'),
             position: 'relative',
             overflow: 'hidden',
             height: '100%',
@@ -166,15 +176,13 @@ export const HomeMenu = () => {
               >
                 Leer
               </Button>
-             
             </Box>
           </Box>
         </Box>
-      )}
+      ) : null}
     </Box>
   );
 };
-
 
 // import * as React from 'react';
 // import { Box, Button, Typography, useTheme } from '@mui/material';

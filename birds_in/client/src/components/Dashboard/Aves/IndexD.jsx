@@ -42,7 +42,6 @@ export const IndexD = () => {
     if (convertNumber === 1) {
       dispatch(setEstateInfo());
     }
-
   };
 
   const handleNavigateToSearch = () => {

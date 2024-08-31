@@ -167,9 +167,10 @@ const deletePhotoFromFTPMamiferos = async (urls) => {
 
         // Recorrer todas las URLs para eliminar
         for (const url of urls) {
+            // console.log(url)
             const fileName = url.split('/').pop();
             // console.log(fileName, ':foto:');
-
+            const ftpUrl = `${fileName}`;
             // Verificar si el archivo existe antes de eliminar
             if (fs.existsSync(url)) {
                 try {
@@ -184,7 +185,7 @@ const deletePhotoFromFTPMamiferos = async (urls) => {
 
             // Intentar eliminar el archivo del servidor FTP
             try {
-                await client.remove(fileName);
+                await client.remove(ftpUrl);
                 console.log('Imagen eliminada del servidor FTP con éxito');
             } catch (ftpError) {
                 console.error('Error al eliminar la imagen del servidor FTP:', ftpError);

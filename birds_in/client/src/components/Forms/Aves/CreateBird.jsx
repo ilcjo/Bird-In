@@ -335,16 +335,6 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     }}
                                 />
                                 <StyledTextField
-                                    name="cientifico"
-                                    label="Nombre científico"
-                                    value={createData.cientifico}
-                                    onChange={handleInputChange}
-                                    type='text'
-                                    variant="filled"
-                                    margin="dense"
-                                    fullWidth
-                                />
-                                <StyledTextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
@@ -354,6 +344,17 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     margin="dense"
                                     fullWidth
                                 />
+                                <StyledTextField
+                                    name="cientifico"
+                                    label="Nombre científico"
+                                    value={createData.cientifico}
+                                    onChange={handleInputChange}
+                                    type='text'
+                                    variant="filled"
+                                    margin="dense"
+                                    fullWidth
+                                />
+
                             </Grid>
 
                             <Grid item xs={12} sm={6}>

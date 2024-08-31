@@ -73,11 +73,19 @@ Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
 Paises.hasOne(Paisajes, { foreignKey: 'paises_id_pais' });
 Paisajes.belongsTo(Zonas, { foreignKey: 'zonas_id_zona' });
 Zonas.hasOne(Paisajes, { foreignKey: 'zonas_id_zona' });
-// =>MAMÍFEROS
+// => MAMÍFEROS
 Mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' })
 Familias_mamiferos.hasOne(Mamiferos, { foreignKey: 'familias_id_familia' })
 Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'grupos_id_grupo' })
 Grupos_mamiferos.hasOne(Mamiferos, { foreignKey: 'grupos_id_grupo' })
+// => MAMÍFEROS
+// // Nueva relación: Una familia tiene muchos grupos
+// Familias_mamiferos.hasMany(Grupos_mamiferos, { foreignKey: 'familias_id_familia' });
+// Grupos_mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' });
+// // Relaciona Mamiferos con Grupos en lugar de Familias
+// Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'grupos_id_grupo' });
+// Grupos_mamiferos.hasMany(Mamiferos, { foreignKey: 'grupos_id_grupo' });
+
 // =>REPTILES
 Reptiles.belongsTo(Familias_reptiles, { foreignKey: 'familias_id_familia' })
 Familias_reptiles.hasOne(Reptiles, { foreignKey: 'familias_id_familia' })
@@ -114,10 +122,9 @@ Paisajes.belongsTo(Zonas, { foreignKey: 'zonas_id_zona' });
 Paises.hasMany(Paisajes, { foreignKey: 'paises_id_pais', as: 'paisesPaisajes' });
 Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
 
-//PAIS-ZONA
+//Zona-país
 Zonas.hasMany(Paises, { foreignKey: 'id_paises', as: 'zonasPaises' });
 Paises.belongsTo(Zonas, { foreignKey: 'id_paises' });
-
 // MUCHOS A MUCHOS
 
 //PaisesAves (AVES)

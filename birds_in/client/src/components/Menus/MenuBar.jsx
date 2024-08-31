@@ -1,15 +1,15 @@
 import * as React from 'react';
-//Icons
+// Icons
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
-//Library
+// Library
 import { Box, Button, Grid, useMediaQuery } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { useNavigate, Link } from 'react-router-dom';
-//redux
+// Redux
 import { clearToken } from '../../redux/settings/slices/Auth';
 import { isOneBird } from '../../redux/birds/slices/InfoSlice';
 import { getOptionsData } from '../../redux/birds/actions/fetchOptions';
@@ -28,11 +28,9 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detecta si es móvil
 
   const handleButtonTodos = (button) => {
-    // console.log('Button clicked:', button);
     setSelectedButton(button);
 
     if (button === 'todo') {
-      // console.log('Fetching all birds...');
       dispatch(getInfoBirds());
     }
   };
@@ -84,7 +82,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             loading="lazy" />
         </Link>
         <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1, gap: '10px' }}>
-          {ShowMantButton && (
+          {ShowMantButton && isAdmin && (
             <Button
               sx={{
                 fontSize: '1rem',
@@ -129,7 +127,6 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 '&:hover': {
                   borderBottom: '2px solid white',
                   borderRadius: '0px',
-
                 },
               }}
               variant="text"
@@ -153,7 +150,6 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             variant="text"
             onClick={onLogoutClick}
             endIcon={<LogoutIcon />}
-          // color='primary'
           >
             {!isMobile && 'Cerrar Sesión'}
           </Button>

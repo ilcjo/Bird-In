@@ -89,7 +89,7 @@ export const Landing = () => {
             px: 5,
             top: '36%',
           }}>
-            <Typography variant="h2" color='primary.main' sx={{ mb: 3 }}>Moises Sterimberg</Typography>
+            <Typography variant="h2" color='primary.main' sx={{ mb: 3 }}>Moisés Sterimberg</Typography>
             <Typography variant="body1" color='primary.light'>Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.</Typography>
             <Typography variant="body1" sx={{ color: '#fff', fontWeight: 'bold', my: 2, fontFamily: 'Arsenal', fontSize: { xs: '0.8rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' } }}>Fotografías por Moises Sterimberg</Typography>
           </Box>

@@ -4,6 +4,7 @@ import {
   Backdrop,
   Button,
   CircularProgress,
+  Divider,
   Grid,
   Snackbar,
   Table,
@@ -184,19 +185,19 @@ export const GruposEdit = () => {
 
   };
 
-  const sortAlphabetically = (array) => {
-    return array.slice().sort((a, b) => {
-      // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
-      if (a && a.nombre && b && b.nombre) {
-        const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-        const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-        return nameA.localeCompare(nameB);
-      }
-      // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
-      return 0;
-    });
-  };
-  const sortedGrupos = sortAlphabetically(grupos);
+  // const sortAlphabetically = (array) => {
+  //   return array.slice().sort((a, b) => {
+  //     // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
+  //     if (a && a.nombre && b && b.nombre) {
+  //       const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
+  //       const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
+  //       return nameA.localeCompare(nameB);
+  //     }
+  //     // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
+  //     return 0;
+  //   });
+  // };
+  // const sortedGrupos = sortAlphabetically(grupos);
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
@@ -207,32 +208,76 @@ export const GruposEdit = () => {
   };
   return (
     <div>
-
       <Grid container spacing={5} sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '80%',
-        minWidth: '170vh',
+        width: '90%',
+        minWidth: '1200px',
         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-        margin: 'auto',
-        padding: '40px 40px 40px 40px',
+        margin: '0 auto',
+        padding: '40px 40px 30px 40px',
         borderRadius: '20px 20px 20px 20px'
       }} >
+        <Grid alignItems="center" container spacing={1} sx={{
+          margin: 5,
+          backgroundColor: 'rgba(0, 56, 28, 0.1)',
+          p: 3,
+          borderRadius: '10px',
+          mb: 0
+        }}>
+          <Grid item xs={12} sm={9}>
+            <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
+              Agregar Nuevo Grupo
+              <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={10}>
+            <TextField
+              fullWidth
+              label="Nombre de Grupo"
+              value={nombreGrupos.nombreG}
+              onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
+              InputLabelProps={{
+                sx: labelStyles,
+              }}
+              InputProps={{
+                sx: inputStyles,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={1}>
+            <Button
+              sx={{
+                mt: -1.5,
+              }}
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={handleAgregar}
+            >
+              Agregar
+            </Button>
+          </Grid>
+        </Grid>
         <Grid item sx={12} md={12}>
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
+            Lista  de Grupos
+            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+          </Typography>
+          <TableContainer sx={{ maxHeight: 450 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center">GRUPOS</StyledTableCell>
-                  <StyledTableCell align="center" ></StyledTableCell>
+                  <StyledTableCell align="center" colSpan={2}>Nombre</StyledTableCell>
+                  <StyledTableCell align="center" colSpan={2}>Acción</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sortedGrupos.map((item, index) => (
+                {grupos.map((item, index) => (
                   <StyledTableRow key={item.index}>
-                    <TableCell align="center" style={{ color: 'white' }}>
+                    <TableCell align="center" colSpan={2} style={{ color: 'white' }}>
                       {editMode === index ? (
                         // Modo de edición
                         <>
@@ -254,51 +299,31 @@ export const GruposEdit = () => {
                         item.nombre
                       )}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" colSpan={2} style={{ color: theme.palette.primary.light, }}>
                       {editMode === index ? (
                         // Modo de edición
                         <>
-                          <Button onClick={saveChanges} sx={{
-                            fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
-                            backgroundColor: theme.palette.primary.dark,
-                            color: theme.palette.primary.light,
-                            '&:hover': {
-                              backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                              color: theme.palette.primary.main, // Cambia el color del texto en hover
-                              textTransform: 'none',
-                            },
-                          }}
-                            variant="outlined"
-                            color="primary"
-                          >Grabar</Button>
-                          <Button onClick={handleCancelEdit}
+                          <Button onClick={saveChanges}
                             sx={{
-                              fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
-                              // backgroundColor: theme.palette.primary.main,
-                              color: theme.palette.primary.light,
-                              '&:hover': {
-                                backgroundColor: 'red', // Cambia el color de fondo en hover
-                                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                textTransform: 'none',
-                              },
+                              fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
                             }}
                             variant="contained"
                             color="secondary"
+                          >Grabar</Button>
+                          <Button onClick={handleCancelEdit}
+                            sx={{
+                              fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
+                            }}
+                            variant="contained"
+                            color="error"
                           >Cancelar</Button>
                         </>
                       ) : (
-                        <Grid container >
+                        <Grid container sx={{ maxHeight: 450 }}>
                           <Grid item xs={12} md={6}>
                             <Button onClick={() => handleEditClick(index, item)}
                               sx={{
-                                fontSize: '1rem', padding: '5px 10px', fontWeight: 'bold', ml: 7, mr: -7, mt: 0.7, textTransform: 'none',
-                                // backgroundColor: theme.palette.primary.main,
-                                color: theme.palette.primary.main,
-                                '&:hover': {
-                                  // backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                  color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                  textTransform: 'none',
-                                },
+                                fontSize: '1rem',
                               }}
                               variant="outlined"
                               color="primary"
@@ -319,49 +344,6 @@ export const GruposEdit = () => {
             </Table>
           </TableContainer>
         </Grid>
-        <Grid container spacing={1} sx={{
-          margin: 3,
-
-        }}>
-
-          <Grid item xs={12} md={11}>
-
-            <TextField
-              fullWidth
-              label="Nombre de Grupo"
-              value={nombreGrupos.nombreG}
-              onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
-              InputLabelProps={{
-                sx: labelStyles,
-              }}
-              InputProps={{
-                sx: inputStyles,
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={1}>
-            <Button
-              sx={{
-                fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', ml: 2, mt: 0.7, textTransform: 'none',
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.dark,
-                '&:hover': {
-                  backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                  color: theme.palette.primary.light, // Cambia el color del texto en hover
-                  textTransform: 'none',
-                },
-              }}
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={handleAgregar}
-            >
-              Agregar
-            </Button>
-          </Grid>
-
-        </Grid>
-
       </Grid>
       {/* Backdrop para mostrar durante la carga */}
       <Backdrop

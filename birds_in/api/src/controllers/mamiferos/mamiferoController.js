@@ -793,8 +793,8 @@ const deleteRegistroDb = async (idRegistro) => {
                 mamiferos_id_mamifero: idRegistro,
             },
         });
-
-        const ftpDeleteResults = await deletePhotoFromFTPMamiferos(imagenes.map(imagen => imagen.url));
+// console.log(imagenes)
+        const ftpDeleteResults = await deletePhotoFromFTPMamiferos(imagenes.map(imagen => imagen.url_mamifero));
 
         if (!ftpDeleteResults.success) {
             // Si hay un problema al borrar las fotos del FTP, puedes manejar el error aquí

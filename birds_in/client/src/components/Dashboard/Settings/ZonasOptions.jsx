@@ -155,8 +155,6 @@ export const ZonasOptions = () => {
     }
   };
 
-
-
   const handleAgregar = async () => {
     if (!nombreZona || !paisSeleccionado) {
       // Si alguno de los campos está vacío, muestra una notificación de error

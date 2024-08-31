@@ -39,7 +39,6 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
 
     const { paises, familias, grupos, zonas } = useSelector(state => state.filters.options)
     const { infoForUpdate } = useSelector(state => state.updateSlice)
-    console.log('soy update form mamiferos', infoForUpdate, grupos, familias)
     const initialCreateData = {
         grupo: infoForUpdate.grupos_mamifero || null,
         familia: infoForUpdate.familias_mamifero || null,
@@ -333,6 +332,28 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             <Grid item xs={12} sm={6}>
                                 <Autocomplete
                                     disablePortal
+                                    id="combo-box-familias"
+                                    options={familias}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.familia}
+                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Familia"
+                                            margin="dense"
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                />
+                                <Autocomplete
+                                    disablePortal
                                     id="combo-box-grupos"
                                     options={grupos}
                                     getOptionLabel={(option) => option.nombre}
@@ -354,28 +375,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         );
                                     }}
                                 />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-familias"
-                                    options={familias}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Familia"
-                                            margin="dense"
-                                        />}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                />
+
 
                             </Grid>
                         </Grid>

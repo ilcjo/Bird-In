@@ -16,7 +16,6 @@ import { loadMoreData } from '../../redux/mamiferos/actions/infoAction';
 import { isOneR, resetInfo, } from '../../redux/mamiferos/slices/InfoSlice';
 import { CardsMamiferos } from '../../components/Cards/Mamiferos/CardsMamiferos';
 
-
 export const Mamiferos = () => {
 
   const theme = useTheme()
