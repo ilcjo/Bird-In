@@ -2,11 +2,13 @@ import axios from 'axios'
 import { fetchOptions, newOptions } from '../slices/FilterSlice';
 import { createParams } from '../../../components/utils/convertId';
 
-export const getOptionsData = () => {
+export const getOptionsDataR = () => {
   return async (dispatch) => {
     try {
+      // console.log('llegue')
       const response = await axios('reptiles/opciones')
       const data = response.data
+      console.log(data)
       dispatch(fetchOptions(data))
       // dispatch(setNoMoreResults(true))
     } catch (error) {

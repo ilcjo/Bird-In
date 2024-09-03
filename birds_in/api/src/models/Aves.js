@@ -18,6 +18,10 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        nombre_comun: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         zonas: {
             type: DataTypes.TEXT,
             allowNull: true
@@ -34,11 +38,7 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        nombre_comun: {
-            type: DataTypes.TEXT,
-            allowNull: true
-        },
-       
-    },{ timestamps: true, }
-    )
-}
+    }, { timestamps: true }
+    );
+};
+

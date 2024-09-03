@@ -14,6 +14,7 @@ const {
    findDataByName,
    findNameDuplicate,
    findAllEnglishNames,
+   verificarRelaciones,
 } = require("../../controllers/birds/birdsController");
 const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
@@ -385,7 +386,17 @@ const getAllAvesAsExcel = async (req, res) => {
    }
 };
 
+const check = async (req, res) => {
+   const { familia, grupo } = req.query
+   try {
+      const message = await verificarRelaciones(familia, grupo)
+      return res.status(200).json(message);
+   } catch (error) {
+      res.status(500).json({ error: error.message });
+   }
+};
 module.exports = {
+   check,
    getFilterInfo,
    selectOptions,
    getFilterOptions,

@@ -68,6 +68,7 @@ Aves.belongsTo(Familias, { foreignKey: 'familias_id_familia' })
 Familias.hasOne(Aves, { foreignKey: 'familias_id_familia' })
 Aves.belongsTo(Grupos, { foreignKey: 'grupos_id_grupo' })
 Grupos.hasOne(Aves, { foreignKey: 'grupos_id_grupo' })
+
 // =>PAISAJES
 Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
 Paises.hasOne(Paisajes, { foreignKey: 'paises_id_pais' });

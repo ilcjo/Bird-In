@@ -11,16 +11,16 @@ import { Loading } from '../../utils/Loading';
 import { sendParameter } from '../../../redux/reptiles/actions/filterAction';
 import { resetInfo } from '../../../redux/reptiles/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/reptiles/slices/FilterSlice';
-import { Header } from './Header';
+import { HeaderR } from './HeaderR';
+import { CopyRight } from '../../CopyRight';
 
-export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
+export const PhotosDetailR = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
     const { isOne, info } = useSelector(state => state.dataReptil)
     const { copyFilters } = useSelector(state => state.filterRep)
     const allImages = info.flatMap(registro => registro.imagenes_reptiles);
-    console.log(info)
     const mainImage = allImages.find(image => image.destacada) ? allImages.find(image => image.destacada).url : null;
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..')
@@ -60,7 +60,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
 
         <React.Fragment>
             {mainImage && (
-                <Header imageUrl={mainImage} registro={info} back={stepBack} />
+                <HeaderR imageUrl={mainImage} registro={info} back={stepBack} />
             )}
             <Grid container spacing={0} sx={{ background: '#86ac8e', p: { xs: 2, md: 5 } }}>
                 {/* Galería de imágenes */}
@@ -113,6 +113,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
                             </Grid>
                         ))}
                     </Grid>
+                    <CopyRight.Photo/>
                 </Box>
             </Grid>
             <Loading

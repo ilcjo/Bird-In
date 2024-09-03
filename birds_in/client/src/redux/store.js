@@ -10,8 +10,8 @@ import filter from './birds/slices/FilterSlice';
 import data from './mamiferos/slices/InfoSlice';
 import updateInfo from './mamiferos/slices/UpdateSlice';
 import filters from './mamiferos/slices/FilterSlice';
-import filtersReptil from './reptiles/slices/FilterSlice';
-import dataReptil from './reptiles/slices/InfoSlice';
+import filtersRep from './reptiles/slices/FilterSlice';
+import dataRep from './reptiles/slices/InfoSlice';
 import updateInfoR from './reptiles/slices/UpdateSlice';
 
 const store = configureStore({
@@ -31,9 +31,9 @@ const store = configureStore({
     updateSlice: updateInfo,
     filters: filters,
     //reptiles
-    dataReptil: dataReptil,
+    dataReptil: dataRep,
     updateReptil: updateInfoR,
-    filterRep: filtersReptil,
+    filterRep: filtersRep,
 
   },
 });

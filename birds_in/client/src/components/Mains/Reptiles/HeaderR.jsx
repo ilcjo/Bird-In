@@ -3,9 +3,9 @@ import { Box, Button, Divider, Grid, Typography, useTheme, } from '@mui/material
 import { formatData } from '../../utils/formatDetail';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export const Header = ({ imageUrl, registro, back }) => {
+export const HeaderR = ({ imageUrl, registro, back }) => {
   const theme = useTheme()
-  console.log('q',registro)
+  // console.log('q',registro)
   return (
     <Box
       component="div"
@@ -15,7 +15,7 @@ export const Header = ({ imageUrl, registro, back }) => {
         height: { xs: 'auto', md: '90vh' },
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-        
+        background: '#86ac8e'
       }}
     >
       <Box
@@ -76,23 +76,6 @@ export const Header = ({ imageUrl, registro, back }) => {
                 >
                   Wiki
                 </Button>
-                <Button
-                  sx={{
-                    mt: -2,
-                    fontSize: '0.8rem',
-                    ml: 2,
-                    alignSelf: 'center',
-                    textTransform: 'none',
-                    padding: '1px 1px',
-                  }}
-                  variant="outlined"
-                  href={data.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  eBird
-                </Button>
-
               </Grid>
               <Grid item xs={12}>
 
@@ -130,7 +113,7 @@ export const Header = ({ imageUrl, registro, back }) => {
                   <Typography variant="h4" color="primary.light">
                     Zonas:
                     <Typography variant="h6" color="primary.light" sx={{ mb: 1.5 }}>
-                      {formatData(data.zonasMamiferos) || 'N/A'}
+                      {formatData(data.zonasReptiles) || 'N/A'}
                     </Typography>
                   </Typography>
                 </Grid>
@@ -141,7 +124,7 @@ export const Header = ({ imageUrl, registro, back }) => {
         <Box
           sx={{
             position: 'absolute',
-            bottom: { xs: 566, md: 1 },
+            bottom: { xs: 566, md: 0 },
             right: { xs: '0%', md: '100%' },
           }}
         >

@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "dev_birds",
+    "password": "Ilcjo1311*",
+    "database": "birds_dev-35303539ebbf",
+    "host": "mysql.us.stackcp.com",
+    "dialect": "mariadb",
+    "port": 62441
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

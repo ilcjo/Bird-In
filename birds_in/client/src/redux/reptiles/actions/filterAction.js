@@ -5,7 +5,7 @@ import { setNoMoreResults } from "../slices/FilterSlice";
 import { createParams } from "../../../components/utils/convertId";
 
 export const sendParameter = (selectedOptions) => {
-    // console.log(selectedOptions, 'soy parametros que llegan')
+    // console.log(selectedOptions, 'soy parámetros que llegan')
     return async (dispatch) => {
         try {
             const queryParams = createParams(selectedOptions)

@@ -15,14 +15,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import CloseIcon from '@mui/icons-material/Close';
 //ESTADOS GLOBALES
 import { sendParameter } from '../../../redux/reptiles/actions/filterAction';
-import { fetchNewOptions, getOptionsData } from '../../../redux/reptiles/actions/fetchOptions';
+import { fetchNewOptions, getOptionsDataR } from '../../../redux/reptiles/actions/fetchOptions';
 import { saveFilters } from '../../../redux/reptiles/slices/FilterSlice';
 import { cargando, isOneR } from '../../../redux/reptiles/slices/InfoSlice';
 import { copingFilters } from '../../../redux/reptiles/slices/FilterSlice';
 import { setNoMoreResults } from '../../../redux/reptiles/slices/FilterSlice';
 
 
-export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
+export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const nombreIngles = localStorage.getItem('nombreIngles');
@@ -100,7 +100,23 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             } else {
                 dispatch(isOneR(false));
             }
-
+            // setIsFetchingOptions(true); // Activa el indicador de carga
+            // // // Realiza la solicitud para obtener las opciones completas
+            // // dispatch(getOptionsData())
+            // //     .then(() => {
+            // //         setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
+            // //     })
+            // //     .catch(() => {
+            // //         setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
+            // //     });
+            // setSelectOption({
+            //     grupo: [],
+            //     familia: [],
+            //     pais: [],
+            //     zona: [],
+            //     cientifico: [],
+            //     ingles: []
+            // });
         } catch (error) {
             console.error("Error occurred during filtering:", error);
             // Manejar el error según sea necesario
@@ -116,7 +132,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const handleReset = () => {
         setIsFetchingOptions(true); // Activa el indicador de carga
         // Realiza la solicitud para obtener las opciones completas
-        dispatch(getOptionsData())
+        dispatch(getOptionsDataR())
             .then(() => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
             })
@@ -138,7 +154,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     React.useEffect(() => {
         return () => {
-            dispatch(getOptionsData());
+            dispatch(getOptionsDataR());
             setSelectOption({
                 grupo: [],
                 familia: [],
@@ -149,7 +165,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             });
         };
     }, []);
-
     return (
         <React.Fragment>
             <Grid component={Box}
@@ -165,6 +180,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     </Typography>
                 </Grid>
                 <Grid container alignItems="center">
+
                     <Grid item xs={12}>
                         {/* Familia */}
                         <FormControl sx={{ m: 1, width: '95%' }}>

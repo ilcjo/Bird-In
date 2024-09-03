@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const updateInfoR = createSlice({
-    name: 'updateInfoReptil',
+    name: 'updateInfoRep',
     initialState,
 
     reducers: {

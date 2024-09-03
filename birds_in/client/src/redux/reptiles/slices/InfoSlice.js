@@ -9,8 +9,8 @@ const initialState = {
   total: 0,
 };
 
-export const dataReptil = createSlice({
-  name: 'data_reptiles',
+export const dataRep = createSlice({
+  name: 'dataRep',
   initialState,
 
   reducers: {
@@ -63,5 +63,5 @@ export const {
   isOneR,
   howMuch,
   cargando,
-} = dataReptil.actions;
-export default dataReptil.reducer;
+} = dataRep.actions;
+export default dataRep.reducer;

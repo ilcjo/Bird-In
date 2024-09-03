@@ -7,15 +7,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 //COMPONENTS
-import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
-import { Filters } from '../../components/Mains/reptiles/Filters';
-import { PhotosDetail } from '../../components/Mains/reptiles/PhotosDetail';
+import { FiltersR } from '../../components/Mains/Reptiles/FiltersR';
+import { PhotosDetailR } from '../../components/Mains/Reptiles/PhotosDetailR';
+import { CardsReptil } from '../../components/Cards/Reptiles/CardsReptil';
 //REDUX
 import { loadMoreData } from '../../redux/reptiles/actions/infoAction';
 import { isOneR, resetInfo, } from '../../redux/reptiles/slices/InfoSlice';
-
 
 export const Reptiles = () => {
 
@@ -28,7 +27,7 @@ export const Reptiles = () => {
   const [page, setPage] = React.useState(1);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Cargando..')
-console.log(info,'desde reptiles main')
+
   const panel = localStorage.getItem('panel')
 
   const handleChangePage = () => {
@@ -84,11 +83,11 @@ console.log(info,'desde reptiles main')
           fullWidth={true}
           maxWidth='md'
         >
-          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
+          <FiltersR isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {info.length === 1 && (
           <Grid container >
-            <PhotosDetail registro={info[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
+            <PhotosDetailR setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
           </Grid>
         )}
         {info.length > 1 && (
@@ -106,7 +105,6 @@ console.log(info,'desde reptiles main')
               borderRadius: '20px',
               mb: 10,
               mt: 10,
-
             }}
           >
             <Grid container
@@ -144,7 +142,7 @@ console.log(info,'desde reptiles main')
             <Grid container spacing={3} justifyContent="center">
               {info.map((registro, index) => (
                 <Grid item key={index}>
-                  <Cards foto={registro.imagenes_reptiles} name={registro.nombre_ingles} />
+                  <CardsReptil foto={registro.imagenes_reptiles} name={registro.nombre_ingles} />
                 </Grid>
               ))}
             </Grid>
@@ -167,7 +165,6 @@ console.log(info,'desde reptiles main')
             )}
           </Box>
         )}
-
         {isOne === false && info.length === 0 && (
           <Box
             sx={{
@@ -208,7 +205,6 @@ console.log(info,'desde reptiles main')
           </Box>
         )}
       </Grid>
-
       <Loading
         message={loadingMessage}
         open={showBackdrop}

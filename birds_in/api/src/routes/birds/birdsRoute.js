@@ -14,7 +14,8 @@ const {
     findInfoForUpdateName,
     checkBirdDuplicate,
     getAllAvesAsExcel,
-    getAllNombres
+    getAllNombres,
+    check
 
 } = require('../../handlers/birds/birdHandler')
 const upload = require('../../utils/multerConfig')
@@ -35,6 +36,6 @@ birdsRouter.get('/filtros', getFilterInfo)
     .get('/duplicados', checkBirdDuplicate)
     .get('/descargar-excel-aves', getAllAvesAsExcel)
     .get('/nombres', getAllNombres)
-    
-    
+    .get('/check', check)
+
 module.exports = birdsRouter

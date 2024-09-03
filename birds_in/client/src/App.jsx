@@ -21,6 +21,7 @@ import { Mamiferos } from './views/Mains/Mamiferos'
 import { Reptiles } from './views/Mains/Reptiles'
 import { Insects } from './views/Mains/Insects'
 import { DashMamiferos } from './views/Dash/DashMamiferos'
+import { DashReptiles } from './views/Dash/DashReptiles'
 
 function App() {
   return (
@@ -112,6 +113,12 @@ function App() {
         element={<ProtectedRoute roles={['admin']} >
           <MenuBar ShowFilterButton={false} ShowBackButton={true} />
           <DashSettings />
+        </ProtectedRoute>
+        } />
+        <Route path="/panelreptiles"
+        element={<ProtectedRoute roles={['admin']} >
+          <MenuBar ShowFilterButton={false} ShowBackButton={true} />
+          <DashReptiles />
         </ProtectedRoute>
         } />
     </Routes>

@@ -19,7 +19,7 @@ const initialState = {
   currentPage: 0
 };
 
-export const filtersReptil = createSlice({
+export const filtersRep = createSlice({
   name: 'filtersReptil',
   initialState,
 
@@ -58,7 +58,7 @@ export const filtersReptil = createSlice({
         ingles: [],
       };
     },
-    saveOptions: (state, action) => {
+    saveOptionsR: (state, action) => {
       state.saveOptions = action.payload
     },
     setNoMoreResults: (state, action) => {
@@ -76,9 +76,9 @@ export const {
   saveFilters,
   stringParameter,
   resetCurrentFilters,
-  saveOptions,
+  saveOptionsR,
   setNoMoreResults,
   copingFilters,
   setCurrentPage
-} = filtersReptil.actions;
-export default filtersReptil.reducer;
+} = filtersRep.actions;
+export default filtersRep.reducer;

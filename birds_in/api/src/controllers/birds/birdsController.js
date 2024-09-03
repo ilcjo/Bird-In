@@ -4,6 +4,185 @@ const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 const { deletePhotoFromFTP } = require("../../services/deletFtp");
 
+async function verificarRelaciones(familia, grupo) {
+    try {
+        const grupos = await Grupos.findAll({
+            include: [
+                {
+                    model: Familias,
+                    as: 'familia',
+                    attributes: ['nombre'],
+                    where: familia ? { id_familia: familia } : undefined,
+                }
+            ],
+            where: grupo ? { id_grupo: grupo.split(',').map(Number) } : undefined,
+            logging: console.log
+        });
+
+        console.log(JSON.stringify(grupos, null, 2));
+    } catch (error) {
+        console.error('Error al verificar las relaciones:', error);
+    }
+}
+
+// const DEFAULT_PER_PAGE = 18;
+// const DEFAULT_PAGE = 1;
+
+// const decodeQueryParam = (param) => {
+//     return param ? decodeURIComponent(param) : null;
+// };
+
+// const buildWhereClause = (nombreCientifico, nombreIngles) => {
+//     const whereClause = {};
+//     if (nombreCientifico) {
+//         whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
+//     }
+//     if (nombreIngles) {
+//         whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
+//     }
+
+//     return whereClause;
+// };
+
+// const buildIncludeArray = (familia, grupo) => {
+//     console.log(familia, grupo, 'llegue build array');
+//     const includeArr = [
+//         {
+//             model: Grupos,
+//             as: 'grupo',
+//             attributes: ['nombre'],
+//             include: [
+//                 {
+//                     model: Familias,
+//                     as: 'familia',
+//                     attributes: ['nombre'],
+//                     where: familia ? { id_familia: familia } : undefined,
+//                 },
+//             ],
+//             where: grupo ? { id_grupo: grupo.split(',').map(Number) } : undefined,
+//         },
+//         {
+//             model: Paises,
+//             attributes: ['nombre', 'id_pais'],
+//             through: {
+//                 attributes: []
+//             }
+//         },
+//         {
+//             model: Zonas,
+//             as: 'zonasAves',
+//             attributes: [['nombre_zona', 'nombre'], 'id_zona'],
+//             through: {
+//                 attributes: ['zonas_id_zona']
+//             }
+//         },
+//         {
+//             model: Imagenes_aves,
+//             as: 'imagenes_aves',
+//             attributes: ['url', 'destacada']
+//         },
+//     ];
+//     // // Si solo llega `familia` y no `grupo`, obtenemos los grupos asociados a esa familia
+//     // if (familia && !grupo) {
+//     //     const gruposFamilia = await Grupos.findAll({
+//     //         where: { familia_id: familia },
+//     //         attributes: ['id_grupo'],
+//     //     });
+
+//     //     const grupoIds = gruposFamilia.map(grupo => grupo.id_grupo);
+//     //     includeArr[0].where = { id_grupo: grupoIds };
+//     // }
+//     console.log(includeArr);
+//     return includeArr;
+// };
+
+
+// const buildIncludeForPais = (pais) => {
+//     return {
+//         model: Paises,
+//         attributes: ['nombre', 'id_pais'],
+//         through: {
+//             attributes: [],
+//         },
+//         where: { id_pais: pais }
+//     };
+// };
+
+// const buildIncludeForZonas = (zonas) => {
+//     return {
+//         model: Zonas,
+//         as: 'zonasAves',
+//         attributes: ['nombre_zona', 'id_zona'],
+//         through: {
+//             attributes: [],
+//         },
+//         where: {
+//             id_zona: zonas,
+//         },
+//     };
+// };
+
+// const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage) => {
+//     try {
+//         nombreCientifico = decodeQueryParam(nombreCientifico);
+//         nombreIngles = decodeQueryParam(nombreIngles);
+
+//         const whereClause = buildWhereClause(nombreCientifico, nombreIngles);
+//         let includeArr = buildIncludeArray(familia, grupo);
+
+//         if (pais) {
+//             includeArr.push(buildIncludeForPais(pais));
+//         }
+
+//         if (zonas) {
+//             includeArr.push(buildIncludeForZonas(zonas));
+//         }
+
+//         const pageConvert = Number(page) || DEFAULT_PAGE;
+//         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
+//         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
+//         console.log(buildWhereClause)
+//         console.log(includeArr)
+//         const avesFiltradas = await Aves.findAll({
+//             where: whereClause,
+//             include: includeArr,
+//             limit: perPageConvert,
+//             offset: offset,
+//             order: [['nombre_ingles', 'ASC']],
+//             logging: console.log,
+//         });
+//         // console.log(avesFiltradas)
+//         let totalResultsCount;
+//         if (pais && zonas) {
+//             totalResultsCount = await Aves.count({
+//                 where: whereClause,
+//                 include: [buildIncludeForPais(pais), buildIncludeForZonas(zonas)]
+//             });
+//         } else if (pais) {
+//             totalResultsCount = await Aves.count({
+//                 where: whereClause,
+//                 include: [buildIncludeForPais(pais)]
+//             });
+//         } else if (zonas) {
+//             totalResultsCount = await Aves.count({
+//                 where: whereClause,
+//                 include: [buildIncludeForZonas(zonas)]
+//             });
+//         } else {
+//             totalResultsCount = await Aves.count({ where: whereClause, include: includeArr });
+//         }
+
+//         const totalPages = Math.ceil(totalResultsCount / perPageConvert);
+//         const isLastPage = totalResultsCount <= 8 || pageConvert >= totalPages;
+
+//         return { avesFiltradas, totalResultsCount, isLastPage };
+//     } catch (error) {
+//         console.error('Ocurrió un error al realizar la consulta:', error);
+//         throw new Error('Error al realizar la consulta de aves');
+//     }
+// };
+
+// ULTIMA VERSION 2.2
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
 
@@ -312,7 +491,7 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
         zonas,
         page,
         perpage)
-// console.log(allResults)
+    // console.log(allResults)
     const newOptions = {
         grupos: [],
         familias: [],
@@ -369,6 +548,72 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
     return newOptions;
 };
 
+// const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
+//     const perPage = '0';
+//     const page = '0';
+//     const allResults = await fetchFilterBirds(grupo, familia, pais, nombreIngles, nombreCientifico, zonas, page, perPage);
+
+//     const newOptions = {
+//         grupos: [],
+//         familias: [],
+//         paises: [],
+//         zonas: [],
+//         nIngles: [],
+//         nCientifico: [],
+//     };
+
+//     // Función para agregar elementos a un Set
+//     const addToSet = (set, item) => set.add(JSON.stringify(item));
+
+//     // Función para convertir un Set a un Array
+//     const convertSetToArray = (set) => Array.from(set).map(item => JSON.parse(item));
+
+//     // Agrupar los datos por grupo y familia
+//     const gruposMap = new Map();
+//     const familiasSet = new Set();
+//     allResults.avesFiltradas.forEach(ave => {
+//         const grupoId = ave.dataValues.grupo_id;
+//         const grupoNombre = ave.grupo.dataValues.nombre;
+
+//         // Si el grupo no existe, créalo
+//         if (!gruposMap.has(grupoId)) {
+//             gruposMap.set(grupoId, { id: grupoId, nombre: grupoNombre });
+//         }
+
+//         // Agregar familia al set de familias
+//         const familiaNombre = ave.grupo.familia ? ave.grupo.familia.nombre : '';
+//         if (familiaNombre) {
+//             const familiaId = ave.grupo.familia.id_familia; // Asegúrate de que `id_familia` esté disponible
+//             familiasSet.add(JSON.stringify({ id: familiaId, nombre: familiaNombre }));
+//         }
+//     });
+
+//     // Convertir el Map de grupos a Array
+//     newOptions.grupos = Array.from(gruposMap.values());
+
+//     // Convertir el Set de familias a Array
+//     newOptions.familias = convertSetToArray(familiasSet);
+
+//     // Extraer y agrupar países y zonas
+//     const paisesSet = new Set();
+//     const zonasSet = new Set();
+//     allResults.avesFiltradas.forEach(ave => {
+//         ave.paises.forEach(pais => addToSet(paisesSet, { id: pais.id_pais, nombre: pais.nombre }));
+//         // console.log(ave.zonasAves)
+//         ave.zonasAves.forEach(zona => addToSet(zonasSet, { id: zona.id_zona, nombre: zona.dataValues.nombre }));
+//     });
+
+//     newOptions.paises = convertSetToArray(paisesSet);
+//     newOptions.zonas = convertSetToArray(zonasSet);
+
+//     // Obtener nombres científicos y en inglés
+//     newOptions.nCientifico = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
+//     newOptions.nIngles = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_ingles })))];
+
+//     return newOptions;
+// };
+
+
 const filterOptionsPaisZonas = async (familia,
     grupo,
     nombreCientifico,
@@ -388,7 +633,7 @@ const filterOptionsPaisZonas = async (familia,
         zonas,
         page,
         perpage)
-    // console.log(allResults)
+    console.log(allResults, 'los resultadis qe llegan')
     const newOptions = {
         grupos: [],
         familias: [],
@@ -476,24 +721,24 @@ const filterOptionsPaisZonas = async (familia,
         // console.log(paisSet)
         newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa))
     }
-    const gruposSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        gruposSet.add(JSON.stringify({
-            id: ave.dataValues.grupos_id_grupo,
-            nombre: ave.grupo.dataValues.nombre
-        }));
-    });
-    const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
-    newOptions.grupos = gruposArray
-    const familiasSet = new Set();
-    allResults.avesFiltradas.forEach(ave => {
-        familiasSet.add(JSON.stringify({
-            id: ave.dataValues.familias_id_familia,
-            nombre: ave.familia.dataValues.nombre
-        }));
-    });
-    const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
-    newOptions.familias = familiasArray;
+    // const gruposSet = new Set();
+    // allResults.avesFiltradas.forEach(ave => {
+    //     gruposSet.add(JSON.stringify({
+    //         id: ave.dataValues.grupos_id_grupo,
+    //         nombre: ave.grupo.dataValues.nombre
+    //     }));
+    // });
+    // const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
+    // newOptions.grupos = gruposArray
+    // const familiasSet = new Set();
+    // allResults.avesFiltradas.forEach(ave => {
+    //     familiasSet.add(JSON.stringify({
+    //         id: ave.dataValues.familias_id_familia,
+    //         nombre: ave.familia.dataValues.nombre
+    //     }));
+    // });
+    // const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
+    // newOptions.familias = familiasArray;
 
     const nombresCientificos = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
     newOptions.nCientifico = nombresCientificos;
@@ -501,6 +746,7 @@ const filterOptionsPaisZonas = async (familia,
     newOptions.nIngles = nombresIngles;
     // const listaZona = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.zonas })))];
     // newOptions.zonas = listaZona;
+    console.log(newOptions)
     return newOptions;
 };
 
@@ -952,5 +1198,6 @@ module.exports = {
     deleteBirdDb,
     findDataByName,
     findNameDuplicate,
-    findAllEnglishNames
+    findAllEnglishNames,
+    verificarRelaciones
 };

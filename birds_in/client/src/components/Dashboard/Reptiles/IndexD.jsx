@@ -10,7 +10,7 @@ import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './Add/IndexTabsCreate';
 import { Search } from './Update/Search';
 //redux
-import { setEstateInfo } from '../../../redux/mamiferos/slices/UpdateSlice';
+import { setEstateInfo } from '../../../redux/reptiles/slices/UpdateSlice';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -88,7 +88,7 @@ export const IndexD = () => {
           </Typography>
           }
         />
-        <StyledTab
+          <StyledTab
           label={<Typography variant='h5' >
             Familias
           </Typography>
@@ -100,6 +100,7 @@ export const IndexD = () => {
           </Typography>
           }
         />
+      
       </StyledTabs >
       <div>
         {selectedTab === 0 && (
