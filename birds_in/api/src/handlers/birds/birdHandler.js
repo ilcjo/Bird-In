@@ -15,6 +15,7 @@ const {
    findNameDuplicate,
    findAllEnglishNames,
    verificarRelaciones,
+   getClassGrupoFamilia,
 } = require("../../controllers/birds/birdsController");
 const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
@@ -395,6 +396,16 @@ const check = async (req, res) => {
       res.status(500).json({ error: error.message });
    }
 };
+
+const checkClases = async (req, res) => {
+   const { familiaID, grupoID } = req.query
+   try {
+      const message = await getClassGrupoFamilia(familiaID, grupoID)
+      return res.status(200).json(message);
+   } catch (error) {
+      res.status(500).json({ error: error.message });
+   }
+};
 module.exports = {
    check,
    getFilterInfo,
@@ -411,6 +422,7 @@ module.exports = {
    findInfoForUpdateName,
    checkBirdDuplicate,
    getAllAvesAsExcel,
-   getAllNombres
+   getAllNombres,
+   checkClases,
 }
 

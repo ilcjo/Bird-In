@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 //icons
+import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //redux
@@ -213,7 +214,7 @@ export const GruposEdit = () => {
         minWidth: '1200xp',
         margin: '0 auto',
         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+        backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
         padding: '0px 40px 30px 40px',
         borderRadius: '20px 20px 20px 20px',
         mb: 10,
@@ -307,6 +308,7 @@ export const GruposEdit = () => {
                             }}
                             variant="contained"
                             color="secondary"
+                            endIcon={<SaveIcon />}
                           >Grabar</Button>
                           <Button onClick={handleCancelEdit}
                             sx={{

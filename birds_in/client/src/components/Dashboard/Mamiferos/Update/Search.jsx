@@ -93,7 +93,7 @@ export const Search = ({ changeTab }) => {
                         width: '170vh',
                         height: '40vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                        backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
                         marginTop: 'auto',
                         borderRadius: '10px',
                     }} >

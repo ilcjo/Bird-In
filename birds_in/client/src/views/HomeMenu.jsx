@@ -65,7 +65,7 @@ export const HomeMenu = () => {
           <img
             src={images[section.id]}
             alt={section.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 5px' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 10px 0px' }}
           />
           <Box
             sx={{
@@ -75,6 +75,7 @@ export const HomeMenu = () => {
               width: '100%',
               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
               color: '#fff',
+              borderRadius: '0px 0px 10px 0px'
             }}
           >
             <Typography variant="h2" color="primary.main" sx={{ mb: '-5px', ml: 2 }}>
@@ -88,12 +89,13 @@ export const HomeMenu = () => {
                 alignItems: 'center', // Center content vertically
               }}
             >
-              <Box sx={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+              <Box sx={{ display: 'flex', gap: '0px', marginLeft: 'auto' }}>
                 {isAdmin && section.id !== 'SobreMi' && (
                   <Button
                     variant="outlined"
                     color="primary"
                     component={RouterLink}
+                    sx={{borderRadius: '0px 0px 0px 10px'}}
                     to={`/panel${section.id}`}
                   >
                     Editar
@@ -102,6 +104,7 @@ export const HomeMenu = () => {
                 <Button
                   variant="contained"
                   color="primary"
+                  sx={{borderRadius: '0px 0px 10px 0px'}}
                   component={RouterLink}
                   to={`/${section.id}`}
                 >

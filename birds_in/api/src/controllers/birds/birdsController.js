@@ -1183,6 +1183,62 @@ const findAllEnglishNames = async () => {
     }
 };
 
+const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
+    try {
+        if (idfamilia) {
+            // Buscar todas las aves con el id_familia dado
+            const aves = await Aves.findAll({
+                where: {
+                    familias_id_familia: idfamilia
+                },
+                attributes: ['grupos_id_grupo'], // Solo necesitamos los id_grupo
+                group: ['grupos_id_grupo'] // Agrupar por id_grupo para evitar duplicados
+            });
+
+            // Extraer los id_grupo de las aves
+            const idGrupos = aves.map(ave => ave.grupos_id_grupo);
+
+            // Buscar los grupos con los id_grupo obtenidos
+            const grupos = await Grupos.findAll({
+                where: {
+                    id_grupo: {
+                        [Op.in]: idGrupos
+                    }
+                },
+                attributes: ['id_grupo', 'nombre']
+            });
+
+            return { grupos };
+        } else if (idgrupo) {
+            // Buscar las aves con el id_grupo dado
+            const aves = await Aves.findAll({
+                where: {
+                    grupos_id_grupo: idgrupo
+                },
+                attributes: ['familias_id_familia'], // Solo necesitamos los id_familia
+                group: ['familias_id_familia'] // Agrupar por id_familia para evitar duplicados
+            });
+
+            // Extraer los id_familia de las aves
+            const idFamilias = aves.map(ave => ave.familias_id_familia);
+
+            // Buscar las familias con los id_familia obtenidos
+            const familias = await Familias.findAll({
+                where: {
+                    id_familia: {
+                        [Op.in]: idFamilias
+                    }
+                },
+                attributes: ['id_familia', 'nombre']
+            });
+
+            return { familias };
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
 
 module.exports = {
     fetchOptions,
@@ -1199,5 +1255,6 @@ module.exports = {
     findDataByName,
     findNameDuplicate,
     findAllEnglishNames,
-    verificarRelaciones
+    verificarRelaciones,
+    getClassGrupoFamilia
 };

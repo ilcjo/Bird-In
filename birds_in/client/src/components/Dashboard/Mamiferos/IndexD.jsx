@@ -14,7 +14,7 @@ import { setEstateInfo } from '../../../redux/mamiferos/slices/UpdateSlice';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-  backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+  backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
   marginTop: '110px',
   '& .Mui-selected': {
@@ -66,7 +66,7 @@ export const IndexD = () => {
         aria-label="tabsAdmin"
         sx={{
           backgroundColor: 'rgba(0, 56, 28, 0.1)',
-          backdropFilter: 'blur(2px)',
+          backdropFilter: 'blur(8px)',
           borderRadius: '20px 20px 0px 0px',
           '& .Mui-selected': {
             backgroundColor: theme.palette.custom.light,

@@ -249,7 +249,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,

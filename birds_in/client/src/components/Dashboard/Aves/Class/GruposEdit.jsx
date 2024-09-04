@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 //icons
+import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //redux
@@ -309,6 +310,7 @@ export const GruposEdit = () => {
                             }}
                             variant="contained"
                             color="secondary"
+                            endIcon={<SaveIcon />}
                           >Grabar</Button>
                           <Button onClick={handleCancelEdit}
                             sx={{

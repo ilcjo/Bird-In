@@ -28,7 +28,7 @@ export const Contadores = () => {
     const renderTable = (data) => (
         <TableContainer component={Paper} sx={{ 
             backgroundColor: 'rgba(0, 56, 28, 0.1)', 
-            backdropFilter: 'blur(2px)', 
+            backdropFilter: 'blur(4px)', 
             padding: '20px', 
             borderRadius: '20px', 
             maxWidth: '45vw', 

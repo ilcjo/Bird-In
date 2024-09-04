@@ -7,7 +7,7 @@ import { CoverDelete } from '../Photos/CoverDelete'
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     width: '100%',

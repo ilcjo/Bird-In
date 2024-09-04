@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 //icons
+import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //redux
@@ -202,21 +203,23 @@ export const FamiliasEdit = () => {
     setOpenSnack(false);
   };
   return (
-    <div>
+    <React.Fragment>
       <Grid container spacing={5} sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
         width: '90%',
         minWidth: '1200xp',
         margin: '0 auto',
+        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+        backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
         padding: '40px 40px 30px 40px',
-        borderRadius: '20px 20px 20px 20px'
+        borderRadius: '20px 20px 20px 20px',
+        mb: 10,
+
       }} >
         <Grid alignItems="center" container spacing={1} sx={{
-          margin: 5,
+          // margin: 5,
           backgroundColor: 'rgba(0, 56, 28, 0.1)',
           p: 3,
           borderRadius: '10px',
@@ -304,6 +307,7 @@ export const FamiliasEdit = () => {
                             }}
                             variant="contained"
                             color="secondary"
+                            endIcon={<SaveIcon />}
                           >Grabar</Button>
                           <Button onClick={handleCancelEdit}
                             sx={{
@@ -379,7 +383,7 @@ export const FamiliasEdit = () => {
           {errorMe}
         </Alert>
       </Snackbar>
-    </div>
+      </React.Fragment >
   )
 };
 
