@@ -25,7 +25,7 @@ import { StyledTextField } from '../../../assets/styles/MUIstyles';
 //redux
 import { createBird, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/birds/actions/crudAction';
 import { saveImageFtp } from '../../../redux/birds/actions/photosAction';
-import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
+import { clasesFamilia, clasesGrupo } from '../../../redux/birds/actions/fetchOptions';
 
 
 export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -34,6 +34,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const dispatch = useDispatch()
 
     const { paises, familias, grupos, zonas } = useSelector(state => state.filterSlice.options)
+    const { extraOptions } = useSelector(state => state.filterSlice)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -45,7 +46,17 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se a creado correctamente.');
     const [birdCreated, setBirdCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
+    const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
+    const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
+    // const combinedOptions = [
+    //     ...(extraOptions.length > 0 ? extraOptions.familia.map(extra => ({ ...extra, type: 'extra' })) : []),
+    //     ...familias.map(familia => ({ ...familia, type: 'familia' })),
+    // ];
 
+    // const combinedOptionsGrupos = [
+    //     ...(extraOptions.length > 0 ? extraOptions.grupo.map(extra => ({ ...extra, type: 'extra' })) : []),
+    //     ...grupos.map(familia => ({ ...familia, type: 'grupo' })),
+    // ];
 
     const [createData, setCreateData] = React.useState({
         grupo: null,
@@ -122,7 +133,6 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             try {
                 // Llama a la función para comprobar duplicados
                 await dispatch(duplicateNameCheck(newName));
-
 
             } catch (error) {
                 // Si hay un error, muestra un mensaje de error
@@ -251,11 +261,52 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }
     };
 
+    // React.useEffect(() => {
+    //     // Aquí despachas la acción para cargar las opciones al montar el componente
+    //     dispatch(getOptionsData());
+    // }, []);
 
-    React.useEffect(() => {
-        // Aquí despachas la acción para cargar las opciones al montar el componente
-        dispatch(getOptionsData());
-    }, [dispatch]);
+    const handleFamiliaChange = async (event, newValue) => {
+        setCreateData(prevState => ({
+            ...prevState,
+            familia: newValue,
+        }));
+
+        if (newValue) {
+            // Aquí llamas a la función que genera datos extra y actualizas el estado
+            const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+            console.log(extraData)
+            // Combina las opciones existentes con las nuevas opciones extra
+            const newCombinedOptions = [
+                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                ...grupos, // Mantén las opciones originales
+
+            ];
+
+            setCombinedOptionsGrupos(newCombinedOptions);
+        }
+    };
+
+    const handleGrupoChange = async (event, newValue) => {
+        setCreateData(prevState => ({
+            ...prevState,
+            grupo: newValue,
+        }));
+
+        if (newValue) {
+            // Aquí llamas a la función que genera datos extra y actualizas el estado
+            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+            console.log(extraData)
+            // Combina las opciones existentes con las nuevas opciones extra
+            const newCombinedOptions = [
+                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                ...familias, // Mantén las opciones originales
+            ];
+
+            setCombinedOptionsFamilias(newCombinedOptions);
+        }
+    };
+
 
     return (
         <React.Fragment>
@@ -358,14 +409,15 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
-
+                                {/* 
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
                                     options={familias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    onChange={handleFamiliaChange}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -398,13 +450,15 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     }}
 
                                 />
+                                
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
                                     options={grupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    onChange={handleGrupoChange}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -414,7 +468,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                             helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
                                             FormHelperTextProps={{
                                                 sx: {
-                                                    /* Agrega los estilos que desees para el texto del helper text */
+                                                    Agrega los estilos que desees para el texto del helper text 
                                                     fontSize: '1.1rem',
                                                     // color: theme.palette.secondary.main,
                                                     fontWeight: 'bold'
@@ -437,7 +491,93 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                             option.nombre.toLowerCase().startsWith(inputValue)
                                         );
                                     }}
+                                />  
+                                */}
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-familias"
+                                    options={combinedOptionsFamilias} // Usa el estado actualizado
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.familia}
+                                    onChange={handleFamiliaChange}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Familia"
+                                            margin="dense"
+                                            error={formSubmitted && !createData.familia}
+                                            helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{ mb: 1 }}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    filterOptions={(options, state) => {
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
                                 />
+
+
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-grupos"
+                                    options={combinedOptionsGrupos} // Usa el estado actualizado
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.grupo}
+                                    onChange={handleGrupoChange}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Grupos"
+                                            margin="dense"
+                                            error={formSubmitted && !createData.grupo}
+                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{ mb: 1 }}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    filterOptions={(options, state) => {
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
+
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

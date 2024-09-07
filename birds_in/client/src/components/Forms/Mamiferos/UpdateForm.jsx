@@ -25,7 +25,7 @@ import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 import { Loading } from '../../utils/Loading';
 //redux
-import { getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
+import { clasesGrupoFamilia, getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
 import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/mamiferos/actions/crudAction';
 import { UpdateImage } from '../../../redux/mamiferos/actions/photosAction';
 // import { getOptionsData } from '../../../redux/mamiferos/actions/fetchOptions';
@@ -81,10 +81,55 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         setCreateData(initialCreateData);
     }, [infoForUpdate]);
 
+    // React.useEffect(() => {
+    //     // Aquí despachas la acción para cargar las opciones al montar el componente
+    //     dispatch(getOptionsDataM());
+    // }, []);
+    const handleFamiliaChange = (event, newValue) => {
+        const selectedFamilia = newValue || null;
+
+        setCreateData(prevState => ({
+            ...prevState,
+            familia: selectedFamilia,
+        }));
+
+        if (selectedFamilia) {
+            // Si hay una familia seleccionada, se obtiene el grupo relacionado
+            dispatch(clasesGrupoFamilia(selectedFamilia.id, null));
+        } else {
+            // Si se elimina la selección, se recuperan las opciones generales
+            dispatch(getOptionsDataM());
+        }
+    };
+
+    const handleGrupoChange = (event, newValue) => {
+        const selectedGrupo = newValue || null;
+
+        setCreateData(prevState => ({
+            ...prevState,
+            grupo: selectedGrupo,
+        }));
+
+        if (selectedGrupo) {
+            // Si hay un grupo seleccionado, se obtienen las familias relacionadas
+            dispatch(clasesGrupoFamilia(null, selectedGrupo.id));
+        } else {
+            // Si se elimina la selección, se recuperan las opciones generales
+            // dispatch(getOptionsData());
+        }
+    };
+
+    // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
     React.useEffect(() => {
-        // Aquí despachas la acción para cargar las opciones al montar el componente
-        dispatch(getOptionsDataM());
-    }, []);
+        // Cargar las opciones iniciales si ya existen valores en infoAveForUpdate
+        if (infoForUpdate.familia) {
+            dispatch(clasesGrupoFamilia(infoForUpdate.familia.id, null));
+        }
+        if (infoForUpdate.grupo) {
+            dispatch(clasesGrupoFamilia(null, infoForUpdate.grupo.id));
+        }
+    }, [dispatch, infoForUpdate]);
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -320,7 +365,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                 />
                                 <StyledTextField
                                     name="cientifico"
-                                    label="Nombre científico"
+                                    label="Nombre científico (Especie)"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
                                     variant="filled"
@@ -336,7 +381,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     options={familias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    onChange={handleFamiliaChange}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Familia"
@@ -358,10 +404,11 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     options={grupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    onChange={handleGrupoChange}
                                     renderInput={(params) =>
                                         <TextField {...params}
-                                            label="Grupo"
+                                            label="Genero"
                                             margin='dense'
 
                                         />}

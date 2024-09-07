@@ -67,10 +67,24 @@ export const filters = createSlice({
     copingFilters: (state, action) => {
       state.copyFilters = { ...state.currentFilters }
     },
+    updateFamiliaOptions: (state, action) => {
+      state.options = {
+        ...state.options,
+        familias: action.payload.familias
+      };
+    },
+    updateGrupoOptions: (state, action) => {
+      state.options = {
+        ...state.options,
+        grupos: action.payload.grupos
+      };
+    },
   },
 });
 
 export const {
+  updateFamiliaOptions,
+  updateGrupoOptions,
   fetchOptions,
   newOptions,
   saveFilters,

@@ -153,6 +153,9 @@ Paises.belongsToMany(Insectos, { through: 'insectos_has_paises', foreignKey: 'pa
 Insectos.belongsToMany(Zonas, { through: 'insectos_has_zonas', foreignKey: 'insectos_id_insecto', timestamps: false, as: 'zonasInsectos' })
 Zonas.belongsToMany(Insectos, { through: 'insectos_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoInsectos' })
 
+Grupos.belongsToMany(Familias, { through: 'familias_has_grupos', foreignKey: 'id_grupo', timestamps: false, })
+Familias.belongsToMany(Grupos, { through: 'familias_has_grupos', foreignKey: 'id_familia', timestamps: false, })
+
 
 
 module.exports = {

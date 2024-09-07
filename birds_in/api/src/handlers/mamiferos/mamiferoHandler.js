@@ -8,7 +8,7 @@ const {
 } = process.env
 
 const vistaAvesOrdenadaAll = require('../../config/db/db');
-const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister, findAllEnglishNames } = require('../../controllers/mamiferos/mamiferoController');
+const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister, findAllEnglishNames, getClassGrupoFamilia } = require('../../controllers/mamiferos/mamiferoController');
 const { deletePhotoFromFTPMamiferos } = require('../../services/deletFtp');
 
 const getAllNombres = async (req, res) => {
@@ -347,7 +347,18 @@ const getAllAvesAsExcel = async (req, res) => {
    }
 };
 
+const checkClases = async (req, res) => {
+   const { familiaID, grupoID } = req.query
+   try {
+      const message = await getClassGrupoFamilia(familiaID, grupoID)
+      return res.status(200).json(message);
+   } catch (error) {
+      res.status(500).json({ error: error.message });
+   }
+};
+
 module.exports = {
+   checkClases,
    createMamifero,
    getFilterInfo,
    selectOptions,

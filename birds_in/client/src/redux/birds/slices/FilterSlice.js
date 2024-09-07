@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  //familia grupo zona  y pais //filt+ create+
   options: [],
+  extraOptions: [],
   saveOptions: [],
   filtersOn: false,
-  noMoreResults: true,//filt+det+main
-  currentFilters: { //filt+
+  noMoreResults: true,
+  currentFilters: { 
     grupo: [],
     familia: [],
     pais: [],
@@ -15,7 +15,7 @@ const initialState = {
     ingles: [],
   },
   filters: '',
-  copyFilters: {},//gilt+det+main
+  copyFilters: {},
   currentPage: 0
 };
 
@@ -67,10 +67,22 @@ export const filter = createSlice({
     copingFilters: (state, action) => {
       state.copyFilters = { ...state.currentFilters }
     },
+    updateFamiliaOptions: (state, action) => {
+      state.extraOptions = {
+        familias: action.payload.familias
+      };
+    },
+    updateGrupoOptions: (state, action) => {
+      state.extraOptions = {
+        grupos: action.payload.grupos
+      };
+    },
   },
 });
 
 export const {
+  updateFamiliaOptions,
+  updateGrupoOptions,
   fetchOptions,
   newOptions,
   saveFilters,

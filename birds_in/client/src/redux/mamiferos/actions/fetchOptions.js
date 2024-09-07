@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fetchOptions, newOptions } from '../slices/FilterSlice';
+import { fetchOptions, newOptions, updateFamiliaOptions, updateGrupoOptions } from '../slices/FilterSlice';
 import { createParams } from '../../../components/utils/convertId';
 
 export const getOptionsDataM = () => {
@@ -26,6 +26,35 @@ export const fetchNewOptions = (selectedOptions) => {
       dispatch(newOptions(data))
     } catch (error) {
       console.log('error enviando datos:', error)
+    }
+  }
+};
+
+export const clasesGrupoFamilia = (idfamilia, idgrupo) => {
+  // console.log('llegue', idfamilia, idgrupo)
+  return async (dispatch) => {
+    try {
+      let data = {};
+
+      if (idfamilia) {
+        // Llamada a la API para obtener los grupos basados en idfamilia
+        const response = await axios.get(`mamiferos/clases?familiaID=${idfamilia}`);
+        const grupos = response.data. grupos;
+
+        // Despachar la acción para actualizar las opciones de grupo
+        dispatch(updateGrupoOptions({ grupos }));
+        // console.log(grupos)
+      } else if (idgrupo) {
+        // Llamada a la API para obtener las familias basadas en idgrupo
+        const response = await axios.get(`mamiferos/clases?grupoID=${idgrupo}`);
+        const familias = response.data.familias;
+        // console.log(familias)
+        // Despachar la acción para actualizar las opciones de familia
+        dispatch(updateFamiliaOptions({ familias }));
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
     }
   }
 };

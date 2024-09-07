@@ -202,6 +202,12 @@ export const FamiliasEdit = () => {
     }
     setOpenSnack(false);
   };
+  
+  React.useEffect(() => {
+    // Aquí despachas la acción para cargar las opciones al montar el componente
+    dispatch(getOptionsDataM());
+  }, []);
+
   return (
     <React.Fragment>
       <Grid container spacing={5} sx={{
@@ -383,7 +389,7 @@ export const FamiliasEdit = () => {
           {errorMe}
         </Alert>
       </Snackbar>
-      </React.Fragment >
+    </React.Fragment >
   )
 };
 

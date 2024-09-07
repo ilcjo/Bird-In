@@ -746,7 +746,7 @@ const filterOptionsPaisZonas = async (familia,
     newOptions.nIngles = nombresIngles;
     // const listaZona = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.zonas })))];
     // newOptions.zonas = listaZona;
-    console.log(newOptions)
+    // console.log(newOptions)
     return newOptions;
 };
 
@@ -1205,7 +1205,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
                         [Op.in]: idGrupos
                     }
                 },
-                attributes: ['id_grupo', 'nombre']
+                attributes: [['id_grupo', 'id'], 'nombre']
             });
 
             return { grupos };
@@ -1229,7 +1229,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
                         [Op.in]: idFamilias
                     }
                 },
-                attributes: ['id_familia', 'nombre']
+                attributes: [['id_familia', 'id'], 'nombre']
             });
 
             return { familias };
@@ -1240,7 +1240,52 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
     }
 };
 
+const findGroupNameDuplicate = async (nombreGrupo) => {
+    try {
+        const existingGroups = await Grupos.findAll({
+            where: {
+                nombre: nombreGrupo
+            }
+        });
+
+        // Si encuentra grupos con el mismo nombre, arroja un error
+        if (existingGroups.length > 0) {
+            throw new Error("Este Nombre de Grupo ya existe.");
+        }
+
+        // Si no encuentra grupos con el mismo nombre, simplemente retorna
+        return "Nombre de Grupo disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+const findFamilyNameDuplicate = async (nombreFamilia) => {
+    try {
+        const existingFamilies = await Familias.findAll({
+            where: {
+                nombre: nombreFamilia
+            }
+        });
+
+        // Si encuentra familias con el mismo nombre, arroja un error
+        if (existingFamilies.length > 0) {
+            throw new Error("Este Nombre de Familia ya existe.");
+        }
+
+        // Si no encuentra familias con el mismo nombre, simplemente retorna
+        return "Nombre de Familia disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
 module.exports = {
+    findGroupNameDuplicate,
+    findFamilyNameDuplicate,
     fetchOptions,
     filterOptions,
     fetchFilterBirds,

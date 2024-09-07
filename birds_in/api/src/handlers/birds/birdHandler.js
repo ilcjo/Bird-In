@@ -16,6 +16,8 @@ const {
    findAllEnglishNames,
    verificarRelaciones,
    getClassGrupoFamilia,
+   findGroupNameDuplicate,
+   findFamilyNameDuplicate,
 } = require("../../controllers/birds/birdsController");
 const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
@@ -406,7 +408,28 @@ const checkClases = async (req, res) => {
       res.status(500).json({ error: error.message });
    }
 };
+
+const checkDuplicateNames = async (req, res) => {
+   const { grupoName, familiaName } = req.query;
+   try {
+      if (grupoName) {
+         const message = await findGroupNameDuplicate(grupoName);
+         return res.status(200).json({ message });
+      } else if (familiaName) {
+         const message = await findFamilyNameDuplicate(familiaName);
+         return res.status(200).json({ message });
+      } else {
+         // Si no se proporcionan ni grupoName ni familiaName, se devuelve un error
+         return res.status(400).json({ error: "Debe proporcionar un nombre de grupo o de familia." });
+      }
+   } catch (error) {
+      return res.status(500).json({ error: error.message });
+   }
+};
+
+
 module.exports = {
+   checkDuplicateNames,
    check,
    getFilterInfo,
    selectOptions,

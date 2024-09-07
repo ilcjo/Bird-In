@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fetchOptions, newOptions } from '../slices/FilterSlice';
+import { fetchOptions, newOptions, updateFamiliaOptions, updateGrupoOptions } from '../slices/FilterSlice';
 import { createParams } from '../../../components/utils/convertId';
 
 export const getOptionsData = () => {
@@ -28,3 +28,41 @@ export const fetchNewOptions = (selectedOptions) => {
   }
 };
 
+export const clasesFamilia = (idfamilia) => {
+  console.log('llegue', idfamilia)
+  return async (dispatch) => {
+    try {
+      // Llamada a la API para obtener los grupos basados en idfamilia
+      const response = await axios.get(`aves/clases?familiaID=${idfamilia}`);
+      const grupos = response.data.grupos;
+
+      // Despachar la acción para actualizar las opciones de grupo
+      dispatch(updateGrupoOptions({ grupos }));
+      return grupos
+      // console.log(grupos)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+};
+
+export const clasesGrupo = (idgrupo) => {
+  console.log('llegue', idgrupo)
+  return async (dispatch) => {
+    try {
+
+      // Llamada a la API para obtener las familias basadas en idgrupo
+      const response = await axios.get(`aves/clases?grupoID=${idgrupo}`);
+      const familias = response.data.familias;
+      // console.log(familias)
+      // Despachar la acción para actualizar las opciones de familia
+      dispatch(updateFamiliaOptions({ familias }));
+      return familias
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+};

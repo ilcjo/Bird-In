@@ -25,7 +25,7 @@ import { StyledTextField } from '../../../assets/styles/MUIstyles';
 //redux
 import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/mamiferos/actions/crudAction';
 import { saveImageFtp } from '../../../redux/mamiferos/actions/photosAction';
-import { getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
+import { clasesGrupoFamilia, getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
 
 
 export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -230,10 +230,40 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }
     };
 
-    React.useEffect(() => {
-        // Aquí despachas la acción para cargar las opciones al montar el componente
-        dispatch(getOptionsDataM());
-    }, [dispatch]);
+    // React.useEffect(() => {
+    //     // Aquí despachas la acción para cargar las opciones al montar el componente
+    //     dispatch(getOptionsDataM());
+    // }, [dispatch]);
+
+    const handleFamiliaChange = (event, newValue) => {
+
+        setCreateData(prevState => ({
+            ...prevState,
+            familia: newValue,
+        }));
+
+        if (newValue) {
+            // Llama a la función o acción que obtiene los grupos basados en la familia seleccionada
+            dispatch(clasesGrupoFamilia(newValue.id, null));
+        } else {
+            dispatch(getOptionsDataM())
+        }
+    };
+
+    const handleGrupoChange = (event, newValue) => {
+        console.log('estoy aca')
+        setCreateData(prevState => ({
+            ...prevState,
+            grupo: newValue,
+        }));
+
+        if (newValue) {
+            // Llama a la función o acción que obtiene las familias basadas en el grupo seleccionado
+            dispatch(clasesGrupoFamilia(null, newValue.id));
+        } else {
+            dispatch(getOptionsDataM())
+        }
+    };
 
     return (
         <React.Fragment>
@@ -321,9 +351,10 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     margin="dense"
                                     fullWidth
                                 />
+
                                 <StyledTextField
                                     name="cientifico"
-                                    label="Nombre científico"
+                                    label="Nombre Científico(Especie)"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
                                     type='text'
@@ -331,18 +362,17 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     margin="dense"
                                     fullWidth
                                 />
-
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
-
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
                                     options={familias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    onChange={handleFamiliaChange}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -361,7 +391,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                                 '& .MuiInputBase-input': {
                                                 },
                                             }}
-
                                         />
                                     )}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
@@ -373,7 +402,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                             option.nombre.toLowerCase().startsWith(inputValue)
                                         );
                                     }}
-
                                 />
                                 <Autocomplete
                                     disablePortal
@@ -381,11 +409,12 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     options={grupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    onChange={handleGrupoChange}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Grupos"
+                                            label="Genero"
                                             margin='dense'
                                             error={formSubmitted && !createData.grupo} // Add error state to the TextField
                                             helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
@@ -406,7 +435,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         />
                                     )}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();
@@ -415,6 +443,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         );
                                     }}
                                 />
+
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

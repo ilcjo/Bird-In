@@ -178,7 +178,7 @@ const fetchOptions = async () => {
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles');
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico');
     // const nombrezonas = mapFieldValues(optionsZonas, 'nombre_zona', 'id_zona')
-
+console.log(optionsGrupos)
     return {
         grupos: optionsGrupos,
         familias: optionsFamilias,
@@ -869,7 +869,65 @@ const findAllEnglishNames = async () => {
     }
 };
 
+const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
+    try {
+        if (idfamilia) {
+            // Buscar todas las aves con el id_familia dado
+            const aves = await Mamiferos.findAll({
+                where: {
+                    familias_id_familia: idfamilia
+                },
+                attributes: ['grupos_id_grupo'], // Solo necesitamos los id_grupo
+                group: ['grupos_id_grupo'] // Agrupar por id_grupo para evitar duplicados
+            });
+
+            // Extraer los id_grupo de las aves
+            const idGrupos = aves.map(registro => registro.grupos_id_grupo);
+
+            // Buscar los grupos con los id_grupo obtenidos
+            const grupos = await Grupos_mamiferos.findAll({
+                where: {
+                    id_grupo: {
+                        [Op.in]: idGrupos
+                    }
+                },
+                attributes: [['id_grupo', 'id'], 'nombre']
+            });
+
+            return { grupos };
+        } else if (idgrupo) {
+            // Buscar las aves con el id_grupo dado
+            const aves = await Mamiferos.findAll({
+                where: {
+                    grupos_id_grupo: idgrupo
+                },
+                attributes: ['familias_id_familia'], // Solo necesitamos los id_familia
+                group: ['familias_id_familia'] // Agrupar por id_familia para evitar duplicados
+            });
+
+            // Extraer los id_familia de las aves
+            const idFamilias = aves.map(registro => registro.familias_id_familia);
+
+            // Buscar las familias con los id_familia obtenidos
+            const familias = await Familias_mamiferos.findAll({
+                where: {
+                    id_familia: {
+                        [Op.in]: idFamilias
+                    }
+                },
+                attributes: [['id_familia','id'], 'nombre']
+            });
+
+            return { familias };
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
 module.exports = {
+    getClassGrupoFamilia,
     fetchOptions,
     filterOptions,
     fetchFilterRegister,

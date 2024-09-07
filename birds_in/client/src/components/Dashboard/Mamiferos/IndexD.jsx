@@ -119,12 +119,12 @@ export const IndexD = () => {
         )}
         {selectedTab === 3 && (
           <Box>
-            <GruposEdit />
+            <FamiliasEdit />
           </Box>
         )}
         {selectedTab === 4 && (
           <Box>
-            <FamiliasEdit />
+            <GruposEdit />
           </Box>
         )}
       </div>

@@ -204,6 +204,12 @@ export const GruposEdit = () => {
     setOpenSnackb(false);
     setShowSuccessMessages('')
   };
+
+  React.useEffect(() => {
+    // Aquí despachas la acción para cargar las opciones al montar el componente
+    dispatch(getOptionsDataM());
+  }, []);
+
   return (
     <React.Fragment>
       <Grid container spacing={5} sx={{

@@ -5,10 +5,9 @@ import { styled } from '@mui/system';
 import { useDispatch } from 'react-redux';
 //COMPONENTS
 import { SearchBird } from './Update/SearchBird';
-import { GruposEdit } from './Class/GruposEdit';
-import { FamiliasEdit } from './Class/FamiliasEdit';
 import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './Add/IndexTabsCreate';
+import { FamiliasGrupos } from './Class/FamiliasGrupos';
 //redux
 import { setEstateInfo } from '../../../redux/birds/slices/UpdateSlice';
 
@@ -55,7 +54,7 @@ export const IndexD = () => {
       setSelectedTab(Number(tab));
     }
   }, [location]);
-  
+
   return (
     <>
       <StyledTabs
@@ -90,13 +89,7 @@ export const IndexD = () => {
         />
         <StyledTab
           label={<Typography variant='h5' >
-            Grupos
-          </Typography>
-          }
-          />
-        <StyledTab
-          label={<Typography variant='h5' >
-            Familias
+            Familias/Grupos
           </Typography>
           }
         />
@@ -119,12 +112,7 @@ export const IndexD = () => {
         )}
         {selectedTab === 3 && (
           <Box>
-            <GruposEdit />
-          </Box>
-        )}
-        {selectedTab === 4 && (
-          <Box>
-            <FamiliasEdit />
+            <FamiliasGrupos />
           </Box>
         )}
       </div>

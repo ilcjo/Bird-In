@@ -25,7 +25,7 @@ import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 import { Loading } from '../../utils/Loading';
 //redux
-import { getOptionsData } from '../../../redux/birds/actions/fetchOptions';
+import { clasesFamilia, clasesGrupo, getOptionsData } from '../../../redux/birds/actions/fetchOptions';
 import { actualizarAve, deleteBird, getInfoForUpdate } from '../../../redux/birds/actions/crudAction';
 import { UpdateAveImage } from '../../../redux/birds/actions/photosAction';
 
@@ -80,10 +80,50 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
         setCreateData(initialCreateData);
     }, [infoAveForUpdate]);
 
+    // React.useEffect(() => {
+    //     // Aquí despachas la acción para cargar las opciones al montar el componente
+    //     dispatch(getOptionsData());
+    // }, [dispatch]);
+
+    const handleFamiliaChange = (event, newValue) => {
+        const selectedFamilia = newValue;
+
+        setCreateData(prevState => ({
+            ...prevState,
+            familia: selectedFamilia,
+        }));
+
+        if (selectedFamilia) {
+            // Si hay una familia seleccionada, se obtiene el grupo relacionado
+            dispatch(clasesFamilia(selectedFamilia.id));
+        }
+    };
+
+    const handleGrupoChange = (event, newValue) => {
+        const selectedGrupo = newValue;
+
+        setCreateData(prevState => ({
+            ...prevState,
+            grupo: selectedGrupo,
+        }));
+
+        if (selectedGrupo) {
+            // Si hay un grupo seleccionado, se obtienen las familias relacionadas
+            dispatch(clasesGrupo(selectedGrupo.id));
+        }
+    };
+
+    // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
     React.useEffect(() => {
-        // Aquí despachas la acción para cargar las opciones al montar el componente
-        dispatch(getOptionsData());
-    }, [dispatch]);
+        // Cargar las opciones iniciales si ya existen valores en infoAveForUpdate
+        if (infoAveForUpdate.familia) {
+            dispatch(clasesGrupoFamilia(infoAveForUpdate.familia.id, null));
+        }
+        if (infoAveForUpdate.grupo) {
+            dispatch(clasesGrupoFamilia(null, infoAveForUpdate.grupo.id));
+        }
+    }, [dispatch, infoAveForUpdate]);
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -342,7 +382,8 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     options={familias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    onChange={handleFamiliaChange}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Familia"
@@ -364,7 +405,8 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     options={grupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
-                                    onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    onChange={handleGrupoChange}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             label="Grupo"
