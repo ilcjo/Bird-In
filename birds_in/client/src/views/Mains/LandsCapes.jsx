@@ -61,7 +61,7 @@ export const LandsCapes = () => {
     }
   }, [loading]);
 
-  
+
   return (
     <React.Fragment>
       <MenuBar isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} showAllButton={true} ShowFilterButton={true} ShowBackButton={true} showAdmin={true} />
@@ -75,14 +75,25 @@ export const LandsCapes = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
-          p: infoLands.length === 1 ? 0 : 2
+          p: infoLands.length === 1 ? 0 : 2,
+          '::before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            opacity: 0.5, // Opcional para mayor discreción
+            pointerEvents: 'none', // Impide la interacción con la imagen
+          }
         }}
       >
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={false}
-          // maxWidth='md'
+        // maxWidth='md'
         >
           <FiltersLands isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
@@ -144,7 +155,7 @@ export const LandsCapes = () => {
             <Grid container spacing={3} justifyContent="center">
               {infoLands.map((item, index) => (
                 <Grid item key={index}>
-                  <CardsLand foto={item.imagenes_paisajes} name={item.zona.nombre} id={item.zona.id_zona}/>
+                  <CardsLand foto={item.imagenes_paisajes} name={item.zona.nombre} id={item.zona.id_zona} />
                 </Grid>
               ))}
             </Grid>

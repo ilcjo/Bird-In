@@ -25,12 +25,10 @@ import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 import { Loading } from '../../utils/Loading';
 //redux
-import { clasesGrupoFamilia, getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
 import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/mamiferos/actions/crudAction';
 import { UpdateImage } from '../../../redux/mamiferos/actions/photosAction';
-// import { getOptionsData } from '../../../redux/mamiferos/actions/fetchOptions';
-// import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/mamiferos/actions/crudAction';
-// import { UpdateImage } from '../../../redux/mamiferos/actions/photosAction';
+import { clasesFamilia, clasesGrupo } from '../../../redux/mamiferos/actions/fetchOptions';
+
 
 export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, selected, changeImagenExist }) => {
 
@@ -63,6 +61,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El Registro se ha Actualizado correctamente.');
+    const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
+    const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
 
     React.useEffect(() => {
         setShowBackdrop(true); // Mostrar el backdrop al inicio
@@ -81,54 +81,72 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         setCreateData(initialCreateData);
     }, [infoForUpdate]);
 
-    // React.useEffect(() => {
-    //     // Aquí despachas la acción para cargar las opciones al montar el componente
-    //     dispatch(getOptionsDataM());
-    // }, []);
-    const handleFamiliaChange = (event, newValue) => {
-        const selectedFamilia = newValue || null;
 
+    const handleFamiliaChange = async (event, newValue) => {
         setCreateData(prevState => ({
             ...prevState,
-            familia: selectedFamilia,
+            familia: newValue,
         }));
 
-        if (selectedFamilia) {
-            // Si hay una familia seleccionada, se obtiene el grupo relacionado
-            dispatch(clasesGrupoFamilia(selectedFamilia.id, null));
-        } else {
-            // Si se elimina la selección, se recuperan las opciones generales
-            dispatch(getOptionsDataM());
+        if (newValue) {
+            // Aquí llamas a la función que genera datos extra y actualizas el estado
+            const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+            // console.log(extraData)
+            // Combina las opciones existentes con las nuevas opciones extra
+            const newCombinedOptions = [
+                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                ...grupos, // Mantén las opciones originales
+
+            ];
+
+            setCombinedOptionsGrupos(newCombinedOptions);
         }
     };
 
-    const handleGrupoChange = (event, newValue) => {
-        const selectedGrupo = newValue || null;
-
+    const handleGrupoChange = async (event, newValue) => {
         setCreateData(prevState => ({
             ...prevState,
-            grupo: selectedGrupo,
+            grupo: newValue,
         }));
 
-        if (selectedGrupo) {
-            // Si hay un grupo seleccionado, se obtienen las familias relacionadas
-            dispatch(clasesGrupoFamilia(null, selectedGrupo.id));
-        } else {
-            // Si se elimina la selección, se recuperan las opciones generales
-            // dispatch(getOptionsData());
+        if (newValue) {
+            // Aquí llamas a la función que genera datos extra y actualizas el estado
+            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+            // console.log(extraData)
+            // Combina las opciones existentes con las nuevas opciones extra
+            const newCombinedOptions = [
+                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                ...familias, // Mantén las opciones originales
+            ];
+
+            setCombinedOptionsFamilias(newCombinedOptions);
         }
     };
 
     // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
     React.useEffect(() => {
-        // Cargar las opciones iniciales si ya existen valores en infoAveForUpdate
-        if (infoForUpdate.familia) {
-            dispatch(clasesGrupoFamilia(infoForUpdate.familia.id, null));
-        }
-        if (infoForUpdate.grupo) {
-            dispatch(clasesGrupoFamilia(null, infoForUpdate.grupo.id));
-        }
-    }, [dispatch, infoForUpdate]);
+        const loadInitialData = async () => {
+            if (infoForUpdate.familia) {
+                const extraDataGrupos = await dispatch(clasesFamilia(infoForUpdate.familia.id));
+                const newCombinedOptionsGrupos = [
+                    ...extraDataGrupos.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...grupos, // Mantén las opciones originales
+                ];
+                setCombinedOptionsGrupos(newCombinedOptionsGrupos);
+            }
+
+            if (infoForUpdate.grupo) {
+                const extraDataFamilias = await dispatch(clasesGrupo(infoForUpdate.grupo.id));
+                const newCombinedOptionsFamilias = [
+                    ...extraDataFamilias.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...familias, // Mantén las opciones originales
+                ];
+                setCombinedOptionsFamilias(newCombinedOptionsFamilias);
+            }
+        };
+
+        loadInitialData();
+    }, [infoForUpdate, grupos, familias]);
 
 
     const handleInputChange = (event) => {
@@ -167,7 +185,6 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
             setImageFiles((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
         }
     };
-
 
     const handleRemoveImage = (index) => {
         URL.revokeObjectURL(imageLink[index]);
@@ -315,7 +332,6 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             </Grid>
                         </Grid>
 
-
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
@@ -378,7 +394,9 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
-                                    options={familias}
+                                    // options={familias}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
+                                    options={combinedOptionsFamilias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
                                     // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
@@ -397,11 +415,22 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                             option.nombre.toLowerCase().startsWith(inputValue)
                                         );
                                     }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
                                 />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
-                                    options={grupos}
+                                    // options={grupos}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
+                                    options={combinedOptionsGrupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
                                     // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
@@ -421,8 +450,16 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                             option.nombre.toLowerCase().startsWith(inputValue)
                                         );
                                     }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
                                 />
-
 
                             </Grid>
                         </Grid>

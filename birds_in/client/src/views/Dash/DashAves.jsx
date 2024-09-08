@@ -50,10 +50,11 @@ export const DashAves = () => {
           height: '100%',
           overflow: 'hidden',
           margin: 0,
+          
         }}
       >
         <IndexD />
-        <Fab
+        {/* <Fab
           color="primary"
           aria-label="save"
           onClick={handleFabClick}
@@ -64,7 +65,7 @@ export const DashAves = () => {
           }}
         >
           <DownloadIcon />
-        </Fab>
+        </Fab> */}
       </Grid>
       <Loading
         message={loadingMessage}

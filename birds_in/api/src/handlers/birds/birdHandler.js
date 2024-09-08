@@ -28,7 +28,7 @@ const {
 } = process.env
 
 const { deletePhotoFromFTP } = require('../../services/deletFtp');
-const vistaAvesOrdenadaAll = require('../../config/db/db');
+const { VistaAvesOrdenadaAll } = require('../../config/db/db');
 // const { connectToFtp, uploadImages } = require('../../utils/FTPUpoad');
 
 const getFilterInfo = async (req, res) => {
@@ -335,8 +335,9 @@ const checkBirdDuplicate = async (req, res) => {
 
 const getAllAvesAsExcel = async (req, res) => {
    try {
+      console.log('llegu')
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
-      const aves = await vistaAvesOrdenadaAll.findAll();
+      const aves = await VistaAvesOrdenadaAll.findAll();
 
       // Crea un nuevo workbook y worksheet con exceljs
       const workbook = new exceljs.Workbook();

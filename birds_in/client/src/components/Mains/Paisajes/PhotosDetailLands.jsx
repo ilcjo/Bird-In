@@ -11,6 +11,7 @@ import { Loading } from '../../utils/Loading';
 //redux
 import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
 import { resetInfoLand, setNoMoreResults } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { CopyRight } from '../../CopyRight';
 
 export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
     // console.log(setPage)
@@ -73,7 +74,8 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                         backdropFilter: 'blur(8px)',
                         padding: { xs: '10px', md: '40px' },
                         borderRadius: '20px',
-                        mb: 10
+                        mb: 4,
+                        
                     }}
                 >
                     <Grid container spacing={2} justifyContent="center" sx={{ mt: -2 }}>
@@ -110,6 +112,7 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                             </Grid>
                         ))}
                     </Grid>
+                    <CopyRight.Photo />
                 </Box>
             </Grid>
             <Loading

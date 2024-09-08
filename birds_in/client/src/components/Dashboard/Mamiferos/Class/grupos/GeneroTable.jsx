@@ -19,8 +19,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { eliminarGrupo, updateGrupo } from '../../../../../redux/birds/actions/CrudClass';
-import { getOptionsData } from '../../../../../redux/birds/actions/fetchOptions';
+import { eliminarGrupo, updateGrupo } from '../../../../../redux/mamiferos/actions/CrudClass';
+import { getOptionsDataM } from '../../../../../redux/mamiferos/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -42,7 +42,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export const GrupoTable = ({
+export const GeneroTable = ({
     onloading,
     loadingMessage,
     showSnackBar,
@@ -52,7 +52,7 @@ export const GrupoTable = ({
 }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { grupos } = useSelector(state => state.filterSlice.options);
+    const { grupos } = useSelector(state => state.filters.options);
 
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
@@ -75,9 +75,9 @@ export const GrupoTable = ({
                 onloading(true);
                 loadingMessage('Eliminando Grupo...');
                 await dispatch(eliminarGrupo(id));
-                await dispatch(getOptionsData());
+                await dispatch(getOptionsDataM());
                 onloading(false);
-                successMessages('Grupo eliminado');
+                successMessages('Genero Eliminado');
                 showSnackBar(true);
             } catch (error) {
                 errorMessage(String(error));
@@ -99,7 +99,7 @@ export const GrupoTable = ({
             onloading(true);
             loadingMessage('Actualizando...');
             await dispatch(updateGrupo(nombreGrupos));
-            await dispatch(getOptionsData());
+            await dispatch(getOptionsDataM());
             onloading(false);
             successMessages('Zona actualizada correctamente');
             showSnackBar(true);
@@ -150,13 +150,13 @@ export const GrupoTable = ({
         <div>
             <Grid item sx={12} md={12}>
                 <Typography variant='h5' color='primary.light' sx={{ mb: 1, mt: 5 }}>
-                    Lista de Grupos
+                    Lista de Géneros
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} />
                 </Typography>
                 <TextField
                     fullWidth
                     variant="outlined"
-                    placeholder="Buscar Grupos..."
+                    placeholder="Buscar Genero..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     sx={{

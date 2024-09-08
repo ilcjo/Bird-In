@@ -9,6 +9,7 @@ import { Loading } from '../../components/utils/Loading';
 import DownloadIcon from '@mui/icons-material/Download';
 //redux
 import { getUsers } from '../../redux/settings/actions/userLoginRegister';
+import { getExcel } from '../../redux/mamiferos/actions/crudAction';
 
 export const DashMamiferos = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export const DashMamiferos = () => {
     try {
       setShowBackdrop(true);
       setLoadingMessage('Generando Excel, por favor espere...');
-      // await dispatch(getExcelAves());
+      await dispatch(getExcel());
     } catch (error) {
       console.log('Este es el error:', String(error));
     } finally {
@@ -50,10 +51,11 @@ export const DashMamiferos = () => {
           height: '100%',
           overflow: 'hidden',
           margin: 0,
+          
         }}
       >
         <IndexD />
-        <Fab
+        {/* <Fab
           color="primary"
           aria-label="save"
           onClick={handleFabClick}
@@ -64,7 +66,7 @@ export const DashMamiferos = () => {
           }}
         >
           <DownloadIcon />
-        </Fab>
+        </Fab> */}
       </Grid>
       <Loading
         message={loadingMessage}

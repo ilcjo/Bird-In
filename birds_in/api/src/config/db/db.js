@@ -53,14 +53,14 @@ db.models = Object.fromEntries(capsEntries)
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 const {
-  Paises, Usuarios, Customize_page, Zonas, Token, VistaAvesOrdenadaAll,
+  Paises, Usuarios, Customize_page, Zonas, Token, VistaAvesOrdenadaAll, VistaMamiferosOrdenadaAll,
   Paisajes, Imagenes_paisajes,
   Aves, Familias, Grupos, Imagenes_aves,
   Mamiferos, Grupos_mamiferos, Familias_mamiferos, Imagenes_mamiferos,
   Reptiles, Grupos_reptiles, Familias_reptiles, Imagenes_reptiles,
   Insectos, Grupos_insectos, Familias_insectos, Imagenes_insectos
 } = db.models;
-// console.log(db.models)
+console.log(db.models)
 // UNO A UNO
 
 // =>AVES
@@ -152,10 +152,6 @@ Paises.belongsToMany(Insectos, { through: 'insectos_has_paises', foreignKey: 'pa
 //ZonasInsectos
 Insectos.belongsToMany(Zonas, { through: 'insectos_has_zonas', foreignKey: 'insectos_id_insecto', timestamps: false, as: 'zonasInsectos' })
 Zonas.belongsToMany(Insectos, { through: 'insectos_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoInsectos' })
-
-Grupos.belongsToMany(Familias, { through: 'familias_has_grupos', foreignKey: 'id_grupo', timestamps: false, })
-Familias.belongsToMany(Grupos, { through: 'familias_has_grupos', foreignKey: 'id_familia', timestamps: false, })
-
 
 
 module.exports = {

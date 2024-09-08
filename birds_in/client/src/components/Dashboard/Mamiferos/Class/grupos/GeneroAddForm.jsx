@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux'
 //icons
 import AddIcon from '@mui/icons-material/Add';
 //components
-import { addGrupo, checkDuplicadosGrupo } from '../../../../../redux/birds/actions/CrudClass';
-import { getOptionsData } from '../../../../../redux/birds/actions/fetchOptions';
+import { addGrupo, checkDuplicadosGrupo } from '../../../../../redux/mamiferos/actions/CrudClass';
+import { getOptionsDataM } from '../../../../../redux/mamiferos/actions/fetchOptions';
 
-export const GrupoAddForm = ({
+export const GeneroAddForm = ({
   onloading
   , loadingMessage
   , showSnackBar
@@ -29,7 +29,7 @@ export const GrupoAddForm = ({
     // Verificar si el nombre de la familia está vacío
     if (!nombreG.trim()) {
       showErrorSnack(true);
-      errorMessage('El nombre del Grupo no puede estar vacío.');
+      errorMessage('El nombre del Genero no puede estar vacío.');
       return;
     }
 
@@ -38,12 +38,12 @@ export const GrupoAddForm = ({
       loadingMessage('Chequeando...');
       // Verificar si el nombre de la familia ya existe
       const duplicateExists = await dispatch(checkDuplicadosGrupo(nombreG));
-      
+
       loadingMessage('Agregando..');
       const response = await dispatch(addGrupo(nombreGrupos));
-      await dispatch(getOptionsData())
+      await dispatch(getOptionsDataM())
       onloading(false)
-      successMessages('Grupo creado correctamente')
+      successMessages('Genero creado correctamente')
       showSnackBar(true);
       // Limpia el formulario o realiza otras acciones necesarias
       setNombreGrupos({
@@ -102,14 +102,14 @@ export const GrupoAddForm = ({
       }}>
         <Grid item xs={12} sm={9}>
           <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
-            Agregar Nuevo Grupo
+            Agregar Nuevo Genero
             <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
           </Typography>
         </Grid>
         <Grid item xs={12} md={9}>
           <TextField
             fullWidth
-            label="Nombre de Grupo"
+            label="Nombre de Genero"
             value={nombreGrupos.nombreG}
             onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
             InputLabelProps={{

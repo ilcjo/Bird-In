@@ -74,7 +74,19 @@ export const Aves = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
-          p: infoBirds.length === 1 ? 0 : 2
+          p: infoBirds.length === 1 ? 0 : 2,
+          '::before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            opacity: 0.5, // Opcional para mayor discreción
+            pointerEvents: 'none', // Impide la interacción con la imagen
+          }
+          
         }}
       >
         <Dialog

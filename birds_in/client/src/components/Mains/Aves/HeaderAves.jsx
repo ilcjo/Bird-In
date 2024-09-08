@@ -15,8 +15,8 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
         height: { xs: 'auto', md: '90vh' },
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-         background: '#86ac8e'
-        
+        background: '#86ac8e'
+
       }}
     >
       <Box
@@ -29,6 +29,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           backgroundPosition: 'center',
           boxShadow: 3,
           borderRadius: '0px 0px 10px 0px',
+          pointerEvents: 'none'
         }}
       />
       <Box

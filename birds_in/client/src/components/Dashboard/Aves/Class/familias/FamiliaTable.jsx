@@ -52,7 +52,6 @@ export const FamiliaTable = ({
     , successMessages
     , errorMessage
     , showErrorSnack
-
 }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
@@ -63,6 +62,12 @@ export const FamiliaTable = ({
         idFamilia: 0
     });
     const [editMode, setEditMode] = React.useState(null);
+    const [searchTerm, setSearchTerm] = React.useState('');
+
+    // Filtrar familias basado en el término de búsqueda
+    const filteredFamilias = familias.filter(familia =>
+        familia.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const handleEditFamilia = (id, newValue) => {
         setNombreFamilia((prevValues) => ({
@@ -72,7 +77,6 @@ export const FamiliaTable = ({
         }));
     };
 
-
     const handleDelete = async (id) => {
         if (window.confirm('¿Seguro que deseas eliminar esta Familia?')) {
             try {
@@ -81,9 +85,8 @@ export const FamiliaTable = ({
                 await dispatch(eliminarFamilia(id))
                 await dispatch(getOptionsData())
                 onloading(false)
-                successMessages('Familia eliminado')
+                successMessages('Familia eliminada')
                 showSnackBar(true);
-
             } catch (error) {
                 errorMessage(String(error));
                 showErrorSnack(true);
@@ -109,7 +112,7 @@ export const FamiliaTable = ({
             await dispatch(updateFamilia(nombreFamilia));
             await dispatch(getOptionsData());
             onloading(false);
-            successMessages('Zona actualizada correctamente')
+            successMessages('Familia actualizada correctamente')
             showSnackBar(true);
             setEditMode(null);
 
@@ -118,7 +121,6 @@ export const FamiliaTable = ({
                 nombreF: '',
                 idFamilia: 0
             });
-
         } catch (error) {
             errorMessage(String(error));
             showErrorSnack(true);
@@ -153,8 +155,8 @@ export const FamiliaTable = ({
             // marginTop: '100px',
             // width: '180px' // Ejemplo: cambia el color del texto a azul
         },
-
     };
+
     return (
         <div>
             <Grid item sx={12} md={12}>
@@ -162,6 +164,24 @@ export const FamiliaTable = ({
                     Lista de Familias
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
+                <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Buscar Familias..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    sx={{
+                        mb: 2,
+                        backgroundColor: 'rgba(204,214,204,0.17)',
+                        borderRadius: '9px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'none',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: theme.palette.primary.main,
+                        },
+                    }}
+                />
                 <TableContainer sx={{ maxHeight: 450, borderRadius: 3 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -171,7 +191,7 @@ export const FamiliaTable = ({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {familias.map((item, index) => (
+                            {filteredFamilias.map((item, index) => (
                                 <StyledTableRow key={item.index}>
                                     <TableCell align="center" colSpan={2} style={{ color: 'white' }}>
                                         {editMode === index ? (
@@ -183,7 +203,6 @@ export const FamiliaTable = ({
                                                     onChange={(e) => handleEditFamilia(item.id, e.target.value)}
                                                     InputLabelProps={{
                                                         sx: labelStyles, // Establece el estilo del label del input
-
                                                     }}
                                                     InputProps={{
                                                         sx: inputStyles, // Establece el estilo del input

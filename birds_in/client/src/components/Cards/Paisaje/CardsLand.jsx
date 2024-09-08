@@ -90,6 +90,8 @@ export const CardsLand = React.memo(({ foto, name, index, id }) => {
                   opacity: 0.8, // Opacidad reducida al hacer hover
                 },
               }}
+              onContextMenu={(e) => e.preventDefault()} // Deshabilita el clic derecho
+              onDragStart={(e) => e.preventDefault()} // Evita arrastrar la imagen
             />
             <div style={{
               position: 'absolute',

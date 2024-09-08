@@ -1,28 +1,30 @@
-
-import * as React from 'react'
-import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import * as React from 'react';
+import { Box, Tab, Tabs, Typography, useTheme, CircularProgress, Backdrop } from '@mui/material';
 import { styled } from '@mui/system';
 import { useDispatch } from 'react-redux';
-//COMPONENTS
+// COMPONENTS
 import { SearchBird } from './Update/SearchBird';
 import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './Add/IndexTabsCreate';
 import { FamiliasGrupos } from './Class/FamiliasGrupos';
-//redux
+// redux
 import { setEstateInfo } from '../../../redux/birds/slices/UpdateSlice';
+import { getExcelAves } from '../../../redux/birds/actions/crudAction';
+import { Loading } from '../../utils/Loading';
 
-
+// Styled Components
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-  backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-  backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+  backgroundColor: 'rgba(0, 56, 28, 0.1)',
+  backdropFilter: 'blur(8px)',
   borderRadius: '10px 10px 0px 0px',
   marginTop: '110px',
   '& .Mui-selected': {
     backgroundColor: theme.palette.custom.light,
   },
 }));
+
 const StyledTab = styled(Tab)({
-  minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
+  minWidth: 'auto',
   color: '#ccd6cc',
   '&.Mui-selected .MuiTypography-root': {
     color: '#C1C700',
@@ -31,20 +33,38 @@ const StyledTab = styled(Tab)({
 
 export const IndexD = () => {
   const dispatch = useDispatch();
-  const theme = useTheme()
+  const theme = useTheme();
   const [selectedTab, setSelectedTab] = React.useState(1);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
+  const [showBackdrop, setShowBackdrop] = React.useState(false);
+  const [onloading, setOnLoading] = React.useState(false);
+  const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
 
   const handleTabChange = (event, newValue) => {
-    const convertNumber = Number(newValue)
+    const convertNumber = Number(newValue);
     setSelectedTab(convertNumber);
     if (convertNumber === 1) {
       dispatch(setEstateInfo());
+    } else if (convertNumber === 4) { // Índice de la pestaña "Descargar Excel"
+      handleDownload();
     }
   };
 
   const handleNavigateToSearch = () => {
     setSelectedTab(0);
+  };
+
+  const handleDownload = async () => {
+    try {
+      setOnLoading(true);
+      setLoadingMessage('Generando Excel, por favor espere...');
+      await dispatch(getExcelAves());
+    } catch (error) {
+      console.log('Este es el error:', String(error));
+    } finally {
+      setOnLoading(false);
+      setSelectedTab(1)
+    }
   };
 
   React.useEffect(() => {
@@ -72,28 +92,13 @@ export const IndexD = () => {
           }
         }}
       >
-        <StyledTab label={
-          <Typography variant='h5'>
-            Actualizar
-          </Typography>} />
+        <StyledTab label={<Typography variant='h5'>Actualizar</Typography>} />
+        <StyledTab label={<Typography variant='h5'>Crear</Typography>} />
+        <StyledTab label={<Typography variant='h5'>Contadores</Typography>} />
+        <StyledTab label={<Typography variant='h5'>Familias/Grupos</Typography>} />
+        <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} />
+      </StyledTabs>
 
-        <StyledTab label={<Typography variant='h5' >
-          Crear
-        </Typography>}
-        />
-        <StyledTab
-          label={<Typography variant='h5' >
-            Contadores
-          </Typography>
-          }
-        />
-        <StyledTab
-          label={<Typography variant='h5' >
-            Familias/Grupos
-          </Typography>
-          }
-        />
-      </StyledTabs >
       <div>
         {selectedTab === 0 && (
           <Box>
@@ -116,7 +121,10 @@ export const IndexD = () => {
           </Box>
         )}
       </div>
+      <Loading
+        message={loadingMessage}
+        open={onloading}
+      />
     </>
   );
 };
-

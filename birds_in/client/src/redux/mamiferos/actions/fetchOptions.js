@@ -5,7 +5,7 @@ import { createParams } from '../../../components/utils/convertId';
 export const getOptionsDataM = () => {
   return async (dispatch) => {
     try {
-      console.log('llegue')
+      // console.log('llegue')
       const response = await axios('mamiferos/opciones')
       const data = response.data
       console.log(data)
@@ -30,28 +30,37 @@ export const fetchNewOptions = (selectedOptions) => {
   }
 };
 
-export const clasesGrupoFamilia = (idfamilia, idgrupo) => {
-  // console.log('llegue', idfamilia, idgrupo)
+export const clasesFamilia = (idfamilia) => {
+  // console.log('llegue', idfamilia)
   return async (dispatch) => {
     try {
-      let data = {};
+      // Llamada a la API para obtener los grupos basados en idfamilia
+      const response = await axios.get(`mamiferos/clases?familiaID=${idfamilia}`);
+      const grupos = response.data.grupos;
+      // Despachar la acción para actualizar las opciones de grupo
+      dispatch(updateGrupoOptions({ grupos }));
+      return grupos
+      // console.log(grupos)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+};
 
-      if (idfamilia) {
-        // Llamada a la API para obtener los grupos basados en idfamilia
-        const response = await axios.get(`mamiferos/clases?familiaID=${idfamilia}`);
-        const grupos = response.data. grupos;
+export const clasesGrupo = (idgrupo) => {
+  // console.log('llegue', idgrupo)
+  return async (dispatch) => {
+    try {
 
-        // Despachar la acción para actualizar las opciones de grupo
-        dispatch(updateGrupoOptions({ grupos }));
-        // console.log(grupos)
-      } else if (idgrupo) {
-        // Llamada a la API para obtener las familias basadas en idgrupo
-        const response = await axios.get(`mamiferos/clases?grupoID=${idgrupo}`);
-        const familias = response.data.familias;
-        // console.log(familias)
-        // Despachar la acción para actualizar las opciones de familia
-        dispatch(updateFamiliaOptions({ familias }));
-      }
+      // Llamada a la API para obtener las familias basadas en idgrupo
+      const response = await axios.get(`mamiferos/clases?grupoID=${idgrupo}`);
+      const familias = response.data.familias;
+      // console.log(familias)
+      // Despachar la acción para actualizar las opciones de familia
+      dispatch(updateFamiliaOptions({ familias }));
+      return familias
+
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;

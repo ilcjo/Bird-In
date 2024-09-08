@@ -19,8 +19,8 @@ export const Contadores = () => {
     ];
 
     const secondHalfData = [
-        { label: 'Número de Grupos', value: allGrupos },
         { label: 'Número de Familias', value: allFamilias },
+        { label: 'Número de Grupos', value: allGrupos },
         { label: 'Número de Países', value: allCountrys },
         { label: 'Número de Zonas', value: allZonas }
     ];

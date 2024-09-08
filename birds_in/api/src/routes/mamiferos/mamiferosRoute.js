@@ -1,7 +1,7 @@
 const { Router } = require('express')
 
 const upload = require('../../utils/multerConfig')
-const { getFilterInfo, selectOptions, getFilterOptions, createMamifero, uploadImageftp, findInfoForUpdate, findInfoForUpdateName, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getAllNombres, checkClases } = require('../../handlers/mamiferos/mamiferoHandler')
+const { getFilterInfo, selectOptions, getFilterOptions, createMamifero, uploadImageftp, findInfoForUpdate, findInfoForUpdateName, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getAllNombres, checkClases, checkDuplicateNames, getExcel } = require('../../handlers/mamiferos/mamiferoHandler')
 
 const MamiferoRouter = Router()
 MamiferoRouter
@@ -18,7 +18,8 @@ MamiferoRouter
     .get('/contando', contandoRegistros)
     .delete('/borrar_registro', deleteRegistro)//por probar
     .get('/duplicados', checkRegisterDuplicate)
-    // .get('/descargar-excel-aves', getAllAvesAsExcel); //PENDIENTE POR HACER TABLA
+    .get('/descargar-excel', getExcel) //PENDIENTE POR HACER TABLA
     .get('/nombres', getAllNombres)
     .get('/clases', checkClases)
+    .get('/gruposFamilias', checkDuplicateNames)
 module.exports = MamiferoRouter

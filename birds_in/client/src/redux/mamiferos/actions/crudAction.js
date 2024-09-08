@@ -89,7 +89,7 @@ export const deleteRegistro = (idN) => {
 
 export const getExcel = () => async (dispatch) => {
   try {
-    const response = await axios.get('/mamiferos/descargar-excel-mamiferos', {
+    const response = await axios.get('/mamiferos/descargar-excel', {
       responseType: 'blob', // Importante para recibir el archivo como blob
     });
 

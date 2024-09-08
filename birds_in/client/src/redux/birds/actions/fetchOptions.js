@@ -29,13 +29,12 @@ export const fetchNewOptions = (selectedOptions) => {
 };
 
 export const clasesFamilia = (idfamilia) => {
-  console.log('llegue', idfamilia)
+  // console.log('llegue', idfamilia)
   return async (dispatch) => {
     try {
       // Llamada a la API para obtener los grupos basados en idfamilia
       const response = await axios.get(`aves/clases?familiaID=${idfamilia}`);
       const grupos = response.data.grupos;
-
       // Despachar la acción para actualizar las opciones de grupo
       dispatch(updateGrupoOptions({ grupos }));
       return grupos
@@ -48,7 +47,7 @@ export const clasesFamilia = (idfamilia) => {
 };
 
 export const clasesGrupo = (idgrupo) => {
-  console.log('llegue', idgrupo)
+  // console.log('llegue', idgrupo)
   return async (dispatch) => {
     try {
 

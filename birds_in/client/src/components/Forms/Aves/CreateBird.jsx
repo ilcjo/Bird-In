@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 //ICONS
+import eBird from '../../../assets/images/Logo_ebird.png'
 import SaveIcon from '@mui/icons-material/Save';
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
 //COMPONENTS
@@ -275,7 +276,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         if (newValue) {
             // Aquí llamas a la función que genera datos extra y actualizas el estado
             const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            console.log(extraData)
+            // console.log(extraData)
             // Combina las opciones existentes con las nuevas opciones extra
             const newCombinedOptions = [
                 ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
@@ -296,7 +297,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         if (newValue) {
             // Aquí llamas a la función que genera datos extra y actualizas el estado
             const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            console.log(extraData)
+            // console.log(extraData)
             // Combina las opciones existentes con las nuevas opciones extra
             const newCombinedOptions = [
                 ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
@@ -722,8 +723,8 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                                         },
                                                     }}
                                                 >
-                                                    eBird
-                                                    {/* <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} /> */}
+                                                    {/* eBird */}
+                                                    <img src={eBird} alt="Wikipedia Logo" style={{ width: '60px', height: '26px' }} />
                                                 </IconButton>
                                             </InputAdornment>
 

@@ -120,7 +120,21 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
             </div>
           </div>
         ) : (
-          <Typography variant="body2">Imagen no disponible</Typography>
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <Typography variant='body2' color='primary' sx={{ mb: 4 }}>
+              Sin imágenes ó sin portada seleccionada
+            </Typography>
+            <Typography
+              className="title"
+              variant='h2'
+              color='primary'
+              onClick={handleDetailClick}
+              style={{ cursor: 'pointer' }}
+              sx={{ color: 'white', fontWeight: 'bold' }}
+            >
+              {name}
+            </Typography>
+          </div>
         )}
       </CardActionArea>
       <CardActions disableSpacing>

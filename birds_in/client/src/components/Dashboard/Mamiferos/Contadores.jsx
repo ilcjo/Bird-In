@@ -14,13 +14,13 @@ export const Contadores = () => {
     const firstHalfData = [
         { label: 'Total Mamíferos', value: allRegistros },
         { label: 'Nombres en Inglés', value: allEnglish },
-        { label: 'Nombres Científico', value: allCientifico },
+        { label: 'Nombres Científico(especie)', value: allCientifico },
         { label: 'Nombres Comunes', value: allComun }
     ];
 
     const secondHalfData = [
-        { label: 'Número de Grupos', value: allGrupos },
         { label: 'Número de Familias', value: allFamilias },
+        { label: 'Número de Géneros', value: allGrupos },
         { label: 'Número de Países', value: allCountrys },
         { label: 'Número de Zonas', value: allZonas }
     ];

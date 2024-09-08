@@ -65,7 +65,7 @@ export const HomeMenu = () => {
           <img
             src={images[section.id]}
             alt={section.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 10px 0px' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 10px 0px', pointerEvents: 'none' }}
           />
           <Box
             sx={{

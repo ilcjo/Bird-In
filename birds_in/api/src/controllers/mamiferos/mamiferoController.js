@@ -178,7 +178,7 @@ const fetchOptions = async () => {
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles');
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico');
     // const nombrezonas = mapFieldValues(optionsZonas, 'nombre_zona', 'id_zona')
-console.log(optionsGrupos)
+    // console.log(optionsGrupos)
     return {
         grupos: optionsGrupos,
         familias: optionsFamilias,
@@ -510,7 +510,7 @@ const findDataById = async (id) => {
                     attributes: [['url_mamifero', 'url'],
                         'id',
                         'destacada',
-                        [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
+                    [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_mamiferos
                 },
                 {
@@ -557,7 +557,7 @@ const findDataByName = async (name) => {
                     attributes: [['url_mamifero', 'url'],
                         'id',
                         'destacada',
-                        [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
+                    [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_mamiferos
                 },
                 {
@@ -793,7 +793,7 @@ const deleteRegistroDb = async (idRegistro) => {
                 mamiferos_id_mamifero: idRegistro,
             },
         });
-// console.log(imagenes)
+        // console.log(imagenes)
         const ftpDeleteResults = await deletePhotoFromFTPMamiferos(imagenes.map(imagen => imagen.url_mamifero));
 
         if (!ftpDeleteResults.success) {
@@ -915,7 +915,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
                         [Op.in]: idFamilias
                     }
                 },
-                attributes: [['id_familia','id'], 'nombre']
+                attributes: [['id_familia', 'id'], 'nombre']
             });
 
             return { familias };
@@ -926,7 +926,54 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
     }
 };
 
+const findGroupNameDuplicate = async (nombreGrupo) => {
+    // console.log(nombreGrupo)
+    try {
+        const existingGroups = await Grupos_mamiferos.findAll({
+            where: {
+                nombre: nombreGrupo
+            }
+        });
+
+        // Si encuentra grupos con el mismo nombre, arroja un error
+        if (existingGroups.length > 0) {
+            throw new Error("Este Nombre de Genero ya existe.");
+        }
+
+        // Si no encuentra grupos con el mismo nombre, simplemente retorna
+        return "Nombre de Genero disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+const findFamilyNameDuplicate = async (nombreFamilia) => {
+    try {
+        const existingFamilies = await Familias_mamiferos.findAll({
+            where: {
+                nombre: nombreFamilia
+            }
+        });
+
+        // Si encuentra familias con el mismo nombre, arroja un error
+        if (existingFamilies.length > 0) {
+            throw new Error("Este Nombre de Familia ya existe.");
+        }
+
+        // Si no encuentra familias con el mismo nombre, simplemente retorna
+        return "Nombre de Familia disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
 module.exports = {
+    findFamilyNameDuplicate,
+    findGroupNameDuplicate,
     getClassGrupoFamilia,
     fetchOptions,
     filterOptions,

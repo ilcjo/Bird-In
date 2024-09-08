@@ -13,9 +13,10 @@ import { resetInfoBird } from '../../../redux/birds/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/birds/slices/FilterSlice';
 import { HeaderAves } from './HeaderAves';
 import { sendParameter } from '../../../redux/birds/actions/filterAction';
+import { CopyRight } from '../../CopyRight';
 
 export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
-    console.log(setPage, 'dentro')
+    // console.log(setPage, 'dentro')
     const theme = useTheme()
     const dispatch = useDispatch()
     const { oneBird } = useSelector(state => state.birdSlice)
@@ -76,7 +77,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
                         backdropFilter: 'blur(8px)',
                         padding: { xs: '10px', md: '40px' },
                         borderRadius: '20px',
-                        mb: 10
+                        mb: 4
                     }}
                 >
                     <Grid container spacing={2} justifyContent="center" sx={{ mt: -2 }}>
@@ -113,6 +114,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
                             </Grid>
                         ))}
                     </Grid>
+                    <CopyRight.Photo />
                 </Box>
             </Grid>
             <Loading

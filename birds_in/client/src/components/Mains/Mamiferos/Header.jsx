@@ -28,6 +28,7 @@ export const Header = ({ imageUrl, registro, back }) => {
           backgroundPosition: 'center',
           boxShadow: 3,
           borderRadius: '0px 0px 10px 0px',
+          pointerEvents: 'none'
         }}
       />
       <Box

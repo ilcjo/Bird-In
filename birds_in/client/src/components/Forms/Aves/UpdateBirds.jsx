@@ -17,6 +17,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 //ICONS
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
+import eBird from '../../../assets/images/Logo_ebird.png'
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -62,6 +63,8 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El ave se ha Actualizado correctamente.');
+    const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
+    const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
 
     React.useEffect(() => {
         setShowBackdrop(true); // Mostrar el backdrop al inicio
@@ -85,44 +88,99 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     //     dispatch(getOptionsData());
     // }, [dispatch]);
 
-    const handleFamiliaChange = (event, newValue) => {
-        const selectedFamilia = newValue;
+    // const handleFamiliaChange = (event, newValue) => {
+    //     const selectedFamilia = newValue;
 
+    //     setCreateData(prevState => ({
+    //         ...prevState,
+    //         familia: selectedFamilia,
+    //     }));
+
+    //     if (selectedFamilia) {
+    //         // Si hay una familia seleccionada, se obtiene el grupo relacionado
+    //         dispatch(clasesFamilia(selectedFamilia.id));
+    //     }
+    // };
+
+    // const handleGrupoChange = (event, newValue) => {
+    //     const selectedGrupo = newValue;
+
+    //     setCreateData(prevState => ({
+    //         ...prevState,
+    //         grupo: selectedGrupo,
+    //     }));
+
+    //     if (selectedGrupo) {
+    //         // Si hay un grupo seleccionado, se obtienen las familias relacionadas
+    //         dispatch(clasesGrupo(selectedGrupo.id));
+    //     }
+    // };
+
+    const handleFamiliaChange = async (event, newValue) => {
         setCreateData(prevState => ({
             ...prevState,
-            familia: selectedFamilia,
+            familia: newValue,
         }));
 
-        if (selectedFamilia) {
-            // Si hay una familia seleccionada, se obtiene el grupo relacionado
-            dispatch(clasesFamilia(selectedFamilia.id));
+        if (newValue) {
+            // Aquí llamas a la función que genera datos extra y actualizas el estado
+            const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+            // console.log(extraData)
+            // Combina las opciones existentes con las nuevas opciones extra
+            const newCombinedOptions = [
+                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                ...grupos, // Mantén las opciones originales
+
+            ];
+
+            setCombinedOptionsGrupos(newCombinedOptions);
         }
     };
 
-    const handleGrupoChange = (event, newValue) => {
-        const selectedGrupo = newValue;
-
+    const handleGrupoChange = async (event, newValue) => {
         setCreateData(prevState => ({
             ...prevState,
-            grupo: selectedGrupo,
+            grupo: newValue,
         }));
 
-        if (selectedGrupo) {
-            // Si hay un grupo seleccionado, se obtienen las familias relacionadas
-            dispatch(clasesGrupo(selectedGrupo.id));
+        if (newValue) {
+            // Aquí llamas a la función que genera datos extra y actualizas el estado
+            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+            // console.log(extraData)
+            // Combina las opciones existentes con las nuevas opciones extra
+            const newCombinedOptions = [
+                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                ...familias, // Mantén las opciones originales
+            ];
+
+            setCombinedOptionsFamilias(newCombinedOptions);
         }
     };
 
     // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
     React.useEffect(() => {
-        // Cargar las opciones iniciales si ya existen valores en infoAveForUpdate
-        if (infoAveForUpdate.familia) {
-            dispatch(clasesGrupoFamilia(infoAveForUpdate.familia.id, null));
-        }
-        if (infoAveForUpdate.grupo) {
-            dispatch(clasesGrupoFamilia(null, infoAveForUpdate.grupo.id));
-        }
-    }, [dispatch, infoAveForUpdate]);
+        const loadInitialData = async () => {
+            if (infoAveForUpdate.familia) {
+                const extraDataGrupos = await dispatch(clasesFamilia(infoAveForUpdate.familia.id));
+                const newCombinedOptionsGrupos = [
+                    ...extraDataGrupos.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...grupos, // Mantén las opciones originales
+                ];
+                setCombinedOptionsGrupos(newCombinedOptionsGrupos);
+            }
+
+            if (infoAveForUpdate.grupo) {
+                const extraDataFamilias = await dispatch(clasesGrupo(infoAveForUpdate.grupo.id));
+                const newCombinedOptionsFamilias = [
+                    ...extraDataFamilias.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...familias, // Mantén las opciones originales
+                ];
+                setCombinedOptionsFamilias(newCombinedOptionsFamilias);
+            }
+        };
+
+        loadInitialData();
+    }, [infoAveForUpdate, grupos, familias]);
 
 
     const handleInputChange = (event) => {
@@ -161,7 +219,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
             setImageFiles((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
         }
     };
-
 
     const handleRemoveImage = (index) => {
         URL.revokeObjectURL(imageLink[index]);
@@ -315,7 +372,6 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             </Grid>
                         </Grid>
 
-
                         <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
@@ -375,11 +431,12 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
-
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
-                                    options={familias}
+                                    // options={familias}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
+                                    options={combinedOptionsFamilias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
                                     onChange={handleFamiliaChange}
@@ -398,11 +455,21 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                             option.nombre.toLowerCase().startsWith(inputValue)
                                         );
                                     }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
                                 />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
-                                    options={grupos}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
+                                    options={combinedOptionsGrupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
                                     onChange={handleGrupoChange}
@@ -422,6 +489,15 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                             option.nombre.toLowerCase().startsWith(inputValue)
                                         );
                                     }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
                                 />
                             </Grid>
                         </Grid>
@@ -565,8 +641,8 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                                         },
                                                     }}
                                                 >
-                                                    eBird
-                                                    {/* <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} /> */}
+                                                    {/* eBird */}
+                                                    <img src={eBird} alt="Wikipedia Logo" style={{ margin: '0px', width: '60px', height: '26px' }} />
                                                 </IconButton>
                                             </InputAdornment>
 

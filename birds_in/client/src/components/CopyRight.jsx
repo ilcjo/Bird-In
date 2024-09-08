@@ -12,11 +12,14 @@ CopyRight.Photo = () => (
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
+
             //   height: '100vh',
         }}
     >
-        <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} Moisés Sterimberg Photo Collection. All rights reserved.
+        <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 5 }}>
+            © {new Date().getFullYear()} Moisés Sterimberg Photo Collection.
+            <br></br>
+            All rights reserved.
         </Typography>
     </Box>
 );

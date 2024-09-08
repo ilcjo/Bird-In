@@ -12,13 +12,16 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
         width: '100%',
         height: '90vh', // Ajusta la altura según sea necesario
         overflow: 'hidden',
+        borderRadius: '0px 0px 10px 0px',
+        background: '#86ac8e'
       }}
     >
       <Box
         sx={{
           position: 'absolute',
-          bottom: 10,
-          right: 10,
+          bottom: 0,
+          right: 0,
+          background: '#86ac8e'
         }}
       >
         <Button
@@ -39,16 +42,16 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+          pointerEvents: 'none',
         }}
       />
-
       <Box
         component="div"
         sx={{
           position: 'absolute',
           top: 0,
           right: 0,
-          width: { xs: '40%', md: '30%' },
+          width: { xs: '60%', md: '27%' },
           height: { xs: '60%', md: '63%' },
           backgroundColor: 'rgba(0, 56, 28, 0.3)',
           backdropFilter: 'blur(10px)',
@@ -57,7 +60,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
           alignItems: 'flex-start',
           padding: 5,
           zIndex: 2,
-          borderRadius: '0px 0px 20px 20px'
+          borderRadius: '0px 0px 20px 20px',
         }}
       >
 
@@ -118,8 +121,6 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
             </Grid>
           </React.Fragment>
         ))}
-
-
       </Box>
     </Box>
   );

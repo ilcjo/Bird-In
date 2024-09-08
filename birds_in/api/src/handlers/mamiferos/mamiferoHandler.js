@@ -7,8 +7,8 @@ const {
    FTP_PASS_2,
 } = process.env
 
-const vistaAvesOrdenadaAll = require('../../config/db/db');
-const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister, findAllEnglishNames, getClassGrupoFamilia } = require('../../controllers/mamiferos/mamiferoController');
+const { VistaMamiferosOrdenadaAll } = require('../../config/db/db');
+const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate, findFamilyNameDuplicate } = require('../../controllers/mamiferos/mamiferoController');
 const { deletePhotoFromFTPMamiferos } = require('../../services/deletFtp');
 
 const getAllNombres = async (req, res) => {
@@ -293,10 +293,10 @@ const checkRegisterDuplicate = async (req, res) => {
    }
 };
 
-const getAllAvesAsExcel = async (req, res) => {
+const getExcel = async (req, res) => {
    try {
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
-      const aves = await vistaAvesOrdenadaAll.findAll();
+      const aves = await VistaMamiferosOrdenadaAll.findAll();
 
       // Crea un nuevo workbook y worksheet con excel.js
       const workbook = new exceljs.Workbook();
@@ -307,7 +307,7 @@ const getAllAvesAsExcel = async (req, res) => {
          { header: 'Nombre Inglés', key: 'nombre_ingles', width: 20 },
          { header: 'Nombre Científico', key: 'nombre_cientifico', width: 20 },
          { header: 'Nombre Común', key: 'nombre_comun', width: 20 },
-         { header: 'Nombre Grupo', key: 'nombre_grupo', width: 20 },
+         { header: 'Nombre Genero', key: 'nombre_genero', width: 20 },
          { header: 'Nombre Familia', key: 'nombre_familia', width: 20 },
          { header: 'Paises', key: 'paises', width: 20 },
          { header: 'Zonas', key: 'zonas', width: 20 },
@@ -323,7 +323,7 @@ const getAllAvesAsExcel = async (req, res) => {
             nombre_ingles: registro.nombre_ingles,
             nombre_cientifico: registro.nombre_cientifico,
             nombre_comun: registro.nombre_comun,
-            nombre_grupo: registro.nombre_grupo,
+            nombre_genero: registro.nombre_genero,
             nombre_familia: registro.nombre_familia,
             paises: registro.paises,
             zonas: registro.zonas,
@@ -335,7 +335,7 @@ const getAllAvesAsExcel = async (req, res) => {
 
       // Configura la respuesta HTTP para descargar el archivo Excel
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', 'attachment; filename=insectos.xlsx');
+      res.setHeader('Content-Disposition', 'attachment; filename=mamiferos.xlsx');
 
       // Escribe el workbook en el flujo de respuesta (response stream)
       await workbook.xlsx.write(res);
@@ -357,7 +357,27 @@ const checkClases = async (req, res) => {
    }
 };
 
+const checkDuplicateNames = async (req, res) => {
+   const { grupoName, familiaName } = req.query;
+   try {
+      if (grupoName) {
+         const message = await findGroupNameDuplicate(grupoName);
+         return res.status(200).json({ message });
+      } else if (familiaName) {
+         const message = await findFamilyNameDuplicate(familiaName);
+         return res.status(200).json({ message });
+      } else {
+         // Si no se proporcionan ni grupoName ni familiaName, se devuelve un error
+         return res.status(400).json({ error: "Debe proporcionar un nombre de grupo o de familia." });
+      }
+   } catch (error) {
+      return res.status(500).json({ error: error.message });
+   }
+};
+
+
 module.exports = {
+   checkDuplicateNames,
    checkClases,
    createMamifero,
    getFilterInfo,
@@ -372,7 +392,8 @@ module.exports = {
    contandoRegistros,
    deleteRegistro,
    checkRegisterDuplicate,
-   getAllNombres
+   getAllNombres,
+   getExcel
 
 }
 
