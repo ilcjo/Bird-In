@@ -51,7 +51,7 @@ const buildIncludeArray = () => {
         {
             model: Imagenes_insectos,
             as: 'imagenes_insectos',
-            attributes: ['url_insecto', 'destacada']
+            attributes: [['url_insecto', 'url'], 'destacada']
         },
 
     ];
@@ -295,7 +295,7 @@ const filterOptionsPaisZonas = async (familia,
         // Filtrar las Insectos según el país y las zonas proporcionadas
         allResults.registrosFiltrados = allResults.registrosFiltrados.filter(registro => {
             // console.log(allResults)
-            const meetsPaisCriteria = !pais || registro.paises.some(paisR=> paisR.dataValues.id_pais === paisNumb);
+            const meetsPaisCriteria = !pais || registro.paises.some(paisR => paisR.dataValues.id_pais === paisNumb);
             const meetsZonasCriteria = !zonas || registro.zonasInsectos.some(zona => zonas.includes(zona.dataValues.id_zona));
             return meetsPaisCriteria && meetsZonasCriteria;
         });
@@ -464,10 +464,10 @@ const findDataById = async (id) => {
             include: [
                 {
                     model: Imagenes_insectos,
-                    attributes: ['url_insecto',
+                    attributes: [['url_insecto', 'url'],
                         'id',
                         'destacada',
-                        [Sequelize.literal('SUBSTRING_INDEX(url_insecto, "_", -1)'), 'titulo']
+                    [Sequelize.literal('SUBSTRING_INDEX(url_insecto, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_insectos
                 },
                 {
@@ -751,7 +751,7 @@ const deleteRegistroDb = async (idRegistro) => {
             },
         });
 
-        const ftpDeleteResults = await deletePhotoFromFTPInsectos(imagenes.map(imagen => imagen.url));
+        const ftpDeleteResults = await deletePhotoFromFTPInsectos(imagenes.map(imagen => imagen.url_insecto));
 
         if (!ftpDeleteResults.success) {
             // Si hay un problema al borrar las fotos del FTP, puedes manejar el error aquí
@@ -813,7 +813,126 @@ const findNameDuplicate = async (nombre) => {
     }
 };
 
+const findAllEnglishNames = async () => {
+    try {
+        const registros = await Reptiles.findAll({
+            attributes: ['nombre_ingles', 'id_reptil'], // Only fetches the 'nombre_ingles' attribute
+        });
+        return registros; // Returns an array of objects, each containing 'nombre_ingles'
+    } catch (error) {
+        // Handle query errors
+        console.error('Error fetching English names:', error);
+        throw error;
+    }
+};
+
+const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
+    try {
+        if (idfamilia) {
+            // Buscar todas las aves con el id_familia dado
+            const aves = await Reptiles.findAll({
+                where: {
+                    familias_id_familia: idfamilia
+                },
+                attributes: ['grupos_id_grupo'], // Solo necesitamos los id_grupo
+                group: ['grupos_id_grupo'] // Agrupar por id_grupo para evitar duplicados
+            });
+
+            // Extraer los id_grupo de las aves
+            const idGrupos = aves.map(registro => registro.grupos_id_grupo);
+
+            // Buscar los grupos con los id_grupo obtenidos
+            const grupos = await Grupos_insectos.findAll({
+                where: {
+                    id_grupo: {
+                        [Op.in]: idGrupos
+                    }
+                },
+                attributes: [['id_grupo', 'id'], 'nombre']
+            });
+
+            return { grupos };
+        } else if (idgrupo) {
+            // Buscar las aves con el id_grupo dado
+            const aves = await Reptiles.findAll({
+                where: {
+                    grupos_id_grupo: idgrupo
+                },
+                attributes: ['familias_id_familia'], // Solo necesitamos los id_familia
+                group: ['familias_id_familia'] // Agrupar por id_familia para evitar duplicados
+            });
+
+            // Extraer los id_familia de las aves
+            const idFamilias = aves.map(registro => registro.familias_id_familia);
+
+            // Buscar las familias con los id_familia obtenidos
+            const familias = await Familias_insectos.findAll({
+                where: {
+                    id_familia: {
+                        [Op.in]: idFamilias
+                    }
+                },
+                attributes: [['id_familia', 'id'], 'nombre']
+            });
+
+            return { familias };
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
+const findGroupNameDuplicate = async (nombreGrupo) => {
+    // console.log(nombreGrupo)
+    try {
+        const existingGroups = await Grupos_insectos.findAll({
+            where: {
+                nombre: nombreGrupo
+            }
+        });
+
+        // Si encuentra grupos con el mismo nombre, arroja un error
+        if (existingGroups.length > 0) {
+            throw new Error("Este Nombre de Genero ya existe.");
+        }
+
+        // Si no encuentra grupos con el mismo nombre, simplemente retorna
+        return "Nombre de Genero disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+const findFamilyNameDuplicate = async (nombreFamilia) => {
+    try {
+        const existingFamilies = await Familias_insectos.findAll({
+            where: {
+                nombre: nombreFamilia
+            }
+        });
+
+        // Si encuentra familias con el mismo nombre, arroja un error
+        if (existingFamilies.length > 0) {
+            throw new Error("Este Nombre de Familia ya existe.");
+        }
+
+        // Si no encuentra familias con el mismo nombre, simplemente retorna
+        return "Nombre de Familia disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
 module.exports = {
+    findAllEnglishNames,
+    getClassGrupoFamilia,
+    findFamilyNameDuplicate,
+    findGroupNameDuplicate,
     fetchOptions,
     filterOptions,
     fetchFilterInsect,

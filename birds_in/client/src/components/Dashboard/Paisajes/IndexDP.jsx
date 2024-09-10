@@ -9,6 +9,8 @@ import { setStateInfoP } from '../../../redux/paisaje/slicesP/createLandSlice';
 //COMPONENTS
 import { IndexTabsCreateP } from './Add/IndexTabsCreateP';
 import { SearchLands } from './Update/SearchLands';
+import { getExcel } from '../../../redux/paisaje/actionsP/fetchAllLands';
+import { Loading } from '../../utils/Loading';
 
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -35,12 +37,16 @@ export const IndexDP = () => {
   const navigate = useNavigate()
   const [selectedTab, setSelectedTab] = React.useState(1);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
+  const [onloading, setOnLoading] = React.useState(false);
+  const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
 
   const handleTabChange = (event, newValue) => {
     const convertNumber = Number(newValue)
     setSelectedTab(convertNumber);
     if (convertNumber === 1) {
       dispatch(setStateInfoP());
+    } else if (convertNumber === 2) { // Índice de la pestaña "Descargar Excel"
+      handleDownload();
     }
   };
 
@@ -51,6 +57,21 @@ export const IndexDP = () => {
   const handleNavigateToPanelAves = () => {
     navigatew('/panelaves?tab=5'); // Assumes you have a router setup to handle this path
   };
+
+  const handleDownload = async () => {
+    try {
+      setOnLoading(true);
+      setLoadingMessage('Generando Excel, por favor espere...');
+      await dispatch(getExcel());
+    } catch (error) {
+      console.log('Este es el error:', String(error));
+    } finally {
+      setOnLoading(false);
+      setSelectedTab(1)
+    }
+  };
+
+
 
   return (
     <>
@@ -78,6 +99,7 @@ export const IndexDP = () => {
           Crear
         </Typography>}
         />
+        <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} />
       </StyledTabs >
       <div>
         {selectedTab === 0 && (
@@ -91,6 +113,10 @@ export const IndexDP = () => {
           </Box>
         )}
       </div>
+      <Loading
+        message={loadingMessage}
+        open={onloading}
+      />
     </>
   );
 };

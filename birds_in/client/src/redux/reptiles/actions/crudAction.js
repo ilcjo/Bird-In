@@ -74,6 +74,7 @@ export const duplicateNameCheck = (name) => {
 };
 
 export const deleteRegistro = (idN) => {
+  // console.log('ids front:', idN)
   return async (dispatch) => {
     try {
       const response = await axios.delete(`/reptiles/borrar_registro?id=${idN}`);
@@ -89,7 +90,7 @@ export const deleteRegistro = (idN) => {
 
 export const getExcel = () => async (dispatch) => {
   try {
-    const response = await axios.get('/reptiles/descargar-excel-reptiles', {
+    const response = await axios.get('/reptiles/descargar-excel', {
       responseType: 'blob', // Importante para recibir el archivo como blob
     });
 

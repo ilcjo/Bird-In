@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Index } from '../components/SingUpTabs/Index';
 import { LazyLoad } from '../components/utils/LazyLoad';
 import { Boolean } from '../redux/settings/slices/OpenClose';
+import { Copyright } from '@mui/icons-material';
+import { CopyRight } from '../components/CopyRight';
 
 
 export const Landing = () => {
@@ -37,10 +39,10 @@ export const Landing = () => {
 
   return (
     <React.Fragment>
-      <Grid container component="main" sx={{ height: '100vh', position: 'relative', margin: 0, padding: 0  }}>
+      <Grid container component="main" sx={{ height: '100vh', position: 'relative', margin: 0, padding: 0 }}>
         {/* Contenedor de la imagen de fondo */}
         <Grid item xs={12} sx={{ position: 'absolute', width: '100%', height: '100%', margin: 0, padding: 0 }}>
-          <img src={allCustom.background_login} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover',  backgroundPosition: 'right', margin: 'OPX' }} />
+          <img src={allCustom.background_login} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover', backgroundPosition: 'right', margin: 'OPX' }} />
         </Grid>
 
         {/* Contenedor del contenido */}
@@ -58,7 +60,7 @@ export const Landing = () => {
             height: { xs: '100vh', sm: '100vh', md: '90vh', lg: '90vh', xl: '90vh' }, // Para que ocupe toda la altura
             left: { xs: '0%', sm: '40%', md: '72%', lg: '72%', xl: '72%' },
             borderRadius: '0px 0px 10px 10px'
-            
+
           }}>
 
           {/* Contenedor para el círculo */}
@@ -75,6 +77,7 @@ export const Landing = () => {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: theme.palette.primary.dark,
+         
             // backdropFilter: 'blur(10px)',
           }}>
             {/* Logo */}
@@ -88,14 +91,16 @@ export const Landing = () => {
             zIndex: 2,
             px: 5,
             top: '36%',
+            mb: 5
           }}>
             <Typography variant="h2" color='primary.main' sx={{ mb: 3 }}>Moisés Sterimberg</Typography>
             <Typography variant="body1" color='primary.light'>Imágenes cautivadoras que capturan la belleza y la majestuosidad de estas especies únicas.</Typography>
             <Typography variant="body1" sx={{ color: '#fff', fontWeight: 'bold', my: 2, fontFamily: 'Arsenal', fontSize: { xs: '0.8rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' } }}>Fotografías por Moises Sterimberg</Typography>
           </Box>
 
-          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '80%', sm: '90%', md: '73%', lg: '70%', xl: '70%' } }}>Iniciar sesión</Button>
+          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '50%', sm: '50%', md: '45%', lg: '55%', xl: '55%' }, }}>Iniciar sesión</Button>
           <Index open={open} />
+          <CopyRight.Website />
         </Grid>
       </Grid>
     </React.Fragment>

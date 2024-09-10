@@ -58,6 +58,7 @@ export const UpdateDestacada = (formData) => {
   };
 
   export const sendPhotosDelete = (ids, urls) => {
+    // console.log(ids, urls)
     return async (dispatch) => {
         try {
             const requestData = {

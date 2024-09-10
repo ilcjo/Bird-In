@@ -1,5 +1,6 @@
 
 require('dotenv').config();
+const exceljs = require('exceljs');
 const {
    findNameDuplicateP,
    sendAndCreateLand,
@@ -15,6 +16,7 @@ const {
 } = require('../../controllers/Lands/landsController');
 
 const ftp = require('basic-ftp');
+const { VistaPaisajesOrdenadaAll } = require('../../config/db/db');
 const { deletePhotoFromFTPPaisajes } = require('../../services/deletFtp');
 const {
    FTP_HOST_2,
@@ -263,7 +265,53 @@ const checkLandsDuplicate = async (req, res) => {
    }
 };
 
+const getExcel = async (req, res) => {
+   try {
+      // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
+      const registro = await VistaPaisajesOrdenadaAll.findAll();
+      // Crea un nuevo workbook y worksheet con excel.js
+      const workbook = new exceljs.Workbook();
+      const worksheet = workbook.addWorksheet('Aves');
+
+      // Define las columnas en tu archivo Excel
+      worksheet.columns = [
+         { header: 'País', key: 'pais', width: 20 },
+         { header: 'Zona', key: 'zona', width: 20 },
+         { header: 'Descripción', key: 'descripcion', width: 20 },
+         { header: 'Map', key: 'url', width: 20 },
+         { header: 'Portada', key: 'tiene_portada', width: 20 },
+         { header: 'Imágenes', key: 'imagenes', width: 20 },
+         // Añade más columnas según los datos que quieras incluir en tu archivo Excel
+      ];
+
+      // Agrega las filas al worksheet con los datos de las aves
+      registro.forEach((registro) => {
+         worksheet.addRow({
+            pais: registro.pais,
+            zona: registro.zona,
+            descripcion: registro.descripcion,
+            map: registro.map,
+            tiene_portada: registro.tiene_portada,
+            imagenes: registro.imagenes,
+         });
+      });
+
+      // Configura la respuesta HTTP para descargar el archivo Excel
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=paisajes.xlsx');
+
+      // Escribe el workbook en el flujo de respuesta (response stream)
+      await workbook.xlsx.write(res);
+      res.end();
+
+   } catch (error) {
+      console.error('Error al descargar el archivo Excel:', error);
+      res.status(500).json({ message: 'Error al descargar el archivo Excel' });
+   }
+};
+
 module.exports = {
+   getExcel,
    getFilterInfoP,
    selectOptionsP,
    getFilterOptionsP,

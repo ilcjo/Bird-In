@@ -12,229 +12,77 @@ import {
     Snackbar,
     TextField,
     Typography,
-    useTheme
+    useTheme,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 //ICONS
-import SaveIcon from '@mui/icons-material/Save';
 import wikipediaLogo from '../../../assets/images/icons8-wikipedia-50.png'
+import SaveIcon from '@mui/icons-material/Save';
+import SearchIcon from '@mui/icons-material/Search';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //COMPONENTS
-import { Loading } from '../../utils/Loading';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
+import { Loading } from '../../utils/Loading';
 //redux
-import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/mamiferos/actions/crudAction';
-import { saveImageFtp } from '../../../redux/mamiferos/actions/photosAction';
-import { clasesFamilia, clasesGrupo, getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
+import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/reptiles/actions/crudAction';
+import { UpdateImage } from '../../../redux/reptiles/actions/photosAction';
+import { clasesFamilia, clasesGrupo } from '../../../redux/reptiles/actions/fetchOptions';
 
 
-export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
+export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, selected, changeImagenExist }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filters.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filterRep.options)
+    const { infoForUpdate } = useSelector(state => state.updateReptil)
+    console.log(infoForUpdate, 'esto es la info')
+    const initialCreateData = {
+        grupo: infoForUpdate.grupos_reptile || null,
+        familia: infoForUpdate.familias_reptile || null,
+        pais: infoForUpdate.paises || [],
+        zona: infoForUpdate.zonasReptiles || [],
+        cientifico: infoForUpdate.nombre_cientifico || '',
+        ingles: infoForUpdate.nombre_ingles || '',
+        comun: infoForUpdate.nombre_comun || '',
+        urlWiki: infoForUpdate.url_wiki || '',
+        ImgDestacada: infoForUpdate.destacada || '',
+        id: infoForUpdate.id_reptil || 0,
+        urlImagen: infoForUpdate.imagenes_reptiles || [],
+    }
+    // console.log(initialCreateData)
+    const [createData, setCreateData] = React.useState(initialCreateData)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
-    const [allImageURLs, setAllImageURLs] = React.useState([]);
+    const [allImageURLs, setAllImageURLs] = React.useState([]); // Nuevo estado para mantener todas las URLs de las imágenes
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
-    const [snackBarMessage, setSnackBarMessage] = React.useState('El Mamífero se a creado correctamente.');
-    const [RegisterCreated, setRegisterCreated] = React.useState(false);
-    const [formSubmitted, setFormSubmitted] = React.useState(false);
+    const [snackBarMessage, setSnackBarMessage] = React.useState('El Registro se ha Actualizado correctamente.');
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
 
-    const [createData, setCreateData] = React.useState({
-        grupo: null,
-        familia: null,
-        pais: [],
-        zona: [],
-        cientifico: '',
-        ingles: '',
-        comun: '',
-        urlWiki: '',
-        urlImagen: [],
-    });
+    React.useEffect(() => {
+        setShowBackdrop(true); // Mostrar el backdrop al inicio
+        setLoadingMessage('Cargando..'); // Ejemplo de mensaje de carga completada (ajusta según necesites)
 
-    const [errors, setErrors] = React.useState({
-        grupo: false,
-        familia: false,
-        ingles: false,
-    });
+        const timer = setTimeout(() => {
+            setShowBackdrop(false); // Cerrar el backdrop después de 5 segundos
+        }, 3000);
 
-    const handleImageChange = (event) => {
-        const selectedImages = event.target.files;
-        if (selectedImages.length > 0) {
-            const imageUrls = Array.from(selectedImages).map(image => URL.createObjectURL(image));
-            setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
-            setImageFiles((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
-        }
-    };
+        return () => {
+            clearTimeout(timer); // Limpiar el temporizador al desmontar el componente
+        };
+    }, []);
 
-    const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpenSnackbar(false);
-    };
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setCreateData({
-            ...createData,
-            [name]: value,
-        });
-        // Clear the error when the user starts typing in the input field
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: false,
-            });
-        }
-    };
-
-    const handleInputChangeIngles = (event) => {
-        const newName = event.target.value;
-        // Si no hay duplicados, actualiza el estado createData
-        setCreateData({
-            ...createData,
-            ingles: newName,
-        });
-        // Reinicia el error al escribir
-        setErrors({
-            ...errors,
-            ingles: false,
-        });
-        // Reinicia el formulario
-        setFormSubmitted(false);
-        // Espera 500 mili segundos antes de llamar a la función para comprobar duplicados
-        setTimeout(async () => {
-            try {
-                // Llama a la función para comprobar duplicados
-                await dispatch(duplicateNameCheck(newName));
-            } catch (error) {
-                // Si hay un error, muestra un mensaje de error
-                console.error('Error al comprobar duplicados:', String(error));
-                alert('Este Registro ya existe');
-                // Restablece el valor del input
-                changeTabSearch()
-            }
-        }, 700);
-    };
+    React.useEffect(() => {
+        setCreateData(initialCreateData);
+    }, [infoForUpdate]);
 
 
-    const handleRemoveImage = (index) => {
-        URL.revokeObjectURL(allImageURLs[index]);
-        setAllImageURLs(allImageURLs.filter((_, i) => i !== index));
-        setImageFiles(imageFiles.filter((_, i) => i !== index));
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const newErrors = {};
-        setFormSubmitted(true);
-        if (!createData.grupo) {
-            newErrors.grupo = true;
-        }
-        if (!createData.familia) {
-            newErrors.familia = true;
-        }
-        if (!createData.ingles) {
-            newErrors.ingles = true;
-        }
-        setErrors(newErrors);
-        // Check if any errors exist and prevent form submission
-        if (Object.values(newErrors).some((error) => error)) {
-            return;
-        }
-        // Check if there are images before attempting to submit the form
-        if (!imageFiles || imageFiles.length === 0) {
-            // Show an alert indicating that images are required
-            alert("Debes cargar al menos una imagen antes de enviar el formulario.");
-            return;
-        }
-        if (imageFiles && imageFiles.length > 0) {
-            const formData = new FormData();
-            imageFiles.forEach((file) => formData.append('images', file))
-            setShowBackdrop(true);
-            setLoadingMessage('Subiendo imágenes al Servidor...');
-            try {
-                // Espera a que la imagen se suba y obtén la URL
-                const imageUrls = await uploadImagesFtpAndSaveLinks(formData);
-                localStorage.setItem('nombreIngles', JSON.stringify(createData.ingles))
-                await createFullEntry(createData, imageUrls);
-                setLoadingMessage('Creando el Registro en la DB...');
-                setShowBackdrop(false);
-                setRegisterCreated(true);
-                setOpenSnackbar(true);
-                setLoadingMessage('Cargando...');
-                setImageLink([]);
-                setImageFiles([]);
-                setFormSubmitted(false)
-                setSnackBarMessage('El Registro se a creado correctamente.')
-                // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
-                setTimeout(() => {
-                    dispatch(getInfoForUpdateName(createData.ingles));
-                    changeImagenTab(1);
-                    isImages(true)
-                }, 1500); // 10000 mili segundos = 10 segundos
-            } catch (error) {
-                console.log('este es el error:', String(error))
-                setErrorMessage(`Ocurrió un error: ${error}`);
-                setErrorSnackbarOpen(true);
-            } finally {
-                setShowBackdrop(false);
-            }
-        }
-    };
-
-    const uploadImagesFtpAndSaveLinks = async (formData) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                // Realiza la carga de la imagen y espera la respuesta
-                const response = await dispatch(saveImageFtp(formData));
-                // Verifica si la respuesta contiene la URL de la imagen
-                if (response && response.data && response.data.imageUrls) {
-                    const imageUrlString = response.data.imageUrls;
-                    setImageLink(imageUrlString)
-                    resolve(imageUrlString);
-                } else {
-                    console.error('El servidor no devolvió la URL de la imagen.');
-                    reject('El servidor no devolvió la URL de la imagen.');
-                }
-            } catch (error) {
-                console.error('Error al enviar la imagen:', error);
-                reject('Error al enviar la imagen.');
-            }
-        });
-    };
-
-    const createFullEntry = async (createData, imageUrl) => {
-        return new Promise((resolve, reject) => {
-            dispatch(createRegistro({ ...createData, urlImagen: imageUrl }))
-                .then(() => {
-                    resolve(); // Si la creación del ave tiene éxito, resuelve la Promesa sin un mensaje.
-                })
-                .catch((error) => {
-                    reject("Error al crear el Registro"); // Si hay un error, resuelve la Promesa con un mensaje.
-                });
-        });
-    };
-
-    const handleLogoClickW = () => {
-        if (createData.urlWiki) {
-            window.open(createData.urlWiki, '_blank');
-        }
-    };
-
-    // React.useEffect(() => {
-    //     // Aquí despachas la acción para cargar las opciones al montar el componente
-    //     dispatch(getOptionsDataM());
-    // }, [dispatch]);
     const handleFamiliaChange = async (event, newValue) => {
         setCreateData(prevState => ({
             ...prevState,
@@ -276,6 +124,169 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }
     };
 
+    // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
+    React.useEffect(() => {
+        const loadInitialData = async () => {
+            if (infoForUpdate.familia) {
+                const extraDataGrupos = await dispatch(clasesFamilia(infoForUpdate.familia.id));
+                const newCombinedOptionsGrupos = [
+                    ...extraDataGrupos.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...grupos, // Mantén las opciones originales
+                ];
+                setCombinedOptionsGrupos(newCombinedOptionsGrupos);
+            }
+
+            if (infoForUpdate.grupo) {
+                const extraDataFamilias = await dispatch(clasesGrupo(infoForUpdate.grupo.id));
+                const newCombinedOptionsFamilias = [
+                    ...extraDataFamilias.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...familias, // Mantén las opciones originales
+                ];
+                setCombinedOptionsFamilias(newCombinedOptionsFamilias);
+            }
+        };
+
+        loadInitialData();
+    }, [infoForUpdate, grupos, familias]);
+
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setCreateData({
+            ...createData,
+            [name]: value,
+        });
+    };
+
+    const handleDeleteRegistro = async () => {
+        try {
+            setShowBackdrop(true);
+            setLoadingMessage('Eliminando Registro del ...');
+            await dispatch(deleteRegistro(infoForUpdate.id_reptil));
+            setOpenSnackbar(true);
+            setSnackBarMessage('El Registro del Registro se ha eliminado correctamente');
+            setTimeout(() => {
+                handleReturnSearch()
+            }, 2000);
+        } catch (error) {
+            console.error('Error al eliminar el registro:', error);
+            setErrorMessage(`Ocurrió un error: ${error.message}`);
+            setErrorSnackbarOpen(true);
+
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+
+    const handleImageChange = (event) => {
+        const selectedImages = event.target.files;
+        if (selectedImages.length > 0) {
+            const imageUrls = Array.from(selectedImages).map(image => URL.createObjectURL(image));
+            setAllImageURLs((prevImageURLs) => [...prevImageURLs, ...imageUrls]);
+            setImageFiles((prevImageFiles) => [...prevImageFiles, ...selectedImages]);
+        }
+    };
+
+    const handleRemoveImage = (index) => {
+        URL.revokeObjectURL(imageLink[index]);
+        const updatedImageURLs = [...imageLink];
+        updatedImageURLs.splice(index, 1);
+        setImageLink(updatedImageURLs);
+        setAllImageURLs((prevAllImageURLs) => prevAllImageURLs.filter((_, i) => i !== index));
+        const updatedImageFiles = [...imageFiles];
+        updatedImageFiles.splice(index, 1);
+        setImageFiles(updatedImageFiles);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setShowBackdrop(true);
+        try {
+            let imageUrl = '';
+            if (imageFiles && imageFiles.length > 0) {
+                const formData = new FormData();
+                for (let i = 0; i < imageFiles.length; i++) {
+                    formData.append('images', imageFiles[i]);
+                }
+                setLoadingMessage('Subiendo Imágenes al Servidor...');
+                imageUrl = await uploadImagesFtpAndSaveLinks(formData);
+                setLoadingMessage('Actualizando Registro...');
+            }
+
+            if (createData.ingles) {
+                localStorage.setItem('nombreIngles', createData.ingles);
+            }
+
+            await createFullEntry(createData, imageUrl);
+
+            setShowBackdrop(false);
+            setLoadingMessage('Actualización en proceso...');
+            setOpenSnackbar(true);
+
+            setImageLink([]);
+            setImageFiles([]);
+            setAllImageURLs([])
+            if (imageUrl) {
+                setSnackBarMessage('El  se ha Actualizado correctamente.');
+                dispatch(getInfoForUpdate(infoForUpdate.id_reptil));
+                changeImagenExist();
+            } else {
+                setSnackBarMessage('El  se ha Actualizado correctamente.');
+                dispatch(getInfoForUpdate(infoForUpdate.id_reptil));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setErrorMessage(`Ocurrió un error: ${error.message}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+
+    const handleReturnSearch = () => {
+        showUpdate(false)
+        showSearch(true)
+        selected(null)
+    };
+
+    const uploadImagesFtpAndSaveLinks = async (formData) => {
+        try {
+            const response = await dispatch(UpdateImage(formData));
+            if (response && response.data && response.data.imageUrls) {
+                return response.data.imageUrls;
+            } else {
+                console.error('El servidor no devolvió las URLs de las imágenes.');
+                throw new Error('El servidor no devolvió las URLs de las imágenes.');
+            }
+        } catch (error) {
+            console.error('Error al enviar las imágenes:', error);
+            throw new Error('Error al enviar las imágenes.');
+        }
+    };
+
+    const createFullEntry = async (createData, imageUrl) => {
+        try {
+            await dispatch(actualizarRegistro({ ...createData, urlImagen: imageUrl }));
+        } catch (error) {
+            console.error('Error al actualizar el registro en la base de datos:', error);
+            throw new Error('Error al actualizar el registro.');
+        }
+    };
+
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnackbar(false);
+    };
+
+
+    const handleLogoClickW = () => {
+        if (createData.urlWiki) {
+            window.open(createData.urlWiki, '_blank');
+        }
+    };
 
     return (
         <React.Fragment>
@@ -299,14 +310,31 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
-                                    Formulario de Creación
+                                <Typography variant='h2' color='primary' sx={{ mb: 3 }}>
+                                    Formulario de Actualización
                                 </Typography>
+                            </Grid>
+
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <Button
+                                    sx={{
+                                        fontSize: '1.1rem',
+                                        fontWeight: 'bold',
+                                        // color: theme.palette.primary.light,
+                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                                    }}
+                                    variant="outlined"
+                                    onClick={handleReturnSearch}
+                                    startIcon={<SearchIcon />}
+                                >
+                                    Buscar Otro Registro
+                                </Button>
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
-                            Subir imágenes a Galería
+                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                            Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
                         <Grid container sx={{}} >
@@ -318,8 +346,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                 />
                             </Grid >
                             <Grid item xs={12} sm={9} md={9} >
-                                <Button
-                                    onClick={handleSubmit}
+                                <Button onClick={handleSubmit}
                                     variant="contained"
                                     color="secondary"
                                     endIcon={<SaveIcon />}
@@ -328,48 +355,36 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Datos del Registro
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6} >
+                            <Grid item xs={12} sm={6}>
                                 <StyledTextField
                                     name="ingles"
-                                    label="Nombre en Inglés"
+                                    label="Nombre en Ingles"
                                     value={createData.ingles}
-                                    onChange={handleInputChangeIngles}
-                                    type='text'
+                                    onChange={handleInputChange}
                                     variant="filled"
                                     margin="dense"
                                     fullWidth
-                                    error={formSubmitted && createData.ingles.trim() === ''} // Check if the field is empty when the form is submitted
-                                    helperText={formSubmitted && createData.ingles.trim() === '' ? 'Este Campo es obligatorio *' : ''}
-                                    FormHelperTextProps={{
-                                        sx: {
-                                            fontSize: '1.1rem',
-                                            fontWeight: 'bold'
-                                        },
-                                    }}
                                 />
                                 <StyledTextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
                                     onChange={handleInputChange}
-                                    type='text'
                                     variant="filled"
                                     margin="dense"
                                     fullWidth
                                 />
-
                                 <StyledTextField
                                     name="cientifico"
-                                    label="Nombre Científico(Especie)"
+                                    label="Nombre científico (Especie)"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
-                                    type='text'
                                     variant="filled"
                                     margin="dense"
                                     fullWidth
@@ -381,33 +396,19 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     disablePortal
                                     id="combo-box-familias"
                                     // options={familias}
-                                    options={combinedOptionsFamilias}
                                     groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
+                                    options={combinedOptionsFamilias}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.familia}
                                     // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
                                     onChange={handleFamiliaChange}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
                                             label="Familia"
                                             margin="dense"
-                                            error={formSubmitted && !createData.familia} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.familia ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    fontSize: '1.1rem',
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                },
-                                            }}
-                                        />
-                                    )}
+                                        />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3 }}
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();
@@ -429,36 +430,20 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     disablePortal
                                     id="combo-box-grupos"
                                     // options={grupos}
-                                    options={combinedOptionsGrupos}
                                     groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
+                                    options={combinedOptionsGrupos}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.grupo}
-                                    onChange={handleGrupoChange}
                                     // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
+                                    onChange={handleGrupoChange}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
                                             label="Genero"
                                             margin='dense'
-                                            error={formSubmitted && !createData.grupo} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    /* Agrega los estilos que desees para el texto del helper text */
-                                                    fontSize: '1.1rem',
-                                                    // color: theme.palette.secondary.main,
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                    // height: '30px',
-                                                },
-                                            }}
-                                        />
-                                    )}
+
+                                        />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3, mt: 1 }}
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();
@@ -490,8 +475,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
                                     renderInput={(params) =>
-                                        <TextField
-                                            {...params}
+                                        <TextField {...params}
                                             label="Países"
                                             margin="dense"
                                         />}
@@ -531,7 +515,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         <TextField {...params}
                                             label="Zonas"
                                             margin="dense"
-
                                         />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
                                     multiple
@@ -598,6 +581,19 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     }}
                                 />
                             </Grid>
+                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <Button
+                                    endIcon={<DeleteForeverIcon />}
+                                    variant="contained"
+                                    color='custom'
+                                    onClick={handleDeleteRegistro}
+                                    sx={{
+                                        color: theme.palette.primary.light,
+                                    }}
+                                >
+                                    Eliminar Registro
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -608,7 +604,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             </Box>
             <Snackbar
                 open={openSnackbar}
-                autoHideDuration={6000} // Duración en milisegundos (ajusta según tus preferencias)
+                autoHideDuration={5000} // Duración en mili segundos (ajusta según tus preferencias)
                 onClose={handleCloseSnackbar}
                 message={snackBarMessage}
             >

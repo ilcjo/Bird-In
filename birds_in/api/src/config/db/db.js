@@ -60,7 +60,7 @@ const {
   Reptiles, Grupos_reptiles, Familias_reptiles, Imagenes_reptiles,
   Insectos, Grupos_insectos, Familias_insectos, Imagenes_insectos
 } = db.models;
-console.log(db.models)
+// console.log(db.models)
 // UNO A UNO
 
 // =>AVES

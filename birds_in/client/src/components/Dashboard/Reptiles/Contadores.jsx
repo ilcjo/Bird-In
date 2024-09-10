@@ -1,26 +1,26 @@
 import * as React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { counting } from '../../../redux/mamiferos/actions/infoAction';
+import { counting } from '../../../redux/reptiles/actions/infoAction';
 
 export const Contadores = () => {
     const dispatch = useDispatch();
-    const { allRegistros, allEnglish, allCientifico, allComun, allGrupos, allFamilias, allZonas, allCountrys } = useSelector(state => state.dataSlice.count);
+    const { allRegistros, allEnglish, allCientifico, allComun, allGrupos, allFamilias, allZonas, allCountrys } = useSelector(state => state.dataReptil.count);
 
     React.useEffect(() => {
         dispatch(counting());
     }, [dispatch]);
 
     const firstHalfData = [
-        { label: 'Total Mamíferos', value: allRegistros },
+        { label: 'Total Reptiles', value: allRegistros },
         { label: 'Nombres en Inglés', value: allEnglish },
-        { label: 'Nombres Científico', value: allCientifico },
+        { label: 'Nombres Científico(especie)', value: allCientifico },
         { label: 'Nombres Comunes', value: allComun }
     ];
 
     const secondHalfData = [
-        { label: 'Número de Grupos', value: allGrupos },
         { label: 'Número de Familias', value: allFamilias },
+        { label: 'Número de Géneros', value: allGrupos },
         { label: 'Número de Países', value: allCountrys },
         { label: 'Número de Zonas', value: allZonas }
     ];
@@ -28,7 +28,7 @@ export const Contadores = () => {
     const renderTable = (data) => (
         <TableContainer component={Paper} sx={{ 
             backgroundColor: 'rgba(0, 56, 28, 0.1)', 
-            backdropFilter: 'blur(2px)', 
+            backdropFilter: 'blur(4px)', 
             padding: '20px', 
             borderRadius: '20px', 
             maxWidth: '45vw', 

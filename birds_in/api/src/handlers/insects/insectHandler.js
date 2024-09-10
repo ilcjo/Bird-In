@@ -7,10 +7,9 @@ const {
    FTP_PASS_2,
 } = process.env
 
-const { deletePhotoFromFTP, deletePhotoFromFTPInsectos } = require('../../services/deletFtp');
-const vistaAvesOrdenadaAll = require('../../config/db/db');
-const { sendAndCreateInsect, fetchFilterInsect, fetchOptions, filterOptionsPaisZonas, findDataById, findDataByName, sendAndUpdateInsect, setDbCover, getContadores, findNameDuplicate } = require('../../controllers/insects/insectsController');
-// const { connectToFtp, uploadImages } = require('../../utils/FTPUpoad');
+const { deletePhotoFromFTPInsectos } = require('../../services/deletFtp');
+const { VistaInsectosOrdenaAll } = require('../../config/db/db');
+const { sendAndCreateInsect, fetchFilterInsect, fetchOptions, filterOptionsPaisZonas, findDataById, findDataByName, sendAndUpdateInsect, setDbCover, getContadores, findNameDuplicate, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate } = require('../../controllers/insects/insectsController');
 
 const getFilterInfo = async (req, res) => {
 
@@ -128,7 +127,7 @@ const uploadImageftp = async (req, res) => {
          await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
 
          // Obtén la URL completa de la imagen
-         const imageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/insectos${remoteFileName}`;
+         const imageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/insectos/m                                  ..........................................--${remoteFileName}`;
          // Agrega la URL al array de imageUrls
          imageUrls.push(imageUrl);
 
@@ -153,23 +152,6 @@ const uploadImageftp = async (req, res) => {
    }
 };
 
-// const uploadImageftp = async (req, res) => {
-//    const client = new ftp.Client();
-//    client.ftp.timeout = 1000000;
-
-//    try {
-//       await connectToFtp(client);
-//       const imageUrls = await uploadImages(client, req.files);
-//       await client.close();
-
-//       res.status(200).json({ message: 'Imágenes subidas con éxito al servidor FTP', imageUrls });
-//    } catch (error) {
-//       console.error('Error durante el proceso de subida de imágenes:', error);
-//       res.status(500).json({ error: 'Error durante el proceso de subida de imágenes', uploaded: error.uploaded });
-//    } finally {
-//       client.close();
-//    }
-// };
 
 const findInfoForUpdate = async (req, res) => {
    const { id } = req.query;
@@ -299,10 +281,10 @@ const checkRegisterDuplicate = async (req, res) => {
    }
 };
 
-const getAllAvesAsExcel = async (req, res) => {
+const getExcel = async (req, res) => {
    try {
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
-      const aves = await vistaAvesOrdenadaAll.findAll();
+      const aves = await VistaInsectosOrdenaAll.findAll();
 
       // Crea un nuevo workbook y worksheet con excel.js
       const workbook = new exceljs.Workbook();
@@ -353,7 +335,49 @@ const getAllAvesAsExcel = async (req, res) => {
    }
 };
 
+const getAllNombres = async (req, res) => {
+   try {
+      const allData = await findAllEnglishNames()
+      res.status(200).json(allData);
+   } catch (error) {
+      console.error(error);
+      res.status(500).send('Error en el servidor');
+   }
+};
+
+const checkClases = async (req, res) => {
+   const { familiaID, grupoID } = req.query
+   try {
+      const message = await getClassGrupoFamilia(familiaID, grupoID)
+      return res.status(200).json(message);
+   } catch (error) {
+      res.status(500).json({ error: error.message });
+   }
+};
+
+const checkDuplicateNames = async (req, res) => {
+   const { grupoName, familiaName } = req.query;
+   try {
+      if (grupoName) {
+         const message = await findGroupNameDuplicate(grupoName);
+         return res.status(200).json({ message });
+      } else if (familiaName) {
+         const message = await findFamilyNameDuplicate(familiaName);
+         return res.status(200).json({ message });
+      } else {
+         // Si no se proporcionan ni grupoName ni familiaName, se devuelve un error
+         return res.status(400).json({ error: "Debe proporcionar un nombre de grupo o de familia." });
+      }
+   } catch (error) {
+      return res.status(500).json({ error: error.message });
+   }
+};
+
 module.exports = {
+   getAllNombres,
+   getExcel,
+   checkClases,
+   checkDuplicateNames,
    createInsect,
    getFilterInfo,
    selectOptions,

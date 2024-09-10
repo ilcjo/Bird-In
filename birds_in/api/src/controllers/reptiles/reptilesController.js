@@ -307,7 +307,7 @@ const filterOptionsPaisZonas = async (familia, grupo, nombreCientifico, nombreIn
     if (zonas || pais) {
         const paisNumb = parseInt(pais);
 
-        // Filtrar las Mamiferos según el país y las zonas proporcionadas
+        // Filtrar las Reptiles según el país y las zonas proporcionadas
         allResults.registrosFiltrados = allResults.registrosFiltrados.filter(registro => {
             const meetsPaisCriteria = !pais || registro.paises.some(pais => pais.dataValues && pais.dataValues.id_pais === paisNumb);
             const meetsZonasCriteria = !zonas || registro.zonasMamiferos.some(zona => zonas.includes(zona.dataValues && zona.dataValues.id_zona));
@@ -317,7 +317,7 @@ const filterOptionsPaisZonas = async (familia, grupo, nombreCientifico, nombreIn
 
     // Lógica para construir las opciones de países y zonas
     if (zonas) {
-        // Construir opciones de países basadas en las Mamiferos filtradas
+        // Construir opciones de países basadas en las Reptiles filtradas
         const paisesSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
             if (registro.paises && Array.isArray(registro.paises)) {
@@ -355,7 +355,7 @@ const filterOptionsPaisZonas = async (familia, grupo, nombreCientifico, nombreIn
     }
 
     if (pais) {
-        // Construir opciones de zonas basadas en las Mamiferos filtradas
+        // Construir opciones de zonas basadas en las Reptiles filtradas
         const zonasSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
             if (registro.zonasMamiferos && Array.isArray(registro.zonasMamiferos)) {
@@ -509,7 +509,7 @@ const findDataById = async (id) => {
                     attributes: [['url_reptil', 'url'],
                         'id',
                         'destacada',
-                        [Sequelize.literal('SUBSTRING_INDEX(url_reptil, "_", -1)'), 'titulo']
+                    [Sequelize.literal('SUBSTRING_INDEX(url_reptil, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_reptiles
                 },
                 {
@@ -556,7 +556,7 @@ const findDataByName = async (name) => {
                     attributes: [['url_reptil', 'url'],
                         'id',
                         'destacada',
-                        [Sequelize.literal('SUBSTRING_INDEX(url_reptil, "_", -1)'), 'titulo']
+                    [Sequelize.literal('SUBSTRING_INDEX(url_reptil, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_reptiles
                 },
                 {
@@ -792,8 +792,8 @@ const deleteRegistroDb = async (idRegistro) => {
                 reptiles_id_reptil: idRegistro,
             },
         });
-
-        const ftpDeleteResults = await deletePhotoFromFTPReptiles(imagenes.map(imagen => imagen.url));
+        // console.log(imagenes, 'soy imagenes de find all')
+        const ftpDeleteResults = await deletePhotoFromFTPReptiles(imagenes.map(imagen => imagen.url_reptil));
 
         if (!ftpDeleteResults.success) {
             // Si hay un problema al borrar las fotos del FTP, puedes manejar el error aquí
@@ -855,7 +855,126 @@ const findNameDuplicate = async (nombre) => {
     }
 };
 
+const findAllEnglishNames = async () => {
+    try {
+        const registros = await Reptiles.findAll({
+            attributes: ['nombre_ingles', 'id_reptil'], // Only fetches the 'nombre_ingles' attribute
+        });
+        return registros; // Returns an array of objects, each containing 'nombre_ingles'
+    } catch (error) {
+        // Handle query errors
+        console.error('Error fetching English names:', error);
+        throw error;
+    }
+};
+
+const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
+    try {
+        if (idfamilia) {
+            // Buscar todas las aves con el id_familia dado
+            const aves = await Reptiles.findAll({
+                where: {
+                    familias_id_familia: idfamilia
+                },
+                attributes: ['grupos_id_grupo'], // Solo necesitamos los id_grupo
+                group: ['grupos_id_grupo'] // Agrupar por id_grupo para evitar duplicados
+            });
+
+            // Extraer los id_grupo de las aves
+            const idGrupos = aves.map(registro => registro.grupos_id_grupo);
+
+            // Buscar los grupos con los id_grupo obtenidos
+            const grupos = await Grupos_reptiles.findAll({
+                where: {
+                    id_grupo: {
+                        [Op.in]: idGrupos
+                    }
+                },
+                attributes: [['id_grupo', 'id'], 'nombre']
+            });
+
+            return { grupos };
+        } else if (idgrupo) {
+            // Buscar las aves con el id_grupo dado
+            const aves = await Reptiles.findAll({
+                where: {
+                    grupos_id_grupo: idgrupo
+                },
+                attributes: ['familias_id_familia'], // Solo necesitamos los id_familia
+                group: ['familias_id_familia'] // Agrupar por id_familia para evitar duplicados
+            });
+
+            // Extraer los id_familia de las aves
+            const idFamilias = aves.map(registro => registro.familias_id_familia);
+
+            // Buscar las familias con los id_familia obtenidos
+            const familias = await Familias_reptiles.findAll({
+                where: {
+                    id_familia: {
+                        [Op.in]: idFamilias
+                    }
+                },
+                attributes: [['id_familia', 'id'], 'nombre']
+            });
+
+            return { familias };
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
+const findGroupNameDuplicate = async (nombreGrupo) => {
+    // console.log(nombreGrupo)
+    try {
+        const existingGroups = await Grupos_reptiles.findAll({
+            where: {
+                nombre: nombreGrupo
+            }
+        });
+
+        // Si encuentra grupos con el mismo nombre, arroja un error
+        if (existingGroups.length > 0) {
+            throw new Error("Este Nombre de Genero ya existe.");
+        }
+
+        // Si no encuentra grupos con el mismo nombre, simplemente retorna
+        return "Nombre de Genero disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+const findFamilyNameDuplicate = async (nombreFamilia) => {
+    try {
+        const existingFamilies = await Familias_reptiles.findAll({
+            where: {
+                nombre: nombreFamilia
+            }
+        });
+
+        // Si encuentra familias con el mismo nombre, arroja un error
+        if (existingFamilies.length > 0) {
+            throw new Error("Este Nombre de Familia ya existe.");
+        }
+
+        // Si no encuentra familias con el mismo nombre, simplemente retorna
+        return "Nombre de Familia disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
 module.exports = {
+    findAllEnglishNames,
+    findFamilyNameDuplicate,
+    findGroupNameDuplicate,
+    getClassGrupoFamilia,
     fetchOptions,
     filterOptions,
     fetchFilterRegister,

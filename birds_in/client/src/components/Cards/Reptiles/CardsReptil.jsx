@@ -69,9 +69,7 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
       },
 
     }}>
-      <CardActionArea sx={{
-        position: 'relative',
-      }}>
+      <CardActionArea sx={{ position: 'relative', }}>
         {destacadaImage && destacadaImage.url ? (
           <div style={{ position: 'relative' }}>
             <CardMedia
@@ -90,6 +88,8 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
                   opacity: 0.8, // Opacidad reducida al hacer hover
                 },
               }}
+              onContextMenu={(e) => e.preventDefault()} // Deshabilita el clic derecho
+              onDragStart={(e) => e.preventDefault()} // Evita arrastrar la imagen
             />
             <div style={{
               position: 'absolute',
@@ -98,10 +98,6 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
               padding: '30px',
               transition: 'transform 0.3s ease-out', // Transición para la posición del divider y título
-              '&:hover': {
-                transform: 'translateX(-50%) scale(1.1)', // Escala aumentada y posición del título al hacer hover
-              },
-
             }}>
               <Divider className="divider" sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
               <Typography

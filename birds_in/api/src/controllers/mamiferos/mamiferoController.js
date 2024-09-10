@@ -858,10 +858,10 @@ const findNameDuplicate = async (nombre) => {
 
 const findAllEnglishNames = async () => {
     try {
-        const aves = await Mamiferos.findAll({
+        const registros = await Mamiferos.findAll({
             attributes: ['nombre_ingles', 'id_mamifero'], // Only fetches the 'nombre_ingles' attribute
         });
-        return aves; // Returns an array of objects, each containing 'nombre_ingles'
+        return registros; // Returns an array of objects, each containing 'nombre_ingles'
     } catch (error) {
         // Handle query errors
         console.error('Error fetching English names:', error);

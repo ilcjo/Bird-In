@@ -272,7 +272,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
-                        <Grid container sx={{ mt: -4 }} >
+                        <Grid container sx={{}} >
                             <Grid item xs={12} sm={3} md={3}>
                                 <ImageUploader
                                     allImageURLs={allImageURLs}

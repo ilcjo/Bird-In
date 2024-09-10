@@ -8,7 +8,7 @@ export const getOptionsDataM = () => {
       // console.log('llegue')
       const response = await axios('mamiferos/opciones')
       const data = response.data
-      console.log(data)
+      // console.log(data)
       dispatch(fetchOptions(data))
       // dispatch(setNoMoreResults(true))
     } catch (error) {

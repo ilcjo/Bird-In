@@ -11,9 +11,9 @@ import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 //redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/mamiferos/actions/photosAction';
-import { getInfoForUpdate } from '../../../../redux/mamiferos/actions/crudAction';
-import { getRegistro } from '../../../../redux/mamiferos/slices/UpdateSlice';
+import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/reptiles/actions/photosAction';
+import { getInfoForUpdate } from '../../../../redux/reptiles/actions/crudAction';
+import { getRegistro } from '../../../../redux/reptiles/slices/UpdateSlice';
 
 export const CoverDelete = ({
     isCreate,
@@ -26,7 +26,7 @@ export const CoverDelete = ({
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
-    const { infoForUpdate } = useSelector(state => state.updateSlice);
+    const { infoForUpdate } = useSelector(state => state.updateReptil);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -51,11 +51,11 @@ export const CoverDelete = ({
                 }
             });
             // Si la imagen es destacada, enviar la solicitud para guardarla como portada
-            await dispatch(sendCoverPhoto(id, infoForUpdate.id_mamifero));
+            await dispatch(sendCoverPhoto(id, infoForUpdate.id_reptil));
             setShowBackdrop(true);
             setLoadingMessage('Seleccionando Portada')
             await new Promise((resolve) => setTimeout(resolve, 5000));
-            await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_reptil));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -109,9 +109,10 @@ export const CoverDelete = ({
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
             // Realizar la eliminación de fotos
+            console.log(selectedIds, selectedUrls)
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
-            await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_reptil));
             setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSelectedImages([])
             setShowBackdrop(false)
@@ -188,7 +189,7 @@ export const CoverDelete = ({
                     <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2,borderColor: theme.palette.primary.main, }} />
+                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
                         variant="contained"
                         color="error"
@@ -198,14 +199,14 @@ export const CoverDelete = ({
                     >
                         Eliminar selección
                     </Button>
-                    {infoForUpdate && infoForUpdate.imagenes_mamiferos && infoForUpdate.imagenes_mamiferos.length > 0 && (
+                    {infoForUpdate && infoForUpdate.imagenes_reptiles && infoForUpdate.imagenes_reptiles.length > 0 && (
                         <Grid container spacing={2} sx={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             m: 0
                         }}>
-                            {infoForUpdate.imagenes_mamiferos.map((imageUrl, index) => (
+                            {infoForUpdate.imagenes_reptiles.map((imageUrl, index) => (
                                 <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
                                     <EditImageCards
                                         imageUrl={imageUrl}
@@ -218,13 +219,13 @@ export const CoverDelete = ({
                             ))}
                             <CarruselGalleryDelete
                                 isOpen={isGalleryOpen}
-                                images={infoForUpdate.imagenes_mamiferos}
+                                images={infoForUpdate.imagenes_reptiles}
                                 selectedIndex={selectedImageIndex}
                                 onClose={handleCloseGallery}
                             />
                         </Grid>
                     )}
-                    {!infoForUpdate || !infoForUpdate.imagenes_mamiferos || infoForUpdate.imagenes_mamiferos.length === 0 && (
+                    {!infoForUpdate || !infoForUpdate.imagenes_reptiles || infoForUpdate.imagenes_reptiles.length === 0 && (
                         <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
                             No hay imágenes subidas.
                         </Typography>

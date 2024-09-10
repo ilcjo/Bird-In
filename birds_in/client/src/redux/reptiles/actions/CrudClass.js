@@ -81,3 +81,27 @@ export const eliminarFamilia = (id) => {
         }
     }
 };
+
+export const checkDuplicadosGrupo = (nameg) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/reptiles/gruposFamilias?grupoName=${nameg}`);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+};
+
+export const checkDuplicadosFamilia = (namef) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/reptiles/gruposFamilias?familiaName=${namef}`);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+};

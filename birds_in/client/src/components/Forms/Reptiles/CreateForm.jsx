@@ -23,9 +23,9 @@ import { Loading } from '../../utils/Loading';
 import { ImageUploader } from '../../utils/ImageUploader';
 import { StyledTextField } from '../../../assets/styles/MUIstyles';
 //redux
-import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/mamiferos/actions/crudAction';
-import { saveImageFtp } from '../../../redux/mamiferos/actions/photosAction';
-import { clasesFamilia, clasesGrupo, getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
+import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/reptiles/actions/crudAction';
+import { saveImageFtp } from '../../../redux/reptiles/actions/photosAction';
+import { clasesFamilia, clasesGrupo } from '../../../redux/reptiles/actions/fetchOptions';
 
 
 export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -33,7 +33,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filters.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filterRep.options)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -42,7 +42,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
-    const [snackBarMessage, setSnackBarMessage] = React.useState('El Mamífero se a creado correctamente.');
+    const [snackBarMessage, setSnackBarMessage] = React.useState('El Reptil se a creado correctamente.');
     const [RegisterCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
@@ -99,6 +99,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
     const handleInputChangeIngles = (event) => {
         const newName = event.target.value;
+        // console.log(newName)
         // Si no hay duplicados, actualiza el estado createData
         setCreateData({
             ...createData,
@@ -122,6 +123,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 alert('Este Registro ya existe');
                 // Restablece el valor del input
                 changeTabSearch()
+                setCreateData()
             }
         }, 700);
     };

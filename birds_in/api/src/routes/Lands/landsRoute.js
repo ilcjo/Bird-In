@@ -12,7 +12,8 @@ const {
     updateInfoPaisaje,
     deletePaisaje,
     selectOptionsP,
-    getFilterOptionsP
+    getFilterOptionsP,
+    getExcel
 } = require('../../handlers/Lands/landsHandler')
 
 const landsRouter = Router()
@@ -26,8 +27,8 @@ landsRouter.get('/filtros', getFilterInfoP)
     .put('/update', updateInfoPaisaje)
     .delete('/borrar_fotos', deletePhotosPaisajes)
     .put('/foto_portada', setCoverPhotoP)
-    // .get('/contando', contandoRegistros)
     .delete('/borrar_registro', deletePaisaje)
     .get('/duplicados', checkLandsDuplicate)
+    .get('/descargar-excel', getExcel)
     
 module.exports = landsRouter

@@ -9,16 +9,16 @@ MamiferoRouter
     .get('/opciones', selectOptions)
     .get('/nuevasOpciones', getFilterOptions)
     .post('/create', createMamifero)
-    .post('/upload_image', upload.array('images'), uploadImageftp)//pendiente de probar
+    .post('/upload_image', upload.array('images'), uploadImageftp)
     .get('/get_update', findInfoForUpdate)
     .get('/get_update_name', findInfoForUpdateName)
     .put('/update', updateInfoRegister)
-    .delete('/borrar_fotos', deletePhotos)//por probar
+    .delete('/borrar_fotos', deletePhotos)
     .put('/foto_portada', setCoverPhoto)
     .get('/contando', contandoRegistros)
-    .delete('/borrar_registro', deleteRegistro)//por probar
+    .delete('/borrar_registro', deleteRegistro)
     .get('/duplicados', checkRegisterDuplicate)
-    .get('/descargar-excel', getExcel) //PENDIENTE POR HACER TABLA
+    .get('/descargar-excel', getExcel)
     .get('/nombres', getAllNombres)
     .get('/clases', checkClases)
     .get('/gruposFamilias', checkDuplicateNames)

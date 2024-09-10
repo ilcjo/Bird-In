@@ -100,23 +100,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             } else {
                 dispatch(isOneR(false));
             }
-            // setIsFetchingOptions(true); // Activa el indicador de carga
-            // // // Realiza la solicitud para obtener las opciones completas
-            // // dispatch(getOptionsData())
-            // //     .then(() => {
-            // //         setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
-            // //     })
-            // //     .catch(() => {
-            // //         setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
-            // //     });
-            // setSelectOption({
-            //     grupo: [],
-            //     familia: [],
-            //     pais: [],
-            //     zona: [],
-            //     cientifico: [],
-            //     ingles: []
-            // });
         } catch (error) {
             console.error("Error occurred during filtering:", error);
             // Manejar el error según sea necesario
