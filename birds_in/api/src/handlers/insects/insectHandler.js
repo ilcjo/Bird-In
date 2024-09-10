@@ -9,7 +9,7 @@ const {
 
 const { deletePhotoFromFTPInsectos } = require('../../services/deletFtp');
 const { VistaInsectosOrdenaAll } = require('../../config/db/db');
-const { sendAndCreateInsect, fetchFilterInsect, fetchOptions, filterOptionsPaisZonas, findDataById, findDataByName, sendAndUpdateInsect, setDbCover, getContadores, findNameDuplicate, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate } = require('../../controllers/insects/insectsController');
+const { sendAndCreateInsect, fetchFilterInsect, fetchOptions, filterOptionsPaisZonas, findDataById, findDataByName, sendAndUpdateInsect, setDbCover, getContadores, findNameDuplicate, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate, findFamilyNameDuplicate, findPhotosId, deleteRegistroDb } = require('../../controllers/insects/insectsController');
 
 const getFilterInfo = async (req, res) => {
 
@@ -127,7 +127,7 @@ const uploadImageftp = async (req, res) => {
          await client.uploadFrom(image.path, `${remotePath}/${remoteFileName}`);
 
          // Obtén la URL completa de la imagen
-         const imageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/insectos/m                                  ..........................................--${remoteFileName}`;
+         const imageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/insectos/${remoteFileName}`;
          // Agrega la URL al array de imageUrls
          imageUrls.push(imageUrl);
 

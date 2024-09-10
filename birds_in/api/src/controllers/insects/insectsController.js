@@ -181,7 +181,7 @@ const fetchOptions = async () => {
 
     return {
         grupos: optionsGrupos,
-        Familias: optionsFamilias,
+        familias: optionsFamilias,
         paises: optionsPaises,
         nIngles: nombreIngles,
         nCientifico: nombreCientifico,
@@ -204,7 +204,7 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
 
     const newOptions = {
         grupos: [],
-        Familias: [],
+        familias: [],
         paises: [],
         zonas: [],
         nIngles: [],
@@ -815,8 +815,8 @@ const findNameDuplicate = async (nombre) => {
 
 const findAllEnglishNames = async () => {
     try {
-        const registros = await Reptiles.findAll({
-            attributes: ['nombre_ingles', 'id_reptil'], // Only fetches the 'nombre_ingles' attribute
+        const registros = await Insectos.findAll({
+            attributes: ['nombre_ingles', 'id_insecto'], // Only fetches the 'nombre_ingles' attribute
         });
         return registros; // Returns an array of objects, each containing 'nombre_ingles'
     } catch (error) {
@@ -830,7 +830,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
     try {
         if (idfamilia) {
             // Buscar todas las aves con el id_familia dado
-            const aves = await Reptiles.findAll({
+            const aves = await  Insectos.findAll({
                 where: {
                     familias_id_familia: idfamilia
                 },
@@ -854,7 +854,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
             return { grupos };
         } else if (idgrupo) {
             // Buscar las aves con el id_grupo dado
-            const aves = await Reptiles.findAll({
+            const aves = await Insectos.findAll({
                 where: {
                     grupos_id_grupo: idgrupo
                 },

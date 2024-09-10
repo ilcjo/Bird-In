@@ -13,6 +13,9 @@ import filters from './mamiferos/slices/FilterSlice';
 import filtersRep from './reptiles/slices/FilterSlice';
 import dataRep from './reptiles/slices/InfoSlice';
 import updateInfoR from './reptiles/slices/UpdateSlice';
+import dataInsect from './insectos/slices/InfoSlice';
+import updateInfoI from './insectos/slices/UpdateSlice';
+import filtersInsect from './insectos/slices/FilterSlice';
 
 const store = configureStore({
   reducer: {
@@ -34,7 +37,10 @@ const store = configureStore({
     dataReptil: dataRep,
     updateReptil: updateInfoR,
     filterRep: filtersRep,
-
+    //insectos
+    data: dataInsect,
+    update: updateInfoI,
+    filter: filtersInsect,
   },
 });
 

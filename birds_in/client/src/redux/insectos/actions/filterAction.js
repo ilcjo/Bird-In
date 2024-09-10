@@ -5,12 +5,12 @@ import { setNoMoreResults } from "../slices/FilterSlice";
 import { createParams } from "../../../components/utils/convertId";
 
 export const sendParameter = (selectedOptions) => {
-    // console.log(selectedOptions, 'soy parametros que llegan')
+    // console.log(selectedOptions, 'soy parámetros que llegan')
     return async (dispatch) => {
         try {
             const queryParams = createParams(selectedOptions)
             // console.log(queryParams, 'soy query params')
-            const response = await axios.get(`/mamiferos/filtros?${queryParams}`);
+            const response = await axios.get(`/insectos/filtros?${queryParams}`);
             const data = response.data.registrosFiltrados;
             const result = response.data.isLastPage
             const total = response.data.totalResultsCount
@@ -30,7 +30,7 @@ export const backInfo = (params) => {
     // console.log(params)
     return async (dispatch) => {
         try {
-            const response = await axios.get(`/mamiferos/filtros?${params}`);
+            const response = await axios.get(`/insectos/filtros?${params}`);
             const data = response.data.registrosFiltrados;
             const total = response.data.totalResultsCount
             dispatch(returnFilters(data))
@@ -44,7 +44,7 @@ export const backInfo = (params) => {
 export const searchBar = (name) => {
     return async (dispatch) => {
       try {
-        const response = await axios(`mamiferos/filtros?nombreIngles=${name}`)
+        const response = await axios(`insectos/filtros?nombreIngles=${name}`)
         const result = response.data
         dispatch(searchBarResult(result))
       } catch (error) {

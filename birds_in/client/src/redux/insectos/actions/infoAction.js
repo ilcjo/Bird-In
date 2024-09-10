@@ -5,7 +5,7 @@ import { setNoMoreResults } from "../slices/FilterSlice";
 export const getInfoRegistro = () => {
     return async (dispatch) => {
         try {
-            const response = await axios('mamiferos/filtros')
+            const response = await axios('insectos/filtros')
             const data = response.data.registrosFiltrados
             dispatch(fetchInfo(data))
         } catch (error) {
@@ -19,7 +19,7 @@ export const loadMoreData = (currentPage, parameters) => {
     return async (dispatch) => {
         try {
             const perPages = 18
-            const response = await axios(`mamiferos/filtros?${parameters}&page=${currentPage}&perPage=${perPages}`);
+            const response = await axios(`insectos/filtros?${parameters}&page=${currentPage}&perPage=${perPages}`);
             const data = response.data.registrosFiltrados;
             const result = response.data.isLastPage
             const total = response.data.totalResultsCount
@@ -35,7 +35,7 @@ export const loadMoreData = (currentPage, parameters) => {
 export const counting = () => {
     return async (dispatch) => {
         try {
-            const response = await axios('mamiferos/contando');
+            const response = await axios('insectos/contando');
             const inf = response.data;
             // console.log('soy respuesta', response)
             await dispatch(saveCounting(inf))

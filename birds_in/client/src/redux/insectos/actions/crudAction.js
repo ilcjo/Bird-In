@@ -4,7 +4,7 @@ import { getRegistro } from "../slices/UpdateSlice";
 export const createRegistro = (formData) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post('mamiferos/create', formData)
+      const response = await axios.post('insectos/create', formData)
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:', response.data);
     } catch (error) {
@@ -18,7 +18,7 @@ export const createRegistro = (formData) => {
 export const actualizarRegistro = (info) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put('mamiferos/update', info)
+      const response = await axios.put('insectos/update', info)
 
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
       console.log('Respuesta del servidor:', response.data);
@@ -32,7 +32,7 @@ export const actualizarRegistro = (info) => {
 export const getInfoForUpdate = (id) => {
   return async (dispatch) => {
     try {
-      const response = await axios(`mamiferos/get_update?id=${id}`)
+      const response = await axios(`insectos/get_update?id=${id}`)
       const registro = response.data
       dispatch(getRegistro(registro))
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
@@ -47,7 +47,7 @@ export const getInfoForUpdate = (id) => {
 export const getInfoForUpdateName = (name) => {
   return async (dispatch) => {
     try {
-      const response = await axios(`mamiferos/get_update_name?name=${name}`)
+      const response = await axios(`insectos/get_update_name?name=${name}`)
       const registro = response.data
       dispatch(getRegistro(registro))
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
@@ -62,7 +62,7 @@ export const getInfoForUpdateName = (name) => {
 export const duplicateNameCheck = (name) => {
   return async (dispatch) => {
     try {
-      const response = await axios(`mamiferos/duplicados?name=${name}`)
+      const response = await axios(`insectos/duplicados?name=${name}`)
       const registro = response.data
       // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
     } catch (error) {
@@ -74,9 +74,10 @@ export const duplicateNameCheck = (name) => {
 };
 
 export const deleteRegistro = (idN) => {
+  // console.log('ids front:', idN)
   return async (dispatch) => {
     try {
-      const response = await axios.delete(`/mamiferos/borrar_registro?id=${idN}`);
+      const response = await axios.delete(`/insectos/borrar_registro?id=${idN}`);
       const data = response.data;
       return data
     } catch (error) {
@@ -89,7 +90,7 @@ export const deleteRegistro = (idN) => {
 
 export const getExcel = () => async (dispatch) => {
   try {
-    const response = await axios.get('/mamiferos/descargar-excel-mamiferos', {
+    const response = await axios.get('/insectos/descargar-excel', {
       responseType: 'blob', // Importante para recibir el archivo como blob
     });
 
@@ -97,7 +98,7 @@ export const getExcel = () => async (dispatch) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'mamiferos.xlsx'); // nombre del archivo
+    link.setAttribute('download', 'insectos.xlsx'); // nombre del archivo
     document.body.appendChild(link);
     link.click();
     link.remove();

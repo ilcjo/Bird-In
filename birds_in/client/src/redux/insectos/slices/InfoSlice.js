@@ -9,8 +9,8 @@ const initialState = {
   total: 0,
 };
 
-export const data = createSlice({
-  name: 'data',
+export const dataInsect = createSlice({
+  name: 'dataInsectos',
   initialState,
 
   reducers: {
@@ -63,5 +63,5 @@ export const {
   isOneR,
   howMuch,
   cargando,
-} = data.actions;
-export default data.reducer;
+} = dataInsect.actions;
+export default dataInsect.reducer;

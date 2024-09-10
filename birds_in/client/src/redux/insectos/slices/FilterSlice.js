@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  //familia grupo zona  y pais //filt+ create+
   options: [],
   saveOptions: [],
+  extraOptions: [],
   filtersOn: false,
-  noMoreResults: true,//filt+det+main
-  currentFilters: { //filt+
+  noMoreResults: true,
+  currentFilters: {
     grupo: [],
     familia: [],
     pais: [],
@@ -15,12 +15,12 @@ const initialState = {
     ingles: [],
   },
   filters: '',
-  copyFilters: {},//gilt+det+main
+  copyFilters: {},
   currentPage: 0
 };
 
-export const filters = createSlice({
-  name: 'filters',
+export const filtersInsect = createSlice({
+  name: 'filtersInsectos',
   initialState,
 
   reducers: {
@@ -58,7 +58,7 @@ export const filters = createSlice({
         ingles: [],
       };
     },
-    saveOptions: (state, action) => {
+    saveOptionsI: (state, action) => {
       state.saveOptions = action.payload
     },
     setNoMoreResults: (state, action) => {
@@ -67,18 +67,30 @@ export const filters = createSlice({
     copingFilters: (state, action) => {
       state.copyFilters = { ...state.currentFilters }
     },
+    updateFamiliaOptions: (state, action) => {
+      state.extraOptions = {
+        familias: action.payload.familias
+      };
+    },
+    updateGrupoOptions: (state, action) => {
+      state.extraOptions = {
+        grupos: action.payload.grupos
+      };
+    },
   },
 });
 
 export const {
+  updateFamiliaOptions,
+  updateGrupoOptions,
   fetchOptions,
   newOptions,
   saveFilters,
   stringParameter,
   resetCurrentFilters,
-  saveOptions,
+  saveOptionsI,
   setNoMoreResults,
   copingFilters,
   setCurrentPage
-} = filters.actions;
-export default filters.reducer;
+} = filtersInsect.actions;
+export default filtersInsect.reducer;

@@ -70,7 +70,7 @@ export const GeneroTable = ({
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('¿Seguro que deseas eliminar este Grupo?')) {
+        if (window.confirm('¿Seguro que deseas eliminar este Genero?')) {
             try {
                 onloading(true);
                 loadingMessage('Eliminando Grupo...');
@@ -101,7 +101,7 @@ export const GeneroTable = ({
             await dispatch(updateGrupo(nombreGrupos));
             await dispatch(getOptionsDataM());
             onloading(false);
-            successMessages('Zona actualizada correctamente');
+            successMessages('Genero actualizado correctamente');
             showSnackBar(true);
             setEditMode(null);
             setNombreGrupos({

@@ -7,22 +7,21 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 //COMPONENTS
-import { Cards } from '../../components/Cards/Cards'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
-import { Filters } from '../../components/Mains/Mamiferos/Filters';
-import { PhotosDetail } from '../../components/Mains/Mamiferos/PhotosDetail';
+import { FiltersI } from '../../components/Mains/Insectos/FiltersI';
+import { CardsInsecto } from '../../components/Cards/Insectos/CardsInsecto';
+import { PhotosDetailI } from '../../components/Mains/Insectos/PhotosDetailI';
 //REDUX
-import { loadMoreData } from '../../redux/birds/actions/infoAction';
-import { isOneR, resetInfo, } from '../../redux/mamiferos/slices/InfoSlice';
+import { loadMoreData } from '../../redux/insectos/actions/infoAction';
+import { isOneR, resetInfo, } from '../../redux/insectos/slices/InfoSlice';
 
-
-export const Insects = () => {
+export const Insectos = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, info, isOne, total } = useSelector(state => state.dataSlice)
-  const { filters, noMoreResults } = useSelector(state => state.filters)
+  const { loading, info, isOne, total } = useSelector(state => state.data)
+  const { filters, noMoreResults } = useSelector(state => state.filter)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
@@ -75,7 +74,18 @@ export const Insects = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
-          p: info.length === 1 ? 0 : 2
+          p: info.length === 1 ? 0 : 2,
+          '::before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            opacity: 0.5, // Opcional para mayor discreción
+            pointerEvents: 'none', // Impide la interacción con la imagen
+          }
         }}
       >
         <Dialog
@@ -84,11 +94,11 @@ export const Insects = () => {
           fullWidth={true}
           maxWidth='md'
         >
-          <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
+          <FiltersI isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {info.length === 1 && (
           <Grid container >
-            <PhotosDetail bird={info[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
+            <PhotosDetailI setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
           </Grid>
         )}
         {info.length > 1 && (
@@ -106,7 +116,6 @@ export const Insects = () => {
               borderRadius: '20px',
               mb: 10,
               mt: 10,
-
             }}
           >
             <Grid container
@@ -144,7 +153,7 @@ export const Insects = () => {
             <Grid container spacing={3} justifyContent="center">
               {info.map((registro, index) => (
                 <Grid item key={index}>
-                  <Cards foto={registro.imagenes_mamiferos} name={registro.nombre_ingles} />
+                  <CardsInsecto foto={registro.imagenes_insectos} name={registro.nombre_ingles} />
                 </Grid>
               ))}
             </Grid>
@@ -167,7 +176,6 @@ export const Insects = () => {
             )}
           </Box>
         )}
-
         {isOne === false && info.length === 0 && (
           <Box
             sx={{
@@ -208,7 +216,6 @@ export const Insects = () => {
           </Box>
         )}
       </Grid>
-
       <Loading
         message={loadingMessage}
         open={showBackdrop}

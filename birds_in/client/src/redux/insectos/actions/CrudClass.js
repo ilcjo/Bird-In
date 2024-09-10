@@ -3,7 +3,7 @@ import axios from 'axios'
 export const addGrupo = (info) => {
     return async (dispatch) => {
         try {
-            const response = await axios.post('mamiferos/clasificacion/crearGrupos/', info)
+            const response = await axios.post('insectos/clasificacion/crearGrupos/', info)
             return response.data
         } catch (error) {
             console.log(error);
@@ -17,7 +17,7 @@ export const updateGrupo = (info) => {
 
     return async (dispatch) => {
         try {
-            const response = await axios.put('mamiferos/clasificacion/actualizarGrupos/', info)
+            const response = await axios.put('insectos/clasificacion/actualizarGrupos/', info)
             return response.data
         } catch (error) {
             console.log(error);
@@ -31,7 +31,7 @@ export const eliminarGrupo = (id) => {
 
     return async (dispatch) => {
         try {
-            const response = await axios.delete(`mamiferos/clasificacion/eliminarGrupos?idGrupo=${id}`)
+            const response = await axios.delete(`insectos/clasificacion/eliminarGrupos?idGrupo=${id}`)
             return response.data
         } catch (error) {
             console.log(error);
@@ -44,7 +44,7 @@ export const eliminarGrupo = (id) => {
 export const addFamilia = (info) => {
     return async (dispatch) => {
         try {
-            const response = await axios.post('mamiferos/clasificacion/crearFamilias/', info)
+            const response = await axios.post('insectos/clasificacion/crearFamilias/', info)
             return response.data
         } catch (error) {
             console.log(error);
@@ -58,7 +58,7 @@ export const updateFamilia = (info) => {
 
     return async (dispatch) => {
         try {
-            const response = await axios.put('mamiferos/clasificacion/actualizarFamilias/', info)
+            const response = await axios.put('insectos/clasificacion/actualizarFamilias/', info)
             return response.data
         } catch (error) {
             console.log(error);
@@ -72,7 +72,7 @@ export const eliminarFamilia = (id) => {
 
     return async (dispatch) => {
         try {
-            const response = await axios.delete(`mamiferos/clasificacion/eliminarFamilias?idFamilia=${id}`)
+            const response = await axios.delete(`insectos/clasificacion/eliminarFamilias?idFamilia=${id}`)
             return response.data
         } catch (error) {
             console.log(error);
@@ -85,7 +85,7 @@ export const eliminarFamilia = (id) => {
 export const checkDuplicadosGrupo = (nameg) => {
     return async (dispatch) => {
         try {
-            const response = await axios.get(`/mamiferos/gruposFamilias?grupoName=${nameg}`);
+            const response = await axios.get(`/insectos/gruposFamilias?grupoName=${nameg}`);
             return response.data;
         } catch (error) {
             console.error(error);
@@ -97,7 +97,7 @@ export const checkDuplicadosGrupo = (nameg) => {
 export const checkDuplicadosFamilia = (namef) => {
     return async (dispatch) => {
         try {
-            const response = await axios.get(`/mamiferos/gruposFamilias?familiaName=${namef}`);
+            const response = await axios.get(`/insectos/gruposFamilias?familiaName=${namef}`);
             return response.data;
         } catch (error) {
             console.error(error);

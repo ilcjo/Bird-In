@@ -204,7 +204,7 @@ const deletePhotoFromFTPMamiferos = async (urls) => {
 
 
 const deletePhotoFromFTPReptiles = async (urls) => {
-    console.log(urls, 'urldelteftpfuncion')
+    // console.log(urls, 'urldelteftpfuncion')
     const client = new ftp.Client();
 
     try {

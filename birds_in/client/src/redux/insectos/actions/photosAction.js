@@ -4,7 +4,7 @@ import { saveUrlImage } from "../slices/UpdateSlice";
 export const saveImageFtp = (formData) => {
     return async (dispatch) => {
       try {
-        const response = await axios.post('mamiferos/upload_image', formData, {
+        const response = await axios.post('insectos/upload_image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
           },
@@ -23,7 +23,7 @@ export const saveImageFtp = (formData) => {
   export const UpdateImage = (formData) => {
     return async (dispatch) => {
       try {
-        const response = await axios.post('mamiferos/upload_image', formData, {
+        const response = await axios.post('insectos/upload_image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
           },
@@ -42,7 +42,7 @@ export const saveImageFtp = (formData) => {
 export const UpdateDestacada = (formData) => {
     return async (dispatch) => {
       try {
-        const response = await axios.post('mamiferos/upload_destacada', formData, {
+        const response = await axios.post('insectos/upload_destacada', formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Asegúrate de establecer el tipo de contenido correcto
           },
@@ -58,6 +58,7 @@ export const UpdateDestacada = (formData) => {
   };
 
   export const sendPhotosDelete = (ids, urls) => {
+    // console.log(ids, urls)
     return async (dispatch) => {
         try {
             const requestData = {
@@ -66,7 +67,7 @@ export const UpdateDestacada = (formData) => {
                     urls: urls,
                 },
             };
-            const response = await axios.delete('/mamiferos/borrar_fotos', requestData)
+            const response = await axios.delete('/insectos/borrar_fotos', requestData)
             const data = response.data
             // console.log(response.data)
         } catch (error) {
@@ -77,16 +78,16 @@ export const UpdateDestacada = (formData) => {
     };
 };
 
-export const sendCoverPhoto = (id, idAves) => {
+export const sendCoverPhoto = (id, idRegistro) => {
     // console.log('llega al axios', id, idAves)
     return async (dispatch) => {
         try {
             const requestData = {
                 idFoto: id,
-                idAve: idAves
+                idRegistro: idRegistro
             };
 
-            const response = axios.put('/mamiferos/foto_portada', requestData )
+            const response = axios.put('/insectos/foto_portada', requestData )
             const data = response.data
             return data
         } catch (error) {

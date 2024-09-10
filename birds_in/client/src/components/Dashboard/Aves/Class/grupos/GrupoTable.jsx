@@ -101,7 +101,7 @@ export const GrupoTable = ({
             await dispatch(updateGrupo(nombreGrupos));
             await dispatch(getOptionsData());
             onloading(false);
-            successMessages('Zona actualizada correctamente');
+            successMessages('Grupo actualizado correctamente');
             showSnackBar(true);
             setEditMode(null);
             setNombreGrupos({

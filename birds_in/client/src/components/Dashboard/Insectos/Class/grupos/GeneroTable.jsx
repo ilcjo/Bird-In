@@ -19,8 +19,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { eliminarGrupo, updateGrupo } from '../../../../../redux/reptiles/actions/CrudClass';
-import { getOptionsDataR } from '../../../../../redux/reptiles/actions/fetchOptions';
+import { eliminarGrupo, updateGrupo } from '../../../../../redux/insectos/actions/CrudClass';
+import { getOptionsDataI } from '../../../../../redux/insectos/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -52,7 +52,7 @@ export const GeneroTable = ({
 }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { grupos } = useSelector(state => state.filterRep.options);
+    const { grupos } = useSelector(state => state.filter.options);
 
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
@@ -75,7 +75,7 @@ export const GeneroTable = ({
                 onloading(true);
                 loadingMessage('Eliminando Grupo...');
                 await dispatch(eliminarGrupo(id));
-                await dispatch(getOptionsDataR());
+                await dispatch(getOptionsDataI());
                 onloading(false);
                 successMessages('Genero Eliminado');
                 showSnackBar(true);
@@ -99,7 +99,7 @@ export const GeneroTable = ({
             onloading(true);
             loadingMessage('Actualizando...');
             await dispatch(updateGrupo(nombreGrupos));
-            await dispatch(getOptionsDataR());
+            await dispatch(getOptionsDataI());
             onloading(false);
             successMessages('Genero actualizado correctamente');
             showSnackBar(true);

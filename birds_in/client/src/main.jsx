@@ -20,6 +20,8 @@ import { getOptionsDataM } from './redux/mamiferos/actions/fetchOptions.js';
 import { saveOptionsM } from './redux/mamiferos/slices/FilterSlice.js';
 import { getOptionsDataR } from './redux/reptiles/actions/fetchOptions.js';
 import { saveOptionsR } from './redux/reptiles/slices/FilterSlice.js';
+import { getOptionsDataI } from './redux/insectos/actions/fetchOptions.js';
+import { saveOptionsI } from './redux/insectos/slices/FilterSlice.js';
 
 // Configurar la URL base de Axios
 // const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
@@ -40,6 +42,8 @@ store.dispatch(getOptionsDataM());
 store.dispatch(saveOptionsM());
 store.dispatch(getOptionsDataR());
 store.dispatch(saveOptionsR());
+store.dispatch(getOptionsDataI());
+store.dispatch(saveOptionsI());
 
 const root = createRoot(document.getElementById('root'));
 root.render(
