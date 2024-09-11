@@ -21,7 +21,7 @@ export const DashSettings = () => {
                 direction="column"
                 alignItems="center"
                 sx={{
-                    background: `url(${allCustom.background_paisaje}) center/cover no-repeat fixed`,
+                    background: `url(${allCustom.background_mantenimiento}) center/cover no-repeat fixed`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     minHeight: '100vh',

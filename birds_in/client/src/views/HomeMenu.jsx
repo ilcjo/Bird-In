@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Box, Button, Typography, IconButton, Divider, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Button, Typography, IconButton, Divider, useTheme, useMediaQuery, Tooltip } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloseIcon from '@mui/icons-material/Close';
 
 const sections = [
   { id: 'aves', title: 'Aves', description: 'Fotografías de aves' },
@@ -75,7 +76,7 @@ export const HomeMenu = () => {
               width: '100%',
               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
               color: '#fff',
-              borderRadius: '0px 0px 10px 0px'
+              borderRadius: '0px 0px 10px 0px',
             }}
           >
             <Typography variant="h2" color="primary.main" sx={{ mb: '-5px', ml: 2 }}>
@@ -121,7 +122,7 @@ export const HomeMenu = () => {
         <IconButton
           sx={{
             position: 'absolute',
-            top: '50%',
+            top: '20%',
             right: showSobreMi ? '25%' : 0, // Changes position if tab is open
             transform: 'translateY(-50%)',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -132,11 +133,13 @@ export const HomeMenu = () => {
           }}
           onClick={() => setShowSobreMi(!showSobreMi)} // Toggle between showing and hiding the tab
         >
-          {showSobreMi ? (
-            <ArrowBackIcon sx={{ color: '#fff', fontSize: '2rem' }} />
-          ) : (
-            <ArrowForwardIcon sx={{ color: '#fff', fontSize: '2rem' }} />
-          )}
+              <Tooltip title={showSobreMi ? "Cerrar" : "Leer sobre el autor"}>
+              {showSobreMi ? (
+                <CloseIcon sx={{ color: 'red', fontSize: '2rem' }} />
+              ) : (
+                <ArrowBackIcon sx={{ color: theme.palette.primary.main, fontSize: '2rem' }} />
+              )}
+            </Tooltip>
         </IconButton>
       )}
 
@@ -163,11 +166,13 @@ export const HomeMenu = () => {
               left: 0,
               width: '100%',
               padding: '20px',
+              height:'20%',
               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
               color: '#fff',
             }}
           >
-            <Typography variant="h4" color="primary.main">
+              <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '15%' }} />
+            <Typography variant="h2" color="primary.main">
               Sobre Mi
             </Typography>
             <Box mt={2} sx={{ display: 'flex', justifyContent: 'center' }}>

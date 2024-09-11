@@ -7,6 +7,7 @@ import { LoginForm } from './LoginForm';
 import { ForgotPass } from './ForgotPass';
 //redux
 import { Boolean } from '../../redux/settings/slices/OpenClose';
+import { CopyRight } from '../CopyRight';
 
 
 export const Index = ({ open }) => {
@@ -89,6 +90,7 @@ export const Index = ({ open }) => {
           </Box>
         )}
       </DialogContent>
+      <CopyRight.Website />
     </Dialog>
   )
 };

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Backdrop, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, SnackbarContent, Typography } from '@mui/material';
+import { Backdrop, Button, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, SnackbarContent, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import SaveIcon from '@mui/icons-material/Save';
@@ -51,9 +51,7 @@ export const SectionCovers = ({ title, coverKey }) => {
             formData.append('file', selectedFile, selectedFile.name);
             formData.append('oldUrl', allCustom[coverKey]);
             formData.append('campo', coverKey);
-
             await dispatch(UpdateCustomizes(formData));
-
             if (!uploadError) {
                 // Set success only if there was no error during the dispatch
                 setLoadingMessage('Subiendo Imagen');
@@ -85,7 +83,7 @@ export const SectionCovers = ({ title, coverKey }) => {
 
     return (
         <Grid item xs={6} sm={12}>
-            <Typography variant='body2' color='primary.main' sx={{ mt: 1 }}>
+            {/* <Typography variant='body1' color='primary.main' sx={{ mt: 1 }}>
                 {title}
             </Typography>
             <Button
@@ -95,7 +93,22 @@ export const SectionCovers = ({ title, coverKey }) => {
                     alt={`Imagen ${title}`}
                     style={{ maxWidth: '200px', maxHeight: '100px', marginTop: '10px', cursor: 'pointer', borderRadius: '10px' }}
                 />
-            </Button>
+            </Button> */}
+            <Card sx={{ maxWidth: 200, mt: 1 }} onClick={() => handleImageClick(allCustom[coverKey])}>
+                <CardActionArea>
+                    <CardMedia
+                        component="img"
+                        image={selectedImageUrl || allCustom[coverKey]}
+                        alt={`Imagen ${title}`}
+                        sx={{ maxHeight: 100, borderRadius: '10px', marginTop: '10px', cursor: 'pointer' }}
+                    />
+                    <CardContent>
+                        <Typography variant='h4' color='primary.main'>
+                            {title}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
             {/* Modal para subir archivos */}
             <Dialog open={uploadModalOpen} onClose={handleCloseUploadModal}>
                 <DialogTitle> <Grid container alignItems="center">
@@ -135,14 +148,6 @@ export const SectionCovers = ({ title, coverKey }) => {
                             variant="contained" // Cambia el estilo del botón a "contained" para un aspecto diferente
                             color="primary"
                             component="span" // Indica que es un botón para seleccionar archivo
-                            sx={{
-                                fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.main, // Cambia el color de fondo en hover
-                                    color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                    textTransform: 'none',
-                                },
-                            }} // Estilo personalizado
                             onChange={handleFileChange}
                             endIcon={<UploadFileIcon />}
                         >
@@ -157,31 +162,13 @@ export const SectionCovers = ({ title, coverKey }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        sx={{
-                            fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                            '&:hover': {
-                                backgroundColor: theme.palette.secondary, // Cambia el color de fondo en hover
-                                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                textTransform: 'none',
-                            },
-                        }}
-                        onClick={handleCloseUploadModal} color="secondary" variant='outlined'
+                        onClick={handleCloseUploadModal} color="error" variant='outlined'
                     >
                         Cancelar
                     </Button>
                     <Button
-                        sx={{
-                            backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                            color: theme.palette.primary.light, // Cambia el color del texto en hover
-                            fontSize: '1.2rem', padding: '5px 10px', fontWeight: 'bold', textTransform: 'none',
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                textTransform: 'none',
-                            },
-                        }}
                         onClick={handleUpload}
-                        color="primary"
+                        color="secondary"
                         variant='contained'
                         endIcon={<SaveIcon />}
                     >

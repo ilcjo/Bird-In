@@ -1,5 +1,12 @@
 const ftp = require('basic-ftp');
-const { FTP_HOST, FTP_USER, FTP_PASS } = process.env;
+const {
+    FTP_HOST,
+    FTP_USER,
+    FTP_PASS,
+    FTP_HOST_2,
+    FTP_USER_2,
+    FTP_PASS_2,
+} = process.env
 
 const replacePhotoInFTP = async (oldImageUrl, newImageBuffer) => {
     // console.log('soy url en funcion:', oldImageUrl, 'soy imagen en funcion', newImageBuffer)
@@ -7,13 +14,13 @@ const replacePhotoInFTP = async (oldImageUrl, newImageBuffer) => {
 
     try {
         await client.access({
-            host: FTP_HOST,
-            user: FTP_USER,
-            password: FTP_PASS,
+            host: FTP_HOST_2,
+            user: FTP_USER_2,
+            password: FTP_PASS_2,
             secure: false,
         });
 
-        await client.cd('customize');
+        await client.cd('custome');
 
         // Extraer el nombre del archivo de la URL antigua
         const oldFileName = oldImageUrl.split('/').pop();
@@ -34,19 +41,19 @@ const replacePhotoInFTP = async (oldImageUrl, newImageBuffer) => {
         await client.uploadFrom(newImageBuffer.path, `${newImageBuffer.filename}`);
 
         // Obtener la URL de la nueva imagen
-        const newImageUrl = `https://lasavesquepasaronpormisojos.com/imagenes/customize/${newImageBuffer.filename}`;
+        const newImageUrl = `https://lasavesquepasaronpormisojos.com/generalimag/custome/${newImageBuffer.filename}`;
 
         console.log('Operación completada con éxito.');
-           // Eliminar la imagen del servidor local
-           const fs = require('fs');
-           fs.unlink(newImageBuffer.path, (err) => {
+        // Eliminar la imagen del servidor local
+        const fs = require('fs');
+        fs.unlink(newImageBuffer.path, (err) => {
             if (err) {
                 console.error('Error al eliminar la imagen antigua del servidor local:', err);
             } else {
                 console.log('Imagen antigua eliminada del servidor local con éxito');
             }
         });
-        
+
         return { success: true, imageUrl: newImageUrl };
     } catch (error) {
         console.error('Error al conectar con el servidor FTP o al manipular las imágenes:', error);

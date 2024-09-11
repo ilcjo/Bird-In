@@ -83,29 +83,29 @@ export const CoverLogin = () => {
     return (
         <React.Fragment>
             <Grid container spacing={5} sx={{
-               display: 'flex',
-               alignItems: 'center',
-               justifyContent: 'center',
-               width: 'auto',
-               margin: 'auto',
-               backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-               backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-               padding: '0px 40px 30px 0px',
-               borderRadius: '0px 0px 20px 20px',
-               mb: 10
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 'auto',
+                margin: 'auto',
+                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                padding: '0px 40px 30px 0px',
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10
             }} >
 
                 <Grid item xs={6} sm={6}>
-                    <Typography variant='h5' color='primary.light' sx={{ mt: -8 }} >
+                    <Typography variant='h5' color='primary.light' sx={{ mt: 0 }} >
                         Portada inicio de sesión
-                        <Divider sx={{ my: 1 }} />
+                        <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
                     </Typography>
-                    <SectionCovers title="Inicio Portada" coverKey="cover_login" />
+                    <SectionCovers title="Inicio Portada" coverKey="background_login" />
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                    <Typography variant='h5' color='primary.light' sx={{ mb: 0}} >
                         Info foto portada inicio de sesión
-                        <Divider sx={{ my: 1 }} />
+                        <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
                     </Typography>
                     <TextField
                         value={textLogin}
@@ -117,24 +117,15 @@ export const CoverLogin = () => {
                             sx: labelStyles, // Estilo del label
                         }}
                         InputProps={{
-                            
+
                             sx: inputStyles, // Estilo del input
                         }}
-                    
+
                     />
                     <Button
-                        sx={{
-                            fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', mt: 2, textTransform: 'none',
-                            backgroundColor: theme.palette.primary.dark,
-                            color: theme.palette.primary.light,
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                textTransform: 'none',
-                            },
-                        }}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
+                        sx={{ mt: 2 }}
                         endIcon={<SaveIcon />}
                         onClick={handleSendToBackend}>
                         Grabar

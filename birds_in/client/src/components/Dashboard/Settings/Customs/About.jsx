@@ -9,7 +9,7 @@ import { UpdateCustomizesText } from '../../../../redux/settings/actions/Custom'
 
 export const About = () => {
     const theme = useTheme();
-   
+
     const dispatch = useDispatch();
     const { allCustom } = useSelector(state => state.customizesSlice);
     const [textFirst, setTextFirst] = React.useState(allCustom.first_about || '');
@@ -84,21 +84,21 @@ export const About = () => {
 
         setSnackbarOpen(false);
     };
-   
+
 
     return (
         <React.Fragment>
             <Grid container spacing={5} sx={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: 'auto',
-                 margin: 'auto',
-                 backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                 backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                 padding: '0px 40px 30px 0px',
-                 borderRadius: '0px 0px 20px 20px',
-                 mb: 10
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 'auto',
+                margin: 'auto',
+                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                padding: '0px 40px 30px 0px',
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10
             }} >
                 <Grid item xs={12} sm={12}>
                     <Typography variant='h5' color='primary.light' sx={{}} >
@@ -114,21 +114,11 @@ export const About = () => {
                         multiline
                         rows={5}
                         fullWidth
-                       
                     />
                     <Button
-                        sx={{
-                            fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', mt: 2, textTransform: 'none',
-                            backgroundColor: theme.palette.primary.dark,
-                            color: theme.palette.primary.light,
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                textTransform: 'none',
-                            },
-                        }}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
+                        sx={{ mt: 2 }}
                         endIcon={<SaveIcon />}
                         onClick={() => handleSendToBackend('first_about')}>
                         Grabar
@@ -144,18 +134,9 @@ export const About = () => {
                         fullWidth
                     />
                     <Button
-                        sx={{
-                            fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', mt: 2, textTransform: 'none',
-                            backgroundColor: theme.palette.primary.dark,
-                            color: theme.palette.primary.light,
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                textTransform: 'none',
-                            },
-                        }}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
+                        sx={{ mt: 2 }}
                         endIcon={<SaveIcon />}
                         onClick={() => handleSendToBackend('text_about')}>
                         Grabar
@@ -169,21 +150,12 @@ export const About = () => {
                         multiline
                         rows={5}
                         fullWidth
-                     
+
                     />
                     <Button
-                        sx={{
-                            fontSize: '1.3rem', padding: '5px 10px', fontWeight: 'bold', mt: 2, textTransform: 'none',
-                            backgroundColor: theme.palette.primary.dark,
-                            color: theme.palette.primary.light,
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.dark, // Cambia el color de fondo en hover
-                                color: theme.palette.primary.light, // Cambia el color del texto en hover
-                                textTransform: 'none',
-                            },
-                        }}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
+                        sx={{ mt: 2 }}
                         endIcon={<SaveIcon />}
                         onClick={() => handleSendToBackend('colaboradores')}>
                         Grabar

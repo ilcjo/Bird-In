@@ -35,7 +35,7 @@ CopyRight.Website = () => (
             mt:2.5
         }}
     >
-        <Typography variant="subtitle2i" color="text.secondary">
+        <Typography variant="subtitle2" color="text.secondary">
             © {new Date().getFullYear()}  Website ilcjob.world. 
             All rights reserved.
         </Typography>

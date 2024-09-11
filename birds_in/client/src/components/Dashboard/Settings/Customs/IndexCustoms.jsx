@@ -45,10 +45,9 @@ export const IndexCustoms = () => {
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h5' >Portadas</Typography>} />
+                    <StyledTab label={<Typography variant='h5' >General</Typography>} />
                     <StyledTab label={<Typography variant='h5' >Inicio de Sesión</Typography>} onClick={() => setSelectedTab(1)} />
                     <StyledTab label={<Typography variant='h5' >Sobre Mí</Typography>} onClick={() => setSelectedTab(2)} />
-                    <StyledTab label={<Typography variant='h5' >General</Typography>} onClick={() => setSelectedTab(3)} />
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%', }}>
                     {selectedTab === 0 && (

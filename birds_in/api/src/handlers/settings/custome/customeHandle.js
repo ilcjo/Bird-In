@@ -19,7 +19,7 @@ const updateCustomize = async (req, res) => {
     const file = req.file;
     const oldUrl = req.body.oldUrl;
     const campo = req.body.campo;
-
+    // console.log(campo)
     try {
         const deletedFtp = await replacePhotoInFTP(oldUrl, file);
         if (!deletedFtp.success) {
@@ -39,7 +39,7 @@ const updateCustomize = async (req, res) => {
 
 const updateTextCustomize = async (req, res) => {
     const { text } = req.body;
-   
+
     try {
         const updateTextDb = await sendParametersForUpdateText(text);
         return res.status(200).json({ message: updateTextDb });

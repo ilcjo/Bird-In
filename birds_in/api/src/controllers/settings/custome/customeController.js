@@ -30,6 +30,8 @@ const fetchCustome = async () => {
                 'background_update_insect',
                 'background_update_land',
                 'background_update_fish',
+                'background_mantenimiento',
+                'background_sobremi',
             ],
         });
         return getAllCutomizes

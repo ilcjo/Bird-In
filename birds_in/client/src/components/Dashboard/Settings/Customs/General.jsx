@@ -6,38 +6,57 @@ export const General = () => {
     const theme = useTheme()
     return (
         <React.Fragment>
-            <Grid container spacing={5} sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 'auto',
-                margin: 'auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                padding: '0px 40px 30px 0px',
-                borderRadius: '0px 0px 20px 20px',
-                mb: 10
-            }} >
-                <Grid item xs={6} sm={6}>
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
-                        Panel de Administración
-                        <Divider sx={{ my: 1 }} />
-                    </Typography>
-                    <SectionCovers title="Fondo detrás de Actualizar" coverKey="header" />
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 3, mt: 2 }} >
-                        Fondo Filtro
-                        <Divider sx={{ my: 1 }} />
-                    </Typography>
-                    <SectionCovers title="Fondo detrás del Menu" coverKey="background_aves" />
+            <Grid item xs={12} sm={12}>
+                <Typography variant='h2' color='primary.light' sx={{ mb: 3, mt: 2 }} >
+                    Fondo de Galerías
+                    <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+                </Typography>
+                <Grid container spacing={3}>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Galería Aves" coverKey="background_aves" />
+                        <SectionCovers title="Galería Peces" coverKey="background_fish" />
+
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Galería Mamiferos" coverKey="background_mamiferos" />
+                        <SectionCovers title="Galería Paisajes" coverKey="background_paisaje" />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Galería Reptiles" coverKey="background_reptile" />
+
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Galería Insectos" coverKey="background_insect" />
+                    </Grid>
                 </Grid>
-                <Grid item xs={6} sm={6}>
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
-                        Logo
-                        <Divider sx={{ my: 1 }} />
-                    </Typography>
-                    <SectionCovers title="Logo" coverKey="logo" />
+                <Typography variant='h2' color='primary.light' sx={{ mb: 3, mt: 2 }} >
+                    Fondos panel de Editar
+                    <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+                </Typography>
+                <Grid container spacing={3}>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Editar Aves" coverKey="background_update_ave" />
+                        <SectionCovers title="Editar Insectos" coverKey="background_update_insect" />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Editar Mamiferos" coverKey="background_update_mamifero" />
+                        <SectionCovers title="Editar Peces" coverKey="background_update_fish" />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Editar Reptiles" coverKey="background_update_reptil" />
+                        <SectionCovers title="Editar Paisajes" coverKey="background_update_land" />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Sobre Mí" coverKey="background_sobremi" />
+                        <SectionCovers title="Mantenimiento" coverKey="background_mantenimiento" />
+                    </Grid>
                 </Grid>
+                <Typography variant='h5' color='primary.light' sx={{ mb: 3, mt: 2 }} >
+                    Logo
+                    <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+                </Typography>
             </Grid>
+            <SectionCovers title="Logo" coverKey="logo" />
         </React.Fragment>
     )
 };

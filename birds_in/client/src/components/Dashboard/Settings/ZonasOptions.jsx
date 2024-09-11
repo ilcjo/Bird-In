@@ -69,6 +69,7 @@ export const ZonasOptions = () => {
   const [showErrorMessages, setShowErrorMessages] = React.useState(false);
   const [showSuccessMessages, setShowSuccessMessages] = React.useState('');
   const [editMode, setEditMode] = React.useState(null);
+  const [searchTerm, setSearchTerm] = React.useState('');
   // Estados para rastrear la selección de país, la zona que se edita y el nuevo nombre
   const [selectedPaisId, setSelectedPaisId] = React.useState(null);
   const [editingZonaId, setEditingZonaId] = React.useState(null);
@@ -246,6 +247,19 @@ export const ZonasOptions = () => {
     setShowSuccessMessages('')
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value.toLowerCase());
+  };
+
+  const filteredZonas = zonas.filter((item) => {
+    // Normaliza los espacios y convierte a minúsculas
+    const normalizedItemName = item.nombre.toLowerCase().replace(/\s+/g, ' ').trim();
+    const normalizedSearchTerm = searchTerm.toLowerCase().replace(/\s+/g, ' ').trim();
+
+    return normalizedItemName.includes(normalizedSearchTerm);
+});
+
+
   return (
     <React.Fragment>
       <Grid container spacing={5} sx={{
@@ -342,6 +356,24 @@ export const ZonasOptions = () => {
             Lista Zonas - Países
             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
           </Typography>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Buscar"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            sx={{
+              mb: 2,
+              backgroundColor: 'rgba(204,214,204,0.17)',
+              borderRadius: '9px',
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'none',
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.palette.primary.main,
+              },
+            }}
+          />
           <TableContainer sx={{ maxHeight: 450 }}>
 
             <Table stickyHeader aria-label="sticky table">
@@ -359,7 +391,7 @@ export const ZonasOptions = () => {
                     <TableCell align="center" colSpan={2}>{item.nombre_pais}</TableCell>
                   </TableRow>
                 ))} */}
-                {zonas.map((item, index) => (
+                {filteredZonas.map((item, index) => (
                   <StyledTableRow key={index}>
                     <TableCell align="center" colSpan={2} style={{ color: 'white', }}>
                       {editMode === index ? (
@@ -429,7 +461,7 @@ export const ZonasOptions = () => {
                           >Cancelar</Button>
                         </>
                       ) : (
-                        <Grid container sx={{ maxHeight: 450 , minWidth: 450 }} >
+                        <Grid container sx={{ maxHeight: 450, minWidth: 450 }} >
                           <Grid item xs={12} md={6}>
                             <Button onClick={() => handleEditClick(index, item)}
                               sx={{

@@ -64,6 +64,7 @@ export const AllUsers = () => {
   const [editingUserId, setEditingUserId] = React.useState(null); // Estado para manejar la edición de contraseña
   const [newPassword, setNewPassword] = React.useState(''); // Estado para manejar la nueva contraseña
   const [showPassword, setShowPassword] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
     // Disparar la acción para obtener todos los usuarios pending al montar el componente
@@ -137,6 +138,14 @@ export const AllUsers = () => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value.toLowerCase());
+  };
+
+  const filteredUser = users.filter((item) =>
+    item.nombre.toLowerCase().includes(searchTerm)
+  );
   return (
     <div>
       <Grid container spacing={5} sx={{
@@ -152,6 +161,24 @@ export const AllUsers = () => {
         mb: 10
       }} >
         <Grid item sx={12} md={12}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Buscar Usuario..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            sx={{
+              mb: 2,
+              backgroundColor: 'rgba(204,214,204,0.17)',
+              borderRadius: '9px',
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'none',
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.palette.primary.main,
+              },
+            }}
+          />
           <TableContainer sx={{}}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -165,7 +192,7 @@ export const AllUsers = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.map((item, index) => (
+                {filteredUser.map((item, index) => (
                   <StyledTableRow key={item.index}>
                     <TableCell align="center" style={{ color: 'white' }}>
                       {item.nombre}

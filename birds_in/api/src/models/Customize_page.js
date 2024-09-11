@@ -110,6 +110,14 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        background_mantenimiento: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        background_sobremi: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
 
     }, { timestamps: false, }
     )

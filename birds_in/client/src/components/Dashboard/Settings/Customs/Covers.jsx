@@ -1,6 +1,7 @@
 import { Divider, Grid, Typography, useTheme } from '@mui/material'
 import * as React from 'react'
 import { SectionCovers } from '../../../utils/SectionCovers'
+import { General } from './General'
 
 export const Covers = () => {
     const theme = useTheme()
@@ -20,31 +21,30 @@ export const Covers = () => {
 
             }} >
                 <Grid item xs={12} sm={12}>
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                    <Typography variant='h2' color='primary.light' sx={{ mb: 1 }} >
                         Pestañas Menu Principal
                         <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
                     </Typography>
                     <Grid container spacing={3}>
                         <Grid item xs={6} sm={3}>
                             <SectionCovers title="Portada Aves" coverKey="cover_birds" />
-                            <SectionCovers title="Portada Animales" coverKey="cover_animals" />
+                            <SectionCovers title="Portada Insectos" coverKey="cover_insect" />
 
                         </Grid>
                         <Grid item xs={6} sm={3}>
+                            <SectionCovers title="Portada Mamiferos" coverKey="cover_animals" />
                             <SectionCovers title="Portada Peces" coverKey="cover_fish" />
-                            <SectionCovers title="Portada Flores" coverKey="cover_flowers" />
-
                         </Grid>
                         <Grid item xs={6} sm={3}>
+                        <SectionCovers title="Portada Reptiles" coverKey="cover_reptile" />
                             <SectionCovers title="Portada Paisajes" coverKey="cover_land" />
-                            <SectionCovers title="Portada Sobre Mí" coverKey="cover_about" />
-
                         </Grid>
                         <Grid item xs={6} sm={3}>
-                            {/* <SectionCovers title="Portada Admin" coverKey="covert_admin" /> */}
+                            <SectionCovers title="Portada Sobre Mí" coverKey="cover_about" />
                         </Grid>
                     </Grid>
                 </Grid>
+                <General />
             </Grid>
         </React.Fragment>
     )

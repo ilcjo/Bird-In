@@ -41,6 +41,7 @@ function App() {
       <Route path="/sobremi"
         element={
           <ProtectedRoute roles={['user', 'admin']}>
+            <MenuBar ShowBackButton={true} ShowFilterButton={false} />
             <SobreMi />
           </ProtectedRoute>
         } />

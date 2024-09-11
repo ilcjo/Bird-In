@@ -1,75 +1,74 @@
-import * as React from 'react'
-import { Box, Grid, Typography, useTheme } from '@mui/material'
-import { MenuBar } from '../../components/Menus/MenuBar';
+import * as React from 'react';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCustomizes } from '../../redux/settings/actions/Custom';
 
 export const SobreMi = () => {
-    const theme = useTheme()
-    const dispatch = useDispatch()
-    const { allCustom } = useSelector(state => state.customizesSlice)
+    const theme = useTheme();
+    const dispatch = useDispatch();
+    const { allCustom } = useSelector(state => state.customizesSlice);
+
     React.useEffect(() => {
         // Cleanup function to handle component unmounting
         return () => {
-            dispatch(getAllCustomizes())
+            dispatch(getAllCustomizes());
         };
-    }, [allCustom]); // Empty dependency array to run only once on mount
+    }, [allCustom]);
+
     return (
-        <div>
-            <MenuBar ShowBackButton={true} ShowFilterButton={false} />
-            <Typography variant='h1' color='primary' sx={{ m: 5, textAlign: 'center', }}>
+        <Box
+            sx={{
+                minHeight: '100vh',
+                backgroundImage: `url(${allCustom.background_sobremi})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                color: theme.palette.primary.contrastText,
+                padding: '50px 20px',
+                backgroundColor: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
+            }}
+        >
+            <Typography variant='h1' color='primary' sx={{ m: 5, textAlign: 'center' }}>
                 Las aves que pasaron por mis ojos....
-
             </Typography>
-            <Typography sx={{ p: 7, mt: -4 }}>
-
-                <Typography sx={{ ml: 20, mr: 20, textAlign: 'center' }} >
-                    <Typography >
-                        {allCustom.first_about}
-                    </Typography>
-                </Typography>
-            </Typography>
-
 
             <Box
                 sx={{
-                    alignItems: 'center',
+                    mt: -8,
                     width: '80%',
                     margin: 'auto',
                     padding: '40px',
                     borderRadius: '30px',
-                    textAlign: 'justify',
-                    backgroundColor: theme.palette.secondary.light
-                }}>
-                <Grid container spacing={2} >
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fondo semi-transparente para el texto
+                    overflowY: 'auto',
+                    maxHeight: '500px', // Limitar la altura para que aparezca la barra de desplazamiento
+                }}
+            >
+                <Typography sx={{ pl: 5, pr: 5, mt: -2 ,textAlign: 'justify', mb: 0, m: 0 }}>
+                    {allCustom.first_about}
+                </Typography>
+                <Typography sx={{ pl: 5, pr: 5, mt: -2 , textAlign: 'justify'}}>
+                    <Typography sx={{  textAlign: 'justify'}}>
+                        <br />
+                        {allCustom.text_about}
+                    </Typography>
+                    <Typography variant='h5' color='primary.dark' sx={{ mt: 2 }}>
+                        Atentamente,
+                        <br />
+                        Moises Sterimberg
+                    </Typography>
+                </Typography>
+            </Box>
 
-                    <Grid item xs={12} md={12}>
-                        <Typography sx={{ pl: 5, pr: 5, mt: -2 }}>
-
-                            <Typography>
-                                <br />
-                                {allCustom.text_about}
-                            </Typography>
-                            <Typography variant='h5' color='primary.dark' sx={{ mt: 2 }} >
-                                Atentamente,
-                                <br />
-                                Moises Sterimberg
-                            </Typography>
-                        </Typography>
-                    </Grid>
-                </Grid>
-
-            </Box >
-            <Grid sx={{ m: 20, mt: -0.5 }}>
-
+            <Box sx={{ m: 20, mt: 5, p: 5, }}>
+                <Typography variant='h5' color='primary'>
+                    Colaboradores:
+                </Typography>
                 <Typography variant='body1' color='primary.dark'>
                     <br />
-                    <Typography variant='h5' color='primary'>
-                        Colaboradores:
-                    </Typography >
                     {allCustom.colaboradores}
                 </Typography>
-            </Grid>
-        </div >
-    )
+            </Box>
+        </Box>
+    );
 };
