@@ -42,11 +42,11 @@ export const Landing = () => {
       <Grid container component="main" sx={{ height: '100vh', position: 'relative', margin: 0, padding: 0 }}>
         {/* Contenedor de la imagen de fondo */}
         <Grid item xs={12} sx={{ position: 'absolute', width: '100%', height: '100%', margin: 0, padding: 0 }}>
-          <img src={allCustom.background_login} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover', backgroundPosition: 'right', margin: 'OPX' }} />
+          <img src={allCustom.background_login} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover', backgroundPosition: 'right', margin: '0px' }} />
         </Grid>
 
         {/* Contenedor del contenido */}
-        <Grid item xs={12} sm={6} md={5} lg={3} component={Box} elevation={6}
+        <Grid xs={12} sm={12} md={4} lg={3} component={Box} elevation={6}
           sx={{
             margin: 0,
             backgroundColor: 'rgba(0, 56, 28, 0.3)',
@@ -60,7 +60,6 @@ export const Landing = () => {
             height: { xs: '100vh', sm: '100vh', md: '90vh', lg: '90vh', xl: '90vh' }, // Para que ocupe toda la altura
             left: { xs: '0%', sm: '40%', md: '72%', lg: '72%', xl: '72%' },
             borderRadius: '0px 0px 10px 10px'
-
           }}>
 
           {/* Contenedor para el círculo */}
@@ -98,7 +97,7 @@ export const Landing = () => {
             <Typography variant="body1" sx={{ color: '#fff', fontWeight: 'bold', my: 2, fontFamily: 'Arsenal', fontSize: { xs: '0.8rem', sm: '1rem', md: '1rem', lg: '1rem', xl: '1rem' } }}>Fotografías por Moises Sterimberg</Typography>
           </Box>
 
-          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '50%', sm: '50%', md: '45%', lg: '55%', xl: '55%' }, }}>Iniciar sesión</Button>
+          <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '80%', sm: '80%', md: '50%', lg: '55%', xl: '55%' }, }}>Iniciar sesión</Button>
           <Index open={open} />
           <CopyRight.Website />
         </Grid>

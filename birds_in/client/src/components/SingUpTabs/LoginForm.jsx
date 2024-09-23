@@ -70,10 +70,10 @@ export const LoginForm = ({ changeTab }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // if (!isCaptchaVerified) {
-    //   alert('Por favor, completa la verificación CAPTCHA.');
-    //   return;
-    // }
+    if (!isCaptchaVerified) {
+      alert('Por favor, completa la verificación CAPTCHA.');
+      return;
+    }
     if (loginData.email && loginData.password) {
       try {
         dispatch(loginRequest())
@@ -180,10 +180,10 @@ export const LoginForm = ({ changeTab }) => {
             }}
           />
           <Typography variant="h5" sx={{ mb: 5, mt: 2 }}>
-            {/* <ReCAPTCHA
+            <ReCAPTCHA
               sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
               onChange={handleCaptchaVerification}
-            /> */}
+            />
             <MuiLink onClick={handlePassLinkClicRk}
               sx={{
                 cursor: 'pointer',
@@ -206,7 +206,7 @@ export const LoginForm = ({ changeTab }) => {
             width: 'fit-content', // Ajustar el ancho al contenido
           }}
         >
-          <Button variant="outlined" onClick={handleClose} color="primary">
+          <Button variant="outlined" onClick={handleClose} color="primary" sx={{ fontSize: { xs: '1rem' } }}>
             Cancelar
           </Button>
           <LoadingButton
@@ -216,10 +216,12 @@ export const LoginForm = ({ changeTab }) => {
             loadingPosition="end"
             variant="contained"
             disabled={!loginData.email && !loginData.password}
+            sx={{ fontSize: { xs: '1rem' } }}
           >
             <span>Iniciar Sesión</span>
           </LoadingButton>
           <Button
+            sx={{ fontSize: { xs: '1rem' } }}
             onClick={handleClose}
             variant="outlined"
             color='error'

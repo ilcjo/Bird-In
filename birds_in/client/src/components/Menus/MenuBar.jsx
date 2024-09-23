@@ -78,7 +78,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
       >
         <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '100px', backgroundColor: '#004E37', borderRadius: '0px 0px 50px 50px' }}>
           <img src={allCustom.logo} alt="Logo"
-            style={{ width: 'auto', height: '220%', marginBottom: '52px', backgroundColor: '#103300', borderRadius: '0px 0px 50px 50px' }}
+            style={{ width: 'auto', height: '200%', marginBottom: '52px', backgroundColor: '#103300', borderRadius: '0px 0px 50px 50px' }}
             loading="lazy" />
         </Link>
         <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1, gap: '10px' }}>

@@ -35,8 +35,8 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
       <Box
         component="div"
         sx={{
-          width: { xs: '100%', md: '30%' },
-          height: { xs: 'auto', md: '100%' },
+          width: { xs: 'auto', md: '30%' },
+          height: { xs: 'auto', md: 'auto' },
           backgroundColor: 'rgba(16, 51, 0, 0.9)',
           backdropFilter: 'blur(10px)',
           display: 'flex',
@@ -143,7 +143,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
         <Box
           sx={{
             position: 'absolute',
-            bottom: { xs: 566, md: 1 },
+            bottom: { xs: 555, md: 0 },
             right: { xs: '0%', md: '100%' },
           }}
         >

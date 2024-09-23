@@ -145,7 +145,6 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }, 700);
     };
 
-
     const handleRemoveImage = (index) => {
         URL.revokeObjectURL(allImageURLs[index]);
         setAllImageURLs(allImageURLs.filter((_, i) => i !== index));

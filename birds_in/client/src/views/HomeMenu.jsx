@@ -18,7 +18,7 @@ const sections = [
 export const HomeMenu = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [showSobreMi, setShowSobreMi] = React.useState(false);
+  const [showSobreMi, setShowSobreMi] = React.useState(true);
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const admin = localStorage.getItem('tipoCliente');
   const isAdmin = admin === 'admin';
@@ -45,6 +45,7 @@ export const HomeMenu = () => {
         gridTemplateRows: 'repeat(2, 1fr)',
         gap: '1px',
         transition: 'grid-template-columns 0.5s ease-in-out',
+        
       }}
     >
       {sections.map((section) => (
@@ -63,11 +64,17 @@ export const HomeMenu = () => {
             gridRow: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
           }}
         >
+            <RouterLink to={`/${section.id}`}  style={{
+    display: 'block', // Asegura que el enlace ocupe el área completa
+    width: '100%',    // Mantén las dimensiones del enlace y la imagen
+    height: '100%',
+  }}>
           <img
             src={images[section.id]}
             alt={section.title}
             style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 10px 0px', pointerEvents: 'none' }}
           />
+          </RouterLink>
           <Box
             sx={{
               position: 'absolute',
@@ -79,10 +86,12 @@ export const HomeMenu = () => {
               borderRadius: '0px 0px 10px 0px',
             }}
           >
+              <RouterLink to={`/${section.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <Typography variant="h2" color="primary.main" sx={{ mb: '-5px', ml: 2 }}>
               <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '15%' }} />
               {section.title}
             </Typography>
+            </RouterLink>
             <Box
               sx={{
                 display: 'flex',
@@ -93,16 +102,16 @@ export const HomeMenu = () => {
               <Box sx={{ display: 'flex', gap: '0px', marginLeft: 'auto' }}>
                 {isAdmin && section.id !== 'SobreMi' && (
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     color="primary"
                     component={RouterLink}
-                    sx={{borderRadius: '0px 0px 0px 10px'}}
+                    sx={{borderRadius: '0px 0px 10px 0px', fontSize:{xs:'1rem'}}}
                     to={`/panel${section.id}`}
                   >
                     Editar
                   </Button>
                 )}
-                <Button
+                {/* <Button
                   variant="contained"
                   color="primary"
                   sx={{borderRadius: '0px 0px 10px 0px'}}
@@ -110,38 +119,12 @@ export const HomeMenu = () => {
                   to={`/${section.id}`}
                 >
                   {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
-                </Button>
+                </Button> */}
               </Box>
             </Box>
           </Box>
         </Box>
       ))}
-
-      {/* Flecha para mostrar/cerrar "Sobre Mi" */}
-      {!isMobile && (
-        <IconButton
-          sx={{
-            position: 'absolute',
-            top: '20%',
-            right: showSobreMi ? '25%' : 0, // Changes position if tab is open
-            transform: 'translateY(-50%)',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            '&:hover': {
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            },
-            zIndex: 2, // Ensure the arrow is above the images
-          }}
-          onClick={() => setShowSobreMi(!showSobreMi)} // Toggle between showing and hiding the tab
-        >
-              <Tooltip title={showSobreMi ? "Cerrar" : "Leer sobre el autor"}>
-              {showSobreMi ? (
-                <CloseIcon sx={{ color: 'red', fontSize: '2rem' }} />
-              ) : (
-                <ArrowBackIcon sx={{ color: theme.palette.primary.main, fontSize: '2rem' }} />
-              )}
-            </Tooltip>
-        </IconButton>
-      )}
 
       {/* Panel "Sobre Mi" */}
       {isMobile || showSobreMi ? (
@@ -181,6 +164,7 @@ export const HomeMenu = () => {
                 color="primary"
                 component={RouterLink}
                 to="/SobreMi"
+                sx={{ top: {xs: '-25px',md:'20px'}, left:{xs:'150px', md:'0px'}}}
               >
                 Leer
               </Button>

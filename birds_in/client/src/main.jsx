@@ -24,8 +24,8 @@ import { getOptionsDataI } from './redux/insectos/actions/fetchOptions.js';
 import { saveOptionsI } from './redux/insectos/slices/FilterSlice.js';
 
 // Configurar la URL base de Axios
-// const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
-const api = 'https://pruebabird.onrender.com';
+const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
+// const api = 'https://pruebabird.onrender.com';
 // const api = 'http://181.48.223.2';
 const apilocal = 'http://localhost:3001';
 axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
@@ -51,7 +51,7 @@ root.render(
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <BrowserRouter>
-          <CssBaseline />
+          {/* <CssBaseline /> */}
           <App />
         </BrowserRouter>
       </Provider>

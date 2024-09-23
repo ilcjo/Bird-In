@@ -164,7 +164,7 @@ const theme = createTheme({
           },
         },
         outlined: {
-          fontSize: '1.2rem', // Aumentar el tamaño del texto a 1.2 rem
+          fontSize: '1.1rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
           borderRadius: '5px',

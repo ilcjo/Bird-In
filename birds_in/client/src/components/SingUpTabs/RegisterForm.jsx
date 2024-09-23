@@ -290,10 +290,11 @@ export const RegisterForm = ({ changeTab, close }) => {
             width: 'fit-content', // Ajustar el ancho al contenido
           }}
         >
-          <Button variant="outlined" onClick={handleClose} color="primary">
+          <Button variant="outlined" onClick={handleClose} color="primary" sx={{ fontSize: { xs: '1rem' } }}>
             Cancelar
           </Button>
           <Button
+            sx={{ fontSize: { xs: '1rem' } }}
             variant="contained"
             onClick={handleSubmit}
             color="primary"

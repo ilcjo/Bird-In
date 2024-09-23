@@ -63,7 +63,6 @@ export const StyledTextField = styled(TextField)(({ theme }) => ({
         borderRadius: '9px',
         borderColor: '#C1C700',
         height:'70px',
-        
         '&:hover': {
             backgroundColor: 'transparent', // Maintain background color on hover
             borderColor: '#C1C700',

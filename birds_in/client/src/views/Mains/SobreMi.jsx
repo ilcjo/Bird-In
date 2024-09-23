@@ -35,20 +35,20 @@ export const SobreMi = () => {
             <Box
                 sx={{
                     mt: -8,
-                    width: '80%',
+                    width: { xs: '90%', md: '80%' },
                     margin: 'auto',
-                    padding: '40px',
+                    padding: { xs: '8px', md: '40px' },
                     borderRadius: '30px',
                     backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fondo semi-transparente para el texto
                     overflowY: 'auto',
                     maxHeight: '500px', // Limitar la altura para que aparezca la barra de desplazamiento
                 }}
             >
-                <Typography sx={{ pl: 5, pr: 5, mt: -2 ,textAlign: 'justify', mb: 0, m: 0 }}>
+                <Typography sx={{ pl: 5, pr: 5, mt: -2, textAlign: 'justify', mb: 0, m: 0 }}>
                     {allCustom.first_about}
                 </Typography>
-                <Typography sx={{ pl: 5, pr: 5, mt: -2 , textAlign: 'justify'}}>
-                    <Typography sx={{  textAlign: 'justify'}}>
+                <Typography sx={{ pl: 5, pr: 5, mt: -2, textAlign: 'justify' }}>
+                    <Typography sx={{ textAlign: 'justify' }}>
                         <br />
                         {allCustom.text_about}
                     </Typography>
@@ -60,7 +60,7 @@ export const SobreMi = () => {
                 </Typography>
             </Box>
 
-            <Box sx={{ m: 20, mt: 5, p: 5, }}>
+            <Box sx={{ m: { xs: 0, md: 14 }, mt: { xs: 8, md: 5 }, p: 5, backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: '10px', }}>
                 <Typography variant='h5' color='primary'>
                     Colaboradores:
                 </Typography>

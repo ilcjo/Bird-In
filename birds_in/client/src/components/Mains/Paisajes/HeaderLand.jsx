@@ -52,7 +52,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
           top: 0,
           right: 0,
           width: { xs: '60%', md: '27%' },
-          height: { xs: '60%', md: '63%' },
+          height: { xs: '50%', md: '63%' },
           backgroundColor: 'rgba(0, 56, 28, 0.3)',
           backdropFilter: 'blur(10px)',
           display: 'flex',
