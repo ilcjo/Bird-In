@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Autocomplete, TextField } from '@mui/material';
 
 const AutocompleteField = ({ id, options, value, onChange, label, disabled, isOptionEqualToValue }) => {
-    console.log(isOptionEqualToValue)
+    // console.log(isOptionEqualToValue)
     return (
         <Autocomplete
             id={id}

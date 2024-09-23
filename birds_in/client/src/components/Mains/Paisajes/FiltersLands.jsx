@@ -17,6 +17,7 @@ import { cargando, copingFilters, isOneLand, saveFilters, setNoMoreResults } fro
 import { fetchNewOptionsP, getOptionsDataP } from '../../../redux/paisaje/actionsP/fetchOptionsLand'
 //ICONS
 import CloseIcon from '@mui/icons-material/Close';
+import { AutocompleteFilter } from '../../utils/AutocompleteFilter'
 
 
 export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
@@ -38,7 +39,7 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         ...selectOptionFromSlice,
     });
 
-    const handleOptionChange = (category, newValue) => {
+    const handleOptionChange = async (category, newValue) => {
         setIsFetchingOptions(true); // Activa el indicador de carga
 
         const updatedSelectOption = {
@@ -50,14 +51,14 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         };
 
         setSelectOption(updatedSelectOption);
-        // Realiza la solicitud para obtener las opciones
-        dispatch(fetchNewOptionsP(updatedSelectOption))
-            .then(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
-            })
-            .catch(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
-            });
+        try {
+            dispatch(fetchNewOptionsP(updatedSelectOption))
+        } catch (error) {
+            console.error('Error fetching new options:', error);
+        } finally {
+            // Desactiva el indicador de carga cuando la solicitud se completa o hay un error
+            setIsFetchingOptions(false);
+        }
     };
 
     const handleClickFiltrar = async () => {
@@ -109,13 +110,11 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
 
     React.useEffect(() => {
-        return () => {
-            dispatch(getOptionsDataP());
-            setSelectOption({
-                pais: [],
-                zona: [],
-            });
-        };
+        dispatch(getOptionsDataP());
+        setSelectOption({
+            pais: [],
+            zona: [],
+        });
     }, []);
 
     return (
@@ -136,85 +135,23 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 <Grid container alignItems="center">
                     <Grid item xs={12}>
                         {/*Pais */}
-                        <FormControl sx={{ m: 1, width: '90%' }}>
-                            <Autocomplete
-                                multiple
-                                value={selectOption.pais}
-                                onChange={(event, newValue) => handleOptionChange('pais', newValue)}
-                                options={paises || []}
-                                getOptionLabel={(option) => option.nombre}
-                                loading={isFetchingOptions}
-                                renderInput={(params) =>
-                                    <TextField {...params}
-                                        label="Países"
-                                        sx={{
-                                            '& .MuiInputBase-input': {
-                                                height: '26px',
-                                            },
-                                        }}
-                                    />}
-                                renderTags={(value, getTagProps) =>
-                                    value.map((option, index) => (
-                                        <Typography
-                                            key={option.id}
-                                            variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                            sx={{
-                                                display: 'inline-block',
-                                                fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                color: 'white',
-                                                ml: 2,
-                                                mt: 1
-                                            }}
-                                        >
-                                            {option.nombre}
-                                        </Typography>
-                                    ))
-                                }
-                                isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={paises?.length === 0}
-                            />
-                        </FormControl>
+                        <AutocompleteFilter
+                            label="Países"
+                            value={selectOption.pais}
+                            onChange={(newValue) => handleOptionChange('pais', newValue)}
+                            options={paises || []}
+                            loading={isFetchingOptions}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         {/* Zona */}
-                        <FormControl sx={{ m: 1, width: '90%' }}>
-                            <Autocomplete
-                                multiple
-                                value={selectOption.zona}
-                                onChange={(event, newValue) => handleOptionChange('zona', newValue)}
-                                options={zonas || []}
-                                getOptionLabel={(option) => option.nombre}
-                                loading={isFetchingOptions}
-                                renderInput={(params) =>
-                                    <TextField {...params}
-                                        label="Zonas"
-                                        sx={{
-                                            '& .MuiInputBase-input': {
-                                                height: '26px',
-                                            },
-                                        }}
-                                    />}
-                                renderTags={(value, getTagProps) =>
-                                    value.map((option, index) => (
-                                        <Typography
-                                            key={option.id}
-                                            variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                            sx={{
-                                                display: 'inline-block',
-                                                fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                color: 'white',
-                                                ml: 2,
-                                                mt: 1
-                                            }}
-                                        >
-                                            {option.nombre}
-                                        </Typography>
-                                    ))
-                                }
-                                isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={zonas?.length === 0}
-                            />
-                        </FormControl>
+                        <AutocompleteFilter
+                            label="Zonas"
+                            value={selectOption.zona}
+                            onChange={(newValue) => handleOptionChange('zona', newValue)}
+                            options={zonas || []}
+                            loading={isFetchingOptions}
+                        />
                     </Grid>
 
                     <Stack spacing={1} direction="row" justifyContent="center"

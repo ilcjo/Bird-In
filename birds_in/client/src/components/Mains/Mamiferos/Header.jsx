@@ -49,7 +49,7 @@ export const Header = ({ imageUrl, registro, back }) => {
           <React.Fragment key={index}>
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
-                <Typography variant='h6' color='primary.light' sx={{ mb: 2 }}>
+                <Typography variant='h6' color='primary.light' sx={{  mb: 1, mt: -2 }}>
                   {data.familias_mamifero.nombre || 'N/A'} / {data.grupos_mamifero.nombre || 'N/A'}
                 </Typography>
               </Grid>

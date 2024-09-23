@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 const { deletePhotoFromFTPPaisajes } = require("../../services/deletFtp");
-const { Paisajes, Paises, Imagenes_paisajes, Zonas } = require("../../config/db/db");
+const { Paisajes, Paises, Imagenes_paisajes, Zonas, PaisesconAves } = require("../../config/db/db");
 
 const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
@@ -72,10 +72,16 @@ const fetchOptionsLand = async () => {
             ['nombre_zona', 'ASC']
         ]
     });
+    // Obtener lista de países relacionados con aves usando la tabla intermedia AvesPaises
+    const existingPaises = await PaisesconAves.findAll({
+        attributes: [['id_pais', 'id'], 'nombre']
+    });
+
 
     return {
-        paises: optionsPaises,
-        zonas: optionsZonas
+        paisesAll: optionsPaises,
+        zonas: optionsZonas,
+        paises: existingPaises
     }
 };
 

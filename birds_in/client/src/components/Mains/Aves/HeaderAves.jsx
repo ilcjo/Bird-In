@@ -50,7 +50,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           <React.Fragment key={index}>
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
-                <Typography variant='h6' color='primary.light' sx={{ mb: 2 }}>
+                <Typography variant='h6' color='primary.light' sx={{ mb: 1, mt: -2 }}>
                   {data.familia.nombre || 'N/A'} / {data.grupo.nombre || 'N/A'}
                 </Typography>
               </Grid>

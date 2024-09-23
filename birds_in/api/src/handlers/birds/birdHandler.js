@@ -335,7 +335,7 @@ const checkBirdDuplicate = async (req, res) => {
 
 const getAllAvesAsExcel = async (req, res) => {
    try {
-      console.log('llegu')
+      // console.log('llegu')
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
       const aves = await VistaAvesOrdenadaAll.findAll();
 

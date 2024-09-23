@@ -1,8 +1,9 @@
 const { Op, Sequelize } = require("sequelize");
-const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas, VistaAvesOrdenadaAll } = require('../../config/db/db');
+const { Aves, Grupos, Familias, Paises, Imagenes_aves, Zonas, PaisesconAves } = require('../../config/db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 const { deletePhotoFromFTP } = require("../../services/deletFtp");
+const db = require("../../config/db/db");
 
 async function verificarRelaciones(familia, grupo) {
     try {
@@ -462,20 +463,25 @@ const fetchOptions = async () => {
             ['nombre_ingles', 'ASC'] // Ordenar nombres ingleses alfabéticamente
         ]
     })
-    // const nombresGrupos = mapFieldValues(optionsGrupos, 'nombre', 'id_grupo')
-    // const nombreFamilias = mapFieldValues(optionsFamilias, 'nombre', 'id_familia')
-    // const nombrePaises = mapFieldValues(optionsPaises, 'nombre', 'id_pais')
+
+    // Obtener lista de países relacionados con aves usando la tabla intermedia AvesPaises
+    const existingPaises = await PaisesconAves.findAll({
+        attributes: [['id_pais', 'id'], 'nombre']
+    });
+
+
+
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles');
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico');
-    // const nombrezonas = mapFieldValues(optionsZonas, 'nombre_zona', 'id_zona')
 
     return {
         grupos: optionsGrupos,
         familias: optionsFamilias,
-        paises: optionsPaises,
+        paisesAll: optionsPaises,
         nIngles: nombreIngles,
         nCientifico: nombreCientifico,
-        zonas: optionsZonas
+        zonas: optionsZonas,
+        paises: existingPaises
     }
 };
 
@@ -633,7 +639,7 @@ const filterOptionsPaisZonas = async (familia,
         zonas,
         page,
         perpage)
-    console.log(allResults, 'los resultadis qe llegan')
+    // console.log(allResults, 'los resultadis qe llegan')
     const newOptions = {
         grupos: [],
         familias: [],
@@ -646,8 +652,7 @@ const filterOptionsPaisZonas = async (familia,
     // Verificar si se proporcionó un ID de zona o un ID de país
 
     if (zonas || pais) {
-
-        const paisNumb = parseInt(pais)
+        const paisNumb = parseInt(pais);
         // Filtrar las aves según el país y las zonas proporcionadas
         allResults.avesFiltradas = allResults.avesFiltradas.filter(ave => {
             const meetsPaisCriteria = !pais || ave.paises.some(paisAve => paisAve.dataValues.id_pais === paisNumb);
@@ -655,10 +660,8 @@ const filterOptionsPaisZonas = async (familia,
             return meetsPaisCriteria && meetsZonasCriteria;
         });
     }
-    // console.log(allResults.avesFiltradas.paises)
-    // Lógica para construir las opciones de paises y zonas
+
     if (zonas) {
-        // Construir opciones de países basadas en las aves filtradas
         const paisesSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
             ave.paises.forEach(pais =>
@@ -668,11 +671,11 @@ const filterOptionsPaisZonas = async (familia,
                 })));
         });
 
-        const findIdPais = await obtenerIdDePais(zonas)
-
+        const findIdPais = await obtenerIdDePais(zonas);
         const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
 
-        newOptions.paises = [JSON.parse(newopti)];
+        // Ordenar alfabéticamente
+        newOptions.paises = [JSON.parse(newopti)].sort((a, b) => a.nombre.localeCompare(b.nombre));
 
         const zonasSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
@@ -681,13 +684,10 @@ const filterOptionsPaisZonas = async (familia,
                 nombre: zona.dataValues.nombre
             })));
         });
-        newOptions.zonas = Array.from(zonasSet).map(zona =>
-            JSON.parse(zona));
+        newOptions.zonas = Array.from(zonasSet).map(zona => JSON.parse(zona)).sort((a, b) => a.nombre.localeCompare(b.nombre));
     }
+
     if (pais) {
-        // console.log(allResults.avesFiltradas)
-        // console.log('entro en pais');
-        // Construir opciones de zonas basadas en las aves filtradas
         const zonasSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
             ave.zonasAves.forEach(zona =>
@@ -697,19 +697,16 @@ const filterOptionsPaisZonas = async (familia,
                 })));
         });
 
-        // console.log(zonasSet);
         const findIdZonas = await obtenerIdDeZonas(pais);
-        // console.log(findIdZonas);
         const newOptionsZona = Array.from(zonasSet).filter(zona => findIdZonas.includes(JSON.parse(zona).id));
 
-        // Transformar el formato de newOptionsZona
         const transformedOptionsZona = newOptionsZona.map(option => ({
             id: JSON.parse(option).id,
             nombre: JSON.parse(option).nombre,
         }));
-        // console.log(transformedOptionsZona)
-        newOptions.zonas = transformedOptionsZona
-        // console.log(newOptions.zonas);
+
+        // Ordenar alfabéticamente
+        newOptions.zonas = transformedOptionsZona.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
         const paisSet = new Set();
         allResults.avesFiltradas.forEach(ave => {
@@ -718,36 +715,56 @@ const filterOptionsPaisZonas = async (familia,
                 nombre: zona.dataValues.nombre
             })));
         });
-        // console.log(paisSet)
-        newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa))
-    }
-    // const gruposSet = new Set();
-    // allResults.avesFiltradas.forEach(ave => {
-    //     gruposSet.add(JSON.stringify({
-    //         id: ave.dataValues.grupos_id_grupo,
-    //         nombre: ave.grupo.dataValues.nombre
-    //     }));
-    // });
-    // const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
-    // newOptions.grupos = gruposArray
-    // const familiasSet = new Set();
-    // allResults.avesFiltradas.forEach(ave => {
-    //     familiasSet.add(JSON.stringify({
-    //         id: ave.dataValues.familias_id_familia,
-    //         nombre: ave.familia.dataValues.nombre
-    //     }));
-    // });
-    // const familiasArray = Array.from(familiasSet).map(item => JSON.parse(item));
-    // newOptions.familias = familiasArray;
 
-    const nombresCientificos = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_cientifico })))];
+        newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa)).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    }
+
+    // Para grupos
+    const gruposSet = new Set();
+    allResults.avesFiltradas.forEach(ave => {
+        if (ave.grupo && ave.grupo.dataValues) {
+            gruposSet.add(JSON.stringify({
+                id: ave.dataValues.grupos_id_grupo,
+                nombre: ave.grupo.dataValues.nombre
+            }));
+        }
+    });
+
+    const gruposArray = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
+    gruposArray.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    newOptions.grupos = gruposArray;
+
+    // Para familias
+    const familiasSet = new Set();
+    allResults.avesFiltradas.forEach(ave => {
+        if (ave.familia && ave.familia.dataValues) {
+            familiasSet.add(JSON.stringify({
+                id: ave.dataValues.familias_id_familia,
+                nombre: ave.familia.dataValues.nombre
+            }));
+        }
+    });
+
+    const familiasArray = Array.from(familiasSet).map(familia => JSON.parse(familia));
+    familiasArray.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    newOptions.familias = familiasArray;
+
+    // Nombres científicos
+    const nombresCientificos = [...new Set(allResults.avesFiltradas.map(ave => ({
+        id: ave.id_ave,
+        nombre: ave.dataValues.nombre_cientifico
+    })))].sort((a, b) => a.nombre.localeCompare(b.nombre));
     newOptions.nCientifico = nombresCientificos;
-    const nombresIngles = [...new Set(allResults.avesFiltradas.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.nombre_ingles })))];
+
+    // Nombres en inglés
+    const nombresIngles = [...new Set(allResults.avesFiltradas.map(ave => ({
+        id: ave.id_ave,
+        nombre: ave.dataValues.nombre_ingles
+    })))].sort((a, b) => a.nombre.localeCompare(b.nombre));
     newOptions.nIngles = nombresIngles;
-    // const listaZona = [...new Set(allResults.map(ave => ({ id: ave.id_ave, nombre: ave.dataValues.zonas })))];
-    // newOptions.zonas = listaZona;
-    // console.log(newOptions)
+
     return newOptions;
+
 };
 
 const sendAndCreateBird = async (
