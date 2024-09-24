@@ -35,7 +35,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filterSlice.options)
+    const { paises, familias, grupos, zonas, paisesAll } = useSelector(state => state.filterSlice.options)
     const { infoAveForUpdate } = useSelector(state => state.createBird)
 
     const initialCreateData = {
@@ -507,7 +507,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     disablePortal
                                     multiple
                                     id="combo-box-pais"
-                                    options={paises}
+                                    options={paisesAll}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}

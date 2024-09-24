@@ -66,7 +66,6 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         // console.log(selectOption)
         dispatch(saveFilters(selectOption));
         dispatch(cargando(true));
-
         try {
             const resultLength = await dispatch(sendParameterP(selectOption));
 

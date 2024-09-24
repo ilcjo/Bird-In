@@ -28,7 +28,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           boxShadow: 3,
-          borderRadius: '0px 0px 10px 0px',
+          borderRadius: '0px 0px 0px 0px',
           pointerEvents: 'none'
         }}
       />
@@ -43,7 +43,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           flexDirection: 'column',
           alignItems: 'flex-start',
           padding: 5,
-          // borderRadius: '0px 0px 0px 0px',
+          borderRadius: '0px 0px 10px 0px',
         }}
       >
         {bird.map((data, index) => (
@@ -144,7 +144,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           sx={{
             position: 'absolute',
             bottom: { xs: 555, md: 0 },
-            right: { xs: '0%', md: '100%' },
+            right: { xs: '0%', md: '0%' },
           }}
         >
           <Button

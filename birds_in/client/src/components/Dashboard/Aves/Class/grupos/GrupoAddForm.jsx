@@ -38,7 +38,6 @@ export const GrupoAddForm = ({
       loadingMessage('Chequeando...');
       // Verificar si el nombre de la familia ya existe
       const duplicateExists = await dispatch(checkDuplicadosGrupo(nombreG));
-      
       loadingMessage('Agregando..');
       const response = await dispatch(addGrupo(nombreGrupos));
       await dispatch(getOptionsData())

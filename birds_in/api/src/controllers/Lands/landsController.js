@@ -79,9 +79,9 @@ const fetchOptionsLand = async () => {
 
 
     return {
-        paisesAll: optionsPaises,
+        paises: optionsPaises,
         zonas: optionsZonas,
-        paises: existingPaises
+        // paisesE: existingPaises
     }
 };
 

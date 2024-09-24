@@ -34,7 +34,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filterSlice.options)
+    const { paises, familias, grupos, zonas, paisesAll } = useSelector(state => state.filterSlice.options)
     const { extraOptions } = useSelector(state => state.filterSlice)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
@@ -586,7 +586,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     disablePortal
                                     multiple
                                     id="combo-box-pais"
-                                    options={paises}
+                                    options={paisesAll}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}

@@ -1,19 +1,14 @@
 import * as React from 'react'
 import {
-  Alert,
   Autocomplete,
-  Backdrop,
   Button,
-  CircularProgress,
   Divider,
   Grid,
-  Snackbar,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -53,21 +48,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export const ZonasOptions = () => {
+export const ZonasOptions = ({
+  onloading
+  , loadingMessage
+  , showSnackBar
+  , successMessages
+  , errorMessage
+  , showErrorSnack
+}) => {
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { zonas, paises } = useSelector(state => state.filterSlice.options)
+  const { zonas, paisesAll } = useSelector(state => state.filterSlice.options)
   // const [page, setPage] = React.useState(0);
   // const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [nombreZona, setNombreZona] = React.useState('');
   const [paisSeleccionado, setPaisSeleccionado] = React.useState(null);
-  const [showBackdrop, setShowBackdrop] = React.useState(false);
-  const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(null);
-  const [showErrorMessages, setShowErrorMessages] = React.useState(false);
-  const [showSuccessMessages, setShowSuccessMessages] = React.useState('');
   const [editMode, setEditMode] = React.useState(null);
   const [searchTerm, setSearchTerm] = React.useState('');
   // Estados para rastrear la selección de país, la zona que se edita y el nuevo nombre
@@ -81,21 +76,24 @@ export const ZonasOptions = () => {
   // console.log('soy zona editada', newZonaName)
   // console.log('soy zona id', editingZonaId)
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('¿Seguro que deseas eliminar esta zona?')) {
       try {
+        onloading(true)
+        loadingMessage('Eliminando Zona...')
         // Lógica para eliminar el elemento
-        dispatch(eliminarZona(id))
-        setShowSuccessMessages('Zona eliminada')
-        setOpenSnackbar(true);
-        dispatch(getOptionsData())
-
+        await dispatch(eliminarZona(id))
+        await dispatch(getOptionsData())
+        onloading(false)
+        successMessages('Zona Eliminada Exitosamente')
+        showSnackBar(true);
       } catch (error) {
-        setErrorMessage(String(error));
-        setErrorSnackbarOpen(true);
+        errorMessage(String(error));
+        showErrorSnack(true);
       }
     }
   };
+
   const handleEditClick = (index, zona) => {
     // Habilita el modo de edición para la fila correspondiente al índice 'index'
     setEditMode(index);
@@ -109,9 +107,7 @@ export const ZonasOptions = () => {
 
   // Función para manejar la selección de un país en Autocomplete
   const handlePaisSelection = (event, newValue) => {
-    if (newValue) {
-      setSelectedPaisId(newValue);
-    }
+    setSelectedPaisId(newValue || null);
   };
 
   // Función para manejar la edición de una zona
@@ -126,7 +122,8 @@ export const ZonasOptions = () => {
   // Función para guardar los cambios en una zona
   const saveChanges = async () => {
     try {
-
+      onloading(true)
+      loadingMessage('Actualizando Zona...');
       // Define los valores a enviar, inicialmente con los valores existentes
       const valuesToUpdate =
       {
@@ -134,54 +131,53 @@ export const ZonasOptions = () => {
         zona: newZonaName.zona !== null ? newZonaName.zona : null, // Si no se cambió el nombre, envía null
         paisId: selectedPaisId ? selectedPaisId.id : 0, // Si no se cambió el país, envía 0
       };
-
-      setShowBackdrop(true);
-      setLoadingMessage('Actualizando...');
       // Realiza la acción para enviar los cambios al backend (dispatch, fetch, etc.)
       await dispatch(updateZona(valuesToUpdate));
-      setShowBackdrop(false);
-      setShowSuccessMessages('Zona actualizada correctamente')
-      setOpenSnackbar(true);
-      dispatch(getOptionsData());
+      await dispatch(getOptionsData());
+      onloading(false)
+      successMessages('Zona actualizada correctamente')
+      showSnackBar(true);
       setEditMode(null);
-
       // Reiniciar los estados después de guardar los cambios
       setSelectedPaisId(null);
       setNewZonaName('');
 
     } catch (error) {
       console.log(error);
-      setErrorMessage(String(error));
-      setErrorSnackbarOpen(true);
+      errorMessage(String(error));
+      showErrorSnack(true);
     }
   };
 
   const handleAgregar = async () => {
     if (!nombreZona || !paisSeleccionado) {
       // Si alguno de los campos está vacío, muestra una notificación de error
-      setErrorSnackbarOpen(true);
-      setErrorMessage('Por favor, completa todos los campos.');
-      setShowErrorMessages(true);
+      showErrorSnack(true);
+      errorMessage('Los campos Pais y Zona no deben estar vacíos.');
+      showErrorSnack(true);
       return;
     }
     try {
+      showErrorSnack(false)
+      onloading(true)
+      loadingMessage('Agregando Zona..')
       // Aquí puedes enviar los datos al servidor o realizar otras acciones
-      setShowErrorMessages(false)
       const response = await dispatch(addZona({ zona: nombreZona, pais: paisSeleccionado.id }));
-      setShowBackdrop(true);
-      setLoadingMessage('Agregando..');
-      setShowBackdrop(false)
-      setShowSuccessMessages('Zona creada correctamente')
-      setOpenSnackbar(true);
+      await dispatch(getOptionsData())
+      onloading(false)
+      showSnackBar(true);
+      loadingMessage('Agregando..');
+      showSnackBar(false)
+      successMessages('Zona creada correctamente')
+      showSnackBar(true);
       // Limpia el formulario o realiza otras acciones necesarias
       setNombreZona('');
       setPaisSeleccionado(null);
-      dispatch(getOptionsData())
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
-      setErrorMessage(String(error));
-      setErrorSnackbarOpen(true)
+      errorMessage(String(error));
+      showErrorSnack(true)
     }
   };
 
@@ -216,20 +212,6 @@ export const ZonasOptions = () => {
 
   };
 
-  const sortAlphabetically = (array) => {
-    return array.slice().sort((a, b) => {
-      // Comprobamos si 'a' y 'b' son objetos válidos y tienen una propiedad 'nombre'
-      if (a && a.nombre && b && b.nombre) {
-        const nameA = a.nombre.charAt(0).toUpperCase() + a.nombre.slice(1);
-        const nameB = b.nombre.charAt(0).toUpperCase() + b.nombre.slice(1);
-        return nameA.localeCompare(nameB);
-      }
-      // Si 'a' o 'b' no tienen la propiedad 'nombre', no hacemos nada
-      return 0;
-    });
-  };
-  const sortedZonas = sortAlphabetically(zonas);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -239,13 +221,6 @@ export const ZonasOptions = () => {
     setPage(0);
   };
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
-    setShowSuccessMessages('')
-  };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -257,7 +232,7 @@ export const ZonasOptions = () => {
     const normalizedSearchTerm = searchTerm.toLowerCase().replace(/\s+/g, ' ').trim();
 
     return normalizedItemName.includes(normalizedSearchTerm);
-});
+  });
 
 
   return (
@@ -300,8 +275,8 @@ export const ZonasOptions = () => {
               InputProps={{
                 sx: inputStyles,
               }}
-              error={showErrorMessages && !nombreZona}
-              helperText={showErrorMessages && !nombreZona ? 'Este campo es obligatorio' : ''}
+              // error={!nombreZona && errorMessage}
+              // helperText={!nombreZona ? 'Este campo es obligatorio' : ''}
             />
           </Grid>
 
@@ -309,7 +284,7 @@ export const ZonasOptions = () => {
             <Autocomplete
               disablePortal
               id="combo-box-paises"
-              options={paises}
+              options={paisesAll}
               getOptionLabel={(option) => option.nombre}
               value={paisSeleccionado}
               onChange={(event, newValue) => setPaisSeleccionado(newValue)}
@@ -323,8 +298,8 @@ export const ZonasOptions = () => {
                     ...params.InputProps,
                     sx: inputStyles,
                   }}
-                  error={showErrorMessages && !paisSeleccionado}
-                  helperText={showErrorMessages && !paisSeleccionado ? 'Este campo es obligatorio' : ''}
+                  // error={!paisSeleccionado && errorMessage}
+                  // helperText={!paisSeleccionado ? 'Este campo es obligatorio' : ''}
                 />}
               isOptionEqualToValue={(option, value) => option.nombre === value?.nombre}
               filterOptions={(options, state) => {
@@ -420,9 +395,9 @@ export const ZonasOptions = () => {
                         // Modo de edición
                         <Autocomplete
                           disablePortal
-                          options={paises}
+                          options={paisesAll}
                           getOptionLabel={(option) => option.nombre}
-                          value={selectedPaisId ? selectedPaisId : paises.find((p) => p.nombre === item.nombre_pais) || null}
+                          value={selectedPaisId ? selectedPaisId : paisesAll.find((p) => p.nombre === item.nombre_pais) || null}
                           onChange={handlePaisSelection}
                           renderInput={(params) => (
                             <TextField
@@ -495,46 +470,7 @@ export const ZonasOptions = () => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           /> */}
         </Grid>
-
       </Grid>
-      {/* Backdrop para mostrar durante la carga */}
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={showBackdrop}
-      >
-        <>
-          <CircularProgress color="inherit" />
-          <Typography variant="h5" color="inherit" sx={{ ml: 2 }}>
-            {loadingMessage}
-          </Typography>
-        </>
-
-      </Backdrop>
-
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={5000} // Duración en mili segundos (ajusta según tus preferencias)
-        onClose={handleCloseSnackbar}
-        message={showSuccessMessages}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      >
-      </Snackbar>
-      {/* Snackbar for error message */}
-      <Snackbar
-        open={errorSnackbarOpen}
-        autoHideDuration={5000} // Adjust the duration as needed
-        onClose={() => setErrorSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      >
-        <Alert
-          elevation={6}
-          variant="filled"
-          severity="error"
-          onClose={() => setErrorSnackbarOpen(false)}
-        >
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </React.Fragment>
   )
 };
