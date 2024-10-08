@@ -2,18 +2,34 @@ const { Zonas } = require("../../../config/db/db");
 
 const createZonas = async (zona, paisId) => {
     try {
+        // Verifica si la zona ya existe
+        const existingZona = await Zonas.findOne({
+            where: {
+                nombre_zona: zona,
+            },
+        });
+
+        // Si la zona ya existe, lanzar un error
+        if (existingZona) {
+            throw new Error('La zona ya existe.');
+        }
+
+        // Si no existe y se proporcionan zona y paisId, crearla
         if (zona && paisId) {
             await Zonas.create({
                 nombre_zona: zona,
                 id_paises: paisId
             });
-            return "Zona creada correctamente."
+            return "Zona creada correctamente.";
+        } else {
+            throw new Error('Faltan datos: nombre de zona o id de país.');
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
         throw error;
     }
 };
+
 
 const updateZonas = async (idZona, zona, idPais) => {
     try {
@@ -22,6 +38,7 @@ const updateZonas = async (idZona, zona, idPais) => {
                 id_zona: idZona,
             },
         });
+        console.log(existingZona)
         if (!existingZona) {
             throw new Error("La zona con el ID especificado no existe.");
         }

@@ -96,14 +96,16 @@ function App() {
       <Route path="/panelaves" // DASHBOARDS
         element={
           <ProtectedRoute roles={['admin']} >
+            <MenuBar ShowFilterButton={false} ShowBackButton={true} />
             <DashAves />
           </ProtectedRoute>
         } />
       <Route path="/panelpaisajes"
-        element={<ProtectedRoute roles={['admin']} >
-          <MenuBar ShowFilterButton={false} ShowBackButton={true} />
-          <DashPaisajes />
-        </ProtectedRoute>
+        element={
+          <ProtectedRoute roles={['admin']} >
+            <MenuBar ShowFilterButton={false} ShowBackButton={true} />
+            <DashPaisajes />
+          </ProtectedRoute>
         } />
       <Route path="/panelmamiferos"
         element={<ProtectedRoute roles={['admin']} >

@@ -4,7 +4,7 @@ export const createIdString = (array) => {
 };
 
 export const createParams = (selectedOptions) => {
-  console.log('soy selectedopction',selectedOptions)
+  // console.log('soy selectedopction',selectedOptions)
   let queryParams = '';
 
   if (selectedOptions.grupo && selectedOptions.grupo.length > 0) {

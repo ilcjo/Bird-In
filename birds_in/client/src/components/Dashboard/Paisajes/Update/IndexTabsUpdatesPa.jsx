@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { CoverDeleteP } from '../Add/CoverDeleteP';
+import { CoverDeleteP } from '../Photos/CoverDeleteP';
 import { UpdatePaisaje } from '../../../Forms/Paisajes/UpdatePaisaje';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -41,7 +41,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
     };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '95%', margin: '0 auto', minWidth: '900px' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px', }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -55,12 +55,10 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                     <StyledTab label={<Typography variant='h5' >
                         Imágenes Existente
                     </Typography>} onClick={handleNavigateToCoverDelete} />
-                    {/* Agrega más pestañas según sea necesario */}
                 </StyledTabs>
-                <Box sx={{ width: '100%', maxWidth: '100%' }}>
+                <Box sx={{}}>
                     {selectedTab === 0 && (
                         <React.Fragment>
-
                             <UpdatePaisaje changeTab={changeTab}
                                 showUpdateRegister={showUpdateRegister}
                                 showSearchRegister={showSearchRegister}

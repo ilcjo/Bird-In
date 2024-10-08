@@ -1,7 +1,7 @@
 import * as React from 'react'
 //LIBRARY
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 //COMPONENTS
@@ -21,7 +21,8 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
     const { isOne, info } = useSelector(state => state.dataSlice)
     const { copyFilters } = useSelector(state => state.filters)
     const allImages = info.flatMap(registro => registro.imagenes_mamiferos);
-    const mainImage = allImages.find(image => image.destacada) ? allImages.find(image => image.destacada).url : null;
+    const featuredImage = allImages.find(image => image.destacada);
+    const mainImage = featuredImage ? encodeURI(featuredImage.url) : null;
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..')
 
@@ -64,6 +65,25 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
             )}
             <Grid container spacing={0} sx={{ background: '#86ac8e', p: { xs: 2, md: 5 } }}>
                 {/* Galería de imágenes */}
+                <Fab
+                    variant="extended"
+                    size="medium"
+                    color="primary"
+                    sx={{
+                        position: 'fixed',
+                        bottom: 16,
+                        right: 16,
+                        zIndex: 1000,
+                        fontWeight: 'bold',
+                        '&:hover': {
+                            color: 'white',
+                        }
+                    }}
+                    onClick={stepBack}
+                >
+                    <ArrowBackIcon sx={{ mr: 1 }} />
+                    Regresar
+                </Fab>
                 <Box
                     sx={{
                         display: 'flex',
@@ -76,7 +96,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
                         backdropFilter: 'blur(8px)',
                         padding: { xs: '10px', md: '40px' },
                         borderRadius: '20px',
-                        mb:4
+                        mb: 4
                     }}
                 >
                     <Grid container spacing={2} justifyContent="center" sx={{ mt: -2 }}>
@@ -113,7 +133,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
                             </Grid>
                         ))}
                     </Grid>
-                    <CopyRight.Photo/>
+                    <CopyRight.Photo />
                 </Box>
             </Grid>
             <Loading

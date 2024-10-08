@@ -5,7 +5,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const HeaderI = ({ imageUrl, registro, back }) => {
   const theme = useTheme()
-  // console.log('q',registro)
   return (
     <Box
       component="div"
@@ -129,7 +128,7 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
             right: { xs: '0%', md: '100%' },
           }}
         >
-          <Button
+          {/* <Button
             color='primary'
             variant="contained"
             onClick={back}
@@ -137,7 +136,7 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
             sx={{ borderRadius: '0px 0px 10px 0px' }}
           >
             Regresar
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Box>

@@ -35,7 +35,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, zonas } = useSelector(state => state.filterSlice.options)
+    const { paisesAll, zonas } = useSelector(state => state.filterSlice.options)
     const { infoLandForUpdate } = useSelector(state => state.createLand);
 
     const initialCreateData = {
@@ -183,7 +183,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
             window.open(createData.urlWiki, '_blank');
         }
     };
-    
+
     const handleMapsClick = () => {
         if (createData.map) {
             window.open(createData.map, '_blank');
@@ -275,13 +275,12 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                             </Grid>
                         </Grid>
 
-
-                        <Typography variant='h5' color='primary.light' >
+                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
-                        <Grid container sx={{}} >
+                        <Grid container sx={{ mt: 0 }} >
                             <Grid item xs={12} sm={3} md={3}>
                                 <ImageUploader
                                     allImageURLs={allImageURLs}
@@ -310,7 +309,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-pais"
-                                    options={paises}
+                                    options={paisesAll}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}

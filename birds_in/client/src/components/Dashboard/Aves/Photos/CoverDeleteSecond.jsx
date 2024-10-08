@@ -2,23 +2,27 @@ import * as React from 'react';
 import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
-//GLOBAL STATE
-import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
-import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
+
 //ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 //COMPONENTS
 import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
-import { EditImageCards } from '../../../Cards/EditImageCards';
 import { Loading } from '../../../utils/Loading';
+import { EditImageCards } from '../../../Cards/EditImageCards';
+//redux
+import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/birds/actions/photosAction';
+import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
+import { getAve } from '../../../../redux/birds/slices/UpdateSlice';
+import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
+import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
 import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
 
-export const CoverDeleteP = ({
+export const CoverDeleteSecond = ({
     isCreate,
-    showUpdateRegister,
-    showSearchRegister,
-    selectedRegister,
+    showUpdateBird,
+    showSearchBird,
+    selectedBird,
     setCoverSelected,
 }) => {
 
@@ -26,7 +30,6 @@ export const CoverDeleteP = ({
     const dispatch = useDispatch();
     const nombreP = localStorage.getItem('nombrePaisaje') || 'del Paisaje';
     const { infoLandForUpdate } = useSelector(state => state.createLand);
-    // console.log('soy info q actulizo', infoLandForUpdate)
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -35,11 +38,9 @@ export const CoverDeleteP = ({
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
-    // console.log(selectedImages)
-
 
     const handleSetAsCover = async (id, url, destacada) => {
-
+        // console.log(id)
         try {
             // Marcar la imagen como portada actual
             setHighlightedImage((prev) => {
@@ -57,7 +58,7 @@ export const CoverDeleteP = ({
             setShowBackdrop(true);
             setLoadingMessage('Seleccionando Portada')
             await new Promise((resolve) => setTimeout(resolve, 5000));
-            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
+            await dispatch(getInfoForUpdate(infoLandForUpdate.id));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -72,13 +73,15 @@ export const CoverDeleteP = ({
     };
 
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState('')
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
+
 
     const handleImageClick = (url) => {
+        // console.log('dentro del handleimage:', url)
         setShowBackdrop(false);
         setLoadingMessage('Cargando..')
-        setSelectedImageIndex(url);
-        setIsGalleryOpen(true)
+        setSelectedImageIndex(url); // Establecer la URL de la imagen seleccionada
+        setIsGalleryOpen(true);
     };
 
     const handleCloseGallery = () => {
@@ -86,8 +89,8 @@ export const CoverDeleteP = ({
         setIsGalleryOpen(false);
     };
 
+
     const handleDeleteCheckBox = (id, url) => {
-        // console.log('soy', url)
         const index = selectedImages.findIndex((img) => img.id === id);
         if (index === -1) {
             // No existe en el array, agregarlo
@@ -108,7 +111,6 @@ export const CoverDeleteP = ({
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
-            // console.log('imagenes url', selectedUrls)
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
@@ -127,10 +129,10 @@ export const CoverDeleteP = ({
     };
 
     const handleReturnSearch = () => {
-        localStorage.removeItem('nombrePaisaje')
-        showUpdateRegister(false)
-        showSearchRegister(true)
-        selectedRegister(null)
+        localStorage.removeItem('nombreIngles')
+        showUpdateBird(false)
+        showSearchBird(true)
+        selectedBird(null)
     };
 
     React.useEffect(() => {
@@ -140,30 +142,30 @@ export const CoverDeleteP = ({
             // localStorage.removeItem('nombreIngles')
         }
     }, [isCreate])
-
+    
     return (
         <React.Fragment>
             <Loading
                 message={loadingMessage}
                 open={showBackdrop}
             />
-            <Grid container spacing={5} sx={{
+            <Grid container sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '100%',
-                minWidth: '800px',
+                width: 'auto',
+                // minWidth: '1200px',
                 margin: '0 auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
-                padding: '0px 40px 30px 0px',
-                borderRadius: '0px 0px 20px 20px'
-            }} >
-
-                <Grid item xs={12} md={12} >
-                    <Grid container alignItems="center">
+                backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backdropFilter: 'blur(2px)',
+                padding: 2,
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
+            }}>
+                <Grid item xs={12} md={12}>
+                    <Grid container >
                         <Grid item xs={12} sm={9}>
-                            <Typography variant='h2' color='primary' >
+                            <Typography variant='h2' color='primary'>
                                 Imágenes {nombreP ? ` ${nombreP}` : 'del Paisaje'}
                             </Typography>
                         </Grid>
@@ -186,12 +188,10 @@ export const CoverDeleteP = ({
                             </Grid>
                         )}
                     </Grid>
-
-                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }} >
+                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
-                        <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     </Typography>
-
+                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
                         variant="contained"
                         color="error"
@@ -201,16 +201,10 @@ export const CoverDeleteP = ({
                     >
                         Eliminar selección
                     </Button>
-
                     {infoLandForUpdate && infoLandForUpdate.imagenes_paisajes && infoLandForUpdate.imagenes_paisajes.length > 0 && (
-                        <Grid container spacing={2} sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            m: 0
-                        }}>
+                        <Grid container spacing={0} sx={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
                             {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
-                                <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
+                                <Grid item xs={12} sm={6} md={4} key={index}>
                                     <EditImageCards
                                         imageUrl={imageUrl}
                                         index={index}
@@ -255,6 +249,6 @@ export const CoverDeleteP = ({
                     {errorMessage}
                 </Alert>
             </Snackbar>
-        </React.Fragment >
+        </React.Fragment>
     );
-};
+}

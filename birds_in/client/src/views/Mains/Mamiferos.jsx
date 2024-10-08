@@ -1,7 +1,7 @@
 import * as React from 'react'
 //LIBRARY
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Button, Dialog, Divider, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Button, Dialog, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -88,6 +88,25 @@ export const Mamiferos = () => {
           }
         }}
       >
+        <Fab
+          variant="extended"
+          size="medium"
+          color="primary"
+          sx={{
+            position: 'fixed',
+            bottom: 16,
+            right: 16,
+            zIndex: 1000,
+            fontWeight: 'bold',
+            '&:hover': {
+                color: 'white',
+            }
+          }}
+          onClick={stepBack}
+        >
+          <ArrowBackIcon sx={{ mr: 1 }} />
+          Regresar
+        </Fab>
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => { }}
@@ -134,20 +153,6 @@ export const Mamiferos = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} lg={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
-                <Button
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    mt: { xs: 0, md: 0 },
-                    mb: { xs: 3, md: 0 },
-                    marginRight: '20px',
-                    marginLeft: { xs: '20px', md: 0 },
-                  }}
-                  variant="outlined"
-                  onClick={stepBack}
-                  startIcon={<ArrowBackIcon />}
-                >Regresar
-                </Button>
               </Grid>
             </Grid>
             <Grid container spacing={3} justifyContent="center">

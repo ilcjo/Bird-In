@@ -3,7 +3,7 @@ import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 //COMPONENTS
 import { CreateLand } from '../../../Forms/Paisajes/CreateLand';
-import { CoverDeleteP } from './CoverDeleteP';
+import { CoverDeleteP } from '../Photos/CoverDeleteP';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -11,6 +11,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     width: '100%',
+    boxSizing: 'border-box',
     '& .Mui-selected': {
         backgroundColor: theme.palette.custom.light,
     },
@@ -28,11 +29,11 @@ const StyledTab = styled(Tab)({
 
 export const IndexTabsCreateP = ({
     isEnable,
+    history,
     changeTab,
     showUpdateRegister,
     showSearchRegister,
     selectedRegister,
-    history,
     changeTabSearch }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [coverSelected, setCoverSelected] = React.useState(false);
@@ -59,7 +60,7 @@ export const IndexTabsCreateP = ({
     // };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '90%', margin: '0 auto', minWidth: '1200px' }}>
+            <Box sx={{ width: '100%', maxWidth: '95%', margin: '0 auto', minWidth: '1200px' }}>
 
                 <StyledTabs
                     value={selectedTab}
@@ -90,6 +91,7 @@ export const IndexTabsCreateP = ({
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
+                         <React.Fragment>
                         <CoverDeleteP
                             isCreate={true}
                             changeTab={changeTab}
@@ -98,6 +100,7 @@ export const IndexTabsCreateP = ({
                             selectedRegister={selectedRegister}
                             setCoverSelected={handleSetCoverSelected}
                         />
+                        </React.Fragment>
                     )}
                 </Box>
             </Box>

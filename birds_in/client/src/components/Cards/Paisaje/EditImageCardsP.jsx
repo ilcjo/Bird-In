@@ -3,13 +3,13 @@ import { Box, Card, CardActionArea, CardContent, Checkbox, Grid, IconButton, Typ
 import BeenhereTwoToneIcon from '@mui/icons-material/BeenhereTwoTone';
 import TurnedInTwoToneIcon from '@mui/icons-material/TurnedInTwoTone';
 
-export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsCover, handleDeleteCheckBox }) => {
+export const EditImageCardsP = ({ imageUrl, index, handleImageClick, handleSetAsCover, handleDeleteCheckBox }) => {
     // console.log(imageUrl)
     return (
         <Card sx={{
             borderRadius: '6px',
-            p: 0,
-            width: 437, minWidth: 437, margin: '10px auto',
+            p: '0 auto',
+            width: 440, minWidth: 440, margin: '10px 5px',
             flexDirection: 'column',
             background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)',
            

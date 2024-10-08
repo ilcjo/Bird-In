@@ -1,7 +1,7 @@
 import * as React from 'react'
 //LIBRARY
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Divider, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 //COMPONENTS
@@ -23,7 +23,8 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
     const { copyFilters } = useSelector(state => state.filterSlice)
     const birds = useSelector(state => state.birdSlice.infoBirds)
     const allImages = birds.flatMap(bird => bird.imagenes_aves);
-    const mainImage = allImages.find(image => image.destacada) ? allImages.find(image => image.destacada).url : null;
+    const featuredImage = allImages.find(image => image.destacada);
+    const mainImage = featuredImage ? encodeURI(featuredImage.url) : null;
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..')
 
@@ -33,7 +34,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
         setTimeout(() => {
             switch (oneBird) {
                 case false:
-                    console.log(copyFilters)
+                    // console.log(copyFilters)
                     dispatch(sendParameter(copyFilters));
                     setPage(1)
                     break;
@@ -65,6 +66,25 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
             )}
             <Grid container spacing={0} sx={{ background: '#86ac8e', p: { xs: 2, md: 5 } }}>
                 {/* Galería de imágenes */}
+                <Fab
+                    variant="extended"
+                    size="medium"
+                    color="primary"
+                    sx={{
+                        position: 'fixed',
+                        bottom: 16,
+                        right: 16,
+                        zIndex: 1000,
+                        fontWeight: 'bold',
+                        '&:hover': {
+                            color: 'white',
+                        }
+                    }}
+                    onClick={stepBack}
+                >
+                    <ArrowBackIcon sx={{ mr: 1 }} />
+                    Regresar
+                </Fab>
                 <Box
                     sx={{
                         display: 'flex',

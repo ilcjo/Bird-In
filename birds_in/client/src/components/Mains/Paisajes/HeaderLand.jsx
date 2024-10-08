@@ -24,15 +24,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
           background: '#86ac8e'
         }}
       >
-        <Button
-          color='primary'
-          variant="contained"
-          onClick={back}
-          startIcon={<ArrowBackIcon />}
-          sx={{ borderRadius: '0px 0px 10px 0px', zIndex: 8, }}
-        >
-          Regresar
-        </Button>
+      
       </Box>
       <Box
         component="div"

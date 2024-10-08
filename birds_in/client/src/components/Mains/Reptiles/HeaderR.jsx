@@ -129,15 +129,7 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
             right: { xs: '0%', md: '100%' },
           }}
         >
-          <Button
-            color='primary'
-            variant="contained"
-            onClick={back}
-            startIcon={<ArrowBackIcon />}
-            sx={{ borderRadius: '0px 0px 10px 0px' }}
-          >
-            Regresar
-          </Button>
+       
         </Box>
       </Box>
     </Box>

@@ -1,7 +1,7 @@
 import * as React from 'react'
 //LIBRARY
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Button, Dialog, Divider, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Button, Dialog, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -88,6 +88,25 @@ export const Insectos = () => {
           }
         }}
       >
+        <Fab
+          variant="extended"
+          size="medium"
+          color="primary"
+          sx={{
+            position: 'fixed',
+            bottom: 16,
+            right: 16,
+            zIndex: 1000,
+            fontWeight: 'bold',
+            '&:hover': {
+                color: 'white',
+            }
+          }}
+          onClick={stepBack}
+        >
+          <ArrowBackIcon sx={{ mr: 1 }} />
+          Regresar
+        </Fab>
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => { }}

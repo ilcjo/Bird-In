@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Tab, Tabs, Typography, useTheme, CircularProgress, Backdrop } from '@mui/material';
+import { Box, Tab, Tabs, Typography, useTheme, } from '@mui/material';
 import { styled } from '@mui/system';
 import { useDispatch } from 'react-redux';
 // COMPONENTS
@@ -7,12 +7,11 @@ import { SearchBird } from './Update/SearchBird';
 import { Contadores } from './Contadores';
 import { IndexTabsCreate } from './Add/IndexTabsCreate';
 import { FamiliasGrupos } from './Class/FamiliasGrupos';
+import { Loading } from '../../utils/Loading';
 // redux
 import { setEstateInfo } from '../../../redux/birds/slices/UpdateSlice';
 import { getExcelAves } from '../../../redux/birds/actions/crudAction';
-import { Loading } from '../../utils/Loading';
 
-// Styled Components
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)',
   backdropFilter: 'blur(8px)',
@@ -36,7 +35,6 @@ export const IndexD = () => {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = React.useState(1);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
-  const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [onloading, setOnLoading] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
 

@@ -143,9 +143,11 @@ export const ZonasOptions = ({
       setNewZonaName('');
 
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
       errorMessage(String(error));
       showErrorSnack(true);
+    } finally {
+      onloading(false)
     }
   };
 
@@ -176,8 +178,12 @@ export const ZonasOptions = ({
       // Puedes procesar la respuesta del servidor si es necesario
     } catch (error) {
       // Maneja el error a nivel superior
-      errorMessage(String(error));
+      errorMessage(String(error.response.data.error));
       showErrorSnack(true)
+      setNombreZona('');
+      setPaisSeleccionado(null);
+    } finally {
+      onloading(false)
     }
   };
 
@@ -227,11 +233,16 @@ export const ZonasOptions = ({
   };
 
   const filteredZonas = zonas.filter((item) => {
-    // Normaliza los espacios y convierte a minúsculas
+    // Normaliza los espacios y convierte a minúsculas tanto para la zona como para el país
     const normalizedItemName = item.nombre.toLowerCase().replace(/\s+/g, ' ').trim();
+    const normalizedCountryName = item.nombre_pais.toLowerCase().replace(/\s+/g, ' ').trim();
     const normalizedSearchTerm = searchTerm.toLowerCase().replace(/\s+/g, ' ').trim();
 
-    return normalizedItemName.includes(normalizedSearchTerm);
+    // Compara si el término de búsqueda está en el nombre de la zona o en el nombre del país
+    return (
+      normalizedItemName.includes(normalizedSearchTerm) ||
+      normalizedCountryName.includes(normalizedSearchTerm)
+    );
   });
 
 
@@ -275,8 +286,8 @@ export const ZonasOptions = ({
               InputProps={{
                 sx: inputStyles,
               }}
-              // error={!nombreZona && errorMessage}
-              // helperText={!nombreZona ? 'Este campo es obligatorio' : ''}
+            // error={!nombreZona && errorMessage}
+            // helperText={!nombreZona ? 'Este campo es obligatorio' : ''}
             />
           </Grid>
 
@@ -298,8 +309,8 @@ export const ZonasOptions = ({
                     ...params.InputProps,
                     sx: inputStyles,
                   }}
-                  // error={!paisSeleccionado && errorMessage}
-                  // helperText={!paisSeleccionado ? 'Este campo es obligatorio' : ''}
+                // error={!paisSeleccionado && errorMessage}
+                // helperText={!paisSeleccionado ? 'Este campo es obligatorio' : ''}
                 />}
               isOptionEqualToValue={(option, value) => option.nombre === value?.nombre}
               filterOptions={(options, state) => {

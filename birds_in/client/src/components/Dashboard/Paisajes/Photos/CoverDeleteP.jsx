@@ -1,32 +1,33 @@
 import * as React from 'react';
-import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
+import { Alert, Box, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
-
+//GLOBAL STATE
+import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
+import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
 //ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 //COMPONENTS
 import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
+import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
+import { EditImageCardsP } from '../../../Cards/Paisaje/EditImageCardsP';
 import { EditImageCards } from '../../../Cards/EditImageCards';
-//redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/birds/actions/photosAction';
-import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
-import { getAve } from '../../../../redux/birds/slices/UpdateSlice';
 
-export const CoverDelete = ({
+export const CoverDeleteP = ({
     isCreate,
-    showUpdateBird,
-    showSearchBird,
-    selectedBird,
+    showUpdateRegister,
+    showSearchRegister,
+    selectedRegister,
     setCoverSelected,
 }) => {
 
     const theme = useTheme();
     const dispatch = useDispatch();
-    const nombreAve = localStorage.getItem('nombreIngles') || 'del Ave';
-    const { infoAveForUpdate } = useSelector(state => state.createBird);
+    const nombreP = localStorage.getItem('nombrePaisaje') || 'del Paisaje';
+    const { infoLandForUpdate } = useSelector(state => state.createLand);
+    // console.log('soy info q actualizo', infoLandForUpdate)
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -35,9 +36,11 @@ export const CoverDelete = ({
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
+    // console.log(selectedImages)
+
 
     const handleSetAsCover = async (id, url, destacada) => {
-        // console.log(id)
+
         try {
             // Marcar la imagen como portada actual
             setHighlightedImage((prev) => {
@@ -51,11 +54,11 @@ export const CoverDelete = ({
                 }
             });
             // Si la imagen es destacada, enviar la solicitud para guardarla como portada
-            await dispatch(sendCoverPhoto(id, infoAveForUpdate.id_ave));
+            await dispatch(sendCoverPhotoP(id, infoLandForUpdate.id));
             setShowBackdrop(true);
             setLoadingMessage('Seleccionando Portada')
             await new Promise((resolve) => setTimeout(resolve, 5000));
-            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -69,24 +72,14 @@ export const CoverDelete = ({
         }
     };
 
-    // React.useEffect(() => {
-    //     // Verificar si ya hay una portada seleccionada cuando el componente se monta
-    //     if (infoAveForUpdate && infoAveForUpdate.imagenes_aves) {
-    //         const portadaSeleccionada = infoAveForUpdate.imagenes_aves.some((img) => img.destacada === true);
-    //         setCoverSelected(portadaSeleccionada); // Actualizar el estado de la portada seleccionada
-    //     }
-    // }, [infoAveForUpdate,]);
-
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
-
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState('')
 
     const handleImageClick = (url) => {
-        // console.log('dentro del handleimage:', url)
         setShowBackdrop(false);
         setLoadingMessage('Cargando..')
-        setSelectedImageIndex(url); // Establecer la URL de la imagen seleccionada
-        setIsGalleryOpen(true);
+        setSelectedImageIndex(url);
+        setIsGalleryOpen(true)
     };
 
     const handleCloseGallery = () => {
@@ -94,8 +87,8 @@ export const CoverDelete = ({
         setIsGalleryOpen(false);
     };
 
-
     const handleDeleteCheckBox = (id, url) => {
+        // console.log('soy', url)
         const index = selectedImages.findIndex((img) => img.id === id);
         if (index === -1) {
             // No existe en el array, agregarlo
@@ -116,10 +109,11 @@ export const CoverDelete = ({
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
+            // console.log('imagenes url', selectedUrls)
             // Realizar la eliminación de fotos
-            await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
+            await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
-            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
             setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSelectedImages([])
             setShowBackdrop(false)
@@ -134,20 +128,20 @@ export const CoverDelete = ({
     };
 
     const handleReturnSearch = () => {
-        localStorage.removeItem('nombreIngles')
-        showUpdateBird(false)
-        showSearchBird(true)
-        selectedBird(null)
+        localStorage.removeItem('nombrePaisaje')
+        showUpdateRegister(false)
+        showSearchRegister(true)
+        selectedRegister(null)
     };
 
     React.useEffect(() => {
         if (isCreate) {
             setSelectedImages([]);
-            dispatch(getAve({}))
+            dispatch(getLand({}))
             // localStorage.removeItem('nombreIngles')
         }
     }, [isCreate])
-    
+
     return (
         <React.Fragment>
             <Loading
@@ -171,7 +165,7 @@ export const CoverDelete = ({
                     <Grid container >
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h2' color='primary'>
-                                Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
+                                Imágenes {nombreP ? ` ${nombreP}` : 'del Paisaje'}
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -206,11 +200,11 @@ export const CoverDelete = ({
                     >
                         Eliminar selección
                     </Button>
-                    {infoAveForUpdate && infoAveForUpdate.imagenes_aves && infoAveForUpdate.imagenes_aves.length > 0 && (
+                    {infoLandForUpdate && infoLandForUpdate.imagenes_paisajes && infoLandForUpdate.imagenes_paisajes.length > 0 && (
                         <Grid container spacing={0} sx={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-                            {infoAveForUpdate.imagenes_aves.map((imageUrl, index) => (
+                            {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
                                 <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <EditImageCards
+                                    <EditImageCardsP
                                         imageUrl={imageUrl}
                                         index={index}
                                         handleImageClick={handleImageClick}
@@ -221,13 +215,13 @@ export const CoverDelete = ({
                             ))}
                             <CarruselGalleryDelete
                                 isOpen={isGalleryOpen}
-                                images={infoAveForUpdate.imagenes_aves}
+                                images={infoLandForUpdate.imagenes_paisajes}
                                 selectedIndex={selectedImageIndex}
                                 onClose={handleCloseGallery}
                             />
                         </Grid>
                     )}
-                    {!infoAveForUpdate || !infoAveForUpdate.imagenes_aves || infoAveForUpdate.imagenes_aves.length === 0 && (
+                    {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes || infoLandForUpdate.imagenes_paisajes.length === 0 && (
                         <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
                             No hay imágenes subidas.
                         </Typography>

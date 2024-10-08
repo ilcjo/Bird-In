@@ -5,7 +5,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const HeaderAves = ({ imageUrl, bird, back }) => {
   const theme = useTheme()
-  // console.log(bird)
   return (
     <Box
       component="div"
@@ -147,7 +146,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
             right: { xs: '0%', md: '0%' },
           }}
         >
-          <Button
+          {/* <Button
             color='primary'
             variant="contained"
             onClick={back}
@@ -155,7 +154,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
             sx={{ borderRadius: '0px 0px 10px 0px' }}
           >
             Regresar
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Box>

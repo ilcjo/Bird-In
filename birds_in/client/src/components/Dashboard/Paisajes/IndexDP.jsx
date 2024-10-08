@@ -1,34 +1,33 @@
 
 import * as React from 'react'
 import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
-import { useDispatch } from 'react-redux';
 import { styled } from '@mui/system';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 //REDUX
 import { setStateInfoP } from '../../../redux/paisaje/slicesP/createLandSlice';
-//COMPONENTS
-import { IndexTabsCreateP } from './Add/IndexTabsCreateP';
-import { SearchLands } from './Update/SearchLands';
 import { getExcel } from '../../../redux/paisaje/actionsP/fetchAllLands';
+//COMPONENTS
+import { SearchLands } from './Update/SearchLands';
+import { IndexTabsCreateP } from './Add/IndexTabsCreateP';
 import { Loading } from '../../utils/Loading';
 
-
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-  backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-  backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+  backgroundColor: 'rgba(0, 56, 28, 0.1)',
+  backdropFilter: 'blur(8px)',
   borderRadius: '10px 10px 0px 0px',
-  marginTop: '110px',
+  marginTop: '100px',
   '& .Mui-selected': {
     backgroundColor: theme.palette.custom.light,
   },
 }));
+
 const StyledTab = styled(Tab)({
-  minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
+  minWidth: 'auto',
   color: '#ccd6cc',
   '&.Mui-selected .MuiTypography-root': {
     color: '#C1C700',
   },
-
 });
 
 export const IndexDP = () => {
@@ -54,10 +53,6 @@ export const IndexDP = () => {
     setSelectedTab(0); // Cambia a la pestaña de imágenes existentes
   };
 
-  const handleNavigateToPanelAves = () => {
-    navigatew('/panelaves?tab=5'); // Assumes you have a router setup to handle this path
-  };
-
   const handleDownload = async () => {
     try {
       setOnLoading(true);
@@ -71,7 +66,13 @@ export const IndexDP = () => {
     }
   };
 
-
+  React.useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const tab = query.get('tab');
+    if (tab) {
+      setSelectedTab(Number(tab));
+    }
+  }, [location]);
 
   return (
     <>
@@ -90,15 +91,8 @@ export const IndexDP = () => {
           }
         }}
       >
-        <StyledTab label={
-          <Typography variant='h5'>
-            Actualizar
-          </Typography>} />
-
-        <StyledTab label={<Typography variant='h5' >
-          Crear
-        </Typography>}
-        />
+        <StyledTab label={<Typography variant='h5'>Actualizar</Typography>} />
+        <StyledTab label={<Typography variant='h5' >Crear</Typography>} />
         <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} />
       </StyledTabs >
       <div>

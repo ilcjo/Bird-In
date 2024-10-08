@@ -1,13 +1,13 @@
 import * as React from 'react'
-import { Grid, useTheme } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { MenuBar } from '../../components/Menus/MenuBar';
-import { getUsers } from '../../redux/settings/actions/userLoginRegister';
+//components
 import { IndexDP } from '../../components/Dashboard/Paisajes/IndexDP';
+//redux
+import { getUsers } from '../../redux/settings/actions/userLoginRegister';
 
 export const DashPaisajes = () => {
   const dispatch = useDispatch()
-  const theme = useTheme()
   const { allCustom } = useSelector((state) => state.customizesSlice);
 
   React.useEffect(() => {
@@ -23,13 +23,12 @@ export const DashPaisajes = () => {
         alignItems="center"
         sx={{
           background: `url(${allCustom.background_paisaje}) center/cover no-repeat fixed`,
-          // backgroundColor: theme.palette.secondary.light,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
           height: '100%',
           overflow: 'hidden',
-          margin: 0,
+          margin: '0 auto',
         }}
       >
         <IndexDP />

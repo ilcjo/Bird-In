@@ -31,7 +31,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { paises, zonas } = useSelector(state => state.filterSlice.options)
+    const { paisesAll, zonas } = useSelector(state => state.filterSlice.options)
 
     const [imgLink, setImgLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
@@ -103,7 +103,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     };
 
     const handleZonaChange = (event, newValue) => {
-        console.log(newValue, 'llegando')
+        // console.log(newValue, 'llegando')
         if (!newValue) {
             setCreateData({
                 ...createData,
@@ -301,7 +301,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box"
-                                    options={paises}
+                                    options={paisesAll}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}

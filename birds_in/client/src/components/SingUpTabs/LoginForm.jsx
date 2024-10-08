@@ -160,6 +160,7 @@ export const LoginForm = ({ changeTab }) => {
             onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
             error={errorTextPass !== ''}
             helperText={errorTextPass}
+            onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">

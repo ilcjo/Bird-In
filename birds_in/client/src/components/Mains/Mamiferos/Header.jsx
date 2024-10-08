@@ -129,7 +129,7 @@ export const Header = ({ imageUrl, registro, back }) => {
             right: { xs: '0%', md: '100%' },
           }}
         >
-          <Button
+          {/* <Button
             color='primary'
             variant="contained"
             onClick={back}
@@ -137,7 +137,7 @@ export const Header = ({ imageUrl, registro, back }) => {
             sx={{ borderRadius: '0px 0px 10px 0px' }}
           >
             Regresar
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Box>

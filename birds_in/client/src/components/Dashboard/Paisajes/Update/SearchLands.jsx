@@ -1,8 +1,6 @@
 import * as React from 'react'
 import {
     Autocomplete,
-    Backdrop,
-    CircularProgress,
     Grid,
     TextField,
     Typography,
@@ -14,12 +12,14 @@ import { useDispatch } from 'react-redux';
 import { IndexTabsUpdatesPa } from './IndexTabsUpdatesPa';
 //REDUX
 import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
+import { Loading } from '../../../utils/Loading';
 
 
 export const SearchLands = ({ changeTab }) => {
     const theme = useTheme();
     const dispatch = useDispatch()
     const [showBackdrop, setShowBackdrop] = React.useState(true);
+    const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [selectedRegister, setSelectedRegister] = React.useState(null);
     const [registerData, setRegisterData] = React.useState([]);
     // console.log('registro seleccionado', registerData)
@@ -75,25 +75,20 @@ export const SearchLands = ({ changeTab }) => {
         <React.Fragment>
             {showSearchRegister && (
                 <React.Fragment>
-                    <Backdrop
+                    <Loading
+                        message={loadingMessage}
                         open={showBackdrop}
-                        sx={{
-                            zIndex: (theme) => theme.zIndex.drawer + 1,
-                            color: '#fff',
-                        }}
-                    >
-                        <CircularProgress color="inherit" />
-                    </Backdrop>
+                    />
                     <Grid container spacing={1} sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: '145vh',
+                        width: '170vh',
                         height: '40vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                         backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
-                        marginTop: '1px',
-                        borderRadius: '20px',
+                        marginTop: 'auto',
+                        borderRadius: '10px',
                     }} >
                         <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
                             <Typography variant="h2" color="primary">
@@ -124,10 +119,8 @@ export const SearchLands = ({ changeTab }) => {
                                     <TextField
                                         {...params}
                                         label="Seleccionar Paisaje a Actualizar"
-                                    
                                     />
                                 )}
-
                                 sx={{ mb: 3, mt: -10 }}
                             />
                         </Grid>
