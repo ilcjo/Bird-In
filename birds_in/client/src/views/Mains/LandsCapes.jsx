@@ -160,7 +160,8 @@ export const LandsCapes = () => {
             <Grid container spacing={3} justifyContent="center">
               {infoLands.map((item, index) => (
                 <Grid item key={index}>
-                  <CardsLand foto={item.imagenes_paisajes} name={item.zona.nombre} id={item.zona.id_zona} />
+                  <CardsLand foto={item.imagenes_paisajes} name={item.zona ? item.zona.nombre : item.paise.nombre}
+                    id={item.zona ? item.zona.id_zona : item.paise.id_pais} />
                 </Grid>
               ))}
             </Grid>

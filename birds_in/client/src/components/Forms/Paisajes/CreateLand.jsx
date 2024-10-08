@@ -15,7 +15,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 //REDUX
-import { createLand, duplicateNameCheckP, getInfoForUpdateNameP, saveImageFtpLand } from '../../../redux/paisaje/actionsP/createLands';
+import { createLand, duplicateNameCheckP, duplicateNameCheckPP, getInfoForUpdateNameP, saveImageFtpLand } from '../../../redux/paisaje/actionsP/createLands';
 //ICONS
 import SaveIcon from '@mui/icons-material/Save';
 import { ImageUploader } from '../../utils/ImageUploader';
@@ -126,7 +126,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         setTimeout(async () => {
             try {
                 // Llama a la función para comprobar duplicados
-                await dispatch(duplicateNameCheckP(newValue.id)); // Assuming newValue is an object with a 'nombre' property
+                await dispatch(duplicateNameCheckP(newValue.id));
             } catch (error) {
                 // Si hay un error, muestra un mensaje de error
                 console.error('Error al comprobar duplicados:', String(error));
@@ -136,6 +136,44 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             }
         }, 700);
     };
+
+    const handlePaisChange = (event, newValue) => {
+        if (!newValue) {
+            setCreateData({
+                ...createData,
+                pais: null,
+            });
+            return;
+        }
+
+        setCreateData((prevState) => ({
+            ...prevState,
+            pais: newValue,
+            map: !prevState.zona ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(newValue.nombre)}` : prevState.map, // Solo actualizar si zona está vacío
+        }));
+
+        setErrors({
+            ...errors,
+            pais: false,
+        });
+
+        setFormSubmitted(false);
+
+        // Wait 700 milliseconds before checking for duplicates
+        setTimeout(async () => {
+            try {
+                // Llama a la función para comprobar duplicados
+                await dispatch(duplicateNameCheckPP(newValue.id));
+            } catch (error) {
+                // Si hay un error, muestra un mensaje de error
+                console.error('Error al comprobar duplicados:', String(error));
+                alert('Este Registro ya existe');
+                // Restablece el valor del input
+                changeTabSearch();
+            }
+        }, 700);
+    };
+
 
     const handleRemoveImage = (index) => {
         URL.revokeObjectURL(allImageURLs[index]);
@@ -151,9 +189,9 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         if (!createData.pais) {
             newErrors.pais = true;
         }
-        if (!createData.zona) {
-            newErrors.zona = true; // Establecer un error si el campo 'zona' está vacío
-        }
+        // if (!createData.zona) {
+        //     newErrors.zona = true; // Establecer un error si el campo 'zona' está vacío
+        // }
         setErrors(newErrors);
         if (Object.values(newErrors).some((error) => error)) {
             return;
@@ -175,7 +213,12 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             try {
                 // Espera a que la imagen se suba y obtén la URL
                 const imageUrls = await uploadImagesFtpAndSaveLinks(formData);
-                localStorage.setItem('nombrePaisaje', JSON.stringify(createData.zona.nombre))
+                // localStorage.setItem('nombrePaisaje', JSON.stringify(createData.zona.nombre))
+                const nombreZonaOPais = createData.zona && createData.zona.nombre
+                    ? createData.zona.nombre
+                    : createData.pais.nombre;
+                localStorage.setItem('nombrePaisaje', JSON.stringify(nombreZonaOPais));
+
                 await createFullEntry(createData, imageUrls);
                 setLoadingMessage('Creando el Paisaje en la DB...');
                 setShowBackdrop(false);
@@ -304,6 +347,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     options={paisesAll}
                                     getOptionLabel={(option) => option.nombre}
                                     value={createData.pais}
+                                    // onChange={handlePaisChange}
                                     onChange={(event, newValue) => setCreateData({ ...createData, pais: newValue })}
                                     renderInput={(params) =>
                                         <TextField

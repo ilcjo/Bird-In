@@ -135,4 +135,19 @@ export const duplicateNameCheckP = (id) => {
   }
 };
 
+export const duplicateNameCheckPP = (id) => {
+
+  return async (dispatch) => {
+    try {
+      const response = await axios(`paisajes/duplicadosP?pais=${id}`)
+      const ave = response.data
+      // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
+
+    } catch (error) {
+      // Maneja los errores de la solicitud
+      console.error('Error al enviar datos:', error);
+      throw error
+    }
+  }
+};
 

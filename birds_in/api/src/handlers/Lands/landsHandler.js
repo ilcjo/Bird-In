@@ -12,7 +12,8 @@ const {
    sendAndUpdatePaisaje,
    deleteRegisterDb,
    fetchOptionsLand,
-   filterOptionsPaisZonasPaisaje
+   filterOptionsPaisZonasPaisaje,
+   findNameDuplicatePP
 } = require('../../controllers/Lands/landsController');
 
 const ftp = require('basic-ftp');
@@ -265,6 +266,16 @@ const checkLandsDuplicate = async (req, res) => {
    }
 };
 
+const checkLandsDuplicateP = async (req, res) => {
+   const { zona } = req.query
+   try {
+      const message = await findNameDuplicatePP(zona)
+      return res.status(200).json(message);
+   } catch (error) {
+      res.status(500).json({ error: error.message });
+   }
+};
+
 const getExcel = async (req, res) => {
    try {
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
@@ -324,6 +335,7 @@ module.exports = {
    contandoRegistros,
    deletePaisaje,
    findInfoForUpdateNameP,
-   checkLandsDuplicate
+   checkLandsDuplicate,
+   checkLandsDuplicateP,
 }
 

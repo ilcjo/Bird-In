@@ -6,25 +6,27 @@ const DEFAULT_PER_PAGE = 18;
 const DEFAULT_PAGE = 1;
 
 const fetchFilterLands = async (pais, zona, page, perPage) => {
-    // console.log('filter', pais, zona)
     try {
         const whereClause = {};
 
-        // Condiciones para el where de Paisajes
+        // Si existe un país, añadir la condición al whereClause
         if (pais) {
             whereClause.paises_id_pais = pais;
         }
+
+        // Si existe una zona, añadir la condición al whereClause
         if (zona) {
             whereClause.zonas_id_zona = zona;
         }
-        // console.log(whereClause)
+
+        // Convertir página y cantidad por página a número, con valores predeterminados
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
 
-        // Obtén los paisajes filtrados junto con los países y zonas asociados
+        // Si ni país ni zona están presentes, devolver todos los paisajes sin filtro
         const RegistrosFiltrados = await Paisajes.findAll({
-            where: whereClause,
+            where: Object.keys(whereClause).length > 0 ? whereClause : {}, // Si no hay filtros, buscar todo
             include: [
                 {
                     model: Paises,
@@ -43,8 +45,10 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
             offset: offset
         });
 
-        // Obtén el total de paisajes para calcular el total de páginas
-        const totalResults = await Paisajes.count({ where: whereClause });
+        // Contar el total de paisajes
+        const totalResults = await Paisajes.count({
+            where: Object.keys(whereClause).length > 0 ? whereClause : {} // Si no hay filtros, contar todo
+        });
 
         const totalPages = Math.ceil(totalResults / perPageConvert);
         const isLastPage = pageConvert >= totalPages;
@@ -52,9 +56,60 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
         return { RegistrosFiltrados, totalResults, isLastPage };
     } catch (error) {
         console.error('Ocurrió un error al realizar la consulta:', error);
-        throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
+        throw error;
     }
 };
+
+// const fetchFilterLands = async (pais, zona, page, perPage) => {
+//     // console.log('filter', pais, zona)
+//     try {
+//         const whereClause = {};
+
+//         // Condiciones para el where de Paisajes
+//         if (pais) {
+//             whereClause.paises_id_pais = pais;
+//         }
+//         if (zona) {
+//             whereClause.zonas_id_zona = zona;
+//         }
+//         // console.log(whereClause)
+//         const pageConvert = Number(page) || DEFAULT_PAGE;
+//         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
+//         const offset = perPageConvert ? (pageConvert - 1) * perPageConvert : 0;
+
+//         // Obtén los paisajes filtrados junto con los países y zonas asociados
+//         const RegistrosFiltrados = await Paisajes.findAll({
+//             where: whereClause,
+//             include: [
+//                 {
+//                     model: Paises,
+//                     attributes: ['nombre', 'id_pais'],
+//                 },
+//                 {
+//                     model: Zonas,
+//                     attributes: [['nombre_zona', 'nombre'], 'id_zona'],
+//                 },
+//                 {
+//                     model: Imagenes_paisajes,
+//                     attributes: [['url_paisaje', 'url'], 'destacada']
+//                 }
+//             ],
+//             limit: perPageConvert,
+//             offset: offset
+//         });
+
+//         // Obtén el total de paisajes para calcular el total de páginas
+//         const totalResults = await Paisajes.count({ where: whereClause });
+
+//         const totalPages = Math.ceil(totalResults / perPageConvert);
+//         const isLastPage = pageConvert >= totalPages;
+
+//         return { RegistrosFiltrados, totalResults, isLastPage };
+//     } catch (error) {
+//         console.error('Ocurrió un error al realizar la consulta:', error);
+//         throw error; // Lanza la excepción para que pueda ser capturada en el lugar desde donde se llama la función.
+//     }
+// };
 
 const fetchOptionsLand = async () => {
     const optionsPaises = await Paises.findAll({
@@ -84,8 +139,6 @@ const fetchOptionsLand = async () => {
         // paisesE: existingPaises
     }
 };
-
-
 
 const filterOptionsPaisZonasPaisaje = async (pais, zona) => {
     // console.log('primera', zona, pais);
@@ -130,7 +183,6 @@ const filterOptionsPaisZonasPaisaje = async (pais, zona) => {
     return newOptions;
 };
 
-
 const sendAndCreateLand = async (
     pais,
     zona,
@@ -139,26 +191,27 @@ const sendAndCreateLand = async (
     urlImagen,
     map
 ) => {
-    // console.log(urlImagen)
     try {
         // Verificar si tanto el país como la zona están presentes
-        if (!pais || !zona) {
-            throw new Error('Tanto el país como la zona son obligatorios.');
+        if (!pais) {
+            throw new Error('El país es obligatorio.');
         }
 
-        const imagenesData = urlImagen.map((imageUrl) => {
-            return {
-                url_paisaje: imageUrl,
-            };
-        });
+        // Crear un arreglo de imágenes de paisajes a partir de las URLs proporcionadas
+        const imagenesData = urlImagen.map((imageUrl) => ({
+            url_paisaje: imageUrl,
+        }));
 
-        // Crear un nuevo registro en la tabla "Paisajes"
+        // Verificar si la zona tiene un id válido
+        const zonaId = zona && zona.id ? zona.id : null;
+
+        // Crear el registro en la tabla "Paisajes"
         const createNewRegistro = await Paisajes.create({
             descripcion: descripcion,
             url: urlWiki,
             map: map,
             paises_id_pais: pais.id,
-            zonas_id_zona: zona.id,
+            zonas_id_zona: zonaId, // Guardar el ID de la zona si existe, o null
             imagenes_paisajes: imagenesData
         }, {
             include: [Imagenes_paisajes]
@@ -170,6 +223,7 @@ const sendAndCreateLand = async (
         throw new Error("Ha ocurrido un error al crear el paisaje.");
     }
 };
+
 
 const findDataByIdP = async (id) => {
     try {
@@ -399,6 +453,28 @@ const findNameDuplicateP = async (id) => {
     }
 };
 
+const findNameDuplicatePP = async (id) => {
+    try {
+        const existingRelations = await Paisajes.findAll({
+            where: {
+                paises_id_pais: id
+            }
+        });
+
+        // Si encuentra aves con el mismo nombre, arroja un error
+        if (existingRelations.length > 0) {
+            throw new Error("Este Registro ya existe.");
+        }
+        // Si no encuentra aves con el mismo nombre, simplemente retorna
+        return "Registro disponible.";
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+
 
 module.exports = {
     fetchOptionsLand,
@@ -411,5 +487,6 @@ module.exports = {
     filterOptionsPaisZonasPaisaje,
     deleteRegisterDb,
     findDataByNameP,
-    findNameDuplicateP
+    findNameDuplicateP,
+    findNameDuplicatePP
 };

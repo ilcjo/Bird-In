@@ -29,6 +29,7 @@ landsRouter.get('/filtros', getFilterInfoP)
     .put('/foto_portada', setCoverPhotoP)
     .delete('/borrar_registro', deletePaisaje)
     .get('/duplicados', checkLandsDuplicate)
+    .get('/duplicadosP', checkLandsDuplicate)
     .get('/descargar-excel', getExcel)
     
 module.exports = landsRouter
