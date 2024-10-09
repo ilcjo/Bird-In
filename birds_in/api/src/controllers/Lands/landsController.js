@@ -127,17 +127,36 @@ const fetchOptionsLand = async () => {
             ['nombre_zona', 'ASC']
         ]
     });
-    // Obtener lista de países relacionados con aves usando la tabla intermedia AvesPaises
-    const existingPaises = await PaisesconAves.findAll({
-        attributes: [['id_pais', 'id'], 'nombre']
+    const paisIdsInPaisajes = await Paisajes.findAll({
+        attributes: ['paises_id_pais'], // Solo necesitamos el ID del país
     });
 
+    // Obtener los nombres de los países que tienen esos IDs (sin eliminar duplicados)
+    const existingPaises = await Paises.findAll({
+        where: {
+            id_pais: paisIdsInPaisajes.map(paisaje => paisaje.paises_id_pais) // Filtramos solo los IDs encontrados
+        },
+        attributes: [['id_pais', 'id'], 'nombre'], // Devolvemos solo el id y el nombre
+    });
+    // Obtener lista de IDs de zonas que están en Paisajes (sin agrupar ni eliminar duplicados)
+    const zonaIdsInPaisajes = await Paisajes.findAll({
+        attributes: ['zonas_id_zona'], // Solo necesitamos el ID de la zona
+    });
+
+    // Obtener los nombres de las zonas que tienen esos IDs
+    const existingZonas = await Zonas.findAll({
+        where: {
+            id_zona: zonaIdsInPaisajes.map(paisaje => paisaje.zonas_id_zona) // Filtramos solo los IDs encontrados
+        },
+        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre']], // Devolvemos solo el id y el nombre
+    });
 
     return {
-        paises: optionsPaises,
-        zonas: optionsZonas,
-        // paisesE: existingPaises
-    }
+        paises: existingPaises,
+        zonas: existingZonas,
+        paisesAll: optionsPaises, // Lista de países en Paisajes
+        zonasAll: optionsZonas // Lista de zonas en Paisajes
+    };
 };
 
 const filterOptionsPaisZonasPaisaje = async (pais, zona) => {

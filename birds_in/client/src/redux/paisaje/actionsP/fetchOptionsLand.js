@@ -5,7 +5,7 @@ import { fetchOptions, newOptions, setNoMoreResults } from '../slicesP/Landscape
 export const getOptionsDataP = () => {
   return async (dispatch) => {
     try {
-      const response = await axios('aves/opciones')
+      const response = await axios('paisajes/opciones')
       const data = response.data
       dispatch(fetchOptions(data))
       dispatch(setNoMoreResults(true))

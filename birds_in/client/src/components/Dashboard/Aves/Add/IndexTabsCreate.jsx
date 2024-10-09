@@ -11,6 +11,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     width: '100%',
+    boxSizing: 'border-box',
     '& .Mui-selected': {
         backgroundColor: theme.palette.custom.light,
     },
@@ -37,7 +38,7 @@ export const IndexTabsCreate = ({
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [coverSelected, setCoverSelected] = React.useState(false);
     const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
-    
+
     //si pasa a la otra pestaña que confirme el cover este 
     const handleTabChange = (event, newValue) => {
         // console.log(coverSelected, 'dentro')
@@ -50,7 +51,7 @@ export const IndexTabsCreate = ({
             setCoverSelected(false)
         }
     };
- 
+
     //función que determina si tiene cover en true
     const handleSetCoverSelected = (isSelected) => {
         setCoverSelected(isSelected);
@@ -58,7 +59,7 @@ export const IndexTabsCreate = ({
 
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '95%', margin: '0 auto', minWidth: '1200px' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px' }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -89,14 +90,16 @@ export const IndexTabsCreate = ({
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDelete
-                            isCreate={true}
-                            changeTab={changeTab}
-                            showUpdateBird={showUpdateBird}
-                            showSearchBird={showSearchBird}
-                            selectedBird={selectedBird}
-                            setCoverSelected={handleSetCoverSelected}
-                        />
+                        <React.Fragment>
+                            <CoverDelete
+                                isCreate={true}
+                                changeTab={changeTab}
+                                showUpdateBird={showUpdateBird}
+                                showSearchBird={showSearchBird}
+                                selectedBird={selectedBird}
+                                setCoverSelected={handleSetCoverSelected}
+                            />
+                        </React.Fragment>
                     )}
                 </Box>
             </Box>
