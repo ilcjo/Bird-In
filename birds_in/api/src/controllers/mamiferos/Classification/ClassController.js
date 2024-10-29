@@ -1,4 +1,4 @@
-const { Mamiferos, Familias_mamiferos, Grupos_mamiferos } = require("../../../config/db/db");
+const { Mamiferos, Familias_mamiferos, Order_mamiferos } = require("../../../config/db/db");
 
 const createFamilias = async (familia) => {
     try {
@@ -76,21 +76,21 @@ const borrarFamilias = async (idF) => {
             },
         });
 
-        return `Se actualizaron ${RegistrosConIdFamilia.length} Mamiferos al nuevo ID de familia  y Grupo a not specified.`;
+        return `Se actualizaron ${RegistrosConIdFamilia.length} Mamiferos al nuevo ID de familia  y Order a not specified.`;
     } catch (error) {
         console.error('Error:', error);
         throw error;
     }
 };
 
-const createGrupos = async (grupo) => {
+const createOrder = async (order) => {
     try {
-        if (grupo) {
-            await Grupos_mamiferos.create({
-                nombre: grupo,
+        if (order) {
+            await Order_mamiferos.create({
+                nombre: order,
 
             });
-            return "Grupo creado correctamente."
+            return "Orden creado correctamente."
         }
     } catch (error) {
         console.error('Error:', error);
@@ -98,34 +98,34 @@ const createGrupos = async (grupo) => {
     }
 };
 
-const updateGrupo = async (nombreG, idGrupo) => {
+const updateOrder = async (nombreG, idOrder) => {
     try {
-        const existingGrupos = await Grupos_mamiferos.findOne({
+        const existingOrder = await Order_mamiferos.findOne({
             where: {
-                id_grupo: idGrupo,
+                id_order: idOrder,
             },
         })
-        if (!existingGrupos) {
-            throw new Error("El ID de Grupo especificado no existe.");
+        if (!existingOrder) {
+            throw new Error("El ID de Order especificado no existe.");
         }
-        if (idGrupo <= 0) {
+        if (idOrder <= 0) {
             throw new Error("El ID no es válido.");
         }
         // Verifica que zona sea una cadena de texto no vacía
         if (typeof nombreG !== 'string' || nombreG.trim() === '') {
-            throw new Error("El nombre de la Grupo no es válido. Debe ser una cadena de texto no vacía.");
+            throw new Error("El nombre de la Order no es válido. Debe ser una cadena de texto no vacía.");
         }
-        if (nombreG !== existingGrupos.nombre) {
+        if (nombreG !== existingOrder.nombre) {
 
-            await Grupos_mamiferos.update({
+            await Order_mamiferos.update({
                 nombre: nombreG,
             },
                 {
                     where: {
-                        id_grupo: idGrupo,
+                        id_order: idOrder,
                     },
                 });
-            return "Grupo actualizado correctamente."
+            return "Order actualizado correctamente."
         }
     } catch (error) {
         console.error('Error:', error);
@@ -133,34 +133,34 @@ const updateGrupo = async (nombreG, idGrupo) => {
     }
 };
 
-const borrarGrupos = async (idG) => {
+const borrarOrder = async (idG) => {
     try {
         // Buscar todas las Mamiferos que tienen el ID de la familia a cambiar
-        const RegistrosConIdGrupos = await Mamiferos.findAll({
+        const RegistrosConIdOrder = await Mamiferos.findAll({
             where: {
-                grupos_id_grupo: idG,
+                orders_id_order: idG,
             },
         });
 
         // Cambiar el ID de familia solo en las Mamiferos encontradas
         await Mamiferos.update(
             {
-                grupos_id_grupo: 4, // Cambiar el ID de familia al valor not specified
+                orders_id_order: 4, // Cambiar el ID de familia al valor not specified
             },
             {
                 where: {
-                    grupos_id_grupo: idG,
+                    orders_id_order: idG,
                 },
             }
         );
 
-        await Grupos_mamiferos.destroy({
+        await Order_mamiferos.destroy({
             where: {
-                id_grupo: idG,
+                id_order: idG,
             },
         });
 
-        return `Se actualizaron ${RegistrosConIdGrupos.length} Mamiferos al nuevo ID de Grupo  y Familia a not specified.`;
+        return `Se actualizaron ${RegistrosConIdOrder.length} Mamiferos al nuevo ID de Order  y Familia a not specified.`;
     } catch (error) {
         console.error('Error:', error);
         throw error;
@@ -172,7 +172,7 @@ module.exports = {
     createFamilias,
     updateFamilias,
     borrarFamilias,
-    createGrupos,
-    updateGrupo,
-    borrarGrupos,
+    createOrder,
+    updateOrder,
+    borrarOrder,
 }

@@ -28,6 +28,13 @@ const StyledTab = styled(Tab)({
 
 export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, selected, history }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
+    const [coverSelected, setCoverSelected] = React.useState(false);
+    const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
+
+      //función que determina si tiene cover en true
+    const handleSetCoverSelected = (isSelected) => {
+        setCoverSelected(isSelected);
+    };
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -36,10 +43,21 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
     const handleNavigateToCoverDelete = () => {
         setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
     };
-    
+
+
+    React.useEffect(() => {
+        let isFromImage = localStorage.getItem('isFromCreateImage');
+        let isExist = localStorage.getItem('isExist');
+        if (isFromImage === 'true' && isExist === 'false') {
+            handleNavigateToCoverDelete();
+        } else if (isFromImage === 'false' && isExist === 'true') {
+
+        }
+    }, []);
+
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '95%', margin: '0 auto',  }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -63,6 +81,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
                                 showSearch={showSearch}
                                 selected={selected}
                                 changeImagenExist={handleNavigateToCoverDelete}
+                                isImages={() => setImagesExistTabEnabled(true)}
                             />
                         </React.Fragment>
                     )}

@@ -96,3 +96,18 @@ export const sendCoverPhoto = (id, idAves) => {
         }
     };
 };
+
+export const saveOrderPhotos = (arrayImages) => {
+  // console.log('llega al axios', arrayImages)
+  return async (dispatch) => {
+    try {
+      const response = axios.post('/aves/guardar_orden_images', { arrayImages })
+      const data = response.data
+      return data
+    } catch (error) {
+      console.error("Error al obtener los datos:", error)
+      throw error
+
+    }
+  };
+};

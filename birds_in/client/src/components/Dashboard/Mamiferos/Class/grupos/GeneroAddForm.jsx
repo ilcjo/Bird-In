@@ -29,7 +29,7 @@ export const GeneroAddForm = ({
     // Verificar si el nombre de la familia está vacío
     if (!nombreG.trim()) {
       showErrorSnack(true);
-      errorMessage('El nombre del Genero no puede estar vacío.');
+      errorMessage('El nombre del Order no puede estar vacío.');
       return;
     }
 
@@ -43,7 +43,7 @@ export const GeneroAddForm = ({
       const response = await dispatch(addGrupo(nombreGrupos));
       await dispatch(getOptionsDataM())
       onloading(false)
-      successMessages('Genero creado correctamente')
+      successMessages('Order creado correctamente')
       showSnackBar(true);
       // Limpia el formulario o realiza otras acciones necesarias
       setNombreGrupos({
@@ -102,14 +102,14 @@ export const GeneroAddForm = ({
       }}>
         <Grid item xs={12} sm={9}>
           <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
-            Agregar Nuevo Genero
+            Agregar Nuevo Order
             <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
           </Typography>
         </Grid>
         <Grid item xs={12} md={9}>
           <TextField
             fullWidth
-            label="Nombre de Genero"
+            label="Nombre de Order"
             value={nombreGrupos.nombreG}
             onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
             InputLabelProps={{

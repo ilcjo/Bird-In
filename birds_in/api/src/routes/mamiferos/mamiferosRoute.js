@@ -1,7 +1,7 @@
 const { Router } = require('express')
 
 const upload = require('../../utils/multerConfig')
-const { getFilterInfo, selectOptions, getFilterOptions, createMamifero, uploadImageftp, findInfoForUpdate, findInfoForUpdateName, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getAllNombres, checkClases, checkDuplicateNames, getExcel } = require('../../handlers/mamiferos/mamiferoHandler')
+const { getFilterInfo, selectOptions, getFilterOptions, createMamifero, uploadImageftp, findInfoForUpdate, findInfoForUpdateName, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getAllNombres, checkClases, checkDuplicateNames, getExcel, saveOrderImages } = require('../../handlers/mamiferos/mamiferoHandler')
 
 const MamiferoRouter = Router()
 MamiferoRouter
@@ -22,4 +22,5 @@ MamiferoRouter
     .get('/nombres', getAllNombres)
     .get('/clases', checkClases)
     .get('/gruposFamilias', checkDuplicateNames)
+    .post('/guardar_orden_images', saveOrderImages)
 module.exports = MamiferoRouter

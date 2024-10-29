@@ -14,11 +14,8 @@ import { EditImageCards } from '../../../Cards/EditImageCards';
 import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/birds/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
 import { getAve } from '../../../../redux/birds/slices/UpdateSlice';
-import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
-import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
-import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
 
-export const CoverDeleteSecond = ({
+export const CoverDeleteOrigin = ({
     isCreate,
     showUpdateBird,
     showSearchBird,
@@ -28,8 +25,8 @@ export const CoverDeleteSecond = ({
 
     const theme = useTheme();
     const dispatch = useDispatch();
-    const nombreP = localStorage.getItem('nombrePaisaje') || 'del Paisaje';
-    const { infoLandForUpdate } = useSelector(state => state.createLand);
+    const nombreAve = localStorage.getItem('nombreIngles') || 'del Ave';
+    const { infoAveForUpdate } = useSelector(state => state.createBird);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -54,11 +51,11 @@ export const CoverDeleteSecond = ({
                 }
             });
             // Si la imagen es destacada, enviar la solicitud para guardarla como portada
-            await dispatch(sendCoverPhotoP(id, infoLandForUpdate.id));
+            await dispatch(sendCoverPhoto(id, infoAveForUpdate.id_ave));
             setShowBackdrop(true);
             setLoadingMessage('Seleccionando Portada')
             await new Promise((resolve) => setTimeout(resolve, 5000));
-            await dispatch(getInfoForUpdate(infoLandForUpdate.id));
+            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -71,6 +68,14 @@ export const CoverDeleteSecond = ({
             setErrorSnackbarOpen(true);
         }
     };
+
+    // React.useEffect(() => {
+    //     // Verificar si ya hay una portada seleccionada cuando el componente se monta
+    //     if (infoAveForUpdate && infoAveForUpdate.imagenes_aves) {
+    //         const portadaSeleccionada = infoAveForUpdate.imagenes_aves.some((img) => img.destacada === true);
+    //         setCoverSelected(portadaSeleccionada); // Actualizar el estado de la portada seleccionada
+    //     }
+    // }, [infoAveForUpdate,]);
 
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
@@ -112,9 +117,9 @@ export const CoverDeleteSecond = ({
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
             // Realizar la eliminación de fotos
-            await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
+            await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
-            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
+            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
             setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSelectedImages([])
             setShowBackdrop(false)
@@ -138,7 +143,7 @@ export const CoverDeleteSecond = ({
     React.useEffect(() => {
         if (isCreate) {
             setSelectedImages([]);
-            dispatch(getLand({}))
+            dispatch(getAve({}))
             // localStorage.removeItem('nombreIngles')
         }
     }, [isCreate])
@@ -166,7 +171,7 @@ export const CoverDeleteSecond = ({
                     <Grid container >
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h2' color='primary'>
-                                Imágenes {nombreP ? ` ${nombreP}` : 'del Paisaje'}
+                                Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -201,9 +206,9 @@ export const CoverDeleteSecond = ({
                     >
                         Eliminar selección
                     </Button>
-                    {infoLandForUpdate && infoLandForUpdate.imagenes_paisajes && infoLandForUpdate.imagenes_paisajes.length > 0 && (
+                    {infoAveForUpdate && infoAveForUpdate.imagenes_aves && infoAveForUpdate.imagenes_aves.length > 0 && (
                         <Grid container spacing={0} sx={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-                            {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
+                            {infoAveForUpdate.imagenes_aves.map((imageUrl, index) => (
                                 <Grid item xs={12} sm={6} md={4} key={index}>
                                     <EditImageCards
                                         imageUrl={imageUrl}
@@ -216,13 +221,13 @@ export const CoverDeleteSecond = ({
                             ))}
                             <CarruselGalleryDelete
                                 isOpen={isGalleryOpen}
-                                images={infoLandForUpdate.imagenes_paisajes}
+                                images={infoAveForUpdate.imagenes_aves}
                                 selectedIndex={selectedImageIndex}
                                 onClose={handleCloseGallery}
                             />
                         </Grid>
                     )}
-                    {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes || infoLandForUpdate.imagenes_paisajes.length === 0 && (
+                    {!infoAveForUpdate || !infoAveForUpdate.imagenes_aves || infoAveForUpdate.imagenes_aves.length === 0 && (
                         <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
                             No hay imágenes subidas.
                         </Typography>

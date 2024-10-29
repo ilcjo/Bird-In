@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 //COMPONENTS
 import { CreateBird } from '../../../Forms/Aves/CreateBird'
 import { CoverDelete } from '../Photos/CoverDelete';
+import { CoverDeleteOrigin } from '../Photos/CoverDeleteOrigin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -57,6 +58,13 @@ export const IndexTabsCreate = ({
         setCoverSelected(isSelected);
     };
 
+    
+    React.useEffect(() => {
+        localStorage.removeItem('isFromCreateImage');
+        localStorage.removeItem('isExist');
+        localStorage.removeItem('nombreIngles');
+    }, [])
+
     return (
         <React.Fragment>
             <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px' }}>
@@ -70,12 +78,12 @@ export const IndexTabsCreate = ({
                     <StyledTab label={<Typography variant='h5' >
                         Información
                     </Typography>} />
-                    <StyledTab
+                    {/* <StyledTab
                         label={<Typography variant='h5' >
                             Imágenes Existente
                         </Typography>}
                         disabled={!imagesExistTabEnabled} // Deshabilitar la pestaña si no hay imágenes
-                    />
+                    /> */}
                     {/* Agrega más pestañas según sea necesario */}
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%', }}>
@@ -91,7 +99,7 @@ export const IndexTabsCreate = ({
                     )}
                     {selectedTab === 1 && (
                         <React.Fragment>
-                            <CoverDelete
+                            <CoverDeleteOrigin
                                 isCreate={true}
                                 changeTab={changeTab}
                                 showUpdateBird={showUpdateBird}

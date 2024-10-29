@@ -52,7 +52,7 @@ export const GeneroTable = ({
 }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { grupos } = useSelector(state => state.filters.options);
+    const { order } = useSelector(state => state.filters.options);
 
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
@@ -70,14 +70,14 @@ export const GeneroTable = ({
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('¿Seguro que deseas eliminar este Genero?')) {
+        if (window.confirm('¿Seguro que deseas eliminar este Order?')) {
             try {
                 onloading(true);
-                loadingMessage('Eliminando Grupo...');
+                loadingMessage('Eliminando Order...');
                 await dispatch(eliminarGrupo(id));
                 await dispatch(getOptionsDataM());
                 onloading(false);
-                successMessages('Genero Eliminado');
+                successMessages('Order Eliminado');
                 showSnackBar(true);
             } catch (error) {
                 errorMessage(String(error));
@@ -101,7 +101,7 @@ export const GeneroTable = ({
             await dispatch(updateGrupo(nombreGrupos));
             await dispatch(getOptionsDataM());
             onloading(false);
-            successMessages('Genero actualizado correctamente');
+            successMessages('Order actualizado correctamente');
             showSnackBar(true);
             setEditMode(null);
             setNombreGrupos({
@@ -119,7 +119,7 @@ export const GeneroTable = ({
         setSearchTerm(e.target.value.toLowerCase());
     };
 
-    const filteredGrupos = grupos.filter((item) =>
+    const filteredGrupos = order.filter((item) =>
         item.nombre.toLowerCase().includes(searchTerm)
     );
 
@@ -150,13 +150,13 @@ export const GeneroTable = ({
         <div>
             <Grid item sx={12} md={12}>
                 <Typography variant='h5' color='primary.light' sx={{ mb: 1, mt: 5 }}>
-                    Lista de Géneros
+                    Lista de Orders
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} />
                 </Typography>
                 <TextField
                     fullWidth
                     variant="outlined"
-                    placeholder="Buscar Genero..."
+                    placeholder="Buscar Order..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     sx={{

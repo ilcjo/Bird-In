@@ -37,7 +37,7 @@ export const IndexTabsCreate = ({
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [coverSelected, setCoverSelected] = React.useState(false);
     const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
-    
+
     //si pasa a la otra pestaña que confirme el cover este 
     const handleTabChange = (event, newValue) => {
         // console.log(coverSelected, 'dentro')
@@ -50,11 +50,17 @@ export const IndexTabsCreate = ({
             setCoverSelected(false)
         }
     };
- 
+
     //función que determina si tiene cover en true
     const handleSetCoverSelected = (isSelected) => {
         setCoverSelected(isSelected);
     };
+
+    React.useEffect(() => {
+        localStorage.removeItem('isFromCreateImage');
+        localStorage.removeItem('isExist');
+        localStorage.removeItem('nombreIngles');
+    }, [])
 
     return (
         <React.Fragment>
@@ -69,12 +75,12 @@ export const IndexTabsCreate = ({
                     <StyledTab label={<Typography variant='h5' >
                         Información
                     </Typography>} />
-                    <StyledTab
+                    {/* <StyledTab
                         label={<Typography variant='h5' >
                             Imágenes Existente
                         </Typography>}
                         disabled={!imagesExistTabEnabled} // Deshabilitar la pestaña si no hay imágenes
-                    />
+                    /> */}
                     {/* Agrega más pestañas según sea necesario */}
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%', }}>

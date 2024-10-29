@@ -38,6 +38,16 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
         setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
     };
 
+    React.useEffect(() => {
+        let isFromImage = localStorage.getItem('isFromCreateImage');
+        let isExist = localStorage.getItem('isExist');
+        if (isFromImage === 'true' && isExist === 'false') {
+            handleNavigateToCoverDelete();
+        } else if (isFromImage === 'false' && isExist === 'true') {
+
+        }
+    }, []);
+
     return (
         <React.Fragment>
             <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px', }}>
@@ -64,6 +74,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdateBird, showSear
                                 showSearchBird={showSearchBird}
                                 selectedBird={selectedBird}
                                 changeImagenExist={handleNavigateToCoverDelete}
+                                isImages={() => setImagesExistTabEnabled(true)}
                             />
                         </React.Fragment>
                     )}

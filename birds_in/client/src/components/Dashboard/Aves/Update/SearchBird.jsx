@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 //COMPONENTS
 import { IndexTabsUpdates } from './IndexTabsUpdates';
 import { Loading } from '../../../utils/Loading';
-import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
+import { getInfoForUpdate, getInfoForUpdateName } from '../../../../redux/birds/actions/crudAction';
 //redux
 
 
@@ -46,15 +46,35 @@ export const SearchBird = ({ changeTab }) => {
         }
     };
 
+    const handleButtonClickFromCreate = () => {
+        let valor = localStorage.getItem('nombreIngles');
+        if (valor) {
+            try {
+                valor = JSON.parse(valor); // Asegurarse de parsear el JSON si es necesario
+            } catch (e) {
+                console.error('Error al parsear nombreIngles:', e);
+            }
+            dispatch(getInfoForUpdateName(valor)); // Llama al action con el valor obtenido
+            setShowUpdateBird(true); // Cambia a la vista de actualización
+            setShowSearchBird(false); // Oculta la vista de búsqueda
+        } else {
+            console.error('nombreIngles no se encuentra en localStorage');
+        }
+    };
+
+    React.useEffect(() => {
+        let isFrom = localStorage.getItem('isFromCreate');
+        if (isFrom) {
+            handleButtonClickFromCreate()
+        }
+    }, []);
+
     React.useEffect(() => {
         if (selectedBird) {
             handleButtonClick();
         }
     }, [selectedBird]);
 
-    //tengo una idea de hacer una rta 
-    //donde solo busque lso nombre después busco el ave 
-    //que selecciona y si pone la info, para hacerlo mas rápido
     React.useEffect(() => {
         const fetchData = async () => {
             try {

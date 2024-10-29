@@ -5,7 +5,7 @@ import { counting } from '../../../redux/mamiferos/actions/infoAction';
 
 export const Contadores = () => {
     const dispatch = useDispatch();
-    const { allRegistros, allEnglish, allCientifico, allComun, allGrupos, allFamilias, allZonas, allCountrys } = useSelector(state => state.dataSlice.count);
+    const { allRegistros, allEnglish, allCientifico, allComun, allOrders, allFamilias, allZonas, allCountrys } = useSelector(state => state.dataSlice.count);
 
     React.useEffect(() => {
         dispatch(counting());
@@ -20,7 +20,7 @@ export const Contadores = () => {
 
     const secondHalfData = [
         { label: 'Número de Familias', value: allFamilias },
-        { label: 'Número de Géneros', value: allGrupos },
+        { label: 'Número de Orders', value: allOrders },
         { label: 'Número de Países', value: allCountrys },
         { label: 'Número de Zonas', value: allZonas }
     ];

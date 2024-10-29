@@ -27,7 +27,7 @@ import { Loading } from '../../utils/Loading';
 //redux
 import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/mamiferos/actions/crudAction';
 import { UpdateImage } from '../../../redux/mamiferos/actions/photosAction';
-import { clasesFamilia, clasesGrupo } from '../../../redux/mamiferos/actions/fetchOptions';
+import { clasesFamilia, clasesOrder } from '../../../redux/mamiferos/actions/fetchOptions';
 
 
 export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, selected, changeImagenExist }) => {
@@ -35,10 +35,10 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filters.options)
+    const { paises, familias, order, zonas } = useSelector(state => state.filters.options)
     const { infoForUpdate } = useSelector(state => state.updateSlice)
     const initialCreateData = {
-        grupo: infoForUpdate.grupos_mamifero || null,
+        order: infoForUpdate.order_mamifero || null,
         familia: infoForUpdate.familias_mamifero || null,
         pais: infoForUpdate.paises || [],
         zona: infoForUpdate.zonasMamiferos || [],
@@ -62,15 +62,15 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El Registro se ha Actualizado correctamente.');
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
-    const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
-
+    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(order);
+    
     React.useEffect(() => {
         setShowBackdrop(true); // Mostrar el backdrop al inicio
         setLoadingMessage('Cargando..'); // Ejemplo de mensaje de carga completada (ajusta según necesites)
 
         const timer = setTimeout(() => {
             setShowBackdrop(false); // Cerrar el backdrop después de 5 segundos
-        }, 3000);
+        }, 1000);
 
         return () => {
             clearTimeout(timer); // Limpiar el temporizador al desmontar el componente
@@ -95,23 +95,23 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
             // Combina las opciones existentes con las nuevas opciones extra
             const newCombinedOptions = [
                 ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...grupos, // Mantén las opciones originales
+                ...order, // Mantén las opciones originales
 
             ];
 
-            setCombinedOptionsGrupos(newCombinedOptions);
+            setCombinedOptionsOrders(newCombinedOptions);
         }
     };
 
-    const handleGrupoChange = async (event, newValue) => {
+    const handleOrderChange = async (event, newValue) => {
         setCreateData(prevState => ({
             ...prevState,
-            grupo: newValue,
+            order: newValue,
         }));
 
         if (newValue) {
             // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+            const extraData = await dispatch(clasesOrder(newValue.id)); // Supongamos que esta función devuelve datos adicionales
             // console.log(extraData)
             // Combina las opciones existentes con las nuevas opciones extra
             const newCombinedOptions = [
@@ -127,16 +127,16 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     React.useEffect(() => {
         const loadInitialData = async () => {
             if (infoForUpdate.familia) {
-                const extraDataGrupos = await dispatch(clasesFamilia(infoForUpdate.familia.id));
-                const newCombinedOptionsGrupos = [
-                    ...extraDataGrupos.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                    ...grupos, // Mantén las opciones originales
+                const extraDataOrders = await dispatch(clasesFamilia(infoForUpdate.familia.id));
+                const newCombinedOptionsOrders = [
+                    ...extraDataOrders.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...order, // Mantén las opciones originales
                 ];
-                setCombinedOptionsGrupos(newCombinedOptionsGrupos);
+                setCombinedOptionsOrders(newCombinedOptionsOrders);
             }
 
-            if (infoForUpdate.grupo) {
-                const extraDataFamilias = await dispatch(clasesGrupo(infoForUpdate.grupo.id));
+            if (infoForUpdate.order) {
+                const extraDataFamilias = await dispatch(clasesOrder(infoForUpdate.order.id));
                 const newCombinedOptionsFamilias = [
                     ...extraDataFamilias.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
                     ...familias, // Mantén las opciones originales
@@ -146,7 +146,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         };
 
         loadInitialData();
-    }, [infoForUpdate, grupos, familias]);
+    }, [infoForUpdate, order, familias]);
 
 
     const handleInputChange = (event) => {
@@ -393,21 +393,22 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             <Grid item xs={12} sm={6}>
                                 <Autocomplete
                                     disablePortal
-                                    id="combo-box-familias"
-                                    // options={familias}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
-                                    options={combinedOptionsFamilias}
+                                    id="combo-box-order"
+                                    // options={order}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Orden'}
+                                    options={combinedOptionsOrders}
                                     getOptionLabel={(option) => option.nombre}
-                                    value={createData.familia}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                                    onChange={handleFamiliaChange}
+                                    value={createData.order}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
+                                    onChange={handleOrderChange}
                                     renderInput={(params) =>
                                         <TextField {...params}
-                                            label="Familia"
-                                            margin="dense"
+                                            label="Orden"
+                                            margin='dense'
+
                                         />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3 }}
+                                    // sx={{ mb: 3, mt: 1 }}
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();
@@ -425,24 +426,24 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         </li>
                                     )}
                                 />
+
                                 <Autocomplete
                                     disablePortal
-                                    id="combo-box-grupos"
-                                    // options={grupos}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
-                                    options={combinedOptionsGrupos}
+                                    id="combo-box-familias"
+                                    // options={familias}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
+                                    options={combinedOptionsFamilias}
                                     getOptionLabel={(option) => option.nombre}
-                                    value={createData.grupo}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                                    onChange={handleGrupoChange}
+                                    value={createData.familia}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    onChange={handleFamiliaChange}
                                     renderInput={(params) =>
                                         <TextField {...params}
-                                            label="Genero"
-                                            margin='dense'
-
+                                            label="Familia"
+                                            margin="dense"
                                         />}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3, mt: 1 }}
+                                    // sx={{ mb: 3 }}
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();
@@ -623,6 +624,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     {errorMessage}
                 </Alert>
             </Snackbar>
+          
 
         </React.Fragment >
     );

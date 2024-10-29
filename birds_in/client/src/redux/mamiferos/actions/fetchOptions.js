@@ -34,13 +34,13 @@ export const clasesFamilia = (idfamilia) => {
   // console.log('llegue', idfamilia)
   return async (dispatch) => {
     try {
-      // Llamada a la API para obtener los grupos basados en idfamilia
+      // Llamada a la API para obtener los orders basados en id
       const response = await axios.get(`mamiferos/clases?familiaID=${idfamilia}`);
-      const grupos = response.data.grupos;
+      const orders = response.data.orders;
       // Despachar la acción para actualizar las opciones de grupo
-      dispatch(updateGrupoOptions({ grupos }));
-      return grupos
-      // console.log(grupos)
+      dispatch(updateGrupoOptions({ orders }));
+      return orders
+      // console.log(orders)
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
@@ -48,13 +48,13 @@ export const clasesFamilia = (idfamilia) => {
   }
 };
 
-export const clasesGrupo = (idgrupo) => {
-  // console.log('llegue', idgrupo)
+export const clasesOrder = (id) => {
+  // console.log('llegue', id)
   return async (dispatch) => {
     try {
 
-      // Llamada a la API para obtener las familias basadas en idgrupo
-      const response = await axios.get(`mamiferos/clases?grupoID=${idgrupo}`);
+      // Llamada a la API para obtener las familias basadas en id
+      const response = await axios.get(`mamiferos/clases?orderID=${id}`);
       const familias = response.data.familias;
       // console.log(familias)
       // Despachar la acción para actualizar las opciones de familia

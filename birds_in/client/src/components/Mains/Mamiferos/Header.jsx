@@ -12,6 +12,7 @@ export const Header = ({ imageUrl, registro, back }) => {
       sx={{
         position: 'relative',
         width: '100%',
+        minHeight:'800px',
         height: { xs: 'auto', md: '90vh' },
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
@@ -23,7 +24,9 @@ export const Header = ({ imageUrl, registro, back }) => {
         sx={{
           width: { xs: '100%', md: '70%', lg: '70%' },
           height: { xs: '500px', md: '100%' },
-          backgroundImage: `url(${imageUrl})`,
+          minHeight:'800px',
+          backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
+          backgroundColor: imageUrl ? 'transparent' : theme.palette.grey[300],
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           boxShadow: 3,
@@ -50,7 +53,7 @@ export const Header = ({ imageUrl, registro, back }) => {
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
                 <Typography variant='h6' color='primary.light' sx={{  mb: 1, mt: -2 }}>
-                  {data.familias_mamifero.nombre || 'N/A'} / {data.grupos_mamifero.nombre || 'N/A'}
+                  {data.familias_mamifero.nombre || 'N/A'} / {data.order_mamifero.nombre || 'N/A'}
                 </Typography>
               </Grid>
 

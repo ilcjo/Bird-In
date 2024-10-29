@@ -3,7 +3,10 @@ import { Box, Card, CardActionArea, CardContent, Checkbox, Grid, IconButton, Typ
 import BeenhereTwoToneIcon from '@mui/icons-material/BeenhereTwoTone';
 import TurnedInTwoToneIcon from '@mui/icons-material/TurnedInTwoTone';
 
-export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsCover, handleDeleteCheckBox }) => {
+export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsCover, handleDeleteCheckBox,
+    handleDragStart,
+    draggable,
+}) => {
     // console.log(imageUrl)
     return (
         <Card sx={{
@@ -12,8 +15,11 @@ export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsC
             width: 439, minWidth: 439, margin: '10px 5px',
             flexDirection: 'column',
             background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)',
-           
-        }}>
+
+        }}
+            // draggable={draggable}  // Establecer atributo draggable
+            // onDragStart={() => handleDragStart(index)}  // Manejar inicio del arrastre
+        >
             <CardActionArea
                 sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', }}
                 onClick={() => handleImageClick(imageUrl.url)}>
@@ -74,6 +80,5 @@ export const EditImageCards = ({ imageUrl, index, handleImageClick, handleSetAsC
                 </Grid>
             </CardContent>
         </Card>
-
     );
 };

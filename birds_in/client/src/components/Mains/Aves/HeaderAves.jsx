@@ -15,7 +15,6 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
         background: '#86ac8e'
-
       }}
     >
       <Box
@@ -23,7 +22,9 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
         sx={{
           width: { xs: '100%', md: '70%', lg: '70%' },
           height: { xs: '500px', md: '100%' },
-          backgroundImage: `url(${imageUrl})`,
+          minWidth:'500px',
+          backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
+          backgroundColor: imageUrl ? 'transparent' : theme.palette.grey[300],
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           boxShadow: 3,

@@ -17,7 +17,8 @@ const {
     getAllNombres,
     check,
     checkClases,
-    checkDuplicateNames
+    checkDuplicateNames,
+    saveOrderImages
 
 } = require('../../handlers/birds/birdHandler')
 const upload = require('../../utils/multerConfig')
@@ -41,5 +42,5 @@ birdsRouter.get('/filtros', getFilterInfo)
     .get('/check', check)
     .get('/clases', checkClases )
     .get('/gruposFamilias', checkDuplicateNames)
-
+    .post('/guardar_orden_images', saveOrderImages)
 module.exports = birdsRouter

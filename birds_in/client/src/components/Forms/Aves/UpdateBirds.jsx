@@ -30,7 +30,7 @@ import { clasesFamilia, clasesGrupo, getOptionsData } from '../../../redux/birds
 import { actualizarAve, deleteBird, getInfoForUpdate } from '../../../redux/birds/actions/crudAction';
 import { UpdateAveImage } from '../../../redux/birds/actions/photosAction';
 
-export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist }) => {
+export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBird, selectedBird, changeImagenExist, isImages }) => {
 
     const theme = useTheme()
     const dispatch = useDispatch()
@@ -72,7 +72,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
 
         const timer = setTimeout(() => {
             setShowBackdrop(false); // Cerrar el backdrop después de 5 segundos
-        }, 3000);
+        }, 1000);
 
         return () => {
             clearTimeout(timer); // Limpiar el temporizador al desmontar el componente

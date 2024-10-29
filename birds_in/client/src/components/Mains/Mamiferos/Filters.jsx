@@ -44,14 +44,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         nCientifico = [],
         paises = [],
         familias = [],
-        grupos = [],
+        order = [],
         zonas = []
     } = useSelector(state => state.filters.options);
 
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
-        grupo: [],
+        order: [],
         familia: [],
         pais: [],
         zona: [],
@@ -123,7 +123,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
             });
         setSelectOption({
-            grupo: [],
+            order: [],
             familia: [],
             pais: [],
             zona: [],
@@ -139,7 +139,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         return () => {
             dispatch(getOptionsDataM());
             setSelectOption({
-                grupo: [],
+                order: [],
                 familia: [],
                 pais: [],
                 zona: [],
@@ -164,6 +164,48 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 </Grid>
                 <Grid container alignItems="center">
 
+
+                    <Grid item xs={12} >
+                        <FormControl sx={{ m: 1, width: '95%' }}>
+                            <Autocomplete
+                                multiple
+                                id='grupoUnico'
+                                value={selectOption.order}
+                                onChange={(event, newValue) => handleOptionChange('order', newValue)}
+                                options={order || []}
+                                getOptionLabel={(option) => option.nombre}
+                                loading={isFetchingOptions}
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        label="Order"
+                                        sx={{
+                                            '& .MuiInputBase-input': {
+                                                height: '26px',
+                                            },
+                                        }}
+                                    />}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Typography
+                                            key={option.id}
+                                            variant="body2" // Elige el variant y otros estilos según tus necesidades
+                                            sx={{
+                                                display: 'inline-block',
+                                                fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
+                                                color: 'white',
+                                                ml: 2,
+                                                mt: 1
+                                            }}
+                                        >
+                                            {option.nombre}
+                                        </Typography>
+                                    ))
+                                }
+                                isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                disabled={order?.length === 0}
+                            />
+                        </FormControl>
+                    </Grid>
                     <Grid item xs={12}>
                         {/* Familia */}
                         <FormControl sx={{ m: 1, width: '95%' }}>
@@ -205,47 +247,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             />
                         </FormControl>
                         <Grid />
-                        <Grid item xs={12} >
-                            <FormControl sx={{ m: 1, width: '95%' }}>
-                                <Autocomplete
-                                    multiple
-                                    id='grupoUnico'
-                                    value={selectOption.grupo}
-                                    onChange={(event, newValue) => handleOptionChange('grupo', newValue)}
-                                    options={grupos || []}
-                                    getOptionLabel={(option) => option.nombre}
-                                    loading={isFetchingOptions}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Grupo"
-                                            sx={{
-                                                '& .MuiInputBase-input': {
-                                                    height: '26px',
-                                                },
-                                            }}
-                                        />}
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Typography
-                                                key={option.id}
-                                                variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                                sx={{
-                                                    display: 'inline-block',
-                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                    color: 'white',
-                                                    ml: 2,
-                                                    mt: 1
-                                                }}
-                                            >
-                                                {option.nombre}
-                                            </Typography>
-                                        ))
-                                    }
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={grupos?.length === 0}
-                                />
-                            </FormControl>
-                        </Grid>
                         <Grid item xs={12}>
                             {/*Pais */}
                             <FormControl sx={{ m: 1, width: '95%' }}>

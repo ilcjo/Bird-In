@@ -2,18 +2,20 @@ import * as React from 'react';
 import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
-
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 //ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 //COMPONENTS
 import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
-import { EditImageCards } from '../../../Cards/EditImageCards';
+import ImageDragContainer from './ImageDragContainer';
 //redux
 import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/mamiferos/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/mamiferos/actions/crudAction';
 import { getRegistro } from '../../../../redux/mamiferos/slices/UpdateSlice';
+
 
 export const CoverDelete = ({
     isCreate,
@@ -140,12 +142,11 @@ export const CoverDelete = ({
         }
     }, [isCreate])
 
+    const [images, setImages] = React.useState(infoForUpdate.imagenes_mamiferos || []);
+
     return (
         <React.Fragment>
-            <Loading
-                message={loadingMessage}
-                open={showBackdrop}
-            />
+            <Loading message={loadingMessage} open={showBackdrop} />
             <Grid container spacing={5} sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -156,8 +157,9 @@ export const CoverDelete = ({
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
                 padding: '0px 40px 30px 0px',
-                borderRadius: '0px 0px 20px 20px',
-                mb: 10,
+                borderRadius: '0px 0px 0px 0px',
+                mb: 1
+
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container alignItems="center">
@@ -172,9 +174,8 @@ export const CoverDelete = ({
                                     sx={{
                                         fontSize: '1.1rem',
                                         fontWeight: 'bold',
-                                        // color: theme.palette.primary.light,
-                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                                        backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                                        backdropFilter: 'blur(2px)',
                                     }}
                                     variant="outlined"
                                     onClick={handleReturnSearch}
@@ -188,7 +189,7 @@ export const CoverDelete = ({
                     <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2,borderColor: theme.palette.primary.main, }} />
+                    <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
                     <Button
                         variant="contained"
                         color="error"
@@ -198,56 +199,47 @@ export const CoverDelete = ({
                     >
                         Eliminar selección
                     </Button>
-                    {infoForUpdate && infoForUpdate.imagenes_mamiferos && infoForUpdate.imagenes_mamiferos.length > 0 && (
-                        <Grid container spacing={2} sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            m: 0
-                        }}>
-                            {infoForUpdate.imagenes_mamiferos.map((imageUrl, index) => (
-                                <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
-                                    <EditImageCards
-                                        imageUrl={imageUrl}
-                                        index={index}
-                                        handleImageClick={handleImageClick}
-                                        handleSetAsCover={handleSetAsCover}
-                                        handleDeleteCheckBox={handleDeleteCheckBox}
-                                    />
-                                </Grid>
-                            ))}
-                            <CarruselGalleryDelete
-                                isOpen={isGalleryOpen}
-                                images={infoForUpdate.imagenes_mamiferos}
-                                selectedIndex={selectedImageIndex}
-                                onClose={handleCloseGallery}
-                            />
-                        </Grid>
-                    )}
-                    {!infoForUpdate || !infoForUpdate.imagenes_mamiferos || infoForUpdate.imagenes_mamiferos.length === 0 && (
-                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                            No hay imágenes subidas.
-                        </Typography>
-                    )}
+
                 </Grid>
+
             </Grid>
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={9000}
-                onClose={() => setSnackbarOpen(false)}
-                message={snackbarMessage}
-            />
-            <Snackbar
-                open={errorSnackbarOpen}
-                autoHideDuration={9000}
-                onClose={() => setErrorSnackbarOpen(false)}
-            >
-                <Alert
-                    elevation={6}
-                    variant="filled"
-                    severity="error"
-                    onClose={() => setErrorSnackbarOpen(false)}
-                >
+            <Grid sx={{
+                margin: '0 auto',
+                backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
+            }}>
+                <DndProvider backend={HTML5Backend}>
+                    <ImageDragContainer
+                        images={images}
+                        handleImageClick={handleImageClick}
+                        handleSetAsCover={handleSetAsCover}
+                        handleDeleteCheckBox={handleDeleteCheckBox}
+                        loading={setLoadingMessage}
+                        backDrop={setShowBackdrop}
+                        snackBar={setSnackbarOpen}
+                        messageBar={setSnackbarMessage}
+                        errorMessage={setErrorMessage}
+                        errorBar={setErrorSnackbarOpen}
+                        idMamifero={infoForUpdate.id_mamifero}
+                    />
+                </DndProvider>
+                <CarruselGalleryDelete
+                    isOpen={isGalleryOpen}
+                    images={infoForUpdate.imagenes_mamiferos}
+                    selectedIndex={selectedImageIndex}
+                    onClose={handleCloseGallery}
+                />
+
+                {images.length === 0 && (
+                    <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                        No hay imágenes subidas.
+                    </Typography>
+                )}
+            </Grid>
+            <Snackbar open={snackbarOpen} autoHideDuration={9000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
+            <Snackbar open={errorSnackbarOpen} autoHideDuration={9000} onClose={() => setErrorSnackbarOpen(false)}>
+                <Alert elevation={6} variant="filled" severity="error" onClose={() => setErrorSnackbarOpen(false)}>
                     {errorMessage}
                 </Alert>
             </Snackbar>

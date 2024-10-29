@@ -1,4 +1,4 @@
-const { createFamilias, updateFamilias, borrarFamilias, createGrupos, updateGrupo, borrarGrupos } = require("../../../controllers/mamiferos/Classification/ClassController");
+const { createFamilias, updateFamilias, borrarFamilias, borrarOrder, updateOrder, createOrder } = require("../../../controllers/mamiferos/Classification/ClassController");
 
 const postFamilias = async (req, res) => {
     const { nombreF } = req.body
@@ -35,7 +35,7 @@ const deleteFamilias = async (req, res) => {
 const postGrupo = async (req, res) => {
     const { nombreG, } = req.body
     try {
-        const options = await createGrupos(nombreG,)
+        const options = await createOrder(nombreG,)
         return res.status(200).json(options)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -45,7 +45,7 @@ const postGrupo = async (req, res) => {
 const putGrupos = async (req, res) => {
     const { nombreG, idGrupo } = req.body
     try {
-        const options = await updateGrupo(nombreG, idGrupo)
+        const options = await updateOrder(nombreG, idGrupo)
         return res.status(200).json(options)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -56,7 +56,7 @@ const deleteGrupos = async (req, res) => {
     const { idGrupo } = req.query
     try {
         if (idGrupo) {
-            const options = await borrarGrupos(idGrupo)
+            const options = await borrarOrder(idGrupo)
             return res.status(200).json(options)
         }
     } catch (error) {

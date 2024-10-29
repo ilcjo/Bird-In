@@ -18,7 +18,6 @@ export const Landing = () => {
     if (!text) {
       return null;
     }
-
     // Dividir el texto por comas y agregar <br /> después de cada coma
     const segments = text.split('.').map((segment, index) => (
       <React.Fragment key={index}>
@@ -46,7 +45,7 @@ export const Landing = () => {
         </Grid>
 
         {/* Contenedor del contenido */}
-        <Grid xs={12} sm={12} md={4} lg={3} component={Box} elevation={6}
+        <Grid item xs={12} sm={12} md={4} lg={3} component={Box} elevation={6}
           sx={{
             margin: 0,
             backgroundColor: 'rgba(0, 56, 28, 0.3)',

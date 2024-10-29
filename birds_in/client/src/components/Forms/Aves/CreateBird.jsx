@@ -35,7 +35,6 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const dispatch = useDispatch()
 
     const { paises, familias, grupos, zonas, paisesAll } = useSelector(state => state.filterSlice.options)
-    const { extraOptions } = useSelector(state => state.filterSlice)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -49,15 +48,8 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [formSubmitted, setFormSubmitted] = React.useState(false);
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
-    // const combinedOptions = [
-    //     ...(extraOptions.length > 0 ? extraOptions.familia.map(extra => ({ ...extra, type: 'extra' })) : []),
-    //     ...familias.map(familia => ({ ...familia, type: 'familia' })),
-    // ];
-
-    // const combinedOptionsGrupos = [
-    //     ...(extraOptions.length > 0 ? extraOptions.grupo.map(extra => ({ ...extra, type: 'extra' })) : []),
-    //     ...grupos.map(familia => ({ ...familia, type: 'grupo' })),
-    // ];
+    const [isFromCreate, setIsFromCreate] = React.useState(false);
+    const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
 
     const [createData, setCreateData] = React.useState({
         grupo: null,
@@ -140,6 +132,10 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Esta ave ya existe');
                 // Restablece el valor del input
+                localStorage.setItem('isExist', JSON.stringify(isFromCreate))
+                localStorage.setItem('isFromCreateImage', JSON.stringify(false))
+                localStorage.setItem('nombreIngles', JSON.stringify(newName))
+                setIsFromCreate(true)
                 changeTabSearch()
             }
         }, 700);
@@ -201,12 +197,20 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 setImageFiles([]);
                 setFormSubmitted(false)
                 setSnackBarMessage('El ave se a creado correctamente.')
+                setIsFromCreateImage(true)
+                localStorage.setItem('isFromCreateImage', JSON.stringify(true))
+                localStorage.setItem('isExist', JSON.stringify(false))
+                changeTabSearch()
                 // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
-                setTimeout(() => {
-                    dispatch(getInfoForUpdateName(createData.ingles));
-                    changeImagenTab(1);
-                    isImages(true)
-                }, 1500); // 10000 mili segundos = 10 segundos
+                // setTimeout(() => {
+                //     localStorage.setItem('isFromCreateImage', JSON.stringify(isFromCreate))
+                //     setIsFromCreateImage(true)
+                //     changeTabSearch()
+                //     // dispatch(getInfoForUpdateName(createData.ingles));
+                //     // // changeImagenTab(1);
+                //     // changeTabSearch()
+                //     // isImages(true)
+                // }, 1500); 
             } catch (error) {
                 console.log('este es el error:', String(error))
                 setErrorMessage(`Ocurrió un error: ${error}`);

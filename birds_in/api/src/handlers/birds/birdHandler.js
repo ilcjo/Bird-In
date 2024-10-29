@@ -18,6 +18,7 @@ const {
    getClassGrupoFamilia,
    findGroupNameDuplicate,
    findFamilyNameDuplicate,
+   saveDbPhotoOrder,
 } = require("../../controllers/birds/birdsController");
 const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
@@ -428,8 +429,20 @@ const checkDuplicateNames = async (req, res) => {
    }
 };
 
+const saveOrderImages = async (req, res) => {
+   const { arrayImages } = req.body
+   // console.log('handler:',arrayImages)
+   try {
+      const newCover = await saveDbPhotoOrder(arrayImages)
+      return res.status(200).json(newCover);
+
+   } catch (error) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+   }
+};
 
 module.exports = {
+   saveOrderImages,
    checkDuplicateNames,
    check,
    getFilterInfo,
