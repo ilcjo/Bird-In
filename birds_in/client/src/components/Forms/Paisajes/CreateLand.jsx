@@ -32,7 +32,6 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const { paisesAll, zonas } = useSelector(state => state.filterSlice.options)
-
     const [imgLink, setImgLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -44,7 +43,9 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [snackBarMessage, setSnackBarMessage] = React.useState('El Paisaje se a creado correctamente.');
     const [registerCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
-
+    const [isFromCreate, setIsFromCreate] = React.useState(false);
+    const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
+    
     const [createData, setCreateData] = React.useState({
         pais: null,
         zona: null,
@@ -128,10 +129,15 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 // Llama a la función para comprobar duplicados
                 await dispatch(duplicateNameCheckP(newValue.id));
             } catch (error) {
+                
                 // Si hay un error, muestra un mensaje de error
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Este Registro ya existe');
                 // Restablece el valor del input
+                localStorage.setItem('nombre', JSON.stringify(newValue.id))
+                localStorage.setItem('isExist', JSON.stringify(isFromCreate))
+                localStorage.setItem('isFromCreateImage', JSON.stringify(false))
+                setIsFromCreate(true)
                 changeTabSearch();
             }
         }, 700);
@@ -169,6 +175,10 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Este Registro ya existe');
                 // Restablece el valor del input
+                localStorage.setItem('nombre', JSON.stringify(newValue.nombre))
+                localStorage.setItem('isExist', JSON.stringify(isFromCreate))
+                localStorage.setItem('isFromCreateImage', JSON.stringify(false))
+                setIsFromCreate(true)
                 changeTabSearch();
             }
         }, 700);
@@ -218,6 +228,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     ? createData.zona.nombre
                     : createData.pais.nombre;
                 localStorage.setItem('nombrePaisaje', JSON.stringify(nombreZonaOPais));
+                localStorage.setItem('nombre', JSON.stringify(createData.zona.id));
 
                 await createFullEntry(createData, imageUrls);
                 setLoadingMessage('Creando el Paisaje en la DB...');
@@ -229,11 +240,14 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 setImageFiles([]);
                 setFormSubmitted(false)
                 setSnackBarMessage('El Paisaje se a creado correctamente.')
-                setTimeout(() => {
-                    dispatch(getInfoForUpdateNameP(createData.zona.id))
-                    changeImagenTab(1);
-                    isImages(true)
-                }, 1500);
+                localStorage.setItem('isFromCreateImage', JSON.stringify(true))
+                localStorage.setItem('isExist', JSON.stringify(false))
+                changeTabSearch()
+                // setTimeout(() => {
+                //     dispatch(getInfoForUpdateNameP(createData.zona.id))
+                //     changeImagenTab(1);
+                //     isImages(true)
+                // }, 1500);
             } catch (error) {
                 console.log('este es el error:', String(error))
                 setErrorMessage(`Ocurrió un error: ${error}`);

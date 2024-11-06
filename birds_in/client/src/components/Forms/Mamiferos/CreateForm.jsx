@@ -125,9 +125,9 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Este Registro ya existe');
                 // Restablece el valor del input
+                localStorage.setItem('nombreIngles', JSON.stringify(newName))
                 localStorage.setItem('isExist', JSON.stringify(isFromCreate))
                 localStorage.setItem('isFromCreateImage', JSON.stringify(false))
-                localStorage.setItem('nombreIngles', JSON.stringify(newName))
                 setIsFromCreate(true)
                 changeTabSearch()
             }

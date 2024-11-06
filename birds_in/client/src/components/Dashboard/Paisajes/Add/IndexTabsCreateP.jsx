@@ -72,12 +72,11 @@ export const IndexTabsCreateP = ({
                     <StyledTab label={<Typography variant='h5' >
                         Información
                     </Typography>} />
-                    <StyledTab
+                    {/* <StyledTab
                         label={<Typography variant='h5' >
                             Imágenes Existente
                         </Typography>}
-                        disabled={!imagesExistTabEnabled} />
-
+                        disabled={!imagesExistTabEnabled} /> */}
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%', }}>
                     {selectedTab === 0 && (

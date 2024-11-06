@@ -38,7 +38,9 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
                 },
                 {
                     model: Imagenes_paisajes,
-                    attributes: [['url_paisaje', 'url'], 'destacada']
+                    attributes: [['url_paisaje', 'url'], 'destacada', 'orden_imagen'],
+                    order: [['orden_imagen', 'ASC']], // Ordenar por order_imagenes
+                    separate: true
                 }
             ],
             limit: perPageConvert,
@@ -266,7 +268,8 @@ const findDataByIdP = async (id) => {
                 'descripcion',
                 'url',
                 'map'
-            ] // Atributos
+            ], // Atributos
+            order: [[{ model: Imagenes_paisajes }, 'orden_imagen', 'ASC']],
         });
         return Registro;
     } catch (error) {
@@ -299,7 +302,8 @@ const findDataByNameP = async (id) => {
                 'descripcion',
                 'url',
                 'map'
-            ]
+            ],
+            order: [[{ model: Imagenes_paisajes }, 'orden_imagen', 'ASC']],
         });
         return Registro;
     } catch (error) {
@@ -493,9 +497,35 @@ const findNameDuplicatePP = async (id) => {
     }
 };
 
+const saveDbPhotoOrder = async (imagesArray) => {
+    // console.log('llego array al controller:', imagesArray)
+    try {
+        // Itera sobre cada imagen en el array
+        for (const image of imagesArray) {
+            const { id, orden } = image;  // Extrae el id y el orden de cada imagen
 
+            // Busca el registro en la base de datos que coincida con el id de la imagen
+            const existingImage = await Imagenes_paisajes.findOne({
+                where: { id: id }
+            });
+
+            // Si encuentra un registro con el id, actualiza el campo orden_imagenes
+            if (existingImage) {
+                await existingImage.update({ orden_imagen: orden });
+            } else {
+                console.warn(`No se encontró una imagen con ID ${id}.`);
+            }
+        }
+
+        return "Orden de imágenes actualizado correctamente.";
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
 
 module.exports = {
+    saveDbPhotoOrder,
     fetchOptionsLand,
     fetchFilterLands,
     sendAndCreateLand,

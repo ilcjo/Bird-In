@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Alert, Box, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 //GLOBAL STATE
 import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
 import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
@@ -13,7 +15,7 @@ import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
 import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
 import { EditImageCardsP } from '../../../Cards/Paisaje/EditImageCardsP';
-import { EditImageCards } from '../../../Cards/EditImageCards';
+import ImageDragContainer from './ImageDragContainer';
 
 export const CoverDeleteP = ({
     isCreate,
@@ -36,6 +38,8 @@ export const CoverDeleteP = ({
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
+    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
     // console.log(selectedImages)
 
 
@@ -71,9 +75,6 @@ export const CoverDeleteP = ({
             setErrorSnackbarOpen(true);
         }
     };
-
-    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState('')
 
     const handleImageClick = (url) => {
         setShowBackdrop(false);
@@ -142,24 +143,27 @@ export const CoverDeleteP = ({
         }
     }, [isCreate])
 
+
+    const [images, setImages] = React.useState(infoLandForUpdate.imagenes_paisajes || []);
     return (
         <React.Fragment>
             <Loading
                 message={loadingMessage}
                 open={showBackdrop}
             />
-            <Grid container sx={{
+            <Grid container spacing={5} sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 'auto',
-                // minWidth: '1200px',
+                width: '100%',
+                minWidth: '1200px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
-                padding: 2,
-                borderRadius: '0px 0px 20px 20px',
-                mb: 10,
+                padding: '0px 40px 30px 0px',
+                borderRadius: '0px 0px 0px 0px',
+                mb: 1
+
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container >
@@ -200,33 +204,40 @@ export const CoverDeleteP = ({
                     >
                         Eliminar selección
                     </Button>
-                    {infoLandForUpdate && infoLandForUpdate.imagenes_paisajes && infoLandForUpdate.imagenes_paisajes.length > 0 && (
-                        <Grid container spacing={0} sx={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-                            {infoLandForUpdate.imagenes_paisajes.map((imageUrl, index) => (
-                                <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <EditImageCardsP
-                                        imageUrl={imageUrl}
-                                        index={index}
-                                        handleImageClick={handleImageClick}
-                                        handleSetAsCover={handleSetAsCover}
-                                        handleDeleteCheckBox={handleDeleteCheckBox}
-                                    />
-                                </Grid>
-                            ))}
-                            <CarruselGalleryDelete
-                                isOpen={isGalleryOpen}
-                                images={infoLandForUpdate.imagenes_paisajes}
-                                selectedIndex={selectedImageIndex}
-                                onClose={handleCloseGallery}
-                            />
-                        </Grid>
-                    )}
-                    {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes || infoLandForUpdate.imagenes_paisajes.length === 0 && (
-                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                            No hay imágenes subidas.
-                        </Typography>
-                    )}
                 </Grid>
+            </Grid>
+            <Grid sx={{
+                margin: '0 auto',
+                backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
+            }}>
+                <DndProvider backend={HTML5Backend}>
+                    <ImageDragContainer
+                        images={images}
+                        handleImageClick={handleImageClick}
+                        handleSetAsCover={handleSetAsCover}
+                        handleDeleteCheckBox={handleDeleteCheckBox}
+                        loading={setLoadingMessage}
+                        backDrop={setShowBackdrop}
+                        snackBar={setSnackbarOpen}
+                        messageBar={setSnackbarMessage}
+                        errorMessage={setErrorMessage}
+                        errorBar={setErrorSnackbarOpen}
+                        id={infoLandForUpdate.id}
+                    />
+                </DndProvider>
+                <CarruselGalleryDelete
+                    isOpen={isGalleryOpen}
+                    images={infoLandForUpdate.imagenes_paisajes}
+                    selectedIndex={selectedImageIndex}
+                    onClose={handleCloseGallery}
+                />
+                {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes || infoLandForUpdate.imagenes_paisajes.length === 0 && (
+                    <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                        No hay imágenes subidas.
+                    </Typography>
+                )}
             </Grid>
             <Snackbar
                 open={snackbarOpen}

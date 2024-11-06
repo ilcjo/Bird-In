@@ -11,10 +11,10 @@ import { Cards } from '../../components/Cards/Cards'
 import { FiltersAves } from '../../components/Mains/Aves/FiltersAves'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
-import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves'
 //REDUX
 import { isOneBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
 import { loadMoreData } from '../../redux/birds/actions/infoAction';
+import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves';
 
 export const Aves = () => {
 
@@ -238,7 +238,6 @@ export const Aves = () => {
           </Box>
         )}
       </Grid>
-
       <Loading
         message={loadingMessage}
         open={showBackdrop}

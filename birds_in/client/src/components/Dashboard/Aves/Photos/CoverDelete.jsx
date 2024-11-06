@@ -220,7 +220,7 @@ export const CoverDelete = ({
                         messageBar={setSnackbarMessage}
                         errorMessage={setErrorMessage}
                         errorBar={setErrorSnackbarOpen}
-                        idAves={infoAveForUpdate.id_ave}
+                        id={infoAveForUpdate.id}
                     />
                 </DndProvider>
                 <CarruselGalleryDelete

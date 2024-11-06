@@ -46,13 +46,27 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
 
 
     React.useEffect(() => {
-        let isFromImage = localStorage.getItem('isFromCreateImage');
-        let isExist = localStorage.getItem('isExist');
-        if (isFromImage === 'true' && isExist === 'false') {
-            handleNavigateToCoverDelete();
-        } else if (isFromImage === 'false' && isExist === 'true') {
+        const executeSequence = async () => {
+            // console.log('llegue a funcion que abre la pesataña');
+            let isFromImage = localStorage.getItem('isFromCreateImage');
+            let isExist = localStorage.getItem('isExist');
 
-        }
+            if (isFromImage === 'true' && isExist === 'false') {
+                // await handleButtonClickFromCreate(); // Espera a que se complete el update
+                setTimeout(() => {
+                    handleNavigateToCoverDelete(); // Ejecuta después del retraso
+                }, 1000); // Ejecuta después de completar el update
+                localStorage.removeItem('nombreIngles');
+                localStorage.removeItem('isFromCreateImage');
+                localStorage.removeItem('isExist');
+            } else if (isFromImage === 'false' && isExist === 'true') {
+                setSelectedTab(0);
+                localStorage.removeItem('nombreIngles');
+                localStorage.removeItem('isFromCreateImage');
+                localStorage.removeItem('isExist');
+            }
+        };
+        executeSequence();
     }, []);
 
     return (

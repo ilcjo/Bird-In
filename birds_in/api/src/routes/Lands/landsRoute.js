@@ -13,7 +13,8 @@ const {
     deletePaisaje,
     selectOptionsP,
     getFilterOptionsP,
-    getExcel
+    getExcel,
+    saveOrderImages
 } = require('../../handlers/Lands/landsHandler')
 
 const landsRouter = Router()
@@ -31,5 +32,5 @@ landsRouter.get('/filtros', getFilterInfoP)
     .get('/duplicados', checkLandsDuplicate)
     .get('/duplicadosP', checkLandsDuplicate)
     .get('/descargar-excel', getExcel)
-    
+    .post('/guardar_orden_images', saveOrderImages)
 module.exports = landsRouter

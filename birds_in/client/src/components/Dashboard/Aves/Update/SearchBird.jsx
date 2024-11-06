@@ -63,7 +63,7 @@ export const SearchBird = ({ changeTab }) => {
     };
 
     React.useEffect(() => {
-        let isFrom = localStorage.getItem('isFromCreate');
+        let isFrom = localStorage.getItem('isFromCreateImage');
         if (isFrom) {
             handleButtonClickFromCreate()
         }

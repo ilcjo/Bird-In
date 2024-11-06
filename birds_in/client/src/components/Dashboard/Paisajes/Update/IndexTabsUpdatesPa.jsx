@@ -39,9 +39,34 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
     const handleNavigateToCoverDelete = () => {
         setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
     };
+
+    React.useEffect(() => {
+        const executeSequence = async () => {
+            // console.log('llegue a funcion que abre la pesataña');
+            let isFromImage = localStorage.getItem('isFromCreateImage');
+            let isExist = localStorage.getItem('isExist');
+            if (isFromImage === 'true' && isExist === 'false') {
+                // await handleButtonClickFromCreate(); // Espera a que se complete el update
+                setTimeout(() => {
+                    handleNavigateToCoverDelete(); // Ejecuta después del retraso
+                    localStorage.removeItem('nombre');
+                    localStorage.removeItem('isFromCreateImage');
+                    localStorage.removeItem('isExist');
+                }, 10000); // Ejecuta después de completar el update
+              
+            } else if (isFromImage === 'false' && isExist === 'true') {
+                setSelectedTab(0);
+                localStorage.removeItem('nombre');
+                localStorage.removeItem('isFromCreateImage');
+                localStorage.removeItem('isExist');
+            }
+        };
+        executeSequence();
+    }, []);
+
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '99%', margin: '0 auto', minWidth: '1200px', }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px', }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}

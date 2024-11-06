@@ -9,7 +9,8 @@ export const EditImageCardsP = ({ imageUrl, index, handleImageClick, handleSetAs
         <Card sx={{
             borderRadius: '6px',
             p: '0 auto',
-            width: 439, minWidth: 439, margin: '10px 5px',
+            width: { xs: 490, sm: 460, md: 490, lg: 470 }, minWidth: { xs: 490, sm: 460, md: 490, lg: 470 },
+             margin: '10px 5px',
             flexDirection: 'column',
             background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)',
            

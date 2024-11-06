@@ -8,7 +8,7 @@ import ImageDragContainer from './ImageDragContainer';
 import Loading from './Loading';
 
 const ImageComponent = ({ images, loadingMessage, showBackdrop, handleReturnSearch, handleDeleteButtonClick, handleImageClick, handleSetAsCover, handleDeleteCheckBox, snackbarOpen, setSnackbarOpen, snackbarMessage, errorSnackbarOpen, setErrorSnackbarOpen, errorMessage, nombre, isCreate }) => {
-console.log('soy imagene,',images)
+
   return (
     <React.Fragment>
       <Loading message={loadingMessage} open={showBackdrop} />

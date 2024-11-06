@@ -3,9 +3,9 @@ import { Card, CardActionArea, CardContent, Grid, Typography } from '@mui/materi
 import { CarruselGallery } from '../Gallery/CarruselGallery';
 
 export const ImagesCards = ({ foto, name, arrayImages }) => {
-  // console.log(foto)
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
+  const [isHorizontal, setIsHorizontal] = React.useState(false);
 
   const handleImageClick = (url) => {
     setSelectedImageIndex(url);
@@ -21,15 +21,25 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
     }
   };
 
+  // Determine if the image is horizontal or vertical
+  React.useEffect(() => {
+    const img = new Image();
+    img.src = foto;
+    img.onload = () => {
+      setIsHorizontal(img.width > img.height);
+    };
+  }, [foto]);
+
   return (
     <Card
       sx={{
         borderRadius: '6px',
-        width: { xs: 360, md: 390 },
-        minWidth: { xs: 360, md: 390 },
+        width: { xs: '100%', sm: 480, md: 485, lg: 485},
+        minWidth: { xs: '100%', sm: 480, md: 485, lg: 485 },
         margin: 0,
         flexDirection: 'column',
         overflow: 'hidden',
+        m: 0.5
       }}
     >
       <CardActionArea
@@ -47,12 +57,11 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
           key={foto}
           loading="lazy"
           style={{
-            width: { xs: 360, md: 'auto' },
             height: 290,
-            objectFit: 'scale-down',
+            objectFit: isHorizontal ? 'scale-down' : 'scale-down',
           }}
-          onContextMenu={(e) => e.preventDefault()} // Deshabilita el clic derecho
-          onDragStart={(e) => e.preventDefault()} // Evita arrastrar la imagen
+          onContextMenu={(e) => e.preventDefault()} // Disable right-click
+          onDragStart={(e) => e.preventDefault()}   // Prevent drag
         />
       </CardActionArea>
       <CardContent sx={{ height: 'auto' }}>
@@ -73,5 +82,3 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
     </Card>
   );
 };
-
-

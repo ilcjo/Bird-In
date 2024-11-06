@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 //COMPONENTS
 import { IndexTabsUpdatesPa } from './IndexTabsUpdatesPa';
 //REDUX
-import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
+import { getInfoForUpdateNameP, getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
 import { Loading } from '../../../utils/Loading';
 
 
@@ -22,12 +22,13 @@ export const SearchLands = ({ changeTab }) => {
     const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
     const [selectedRegister, setSelectedRegister] = React.useState(null);
     const [registerData, setRegisterData] = React.useState([]);
-    console.log('registro seleccionado', selectedRegister)
+    // console.log('registro seleccionado', selectedRegister)
     const [showUpdateRegister, setShowUpdateRegister] = React.useState(false);
     const [showSearchRegister, setShowSearchRegister] = React.useState(true);
 
     const handleRegisterSelect = (registro) => {
         // console.log(registro)
+        // localStorage.setItem('nombrePaisaje', JSON.stringify(bird.nombre_ingles))
         setSelectedRegister(registro);
         handleButtonClick();
     };
@@ -48,6 +49,29 @@ export const SearchLands = ({ changeTab }) => {
         }
     }, [selectedRegister]);
 
+    React.useEffect(() => {
+        let isFrom = localStorage.getItem('isFromCreateImage');
+        if (isFrom) {
+            handleButtonClickFromCreate()
+        }
+    }, []);
+
+    const handleButtonClickFromCreate = () => {
+        let valor = localStorage.getItem('nombre');
+        if (valor) {
+            try {
+                valor = JSON.parse(valor); // Asegurarse de parsear el JSON si es necesario
+            } catch (e) {
+                console.error('Error al parsear nombreIngles:', e);
+            }
+            dispatch(getInfoForUpdateNameP(valor)); // Llama al action con el valor obtenido
+            setShowUpdateRegister(true); // Cambia a la vista de actualización
+            setShowSearchRegister(false); // Oculta la vista de búsqueda
+            
+        } else {
+            console.error('nombreIngles no se encuentra en localStorage');
+        }
+    };
     //encuentra y organiza los registros de la db
     // React.useEffect(() => {
     //     const fetchData = async () => {
@@ -77,24 +101,24 @@ export const SearchLands = ({ changeTab }) => {
                 const response = await axios.get('/paisajes/filtros?page=0&perPage=0');
                 const data = response.data.RegistrosFiltrados;
                 console.log(data);
-    
+
                 // Filtrar los registros para que incluyan solo aquellos con una zona o un país
                 const validData = data.filter((item) => item.zona || item.paise); // Asegúrate de que el nombre de la propiedad sea correcto
                 console.log(validData);
-    
+
                 // Mapear los datos para mostrar el nombre de la zona o el país
                 const formattedData = validData.map((item) => {
                     // Verifica si hay zona y usa el nombre correspondiente
                     const nombre = item.zona ? item.zona.nombre : item.paise.nombre;
                     const id = item.id
-    
+
                     return {
                         id: id,
                         nombre: nombre,
                         // Incluye otras propiedades necesarias aquí
                     };
                 });
-    
+
                 localStorage.setItem('LandsData', JSON.stringify(formattedData)); // Guarda los datos formateados en localStorage
                 setRegisterData(formattedData); // Actualiza el estado con los datos formateados
             } catch (error) {
@@ -105,7 +129,7 @@ export const SearchLands = ({ changeTab }) => {
         };
         fetchData();
     }, [showUpdateRegister]);
-    
+
 
 
     return (

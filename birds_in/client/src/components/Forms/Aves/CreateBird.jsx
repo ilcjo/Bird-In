@@ -70,7 +70,6 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         ingles: false,
     });
 
-
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
@@ -132,9 +131,9 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Esta ave ya existe');
                 // Restablece el valor del input
+                localStorage.setItem('nombreIngles', JSON.stringify(newName))
                 localStorage.setItem('isExist', JSON.stringify(isFromCreate))
                 localStorage.setItem('isFromCreateImage', JSON.stringify(false))
-                localStorage.setItem('nombreIngles', JSON.stringify(newName))
                 setIsFromCreate(true)
                 changeTabSearch()
             }
