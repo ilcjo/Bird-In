@@ -144,7 +144,7 @@ export const CoverDeleteP = ({
     }, [isCreate])
 
 
-    const [images, setImages] = React.useState(infoLandForUpdate.imagenes_paisajes || []);
+    const [images, setImages] = React.useState(infoLandForUpdate.imagenes_paisajes);
     return (
         <React.Fragment>
             <Loading
@@ -214,7 +214,7 @@ export const CoverDeleteP = ({
             }}>
                 <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
-                        images={images}
+                        images={infoLandForUpdate.imagenes_paisajes}
                         handleImageClick={handleImageClick}
                         handleSetAsCover={handleSetAsCover}
                         handleDeleteCheckBox={handleDeleteCheckBox}

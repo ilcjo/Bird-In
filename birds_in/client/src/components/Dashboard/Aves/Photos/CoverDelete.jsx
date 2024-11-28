@@ -41,6 +41,7 @@ export const CoverDelete = ({
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
     const handleSetAsCover = async (id, url, destacada) => {
+        console.log(id, url)
         try {
             setHighlightedImage((prev) => {
                 if (prev && prev.id === id) {
@@ -125,7 +126,7 @@ export const CoverDelete = ({
         }
     }, [isCreate]);
 
-    const [images, setImages] = React.useState(infoAveForUpdate.imagenes_aves || []);
+    const [images, setImages] = React.useState(infoAveForUpdate.imagenes_aves );
 
     return (
         <React.Fragment>
@@ -133,33 +134,18 @@ export const CoverDelete = ({
                 message={loadingMessage}
                 open={showBackdrop}
             />
-
-            {/* <Grid container sx={{
+            <Grid container spacing={5} sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 'auto',
+                width: '100%',
+                minWidth: '1200px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
-                padding: 2,
-                borderRadius: '0px 0px 20px 20px',
-                mb: 10,
-            }}>
-             */}
-            <Grid container spacing={5} sx={{
-                     display: 'flex',
-                     alignItems: 'center',
-                     justifyContent: 'center',
-                     width: '100%',
-                     minWidth: '1200px',
-                     margin: '0 auto',
-                     backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                     backdropFilter: 'blur(2px)',
-                     padding: '0px 40px 30px 0px',
-                     borderRadius: '0px 0px 0px 0px',
-                     mb: 1
-     
+                padding: '0px 40px 30px 0px',
+                borderRadius: '0px 0px 0px 0px',
+                mb: 1
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container>
@@ -200,7 +186,6 @@ export const CoverDelete = ({
                         Eliminar selección
                     </Button>
                 </Grid>
-
             </Grid>
             <Grid sx={{
                 margin: '0 auto',
@@ -210,7 +195,7 @@ export const CoverDelete = ({
             }}>
                 <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
-                        images={images}
+                        images={infoAveForUpdate.imagenes_aves}
                         handleImageClick={handleImageClick}
                         handleSetAsCover={handleSetAsCover}
                         handleDeleteCheckBox={handleDeleteCheckBox}

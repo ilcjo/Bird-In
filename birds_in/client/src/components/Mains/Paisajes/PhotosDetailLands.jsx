@@ -60,8 +60,14 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
             {mainImage && (
                 <HeaderLand imageUrl={mainImage} register={Register} back={stepBack} />
             )}
-            <Grid container spacing={0} sx={{ backgroundColor: 'rgba(32,60,18, 0.5)', p: { xs: 2, md: 2 } }}>
-                {/* Galería de imágenes */}
+            <Grid container spacing={0} sx={{
+                backgroundColor: 'rgba(32,60,18, 0.5)', p: {
+                    xs: 2, md: 2,
+                    alignItems: 'center', // Centra verticalmente (si es necesario)
+                    display: 'flex',
+                    justifyContent: 'center',
+                }
+            }}>
                 <Fab
                     variant="extended"
                     size="medium"
@@ -82,11 +88,11 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                     Regresar
                 </Fab>
 
-                <Box sx={{ width: '100%', mb: 4, textAlign: 'left' }}>
+                <Box sx={{ width: '100%', mb: 4, textAlign: 'left', mt: 2 }}>
                     <Typography variant='h2' color='primary' sx={{ display: 'flex', alignItems: 'center', ml: 4 }}>
                         Galería de Imágenes
                     </Typography>
-                    <Divider
+                    {/* <Divider
                         sx={{
                             my: 2,
                             borderColor: theme.palette.primary.main,
@@ -95,21 +101,21 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                             borderBottomWidth: '3px',
                             borderRadius: '10px',
                         }}
-                    />
+                    /> */}
                 </Box>
-                    {allImages?.length === 0 ? (
-                        <Typography variant="h2" color="primary.main" sx={{ mt: 4, textAlign: 'left', ml: 4 }}>
-                            No se han subido imágenes.
-                        </Typography>
-                    ) : (
-                        allImages?.map((image, index) => (
-                                <ImagesCards
-                                    foto={image.url}
-                                    name={image.nombre_ingles}
-                                    arrayImages={allImages}
-                                />
-                        ))
-                    )}
+                {allImages?.length === 0 ? (
+                    <Typography variant="h2" color="primary.main" sx={{ mt: 4, textAlign: 'left', ml: 4 }}>
+                        No se han subido imágenes.
+                    </Typography>
+                ) : (
+                    allImages?.map((image, index) => (
+                        <ImagesCards
+                            foto={image.url}
+                            name={image.nombre_ingles}
+                            arrayImages={allImages}
+                        />
+                    ))
+                )}
                 <Box sx={{ width: '100%', textAlign: 'center', mt: 4 }}>
                     <CopyRight.Photo />
                 </Box>

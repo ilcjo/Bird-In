@@ -9,6 +9,7 @@ import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
 const ImageDragContainer = ({ images, handleImageClick, handleSetAsCover, handleDeleteCheckBox,
     loading, backDrop, snackBar, messageBar, errorMessage, errorBar, idAves
 }) => {
+    console.log(images, 'imagedrager component')
     const dispatch = useDispatch();
     const [imageList, setImageList] = useState(images);
     const [showFab, setShowFab] = useState(false); // Estado para mostrar el FAB
@@ -57,7 +58,11 @@ const ImageDragContainer = ({ images, handleImageClick, handleSetAsCover, handle
 
     return (
         <>
-            <Grid container spacing={1}>
+            <Grid container spacing={1} sx={{
+                display: 'flex',
+                justifyContent: 'center', // Centra horizontalmente las tarjetas
+                alignItems: 'center', // Centra verticalmente (si es necesario)
+            }}>
                 {imageList.map((image, index) => (
                     <PhotosOrganize
                         imageUrl={image}

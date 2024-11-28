@@ -34,8 +34,8 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
     <Card
       sx={{
         borderRadius: '6px',
-        width: { xs: '100%', sm: 480, md: 485, lg: 485},
-        minWidth: { xs: '100%', sm: 480, md: 485, lg: 485 },
+        width: { xs: '100%', sm: 480, md: 480, lg: 480},
+        minWidth: { xs: '100%', sm: 480, md: 480, lg: 480 },
         margin: 0,
         flexDirection: 'column',
         overflow: 'hidden',
@@ -58,7 +58,8 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
           loading="lazy"
           style={{
             height: 290,
-            objectFit: isHorizontal ? 'scale-down' : 'scale-down',
+            width: '100%',
+            objectFit: isHorizontal ? 'cover' : 'scale-down',
           }}
           onContextMenu={(e) => e.preventDefault()} // Disable right-click
           onDragStart={(e) => e.preventDefault()}   // Prevent drag

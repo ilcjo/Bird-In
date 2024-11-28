@@ -89,30 +89,33 @@ export const Aves = () => {
 
         }}
       >
-        <Fab
-          variant="extended"
-          size="medium"
-          color="primary"
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-            zIndex: 1000,
-            fontWeight: 'bold',
-            '&:hover': {
-              color: 'white',
-            }
-          }}
-          onClick={stepBack}
-        >
-          <ArrowBackIcon sx={{ mr: 1 }} />
-          Regresar
-        </Fab>
+        {!isFilterDialogOpen && infoBirds.length > 1 && (
+          <Fab
+            variant="extended"
+            size="medium"
+            color="primary"
+            sx={{
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+              zIndex: 1000,
+              fontWeight: 'bold',
+              '&:hover': {
+                color: 'white',
+              }
+            }}
+            onClick={stepBack}
+          >
+            <ArrowBackIcon sx={{ mr: 1 }} />
+            Regresar
+          </Fab>
+        )}
+
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => { }}
-          fullWidth={true}
-          maxWidth='md'
+          fullWidth={false}
+        // maxWidth='md'
         >
           <FiltersAves isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>

@@ -45,8 +45,8 @@ export const CardsLand = React.memo(({ foto, name, index, id }) => {
 
   return (
     <Card sx={{
-      minWidth: { xs: 380, lg: 500 },
-      maxWidth: { xs: 380, lg: 500 },
+      minWidth: { xs: 340, lg: 470 },
+      maxWidth: { xs: 340, lg: 470 },
       minHeight: 330,
       maxHeight: 330,
       position: 'relative',

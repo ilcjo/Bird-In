@@ -12,6 +12,9 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
         position: 'relative',
         width: '100%',
         height: { xs: 'auto', md: '90vh' },
+        overflow: 'hidden',
+        borderRadius: '0px 0px 0px 0px',
+        background: '#86ac8e',
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
         background: '#86ac8e'
@@ -20,9 +23,9 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
       <Box
         component="div"
         sx={{
-          width: { xs: '100%', md: '70%', lg: '70%' },
+          width: { xs: '100%', md: '75%', lg: '75%' },
           height: { xs: '500px', md: '100%' },
-          minWidth:'500px',
+          minWidth: '500px',
           backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
           backgroundColor: imageUrl ? 'transparent' : theme.palette.grey[300],
           backgroundSize: 'cover',
@@ -35,7 +38,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
       <Box
         component="div"
         sx={{
-          width: { xs: 'auto', md: '30%' },
+          width: { xs: 'auto', md: '25%' },
           height: { xs: 'auto', md: 'auto' },
           backgroundColor: 'rgba(16, 51, 0, 0.9)',
           backdropFilter: 'blur(10px)',
@@ -43,7 +46,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           flexDirection: 'column',
           alignItems: 'flex-start',
           padding: 5,
-          borderRadius: '0px 0px 10px 0px',
+          borderRadius: '0px 0px 0px 0px',
         }}
       >
         {bird.map((data, index) => (
@@ -57,15 +60,15 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
 
               <Grid item xs={12} >
                 <Typography variant="h4" color='primary.light' >
-                  Nombre en Inglés:
-                  <Typography variant='h1' color='primary' >
-                    {data.nombre_ingles || 'N/A'}
-                  </Typography>
-                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '30%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
+                  NOMBRE EN INGLÉS:
                 </Typography>
+                <Typography variant='h1' color='primary' >
+                  {data.nombre_ingles || 'N/A'}
+                </Typography>
+                {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '30%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} /> */}
                 <Button
                   sx={{
-                    mt: -2,
+                    mt: 1.5,
                     fontSize: '0.8rem',
                     alignSelf: 'center',
                     textTransform: 'none',
@@ -80,7 +83,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                 </Button>
                 <Button
                   sx={{
-                    mt: -2,
+                    mt: 1.5,
                     fontSize: '0.8rem',
                     ml: 2,
                     alignSelf: 'center',
@@ -96,48 +99,45 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                 </Button>
 
               </Grid>
+
+              {/* <Box sx={{
+                // backgroundColor: 'rgba(16, 51, 0, 0.5)',
+                // backdropFilter: 'blur(10px)',
+                p: 2,
+                borderRadius: '10px',
+              }} > */}
+              {/* <Grid container spacing={1}> */}
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                <Typography variant="h4" color='primary.light' sx={{ mb: 1 }} >
+                  NOMBRE CIENTÍFICO:
+                  <Typography variant='h6' color='primary.light' sx={{ mb: 0.5 }}>
+                    {data.nombre_cientifico || 'N/A'}
+                  </Typography>
+                </Typography>
+                <Typography variant="h4" color='primary.light' sx={{ mb: 0 }}>
+                  NOMBRE COMÚN:
+                  <Typography variant='h6' color='primary.light'>
+                    {data.nombre_comun || 'N/A'}
+                  </Typography>
+                </Typography>
+              </Grid>
+
               <Grid item xs={12}>
-
+                <Typography variant="h4" color='primary.light' sx={{ mb: 1 }}>
+                  PAÍS:
+                  <Typography variant='h6' color='primary.light' sx={{ mb: 0 }}>
+                    {formatData(data.paises) || 'N/A'}
+                  </Typography>
+                </Typography>
+                <Typography variant="h4" color="primary.light" sx={{ mb: 1 }}>
+                  ZONAS:
+                  <Typography variant="h6" color="primary.light" sx={{ mb: 0 }}>
+                    {formatData(data.zonasAves) || 'N/A'}
+                  </Typography>
+                </Typography>
               </Grid>
+              {/* </Box> */}
             </Grid>
-            <Box sx={{
-              // backgroundColor: 'rgba(16, 51, 0, 0.5)',
-              // backdropFilter: 'blur(10px)',
-              p: 2,
-              borderRadius: '10px',
-            }} >
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }} >
-                    Nombre Científico:
-                    <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
-                      {data.nombre_cientifico || 'N/A'}
-                    </Typography>
-                  </Typography>
-                  <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
-                    Nombre Común:
-                    <Typography variant='h6' color='primary.light'>
-                      {data.nombre_comun || 'N/A'}
-                    </Typography>
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
-                    País:
-                    <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
-                      {formatData(data.paises) || 'N/A'}
-                    </Typography>
-                  </Typography>
-                  <Typography variant="h4" color="primary.light">
-                    Zonas:
-                    <Typography variant="h6" color="primary.light" sx={{ mb: 1.5 }}>
-                      {formatData(data.zonasAves) || 'N/A'}
-                    </Typography>
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Box>
           </React.Fragment>
         ))}
         <Box
@@ -158,6 +158,6 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           </Button> */}
         </Box>
       </Box>
-    </Box>
+    </Box >
   )
 };

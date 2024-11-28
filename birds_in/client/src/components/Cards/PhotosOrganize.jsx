@@ -5,6 +5,7 @@ import TurnedInTwoToneIcon from '@mui/icons-material/TurnedInTwoTone';
 import { useDrag, useDrop } from 'react-dnd';
 
 export const PhotosOrganize = ({ imageUrl, index, moveImage, handleImageClick, handleSetAsCover, handleDeleteCheckBox }) => {
+    console.log(imageUrl, 'imageUrl photoorganize ocmponent')
     const ref = React.useRef(null);
     const [isHorizontal, setIsHorizontal] = React.useState(false);
 
@@ -38,11 +39,11 @@ export const PhotosOrganize = ({ imageUrl, index, moveImage, handleImageClick, h
     drag(drop(ref));
 
     return (
-        <Grid ref={ref} item sx={{ opacity: isDragging ? 0.5 : 1, mt: 5 }}>
+        <Grid ref={ref} item sx={{ opacity: isDragging ? 0.5 : 1, mt: 5 ,  }}>
             <Card sx={{
                 borderRadius: '6px',
                 p: '0 auto',
-                width: { xs: 450, sm: 450, md: 440, lg: 490, }, minWidth: { xs: 490, sm: 460, md: 440, lg: 490, }, margin: '0px 0px',
+                width: { xs: 450, sm: 450, md: 490, lg: 490, }, minWidth: { xs: 490, sm: 460, md: 490, lg: 490, }, margin: '0px 0px',
                 flexDirection: 'column',
                 background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)',
             }}>
@@ -75,7 +76,7 @@ export const PhotosOrganize = ({ imageUrl, index, moveImage, handleImageClick, h
                         alt={`Imagen no cargada ${index + 1}`}
                         style={{
                             height: 290,
-                            objectFit: isHorizontal ? 'scale-down' : 'scale-down', // Cambia el estilo basado en la orientación
+                            objectFit: isHorizontal ? 'cover' : 'scale-down', // Cambia el estilo basado en la orientación
                             width: '100%',
                         }}
                         loading="lazy"

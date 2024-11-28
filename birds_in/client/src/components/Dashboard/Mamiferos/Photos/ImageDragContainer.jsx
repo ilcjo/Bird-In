@@ -57,7 +57,11 @@ const ImageDragContainer = ({ images, handleImageClick, handleSetAsCover, handle
 
     return (
         <>
-            <Grid container spacing={1}>
+            <Grid container spacing={1} sx={{
+                display: 'flex',
+                justifyContent: 'center', // Centra horizontalmente las tarjetas
+                alignItems: 'center', // Centra verticalmente (si es necesario)
+            }}>
                 {imageList.map((image, index) => (
                     <PhotosOrganize
                         imageUrl={image}

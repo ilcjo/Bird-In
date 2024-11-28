@@ -43,10 +43,11 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
                     separate: true
                 }
             ],
+            // order: [['nombre', 'ASC']],
             limit: perPageConvert,
             offset: offset
         });
-
+console.log(RegistrosFiltrados)
         // Contar el total de paisajes
         const totalResults = await Paisajes.count({
             where: Object.keys(whereClause).length > 0 ? whereClause : {} // Si no hay filtros, contar todo
@@ -114,52 +115,64 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
 // };
 
 const fetchOptionsLand = async () => {
+    // Obtener todos los países, ordenados alfabéticamente por nombre
     const optionsPaises = await Paises.findAll({
-        attributes: [['id_pais', 'id'], 'nombre',],
+        attributes: [['id_pais', 'id'], 'nombre'],
+        order: [['nombre', 'ASC']], // Orden alfabético
     });
+
+    // Obtener todas las zonas, ordenadas alfabéticamente por el país y luego por el nombre de la zona
     const optionsZonas = await Zonas.findAll({
-        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre'],
-        [
-            Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'),
-            'nombre_pais'
-        ],
+        attributes: [
+            ['id_zona', 'id'],
+            ['nombre_zona', 'nombre'],
+            [
+                Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'),
+                'nombre_pais'
+            ],
         ],
         order: [
-            [Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'), 'ASC'],
-            ['nombre_zona', 'ASC']
-        ]
+            [Sequelize.literal('(SELECT nombre FROM paises WHERE paises.id_pais = id_paises)'), 'ASC'], // País alfabético
+            ['nombre_zona', 'ASC'], // Zona alfabética
+        ],
     });
+
+    // Obtener IDs de países que están en Paisajes
     const paisIdsInPaisajes = await Paisajes.findAll({
         attributes: ['paises_id_pais'], // Solo necesitamos el ID del país
     });
 
-    // Obtener los nombres de los países que tienen esos IDs (sin eliminar duplicados)
+    // Obtener los nombres de los países que tienen esos IDs, ordenados alfabéticamente
     const existingPaises = await Paises.findAll({
         where: {
-            id_pais: paisIdsInPaisajes.map(paisaje => paisaje.paises_id_pais) // Filtramos solo los IDs encontrados
+            id_pais: paisIdsInPaisajes.map((paisaje) => paisaje.paises_id_pais), // Filtramos solo los IDs encontrados
         },
-        attributes: [['id_pais', 'id'], 'nombre'], // Devolvemos solo el id y el nombre
+        attributes: [['id_pais', 'id'], 'nombre'],
+        order: [['nombre', 'ASC']], // Orden alfabético
     });
-    // Obtener lista de IDs de zonas que están en Paisajes (sin agrupar ni eliminar duplicados)
+
+    // Obtener IDs de zonas que están en Paisajes
     const zonaIdsInPaisajes = await Paisajes.findAll({
         attributes: ['zonas_id_zona'], // Solo necesitamos el ID de la zona
     });
 
-    // Obtener los nombres de las zonas que tienen esos IDs
+    // Obtener los nombres de las zonas que tienen esos IDs, ordenados alfabéticamente
     const existingZonas = await Zonas.findAll({
         where: {
-            id_zona: zonaIdsInPaisajes.map(paisaje => paisaje.zonas_id_zona) // Filtramos solo los IDs encontrados
+            id_zona: zonaIdsInPaisajes.map((paisaje) => paisaje.zonas_id_zona), // Filtramos solo los IDs encontrados
         },
-        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre']], // Devolvemos solo el id y el nombre
+        attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre']],
+        order: [['nombre_zona', 'ASC']], // Orden alfabético
     });
 
     return {
         paises: existingPaises,
         zonas: existingZonas,
-        paisesAll: optionsPaises, // Lista de países en Paisajes
-        zonasAll: optionsZonas // Lista de zonas en Paisajes
+        paisesAll: optionsPaises,
+        zonasAll: optionsZonas,
     };
 };
+
 
 const filterOptionsPaisZonasPaisaje = async (pais, zona) => {
     // console.log('primera', zona, pais);

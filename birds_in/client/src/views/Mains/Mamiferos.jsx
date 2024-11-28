@@ -88,25 +88,27 @@ export const Mamiferos = () => {
           }
         }}
       >
-        <Fab
-          variant="extended"
-          size="medium"
-          color="primary"
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-            zIndex: 1000,
-            fontWeight: 'bold',
-            '&:hover': {
+        {!isFilterDialogOpen && info.length > 1 && (
+          <Fab
+            variant="extended"
+            size="medium"
+            color="primary"
+            sx={{
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+              zIndex: 1000,
+              fontWeight: 'bold',
+              '&:hover': {
                 color: 'white',
-            }
-          }}
-          onClick={stepBack}
-        >
-          <ArrowBackIcon sx={{ mr: 1 }} />
-          Regresar
-        </Fab>
+              }
+            }}
+            onClick={stepBack}
+          >
+            <ArrowBackIcon sx={{ mr: 1 }} />
+            Regresar
+          </Fab>
+        )}
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => { }}

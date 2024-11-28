@@ -101,26 +101,32 @@ export const SearchLands = ({ changeTab }) => {
                 const response = await axios.get('/paisajes/filtros?page=0&perPage=0');
                 const data = response.data.RegistrosFiltrados;
                 console.log(data);
-
+    
                 // Filtrar los registros para que incluyan solo aquellos con una zona o un país
-                const validData = data.filter((item) => item.zona || item.paise); // Asegúrate de que el nombre de la propiedad sea correcto
+                const validData = data.filter((item) => item.zona || item.paise);
                 console.log(validData);
-
+    
                 // Mapear los datos para mostrar el nombre de la zona o el país
                 const formattedData = validData.map((item) => {
-                    // Verifica si hay zona y usa el nombre correspondiente
-                    const nombre = item.zona ? item.zona.nombre : item.paise.nombre;
-                    const id = item.id
-
+                    const nombre = item.zona?.nombre || item.paise?.nombre || ""; // Prioridad a zona, luego a país
+                    const id = item.id;
+    
                     return {
                         id: id,
                         nombre: nombre,
-                        // Incluye otras propiedades necesarias aquí
                     };
                 });
-
-                localStorage.setItem('LandsData', JSON.stringify(formattedData)); // Guarda los datos formateados en localStorage
-                setRegisterData(formattedData); // Actualiza el estado con los datos formateados
+    
+                // Ordenar los datos alfabéticamente por el nombre
+                const sortedData = formattedData.sort((a, b) => {
+                    const nameA = a.nombre.toLowerCase();
+                    const nameB = b.nombre.toLowerCase();
+                    return nameA.localeCompare(nameB);
+                });
+    
+                // Guardar los datos ordenados
+                localStorage.setItem('LandsData', JSON.stringify(sortedData)); // Guarda los datos ordenados en localStorage
+                setRegisterData(sortedData); // Actualiza el estado con los datos ordenados
             } catch (error) {
                 console.error("Error al obtener los datos:", error);
             } finally {
@@ -129,7 +135,7 @@ export const SearchLands = ({ changeTab }) => {
         };
         fetchData();
     }, [showUpdateRegister]);
-
+    
 
 
     return (

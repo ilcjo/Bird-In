@@ -108,7 +108,7 @@ export const LoginForm = ({ changeTab }) => {
   };
 
   return (
-    <Box sx={{ margin: '10px' }}>
+    <Box sx={{ margin: '0px' }}>
       <div>
         <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
           Acceder a tu cuenta
@@ -200,7 +200,7 @@ export const LoginForm = ({ changeTab }) => {
           </Typography>
 
         </form>
-        <Stack spacing={3} direction="row" justifyContent="center"
+        <Stack spacing={1} direction="row" justifyContent="center"
           alignItems="center"
           sx={{
             margin: 'auto', // Centrar horizontalmente el Stack
@@ -219,7 +219,7 @@ export const LoginForm = ({ changeTab }) => {
             disabled={!loginData.email && !loginData.password}
             sx={{ fontSize: { xs: '1rem' } }}
           >
-            <span>Iniciar Sesión</span>
+            <span>Entrar</span>
           </LoadingButton>
           <Button
             sx={{ fontSize: { xs: '1rem' } }}

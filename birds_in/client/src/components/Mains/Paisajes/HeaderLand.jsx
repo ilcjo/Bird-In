@@ -8,78 +8,47 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
     <Box
       component="div"
       sx={{
-        position: 'relative',
         width: '100%',
-        height: '90vh', // Ajusta la altura según sea necesario
-        overflow: 'hidden',
-        borderRadius: '0px 0px 10px 0px',
-        background: '#86ac8e'
       }}
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          background: '#86ac8e'
-        }}
-      >
-      
-      </Box>
+      {/* Caja de la Imagen */}
       <Box
         component="div"
         sx={{
           width: '100%',
-          height: '100%',
+          height: '80vh', // Ajusta la altura según sea necesario
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           pointerEvents: 'none',
         }}
       />
+
+      {/* Caja de Títulos y Botones debajo de la imagen */}
       <Box
         component="div"
         sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: { xs: '60%', md: '27%' },
-          height: { xs: '50%', md: '63%' },
-          backgroundColor: 'rgba(0, 56, 28, 0.3)',
+          width: '100%',
+          backgroundColor: 'rgba(16, 51, 0, 0.9)',
           backdropFilter: 'blur(10px)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: 5,
+          padding: 2,
           zIndex: 2,
-          borderRadius: '0px 0px 20px 20px',
+          borderRadius: '0px 0px 0px 0px',
         }}
       >
-
         {register.map((data, index) => (
           <React.Fragment key={index}>
-            <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
-              <Grid item xs={12}>
-                <Typography variant="h4" color='primary.light' >
-                  País:
-                  <Typography variant='h1' color='primary' sx={{ mb: 1 }}>
-                    {data.paise.nombre || 'N/A'},
+            <Grid container spacing={1}>
+              <Grid item xs={3.5}>
+                <Typography variant="h4" color='primary.light'>
+                  PAÍS:
+                  <Typography variant='h1' color='primary' sx={{ mb: 0 }}>
+                    {data.paise.nombre || 'N/A'}
                   </Typography>
-                  <Typography variant="h4" color='primary.light' >
-                    Zona:
-                    <Typography variant='h1' color='primary.light' >
-                  {data.zona.nombre || 'N/A'}
-                    </Typography>
-                  </Typography>
-                </Typography>
-              </Grid>
 
-              <Grid item xs={12} >
-
-                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '30%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
                 <Button
                   sx={{
-                    mt: -2,
+                    mt: 1,
                     fontSize: '0.8rem',
                     alignSelf: 'center',
                     textTransform: 'none',
@@ -94,7 +63,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
                 </Button>
                 <Button
                   sx={{
-                    mt: -2,
+                    mt: 1,
                     fontSize: '0.8rem',
                     ml: 2,
                     alignSelf: 'center',
@@ -105,9 +74,19 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
                   href={data.map}
                   target="_blank"
                   rel="noopener noreferrer"
-                >
+                  >
                   Maps
                 </Button>
+                  </Typography>
+              </Grid>
+
+              <Grid item xs={7}>
+                <Typography variant="h4" color='primary.light'>
+                  ZONA:
+                  <Typography variant='h1' color='primary'>
+                    {data.zona.nombre || 'N/A'}
+                  </Typography>
+                </Typography>
 
               </Grid>
             </Grid>

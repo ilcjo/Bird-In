@@ -89,6 +89,7 @@ export const LandsCapes = () => {
           }
         }}
       >
+        {!isFilterDialogOpen && infoLands.length > 1 && (
         <Fab
           variant="extended"
           size="medium"
@@ -108,6 +109,7 @@ export const LandsCapes = () => {
           <ArrowBackIcon sx={{ mr: 1 }} />
           Regresar
         </Fab>
+        )}
         <Dialog
           open={isFilterDialogOpen}
           onClose={() => { }}

@@ -25,7 +25,7 @@ export const Index = ({ open }) => {
 
   const tabTitleStyles = {
     color: theme.palette.primary.light,
-    fontSize: { xs: '1rem', sm: '1.5rem', md: '1.75rem' },
+    fontSize: { xs: '1rem', sm: '1.5rem', md: '1.5rem' },
     "&:hover": {
       color: theme.palette.primary.main, // Cambiar el color del texto en el hover
       cursor: 'pointer', // Cambiar el cursor a "mano" en el hover
@@ -37,8 +37,8 @@ export const Index = ({ open }) => {
       sx: {
         padding: '9px',
         borderRadius: '15px',
-        minHeight: { xs: '60%', lg: '90%' },
-        maxHeight: { xs: '60%', lg: '90%' },
+        minHeight: { xs: '85%', lg: '90%' },
+        maxHeight: { xs: '85%', lg: '90%' },
         minWidth: { xs: '90%', lg: '40%' },
         maxWidth: '40%'
       }
