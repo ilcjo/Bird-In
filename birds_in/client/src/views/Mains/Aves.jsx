@@ -152,7 +152,7 @@ export const Aves = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white' sx={{ marginLeft: '20px' }}>
+                <Typography variant='h4' color='white' sx={{ marginLeft: '20px' }}>
                   Total de Aves Filtradas: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
@@ -229,7 +229,7 @@ export const Aves = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white'>
+                <Typography variant='h5' color='white'>
                   Total de Aves Filtradas: 0
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>

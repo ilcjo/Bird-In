@@ -25,7 +25,7 @@ export const Index = ({ open }) => {
 
   const tabTitleStyles = {
     color: theme.palette.primary.light,
-    fontSize: { xs: '1rem', sm: '1.5rem', md: '1.5rem' },
+    fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.5rem' },
     "&:hover": {
       color: theme.palette.primary.main, // Cambiar el color del texto en el hover
       cursor: 'pointer', // Cambiar el cursor a "mano" en el hover
@@ -37,9 +37,9 @@ export const Index = ({ open }) => {
       sx: {
         padding: '9px',
         borderRadius: '15px',
-        minHeight: { xs: '85%', lg: '90%' },
-        maxHeight: { xs: '85%', lg: '90%' },
-        minWidth: { xs: '90%', lg: '40%' },
+        minHeight: { xs: '85%', md: '70%', lg: '90%' },
+        maxHeight: { xs: '85%', md: '70%', lg: '90%' },
+        minWidth: { xs: '90%', md: '70%', lg: '40%' },
         maxWidth: '40%'
       }
     }}
@@ -53,11 +53,11 @@ export const Index = ({ open }) => {
           aria-label="tabsLogin"
         >
           <Tab label={
-            <Typography variant='h5' sx={tabTitleStyles}>
-              Log In
+            <Typography variant='h3' sx={tabTitleStyles}>
+              Login
             </Typography>
           }></Tab>
-          <Tab label={<Typography variant='h5' sx={tabTitleStyles}>
+          <Tab label={<Typography variant='h3' sx={tabTitleStyles}>
             Registrarse
           </Typography>}></Tab>
           {/* <Tab label={<Typography variant='h5' sx={tabTitleStyles}>

@@ -113,13 +113,13 @@ export const Mamiferos = () => {
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={true}
-          maxWidth='md'
+          // maxWidth='md'
         >
           <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {info.length === 1 && (
           <Grid container >
-            <PhotosDetail bird={info[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
+            <PhotosDetail animal={info[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
           </Grid>
         )}
         {info.length > 1 && (
@@ -149,7 +149,7 @@ export const Mamiferos = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white' sx={{ marginLeft: '20px' }}>
+                <Typography variant='h4' color='white' sx={{ marginLeft: '20px' }}>
                   Total de Registros Filtrados: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
@@ -211,7 +211,7 @@ export const Mamiferos = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white'>
+                <Typography variant='h5' color='white'>
                   Total de Resultados Filtrados: 0
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>

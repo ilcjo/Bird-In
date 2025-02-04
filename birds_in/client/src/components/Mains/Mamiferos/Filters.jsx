@@ -61,7 +61,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     });
 
 
-    const handleOptionChange = (category, newValue) => {
+    const handleOptionChange = async (category, newValue) => {
         setIsFetchingOptions(true); // Activa el indicador de carga
 
         const updatedSelectOption = {
@@ -73,14 +73,22 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         };
 
         setSelectOption(updatedSelectOption);
-        // Realiza la solicitud para obtener las opciones
-        dispatch(fetchNewOptions(updatedSelectOption))
-            .then(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
-            })
-            .catch(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
-            });
+        try {
+            // Realiza la solicitud para obtener las opciones
+            await dispatch(fetchNewOptions(updatedSelectOption))
+            // .then(() => {
+            //     setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
+            // })
+            // .catch(() => {
+            //     setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
+            // });
+        } catch (error) {
+            // Maneja el error, si es necesario
+            console.error('Error fetching new options:', error);
+        } finally {
+            // Desactiva el indicador de carga cuando la solicitud se completa o hay un error
+            setIsFetchingOptions(false);
+        }
     };
 
     const handleClickFiltrar = async () => {
@@ -91,7 +99,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
         try {
             const resultLength = await dispatch(sendParameter(selectOption));
-
             pages(1);
             dispatch(copingFilters());
 
@@ -136,7 +143,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
 
     React.useEffect(() => {
-        return () => {
+        // return () => {
             dispatch(getOptionsDataM());
             setSelectOption({
                 order: [],
@@ -146,7 +153,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 cientifico: [],
                 ingles: []
             });
-        };
+        // };
     }, []);
     return (
         <React.Fragment>
@@ -163,7 +170,6 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     </Typography>
                 </Grid>
                 <Grid container alignItems="center">
-
 
                     <Grid item xs={12} >
                         <FormControl sx={{ m: 1, width: '95%' }}>
@@ -417,14 +423,14 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 margin: '20px auto', // Centrar horizontalmente el Stack
                                 width: 'fit-content', // Ajustar el ancho al contenido
                             }} >
-                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
-                                Mostrar
+                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
+                                < CloseIcon /> Cerrar
                             </Button>
                             <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
                                 Resetear
                             </Button>
-                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
-                                < CloseIcon /> Cerrar
+                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                                Mostrar
                             </Button>
                         </Stack>
                     </Grid>

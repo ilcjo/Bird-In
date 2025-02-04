@@ -18,6 +18,8 @@ import {
 import { useDispatch, } from 'react-redux';
 //icons
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
 //redux
 import { Boolean } from '../../redux/settings/slices/OpenClose';
 import { pendingEmail, registerData, } from '../../redux/settings/actions/userLoginRegister';
@@ -178,21 +180,21 @@ export const RegisterForm = ({ changeTab, close }) => {
 
 
   return (
-    <Box sx={{ margin: '10px' }} >
+    <Box sx={{ margin: '0px' }} >
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
+        <Typography variant="h2" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
           Crear Cuenta
         </Typography>
-        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+        <Typography variant="h5" color="primary.main" sx={{ mb: 2 }}>
           Ya eres miembro ?
           <MuiLink onClick={handleLinkClicRk} color="primary.light" underline="none" sx={{
             cursor: 'pointer',
             '&:hover': {
               color: theme.palette.primary.main
             },
-            marginLeft: '5px'
+            marginLeft: '7px'
           }}>
-            Log In
+            Iniciar Sesión
           </MuiLink>
         </Typography>
       </div>
@@ -205,18 +207,16 @@ export const RegisterForm = ({ changeTab, close }) => {
             onChange={handleNameChange}
             error={errorName}
             helperText={errorName}
-
+            fullWidth
+            margin="normal"
             FormHelperTextProps={{
               sx: {
                 /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1.1rem',
+                fontSize: '1rem',
                 color: theme.palette.secondary.main,
                 fontWeight: 'bold'
               },
             }}
-            fullWidth
-            margin="normal"
-
           />
 
           <TextField
@@ -225,7 +225,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             type="email"
             value={formData.email}
             onChange={(e) => { handleEmailChange(e) }}
-            margin="normal"
+            // margin="normal"
             fullWidth
             sx={{ mt: 3 }}
             error={errorEmail}
@@ -243,7 +243,7 @@ export const RegisterForm = ({ changeTab, close }) => {
           <TextField
             label="Contraseña"
             name="pass"
-            margin="normal"
+            // margin="normal"
             error={error !== ''}
             type={showPassword ? 'text' : 'password'}
             fullWidth
@@ -278,7 +278,7 @@ export const RegisterForm = ({ changeTab, close }) => {
               validatePassword(e.target.value);
             }}
           />
-          <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px', mt: 3 }}>
+          <Typography variant="h5" color="primary.main" sx={{ mb: 5, mt: 2 }}>
             La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
           </Typography>
 
@@ -290,8 +290,9 @@ export const RegisterForm = ({ changeTab, close }) => {
             width: 'fit-content', // Ajustar el ancho al contenido
           }}
         >
-          <Button variant="outlined" onClick={handleClose} color="primary" sx={{ fontSize: { xs: '1rem' } }}>
-            Cancelar
+          <Button variant="outlined" onClick={handleClose} color="error" sx={{ fontSize: { xs: '1rem' } }}
+            startIcon={<CloseIcon />}>
+            Cerrar
           </Button>
           <Button
             sx={{ fontSize: { xs: '1rem' } }}
@@ -299,8 +300,9 @@ export const RegisterForm = ({ changeTab, close }) => {
             onClick={handleSubmit}
             color="primary"
             disabled={isButtonDisabled()}
+            endIcon={<SendIcon />}
           >
-            Crear Cuenta
+            Crear
           </Button>
         </Stack>
       </Grid>

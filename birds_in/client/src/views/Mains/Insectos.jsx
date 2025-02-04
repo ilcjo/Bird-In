@@ -48,7 +48,7 @@ export const Insectos = () => {
 
   React.useEffect(() => {
     dispatch(resetInfo());
-    dispatch(isOneR(null))//falta
+    dispatch(isOneR(null))
   }, []);
 
   React.useEffect(() => {
@@ -113,13 +113,13 @@ export const Insectos = () => {
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={true}
-          maxWidth='md'
+        // maxWidth='md'
         >
           <FiltersI isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {info.length === 1 && (
           <Grid container >
-            <PhotosDetailI setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
+            <PhotosDetailI animal={info[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
           </Grid>
         )}
         {info.length > 1 && (
@@ -149,13 +149,13 @@ export const Insectos = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white' sx={{ marginLeft: '20px' }}>
+                <Typography variant='h4' color='white' sx={{ marginLeft: '20px' }}>
                   Total de Registros Filtrados: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} lg={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
-                <Button
+                {/* <Button
                   sx={{
                     fontSize: '1rem',
                     fontWeight: 'bold',
@@ -168,7 +168,7 @@ export const Insectos = () => {
                   onClick={stepBack}
                   startIcon={<ArrowBackIcon />}
                 >Regresar
-                </Button>
+                </Button> */}
               </Grid>
             </Grid>
             <Grid container spacing={3} justifyContent="center">
@@ -225,7 +225,7 @@ export const Insectos = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white'>
+                <Typography variant='h5' color='white'>
                   Total de Resultados Filtrados: 0
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>

@@ -53,16 +53,16 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
           <React.Fragment key={index}>
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
-                <Typography variant='h6' color='primary.light' sx={{ mb: 1, mt: -2 }}>
+                <Typography variant='h4' color='primary.light' sx={{ mb: 1, mt: -2 }}>
                   {data.familia.nombre || 'N/A'} / {data.grupo.nombre || 'N/A'}
                 </Typography>
               </Grid>
 
               <Grid item xs={12} >
-                <Typography variant="h4" color='primary.light' >
+                <Typography variant="h5" color='primary.light' >
                   NOMBRE EN INGLÉS:
                 </Typography>
-                <Typography variant='h1' color='primary' >
+                <Typography variant='h1' color='primary' sx={{}} >
                   {data.nombre_ingles || 'N/A'}
                 </Typography>
                 {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '30%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} /> */}
@@ -108,30 +108,30 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
               }} > */}
               {/* <Grid container spacing={1}> */}
               <Grid item xs={12} sx={{ mt: 2 }}>
-                <Typography variant="h4" color='primary.light' sx={{ mb: 1 }} >
+                <Typography variant="h5" color='primary.light' sx={{ mb: 1 }} >
                   NOMBRE CIENTÍFICO:
-                  <Typography variant='h6' color='primary.light' sx={{ mb: 0.5 }}>
+                  <Typography variant='body1' color='primary.light' sx={{ mb: 0.5 }}>
                     {data.nombre_cientifico || 'N/A'}
                   </Typography>
                 </Typography>
-                <Typography variant="h4" color='primary.light' sx={{ mb: 0 }}>
+                <Typography variant="h5" color='primary.light' sx={{ mb: 0 }}>
                   NOMBRE COMÚN:
-                  <Typography variant='h6' color='primary.light'>
+                  <Typography variant='body1' color='primary.light'>
                     {data.nombre_comun || 'N/A'}
                   </Typography>
                 </Typography>
               </Grid>
 
               <Grid item xs={12}>
-                <Typography variant="h4" color='primary.light' sx={{ mb: 1 }}>
+                <Typography variant="h5" color='primary.light' sx={{ mb: 1 }}>
                   PAÍS:
-                  <Typography variant='h6' color='primary.light' sx={{ mb: 0 }}>
+                  <Typography variant='body1' color='primary.light' sx={{ mb: 0 }}>
                     {formatData(data.paises) || 'N/A'}
                   </Typography>
                 </Typography>
-                <Typography variant="h4" color="primary.light" sx={{ mb: 1 }}>
+                <Typography variant="h5" color="primary.light" sx={{ mb: 1 }}>
                   ZONAS:
-                  <Typography variant="h6" color="primary.light" sx={{ mb: 0 }}>
+                  <Typography variant="body1" color="primary.light" sx={{ mb: 0 }}>
                     {formatData(data.zonasAves) || 'N/A'}
                   </Typography>
                 </Typography>

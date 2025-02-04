@@ -43,7 +43,7 @@ export const PhotosOrganize = ({ imageUrl, index, moveImage, handleImageClick, h
             <Card sx={{
                 borderRadius: '6px',
                 p: '0 auto',
-                width: { xs: 450, sm: 450, md: 490, lg: 490, }, minWidth: { xs: 490, sm: 460, md: 490, lg: 490, }, margin: '0px 0px',
+                width: { xs: 450, sm: 450, md: 470, lg: 470, }, minWidth: { xs: 450, sm: 450, md: 470, lg: 470, }, margin: '0px 0px',
                 flexDirection: 'column',
                 background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)',
             }}>

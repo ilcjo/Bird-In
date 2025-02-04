@@ -280,12 +280,12 @@ export const ZonasOptions = ({
               label="Nombre de Zona"
               value={nombreZona}
               onChange={(e) => setNombreZona(e.target.value)}
-              InputLabelProps={{
-                sx: labelStyles,
-              }}
-              InputProps={{
-                sx: inputStyles,
-              }}
+              // InputLabelProps={{
+              //   sx: labelStyles,
+              // }}
+              // InputProps={{
+              //   sx: inputStyles,
+              // }}
             // error={!nombreZona && errorMessage}
             // helperText={!nombreZona ? 'Este campo es obligatorio' : ''}
             />
@@ -302,13 +302,13 @@ export const ZonasOptions = ({
               renderInput={(params) =>
                 <TextField {...params}
                   label="País"
-                  InputLabelProps={{
-                    sx: labelStyles,
-                  }}
-                  InputProps={{
-                    ...params.InputProps,
-                    sx: inputStyles,
-                  }}
+                  // InputLabelProps={{
+                  //   sx: labelStyles,
+                  // }}
+                  // InputProps={{
+                  //   ...params.InputProps,
+                  //   sx: inputStyles,
+                  // }}
                 // error={!paisSeleccionado && errorMessage}
                 // helperText={!paisSeleccionado ? 'Este campo es obligatorio' : ''}
                 />}
@@ -348,17 +348,17 @@ export const ZonasOptions = ({
             placeholder="Buscar"
             value={searchTerm}
             onChange={handleSearchChange}
-            sx={{
-              mb: 2,
-              backgroundColor: 'rgba(204,214,204,0.17)',
-              borderRadius: '9px',
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'none',
-              },
-              '&:hover .MuiOutlinedInput-notchedOutline': {
-                borderColor: theme.palette.primary.main,
-              },
-            }}
+            // sx={{
+            //   mb: 2,
+            //   backgroundColor: 'rgba(204,214,204,0.17)',
+            //   borderRadius: '9px',
+            //   '& .MuiOutlinedInput-notchedOutline': {
+            //     borderColor: 'none',
+            //   },
+            //   '&:hover .MuiOutlinedInput-notchedOutline': {
+            //     borderColor: theme.palette.primary.main,
+            //   },
+            // }}
           />
           <TableContainer sx={{ maxHeight: 450 }}>
 

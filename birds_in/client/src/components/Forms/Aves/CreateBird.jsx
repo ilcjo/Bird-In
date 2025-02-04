@@ -370,13 +370,13 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6} >
-                                <StyledTextField
+                                <TextField
                                     name="ingles"
                                     label="Nombre en Inglés"
                                     value={createData.ingles}
                                     onChange={handleInputChangeIngles}
                                     type='text'
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                     error={formSubmitted && createData.ingles.trim() === ''} // Check if the field is empty when the form is submitted
@@ -388,25 +388,28 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         },
                                     }}
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
                                     onChange={handleInputChange}
                                     type='text'
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="cientifico"
                                     label="Nombre científico"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
                                     type='text'
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
+                                    InputProps={{
+                                        style: { fontStyle: 'italic' } // Aplica estilo cursiva al texto
+                                    }}
                                 />
 
                             </Grid>
@@ -674,10 +677,10 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             </Grid>
 
                             <Grid item xs={12} sm={12}>
-                                <StyledTextField
+                                <TextField
                                     name="urlWiki"
                                     label='URL Wiki'
-                                    variant="filled"
+                                    variant="outlined"
                                     value={createData.urlWiki}
                                     onChange={handleInputChange}
                                     fullWidth
@@ -702,10 +705,10 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     }}
                                 />
 
-                                <StyledTextField
+                                <TextField
                                     name="urlBird"
                                     label='URL'
-                                    variant="filled"
+                                    variant="outlined"
                                     value={createData.urlBird}
                                     onChange={handleInputChange}
                                     margin="dense"

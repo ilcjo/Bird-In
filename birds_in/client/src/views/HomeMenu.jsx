@@ -43,7 +43,7 @@ export const HomeMenu = () => {
         display: 'grid',
         gridTemplateColumns: isMobile ? 'repeat(1, 1fr)' : (showSobreMi ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)'),
         gridTemplateRows: 'repeat(2, 1fr)',
-        gap: '1px',
+        gap: '0px',
         transition: 'grid-template-columns 0.5s ease-in-out',
         
       }}

@@ -12,6 +12,7 @@ import {
 import { useDispatch } from 'react-redux';
 //components
 import { Loading } from '../utils/Loading';
+import SendIcon from '@mui/icons-material/Send';
 //redux
 import { recoverPass } from '../../redux/settings/actions/userLoginRegister';
 
@@ -57,10 +58,10 @@ export const ForgotPass = () => {
     <React.Fragment>
       <Box sx={{ margin: '10px' }}>
         <div>
-          <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', mb: 2 }}>
+          <Typography variant="h2" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
             ¿Olvidaste tu contraseña?
           </Typography>
-          <Typography variant="body1" color='primary.main' sx={{ marginLeft: '2px', mb: 2 }}>
+          <Typography variant="h5" color='primary.main' sx={{ mb: 2 }}>
             Ingresa tu correo y recibirás un correo electrónico con los pasos para recuperar tu cuenta.
           </Typography>
         </div>
@@ -76,11 +77,15 @@ export const ForgotPass = () => {
             }}
             margin="normal"
             fullWidth
+            sx={{ mb: 5, mt: 2 }}
           />
         </form>
         <Grid container component={Box} justifyContent="center" size="medium">
-          <Button variant="contained" onClick={handlePass} color="primary" sx={{ fontSize: { xs: '1rem' } }}>
-            Recuperar Contraseña
+          <Button variant="contained" onClick={handlePass} color="primary"
+            endIcon={<SendIcon />}
+            sx={{ fontSize: { xs: '1rem' } }}
+          >
+            Recuperar
           </Button>
         </Grid>
         <Loading

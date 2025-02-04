@@ -102,12 +102,12 @@ export const FamiliaAddForm = ({
                         label="Nombre de Familia"
                         value={nombreFamilia.nombreF}
                         onChange={(e) => setNombreFamilia({ ...nombreFamilia, nombreF: e.target.value })}
-                        InputLabelProps={{
-                            sx: labelStyles,
-                        }}
-                        InputProps={{
-                            sx: inputStyles,
-                        }}
+                        // InputLabelProps={{
+                        //     sx: labelStyles,
+                        // }}
+                        // InputProps={{
+                        //     sx: inputStyles,
+                        // }}
                     />
                 </Grid>
                 <Grid item xs={12} md={2}>

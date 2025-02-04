@@ -13,6 +13,8 @@ export const AutocompleteFilter = ({ label, options, value, onChange, loading })
                 renderInput={(params) =>
                     <TextField
                         {...params}
+                        color="primary"
+                        // variant="standard"
                         label={label}
                         sx={{
                             '& .MuiInputBase-input': {

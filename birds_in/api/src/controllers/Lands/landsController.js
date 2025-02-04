@@ -47,7 +47,7 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
             limit: perPageConvert,
             offset: offset
         });
-console.log(RegistrosFiltrados)
+// console.log(RegistrosFiltrados)
         // Contar el total de paisajes
         const totalResults = await Paisajes.count({
             where: Object.keys(whereClause).length > 0 ? whereClause : {} // Si no hay filtros, contar todo
@@ -175,15 +175,15 @@ const fetchOptionsLand = async () => {
 
 
 const filterOptionsPaisZonasPaisaje = async (pais, zona) => {
-    // console.log('primera', zona, pais);
     const perpage = '0';
     const page = '0';
     const { RegistrosFiltrados } = await fetchFilterLands(pais, zona, page, perpage);
-    // console.log(RegistrosFiltrados)
+
     const newOptions = {
         paises: [],
         zonas: [],
     };
+
     if (zona) {
         const paisesSet = new Set();
         RegistrosFiltrados.forEach(paisaje => {
@@ -194,28 +194,31 @@ const filterOptionsPaisZonasPaisaje = async (pais, zona) => {
                 }));
             }
         });
-        // console.log(paisesSet);
-        newOptions.paises = Array.from(paisesSet).map(pais => JSON.parse(pais));
+        // Ordenar países alfabéticamente
+        newOptions.paises = Array.from(paisesSet)
+            .map(pais => JSON.parse(pais))
+            .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
     }
 
     if (pais) {
         const zonasSet = new Set();
-
         RegistrosFiltrados.forEach(paisaje => {
             if (paisaje.zona) {
-                // console.log('paisaje.zona:', paisaje.zona); 
                 zonasSet.add(JSON.stringify({
                     id: paisaje.zona.dataValues.id_zona,
                     nombre: paisaje.zona.dataValues.nombre,
                 }));
             }
         });
-        // console.log(zonasSet,'soy');
-        newOptions.zonas = Array.from(zonasSet).map(zona => JSON.parse(zona));
+        // Ordenar zonas alfabéticamente
+        newOptions.zonas = Array.from(zonasSet)
+            .map(zona => JSON.parse(zona))
+            .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
     }
 
     return newOptions;
 };
+
 
 const sendAndCreateLand = async (
     pais,

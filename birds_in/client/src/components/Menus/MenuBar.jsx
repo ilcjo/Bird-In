@@ -100,6 +100,24 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               {!isMobile && 'Mantenimiento'}
             </Button>
           )}
+           {ShowBackButton && (
+            <Button
+              sx={{
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                color: 'white',
+                '&:hover': {
+                  borderBottom: '2px solid white',
+                  borderRadius: '0px',
+                },
+              }}
+              variant="text"
+              onClick={returnMenuClick}
+              startIcon={<HomeIcon />}
+            >
+              {!isMobile && 'Menu Principal'}
+            </Button>
+          )}
           {ShowFilterButton && (
             <Button
               sx={{
@@ -118,24 +136,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               {!isMobile && 'Abrir Filtro'}
             </Button>
           )}
-          {ShowBackButton && (
-            <Button
-              sx={{
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                color: 'white',
-                '&:hover': {
-                  borderBottom: '2px solid white',
-                  borderRadius: '0px',
-                },
-              }}
-              variant="text"
-              onClick={returnMenuClick}
-              startIcon={<HomeIcon />}
-            >
-              {!isMobile && 'Menu Principal'}
-            </Button>
-          )}
+         
           <Button
             sx={{
               fontSize: '1rem',

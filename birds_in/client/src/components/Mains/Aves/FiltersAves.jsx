@@ -259,14 +259,14 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 margin: '20px auto', // Centrar horizontalmente el Stack
                                 width: 'fit-content', // Ajustar el ancho al contenido
                             }} >
-                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
-                                Mostrar
+                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
+                                < CloseIcon /> Cerrar
                             </Button>
                             <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
                                 Resetear
                             </Button>
-                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
-                                < CloseIcon /> Cerrar
+                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                                Mostrar
                             </Button>
                         </Stack>
                     </Grid>

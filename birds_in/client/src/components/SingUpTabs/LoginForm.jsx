@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
+import LoginIcon from '@mui/icons-material/Login';
 //redux
 import { loginFailure, loginRequest } from '../../redux/settings/slices/Auth';
 import { Boolean } from '../../redux/settings/slices/OpenClose';
@@ -110,10 +111,10 @@ export const LoginForm = ({ changeTab }) => {
   return (
     <Box sx={{ margin: '0px' }}>
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ marginLeft: '2px', }}>
+        <Typography variant="h2" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
           Acceder a tu cuenta
         </Typography>
-        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '8px', my: '10px' }}>
+        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '0px', my: '10px' }}>
           Aun no eres miembro ?
           <MuiLink onClick={handleRegisterLinkClick} color="primary.light" underline="none"
             sx={{
@@ -121,112 +122,132 @@ export const LoginForm = ({ changeTab }) => {
               '&:hover': {
                 color: theme.palette.primary.main
               },
-              marginLeft: '5px'
+              marginLeft: '7px'
             }}>
             Registrarse
           </MuiLink>
         </Typography>
       </div>
       <Grid container component={Box}  >
-        <form onSubmit={handleLogin} >
+        <Grid container justifyContent="center" alignItems="center">
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: '100%',
+            }}
+          >
+            <form onSubmit={handleLogin} >
+              <TextField
+                label="E-mail"
+                name="email"
+                type="email"
+                color='primary'
+                value={loginData.email}
+                onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                error={errorText !== ''}
+                helperText={errorText}
+                margin="normal"
+                fullWidth
+                FormHelperTextProps={{
+                  sx: {
+                    fontSize: '1rem',
+                    color: theme.palette.primary.light,
+                    fontWeight: 'bold'
+                  },
+                }}
+              />
 
-          <TextField
-            label="E-mail"
-            name="email"
-            type="email"
-            // color='primary'
-            value={loginData.email}
-            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-            error={errorText !== ''}
-            helperText={errorText}
-            margin="normal"
-            fullWidth
-            FormHelperTextProps={{
-              sx: {
-                fontSize: '1rem',
-                color: theme.palette.primary.light,
-              },
-            }}
-          />
-
-          <TextField
-            label="Password"
-            name="password"
-            margin="normal"
-            color='primary'
-            type={showPassword ? 'text' : 'password'}
-            fullWidth
-            value={loginData.password}
-            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-            error={errorTextPass !== ''}
-            helperText={errorTextPass}
-            onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            FormHelperTextProps={{
-              sx: {
-                fontSize: '1rem',
-                color: theme.palette.primary.light,
-              },
-            }}
-          />
-          <Typography variant="h5" sx={{ mb: 5, mt: 2 }}>
-            {/* <ReCAPTCHA
+              <TextField
+                label="Password"
+                name="password"
+                margin="normal"
+                color='primary'
+                type={showPassword ? 'text' : 'password'}
+                fullWidth
+                value={loginData.password}
+                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                error={errorTextPass !== ''}
+                helperText={errorTextPass}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                FormHelperTextProps={{
+                  sx: {
+                    fontSize: '1rem',
+                    color: theme.palette.primary.light,
+                    fontWeight: 'bold'
+                  },
+                }}
+                sx={{
+                  // fontSize: '1rem', // Tamaño de texto interno
+                  // input: { fontSize: '1rem', height: '60px' }, // Tamaño del texto de entrada
+                  // minHeight: '60px', // Altura mínima para igualar el tamaño predeterminado de MUI
+                  // width: { xs: '100%', md: '520px' }
+                }}
+              />
+              <Typography variant="h5" sx={{ mb: 5, mt: 2 }}>
+                {/* <ReCAPTCHA
               sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
               onChange={handleCaptchaVerification}
             /> */}
-            <MuiLink onClick={handlePassLinkClicRk}
-              sx={{
-                cursor: 'pointer',
-                '&:hover': {
-                  color: theme.palette.primary.main
-                },
-                marginLeft: '8px',
-                marginTop: '10px',
+                <MuiLink onClick={handlePassLinkClicRk}
+                  color="primary.light" underline="none"
+                  sx={{
+                    cursor: 'pointer',
+                    '&:hover': {
+                      color: theme.palette.primary.main
+                    },
+                    // marginLeft: '5px'
 
-              }} style={{ color: theme.palette.primary.main }}>
-              Olvidó su contraseña?
-            </MuiLink>
-          </Typography>
+                  }} >
+                  Olvidó su contraseña?
+                </MuiLink>
+              </Typography>
 
-        </form>
+            </form>
+          </Box>
+        </Grid>
         <Stack spacing={1} direction="row" justifyContent="center"
           alignItems="center"
           sx={{
             margin: 'auto', // Centrar horizontalmente el Stack
             width: 'fit-content', // Ajustar el ancho al contenido
+
           }}
         >
-          <Button variant="outlined" onClick={handleClose} color="primary" sx={{ fontSize: { xs: '1rem' } }}>
-            Cancelar
+          <Button variant="outlined" onClick={handleClose} color="error" sx={{ fontSize: { xs: '1rem' } }}
+            startIcon={<CloseIcon />}
+          >
+            Cerrar
           </Button>
           <LoadingButton
             onClick={handleLogin}
-            endIcon={<SendIcon />}
+            endIcon={<LoginIcon />}
             loading={loading}
             loadingPosition="end"
-            variant="contained"
             disabled={!loginData.email && !loginData.password}
-            sx={{ fontSize: { xs: '1rem' } }}
+            variant='contained'
           >
             <span>Entrar</span>
           </LoadingButton>
-          <Button
+          {/* <Button
             sx={{ fontSize: { xs: '1rem' } }}
             onClick={handleClose}
             variant="outlined"
             color='error'
-            startIcon={<CloseIcon />}>Cerrar</Button>
+            startIcon={<CloseIcon />}>Cerrar</Button> */}
         </Stack>
       </Grid>
       {approvedMessage && (

@@ -78,7 +78,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
                 </Fab>
 
                 <Box sx={{ width: '100%', mb: 4, textAlign: 'left' }}>
-                    <Typography variant='h2' color='primary' sx={{ display: 'flex', alignItems: 'center', ml: 4 }}>
+                    <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center', ml: 4 }}>
                         Galería de Imágenes
                     </Typography>
 

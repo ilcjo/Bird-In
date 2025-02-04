@@ -113,7 +113,7 @@ export const Reptiles = () => {
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={true}
-          maxWidth='md'
+          // maxWidth='md'
         >
           <FiltersR isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
@@ -149,7 +149,7 @@ export const Reptiles = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white' sx={{ marginLeft: '20px' }}>
+                <Typography variant='h4' color='white' sx={{ marginLeft: '20px' }}>
                   Total de Registros Filtrados: {total}
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>
@@ -211,7 +211,7 @@ export const Reptiles = () => {
                   Resultados
                   <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h6' color='white'>
+                <Typography variant='h5' color='white'>
                   Total de Resultados Filtrados: 0
                   <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                 </Typography>

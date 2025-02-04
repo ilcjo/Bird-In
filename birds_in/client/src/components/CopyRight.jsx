@@ -32,11 +32,11 @@ CopyRight.Website = () => (
             justifyContent: 'center',
             textAlign: 'center',
             //   height: '100vh',
-            mt:2.5
+            mt: 2.5
         }}
     >
         <Typography variant="subtitle2" color="text.secondary">
-            © {new Date().getFullYear()}  Website ilcjob.world. 
+            © {new Date().getFullYear()}  Website ilcjob.world.
             All rights reserved.
         </Typography>
     </Box>

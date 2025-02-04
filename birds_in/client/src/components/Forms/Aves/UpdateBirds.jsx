@@ -401,32 +401,35 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
 
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <StyledTextField
+                                <TextField
                                     name="ingles"
                                     label="Nombre en Ingles"
                                     value={createData.ingles}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="cientifico"
                                     label="Nombre cientifico"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
+                                    InputProps={{
+                                        style: { fontStyle: 'italic' } // Aplica estilo cursiva al texto
+                                    }}
                                 />
                             </Grid>
 
@@ -590,10 +593,10 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             </Grid>
 
                             <Grid item xs={12} sm={12}>
-                                <StyledTextField
+                                <TextField
                                     name="urlWiki"
                                     label='URL Wiki'
-                                    variant="filled"
+                                    variant="outlined"
                                     value={createData.urlWiki}
                                     onChange={handleInputChange}
                                     fullWidth
@@ -618,10 +621,10 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     }}
                                 />
 
-                                <StyledTextField
+                                <TextField
                                     name="urlBird"
                                     label='URL'
-                                    variant="filled"
+                                    variant="outlined"
                                     value={createData.urlBird}
                                     onChange={handleInputChange}
                                     margin="dense"

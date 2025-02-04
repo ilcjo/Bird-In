@@ -29,35 +29,35 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Arsenal',
     h1: {
-      fontSize: '2.6rem',
+      fontSize: '1.7rem',
       fontWeight: 600,
     },
     h2: {
-      fontSize: '1.8rem',
+      fontSize: '1.6rem',
       fontWeight: 600,
-      my: 1,
+      // my: 1,
     },
     h3: {
-      fontSize: '0.5rem',
-      fontWeight: 400,
+      fontSize: '1.4rem',
+      fontWeight: 600,
     },
     h4: {
-      fontSize: '1rem',
+      fontSize: '1.2rem',
       fontWeight: 600,
-      marginLeft: '6px'
+      // marginLeft: '6px'
     },
     h5: {
-      fontSize: '1.3rem',
+      fontSize: '1rem',
       fontWeight: 600,
     },
     body1: {
-      fontSize: '1.7rem',
+      fontSize: '1.3rem',
       fontWeight: 100,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
     },
     body2: {
-      fontSize: '1.5rem',
+      fontSize: '1.2rem',
       fontWeight: 200,
       fontFamily: 'Crimson Pro, sans-serif',
       lineHeight: 1.2,
@@ -89,42 +89,45 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           // backgroundColor: 'rgba(204,214,204,0.17)',
-          borderRadius: '9px',
+          // borderRadius: '9px',
           // height: '70px',
           '& .MuiInputLabel-root': {
             // height: '70px',
             color: '#C1C700', // Color del tITULO del label cuando está habilitado
           },
           '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '10px',
+            // padding: '0px',
+            // paddingLeft: '10px',
             // height: '70px',
             // backgroundColor: 'rgba(0,56,28,0.22)',
-            borderRadius: '9px',
-            borderColor: 'transparent',
+            // borderRadius: '9px',
+            // borderColor: 'transparent',
             color: '#ccd6cc',
           },
 
           '& .MuiOutlinedInput-notchedOutline': {
             // backgroundColor: 'rgba(0,56,28,0.22)',
-            backgroundColor: 'rgba(204,214,204,0.17)',
-            borderColor: 'transparent',
+            // backgroundColor: 'rgba(204,214,204,0.17)',
+            // borderColor: 'transparent',
             // height: '70px',
-            padding: '0px',
-            borderRadius: '9px',
+            // padding: '0px',
+            // borderRadius: '9px',}
+            
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#C1C700 !important',
-            backgroundColor: 'transparent',
-            borderRadius: '9px',
+            
+            // backgroundColor: 'transparent',
+            // borderRadius: '9px',
             // height: '70px',
           },
-          '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-            // Agrega los estilos que desees para el Select
-            // height: '70px',
+        //   '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+        //     // Agrega los estilos que desees para el Select
+        //     // height: '70px',
 
-          },
+        //   },
         },
+      
       },
       defaultProps: {
         InputLabelProps: {
@@ -153,7 +156,7 @@ const theme = createTheme({
           fontWeight: 500,
         },
         contained: {
-          fontSize: '1.2rem', // Aumentar el tamaño del texto a 1.2 rem
+          fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
           borderRadius: '5px',
@@ -164,7 +167,7 @@ const theme = createTheme({
           },
         },
         outlined: {
-          fontSize: '1.2rem', // Aumentar el tamaño del texto a 1.2 rem
+          fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
           borderRadius: '5px',

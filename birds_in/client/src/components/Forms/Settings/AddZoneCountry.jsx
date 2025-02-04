@@ -92,7 +92,7 @@ export const AddZoneCountry = ({ open, onclose }) => {
                     <DialogContent>
                         <Grid item xs={12} sm={6} >
                             <TextField
-                                variant="filled"
+                                variant="outlined"
                                 name="zona"
                                 label="Zonas"
                                 value={selectOptions.zona}
@@ -102,12 +102,12 @@ export const AddZoneCountry = ({ open, onclose }) => {
                                 multiline
                                 rows={2}
                                 sx={{ mt: -3, mb: 2, backgroundColor: 'rgba(204,214,204,0.17)', }}
-                                InputLabelProps={{
-                                    sx: labelStyles, // Establece el estilo del label del input
-                                }}
-                                InputProps={{
-                                    style: { color: '#ccd6cc' } // Cambia el color del texto a azul (o el color que desees)
-                                }}
+                                // InputLabelProps={{
+                                //     sx: labelStyles, // Establece el estilo del label del input
+                                // }}
+                                // InputProps={{
+                                //     style: { color: '#ccd6cc' } // Cambia el color del texto a azul (o el color que desees)
+                                // }}
                             />
                         </Grid>
                         <Grid tem xs={12} sm={6} >

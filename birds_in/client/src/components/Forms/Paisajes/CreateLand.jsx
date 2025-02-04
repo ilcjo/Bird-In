@@ -442,23 +442,23 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                         </Grid>
                         <Grid container spacing={1}>
                             <Grid item xs={12} sm={12}>
-                                <StyledTextField
+                                <TextField
                                     name="descripcion"
                                     label="Descripción"
                                     value={createData.descripcion}
                                     onChange={handleInputChange}
                                     type='text'
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="normal"
                                     fullWidth
                                 />
                             </Grid>
 
                             <Grid item sx={12} md={12}>
-                                <StyledTextField
+                                <TextField
                                     name="urlWiki"
                                     label='URL Wiki'
-                                    variant="filled"
+                                    variant="outlined"
                                     value={createData.urlWiki}
                                     onChange={handleInputChange}
                                     fullWidth
@@ -482,9 +482,9 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={12} >
-                                <StyledTextField
+                                <TextField
                                     label="URL de Google Maps"
-                                    variant="filled"
+                                    variant="outlined"
                                     fullWidth
                                     name="map"
                                     value={createData.map}

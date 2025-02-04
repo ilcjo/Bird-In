@@ -111,12 +111,12 @@ export const GrupoAddForm = ({
             label="Nombre de Grupo"
             value={nombreGrupos.nombreG}
             onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
-            InputLabelProps={{
-              sx: labelStyles,
-            }}
-            InputProps={{
-              sx: inputStyles,
-            }}
+            // InputLabelProps={{
+            //   sx: labelStyles,
+            // }}
+            // InputProps={{
+            //   sx: inputStyles,
+            // }}
           />
         </Grid>
         <Grid item xs={12} md={2}>
