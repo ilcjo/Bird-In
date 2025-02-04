@@ -112,6 +112,7 @@ const theme = createTheme({
             // height: '70px',
             // padding: '0px',
             // borderRadius: '9px',}
+            borderColor: '#ccd6cc !important',
             
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {

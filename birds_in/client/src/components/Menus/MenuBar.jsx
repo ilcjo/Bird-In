@@ -89,8 +89,10 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 fontWeight: 'bold',
                 color: 'white',
                 '&:hover': {
-                  borderBottom: '2px solid white',
+                  color: theme.palette.primary.main,
+                  borderBottom: '2px solid #C1C700',
                   borderRadius: '0px',
+                  borderWidth: '3px'
                 },
               }}
               variant="text"
@@ -107,8 +109,10 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 fontWeight: 'bold',
                 color: 'white',
                 '&:hover': {
-                  borderBottom: '2px solid white',
+                  color: theme.palette.primary.main,
+                  borderBottom: '2px solid #C1C700',
                   borderRadius: '0px',
+                  borderWidth: '3px'
                 },
               }}
               variant="text"
@@ -125,8 +129,10 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
                 fontWeight: 'bold',
                 color: 'white',
                 '&:hover': {
-                  borderBottom: '2px solid white',
-                  borderRadius: '0px'
+                  color: theme.palette.primary.main,
+                  borderBottom: '2px solid #C1C700',
+                  borderRadius: '0px',
+                  borderWidth: '3px'
                 },
               }}
               variant="text"
@@ -143,9 +149,10 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               fontWeight: 'bold',
               color: 'white',
               '&:hover': {
-                borderBottom: '2px solid white',
-                borderRadius: '0px',
-                color: 'white'
+                color: theme.palette.primary.main,
+                  borderBottom: '2px solid #C1C700',
+                  borderRadius: '0px',
+                  borderWidth: '3px'
               },
             }}
             variant="text"

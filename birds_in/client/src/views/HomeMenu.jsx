@@ -55,11 +55,13 @@ export const HomeMenu = () => {
             position: 'relative',
             overflow: 'hidden',
             transition: 'transform 0.5s ease-in-out',
-            '&:hover': { transform: 'scale(1)' },
-            height: '49vh',
+           '&:hover img': {
+      transform: 'scale(1.1)', // Aumenta el tamaño de la imagen en hover
+    },
+            height: '50vh',
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end', // Align content at the bottom
+            // flexDirection: 'column',
+            // justifyContent: 'flex-end', // Align content at the bottom
             gridColumn: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
             gridRow: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
           }}
@@ -72,7 +74,7 @@ export const HomeMenu = () => {
           <img
             src={images[section.id]}
             alt={section.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 10px 0px', pointerEvents: 'none' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 10px 0px', pointerEvents: 'none', transition: 'transform 0.5s ease-in-out', }}
           />
           </RouterLink>
           <Box
@@ -84,13 +86,28 @@ export const HomeMenu = () => {
               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
               color: '#fff',
               borderRadius: '0px 0px 10px 0px',
+              '&:hover .title-text': { color: theme.palette.primary.main }, // Cambia color del texto en hover
+              '&:hover .divider-line': { transform: 'translateX(10px)' },
             }}
           >
               <RouterLink to={`/${section.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <Typography variant="h2" color="primary.main" sx={{ mb: '-5px', ml: 2 }}>
-              <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '15%' }} />
+              
+            <Typography variant="h1" color="white" 
+              className="title-text"
+            sx={{
+    mb: '-5px',
+    ml: 2,
+    transition: 'color 0.3s ease-in-out', // Transición para el color
+  }}>
+             
               {section.title}
             </Typography>
+            <Divider 
+            className="divider-line"
+            sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '30%',
+                 transition: 'transform 0.3s ease-in-out', // Agregamos transición
+                 transformOrigin: 'left', // Punto de origen del movimiento
+               }} />
             </RouterLink>
             <Box
               sx={{
@@ -135,12 +152,18 @@ export const HomeMenu = () => {
             position: 'relative',
             overflow: 'hidden',
             height: '100%',
+            transition: 'transform 0.5s ease-in-out',
+            filter: 'grayscale(50%)', // Estado inicial en blanco y negro
+            '&:hover': {
+              filter: 'grayscale(0%)',  // Recupera los colores en hover
+    },
           }}
         >
           <img
             src={images['SobreMi']}
             alt="Sobre Mi"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover',
+        transition: 'transform 0.5s ease-in-out, ' }}
           />
           <Box
             sx={{
@@ -152,12 +175,23 @@ export const HomeMenu = () => {
               height:'20%',
               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
               color: '#fff',
+              '&:hover .title-text': { color: theme.palette.primary.main }, // Cambia color del texto en hover
+              '&:hover .divider-line': { transform: 'translateX(10px)' },
             }}
           >
-              <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '15%' }} />
-            <Typography variant="h2" color="primary.main">
+            <Typography variant="h1" color="white"
+             className="title-text"
+             sx={{
+     mb: '-5px',
+     ml: 2,
+     transition: 'color 0.3s ease-in-out', // Transición para el color
+   }}>
               Sobre Mi
             </Typography>
+              <Divider 
+              className="divider-line"
+              sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '30%',   transition: 'transform 0.3s ease-in-out', // Agregamos transición
+                 transformOrigin: 'left',  }} />
             <Box mt={2} sx={{ display: 'flex', justifyContent: 'center' }}>
               <Button
                 variant="contained"

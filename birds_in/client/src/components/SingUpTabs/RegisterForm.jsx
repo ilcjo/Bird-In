@@ -182,10 +182,10 @@ export const RegisterForm = ({ changeTab, close }) => {
   return (
     <Box sx={{ margin: '0px' }} >
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
+        <Typography variant="h1" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
           Crear Cuenta
         </Typography>
-        <Typography variant="h5" color="primary.main" sx={{ mb: 2 }}>
+        <Typography variant="h4" color="primary.main" sx={{ marginLeft: '0px', my: '10px' }}>
           Ya eres miembro ?
           <MuiLink onClick={handleLinkClicRk} color="primary.light" underline="none" sx={{
             cursor: 'pointer',
@@ -199,90 +199,101 @@ export const RegisterForm = ({ changeTab, close }) => {
         </Typography>
       </div>
       <Grid container component={Box}  >
-        <form onSubmit={handleSubmit}  >
-          <TextField
-            label="Nombre Completo"
-            name="name"
-            value={formData.name}
-            onChange={handleNameChange}
-            error={errorName}
-            helperText={errorName}
-            fullWidth
-            margin="normal"
-            FormHelperTextProps={{
-              sx: {
-                /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1rem',
-                color: theme.palette.secondary.main,
-                fontWeight: 'bold'
-              },
+        <Grid container justifyContent="center" alignItems="center">
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              width: '100%',
             }}
-          />
+          >
+            <form onSubmit={handleSubmit}  >
+              <TextField
+                label="Nombre Completo"
+                name="name"
+                value={formData.name}
+                onChange={handleNameChange}
+                error={errorName}
+                helperText={errorName}
+                fullWidth
+                margin="normal"
+                FormHelperTextProps={{
+                  sx: {
+                    /* Agrega los estilos que desees para el texto del helper text */
+                    fontSize: '1rem',
+                    color: theme.palette.secondary.main,
+                    fontWeight: 'bold'
+                  },
+                }}
+              />
 
-          <TextField
-            label="Correo Electrónico"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => { handleEmailChange(e) }}
-            // margin="normal"
-            fullWidth
-            sx={{ mt: 3 }}
-            error={errorEmail}
-            helperText={errorEmail}
-            FormHelperTextProps={{
-              sx: {
-                /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1.1rem',
-                color: theme.palette.secondary.main,
-                fontWeight: 'bold'
-              },
-            }}
+              <TextField
+                label="Correo Electrónico"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => { handleEmailChange(e) }}
+                // margin="normal"
+                fullWidth
+                sx={{ mt: 3 }}
+                error={errorEmail}
+                helperText={errorEmail}
+                FormHelperTextProps={{
+                  sx: {
+                    /* Agrega los estilos que desees para el texto del helper text */
+                    fontSize: '1.1rem',
+                    color: theme.palette.secondary.main,
+                    fontWeight: 'bold'
+                  },
+                }}
 
-          />
-          <TextField
-            label="Contraseña"
-            name="pass"
-            // margin="normal"
-            error={error !== ''}
-            type={showPassword ? 'text' : 'password'}
-            fullWidth
-            sx={{ mt: 3 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    onClick={() => setShowPassword(!showPassword)}
-                    onMouseDown={(event) => event.preventDefault()}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+              />
+              <TextField
+                label="Contraseña"
+                name="pass"
+                // margin="normal"
+                error={error !== ''}
+                type={showPassword ? 'text' : 'password'}
+                fullWidth
+                sx={{ mt: 3 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={(event) => event.preventDefault()}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
 
-            }}
+                }}
 
-            helperText={error}
-            FormHelperTextProps={{
-              sx: {
-                /* Agrega los estilos que desees para el texto del helper text */
-                fontSize: '1.1rem',
-                color: theme.palette.secondary,
-                fontWeight: 'bold'
-              },
-            }}
-            value={formData.passFirst} // Vincula este campo al valor 'passFirst' en el estado
-            onChange={(e) => {
-              setFormData({ ...formData, pass: e.target.value });
-              validatePassword(e.target.value);
-            }}
-          />
-          <Typography variant="h5" color="primary.main" sx={{ mb: 5, mt: 2 }}>
-            La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
-          </Typography>
+                helperText={error}
+                FormHelperTextProps={{
+                  sx: {
+                    /* Agrega los estilos que desees para el texto del helper text */
+                    fontSize: '1.1rem',
+                    color: theme.palette.secondary,
+                    fontWeight: 'bold'
+                  },
+                }}
+                value={formData.passFirst} // Vincula este campo al valor 'passFirst' en el estado
+                onChange={(e) => {
+                  setFormData({ ...formData, pass: e.target.value });
+                  validatePassword(e.target.value);
+                }}
+              />
+              <Typography variant="h4" color="primary.main" sx={{ mb: 5, mt: 2 }}>
+                La contraseña debe tener 8 caracteres, una Mayúscula, un número y un carácter especial
+              </Typography>
 
-        </form>
+            </form>
+          </Box>
+        </Grid>
         <Stack spacing={2} direction="row" justifyContent="center"
           alignItems="center"
           sx={{

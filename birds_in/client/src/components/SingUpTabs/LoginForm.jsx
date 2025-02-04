@@ -111,10 +111,10 @@ export const LoginForm = ({ changeTab }) => {
   return (
     <Box sx={{ margin: '0px' }}>
       <div>
-        <Typography variant="h2" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
+        <Typography variant="h1" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
           Acceder a tu cuenta
         </Typography>
-        <Typography variant="h5" color="primary.main" sx={{ marginLeft: '0px', my: '10px' }}>
+        <Typography variant="h4" color="primary.main" sx={{ marginLeft: '0px', my: '10px' }}>
           Aun no eres miembro ?
           <MuiLink onClick={handleRegisterLinkClick} color="primary.light" underline="none"
             sx={{
@@ -134,7 +134,7 @@ export const LoginForm = ({ changeTab }) => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               width: '100%',
             }}
           >
@@ -197,7 +197,7 @@ export const LoginForm = ({ changeTab }) => {
                   // width: { xs: '100%', md: '520px' }
                 }}
               />
-              <Typography variant="h5" sx={{ mb: 5, mt: 2 }}>
+              <Typography variant="h4" sx={{ mb: 5, mt: 2 }}>
                 {/* <ReCAPTCHA
               sitekey="6Lfj8zIpAAAAAJ5nQr549h4ERFR5xFTazyofxzJ2"
               onChange={handleCaptchaVerification}
@@ -227,7 +227,7 @@ export const LoginForm = ({ changeTab }) => {
 
           }}
         >
-          <Button variant="outlined" onClick={handleClose} color="error" sx={{ fontSize: { xs: '1rem' } }}
+          <Button variant="outlined" onClick={handleClose} color="error" 
             startIcon={<CloseIcon />}
           >
             Cerrar

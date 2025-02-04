@@ -58,10 +58,10 @@ export const ForgotPass = () => {
     <React.Fragment>
       <Box sx={{ margin: '10px' }}>
         <div>
-          <Typography variant="h2" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
+          <Typography variant="h1" color='primary.light' sx={{ mb: 1.5, mt: 2 }}>
             ¿Olvidaste tu contraseña?
           </Typography>
-          <Typography variant="h5" color='primary.main' sx={{ mb: 2 }}>
+          <Typography variant="h4" color='primary.main' sx={{ mb: 2 }}>
             Ingresa tu correo y recibirás un correo electrónico con los pasos para recuperar tu cuenta.
           </Typography>
         </div>
