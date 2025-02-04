@@ -91,9 +91,9 @@ export const FamiliaAddForm = ({
                 mb: 0
             }}>
                 <Grid item xs={12} sm={9}>
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
+                    <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
                         Agregar Nueva Familia
-                        <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+                        <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
                     </Typography>
                 </Grid>
                 <Grid item xs={12} md={9}>
@@ -115,7 +115,7 @@ export const FamiliaAddForm = ({
                         sx={{ mt: -1.5 }}
                         variant="contained"
                         color="primary"
-                        startIcon={<AddIcon />}
+                        endIcon={<AddIcon />}
                         onClick={handleAgregar}
                     >
                         Agregar

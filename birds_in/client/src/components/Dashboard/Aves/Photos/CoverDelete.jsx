@@ -126,7 +126,7 @@ export const CoverDelete = ({
         }
     }, [isCreate]);
 
-    const [images, setImages] = React.useState(infoAveForUpdate.imagenes_aves );
+    const [images, setImages] = React.useState(infoAveForUpdate.imagenes_aves);
 
     return (
         <React.Fragment>
@@ -150,7 +150,7 @@ export const CoverDelete = ({
                 <Grid item xs={12} md={12}>
                     <Grid container>
                         <Grid item xs={12} sm={9}>
-                            <Typography variant='h2' color='primary'>
+                            <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
                             </Typography>
                         </Grid>
@@ -158,7 +158,7 @@ export const CoverDelete = ({
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <Button
                                     sx={{
-                                        fontSize: '1.1rem',
+                                        fontSize: '1rem',
                                         fontWeight: 'bold',
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)',
                                         backdropFilter: 'blur(2px)',
@@ -172,7 +172,7 @@ export const CoverDelete = ({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
@@ -181,7 +181,7 @@ export const CoverDelete = ({
                         color="error"
                         onClick={handleDeleteButtonClick}
                         endIcon={<DeleteIcon />}
-                        sx={{ mt: 0, mb: 2, color: 'primary.light' }}
+                        sx={{ mt: 0, mb: 0, color: 'primary.light' }}
                     >
                         Eliminar selección
                     </Button>
@@ -190,6 +190,7 @@ export const CoverDelete = ({
             <Grid sx={{
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backdropFilter: 'blur(2px)',
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
             }}>

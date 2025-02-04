@@ -170,7 +170,7 @@ export const CoverDeleteOrigin = ({
                 <Grid item xs={12} md={12}>
                     <Grid container >
                         <Grid item xs={12} sm={9}>
-                            <Typography variant='h2' color='primary'>
+                            <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
                             </Typography>
                         </Grid>
@@ -178,7 +178,7 @@ export const CoverDeleteOrigin = ({
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
-                                        fontSize: '1.1rem',
+                                        fontSize: '1rem',
                                         fontWeight: 'bold',
                                         // color: theme.palette.primary.light,
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -193,7 +193,7 @@ export const CoverDeleteOrigin = ({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />

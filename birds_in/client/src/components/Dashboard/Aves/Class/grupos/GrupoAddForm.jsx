@@ -100,9 +100,9 @@ export const GrupoAddForm = ({
         mb: 0
       }}>
         <Grid item xs={12} sm={9}>
-          <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
+          <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
             Agregar Nuevo Grupo
-            <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+            <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
           </Typography>
         </Grid>
         <Grid item xs={12} md={9}>
@@ -111,19 +111,17 @@ export const GrupoAddForm = ({
             label="Nombre de Grupo"
             value={nombreGrupos.nombreG}
             onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
-            // InputLabelProps={{
-            //   sx: labelStyles,
-            // }}
-            // InputProps={{
-            //   sx: inputStyles,
-            // }}
+          // InputLabelProps={{
+          //   sx: labelStyles,
+          // }}
+          // InputProps={{
+          //   sx: inputStyles,
+          // }}
           />
         </Grid>
         <Grid item xs={12} md={2}>
           <Button
-            sx={{
-              mt: -1.5,
-            }}
+            sx={{ mt: -1.5, }}
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}

@@ -111,14 +111,14 @@ export const SearchBird = ({ changeTab }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         width: '170vh',
-                        height: '40vh',
+                        height: '30vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                         marginTop: 'auto',
                         borderRadius: '10px',
                     }} >
-                        <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
-                            <Typography variant="h2" color="primary">
+                        <Grid item xs={12} sm={12} sx={{ mt:0, mr: -50 }}>
+                            <Typography variant="h1" color="primary">
                                 Buscar Ave
                             </Typography>
                         </Grid>
@@ -136,7 +136,7 @@ export const SearchBird = ({ changeTab }) => {
                                     />
                                 )}
 
-                                sx={{ mb: 3, mt: -10 }}
+                                sx={{ mb: 3, mt: -5}}
                             />
                         </Grid>
                     </Grid>

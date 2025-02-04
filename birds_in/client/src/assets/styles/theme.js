@@ -155,6 +155,7 @@ const theme = createTheme({
           marginTop: '0px',
           gap: '0px',
           fontWeight: 500,
+          fontSize: '1rem',
         },
         contained: {
           fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem

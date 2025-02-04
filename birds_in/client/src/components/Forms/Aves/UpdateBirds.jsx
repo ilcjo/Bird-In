@@ -349,11 +349,10 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 3 }}>
+                                <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Actualización
                                 </Typography>
                             </Grid>
-
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <Button
                                     sx={{
@@ -372,11 +371,11 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
-                        <Grid container sx={{ mt: 0 }} >
+                        <Grid container >
                             <Grid item xs={12} sm={3} md={3}>
                                 <ImageUploader
                                     allImageURLs={allImageURLs}
@@ -394,7 +393,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Ave
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
@@ -601,7 +600,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     onChange={handleInputChange}
                                     fullWidth
                                     shrink='true'
-                                    margin="dense"
+                                    // margin="normal"
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
@@ -627,7 +626,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                                     variant="outlined"
                                     value={createData.urlBird}
                                     onChange={handleInputChange}
-                                    margin="dense"
+                                    margin="normal"
                                     fullWidth
                                     shrink='true'
                                     InputProps={{

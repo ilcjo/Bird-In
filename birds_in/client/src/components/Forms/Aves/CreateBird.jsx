@@ -333,13 +333,13 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
+                                <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Creación
                                 </Typography>
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Subir imágenes a Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
@@ -363,7 +363,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Ave
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
@@ -685,7 +685,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     onChange={handleInputChange}
                                     fullWidth
                                     shrink='true'
-                                    margin="dense"
+                                    // margin="dense"
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
@@ -711,7 +711,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     variant="outlined"
                                     value={createData.urlBird}
                                     onChange={handleInputChange}
-                                    margin="dense"
+                                    margin="normal"
                                     fullWidth
                                     shrink='true'
                                     InputProps={{

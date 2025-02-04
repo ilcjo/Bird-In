@@ -39,7 +39,7 @@ export const FamiliasGrupos = () => {
                 // justifyContent: 'center',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                 backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                width: '90%',
+                width: '100%',
                 // minWidth: '1200px',
                 margin: '0 auto',
                 padding: '40px 40px 30px 40px',
