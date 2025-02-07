@@ -6,9 +6,10 @@ const initialState = {
   saveOptions: [],
   filtersOn: false,
   noMoreResults: true,
-  currentFilters: { 
+  currentFilters: {
     order: [],
     familia: [],
+    grupo: [],
     pais: [],
     zona: [],
     cientifico: [],
@@ -74,6 +75,11 @@ export const filters = createSlice({
     },
     updateGrupoOptions: (state, action) => {
       state.extraOptions = {
+        grupos: action.payload.grupos
+      };
+    },
+    updateOrdersOptions: (state, action) => {
+      state.extraOptions = {
         orders: action.payload.orders
       };
     },
@@ -83,6 +89,7 @@ export const filters = createSlice({
 export const {
   updateFamiliaOptions,
   updateGrupoOptions,
+  updateOrdersOptions,
   fetchOptions,
   newOptions,
   saveFilters,

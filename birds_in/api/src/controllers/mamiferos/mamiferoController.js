@@ -1,5 +1,5 @@
 const { Op, Sequelize } = require("sequelize");
-const { Mamiferos, Order_mamiferos, Familias_mamiferos, Paises, Imagenes_mamiferos, Zonas, } = require('../../config/db/db');
+const { Mamiferos, Order_mamiferos, Familias_mamiferos, Paises, Imagenes_mamiferos, Zonas, Grupos_mamiferos } = require('../../config/db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 const { deletePhotoFromFTPMamiferos } = require("../../services/deletFtp");
@@ -145,11 +145,15 @@ const fetchFilterRegister = async (familia, order, nombreCientifico, nombreIngle
 
 const fetchOptions = async () => {
     const optionsOrders = await Order_mamiferos.findAll({
-        attributes: ['nombre', ['id_order', 'id']],
+        attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']],
         order: [['nombre', 'ASC']]
     });
     const optionsFamilias = await Familias_mamiferos.findAll({
         attributes: ['nombre', ['id_familia', 'id']],
+        order: [['nombre', 'ASC']]
+    })
+    const optionsGrupos = await Grupos_mamiferos.findAll({
+        attributes: ['nombre', ['id_grupo', 'id']],
         order: [['nombre', 'ASC']]
     })
     const optionsPaises = await Paises.findAll({
@@ -184,6 +188,7 @@ const fetchOptions = async () => {
     return {
         order: optionsOrders,
         familias: optionsFamilias,
+        grupos: optionsGrupos,
         paises: optionsPaises,
         nIngles: nombreIngles,
         nCientifico: nombreCientifico,
@@ -441,6 +446,7 @@ const filterOptionsPaisZonas = async (familia, order, nombreCientifico, nombreIn
 const sendAndCreateRegister = async (
     order,
     familia,
+    grupo,
     paises,
     zona,
     cientifico,
@@ -471,6 +477,7 @@ const sendAndCreateRegister = async (
                 url_wiki: urlWiki,
                 orders_id_order: order.id,
                 familias_id_familia: familia.id,
+                grupos_id_grupo: grupo.id,
                 imagenes_mamiferos: imagenesRegistrosData
             }, {
                 include: Imagenes_mamiferos,
@@ -533,6 +540,7 @@ const findDataById = async (id) => {
                 },
                 { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id']] },
                 { model: Familias_mamiferos, attributes: ['nombre', ['id_familia', 'id']] },
+                { model: Grupos_mamiferos, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
             attributes: [
                 'id_mamifero',
@@ -558,11 +566,12 @@ const findDataByName = async (name) => {
             include: [
                 {
                     model: Imagenes_mamiferos,
-                    attributes: [['url_mamifero', 'url'],
+                    attributes: [
+                        ['url_mamifero', 'url'],
                         'id',
                         'destacada',
-                    'orden_imagenes'
-                    [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
+                        'orden_imagenes',
+                        [Sequelize.literal('SUBSTRING_INDEX(url_mamifero, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_mamiferos
                 },
                 {
@@ -582,6 +591,7 @@ const findDataByName = async (name) => {
                 },
                 { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id']] },
                 { model: Familias_mamiferos, attributes: ['nombre', ['id_familia', 'id']] },
+                { model: Grupos_mamiferos, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
             attributes: [
                 'id_mamifero',
@@ -603,6 +613,7 @@ const findDataByName = async (name) => {
 const sendAndUpdateRegister = async (
     order,
     familia,
+    grupo,
     paises,
     zona,
     cientifico,
@@ -633,6 +644,7 @@ const sendAndUpdateRegister = async (
             url_wiki: urlWiki !== existingInsect.url_wiki ? urlWiki : undefined,
             orders_id_order: order.id !== existingInsect.orders_id_order ? order.id : undefined,
             familias_id_familia: familia.id !== existingInsect.familias_id_familia ? familia.id : undefined,
+            grupos_id_grupo: grupo.id !== existingInsect.grupos_id_grupo ? grupo.id : undefined,
         };
 
         // Filtrar valores undefined
@@ -934,7 +946,99 @@ const findAllEnglishNames = async () => {
 //     }
 // };
 
-const getClassGrupoFamilia = async (idfamilia, idorder) => {
+const getClassGrupoFamilia = async (idfamilia, idorder, idgrupo,) => {
+    console.log(idorder)
+    try {
+        let result = {};
+
+        switch (true) {
+            case !!idfamilia: {
+                // Buscar mamíferos por familia
+                const mamiferos = await Mamiferos.findAll({
+                    where: { familias_id_familia: idfamilia },
+                    attributes: ['grupos_id_grupo', 'orders_id_order'],
+                    group: ['grupos_id_grupo', 'orders_id_order']
+                });
+
+                const idGrupos = [...new Set(mamiferos.map(m => m.grupos_id_grupo))];
+                const idOrders = [...new Set(mamiferos.map(m => m.orders_id_order))];
+
+                const grupos = await Grupos_mamiferos.findAll({
+                    where: { id_grupo: { [Op.in]: idGrupos } },
+                    attributes: [['id_grupo', 'id'], 'nombre']
+                });
+
+                const orders = await Order_mamiferos.findAll({
+                    where: { id_order: { [Op.in]: idOrders } },
+                    attributes: [['id_order', 'id'], 'nombre']
+                });
+
+                result = { grupos, orders };
+                break;
+            }
+
+            case !!idgrupo: {
+                // Buscar mamíferos por grupo
+                const mamiferos = await Mamiferos.findAll({
+                    where: { grupos_id_grupo: idgrupo },
+                    attributes: ['familias_id_familia', 'orders_id_order'],
+                    group: ['familias_id_familia', 'orders_id_order']
+                });
+
+                const idFamilias = [...new Set(mamiferos.map(m => m.familias_id_familia))];
+                const idOrders = [...new Set(mamiferos.map(m => m.orders_id_order))];
+
+                const familias = await Familias_mamiferos.findAll({
+                    where: { id_familia: { [Op.in]: idFamilias } },
+                    attributes: [['id_familia', 'id'], 'nombre']
+                });
+
+                const orders = await Order_mamiferos.findAll({
+                    where: { id_order: { [Op.in]: idOrders } },
+                    attributes: [['id_order', 'id'], 'nombre']
+                });
+
+                result = { familias, orders };
+                break;
+            }
+
+            case !!idorder: {
+                // Buscar mamíferos por orden
+                const mamiferos = await Mamiferos.findAll({
+                    where: { orders_id_order: idorder },
+                    attributes: ['familias_id_familia', 'grupos_id_grupo'],
+                    group: ['familias_id_familia', 'grupos_id_grupo']
+                });
+
+                const idFamilias = [...new Set(mamiferos.map(m => m.familias_id_familia))];
+                const idGrupos = [...new Set(mamiferos.map(m => m.grupos_id_grupo))];
+
+                const familias = await Familias_mamiferos.findAll({
+                    where: { id_familia: { [Op.in]: idFamilias } },
+                    attributes: [['id_familia', 'id'], 'nombre']
+                });
+
+                const grupos = await Grupos_mamiferos.findAll({
+                    where: { id_grupo: { [Op.in]: idGrupos } },
+                    attributes: [['id_grupo', 'id'], 'nombre']
+                });
+
+                result = { familias, grupos };
+                break;
+            }
+
+            default:
+                throw new Error("Debes proporcionar al menos un parámetro (idfamilia, idgrupo o idorder).");
+        }
+
+        return result;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
+const getClassGrupoFamiliaOTRO = async (idfamilia, idorder, idgrupo) => {
     try {
         if (idfamilia) {
             // Buscar todas las aves con el id_familia dado
@@ -943,9 +1047,9 @@ const getClassGrupoFamilia = async (idfamilia, idorder) => {
                     id_familia: idfamilia
                 },
                 attributes: ['id_order'], // Solo necesitamos los id_order
-                group: ['id_order'] // Agrupar por id_order para evitar duplicados
+                group: ['id_order'] // Agwrupar por id_order para evitar duplicados
             });
-            // Extraer los id_order de las aves
+            // Extraer los id_order de las lista
             const idOrders = registro.map(registro => registro.id_order);
 
             // Buscar los order con los id_order obtenidos

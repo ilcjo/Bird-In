@@ -216,7 +216,7 @@ const findInfoForUpdate = async (req, res) => {
       }
       return res.status(200).json(formDataUpdate);
    } catch (error) {
-      res.status(500).json({ error: 'Error actualizando ave' });
+      res.status(500).json({ error: 'Error ' });
    }
 };
 
@@ -224,7 +224,7 @@ const findInfoForUpdateName = async (req, res) => {
    const { name } = req.query;
    try {
       if (!name) {
-         return res.status(400).json({ error: 'ID de ave no proporcionado' });
+         return res.status(400).json({ error: 'Nombre de ave no proporcionado' });
       }
       const formDataUpdate = await findDataByName(name);
       if (!formDataUpdate) {
@@ -232,7 +232,7 @@ const findInfoForUpdateName = async (req, res) => {
       }
       return res.status(200).json(formDataUpdate);
    } catch (error) {
-      res.status(500).json({ error: 'Error actualizando ave' });
+      res.status(500).json({ error: 'Error' });
    }
 };
 

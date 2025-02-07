@@ -84,6 +84,7 @@ const createMamifero = async (req, res) => {
    const {
       order,
       familia,
+      grupo,
       pais,
       zona,
       cientifico,
@@ -99,6 +100,7 @@ const createMamifero = async (req, res) => {
       const successCreate = await sendAndCreateRegister(
          order,
          familia,
+         grupo,
          pais,
          zona,
          cientifico,
@@ -185,7 +187,7 @@ const findInfoForUpdateName = async (req, res) => {
    const { name } = req.query;
    try {
       if (!name) {
-         return res.status(400).json({ error: 'Nombre del ave no proporcionado' });
+         return res.status(400).json({ error: 'Nombre del animal no proporcionado' });
       }
       const formDataUpdate = await findDataByName(name);
       if (!formDataUpdate) {
@@ -202,6 +204,7 @@ const updateInfoRegister = async (req, res) => {
    const {
       order,
       familia,
+      grupo,
       pais,
       zona,
       cientifico,
@@ -216,6 +219,7 @@ const updateInfoRegister = async (req, res) => {
       const succesUpdate = await sendAndUpdateRegister(
          order,
          familia,
+         grupo,
          pais,
          zona,
          cientifico,
@@ -348,9 +352,10 @@ const getExcel = async (req, res) => {
 };
 
 const checkClases = async (req, res) => {
-   const { familiaID, orderID } = req.query
+   const { familiaID, orderID, grupoID } = req.query
+   
    try {
-      const message = await getClassGrupoFamilia(familiaID, orderID)
+      const message = await getClassGrupoFamilia(familiaID, orderID, grupoID)
       return res.status(200).json(message);
    } catch (error) {
       res.status(500).json({ error: error.message });

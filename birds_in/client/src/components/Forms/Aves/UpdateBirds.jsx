@@ -356,7 +356,7 @@ export const UpdateBirds = ({ isEnable, changeTab, showUpdateBird, showSearchBir
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <Button
                                     sx={{
-                                        fontSize: '1.1rem',
+                                        fontSize: '1rem',
                                         fontWeight: 'bold',
                                         // color: theme.palette.primary.light,
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado

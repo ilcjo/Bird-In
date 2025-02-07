@@ -37,6 +37,8 @@ export const CoverDelete = ({
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
+    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
     const handleSetAsCover = async (id, url, destacada) => {
         // console.log(id)
@@ -70,10 +72,6 @@ export const CoverDelete = ({
             setErrorSnackbarOpen(true);
         }
     };
-
-    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
-
 
     const handleImageClick = (url) => {
         // console.log('dentro del handleimage:', url)
@@ -143,7 +141,7 @@ export const CoverDelete = ({
     }, [isCreate])
 
     const [images, setImages] = React.useState(infoForUpdate.imagenes_mamiferos || []);
-
+console.log(infoForUpdate.imagenes_mamiferos)
     return (
         <React.Fragment>
             <Loading message={loadingMessage} open={showBackdrop} />
@@ -164,15 +162,15 @@ export const CoverDelete = ({
                 <Grid item xs={12} md={12}>
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
-                            <Typography variant='h2' color='primary'>
-                                Imágenes {nombre ? ` ${nombre}` : 'del Registro '}
+                            <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
+                                Imágenes {nombre ? ` ${nombre}` : 'del Mamífero'}
                             </Typography>
                         </Grid>
                         {!isCreate && (
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
-                                        fontSize: '1.1rem',
+                                        fontSize: '1rem',
                                         fontWeight: 'bold',
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)',
                                         backdropFilter: 'blur(2px)',
@@ -186,7 +184,7 @@ export const CoverDelete = ({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
@@ -206,12 +204,13 @@ export const CoverDelete = ({
             <Grid sx={{
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backdropFilter: 'blur(2px)',
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
             }}>
                 <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
-                        images={images}
+                        images={infoForUpdate.imagenes_mamiferos}
                         handleImageClick={handleImageClick}
                         handleSetAsCover={handleSetAsCover}
                         handleDeleteCheckBox={handleDeleteCheckBox}
@@ -237,12 +236,29 @@ export const CoverDelete = ({
                     </Typography>
                 )}
             </Grid>
-            <Snackbar open={snackbarOpen} autoHideDuration={9000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
-            <Snackbar open={errorSnackbarOpen} autoHideDuration={9000} onClose={() => setErrorSnackbarOpen(false)}>
+            {/* <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
+            <Snackbar open={errorSnackbarOpen} autoHideDuration={6000} onClose={() => setErrorSnackbarOpen(false)}>
                 <Alert elevation={6} variant="filled" severity="error" onClose={() => setErrorSnackbarOpen(false)}>
                     {errorMessage}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setSnackbarOpen(false)}
+                message={snackbarMessage}
+            />
+            <Snackbar
+                open={errorSnackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setErrorSnackbarOpen(false)}
+                message={errorMessage}
+                action={
+                    <Button color="inherit" onClick={() => setErrorSnackbarOpen(false)}>
+                        Cerrar
+                    </Button>
+                }
+            />
         </React.Fragment>
     );
 }

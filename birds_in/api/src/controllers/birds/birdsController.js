@@ -846,7 +846,8 @@ const findDataById = async (id) => {
             include: [
                 {
                     model: Imagenes_aves,
-                    attributes: ['url',
+                    attributes: [
+                        'url',
                         'id',
                         'destacada',
                         'orden_imagen',

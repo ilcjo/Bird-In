@@ -160,9 +160,9 @@ export const FamiliaTable = ({
     return (
         <div>
             <Grid item sx={12} md={12}>
-                <Typography variant='h5' color='primary.light' sx={{ mb: 1, mt: 5 }}>
+                <Typography variant='h2' color='primary.light' sx={{ mb: 1, mt: 5 }}>
                     Lista de Familias
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                    <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
                 </Typography>
                 <TextField
                     fullWidth
@@ -193,7 +193,7 @@ export const FamiliaTable = ({
                         <TableBody>
                             {filteredFamilias.map((item, index) => (
                                 <StyledTableRow key={item.index}>
-                                    <TableCell align="center" colSpan={2} style={{ color: 'white' }}>
+                                    <TableCell align="center" colSpan={2} style={{ color: 'white', fontSize: '1.4rem' }}>
                                         {editMode === index ? (
                                             // Modo de edición
                                             <>
@@ -241,7 +241,7 @@ export const FamiliaTable = ({
                                                         sx={{
                                                             fontSize: '1rem',
                                                         }}
-                                                        variant="outlined"
+                                                        variant="contained"
                                                         color="primary"
                                                     >Editar</Button>
                                                 </Grid>

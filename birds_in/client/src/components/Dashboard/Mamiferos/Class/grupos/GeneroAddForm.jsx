@@ -60,37 +60,6 @@ export const GeneroAddForm = ({
     }
   };
 
-  const labelStyles = {
-    color: theme.palette.primary.main, // Color del texto del label
-    marginTop: '-10px',
-  };
-
-  const inputStyles = {
-    // Aquí puedes agregar los estilos que desees para los inputs
-    color: theme.palette.primary.light,
-    backgroundColor: 'rgba(204,214,204,0.17)',
-    borderRadius: '9px',
-    height: '60px',
-    '& .MuiInputBase-input': {
-      padding: '0px',
-      paddingLeft: '10px',
-    },
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'none',
-    },
-    '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: theme.palette.primary.main, // Color del borde en el hover
-      backgroundColor: 'rgba(0,56,28,0.22) ',
-    },
-    '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-      // Agrega los estilos que desees para el Select
-      // height: '50px',
-      // marginTop: '100px',
-      // width: '180px' // Ejemplo: cambia el color del texto a azul
-    },
-
-  };
-
   return (
     <div>
       <Grid alignItems="center" container spacing={1} sx={{
@@ -101,9 +70,9 @@ export const GeneroAddForm = ({
         mb: 0
       }}>
         <Grid item xs={12} sm={9}>
-          <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
+          <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
             Agregar Nuevo Order
-            <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+            <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
           </Typography>
         </Grid>
         <Grid item xs={12} md={9}>
@@ -112,12 +81,7 @@ export const GeneroAddForm = ({
             label="Nombre de Order"
             value={nombreGrupos.nombreG}
             onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
-            InputLabelProps={{
-              sx: labelStyles,
-            }}
-            InputProps={{
-              sx: inputStyles,
-            }}
+           
           />
         </Grid>
         <Grid item xs={12} md={2}>

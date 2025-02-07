@@ -61,10 +61,8 @@ export const Contadores = () => {
                 <TableHead>
                     <TableRow>
                         <StyledTableCell align="center" > Categoría
-                            {/* <Typography variant="h4" color="primary.light">Categoría</Typography> */}
                         </StyledTableCell>
                         <StyledTableCell align="center" >Total
-                            {/* <Typography variant="h4" color="primary.light">Cantidad</Typography> */}
                         </StyledTableCell>
                     </TableRow>
                 </TableHead>

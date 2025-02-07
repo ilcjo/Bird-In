@@ -149,9 +149,9 @@ export const GeneroTable = ({
     return (
         <div>
             <Grid item sx={12} md={12}>
-                <Typography variant='h5' color='primary.light' sx={{ mb: 1, mt: 5 }}>
+                <Typography variant='h2' color='primary.light' sx={{ mb: 1, mt: 5 }}>
                     Lista de Orders
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} />
+                    <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main }} />
                 </Typography>
                 <TextField
                     fullWidth
@@ -232,7 +232,7 @@ export const GeneroTable = ({
                                                     <Button
                                                         onClick={() => handleEditClick(index)}
                                                         sx={{ fontSize: '1rem' }}
-                                                        variant="outlined"
+                                                        variant="contained"
                                                         color="primary"
                                                     >
                                                         Editar

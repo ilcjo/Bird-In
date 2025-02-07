@@ -58,7 +58,7 @@ const {
   Aves, Familias, Grupos, Imagenes_aves,
   Mamiferos, Order_mamiferos, Familias_mamiferos, Imagenes_mamiferos,
   Reptiles, Grupos_reptiles, Familias_reptiles, Imagenes_reptiles,
-  Insectos, Grupos_insectos, Familias_insectos, Imagenes_insectos
+  Insectos, Grupos_insectos, Familias_insectos, Imagenes_insectos, Grupos_mamiferos
 } = db.models;
 // console.log(db.models)
 // UNO A UNO
@@ -79,6 +79,8 @@ Mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' })
 Familias_mamiferos.hasOne(Mamiferos, { foreignKey: 'familias_id_familia' })
 Mamiferos.belongsTo(Order_mamiferos, { foreignKey: 'orders_id_order' })
 Order_mamiferos.hasOne(Mamiferos, { foreignKey: 'orders_id_order' })
+Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'grupos_id_grupo' })
+Grupos_mamiferos.hasOne(Mamiferos, { foreignKey: 'grupos_id_grupo' })
 // => MAMÍFEROS
 // // Nueva relación: Una familia tiene muchos grupos
 // Familias_mamiferos.hasMany(Grupos_mamiferos, { foreignKey: 'familias_id_familia' });

@@ -2,33 +2,30 @@ import * as React from 'react';
 import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-
-// ICONS
+//ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
-// COMPONENTS
+//COMPONENTS
 import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
-import { EditImageCards } from '../../../Cards/EditImageCards';
-import ImageDragContainer from './ImageDragContainer';
-// redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/birds/actions/photosAction';
-import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
-import { getAve } from '../../../../redux/birds/slices/UpdateSlice';
+//redux
+import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/mamiferos/actions/photosAction';
+import { getInfoForUpdate } from '../../../../redux/mamiferos/actions/crudAction';
+import { getRegistro } from '../../../../redux/mamiferos/slices/UpdateSlice';
 
-export const CoverDelete = ({
+
+export const CoverDeleteOrigin = ({
     isCreate,
-    showUpdateBird,
-    showSearchBird,
-    selectedBird,
+    showUpdate,
+    showSearch,
+    selected,
     setCoverSelected,
 }) => {
+
     const theme = useTheme();
     const dispatch = useDispatch();
-    const nombreAve = localStorage.getItem('nombreIngles') || 'del Ave';
-    const { infoAveForUpdate } = useSelector(state => state.createBird);
+    const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
+    const { infoForUpdate } = useSelector(state => state.updateSlice);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -41,20 +38,25 @@ export const CoverDelete = ({
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
     const handleSetAsCover = async (id, url, destacada) => {
-        console.log(id, url)
+        // console.log(id)
         try {
+            // Marcar la imagen como portada actual
             setHighlightedImage((prev) => {
+
+                // Deseleccionar la imagen destacada si ya estaba seleccionada
                 if (prev && prev.id === id) {
                     return null;
                 } else {
+                    // Seleccionar la nueva imagen destacada
                     return { id, url };
                 }
             });
-            await dispatch(sendCoverPhoto(id, infoAveForUpdate.id_ave));
+            // Si la imagen es destacada, enviar la solicitud para guardarla como portada
+            await dispatch(sendCoverPhoto(id, infoForUpdate.id_mamifero));
             setShowBackdrop(true);
-            setLoadingMessage('Seleccionando Portada');
+            setLoadingMessage('Seleccionando Portada')
             await new Promise((resolve) => setTimeout(resolve, 5000));
-            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -69,22 +71,26 @@ export const CoverDelete = ({
     };
 
     const handleImageClick = (url) => {
+        // console.log('dentro del handleimage:', url)
         setShowBackdrop(false);
-        setLoadingMessage('Cargando..');
-        setSelectedImageIndex(url);
+        setLoadingMessage('Cargando..')
+        setSelectedImageIndex(url); // Establecer la URL de la imagen seleccionada
         setIsGalleryOpen(true);
     };
 
     const handleCloseGallery = () => {
-        setSelectedImageIndex(null);
+        setSelectedImageIndex(null); // Restablecer el estado de la imagen seleccionada
         setIsGalleryOpen(false);
     };
+
 
     const handleDeleteCheckBox = (id, url) => {
         const index = selectedImages.findIndex((img) => img.id === id);
         if (index === -1) {
+            // No existe en el array, agregarlo
             setSelectedImages([...selectedImages, { id, url }]);
         } else {
+            // Ya existe en el array, quitarlo
             const newSelectedImages = [...selectedImages];
             newSelectedImages.splice(index, 1);
             setSelectedImages(newSelectedImages);
@@ -93,15 +99,19 @@ export const CoverDelete = ({
 
     const handleDeleteButtonClick = async () => {
         try {
+            // Mostrar el indicador de carga
             setShowBackdrop(true);
-            setLoadingMessage('Borrando Fotografías Seleccionadas');
+            setLoadingMessage('Borrando Fotografías Seleccionadas')
+            // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
+            // Realizar la eliminación de fotos
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
-            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+            // Mostrar Snackbar y obtener información actualizada
+            await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));
             setSnackbarMessage('Fotografías Eliminadas con éxito');
-            setSelectedImages([]);
-            setShowBackdrop(false);
+            setSelectedImages([])
+            setShowBackdrop(false)
             setSnackbarOpen(true);
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
@@ -113,49 +123,48 @@ export const CoverDelete = ({
     };
 
     const handleReturnSearch = () => {
-        localStorage.removeItem('nombreIngles');
-        showUpdateBird(false);
-        showSearchBird(true);
-        selectedBird(null);
+        localStorage.removeItem('nombreIngles')
+        showUpdate(false)
+        showSearch(true)
+        selected(null)
     };
 
     React.useEffect(() => {
         if (isCreate) {
             setSelectedImages([]);
-            dispatch(getAve({}));
+            dispatch(getRegistro({}))
+            // localStorage.removeItem('nombreIngles')
         }
-    }, [isCreate]);
+    }, [isCreate])
 
-    const [images, setImages] = React.useState(infoAveForUpdate.imagenes_aves);
+    const [images, setImages] = React.useState(infoForUpdate.imagenes_mamiferos || []);
 
     return (
         <React.Fragment>
-            <Loading
-                message={loadingMessage}
-                open={showBackdrop}
-            />
+            <Loading message={loadingMessage} open={showBackdrop} />
             <Grid container spacing={5} sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-                minWidth: '1200px',
+                // minWidth: '1200px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
-                padding: '0px 40px 30px 0px',
+                padding: 2,
                 borderRadius: '0px 0px 0px 0px',
-                mb: 1
+                mb: 10
+
             }}>
                 <Grid item xs={12} md={12}>
-                    <Grid container>
+                    <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
-                                Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
+                                Imágenes {nombre ? ` ${nombre}` : 'del Mamífero'}
                             </Typography>
                         </Grid>
                         {!isCreate && (
-                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
                                         fontSize: '1rem',
@@ -175,51 +184,44 @@ export const CoverDelete = ({
                     <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} />
                     <Button
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
                         endIcon={<DeleteIcon />}
-                        sx={{ mt: 0, mb: 0, color: 'primary.light' }}
+                        sx={{ mt: 0, mb: 2, color: 'primary.light' }}
                     >
                         Eliminar selección
                     </Button>
+
+                    {infoForUpdate && infoForUpdate.imagenes_mamiferos && infoForUpdate.imagenes_mamiferos.length > 0 && (
+                        <Grid container spacing={0} sx={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+                            {infoForUpdate.imagenes_mamiferos.map((imageUrl, index) => (
+                                <Grid item xs={12} sm={6} md={4} key={index}>
+                                    <EditImageCards
+                                        imageUrl={imageUrl}
+                                        index={index}
+                                        handleImageClick={handleImageClick}
+                                        handleSetAsCover={handleSetAsCover}
+                                        handleDeleteCheckBox={handleDeleteCheckBox}
+                                    />
+                                </Grid>
+                            ))}
+                            <CarruselGalleryDelete
+                                isOpen={isGalleryOpen}
+                                images={infoForUpdate.imagenes_mamiferos}
+                                selectedIndex={selectedImageIndex}
+                                onClose={handleCloseGallery}
+                            />
+                        </Grid>
+                    )}
+                    {!infoForUpdate || !infoForUpdate.imagenes_mamiferos || infoForUpdate.imagenes_mamiferos.length === 0 && (
+                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                            No hay imágenes subidas.
+                        </Typography>
+                    )}
                 </Grid>
-            </Grid>
-            <Grid sx={{
-                margin: '0 auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(2px)',
-                borderRadius: '0px 0px 20px 20px',
-                mb: 10,
-            }}>
-                <DndProvider backend={HTML5Backend}>
-                    <ImageDragContainer
-                        images={infoAveForUpdate.imagenes_aves}
-                        handleImageClick={handleImageClick}
-                        handleSetAsCover={handleSetAsCover}
-                        handleDeleteCheckBox={handleDeleteCheckBox}
-                        loading={setLoadingMessage}
-                        backDrop={setShowBackdrop}
-                        snackBar={setSnackbarOpen}
-                        messageBar={setSnackbarMessage}
-                        errorMessage={setErrorMessage}
-                        errorBar={setErrorSnackbarOpen}
-                        id={infoAveForUpdate.id}
-                    />
-                </DndProvider>
-                <CarruselGalleryDelete
-                    isOpen={isGalleryOpen}
-                    images={infoAveForUpdate.imagenes_aves}
-                    selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
-                />
-                {images.length === 0 && (
-                    <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                        No hay imágenes subidas.
-                    </Typography>
-                )}
             </Grid>
             <Snackbar
                 open={snackbarOpen}
@@ -240,4 +242,4 @@ export const CoverDelete = ({
             />
         </React.Fragment>
     );
-};
+}

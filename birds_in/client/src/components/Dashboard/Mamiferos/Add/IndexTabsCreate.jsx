@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 //COMPONENTS
-import { CoverDelete } from '../Photos/CoverDelete';
 import { CreateForm } from '../../../Forms/Mamiferos/CreateForm';
+import { CoverDeleteOrigin } from '../Photos/CoverDeleteOrigin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -64,7 +64,7 @@ export const IndexTabsCreate = ({
 
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '90%', margin: '0 auto', minWidth: '1200px' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px' }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -72,7 +72,7 @@ export const IndexTabsCreate = ({
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h5' >
+                    <StyledTab label={<Typography variant='h4' >
                         Información
                     </Typography>} />
                     {/* <StyledTab
@@ -95,14 +95,16 @@ export const IndexTabsCreate = ({
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDelete
-                            isCreate={true}
-                            changeTab={changeTab}
-                            showUpdate={showUpdate}
-                            showSearch={showSearch}
-                            selected={selected}
-                            setCoverSelected={handleSetCoverSelected}
-                        />
+                        <React.Fragment>
+                            <CoverDeleteOrigin
+                                isCreate={true}
+                                changeTab={changeTab}
+                                showUpdate={showUpdate}
+                                showSearch={showSearch}
+                                selected={selected}
+                                setCoverSelected={handleSetCoverSelected}
+                            />
+                        </React.Fragment>
                     )}
                 </Box>
             </Box>
