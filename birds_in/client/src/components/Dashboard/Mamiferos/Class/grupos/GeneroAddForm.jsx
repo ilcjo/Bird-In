@@ -20,16 +20,17 @@ export const GeneroAddForm = ({
 
   const [nombreGrupos, setNombreGrupos] = React.useState({
     nombreG: '',
+    nombreC: '',
     idGrupo: 0
   });
 
   const handleAgregar = async () => {
-    const { nombreG } = nombreGrupos;
-
+    const { nombreG, nombreC } = nombreGrupos;
+    console.log(nombreGrupos, '<---nombre')
     // Verificar si el nombre de la familia está vacío
-    if (!nombreG.trim()) {
+    if (!nombreG.trim() || !nombreC.trim()) {
       showErrorSnack(true);
-      errorMessage('El nombre del Order no puede estar vacío.');
+      errorMessage('Los nombres del Orden no puede estar vacíos.');
       return;
     }
 
@@ -43,11 +44,12 @@ export const GeneroAddForm = ({
       const response = await dispatch(addGrupo(nombreGrupos));
       await dispatch(getOptionsDataM())
       onloading(false)
-      successMessages('Order creado correctamente')
+      successMessages('Orden creado correctamente')
       showSnackBar(true);
       // Limpia el formulario o realiza otras acciones necesarias
       setNombreGrupos({
         nombreG: '',
+        nombreC: '',
         idGrupo: 0
       });
       // Puedes procesar la respuesta del servidor si es necesario
@@ -71,23 +73,31 @@ export const GeneroAddForm = ({
       }}>
         <Grid item xs={12} sm={9}>
           <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
-            Agregar Nuevo Order
+            Agregar Nuevo Orden
             <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
           </Typography>
         </Grid>
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} md={6}>
           <TextField
             fullWidth
-            label="Nombre de Order"
+            label="Orden"
             value={nombreGrupos.nombreG}
             onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
-           
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+
+          <TextField
+            fullWidth
+            label="Order"
+            value={nombreGrupos.nombreC}
+            onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreC: e.target.value })}
           />
         </Grid>
         <Grid item xs={12} md={2}>
           <Button
             sx={{
-              mt: -1.5,
+              // mt: -1.5,
             }}
             variant="contained"
             color="primary"

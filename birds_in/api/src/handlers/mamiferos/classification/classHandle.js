@@ -33,9 +33,9 @@ const deleteFamilias = async (req, res) => {
 };
 
 const postGrupo = async (req, res) => {
-    const { nombreG, } = req.body
+    const { nombreG, nombreC } = req.body
     try {
-        const options = await createOrder(nombreG,)
+        const options = await createOrder(nombreG, nombreC)
         return res.status(200).json(options)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -43,9 +43,9 @@ const postGrupo = async (req, res) => {
 };
 
 const putGrupos = async (req, res) => {
-    const { nombreG, idGrupo } = req.body
+    const { nombreG, nombreC, idGrupo } = req.body
     try {
-        const options = await updateOrder(nombreG, idGrupo)
+        const options = await updateOrder(nombreG, nombreC, idGrupo)
         return res.status(200).json(options)
     } catch (error) {
         res.status(500).json({ error: error.message })

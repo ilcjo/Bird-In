@@ -93,7 +93,7 @@ export const IndexD = () => {
         <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} />
         <StyledTab label={<Typography variant='h4'>Crear</Typography>} />
         <StyledTab label={<Typography variant='h4'>Contadores</Typography>} />
-        <StyledTab label={<Typography variant='h4'>Orders/Familias/Grupos</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Familias/Grupos</Typography>} />
         <StyledTab label={<Typography variant='h4'>Descargar Excel</Typography>} />
       </StyledTabs>
       <div>

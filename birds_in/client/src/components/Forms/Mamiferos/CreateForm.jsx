@@ -52,9 +52,10 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
     const [isFromCreate, setIsFromCreate] = React.useState(false);
     const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
-
+console.log(combinedOptionsOrders, 'combinados order')
     const [createData, setCreateData] = React.useState({
         order: null,
+        orderComun: null,
         familia: null,
         grupo: null,
         pais: [],
@@ -72,7 +73,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         grupo: false,
         ingles: false,
     });
-
+console.log(createData, 'info sde ahora')
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
@@ -291,38 +292,76 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }
     };
 
+    // const handleOrderChange = async (event, newValue) => {
+    //     setCreateData(prevState => ({
+    //         ...prevState,
+    //         order: newValue,
+    //         orderComun: newValue.comun,
+    //     }));
+
+    //     if (newValue) {
+    //         try {
+    //             // Llamar a la función para obtener datos adicionales (familias y grupos)
+    //             const extraData = await dispatch(clasesOrder(newValue.id));
+
+    //             console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
+
+    //             // Verificar si extraData contiene familias y grupos
+    //             const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
+    //             const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
+
+    //             // Combinar familias y grupos con las opciones originales
+    //             const newCombinedOptionsFamilia = [
+    //                 ...extraFamilias, // Agregar las familias extra
+    //                 ...familias,      // Mantener las familias originales
+    //             ];
+    //             const newCombinedOptionsGrupos = [
+    //                 ...extraGrupos, // Agregar las familias extra
+    //                 ...grupos,      // Mantener las familias originales
+    //             ];
+
+    //             setCombinedOptionsFamilias(newCombinedOptionsFamilia);
+    //             setCombinedOptionsGrupos(newCombinedOptionsGrupos)
+    //         } catch (error) {
+    //             console.error("Error al obtener datos adicionales:", error);
+    //         }
+    //     }
+    // };
+
     const handleOrderChange = async (event, newValue) => {
+        if (!newValue) {
+            // Si el usuario borra la selección, limpiar el estado
+            setCreateData(prevState => ({
+                ...prevState,
+                order: null,
+                orderComun: "",
+            }));
+            setCombinedOptionsFamilias(familias);
+            setCombinedOptionsGrupos(grupos);
+            return;
+        }
+
         setCreateData(prevState => ({
             ...prevState,
-            order: newValue,
+            order: newValue ?? null,
+            orderComun: newValue.order_comun || "", // Asegura que orderComun se actualice
         }));
 
-        if (newValue) {
-            try {
-                // Llamar a la función para obtener datos adicionales (familias y grupos)
-                const extraData = await dispatch(clasesOrder(newValue.id));
+        try {
+            // Obtener datos adicionales (familias y grupos)
+            const extraData = await dispatch(clasesOrder(newValue.id));
 
-                console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
+            console.log(extraData, 'datos que llegan'); // Verificar datos recibidos
 
-                // Verificar si extraData contiene familias y grupos
-                const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
-                const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
+            // Verificar si extraData contiene familias y grupos
+            const extraFamilias = extraData?.familias?.map(f => ({ ...f, type: 'extra' })) || [];
+            const extraGrupos = extraData?.grupos?.map(g => ({ ...g, type: 'extra' })) || [];
 
-                // Combinar familias y grupos con las opciones originales
-                const newCombinedOptionsFamilia = [
-                    ...extraFamilias, // Agregar las familias extra
-                    ...familias,      // Mantener las familias originales
-                ];
-                const newCombinedOptionsGrupos = [
-                    ...extraGrupos, // Agregar las familias extra
-                    ...grupos,      // Mantener las familias originales
-                ];
-
-                setCombinedOptionsFamilias(newCombinedOptionsFamilia);
-                setCombinedOptionsGrupos(newCombinedOptionsGrupos)
-            } catch (error) {
-                console.error("Error al obtener datos adicionales:", error);
-            }
+            // Combinar con opciones originales
+            setCombinedOptionsFamilias([...extraFamilias, ...familias]);
+            setCombinedOptionsGrupos([...extraGrupos, ...grupos]);
+        } catch (error) {
+            console.error("Error al obtener datos adicionales:", error);
         }
     };
 
@@ -470,7 +509,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     options={combinedOptionsOrders}
                                     groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Orden'}
                                     getOptionLabel={(option) => option.nombre}
-                                    value={createData.order}
+                                    value={createData.order ?? null}
                                     onChange={handleOrderChange}
                                     // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
                                     renderInput={(params) => (
@@ -514,6 +553,25 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         </li>
                                     )}
                                 />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-order-name"
+                                    options={combinedOptionsOrders} // Usa la lista combinada de órdenes
+                                    getOptionLabel={(option) => option.order_comun || ''} // Mostrar el nombre común
+                                    value={createData.order ?? null} // Asegurar que el valor refleje el estado
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Nombre Común del Orden"
+                                            margin='dense'
+                                            error={formSubmitted && !createData.orderComun}
+                                            helperText={formSubmitted && !createData.orderComun ? 'Este Campo es obligatorio *' : ''}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.order_comun === value?.order_comun}
+
+                                />
+
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"

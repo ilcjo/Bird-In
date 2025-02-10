@@ -83,11 +83,13 @@ const borrarFamilias = async (idF) => {
     }
 };
 
-const createOrder = async (order) => {
+const createOrder = async (nombreG, nombreC) => {
+    console.log(nombreC, nombreG)
     try {
-        if (order) {
+        if (nombreC && nombreG) {
             await Order_mamiferos.create({
-                nombre: order,
+                nombre: nombreG,
+                nombre_comun: nombreC
 
             });
             return "Orden creado correctamente."
@@ -98,40 +100,46 @@ const createOrder = async (order) => {
     }
 };
 
-const updateOrder = async (nombreG, idOrder) => {
+const updateOrder = async (nombreG, nombreComun, idOrder) => {
     try {
+        // Verifica si el ID de la Order existe
         const existingOrder = await Order_mamiferos.findOne({
-            where: {
-                id_order: idOrder,
-            },
-        })
+            where: { id_order: idOrder },
+        });
+
         if (!existingOrder) {
             throw new Error("El ID de Order especificado no existe.");
         }
+
         if (idOrder <= 0) {
             throw new Error("El ID no es válido.");
         }
-        // Verifica que zona sea una cadena de texto no vacía
-        if (typeof nombreG !== 'string' || nombreG.trim() === '') {
-            throw new Error("El nombre de la Order no es válido. Debe ser una cadena de texto no vacía.");
-        }
-        if (nombreG !== existingOrder.nombre) {
 
-            await Order_mamiferos.update({
-                nombre: nombreG,
-            },
-                {
-                    where: {
-                        id_order: idOrder,
-                    },
-                });
-            return "Order actualizado correctamente."
+        // Verifica que los nombres sean cadenas de texto no vacías
+        if (typeof nombreG !== 'string' || nombreG.trim() === '') {
+            throw new Error("El nombre científico no es válido. Debe ser una cadena de texto no vacía.");
+        }
+
+        if (typeof nombreComun !== 'string' || nombreComun.trim() === '') {
+            throw new Error("El nombre común no es válido. Debe ser una cadena de texto no vacía.");
+        }
+
+        // Verifica si hay cambios antes de actualizar
+        if (nombreG !== existingOrder.nombre || nombreComun !== existingOrder.nombre_comun) {
+            await Order_mamiferos.update(
+                { nombre: nombreG, nombre_comun: nombreComun },
+                { where: { id_order: idOrder } }
+            );
+            return "Order actualizado correctamente.";
+        } else {
+            return "No se realizaron cambios, los valores son los mismos.";
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
         throw error;
     }
 };
+
 
 const borrarOrder = async (idG) => {
     try {

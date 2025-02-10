@@ -67,23 +67,21 @@ export const FamiliaAddForm = ({
                 borderRadius: '10px',
                 mb: 0
             }}>
-                <Grid item xs={12} sm={9}>
+                <Grid item xs={12} sm={9} >
                     <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
                         Agregar Nueva Familia
                         <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
                     </Typography>
                 </Grid>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={12}>
                     <TextField
                         fullWidth
                         label="Nombre de Familia"
                         value={nombreFamilia.nombreF}
                         onChange={(e) => setNombreFamilia({ ...nombreFamilia, nombreF: e.target.value })}
                     />
-                </Grid>
-                <Grid item xs={12} md={2}>
-                    <Button
-                        sx={{ mt: -1.5 }}
+                     <Button
+                        sx={{ mt: 1 }}
                         variant="contained"
                         color="primary"
                         startIcon={<AddIcon />}
@@ -92,6 +90,9 @@ export const FamiliaAddForm = ({
                         Agregar
                     </Button>
                 </Grid>
+                {/* <Grid item xs={12} md={2} sx={{mt:10}}> */}
+                   
+                {/* </Grid> */}
             </Grid>
         </div>
     );

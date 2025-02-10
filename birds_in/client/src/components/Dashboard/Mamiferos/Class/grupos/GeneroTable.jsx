@@ -53,21 +53,24 @@ export const GeneroTable = ({
     const theme = useTheme();
     const dispatch = useDispatch();
     const { order } = useSelector(state => state.filters.options);
-
+    console.log(order, 'orden;')
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
+        nombreC: '',
         idGrupo: 0
     });
     const [editMode, setEditMode] = React.useState(null);
     const [searchTerm, setSearchTerm] = React.useState('');
 
-    const handleEditGrupo = (index, newValue) => {
+
+    const handleEditGrupo = (id, field, newValue) => {
         setNombreGrupos((prevValues) => ({
             ...prevValues,
-            nombreG: newValue,
-            idGrupo: index,
+            idGrupo: id,
+            [field]: newValue, // Solo cambia el campo específico
         }));
     };
+
 
     const handleDelete = async (id) => {
         if (window.confirm('¿Seguro que deseas eliminar este Order?')) {
@@ -86,8 +89,13 @@ export const GeneroTable = ({
         }
     };
 
-    const handleEditClick = (index) => {
-        setEditMode(index);
+    const handleEditClick = (grupo) => {
+        setEditMode(grupo.id); // Usa el ID en lugar del índice
+        setNombreGrupos({
+            nombreG: grupo.nombre,
+            nombreC: grupo.order_comun,
+            idGrupo: grupo.id
+        });
     };
 
     const handleCancelEdit = () => {
@@ -106,6 +114,7 @@ export const GeneroTable = ({
             setEditMode(null);
             setNombreGrupos({
                 nombreG: '',
+                nombreC: '',
                 idGrupo: 0
             });
         } catch (error) {
@@ -120,7 +129,8 @@ export const GeneroTable = ({
     };
 
     const filteredGrupos = order.filter((item) =>
-        item.nombre.toLowerCase().includes(searchTerm)
+        item.nombre.toLowerCase().includes(searchTerm) ||
+        item.order_comun.toLowerCase().includes(searchTerm)
     );
 
     const labelStyles = {
@@ -150,13 +160,13 @@ export const GeneroTable = ({
         <div>
             <Grid item sx={12} md={12}>
                 <Typography variant='h2' color='primary.light' sx={{ mb: 1, mt: 5 }}>
-                    Lista de Orders
+                    Lista de Ordens
                     <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main }} />
                 </Typography>
                 <TextField
                     fullWidth
                     variant="outlined"
-                    placeholder="Buscar Order..."
+                    placeholder="Buscar Orden ó Order..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     sx={{
@@ -175,7 +185,8 @@ export const GeneroTable = ({
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell align="center" colSpan={2}>Nombre</StyledTableCell>
+                                <StyledTableCell align="center" colSpan={2}>Orden</StyledTableCell>
+                                <StyledTableCell align="center">Order</StyledTableCell>
                                 <StyledTableCell align="center" colSpan={2}>Acción</StyledTableCell>
                             </TableRow>
                         </TableHead>
@@ -183,11 +194,11 @@ export const GeneroTable = ({
                             {filteredGrupos.map((item, index) => (
                                 <StyledTableRow key={item.index}>
                                     <TableCell align="center" colSpan={2} style={{ color: 'white' }}>
-                                        {editMode === index ? (
+                                        {editMode === item.id ? (
                                             <TextField
                                                 fullWidth
-                                                value={nombreGrupos.idGrupo === item.id ? nombreGrupos.nombreG : item.nombre}
-                                                onChange={(e) => handleEditGrupo(item.id, e.target.value)}
+                                                value={nombreGrupos.nombreG}
+                                                onChange={(e) => handleEditGrupo(item.id, "nombreG", e.target.value)}
                                                 InputLabelProps={{ sx: labelStyles }}
                                                 InputProps={{ sx: inputStyles }}
                                             />
@@ -195,8 +206,23 @@ export const GeneroTable = ({
                                             item.nombre
                                         )}
                                     </TableCell>
+
+                                    <TableCell align="center" style={{ color: 'white' }}>
+                                        {editMode === item.id ? (
+                                            <TextField
+                                                fullWidth
+                                                value={nombreGrupos.nombreC}
+                                                onChange={(e) => handleEditGrupo(item.id, "nombreC", e.target.value)}
+                                                InputLabelProps={{ sx: labelStyles }}
+                                                InputProps={{ sx: inputStyles }}
+                                            />
+                                        ) : (
+                                            item.order_comun
+                                        )}
+                                    </TableCell>
+
                                     <TableCell align="center" colSpan={2} style={{ color: theme.palette.primary.light }}>
-                                        {editMode === index ? (
+                                        {editMode === item.id ? (
                                             <>
                                                 <Button
                                                     onClick={saveChanges}
@@ -230,7 +256,7 @@ export const GeneroTable = ({
                                             <Grid container sx={{ maxHeight: 450 }}>
                                                 <Grid item xs={12} md={6}>
                                                     <Button
-                                                        onClick={() => handleEditClick(index)}
+                                                        onClick={() => handleEditClick(item)}
                                                         sx={{ fontSize: '1rem' }}
                                                         variant="contained"
                                                         color="primary"

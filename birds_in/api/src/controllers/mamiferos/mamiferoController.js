@@ -538,7 +538,7 @@ const findDataById = async (id) => {
                         attributes: [],
                     }, // Atributos que deseas de Paises
                 },
-                { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id']] },
+                { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']] },
                 { model: Familias_mamiferos, attributes: ['nombre', ['id_familia', 'id']] },
                 { model: Grupos_mamiferos, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
@@ -589,7 +589,7 @@ const findDataByName = async (name) => {
                         attributes: [],
                     }, // Atributos que deseas de Paises
                 },
-                { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id']] },
+                { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id',], ['nombre_comun', 'comun']] },
                 { model: Familias_mamiferos, attributes: ['nombre', ['id_familia', 'id']] },
                 { model: Grupos_mamiferos, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
@@ -970,7 +970,7 @@ const getClassGrupoFamilia = async (idfamilia, idorder, idgrupo,) => {
 
                 const orders = await Order_mamiferos.findAll({
                     where: { id_order: { [Op.in]: idOrders } },
-                    attributes: [['id_order', 'id'], 'nombre']
+                    attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
                 });
 
                 result = { grupos, orders };
@@ -995,7 +995,7 @@ const getClassGrupoFamilia = async (idfamilia, idorder, idgrupo,) => {
 
                 const orders = await Order_mamiferos.findAll({
                     where: { id_order: { [Op.in]: idOrders } },
-                    attributes: [['id_order', 'id'], 'nombre']
+                    attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
                 });
 
                 result = { familias, orders };
@@ -1059,7 +1059,7 @@ const getClassGrupoFamiliaOTRO = async (idfamilia, idorder, idgrupo) => {
                         [Op.in]: idOrders
                     }
                 },
-                attributes: [['id_order', 'id'], 'nombre']
+                attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
             });
 
             return { order };
@@ -1096,24 +1096,23 @@ const getClassGrupoFamiliaOTRO = async (idfamilia, idorder, idgrupo) => {
 
 
 const findGroupNameDuplicate = async (nombreGrupo) => {
-    // console.log(nombreGrupo)
     try {
-        const existingGroups = await Order_mamiferos.findAll({
-            where: {
-                nombre: nombreGrupo
-            }
+        const existingGroup = await Order_mamiferos.findOne({
+            where: { nombre: nombreGrupo }
         });
 
-        // Si encuentra order con el mismo nombre, arroja un error
-        if (existingGroups.length > 0) {
-            throw new Error("Este Nombre de Genero ya existe.");
+        console.log(existingGroup);
+
+        // Si encuentra un grupo con el mismo nombre, arroja un error
+        if (existingGroup) {
+            throw new Error("Este Nombre de Orden ya existe.");
         }
 
-        // Si no encuentra order con el mismo nombre, simplemente retorna
-        return "Nombre de Genero disponible.";
+        // Si no hay duplicado, retorna un mensaje de éxito (opcional)
+        return "Nombre de Orden disponible.";
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
         throw error;
     }
 };
