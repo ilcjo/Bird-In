@@ -7,8 +7,10 @@ import { FamiliaTable } from './familias/FamiliaTable';
 import { Loading } from '../../../utils/Loading';
 //redux
 import { getOptionsDataM } from '../../../../redux/mamiferos/actions/fetchOptions';
-import { GeneroAddForm } from './grupos/GeneroAddForm';
-import { GeneroTable } from './grupos/GeneroTable';
+import { OrdenAddForm } from './order/OrdenAddForm';
+import { OrdenTable } from './order/OrdenTable';
+import { GrupoAddForm } from './grupos/GrupoAddForm';
+import { GrupoTable } from './grupos/GrupoTable';
 
 export const FamiliasGeneros = () => {
     const dispatch = useDispatch()
@@ -39,7 +41,7 @@ export const FamiliasGeneros = () => {
                 // alignItems: 'center',
                 // justifyContent: 'center',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
                 width: '100%',
                 // minWidth: '1200px',
                 margin: '0 auto',
@@ -47,25 +49,6 @@ export const FamiliasGeneros = () => {
                 borderRadius: '20px 20px 20px 20px',
                 mb: 10
             }} >
-
-                <Grid item xs={6}>
-                    <GeneroAddForm
-                        onloading={setOnLoading}
-                        loadingMessage={setLoadingMessage}
-                        showSnackBar={setOpenSnack}
-                        successMessages={setShowSuccessMessages}
-                        errorMessage={setErrorMessage}
-                        showErrorSnack={setErrorSnackOpen}
-                    />
-                    <GeneroTable
-                        onloading={setOnLoading}
-                        loadingMessage={setLoadingMessage}
-                        showSnackBar={setOpenSnack}
-                        successMessages={setShowSuccessMessages}
-                        errorMessage={setErrorMessage}
-                        showErrorSnack={setErrorSnackOpen}
-                    />
-                </Grid>
                 <Grid item xs={6}>
                     <FamiliaAddForm
                         onloading={setOnLoading}
@@ -76,6 +59,44 @@ export const FamiliasGeneros = () => {
                         showErrorSnack={setErrorSnackOpen}
                     />
                     <FamiliaTable
+                        onloading={setOnLoading}
+                        loadingMessage={setLoadingMessage}
+                        showSnackBar={setOpenSnack}
+                        successMessages={setShowSuccessMessages}
+                        errorMessage={setErrorMessage}
+                        showErrorSnack={setErrorSnackOpen}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <GrupoAddForm
+                        onloading={setOnLoading}
+                        loadingMessage={setLoadingMessage}
+                        showSnackBar={setOpenSnack}
+                        successMessages={setShowSuccessMessages}
+                        errorMessage={setErrorMessage}
+                        showErrorSnack={setErrorSnackOpen}
+                    />
+                    <GrupoTable
+                        onloading={setOnLoading}
+                        loadingMessage={setLoadingMessage}
+                        showSnackBar={setOpenSnack}
+                        successMessages={setShowSuccessMessages}
+                        errorMessage={setErrorMessage}
+                        showErrorSnack={setErrorSnackOpen}
+                    />
+
+                </Grid>
+
+                <Grid item xs={12}>
+                    <OrdenAddForm
+                        onloading={setOnLoading}
+                        loadingMessage={setLoadingMessage}
+                        showSnackBar={setOpenSnack}
+                        successMessages={setShowSuccessMessages}
+                        errorMessage={setErrorMessage}
+                        showErrorSnack={setErrorSnackOpen}
+                    />
+                    <OrdenTable
                         onloading={setOnLoading}
                         loadingMessage={setLoadingMessage}
                         showSnackBar={setOpenSnack}

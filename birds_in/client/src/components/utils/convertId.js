@@ -7,6 +7,9 @@ export const createParams = (selectedOptions) => {
   // console.log('soy selectedopction',selectedOptions)
   let queryParams = '';
 
+  if (selectedOptions.orden && selectedOptions.orden.length > 0) {
+    queryParams += `orden=${selectedOptions.orden.map(item => item.id).join('&orden=')}`;
+  }
   if (selectedOptions.grupo && selectedOptions.grupo.length > 0) {
     queryParams += `grupo=${selectedOptions.grupo.map(item => item.id).join('&grupo=')}`;
   }

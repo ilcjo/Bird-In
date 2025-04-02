@@ -44,8 +44,8 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
   return (
     <Card
       sx={{
-        minWidth: { xs: 380, lg: 430 },
-        maxWidth: { xs: 380, lg: 430 },
+        minWidth: { xs: 340, lg: 470 },
+        maxWidth: { xs: 340, lg: 470 },
         minHeight: 330,
         maxHeight: 330,
         position: 'relative',
@@ -64,7 +64,7 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
         },
         '&:hover .title': {
           fontSize: '2rem',
-          color: 'white',
+          color: 'white'
         },
       }}
     >
@@ -99,18 +99,14 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
                 background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
                 padding: '30px',
                 transition: 'transform 0.3s ease-out',
+                '&:hover': {
+                  transform: 'translateX(-50%) scale(1.1)', // Escala aumentada y posición del título al hacer hover
+                },
               }}
             >
               <Divider
                 className="divider"
-                sx={{
-                  my: 2,
-                  borderColor: theme.palette.primary.main,
-                  width: '20%',
-                  height: '2px',
-                  borderBottomWidth: '3px',
-                  borderRadius: '10px',
-                }}
+                sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }}
               />
               <Typography
                 className="title"

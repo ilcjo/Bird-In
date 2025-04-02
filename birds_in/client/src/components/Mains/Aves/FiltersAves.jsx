@@ -184,7 +184,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             <Grid component={Box}
                 sx={{
                     height: 'auto',
-                    borderRadius: '20px 20px 20px 20px',
+                    borderRadius: '20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
                     padding: { xs: 0, md: 2 },
                 }} >
@@ -193,20 +193,20 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                         Búsqueda Avanzada
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    {/* Familia */}
-                    <AutocompleteFilter
-                        label="Familia"
-                        options={familias}
-                        value={selectOption.familia}
-                        onChange={(newValue) => handleOptionChange('familia', newValue)}
-                        loading={isFetchingOptions}
-                    />
-                    <Grid />
-                    <Grid container alignItems="center">
+                <Grid container alignItems="center">
+                    <Grid item xs={12}>
+                        {/* Familia */}
+                        <AutocompleteFilter
+                            label="Familia"
+                            options={familias}
+                            value={selectOption.familia}
+                            onChange={(newValue) => handleOptionChange('familia', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                        <Grid />
                         <Grid item xs={12} >
                             <AutocompleteFilter
-                                label="Grupos"
+                                label="Grupo"
                                 options={grupos}
                                 value={selectOption.grupo}
                                 onChange={(newValue) => handleOptionChange('grupo', newValue)}
@@ -237,7 +237,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                         <Grid item xs={12}>
                             {/* Científico */}
                             <AutocompleteFilter
-                                label="Nombre cientifico"
+                                label="Nombre científico"
                                 value={selectOption.cientifico}
                                 onChange={(newValue) => handleOptionChange('cientifico', newValue)}
                                 options={nCientifico || []}
@@ -257,7 +257,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             alignItems="center"
                             sx={{
                                 margin: '20px auto', // Centrar horizontalmente el Stack
-                                width: 'fit-content', // Ajustar el ancho al contenido
+                                // width: 'fit-content', // Ajustar el ancho al contenido
                             }} >
                             <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
                                 < CloseIcon /> Cerrar

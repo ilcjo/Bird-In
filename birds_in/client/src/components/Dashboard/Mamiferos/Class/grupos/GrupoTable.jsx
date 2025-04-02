@@ -42,7 +42,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export const GeneroTable = ({
+export const GrupoTable = ({
     onloading,
     loadingMessage,
     showSnackBar,
@@ -52,11 +52,10 @@ export const GeneroTable = ({
 }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { order } = useSelector(state => state.filters.options);
-    console.log(order, 'orden;')
+    const { grupos } = useSelector(state => state.filters.options);
+    console.log(grupos, 'orden;')
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
-        nombreC: '',
         idGrupo: 0
     });
     const [editMode, setEditMode] = React.useState(null);
@@ -93,7 +92,6 @@ export const GeneroTable = ({
         setEditMode(grupo.id); // Usa el ID en lugar del índice
         setNombreGrupos({
             nombreG: grupo.nombre,
-            nombreC: grupo.order_comun,
             idGrupo: grupo.id
         });
     };
@@ -114,7 +112,6 @@ export const GeneroTable = ({
             setEditMode(null);
             setNombreGrupos({
                 nombreG: '',
-                nombreC: '',
                 idGrupo: 0
             });
         } catch (error) {
@@ -128,9 +125,8 @@ export const GeneroTable = ({
         setSearchTerm(e.target.value.toLowerCase());
     };
 
-    const filteredGrupos = order.filter((item) =>
-        item.nombre.toLowerCase().includes(searchTerm) ||
-        item.order_comun.toLowerCase().includes(searchTerm)
+    const filteredGrupos = grupos.filter((item) =>
+        item.nombre.toLowerCase().includes(searchTerm)
     );
 
     const labelStyles = {
@@ -160,18 +156,18 @@ export const GeneroTable = ({
         <div>
             <Grid item sx={12} md={12}>
                 <Typography variant='h2' color='primary.light' sx={{ mb: 1, mt: 5 }}>
-                    Lista de Ordens
+                    Lista de Grupos
                     <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main }} />
                 </Typography>
                 <TextField
                     fullWidth
                     variant="outlined"
-                    placeholder="Buscar Orden ó Order..."
+                    placeholder="Buscar Grupo..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     sx={{
                         mb: 2,
-                        backgroundColor: 'rgba(204,214,204,0.17)',
+                        backgroundColor: 'hsla(152, 89.50%, 7.50%, 0.17)',
                         borderRadius: '9px',
                         '& .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'none',
@@ -179,14 +175,17 @@ export const GeneroTable = ({
                         '&:hover .MuiOutlinedInput-notchedOutline': {
                             borderColor: theme.palette.primary.main,
                         },
+                        '& .MuiInputBase-input::placeholder': {
+                            color: theme.palette.primary, // Cambia el color del placeholder
+                            opacity: 1, // Asegura que el color se aplique correctamente
+                        }
                     }}
                 />
                 <TableContainer sx={{ maxHeight: 450, borderRadius: 3 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell align="center" colSpan={2}>Orden</StyledTableCell>
-                                <StyledTableCell align="center">Order</StyledTableCell>
+                                <StyledTableCell align="center" colSpan={2}>Nombre Grupo</StyledTableCell>
                                 <StyledTableCell align="center" colSpan={2}>Acción</StyledTableCell>
                             </TableRow>
                         </TableHead>
@@ -204,20 +203,6 @@ export const GeneroTable = ({
                                             />
                                         ) : (
                                             item.nombre
-                                        )}
-                                    </TableCell>
-
-                                    <TableCell align="center" style={{ color: 'white' }}>
-                                        {editMode === item.id ? (
-                                            <TextField
-                                                fullWidth
-                                                value={nombreGrupos.nombreC}
-                                                onChange={(e) => handleEditGrupo(item.id, "nombreC", e.target.value)}
-                                                InputLabelProps={{ sx: labelStyles }}
-                                                InputProps={{ sx: inputStyles }}
-                                            />
-                                        ) : (
-                                            item.order_comun
                                         )}
                                     </TableCell>
 

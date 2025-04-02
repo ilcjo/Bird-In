@@ -14,7 +14,6 @@ import { Loading } from '../../../utils/Loading';
 import { getInfoForUpdate, getInfoForUpdateName } from '../../../../redux/birds/actions/crudAction';
 //redux
 
-
 export const SearchBird = ({ changeTab }) => {
     const theme = useTheme();
     const dispatch = useDispatch()

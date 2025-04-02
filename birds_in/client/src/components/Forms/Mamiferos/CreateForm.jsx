@@ -35,7 +35,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, order, grupos, zonas } = useSelector(state => state.filters.options)
+    const { paises, familias, orden, grupos, zonas } = useSelector(state => state.filters.options)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -48,11 +48,11 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [RegisterCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
-    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(order);
+    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(orden);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
     const [isFromCreate, setIsFromCreate] = React.useState(false);
     const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
-console.log(combinedOptionsOrders, 'combinados order')
+    // console.log(combinedOptionsOrders, 'combinados order')
     const [createData, setCreateData] = React.useState({
         order: null,
         orderComun: null,
@@ -73,7 +73,7 @@ console.log(combinedOptionsOrders, 'combinados order')
         grupo: false,
         ingles: false,
     });
-console.log(createData, 'info sde ahora')
+    console.log(createData, 'info sde ahora')
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
@@ -277,7 +277,7 @@ console.log(createData, 'info sde ahora')
                 // Combinar familias y grupos con las opciones originales
                 const newCombinedOptionsOrders = [
                     ...extraOrder, // Agregar las familias extra
-                    ...order,      // Mantener las familias originales
+                    ...orden,      // Mantener las familias originales
                 ];
                 const newCombinedOptionsGrupos = [
                     ...extraGrupos, // Agregar las familias extra
@@ -416,7 +416,7 @@ console.log(createData, 'info sde ahora')
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -499,6 +499,55 @@ console.log(createData, 'info sde ahora')
                                     margin="dense"
                                     fullWidth
                                 />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-grupos"
+                                    // options={grupos || ''}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupo'}
+                                    options={combinedOptionsGrupos}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.grupo}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    onChange={handleGruposChange}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Grupo"
+                                            margin="dense"
+                                            error={formSubmitted && !createData.grupo} // Add error state to the TextField
+                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                // mb: 1,
+                                                '& .MuiInputBase-input': {
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3, mt: 1 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -562,16 +611,14 @@ console.log(createData, 'info sde ahora')
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Nombre Común del Orden"
+                                            label="Order"
                                             margin='dense'
                                             error={formSubmitted && !createData.orderComun}
                                             helperText={formSubmitted && !createData.orderComun ? 'Este Campo es obligatorio *' : ''}
                                         />
                                     )}
                                     isOptionEqualToValue={(option, value) => option.order_comun === value?.order_comun}
-
                                 />
-
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
@@ -621,55 +668,7 @@ console.log(createData, 'info sde ahora')
                                     )}
                                 />
 
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-grupos"
-                                    // options={grupos || ''}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupo'}
-                                    options={combinedOptionsGrupos}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.grupo}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                                    onChange={handleGruposChange}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Grupo"
-                                            margin="dense"
-                                            error={formSubmitted && !createData.grupo} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    fontSize: '1.1rem',
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                // mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3, mt: 1 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
+
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

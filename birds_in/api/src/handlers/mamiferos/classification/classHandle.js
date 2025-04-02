@@ -1,4 +1,4 @@
-const { createFamilias, updateFamilias, borrarFamilias, borrarOrder, updateOrder, createOrder } = require("../../../controllers/mamiferos/Classification/ClassController");
+const { createFamilias, updateFamilias, borrarFamilias, borrarOrder, updateOrder, createOrder, borrarGrupos, createGrupos, updateGrupos } = require("../../../controllers/mamiferos/Classification/ClassController");
 
 const postFamilias = async (req, res) => {
     const { nombreF } = req.body
@@ -35,7 +35,7 @@ const deleteFamilias = async (req, res) => {
 const postGrupo = async (req, res) => {
     const { nombreG, nombreC } = req.body
     try {
-        const options = await createOrder(nombreG, nombreC)
+        const options = await createGrupos(nombreG, nombreC)
         return res.status(200).json(options)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -43,9 +43,9 @@ const postGrupo = async (req, res) => {
 };
 
 const putGrupos = async (req, res) => {
-    const { nombreG, nombreC, idGrupo } = req.body
+    const { nombreG, idGrupo } = req.body
     try {
-        const options = await updateOrder(nombreG, nombreC, idGrupo)
+        const options = await updateGrupos(nombreG, idGrupo)
         return res.status(200).json(options)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -56,19 +56,52 @@ const deleteGrupos = async (req, res) => {
     const { idGrupo } = req.query
     try {
         if (idGrupo) {
-            const options = await borrarOrder(idGrupo)
+            const options = await borrarGrupos(idGrupo)
             return res.status(200).json(options)
         }
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
 };
+const postOrden = async (req, res) => {
+    const { nombreG, nombreC } = req.body
+    try {
+        const options = await createOrder(nombreG, nombreC)
+        return res.status(200).json(options)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
 
+const putOrden = async (req, res) => {
+    const { nombreG, nombreC, idGrupo } = req.body
+    try {
+        const options = await updateOrder(nombreG, nombreC, idGrupo)
+        return res.status(200).json(options)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const deleteOrden = async (req, res) => {
+    const { idGrupo } = req.query
+    try {
+        if (idGrupo) {
+            const options = await borrarOrder(idGrupo)
+            return res.status(200).json(options)
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
 module.exports = {
     postFamilias,
     putFamilias,
     deleteFamilias,
     postGrupo,
     putGrupos,
-    deleteGrupos
+    deleteGrupos,
+    postOrden,
+    deleteOrden,
+    putOrden
 }

@@ -471,8 +471,6 @@ const fetchOptions = async () => {
         attributes: [['id_pais', 'id'], 'nombre']
     });
 
-
-
     const nombreIngles = mapFieldValues(optionsNames, 'nombre_ingles');
     const nombreCientifico = mapFieldValues(optionsNames, 'nombre_cientifico');
 

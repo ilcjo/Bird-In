@@ -1,4 +1,4 @@
-const { Mamiferos, Familias_mamiferos, Order_mamiferos } = require("../../../config/db/db");
+const { Mamiferos, Familias_mamiferos, Order_mamiferos, Grupos_mamiferos } = require("../../../config/db/db");
 
 const createFamilias = async (familia) => {
     try {
@@ -77,6 +77,89 @@ const borrarFamilias = async (idF) => {
         });
 
         return `Se actualizaron ${RegistrosConIdFamilia.length} Mamiferos al nuevo ID de familia  y Order a not specified.`;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+const createGrupos = async (grupo) => {
+    try {
+        if (grupo) {
+            await Grupos_mamiferos.create({
+                nombre: grupo,
+
+            });
+            return "Grupo creada correctamente."
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+const updateGrupos = async (nombreF, idFamilia) => {
+    try {
+        const existingFamilia = await Grupos_mamiferos.findOne({
+            where: {
+                id_grupo: idFamilia,
+            },
+        })
+        if (!existingFamilia) {
+            throw new Error("El ID de Grupo especificado no existe.");
+        }
+        if (idFamilia <= 0) {
+            throw new Error("El ID no es válido.");
+        }
+        // Verifica que zona sea una cadena de texto no vacía
+        if (typeof nombreF !== 'string' || nombreF.trim() === '') {
+            throw new Error("El nombre de Grupo no es válido. Debe ser una cadena de texto no vacía.");
+        }
+        if (nombreF !== existingFamilia.nombre) {
+
+            await Grupos_mamiferos.update({
+                nombre: nombreF,
+            },
+                {
+                    where: {
+                        id_grupo: idFamilia,
+                    },
+                });
+            return "Grupo actualizada correctamente."
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+const borrarGrupos = async (idF) => {
+    try {
+        // Buscar todas las Mamiferos que tienen el ID de la familia a cambiar
+        const RegistrosConIdFamilia = await Mamiferos.findAll({
+            where: {
+                grupos_id_grupo: idF,
+            },
+        });
+        // Cambiar el ID de familia solo en las Mamiferos encontradas
+        await Mamiferos.update(
+            {
+                grupos_id_grupo: 3, // Cambiar el ID de familia al valor 130
+            },
+            {
+                where: {
+                    grupos_id_grupo: idF,
+                },
+            }
+        );
+
+        await Grupos_mamiferos.destroy({
+            where: {
+                id_grupo: idF,
+            },
+        });
+
+        return `Se actualizaron ${RegistrosConIdFamilia.length} Mamiferos al nuevo ID.`;
     } catch (error) {
         console.error('Error:', error);
         throw error;
@@ -183,4 +266,7 @@ module.exports = {
     createOrder,
     updateOrder,
     borrarOrder,
+    borrarGrupos,
+    updateGrupos,
+    createGrupos
 }

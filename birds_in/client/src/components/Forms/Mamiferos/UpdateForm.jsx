@@ -35,7 +35,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, order, grupos, zonas } = useSelector(state => state.filters.options)
+    const { paises, familias, orden, grupos, zonas } = useSelector(state => state.filters.options)
     const { infoForUpdate } = useSelector(state => state.updateSlice)
     const initialCreateData = {
         order: infoForUpdate.order_mamifero || null,
@@ -63,7 +63,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El Registro se ha Actualizado correctamente.');
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
-    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(order);
+    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(orden);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
 
     React.useEffect(() => {
@@ -103,7 +103,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                 // Combinar familias y grupos con las opciones originales
                 const newCombinedOptionsOrders = [
                     ...extraOrder, // Agregar las familias extra
-                    ...order,      // Mantener las familias originales
+                    ...orden,      // Mantener las familias originales
                 ];
                 const newCombinedOptionsGrupos = [
                     ...extraGrupos, // Agregar las familias extra
@@ -231,7 +231,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                 const extraDataOrders = await dispatch(clasesFamilia(infoForUpdate.familia.id));
                 const newCombinedOptionsOrders = [
                     ...extraDataOrders.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                    ...order, // Mantén las opciones originales
+                    ...orden, // Mantén las opciones originales
                 ];
                 setCombinedOptionsOrders(newCombinedOptionsOrders);
             }
@@ -247,7 +247,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         };
 
         loadInitialData();
-    }, [infoForUpdate, order, familias]);
+    }, [infoForUpdate, orden, familias]);
 
 
     const handleInputChange = (event) => {

@@ -172,7 +172,7 @@ export const FamiliaTable = ({
                     onChange={(e) => setSearchTerm(e.target.value)}
                     sx={{
                         mb: 2,
-                        backgroundColor: 'rgba(204,214,204,0.17)',
+                        backgroundColor: 'hsla(152, 89.50%, 7.50%, 0.17)',
                         borderRadius: '9px',
                         '& .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'none',
@@ -180,13 +180,17 @@ export const FamiliaTable = ({
                         '&:hover .MuiOutlinedInput-notchedOutline': {
                             borderColor: theme.palette.primary.main,
                         },
+                        '& .MuiInputBase-input::placeholder': {
+                            color: theme.palette.primary, // Cambia el color del placeholder
+                            opacity: 1, // Asegura que el color se aplique correctamente
+                        }
                     }}
                 />
                 <TableContainer sx={{ maxHeight: 450, borderRadius: 3 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell align="center" colSpan={2}>Nombre</StyledTableCell>
+                                <StyledTableCell align="center" colSpan={2}>Nombre Familia</StyledTableCell>
                                 <StyledTableCell align="center" colSpan={2}>Acción</StyledTableCell>
                             </TableRow>
                         </TableHead>

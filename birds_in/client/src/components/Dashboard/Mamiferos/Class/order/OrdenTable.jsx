@@ -19,14 +19,14 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { eliminarGrupo, updateGrupo } from '../../../../../redux/birds/actions/CrudClass';
-import { getOptionsData } from '../../../../../redux/birds/actions/fetchOptions';
+import { eliminarOrden, updateOrden } from '../../../../../redux/mamiferos/actions/CrudClass';
+import { getOptionsDataM } from '../../../../../redux/mamiferos/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.primary.dark,
         color: theme.palette.primary.main,
-        ...theme.typography.h4,
+        ...theme.typography.h5,
     },
     [`&.${tableCellClasses.body}`]: {
         fontFamily: theme.typography.fontFamily,
@@ -42,7 +42,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export const GrupoTable = ({
+export const OrdenTable = ({
     onloading,
     loadingMessage,
     showSnackBar,
@@ -52,32 +52,35 @@ export const GrupoTable = ({
 }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { grupos } = useSelector(state => state.filterSlice.options);
-
+    const { orden } = useSelector(state => state.filters.options);
+    console.log(orden, 'orden;')
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
+        nombreC: '',
         idGrupo: 0
     });
     const [editMode, setEditMode] = React.useState(null);
     const [searchTerm, setSearchTerm] = React.useState('');
 
-    const handleEditGrupo = (index, newValue) => {
+
+    const handleEditGrupo = (id, field, newValue) => {
         setNombreGrupos((prevValues) => ({
             ...prevValues,
-            nombreG: newValue,
-            idGrupo: index,
+            idGrupo: id,
+            [field]: newValue, // Solo cambia el campo específico
         }));
     };
 
+
     const handleDelete = async (id) => {
-        if (window.confirm('¿Seguro que deseas eliminar este Grupo?')) {
+        if (window.confirm('¿Seguro que deseas eliminar este Order?')) {
             try {
                 onloading(true);
-                loadingMessage('Eliminando Grupo...');
-                await dispatch(eliminarGrupo(id));
-                await dispatch(getOptionsData());
+                loadingMessage('Eliminando Order...');
+                await dispatch(eliminarOrden(id));
+                await dispatch(getOptionsDataM());
                 onloading(false);
-                successMessages('Grupo eliminado');
+                successMessages('Order Eliminado');
                 showSnackBar(true);
             } catch (error) {
                 errorMessage(String(error));
@@ -86,8 +89,13 @@ export const GrupoTable = ({
         }
     };
 
-    const handleEditClick = (index) => {
-        setEditMode(index);
+    const handleEditClick = (grupo) => {
+        setEditMode(grupo.id); // Usa el ID en lugar del índice
+        setNombreGrupos({
+            nombreG: grupo.nombre,
+            nombreC: grupo.order_comun,
+            idGrupo: grupo.id
+        });
     };
 
     const handleCancelEdit = () => {
@@ -98,14 +106,15 @@ export const GrupoTable = ({
         try {
             onloading(true);
             loadingMessage('Actualizando...');
-            await dispatch(updateGrupo(nombreGrupos));
-            await dispatch(getOptionsData());
+            await dispatch(updateOrden(nombreGrupos));
+            await dispatch(getOptionsDataM());
             onloading(false);
-            successMessages('Grupo actualizado correctamente');
+            successMessages('Order actualizado correctamente');
             showSnackBar(true);
             setEditMode(null);
             setNombreGrupos({
                 nombreG: '',
+                nombreC: '',
                 idGrupo: 0
             });
         } catch (error) {
@@ -119,8 +128,9 @@ export const GrupoTable = ({
         setSearchTerm(e.target.value.toLowerCase());
     };
 
-    const filteredGrupos = grupos.filter((item) =>
-        item.nombre.toLowerCase().includes(searchTerm)
+    const filteredGrupos = orden.filter((item) =>
+        item.nombre.toLowerCase().includes(searchTerm) ||
+        item.order_comun.toLowerCase().includes(searchTerm)
     );
 
     const labelStyles = {
@@ -150,18 +160,18 @@ export const GrupoTable = ({
         <div>
             <Grid item sx={12} md={12}>
                 <Typography variant='h2' color='primary.light' sx={{ mb: 1, mt: 5 }}>
-                    Lista de Grupos
+                    Lista de Ordens
                     <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main }} />
                 </Typography>
                 <TextField
                     fullWidth
                     variant="outlined"
-                    placeholder="Buscar Grupos..."
+                    placeholder="Buscar Orden ó Order..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     sx={{
                         mb: 2,
-                        backgroundColor: 'hsla(152, 89.50%, 7.50%, 0.17)',
+                        backgroundColor: 'rgba(204,214,204,0.17)',
                         borderRadius: '9px',
                         '& .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'none',
@@ -169,29 +179,26 @@ export const GrupoTable = ({
                         '&:hover .MuiOutlinedInput-notchedOutline': {
                             borderColor: theme.palette.primary.main,
                         },
-                        '& .MuiInputBase-input::placeholder': {
-                            color: theme.palette.primary, // Cambia el color del placeholder
-                            opacity: 1, // Asegura que el color se aplique correctamente
-                        }
                     }}
                 />
                 <TableContainer sx={{ maxHeight: 450, borderRadius: 3 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell align="center" colSpan={2}>Nombre Grupo</StyledTableCell>
+                                <StyledTableCell align="center" colSpan={2}>Orden</StyledTableCell>
+                                <StyledTableCell align="center">Order</StyledTableCell>
                                 <StyledTableCell align="center" colSpan={2}>Acción</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {filteredGrupos.map((item, index) => (
                                 <StyledTableRow key={item.index}>
-                                    <TableCell align="center" colSpan={2} style={{ color: 'white', fontSize: '1.4rem' }}>
-                                        {editMode === index ? (
+                                    <TableCell align="center" colSpan={2} style={{ color: 'white' }}>
+                                        {editMode === item.id ? (
                                             <TextField
                                                 fullWidth
-                                                value={nombreGrupos.idGrupo === item.id ? nombreGrupos.nombreG : item.nombre}
-                                                onChange={(e) => handleEditGrupo(item.id, e.target.value)}
+                                                value={nombreGrupos.nombreG}
+                                                onChange={(e) => handleEditGrupo(item.id, "nombreG", e.target.value)}
                                                 InputLabelProps={{ sx: labelStyles }}
                                                 InputProps={{ sx: inputStyles }}
                                             />
@@ -199,8 +206,23 @@ export const GrupoTable = ({
                                             item.nombre
                                         )}
                                     </TableCell>
+
+                                    <TableCell align="center" style={{ color: 'white' }}>
+                                        {editMode === item.id ? (
+                                            <TextField
+                                                fullWidth
+                                                value={nombreGrupos.nombreC}
+                                                onChange={(e) => handleEditGrupo(item.id, "nombreC", e.target.value)}
+                                                InputLabelProps={{ sx: labelStyles }}
+                                                InputProps={{ sx: inputStyles }}
+                                            />
+                                        ) : (
+                                            item.order_comun
+                                        )}
+                                    </TableCell>
+
                                     <TableCell align="center" colSpan={2} style={{ color: theme.palette.primary.light }}>
-                                        {editMode === index ? (
+                                        {editMode === item.id ? (
                                             <>
                                                 <Button
                                                     onClick={saveChanges}
@@ -234,7 +256,7 @@ export const GrupoTable = ({
                                             <Grid container sx={{ maxHeight: 450 }}>
                                                 <Grid item xs={12} md={6}>
                                                     <Button
-                                                        onClick={() => handleEditClick(index)}
+                                                        onClick={() => handleEditClick(item)}
                                                         sx={{ fontSize: '1rem' }}
                                                         variant="contained"
                                                         color="primary"

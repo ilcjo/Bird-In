@@ -90,7 +90,7 @@ export const Landing = () => {
               </Typography>
             </Box>
 
-            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '55%', lg: '65%' }, mb: 4 }}>
+            <Button variant="contained" onClick={handleOpen} size="medium" sx={{ mt: { xs: '85%', lg: '65%' }, mb: 4 }}>
               Iniciar sesión
             </Button>
             <CopyRight.Website />

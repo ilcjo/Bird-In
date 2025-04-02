@@ -2,7 +2,7 @@ import { Autocomplete, FormControl, TextField, Typography, CircularProgress } fr
 
 export const AutocompleteFilter = ({ label, options, value, onChange, loading }) => {
     return (
-        <FormControl sx={{ m: 1, width: '95%' }}>
+        <FormControl sx={{ m: 0.5, width: '95%' }}>
             <Autocomplete
                 multiple
                 value={value}

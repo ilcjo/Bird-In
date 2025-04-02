@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        nombre_order: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         paises: {
             type: DataTypes.STRING,
             allowNull: false,

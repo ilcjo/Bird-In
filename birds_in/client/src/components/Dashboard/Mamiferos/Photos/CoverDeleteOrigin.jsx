@@ -150,7 +150,7 @@ export const CoverDeleteOrigin = ({
                 // minWidth: '1200px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(2px)',
+                backdropFilter: 'blur(4px)',
                 padding: 2,
                 borderRadius: '0px 0px 0px 0px',
                 mb: 10

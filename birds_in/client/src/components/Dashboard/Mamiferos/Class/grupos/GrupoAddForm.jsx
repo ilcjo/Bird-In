@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { addGrupo, checkDuplicadosGrupo } from '../../../../../redux/mamiferos/actions/CrudClass';
 import { getOptionsDataM } from '../../../../../redux/mamiferos/actions/fetchOptions';
 
-export const GeneroAddForm = ({
+export const GrupoAddForm = ({
   onloading
   , loadingMessage
   , showSnackBar
@@ -20,17 +20,16 @@ export const GeneroAddForm = ({
 
   const [nombreGrupos, setNombreGrupos] = React.useState({
     nombreG: '',
-    nombreC: '',
     idGrupo: 0
   });
 
   const handleAgregar = async () => {
-    const { nombreG, nombreC } = nombreGrupos;
+    const { nombreG } = nombreGrupos;
     console.log(nombreGrupos, '<---nombre')
     // Verificar si el nombre de la familia está vacío
-    if (!nombreG.trim() || !nombreC.trim()) {
+    if (!nombreG.trim()) {
       showErrorSnack(true);
-      errorMessage('Los nombres del Orden no puede estar vacíos.');
+      errorMessage('El Grupo no puede estar vacíos.');
       return;
     }
 
@@ -44,12 +43,11 @@ export const GeneroAddForm = ({
       const response = await dispatch(addGrupo(nombreGrupos));
       await dispatch(getOptionsDataM())
       onloading(false)
-      successMessages('Orden creado correctamente')
+      successMessages('Grupo creado correctamente')
       showSnackBar(true);
       // Limpia el formulario o realiza otras acciones necesarias
       setNombreGrupos({
         nombreG: '',
-        nombreC: '',
         idGrupo: 0
       });
       // Puedes procesar la respuesta del servidor si es necesario
@@ -73,25 +71,16 @@ export const GeneroAddForm = ({
       }}>
         <Grid item xs={12} sm={9}>
           <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
-            Agregar Nuevo Orden
+            Agregar Nuevo Grupo
             <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
           </Typography>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <TextField
             fullWidth
-            label="Orden"
+            label="Nombre del Grupo"
             value={nombreGrupos.nombreG}
             onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreG: e.target.value })}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-
-          <TextField
-            fullWidth
-            label="Order"
-            value={nombreGrupos.nombreC}
-            onChange={(e) => setNombreGrupos({ ...nombreGrupos, nombreC: e.target.value })}
           />
         </Grid>
         <Grid item xs={12} md={2}>

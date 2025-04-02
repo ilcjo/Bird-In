@@ -8,7 +8,7 @@ const {
 } = process.env
 
 const { VistaMamiferosOrdenadaAll } = require('../../config/db/db');
-const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate, findFamilyNameDuplicate, saveDbPhotoOrder } = require('../../controllers/mamiferos/mamiferoController');
+const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateInsect, findDataById, findDataByName, sendAndUpdateInsect, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, sendAndCreateRegister, sendAndUpdateRegister, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate, findFamilyNameDuplicate, saveDbPhotoOrder, findOrdenNameDuplicate } = require('../../controllers/mamiferos/mamiferoController');
 const { deletePhotoFromFTPMamiferos } = require('../../services/deletFtp');
 
 const getAllNombres = async (req, res) => {
@@ -23,9 +23,22 @@ const getAllNombres = async (req, res) => {
 
 const getFilterInfo = async (req, res) => {
 
-   const { familia, order, nombreCientifico, nombreIngles, pais, zonas, page, perPage } = req.query;
+   const {
+      orden,
+      familia,
+      grupo,
+      pais,
+      zonas,
+      nombreCientifico,
+      nombreIngles, page, perPage } = req.query;
    try {
-      const allData = await fetchFilterRegister(familia, order, nombreCientifico, nombreIngles, pais, zonas, page, perPage)
+      const allData = await fetchFilterRegister(orden,
+         familia,
+         grupo,
+         pais,
+         zonas,
+         nombreCientifico,
+         nombreIngles, page, perPage)
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
@@ -47,31 +60,37 @@ const selectOptions = async (req, res) => {
 };
 
 const getFilterOptions = async (req, res,) => {
-   const { familia,
-      order,
-      nombreCientifico,
-      nombreIngles,
+   const {
+      orden,
+      familia,
+      grupo,
       pais,
       zonas,
+      nombreCientifico,
+      nombreIngles,
    } = req.query;
-   // console.log(zonas,'llegue')
+   console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles, 'llegue')
    try {
       let newOptions;
       if (zonas || pais) {
-         newOptions = await filterOptionsPaisZonas(familia,
-            order,
-            nombreCientifico,
-            nombreIngles,
+         newOptions = await filterOptionsPaisZonas(
+            orden,
+            familia,
+            grupo,
             pais,
             zonas,
+            nombreCientifico,
+            nombreIngles,
          );
       } else {
-         newOptions = await filterOptions(familia,
-            order,
-            nombreCientifico,
-            nombreIngles,
+         newOptions = await filterOptions(
+            orden,
+            familia,
+            grupo,
             pais,
             zonas,
+            nombreCientifico,
+            nombreIngles,
          );
       }
       return res.status(200).json(newOptions);
@@ -312,6 +331,7 @@ const getExcel = async (req, res) => {
          { header: 'Nombre Científico', key: 'nombre_cientifico', width: 20 },
          { header: 'Nombre Común', key: 'nombre_comun', width: 20 },
          { header: 'Nombre Orden', key: 'nombre_orden', width: 20 },
+         { header: 'Nombre Order', key: 'nombre_order', width: 20 },
          { header: 'Nombre Familia', key: 'nombre_familia', width: 20 },
          { header: 'Nombre Grupo', key: 'nombre_grupo', width: 20 },
          { header: 'Paises', key: 'paises', width: 20 },
@@ -329,6 +349,7 @@ const getExcel = async (req, res) => {
             nombre_cientifico: registro.nombre_cientifico,
             nombre_comun: registro.nombre_comun,
             nombre_familia: registro.nombre_familia,
+            nombre_orden: registro.nombre_orden,
             nombre_order: registro.nombre_order,
             paises: registro.paises,
             zonas: registro.zonas,
@@ -354,7 +375,7 @@ const getExcel = async (req, res) => {
 
 const checkClases = async (req, res) => {
    const { familiaID, orderID, grupoID } = req.query
-   
+
    try {
       const message = await getClassGrupoFamilia(familiaID, orderID, grupoID)
       return res.status(200).json(message);
@@ -364,10 +385,14 @@ const checkClases = async (req, res) => {
 };
 
 const checkDuplicateNames = async (req, res) => {
-   const { grupoName, familiaName } = req.query;
+   const { grupoName, familiaName, ordenName } = req.query;
    try {
       if (grupoName) {
          const message = await findGroupNameDuplicate(grupoName);
+         return res.status(200).json({ message });
+      } else if (ordenName) {
+         console.log('llegue')
+         const message = await findOrdenNameDuplicate(ordenName);
          return res.status(200).json({ message });
       } else if (familiaName) {
          const message = await findFamilyNameDuplicate(familiaName);
