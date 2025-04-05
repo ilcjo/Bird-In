@@ -10,9 +10,9 @@ const sections = [
   { id: 'aves', title: 'Aves', description: 'Fotografías de aves' },
   { id: 'mamiferos', title: 'Mamiferos', description: 'Fotografías de Mamiferos' },
   { id: 'reptiles', title: 'Reptiles', description: 'Fotografías de Reptiles' },
-  { id: 'insectos', title: 'Insectos', description: 'Fotografías de Insectos' },
-  { id: 'peces', title: 'Peces', description: 'Fotografías de peces' },
   { id: 'paisajes', title: 'Paisajes', description: 'Fotografías de paisajes' },
+  { id: 'peces', title: 'Peces', description: 'Fotografías de peces' },
+  { id: 'insectos', title: 'Insectos', description: 'Fotografías de Insectos' },
 ];
 
 export const HomeMenu = () => {
@@ -28,9 +28,9 @@ export const HomeMenu = () => {
     aves: allCustom.cover_birds,
     mamiferos: allCustom.cover_animals,
     reptiles: allCustom.cover_reptile,
-    insectos: allCustom.cover_insect,
-    peces: allCustom.cover_fish,
     paisajes: allCustom.cover_land,
+    peces: allCustom.cover_fish,
+    insectos: allCustom.cover_insect,
     SobreMi: allCustom.cover_about,
   };
 

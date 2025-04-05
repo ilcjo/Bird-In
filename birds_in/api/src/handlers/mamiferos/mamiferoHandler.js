@@ -69,7 +69,7 @@ const getFilterOptions = async (req, res,) => {
       nombreCientifico,
       nombreIngles,
    } = req.query;
-   console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles, 'llegue')
+   // console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles, 'llegue')
    try {
       let newOptions;
       if (zonas || pais) {

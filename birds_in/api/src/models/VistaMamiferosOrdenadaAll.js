@@ -23,10 +23,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        nombre_orden: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         nombre_order: {
             type: DataTypes.STRING,
             allowNull: false,

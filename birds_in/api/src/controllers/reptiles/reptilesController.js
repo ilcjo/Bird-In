@@ -1,5 +1,5 @@
 const { Op, Sequelize } = require("sequelize");
-const { Reptiles, Grupos_reptiles, Familias_reptiles, Paises, Imagenes_reptiles, Zonas, } = require('../../config/db/db');
+const { Reptiles, Order_reptiles, Grupos_reptiles, Familias_reptiles, Paises, Imagenes_reptiles, Zonas, } = require('../../config/db/db');
 const mapFieldValues = require('../../utils/mapOptions');
 const { obtenerIdDePais, obtenerIdDeZonas } = require("../../utils/OptionsZonaPais");
 const { deletePhotoFromFTPReptiles } = require("../../services/deletFtp");
@@ -11,10 +11,14 @@ const decodeQueryParam = (param) => {
     return param ? decodeURIComponent(param) : null;
 };
 
-const buildWhereClause = (familia, grupo, nombreCientifico, nombreIngles) => {
+const buildWhereClause = (familia, order, grupo, nombreCientifico, nombreIngles) => {
     const whereClause = {};
     if (familia) {
         whereClause.familias_id_familia = familia;
+    }
+    if (order) {
+        const orderArray = order.split(',').map(Number);
+        whereClause.orders_id_order = orderArray;
     }
     if (grupo) {
         const grupoArray = grupo.split(',').map(Number);
@@ -31,6 +35,7 @@ const buildWhereClause = (familia, grupo, nombreCientifico, nombreIngles) => {
 
 const buildIncludeArray = () => {
     return [
+        { model: Order_reptiles, attributes: ['nombre', 'nombre_comun'] },
         { model: Grupos_reptiles, attributes: ['nombre'] },
         { model: Familias_reptiles, attributes: ['nombre'] },
         {
@@ -51,7 +56,9 @@ const buildIncludeArray = () => {
         {
             model: Imagenes_reptiles,
             as: 'imagenes_reptiles',
-            attributes: [['url_reptil', 'url'], 'destacada']
+            attributes: [['url_reptil', 'url',], 'destacada', 'orden_imagenes'],
+            order: [['orden_imagenes', 'ASC']],
+            separate: true
         },
 
     ];
@@ -82,12 +89,22 @@ const buildIncludeForZonas = (zonas) => {
     };
 };
 
-const fetchFilterRegister = async (familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage) => {
+const fetchFilterRegister = async (
+    orden,
+    familia,
+    grupo,
+    pais,
+    zonas,
+    nombreCientifico,
+    nombreIngles,
+    page, perPage
+) => {
+    console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles)
     try {
         nombreCientifico = decodeQueryParam(nombreCientifico);
         nombreIngles = decodeQueryParam(nombreIngles);
 
-        const whereClause = buildWhereClause(familia, grupo, nombreCientifico, nombreIngles);
+        const whereClause = buildWhereClause(familia, orden, grupo, nombreCientifico, nombreIngles);
         let includeArr = buildIncludeArray();
 
         if (pais) {
@@ -142,6 +159,10 @@ const fetchFilterRegister = async (familia, grupo, nombreCientifico, nombreIngle
 
 
 const fetchOptions = async () => {
+    const optionsOrders = await Order_reptiles.findAll({
+        attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']],
+        order: [['nombre', 'ASC']]
+    });
     const optionsGrupos = await Grupos_reptiles.findAll({
         attributes: ['nombre', ['id_grupo', 'id']],
         order: [['nombre', 'ASC']]
@@ -180,8 +201,9 @@ const fetchOptions = async () => {
     // const nombrezonas = mapFieldValues(optionsZonas, 'nombre_zona', 'id_zona')
 
     return {
-        grupos: optionsGrupos,
+        orden: optionsOrders,
         familias: optionsFamilias,
+        grupos: optionsGrupos,
         paises: optionsPaises,
         nIngles: nombreIngles,
         nCientifico: nombreCientifico,
@@ -189,28 +211,48 @@ const fetchOptions = async () => {
     }
 };
 
-const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientifico, zonas) => {
+const filterOptions = async (
+    orden,
+    familia,
+    grupo,
+    pais,
+    zonas,
+    nombreCientifico,
+    nombreIngles,
+) => {
     const perpage = '0';
     const page = '0';
     const allResults = await fetchFilterRegister(
-        grupo,
+        orden,
         familia,
+        grupo,
         pais,
-        nombreIngles,
-        nombreCientifico,
         zonas,
+        nombreCientifico,
+        nombreIngles,
         page,
         perpage
     );
 
     const newOptions = {
-        grupos: [],
+        orden: [],
         familias: [],
+        grupos: [],
         paises: [],
         zonas: [],
         nIngles: [],
         nCientifico: [],
     };
+    const orderSet = new Set();
+    allResults.registrosFiltrados.forEach(registro => {
+        if (registro.dataValues && registro.order_reptil && registro.order_reptil.dataValues) {
+            orderSet.add(JSON.stringify({
+                id: registro.dataValues.orders_id_order,
+                nombre: registro.order_reptil.dataValues.nombre
+            }));
+        }
+    });
+    newOptions.orden = Array.from(orderSet).map(order => JSON.parse(order));
 
     const gruposSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
@@ -280,37 +322,49 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
 };
 
 
-const filterOptionsPaisZonas = async (familia, grupo, nombreCientifico, nombreIngles, pais, zonas) => {
+const filterOptionsPaisZonas = async (
+    orden,
+    familia,
+    grupo,
+    pais,
+    zonas,
+    nombreCientifico,
+    nombreIngles,
+) => {
     const perpage = '0';
     const page = '0';
     const allResults = await fetchFilterRegister(
+        orden,
         familia,
         grupo,
-        nombreCientifico,
-        nombreIngles,
         pais,
         zonas,
+        nombreCientifico,
+        nombreIngles,
         page,
         perpage
     );
 
     const newOptions = {
-        grupos: [],
+        orden: [],
         familias: [],
+        grupos: [],
         paises: [],
         zonas: [],
         nIngles: [],
         nCientifico: [],
     };
-
+    if (!allResults?.registrosFiltrados) {
+        return newOptions; // Retornar vacío si no hay datos
+    }
     // Verificar si se proporcionó un ID de zona o un ID de país
     if (zonas || pais) {
         const paisNumb = parseInt(pais);
 
         // Filtrar las Reptiles según el país y las zonas proporcionadas
         allResults.registrosFiltrados = allResults.registrosFiltrados.filter(registro => {
-            const meetsPaisCriteria = !pais || registro.paises.some(pais => pais.dataValues && pais.dataValues.id_pais === paisNumb);
-            const meetsZonasCriteria = !zonas || registro.zonasMamiferos.some(zona => zonas.includes(zona.dataValues && zona.dataValues.id_zona));
+            const meetsPaisCriteria = !pais || registro.paises?.some(pais => pais?.dataValues?.id_pais === paisNumb);
+            const meetsZonasCriteria = !zonas || registro.zonasReptiles?.some(zona => zonas.includes(zona?.dataValues?.id_zona));
             return meetsPaisCriteria && meetsZonasCriteria;
         });
     }
@@ -320,36 +374,31 @@ const filterOptionsPaisZonas = async (familia, grupo, nombreCientifico, nombreIn
         // Construir opciones de países basadas en las Reptiles filtradas
         const paisesSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            if (registro.paises && Array.isArray(registro.paises)) {
-                registro.paises.forEach(pais => {
-                    if (pais.dataValues) {
-                        paisesSet.add(JSON.stringify({
-                            id: pais.dataValues.id_pais,
-                            nombre: pais.dataValues.nombre,
-                        }));
-                    }
-                });
-            }
+            registro.paises?.forEach(pais => {
+                if (pais?.dataValues) {
+                    paisesSet.add(JSON.stringify({
+                        id: pais.dataValues.id_pais,
+                        nombre: pais.dataValues.nombre,
+                    }));
+                }
+            });
         });
 
         const findIdPais = await obtenerIdDePais(zonas);
-
         const newopti = Array.from(paisesSet).filter(pais => findIdPais.includes(JSON.parse(pais).id));
-
-        newOptions.paises = newopti.map(pais => JSON.parse(pais));
+        newOptions.paises = newopti.map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
+        // newOptions.paises = newopti.map(pais => JSON.parse(pais));
 
         const zonasSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            if (registro.zonasReptiles && Array.isArray(registro.zonasReptiles)) {
-                registro.zonasReptiles.forEach(zona => {
-                    if (zona.dataValues) {
-                        zonasSet.add(JSON.stringify({
-                            id: zona.dataValues.id_zona,
-                            nombre: zona.dataValues.nombre
-                        }));
-                    }
-                });
-            }
+            registro.zonasReptiles?.forEach(zona => {
+                if (zona?.dataValues) {
+                    zonasSet.add(JSON.stringify({
+                        id: zona.dataValues.id_zona,
+                        nombre: zona.dataValues.nombre
+                    }));
+                }
+            });
         });
         newOptions.zonas = Array.from(zonasSet).map(zona => JSON.parse(zona));
     }
@@ -358,86 +407,103 @@ const filterOptionsPaisZonas = async (familia, grupo, nombreCientifico, nombreIn
         // Construir opciones de zonas basadas en las Reptiles filtradas
         const zonasSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            if (registro.zonasMamiferos && Array.isArray(registro.zonasMamiferos)) {
-                registro.zonasMamiferos.forEach(zona => {
-                    if (zona.dataValues) {
-                        zonasSet.add(JSON.stringify({
-                            id: zona.dataValues.id_zona,
-                            nombre: zona.dataValues.nombre,
-                        }));
-                    }
-                });
-            }
+            registro.zonasReptiles?.forEach(zona => {
+                if (zona?.dataValues) {
+                    zonasSet.add(JSON.stringify({
+                        id: zona.dataValues.id_zona,
+                        nombre: zona.dataValues.nombre,
+                    }));
+                }
+            });
         });
 
         const findIdZonas = await obtenerIdDeZonas(pais);
         const newOptionsZona = Array.from(zonasSet).filter(zona => findIdZonas.includes(JSON.parse(zona).id));
 
-        newOptions.zonas = newOptionsZona.map(option => ({
-            id: JSON.parse(option).id,
-            nombre: JSON.parse(option).nombre,
-        }));
+        newOptions.zonas = newOptionsZona.map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+        // newOptions.zonas = newOptionsZona.map(option => ({
+        //     id: JSON.parse(option).id,
+        //     nombre: JSON.parse(option).nombre,
+        // }));
 
         const paisSet = new Set();
         allResults.registrosFiltrados.forEach(registro => {
-            if (registro.paises && Array.isArray(registro.paises)) {
-                registro.paises.forEach(pais => {
-                    if (pais.dataValues) {
-                        paisSet.add(JSON.stringify({
-                            id: pais.dataValues.id_pais,
-                            nombre: pais.dataValues.nombre
-                        }));
-                    }
-                });
-            }
+            registro.paises?.forEach(pais => {
+                if (pais?.dataValues) {
+                    paisSet.add(JSON.stringify({
+                        id: pais.dataValues.id_pais,
+                        nombre: pais.dataValues.nombre
+                    }));
+                }
+            });
         });
-        newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa));
+        newOptions.paises = Array.from(paisSet).map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
+        // newOptions.paises = Array.from(paisSet).map(pa => JSON.parse(pa));
     }
+
+    // Construir opciones de órdenes
+    const orderSet = new Set();
+    allResults.registrosFiltrados.forEach(registro => {
+        if (registro.order_reptil?.dataValues) {
+            orderSet.add(JSON.stringify({
+                id: registro.dataValues.orders_id_order,
+                nombre: registro.order_reptil.dataValues.nombre,
+            }));
+        }
+    });
+    newOptions.orden = Array.from(orderSet).map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
 
     // Construir opciones de grupos
     const gruposSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        if (registro.dataValues && registro.grupo && registro.grupo.dataValues) {
+        if (registro.grupo?.dataValues) {
             gruposSet.add(JSON.stringify({
                 id: registro.dataValues.grupos_id_grupo,
                 nombre: registro.grupo.dataValues.nombre
             }));
         }
     });
-    newOptions.grupos = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
+    newOptions.grupos = Array.from(gruposSet).map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    // newOptions.grupos = Array.from(gruposSet).map(grupo => JSON.parse(grupo));
 
     // Construir opciones de familias
     const familiasSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
-        if (registro.dataValues && registro.familia && registro.familia.dataValues) {
+        if (registro.familia?.dataValues) {
             familiasSet.add(JSON.stringify({
                 id: registro.dataValues.familias_id_familia,
                 nombre: registro.familia.dataValues.nombre
             }));
         }
     });
-    newOptions.familias = Array.from(familiasSet).map(item => JSON.parse(item));
+    newOptions.familias = Array.from(familiasSet).map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    // newOptions.familias = Array.from(familiasSet).map(item => JSON.parse(item));
 
     // Construir opciones de nombres científicos
-    const nombresCientificos = [...new Set(allResults.registrosFiltrados.map(registro => ({
-        id: registro.id_mamifero,
-        nombre: registro.dataValues ? registro.dataValues.nombre_cientifico : null
-    })))];
-    newOptions.nCientifico = nombresCientificos;
+    newOptions.nCientifico = [...new Set(
+        allResults.registrosFiltrados.map(registro => ({
+            id: registro.id_reptil,
+            nombre: registro.dataValues?.nombre_cientifico || '',
+        }))
+    )].sort((a, b) => a.nombre.localeCompare(b.nombre));
 
     // Construir opciones de nombres en inglés
-    const nombresIngles = [...new Set(allResults.registrosFiltrados.map(registro => ({
-        id: registro.id_mamifero,
-        nombre: registro.dataValues ? registro.dataValues.nombre_ingles : null
-    })))];
-    newOptions.nIngles = nombresIngles;
+    newOptions.nIngles = [...new Set(
+        allResults.registrosFiltrados.map(registro => ({
+            id: registro.id_reptil,
+            nombre: registro.dataValues?.nombre_ingles || '',
+        }))
+    )].sort((a, b) => a.nombre.localeCompare(b.nombre));
+
 
     return newOptions;
 };
 
 const sendAndCreateRegister = async (
-    grupo,
+    order,
     familia,
+    grupo,
     paises,
     zona,
     cientifico,
@@ -466,8 +532,9 @@ const sendAndCreateRegister = async (
                 nombre_cientifico: convertCientifico,
                 nombre_comun: convertComun,
                 url_wiki: urlWiki,
-                grupos_id_grupo: grupo.id,
+                orders_id_order: order.id,
                 familias_id_familia: familia.id,
+                grupos_id_grupo: grupo.id,
                 imagenes_reptiles: imagenesRegistrosData
             }, {
                 include: Imagenes_reptiles,
@@ -509,6 +576,7 @@ const findDataById = async (id) => {
                     attributes: [['url_reptil', 'url'],
                         'id',
                         'destacada',
+                        'orden_imagenes',
                     [Sequelize.literal('SUBSTRING_INDEX(url_reptil, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_reptiles
                 },
@@ -527,15 +595,17 @@ const findDataById = async (id) => {
                         attributes: [],
                     }, // Atributos que deseas de Paises
                 },
-                { model: Grupos_reptiles, attributes: ['nombre', ['id_grupo', 'id']] },
+                { model: Order_reptiles, attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']] },
                 { model: Familias_reptiles, attributes: ['nombre', ['id_familia', 'id']] },
+                { model: Grupos_reptiles, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
             attributes: [
                 'id_reptil',
                 'nombre_ingles',
                 'nombre_cientifico',
                 'nombre_comun',
-                'url_wiki',] // Atributos de Reptiles que deseas
+                'url_wiki',], // Atributos de Reptiles que deseas
+            order: [[{ model: Imagenes_reptiles }, 'orden_imagenes', 'ASC']],  // Atributos de Mamiferos que deseas
         });
         return registro;
     } catch (error) {
@@ -553,10 +623,12 @@ const findDataByName = async (name) => {
             include: [
                 {
                     model: Imagenes_reptiles,
-                    attributes: [['url_reptil', 'url'],
+                    attributes: [
+                        ['url_reptil', 'url'],
                         'id',
                         'destacada',
-                    [Sequelize.literal('SUBSTRING_INDEX(url_reptil, "_", -1)'), 'titulo']
+                        'orden_imagenes',
+                        [Sequelize.literal('SUBSTRING_INDEX(url_reptil, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_reptiles
                 },
                 {
@@ -574,6 +646,7 @@ const findDataByName = async (name) => {
                         attributes: [],
                     }, // Atributos que deseas de Paises
                 },
+                { model: Order_reptiles, attributes: ['nombre', ['id_order', 'id',], ['nombre_comun', 'comun']] },
                 { model: Grupos_reptiles, attributes: ['nombre', ['id_grupo', 'id']] },
                 { model: Familias_reptiles, attributes: ['nombre', ['id_familia', 'id']] },
             ],
@@ -582,7 +655,8 @@ const findDataByName = async (name) => {
                 'nombre_ingles',
                 'nombre_cientifico',
                 'nombre_comun',
-                'url_wiki',] // Atributos de Reptiles que deseas
+                'url_wiki',], // Atributos de Reptiles que deseas
+            order: [[{ model: Imagenes_reptiles }, 'orden_imagenes', 'ASC']],  // Atributos de Mamiferos que deseas
         });
         return registro;
     } catch (error) {
@@ -594,8 +668,9 @@ const findDataByName = async (name) => {
 
 
 const sendAndUpdateRegister = async (
-    grupo,
+    order,
     familia,
+    grupo,
     paises,
     zona,
     cientifico,
@@ -604,6 +679,7 @@ const sendAndUpdateRegister = async (
     urlWiki,
     urlImagen,
     idRegistro,
+    image_orden
 ) => {
     try {
         // Obtener el registro existente de la base de datos
@@ -623,8 +699,9 @@ const sendAndUpdateRegister = async (
             nombre_cientifico: cientifico !== existingInsect.nombre_cientifico ? cientifico : undefined,
             nombre_comun: comun !== existingInsect.nombre_comun ? comun : undefined,
             url_wiki: urlWiki !== existingInsect.url_wiki ? urlWiki : undefined,
-            grupos_id_grupo: grupo.id !== existingInsect.grupos_id_grupo ? grupo.id : undefined,
+            orders_id_order: order.id !== existingInsect.orders_id_order ? order.id : undefined,
             familias_id_familia: familia.id !== existingInsect.familias_id_familia ? familia.id : undefined,
+            grupos_id_grupo: grupo.id !== existingInsect.grupos_id_grupo ? grupo.id : undefined,
         };
 
         // Filtrar valores undefined
@@ -747,11 +824,7 @@ const getContadores = async () => {
                 }
             }
         });
-        // const withoutContry = await Reptiles.count({
-        //     where: {
-        //         [Sequelize.Op.not]: Sequelize.literal('EXISTS (SELECT 1 FROM reptiles_has_paises WHERE Reptiles.id_reptil = reptiles_has_paises.reptiles_id_reptil)'),
-        //     },
-        // })
+
         const allCountrys = await Paises.count({
             distinct: true,
             col: 'id_pais', // Ajusta según el nombre real de la columna en tu modelo
@@ -762,9 +835,9 @@ const getContadores = async () => {
                 required: true, // Utiliza una inner join para asegurar que solo obtengas registros que tengan relaciones en reptiles_has_paises
             }],
         });
-
-        const allGrupos = await Grupos_reptiles.count();
+        const allOrders = await Order_reptiles.count();
         const allFamilias = await Familias_reptiles.count()
+        const allGrupos = await Grupos_reptiles.count();
         const allZonas = await Zonas.count({
             distinct: true,
             col: 'id_zona', // Ajusta según el nombre real de la columna en tu modelo
@@ -778,7 +851,7 @@ const getContadores = async () => {
         })
 
 
-        return { allRegistros, allEnglish, allCientifico, allComun, allGrupos, allFamilias, allZonas, allCountrys }
+        return { allRegistros, allEnglish, allCientifico, allComun, allOrders, allFamilias, allGrupos, allZonas, allCountrys }
     } catch (error) {
         console.error('Error:', error);
         throw error;
@@ -859,6 +932,7 @@ const findAllEnglishNames = async () => {
     try {
         const registros = await Reptiles.findAll({
             attributes: ['nombre_ingles', 'id_reptil'], // Only fetches the 'nombre_ingles' attribute
+            order: [['nombre_ingles', 'ASC']],
         });
         return registros; // Returns an array of objects, each containing 'nombre_ingles'
     } catch (error) {
@@ -868,57 +942,107 @@ const findAllEnglishNames = async () => {
     }
 };
 
-const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
+const getClassGrupoFamilia = async (idfamilia, idorder, idgrupo) => {
+    console.log(idorder)
     try {
-        if (idfamilia) {
-            // Buscar todas las aves con el id_familia dado
-            const aves = await Reptiles.findAll({
-                where: {
-                    familias_id_familia: idfamilia
-                },
-                attributes: ['grupos_id_grupo'], // Solo necesitamos los id_grupo
-                group: ['grupos_id_grupo'] // Agrupar por id_grupo para evitar duplicados
-            });
+        let result = {};
+        switch (true) {
+            case !!idfamilia: {
+                // Buscar todas las aves con el id_familia dado
+                const registro = await Reptiles.findAll({
+                    where: {
+                        familias_id_familia: idfamilia
+                    },
+                    attributes: ['grupos_id_grupo', 'orders_id_order'], // Solo necesitamos los id_grupo
+                    group: ['grupos_id_grupo', 'orders_id_order'] // Agrupar por id_grupo para evitar duplicados
+                });
 
-            // Extraer los id_grupo de las aves
-            const idGrupos = aves.map(registro => registro.grupos_id_grupo);
+                // Extraer los id_grupo de las aves
+                const idGrupos = [...new Set(registro.map(m => m.grupos_id_grupo))];
+                const idOrders = [...new Set(registro.map(m => m.orders_id_order))];
+                // const idGrupos = aves.map(registro => registro.grupos_id_grupo);
+                // Buscar los grupos con los id_grupo obtenidos
+                const grupos = await Grupos_reptiles.findAll({
+                    where: {
+                        id_grupo: {
+                            [Op.in]: idGrupos
+                        }
+                    },
+                    attributes: [['id_grupo', 'id'], 'nombre']
+                });
 
-            // Buscar los grupos con los id_grupo obtenidos
-            const grupos = await Grupos_reptiles.findAll({
-                where: {
-                    id_grupo: {
-                        [Op.in]: idGrupos
-                    }
-                },
-                attributes: [['id_grupo', 'id'], 'nombre']
-            });
+                const orders = await Order_reptiles.findAll({
+                    where: { id_order: { [Op.in]: idOrders } },
+                    attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
+                });
 
-            return { grupos };
-        } else if (idgrupo) {
-            // Buscar las aves con el id_grupo dado
-            const aves = await Reptiles.findAll({
-                where: {
-                    grupos_id_grupo: idgrupo
-                },
-                attributes: ['familias_id_familia'], // Solo necesitamos los id_familia
-                group: ['familias_id_familia'] // Agrupar por id_familia para evitar duplicados
-            });
+                result = { grupos, orders };
+                break;
+            }
+            case !!idgrupo: {
+                // Buscar las aves con el id_grupo dado
+                const registro = await Reptiles.findAll({
+                    where: {
+                        grupos_id_grupo: idgrupo
+                    },
+                    attributes: ['familias_id_familia', 'orders_id_order'], // Solo necesitamos los id_familia
+                    group: ['familias_id_familia', 'orders_id_order'] // Agrupar por id_familia para evitar duplicados
+                });
 
-            // Extraer los id_familia de las aves
-            const idFamilias = aves.map(registro => registro.familias_id_familia);
+                // Extraer los id_familia 
+                const idFamilias = [...new Set(registro.map(m => m.familias_id_familia))];
+                const idOrders = [...new Set(registro.map(m => m.orders_id_order))];
 
-            // Buscar las familias con los id_familia obtenidos
-            const familias = await Familias_reptiles.findAll({
-                where: {
-                    id_familia: {
-                        [Op.in]: idFamilias
-                    }
-                },
-                attributes: [['id_familia', 'id'], 'nombre']
-            });
+                // const idFamilias = aves.map(registro => registro.familias_id_familia);
 
-            return { familias };
+                // Buscar las familias con los id_familia obtenidos
+                const familias = await Familias_reptiles.findAll({
+                    where: {
+                        id_familia: {
+                            [Op.in]: idFamilias
+                        }
+                    },
+                    attributes: [['id_familia', 'id'], 'nombre']
+                });
+
+                const orders = await Order_reptiles.findAll({
+                    where: { id_order: { [Op.in]: idOrders } },
+                    attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
+                });
+
+                result = { familias, orders };
+                break;;
+            }
+            case !!idorder: {
+                // Buscar mamíferos por orden
+                const registro = await Reptiles.findAll({
+                    where: { orders_id_order: idorder },
+                    attributes: ['familias_id_familia', 'grupos_id_grupo'],
+                    group: ['familias_id_familia', 'grupos_id_grupo']
+                });
+
+                const idFamilias = [...new Set(registro.map(m => m.familias_id_familia))];
+                const idGrupos = [...new Set(registro.map(m => m.grupos_id_grupo))];
+
+                const familias = await Familias_reptiles.findAll({
+                    where: { id_familia: { [Op.in]: idFamilias } },
+                    attributes: [['id_familia', 'id'], 'nombre']
+                });
+
+                const grupos = await Grupos_reptiles.findAll({
+                    where: { id_grupo: { [Op.in]: idGrupos } },
+                    attributes: [['id_grupo', 'id'], 'nombre']
+                });
+
+                result = { familias, grupos };
+                break;
+            }
+
+            default:
+                throw new Error("Debes proporcionar al menos un parámetro (idfamilia, idgrupo o idorder).");
         }
+
+        return result;
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;
@@ -926,7 +1050,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
 };
 
 const findGroupNameDuplicate = async (nombreGrupo) => {
-    // console.log(nombreGrupo)
+    console.log(nombreGrupo, ':grup');
     try {
         const existingGroups = await Grupos_reptiles.findAll({
             where: {
@@ -934,16 +1058,40 @@ const findGroupNameDuplicate = async (nombreGrupo) => {
             }
         });
 
-        // Si encuentra grupos con el mismo nombre, arroja un error
+        console.log(existingGroups);
+
+        // Verifica si hay resultados
         if (existingGroups.length > 0) {
-            throw new Error("Este Nombre de Genero ya existe.");
+            throw new Error("Este Nombre del Grupo ya existe.");
         }
 
-        // Si no encuentra grupos con el mismo nombre, simplemente retorna
-        return "Nombre de Genero disponible.";
+        return "Nombre de Grupo disponible.";
 
     } catch (error) {
         console.error('Error:', error);
+        throw error;
+    }
+};
+
+
+const findOrdenNameDuplicate = async (nombreGrupo) => {
+    try {
+        const existingGroup = await Order_reptiles.findOne({
+            where: { nombre: nombreGrupo }
+        });
+
+        console.log(existingGroup);
+
+        // Si encuentra un grupo con el mismo nombre, arroja un error
+        if (existingGroup) {
+            throw new Error("Este Nombre de Orden ya existe.");
+        }
+
+        // Si no hay duplicado, retorna un mensaje de éxito (opcional)
+        return "Nombre de Orden disponible.";
+
+    } catch (error) {
+        console.error('Error:', error.message);
         throw error;
     }
 };
@@ -970,8 +1118,36 @@ const findFamilyNameDuplicate = async (nombreFamilia) => {
     }
 };
 
+const saveDbPhotoOrder = async (imagesArray) => {
+    // console.log('llego array al controller:', imagesArray)
+    try {
+        // Itera sobre cada imagen en el array
+        for (const image of imagesArray) {
+            const { id, orden } = image;  // Extrae el id y el orden de cada imagen
+
+            // Busca el registro en la base de datos que coincida con el id de la imagen
+            const existingImage = await Imagenes_reptiles.findOne({
+                where: { id: id }
+            });
+
+            // Si encuentra un registro con el id, actualiza el campo orden_imagenes
+            if (existingImage) {
+                await existingImage.update({ orden_imagenes: orden });
+            } else {
+                console.warn(`No se encontró una imagen con ID ${id}.`);
+            }
+        }
+
+        return "Orden de imágenes actualizado correctamente.";
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
 module.exports = {
-    findAllEnglishNames,
+    saveDbPhotoOrder,
+    findOrdenNameDuplicate,
     findFamilyNameDuplicate,
     findGroupNameDuplicate,
     getClassGrupoFamilia,
@@ -988,4 +1164,5 @@ module.exports = {
     deleteRegistroDb,
     findDataByName,
     findNameDuplicate,
+    findAllEnglishNames,
 };

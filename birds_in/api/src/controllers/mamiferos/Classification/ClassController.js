@@ -251,7 +251,7 @@ const borrarOrder = async (idG) => {
             },
         });
 
-        return `Se actualizaron ${RegistrosConIdOrder.length} Mamiferos al nuevo ID de Order  y Familia a not specified.`;
+        return `Se actualizaron ${RegistrosConIdOrder.length} Mamiferos al nuevo ID de Order  y Familia.`;
     } catch (error) {
         console.error('Error:', error);
         throw error;

@@ -35,7 +35,6 @@ export const IndexD = () => {
   const theme = useTheme()
   const [selectedTab, setSelectedTab] = React.useState(1);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
-  const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [onloading, setOnLoading] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
 
@@ -91,11 +90,11 @@ export const IndexD = () => {
           }
         }}
       >
-        <StyledTab label={<Typography variant='h5'>Actualizar</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Crear</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Contadores</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Familias/Géneros</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Crear</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Contadores</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Orden/Familias/Grupos</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Descargar Excel</Typography>} />
       </StyledTabs>
       <div>
         {selectedTab === 0 && (

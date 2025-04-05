@@ -25,7 +25,7 @@ import { StyledTextField } from '../../../assets/styles/MUIstyles';
 //redux
 import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/reptiles/actions/crudAction';
 import { saveImageFtp } from '../../../redux/reptiles/actions/photosAction';
-import { clasesFamilia, clasesGrupo } from '../../../redux/reptiles/actions/fetchOptions';
+import { clasesFamilia, clasesGrupo, clasesOrder } from '../../../redux/reptiles/actions/fetchOptions';
 
 
 export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -33,7 +33,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filterRep.options)
+    const { paises, familias, orden, grupos, zonas } = useSelector(state => state.filterRep.options)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -46,11 +46,16 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [RegisterCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
+    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(orden);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
+    const [isFromCreate, setIsFromCreate] = React.useState(false);
+    const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
 
     const [createData, setCreateData] = React.useState({
-        grupo: null,
+        order: null,
+        orderComun: null,
         familia: null,
+        grupo: null,
         pais: [],
         zona: [],
         cientifico: '',
@@ -61,8 +66,9 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     });
 
     const [errors, setErrors] = React.useState({
-        grupo: false,
+        order: false,
         familia: false,
+        grupo: false,
         ingles: false,
     });
 
@@ -121,9 +127,14 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 // Si hay un error, muestra un mensaje de error
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Este Registro ya existe');
-                // Restablece el valor del input
+                // // Restablece el valor del input
+                // changeTabSearch()
+                // setCreateData()
+                localStorage.setItem('nombreIngles', JSON.stringify(newName))
+                localStorage.setItem('isExist', JSON.stringify(isFromCreate))
+                localStorage.setItem('isFromCreateImage', JSON.stringify(false))
+                setIsFromCreate(true)
                 changeTabSearch()
-                setCreateData()
             }
         }, 700);
     };
@@ -139,11 +150,14 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         event.preventDefault();
         const newErrors = {};
         setFormSubmitted(true);
-        if (!createData.grupo) {
-            newErrors.grupo = true;
+        if (!createData.order) {
+            newErrors.order = true;
         }
         if (!createData.familia) {
             newErrors.familia = true;
+        }
+        if (!createData.grupo) {
+            newErrors.grupo = true;
         }
         if (!createData.ingles) {
             newErrors.ingles = true;
@@ -178,12 +192,16 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 setImageFiles([]);
                 setFormSubmitted(false)
                 setSnackBarMessage('El Registro se a creado correctamente.')
-                // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
-                setTimeout(() => {
-                    dispatch(getInfoForUpdateName(createData.ingles));
-                    changeImagenTab(1);
-                    isImages(true)
-                }, 1500); // 10000 mili segundos = 10 segundos
+                setIsFromCreateImage(true)
+                localStorage.setItem('isFromCreateImage', JSON.stringify(true))
+                localStorage.setItem('isExist', JSON.stringify(false))
+                changeTabSearch()
+                // // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
+                // setTimeout(() => {
+                //     dispatch(getInfoForUpdateName(createData.ingles));
+                //     changeImagenTab(1);
+                //     isImages(true)
+                // }, 1500); // 10000 mili segundos = 10 segundos
             } catch (error) {
                 console.log('este es el error:', String(error))
                 setErrorMessage(`Ocurrió un error: ${error}`);
@@ -244,17 +262,68 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...grupos, // Mantén las opciones originales
+            try {
+                // Aquí llamas a la función que genera datos extra y actualizas el estado
+                const extraData = await dispatch(clasesFamilia(newValue.id));
+                // console.log(extraData)
+                console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
 
-            ];
+                // Verificar si extraData contiene familias y grupos
+                const extraOrder = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
+                const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
 
-            setCombinedOptionsGrupos(newCombinedOptions);
+                // Combinar familias y grupos con las opciones originales
+                const newCombinedOptionsOrders = [
+                    ...extraOrder, // Agregar las familias extra
+                    ...orden,      // Mantener las familias originales
+                ];
+                const newCombinedOptionsGrupos = [
+                    ...extraGrupos, // Agregar las familias extra
+                    ...grupos,      // Mantener las familias originales
+                ];
+
+                setCombinedOptionsOrders(newCombinedOptionsOrders);
+                setCombinedOptionsGrupos(newCombinedOptionsGrupos)
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
+        }
+    };
+
+    const handleOrderChange = async (event, newValue) => {
+        if (!newValue) {
+            // Si el usuario borra la selección, limpiar el estado
+            setCreateData(prevState => ({
+                ...prevState,
+                order: null,
+                orderComun: "",
+            }));
+            setCombinedOptionsFamilias(familias);
+            setCombinedOptionsGrupos(grupos);
+            return;
+        }
+
+        setCreateData(prevState => ({
+            ...prevState,
+            order: newValue ?? null,
+            orderComun: newValue.order_comun || "", // Asegura que orderComun se actualice
+        }));
+
+        try {
+            // Obtener datos adicionales (familias y grupos)
+            const extraData = await dispatch(clasesOrder(newValue.id));
+
+            console.log(extraData, 'datos que llegan'); // Verificar datos recibidos
+
+            // Verificar si extraData contiene familias y grupos
+            const extraFamilias = extraData?.familias?.map(f => ({ ...f, type: 'extra' })) || [];
+            const extraGrupos = extraData?.grupos?.map(g => ({ ...g, type: 'extra' })) || [];
+
+            // Combinar con opciones originales
+            setCombinedOptionsFamilias([...extraFamilias, ...familias]);
+            setCombinedOptionsGrupos([...extraGrupos, ...grupos]);
+        } catch (error) {
+            console.error("Error al obtener datos adicionales:", error);
         }
     };
 
@@ -265,16 +334,31 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...familias, // Mantén las opciones originales
-            ];
+            try {
+                // Llamar a la función para obtener datos adicionales (familias y grupos)
+                const extraData = await dispatch(clasesGrupos(newValue.id));
 
-            setCombinedOptionsFamilias(newCombinedOptions);
+                console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
+
+                // Verificar si extraData contiene familias y grupos
+                const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
+                const extraOrders = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
+
+                // Combinar familias y grupos con las opciones originales
+                const newCombinedOptionsFamilia = [
+                    ...extraFamilias, // Agregar las familias extra
+                    ...familias,      // Mantener las familias originales
+                ];
+                const newCombinedOptionsOrders = [
+                    ...extraOrders, // Agregar las familias extra
+                    ...grupos,      // Mantener las familias originales
+                ];
+
+                setCombinedOptionsFamilias(newCombinedOptionsFamilia);
+                setCombinedOptionsOrders(newCombinedOptionsOrders)
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
         }
     };
 
@@ -293,7 +377,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -301,13 +385,13 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
+                                <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Creación
                                 </Typography>
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Subir imágenes a Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
@@ -330,20 +414,20 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Registro
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6} >
-                                <StyledTextField
+                                <TextField
                                     name="ingles"
                                     label="Nombre en Inglés"
                                     value={createData.ingles}
                                     onChange={handleInputChangeIngles}
                                     type='text'
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                     error={formSubmitted && createData.ingles.trim() === ''} // Check if the field is empty when the form is submitted
@@ -355,30 +439,146 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         },
                                     }}
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
                                     onChange={handleInputChange}
                                     type='text'
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
 
-                                <StyledTextField
+                                <TextField
                                     name="cientifico"
-                                    label="Nombre Científico(Especie)"
+                                    label="Nombre científico"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
                                     type='text'
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-grupos"
+                                    // options={grupos}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupo'}
+                                    options={combinedOptionsGrupos}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.grupo}
+                                    onChange={handleGrupoChange}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Grupo"
+                                            margin='dense'
+                                            error={formSubmitted && !createData.grupo} // Add error state to the TextField
+                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                // mb: 1,
+                                                '& .MuiInputBase-input': {
+                                                    // height: '30px',
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
                             </Grid>
-
                             <Grid item xs={12} sm={6}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-orders"
+                                    // options={order}
+                                    options={combinedOptionsOrders}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Orden'}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.order ?? null}
+                                    onChange={handleOrderChange}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Orden"
+                                            margin='dense'
+                                            error={formSubmitted && !createData.order} // Add error state to the TextField
+                                            helperText={formSubmitted && !createData.order ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    /* Agrega los estilos que desees para el texto del helper text */
+                                                    fontSize: '1.1rem',
+                                                    // color: theme.palette.secondary.main,
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                // mb: 1,
+                                                '& .MuiInputBase-input': {
+                                                    // height: '30px',
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-order-name"
+                                    options={combinedOptionsOrders} // Usa la lista combinada de órdenes
+                                    getOptionLabel={(option) => option.order_comun || ''} // Mostrar el nombre común
+                                    value={createData.order ?? null} // Asegurar que el valor refleje el estado
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Nombre común del orden"
+                                            margin='dense'
+                                            error={formSubmitted && !createData.orderComun}
+                                            helperText={formSubmitted && !createData.orderComun ? 'Este Campo es obligatorio *' : ''}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.order_comun === value?.order_comun}
+                                />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
@@ -405,57 +605,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                             sx={{
                                                 mb: 1,
                                                 '& .MuiInputBase-input': {
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-grupos"
-                                    // options={grupos}
-                                    options={combinedOptionsGrupos}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.grupo}
-                                    onChange={handleGrupoChange}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Genero"
-                                            margin='dense'
-                                            error={formSubmitted && !createData.grupo} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    /* Agrega los estilos que desees para el texto del helper text */
-                                                    fontSize: '1.1rem',
-                                                    // color: theme.palette.secondary.main,
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                    // height: '30px',
                                                 },
                                             }}
                                         />
@@ -572,10 +721,10 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             </Grid>
 
                             <Grid item xs={12} sm={12}>
-                                <StyledTextField
+                                <TextField
                                     name="urlWiki"
                                     label='URL Wiki'
-                                    variant="filled"
+                                    variant="outlined"
                                     value={createData.urlWiki}
                                     onChange={handleInputChange}
                                     fullWidth
@@ -630,7 +779,6 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     {errorMessage}
                 </Alert>
             </Snackbar>
-
         </React.Fragment >
     );
 };

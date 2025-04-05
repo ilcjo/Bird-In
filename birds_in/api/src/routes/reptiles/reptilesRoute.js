@@ -1,7 +1,7 @@
 const { Router } = require('express')
 
 const upload = require('../../utils/multerConfig')
-const { getFilterInfo, selectOptions, getFilterOptions, createRegistro, findInfoForUpdate, findInfoForUpdateName, uploadImageftp, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getExcel, getAllNombres, checkClases, checkDuplicateNames } = require('../../handlers/reptiles/reptilesHandler')
+const { getFilterInfo, selectOptions, getFilterOptions, createRegistro, findInfoForUpdate, findInfoForUpdateName, uploadImageftp, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getExcel, getAllNombres, checkClases, checkDuplicateNames, saveOrderImages } = require('../../handlers/reptiles/reptilesHandler')
 
 const reptilesRouter = Router()
 reptilesRouter
@@ -22,5 +22,6 @@ reptilesRouter
     .get('/nombres', getAllNombres)
     .get('/clases', checkClases)
     .get('/gruposFamilias', checkDuplicateNames)
+    .post('/guardar_orden_images', saveOrderImages)
 
 module.exports = reptilesRouter

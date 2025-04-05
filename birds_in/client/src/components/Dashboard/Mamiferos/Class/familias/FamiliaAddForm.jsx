@@ -30,7 +30,7 @@ export const FamiliaAddForm = ({
             errorMessage('El nombre de la familia no puede estar vacío.');
             return;
         }
-        
+
         try {
             onloading(true);
             loadingMessage('Chequeando...');
@@ -79,9 +79,9 @@ export const FamiliaAddForm = ({
                         label="Nombre de Familia"
                         value={nombreFamilia.nombreF}
                         onChange={(e) => setNombreFamilia({ ...nombreFamilia, nombreF: e.target.value })}
-                        
+
                     />
-                     <Button
+                    <Button
                         sx={{ mt: 1 }}
                         variant="contained"
                         color="primary"
@@ -91,9 +91,6 @@ export const FamiliaAddForm = ({
                         Agregar
                     </Button>
                 </Grid>
-                {/* <Grid item xs={12} md={2} sx={{mt:10}}> */}
-                   
-                {/* </Grid> */}
             </Grid>
         </div>
     );

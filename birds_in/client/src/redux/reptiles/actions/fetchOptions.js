@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fetchOptions, newOptions, updateFamiliaOptions, updateGrupoOptions } from '../slices/FilterSlice';
+import { fetchOptions, newOptions, updateFamiliaOptions, updateGrupoOptions, updateOrdersOptions } from '../slices/FilterSlice';
 import { createParams } from '../../../components/utils/convertId';
 
 export const getOptionsDataR = () => {
@@ -36,11 +36,35 @@ export const clasesFamilia = (idfamilia) => {
     try {
       // Llamada a la API para obtener los grupos basados en idfamilia
       const response = await axios.get(`reptiles/clases?familiaID=${idfamilia}`);
+      const orders = response.data.orders;
       const grupos = response.data.grupos;
       // Despachar la acción para actualizar las opciones de grupo
+      dispatch(updateOrdersOptions({ orders }));
       dispatch(updateGrupoOptions({ grupos }));
-      return grupos
+      return { orders, grupos }
       // console.log(grupos)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+};
+
+export const clasesOrder = (id) => {
+  // console.log('llegue', id)
+  return async (dispatch) => {
+    try {
+
+      // Llamada a la API para obtener las familias basadas en id
+      const response = await axios.get(`reptiles/clases?orderID=${id}`);
+      const familias = response.data.familias;
+      const grupos = response.data.grupos;
+      console.log(response.data)
+      // Despachar la acción para actualizar las opciones de familia
+      dispatch(updateFamiliaOptions({ familias }));
+      dispatch(updateGrupoOptions({ grupos }));
+      return { familias, grupos }
+
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
@@ -56,10 +80,12 @@ export const clasesGrupo = (idgrupo) => {
       // Llamada a la API para obtener las familias basadas en idgrupo
       const response = await axios.get(`reptiles/clases?grupoID=${idgrupo}`);
       const familias = response.data.familias;
+      const orders = response.data.orders;
       // console.log(familias)
       // Despachar la acción para actualizar las opciones de familia
+      dispatch(updateOrdersOptions({ orders }));
       dispatch(updateFamiliaOptions({ familias }));
-      return familias
+      return { familias, orders }
 
     } catch (error) {
       console.error('Error fetching data:', error);

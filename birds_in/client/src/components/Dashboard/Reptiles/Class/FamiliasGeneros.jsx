@@ -4,11 +4,13 @@ import { useDispatch } from 'react-redux';
 //components
 import { FamiliaAddForm } from './familias/FamiliaAddForm';
 import { FamiliaTable } from './familias/FamiliaTable';
+import { GrupoAddForm } from './grupos/GrupoAddForm';
+import { GrupoTable } from './grupos/GrupoTable';
 import { Loading } from '../../../utils/Loading';
 //redux
 import { getOptionsDataR } from '../../../../redux/reptiles/actions/fetchOptions';
-import { GeneroAddForm } from './grupos/GeneroAddForm';
-import { GeneroTable } from './grupos/GeneroTable';
+import { OrdenTable } from './order/OrdenTable';
+import { OrdenAddForm } from './order/OrdenAddForm';
 
 export const FamiliasGeneros = () => {
     const dispatch = useDispatch()
@@ -39,12 +41,12 @@ export const FamiliasGeneros = () => {
                 // alignItems: 'center',
                 // justifyContent: 'center',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
-                width: '90%',
+                backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                width: '100%',
                 // minWidth: '1200px',
                 margin: '0 auto',
                 padding: '40px 40px 30px 40px',
-                borderRadius: '20px 20px 20px 20px',
+                borderRadius: '20px',
                 mb: 10
             }} >
                 <Grid item xs={6}>
@@ -66,7 +68,7 @@ export const FamiliasGeneros = () => {
                     />
                 </Grid>
                 <Grid item xs={6}>
-                    <GeneroAddForm
+                    <GrupoAddForm
                         onloading={setOnLoading}
                         loadingMessage={setLoadingMessage}
                         showSnackBar={setOpenSnack}
@@ -74,7 +76,25 @@ export const FamiliasGeneros = () => {
                         errorMessage={setErrorMessage}
                         showErrorSnack={setErrorSnackOpen}
                     />
-                    <GeneroTable
+                    <GrupoTable
+                        onloading={setOnLoading}
+                        loadingMessage={setLoadingMessage}
+                        showSnackBar={setOpenSnack}
+                        successMessages={setShowSuccessMessages}
+                        errorMessage={setErrorMessage}
+                        showErrorSnack={setErrorSnackOpen}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <OrdenAddForm
+                        onloading={setOnLoading}
+                        loadingMessage={setLoadingMessage}
+                        showSnackBar={setOpenSnack}
+                        successMessages={setShowSuccessMessages}
+                        errorMessage={setErrorMessage}
+                        showErrorSnack={setErrorSnackOpen}
+                    />
+                    <OrdenTable
                         onloading={setOnLoading}
                         loadingMessage={setLoadingMessage}
                         showSnackBar={setOpenSnack}

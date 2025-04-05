@@ -1,4 +1,4 @@
-const { createFamilias, updateFamilias, borrarFamilias, createGrupos, updateGrupo, borrarGrupos } = require("../../../controllers/reptiles/Classification/ClassController");
+const { createFamilias, updateFamilias, borrarFamilias, createGrupos, updateGrupo, borrarGrupos, createOrder, updateOrder, borrarOrder } = require("../../../controllers/reptiles/Classification/ClassController");
 
 const postFamilias = async (req, res) => {
     const { nombreF } = req.body
@@ -33,9 +33,9 @@ const deleteFamilias = async (req, res) => {
 };
 
 const postGrupo = async (req, res) => {
-    const { nombreG, } = req.body
+    const { nombreG } = req.body
     try {
-        const options = await createGrupos(nombreG,)
+        const options = await createGrupos(nombreG)
         return res.status(200).json(options)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -64,11 +64,45 @@ const deleteGrupos = async (req, res) => {
     }
 };
 
+const postOrden = async (req, res) => {
+    const { nombreG, nombreC } = req.body
+    try {
+        const options = await createOrder(nombreG, nombreC)
+        return res.status(200).json(options)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const putOrden = async (req, res) => {
+    const { nombreG, nombreC, idGrupo } = req.body
+    try {
+        const options = await updateOrder(nombreG, nombreC, idGrupo)
+        return res.status(200).json(options)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+const deleteOrden = async (req, res) => {
+    const { idGrupo } = req.query
+    try {
+        if (idGrupo) {
+            const options = await borrarOrder(idGrupo)
+            return res.status(200).json(options)
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
 module.exports = {
     postFamilias,
     putFamilias,
     deleteFamilias,
     postGrupo,
     putGrupos,
-    deleteGrupos
+    deleteGrupos,
+    postOrden,
+    deleteOrden,
+    putOrden
 }

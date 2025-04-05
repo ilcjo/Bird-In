@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 //components
 import { FamiliaAddForm } from './familias/FamiliaAddForm';
 import { FamiliaTable } from './familias/FamiliaTable';
-import { Loading } from '../../../utils/Loading';
-//redux
-import { getOptionsDataM } from '../../../../redux/mamiferos/actions/fetchOptions';
 import { OrdenAddForm } from './order/OrdenAddForm';
 import { OrdenTable } from './order/OrdenTable';
 import { GrupoAddForm } from './grupos/GrupoAddForm';
 import { GrupoTable } from './grupos/GrupoTable';
+import { Loading } from '../../../utils/Loading';
+//redux
+import { getOptionsDataM } from '../../../../redux/mamiferos/actions/fetchOptions';
 
 export const FamiliasGeneros = () => {
     const dispatch = useDispatch()
@@ -41,12 +41,12 @@ export const FamiliasGeneros = () => {
                 // alignItems: 'center',
                 // justifyContent: 'center',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(5px)', // Efecto de desenfoque de fondo
+                backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
                 width: '100%',
                 // minWidth: '1200px',
                 margin: '0 auto',
                 padding: '40px 40px 30px 40px',
-                borderRadius: '20px 20px 20px 20px',
+                borderRadius: '20px',
                 mb: 10
             }} >
                 <Grid item xs={6}>
@@ -84,7 +84,6 @@ export const FamiliasGeneros = () => {
                         errorMessage={setErrorMessage}
                         showErrorSnack={setErrorSnackOpen}
                     />
-
                 </Grid>
 
                 <Grid item xs={12}>

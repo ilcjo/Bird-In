@@ -113,13 +113,13 @@ export const Reptiles = () => {
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={true}
-          // maxWidth='md'
+        // maxWidth='md'
         >
           <FiltersR isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
         {info.length === 1 && (
           <Grid container >
-            <PhotosDetailR setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
+            <PhotosDetailR animal={info[0]} setIsFilterOpen={setFilterDialogOpen} setPage={setPage} />
           </Grid>
         )}
         {info.length > 1 && (

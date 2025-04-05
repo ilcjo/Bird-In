@@ -98,7 +98,7 @@ const fetchFilterRegister = async (
     nombreCientifico,
     nombreIngles,
     page, perPage) => {
-    console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles)
+    // console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles)
     try {
         nombreCientifico = decodeQueryParam(nombreCientifico);
         nombreIngles = decodeQueryParam(nombreIngles);
@@ -1246,6 +1246,7 @@ const saveDbPhotoOrder = async (imagesArray) => {
 
 module.exports = {
     saveDbPhotoOrder,
+    findOrdenNameDuplicate,
     findFamilyNameDuplicate,
     findGroupNameDuplicate,
     getClassGrupoFamilia,
@@ -1263,5 +1264,4 @@ module.exports = {
     findDataByName,
     findNameDuplicate,
     findAllEnglishNames,
-    findOrdenNameDuplicate
 };

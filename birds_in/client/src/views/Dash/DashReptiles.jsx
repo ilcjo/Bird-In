@@ -24,7 +24,6 @@ export const DashReptiles = () => {
 
   return (
     <React.Fragment>
-      <MenuBar ShowFilterButton={false} ShowBackButton={true} />
       <Grid
         container
         direction="column"
@@ -37,15 +36,11 @@ export const DashReptiles = () => {
           height: '100%',
           overflow: 'hidden',
           margin: 0,
-          
+
         }}
       >
         <IndexD />
       </Grid>
-      <Loading
-        message={loadingMessage}
-        open={showBackdrop}
-      />
     </React.Fragment>
   );
 };

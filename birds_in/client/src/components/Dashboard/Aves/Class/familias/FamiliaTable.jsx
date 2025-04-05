@@ -222,6 +222,13 @@ export const FamiliaTable = ({
                                         {editMode === index ? (
                                             // Modo de edición
                                             <>
+                                             <Button onClick={handleCancelEdit}
+                                                    sx={{
+                                                        fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
+                                                    }}
+                                                    variant="contained"
+                                                    color="error"
+                                                >Cancelar</Button>
                                                 <Button onClick={saveChanges}
                                                     sx={{
                                                         fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
@@ -230,13 +237,7 @@ export const FamiliaTable = ({
                                                     color="secondary"
                                                     endIcon={<SaveIcon />}
                                                 >Grabar</Button>
-                                                <Button onClick={handleCancelEdit}
-                                                    sx={{
-                                                        fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
-                                                    }}
-                                                    variant="contained"
-                                                    color="error"
-                                                >Cancelar</Button>
+                                               
                                             </>
                                         ) : (
                                             <Grid container spacing={0} sx={{ maxHeight: 450 }} >

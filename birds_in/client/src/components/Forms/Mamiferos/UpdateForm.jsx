@@ -402,7 +402,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -492,6 +492,40 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         style: { fontStyle: 'italic' } // Aplica estilo cursiva al texto
                                     }}
                                 />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-grupo"
+                                    // options={order}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupo'}
+                                    options={combinedOptionsGrupos}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.grupo}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
+                                    onChange={handleGruposChange}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Grupo"
+                                            margin='dense'
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3, mt: 1 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -539,7 +573,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Nombre Común del Orden"
+                                            label="Nombre común del orden"
                                             margin='dense'
                                         />
                                     )}
@@ -580,40 +614,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         </li>
                                     )}
                                 />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-grupo"
-                                    // options={order}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupo'}
-                                    options={combinedOptionsGrupos}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.grupo}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
-                                    onChange={handleGruposChange}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Grupo"
-                                            margin='dense'
-                                        />}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3, mt: 1 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
+
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

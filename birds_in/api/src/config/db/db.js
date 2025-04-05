@@ -13,7 +13,7 @@ const {
 } = process.env
 
 const db = new Sequelize(`mariadb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
-  // logging: console.log,
+  logging: process.env.NODE_ENV !== 'production' ? console.log : false,
   dialectOptions: {
     connectTimeout: 30000, // Aumenta el tiempo de conexión a 30 segundos (30000 ms)
   },
@@ -56,9 +56,9 @@ const {
   Paises, Usuarios, Customize_page, Zonas, Token, VistaAvesOrdenadaAll, VistaMamiferosOrdenadaAll,
   Paisajes, Imagenes_paisajes,
   Aves, Familias, Grupos, Imagenes_aves,
-  Mamiferos, Order_mamiferos, Familias_mamiferos, Imagenes_mamiferos,
-  Reptiles, Grupos_reptiles, Familias_reptiles, Imagenes_reptiles,
-  Insectos, Grupos_insectos, Familias_insectos, Imagenes_insectos, Grupos_mamiferos
+  Mamiferos, Order_mamiferos, Familias_mamiferos, Grupos_mamiferos, Imagenes_mamiferos,
+  Reptiles, Order_reptiles, Grupos_reptiles, Familias_reptiles, Imagenes_reptiles,
+  Insectos, Grupos_insectos, Familias_insectos, Imagenes_insectos,
 } = db.models;
 // console.log(db.models)
 // UNO A UNO
@@ -92,8 +92,11 @@ Grupos_mamiferos.hasOne(Mamiferos, { foreignKey: 'grupos_id_grupo' })
 // =>REPTILES
 Reptiles.belongsTo(Familias_reptiles, { foreignKey: 'familias_id_familia' })
 Familias_reptiles.hasOne(Reptiles, { foreignKey: 'familias_id_familia' })
+Reptiles.belongsTo(Order_reptiles, { foreignKey: 'orders_id_order' })
+Order_reptiles.hasOne(Reptiles, { foreignKey: 'orders_id_order' })
 Reptiles.belongsTo(Grupos_reptiles, { foreignKey: 'orders_id_order' })
 Grupos_reptiles.hasOne(Reptiles, { foreignKey: 'orders_id_order' })
+
 // // =>INSECTOS
 Insectos.belongsTo(Familias_insectos, { foreignKey: 'familias_id_familia' })
 Familias_insectos.hasOne(Insectos, { foreignKey: 'familias_id_familia' })

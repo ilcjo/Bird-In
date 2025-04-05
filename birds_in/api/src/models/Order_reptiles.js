@@ -2,20 +2,20 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     // defino el modelo
-    sequelize.define('familias_reptiles', {
-        id_familia: {
+    sequelize.define('order_reptiles', {
+        id_order: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             primaryKey: true,
+            allowNull: false,
             autoIncrement: true
         },
         nombre: {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        id_order: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
+        nombre_comun: {
+            type: DataTypes.TEXT,
+            allowNull: false
         }
     },{ timestamps: false, }
     )

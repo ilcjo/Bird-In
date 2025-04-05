@@ -35,12 +35,13 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filterRep.options)
+    const { paises, familias, orden, grupos, zonas } = useSelector(state => state.filterRep.options)
     const { infoForUpdate } = useSelector(state => state.updateReptil)
     console.log(infoForUpdate, 'esto es la info')
     const initialCreateData = {
-        grupo: infoForUpdate.grupos_reptile || null,
+        order: infoForUpdate.order_reptil || null,
         familia: infoForUpdate.familias_reptile || null,
+        grupo: infoForUpdate.grupos_reptile || null,
         pais: infoForUpdate.paises || [],
         zona: infoForUpdate.zonasReptiles || [],
         cientifico: infoForUpdate.nombre_cientifico || '',
@@ -63,6 +64,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackBarMessage, setSnackBarMessage] = React.useState('El Registro se ha Actualizado correctamente.');
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
+    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(orden);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
 
     React.useEffect(() => {
@@ -71,7 +73,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
 
         const timer = setTimeout(() => {
             setShowBackdrop(false); // Cerrar el backdrop después de 5 segundos
-        }, 3000);
+        }, 1000);
 
         return () => {
             clearTimeout(timer); // Limpiar el temporizador al desmontar el componente
@@ -90,17 +92,31 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...grupos, // Mantén las opciones originales
+            try {
+                // Aquí llamas a la función que genera datos extra y actualizas el estado
+                const extraData = await dispatch(clasesFamilia(newValue.id));
+                // console.log(extraData)
+                console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
 
-            ];
+                // Verificar si extraData contiene familias y grupos
+                const extraOrder = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
+                const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
 
-            setCombinedOptionsGrupos(newCombinedOptions);
+                // Combinar familias y grupos con las opciones originales
+                const newCombinedOptionsOrders = [
+                    ...extraOrder, // Agregar las familias extra
+                    ...orden,      // Mantener las familias originales
+                ];
+                const newCombinedOptionsGrupos = [
+                    ...extraGrupos, // Agregar las familias extra
+                    ...grupos,      // Mantener las familias originales
+                ];
+
+                setCombinedOptionsOrders(newCombinedOptionsOrders);
+                setCombinedOptionsGrupos(newCombinedOptionsGrupos)
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
         }
     };
 
@@ -111,33 +127,83 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...familias, // Mantén las opciones originales
-            ];
+            try {
+                // Llamar a la función para obtener datos adicionales (familias y grupos)
+                const extraData = await dispatch(clasesGrupos(newValue.id));
 
-            setCombinedOptionsFamilias(newCombinedOptions);
+                console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
+
+                // Verificar si extraData contiene familias y grupos
+                const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
+                const extraOrders = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
+
+                // Combinar familias y grupos con las opciones originales
+                const newCombinedOptionsFamilia = [
+                    ...extraFamilias, // Agregar las familias extra
+                    ...familias,      // Mantener las familias originales
+                ];
+                const newCombinedOptionsOrders = [
+                    ...extraOrders, // Agregar las familias extra
+                    ...grupos,      // Mantener las familias originales
+                ];
+
+                setCombinedOptionsFamilias(newCombinedOptionsFamilia);
+                setCombinedOptionsOrders(newCombinedOptionsOrders)
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
         }
     };
 
+    const handleOrderChange = async (event, newValue) => {
+        console.log(newValue)
+        if (!newValue) {
+            // Si el usuario borra la selección, limpiar el estado
+            setCreateData(prevState => ({
+                ...prevState,
+                order: null,
+            }));
+            setCombinedOptionsFamilias(familias);
+            setCombinedOptionsGrupos(grupos);
+            return;
+        }
+
+        setCreateData(prevState => ({
+            ...prevState,
+            order: newValue ?? null,
+        }));
+
+        try {
+            // Obtener datos adicionales (familias y grupos)
+            const extraData = await dispatch(clasesOrder(newValue.id));
+
+            console.log(extraData, 'datos que llegan'); // Verificar datos recibidos
+
+            // Verificar si extraData contiene familias y grupos
+            const extraFamilias = extraData?.familias?.map(f => ({ ...f, type: 'extra' })) || [];
+            const extraGrupos = extraData?.grupos?.map(g => ({ ...g, type: 'extra' })) || [];
+
+            // Combinar con opciones originales
+            setCombinedOptionsFamilias([...extraFamilias, ...familias]);
+            setCombinedOptionsGrupos([...extraGrupos, ...grupos]);
+        } catch (error) {
+            console.error("Error al obtener datos adicionales:", error);
+        }
+    };
     // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
     React.useEffect(() => {
         const loadInitialData = async () => {
             if (infoForUpdate.familia) {
-                const extraDataGrupos = await dispatch(clasesFamilia(infoForUpdate.familia.id));
-                const newCombinedOptionsGrupos = [
-                    ...extraDataGrupos.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                    ...grupos, // Mantén las opciones originales
+                const extraDataOrders = await dispatch(clasesFamilia(infoForUpdate.familia.id));
+                const newCombinedOptionsOrders = [
+                    ...extraDataOrders.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...orden, // Mantén las opciones originales
                 ];
-                setCombinedOptionsGrupos(newCombinedOptionsGrupos);
+                setCombinedOptionsOrders(newCombinedOptionsOrders);
             }
 
-            if (infoForUpdate.grupo) {
-                const extraDataFamilias = await dispatch(clasesGrupo(infoForUpdate.grupo.id));
+            if (infoForUpdate.order) {
+                const extraDataFamilias = await dispatch(clasesOrder(infoForUpdate.order.id));
                 const newCombinedOptionsFamilias = [
                     ...extraDataFamilias.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
                     ...familias, // Mantén las opciones originales
@@ -147,7 +213,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         };
 
         loadInitialData();
-    }, [infoForUpdate, grupos, familias]);
+    }, [infoForUpdate, orden, familias]);
 
 
     const handleInputChange = (event) => {
@@ -302,7 +368,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -310,7 +376,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 3 }}>
+                                <Typography variant='h1' color='primary' sx={{ mb: 3 }}>
                                     Formulario de Actualización
                                 </Typography>
                             </Grid>
@@ -333,7 +399,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
@@ -355,43 +421,131 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Registro
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <StyledTextField
+                                <TextField
                                     name="ingles"
                                     label="Nombre en Ingles"
                                     value={createData.ingles}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="cientifico"
-                                    label="Nombre científico (Especie)"
+                                    label="Nombre científico"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
+                                    InputProps={{
+                                        style: { fontStyle: 'italic' } // Aplica estilo cursiva al texto
+                                    }}
+                                />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-grupos"
+                                    // options={grupos}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
+                                    options={combinedOptionsGrupos}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.grupo}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    onChange={handleGrupoChange}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Grupo"
+                                            margin='dense'
+
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3, mt: 1 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
                                 />
                             </Grid>
-
                             <Grid item xs={12} sm={6}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-order"
+                                    // options={order}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Orden'}
+                                    options={combinedOptionsOrders}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.order ?? null}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
+                                    onChange={handleOrderChange}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Orden"
+                                            margin='dense'
+
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3, mt: 1 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-order-name"
+                                    options={combinedOptionsOrders} // Usa la lista combinada de órdenes
+                                    getOptionLabel={(option) => option.order_comun || ''} // Mostrar el nombre común
+                                    value={createData.order} // Asegurar que el valor refleje el estado
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Nombre común del orden"
+                                            margin='dense'
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.order_comun === value?.order_comun}
+
+                                />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
@@ -426,41 +580,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         </li>
                                     )}
                                 />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-grupos"
-                                    // options={grupos}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupos'}
-                                    options={combinedOptionsGrupos}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.grupo}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                                    onChange={handleGrupoChange}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Genero"
-                                            margin='dense'
-
-                                        />}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3, mt: 1 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
+                                
 
                             </Grid>
                         </Grid>
@@ -553,10 +673,10 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             </Grid>
 
                             <Grid item xs={12} sm={12}>
-                                <StyledTextField
+                                <TextField
                                     name="urlWiki"
                                     label='URL Wiki'
-                                    variant="filled"
+                                    variant="outlined"
                                     value={createData.urlWiki}
                                     onChange={handleInputChange}
                                     fullWidth

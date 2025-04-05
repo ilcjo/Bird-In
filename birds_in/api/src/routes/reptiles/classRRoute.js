@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { postFamilias, putFamilias, deleteFamilias, postGrupo, putGrupos, deleteGrupos } = require('../../handlers/reptiles/classification/classHandle')
+const { postFamilias, putFamilias, deleteFamilias, postGrupo, putGrupos, deleteGrupos, postOrden, putOrden, deleteOrden } = require('../../handlers/reptiles/classification/classHandle')
 
 
 const classRRouter = Router()
@@ -9,4 +9,7 @@ classRRouter.post('/crearfamilias', postFamilias)
     .post('/crearGrupos', postGrupo)
     .put('/actualizarGrupos', putGrupos)
     .delete('/eliminarGrupos', deleteGrupos)
+    .post('/crearOrden', postOrden)
+    .put('/actualizarOrden', putOrden)
+    .delete('/eliminarOrden', deleteOrden)
 module.exports = classRRouter

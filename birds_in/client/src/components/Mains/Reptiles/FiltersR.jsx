@@ -20,6 +20,7 @@ import { saveFilters } from '../../../redux/reptiles/slices/FilterSlice';
 import { cargando, isOneR } from '../../../redux/reptiles/slices/InfoSlice';
 import { copingFilters } from '../../../redux/reptiles/slices/FilterSlice';
 import { setNoMoreResults } from '../../../redux/reptiles/slices/FilterSlice';
+import { AutocompleteFilter } from '../../utils/AutocompleteFilter';
 
 
 export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
@@ -40,19 +41,21 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     const selectOptionFromSlice = useSelector((state) => state.filterRep.currentFilters);
     const {
-        nIngles = [],
-        nCientifico = [],
-        paises = [],
+        orden = [],
         familias = [],
         grupos = [],
-        zonas = []
+        paises = [],
+        zonas = [],
+        nCientifico = [],
+        nIngles = [],
     } = useSelector(state => state.filterRep.options);
 
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
-        grupo: [],
+        orden: [],
         familia: [],
+        grupo: [],
         pais: [],
         zona: [],
         cientifico: [],
@@ -73,14 +76,15 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         };
 
         setSelectOption(updatedSelectOption);
-        // Realiza la solicitud para obtener las opciones
-        dispatch(fetchNewOptions(updatedSelectOption))
-            .then(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
-            })
-            .catch(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
-            });
+        console.log(updatedSelectOption)
+        try {
+            dispatch(fetchNewOptions(updatedSelectOption))
+        } catch (error) {
+            console.error('Error fetching new options:', error);
+        } finally {
+            // Desactiva el indicador de carga cuando la solicitud se completa o hay un error
+            setIsFetchingOptions(false);
+        }
     };
 
     const handleClickFiltrar = async () => {
@@ -91,7 +95,6 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
         try {
             const resultLength = await dispatch(sendParameter(selectOption));
-
             pages(1);
             dispatch(copingFilters());
 
@@ -123,8 +126,9 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
             });
         setSelectOption({
-            grupo: [],
+            orden: [],
             familia: [],
+            grupo: [],
             pais: [],
             zona: [],
             cientifico: [],
@@ -136,299 +140,133 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
 
     React.useEffect(() => {
-        return () => {
-            dispatch(getOptionsDataR());
-            setSelectOption({
-                grupo: [],
-                familia: [],
-                pais: [],
-                zona: [],
-                cientifico: [],
-                ingles: []
-            });
-        };
+        // return () => {
+        dispatch(getOptionsDataR());
+        setSelectOption({
+            orden: [],
+            familia: [],
+            grupo: [],
+            pais: [],
+            zona: [],
+            cientifico: [],
+            ingles: []
+        });
+        // };
     }, []);
+
     return (
         <React.Fragment>
-            <Grid component={Box}
+            <Grid
+                component={Box}
                 sx={{
                     height: 'auto',
-                    borderRadius: '20px 20px 20px 20px',
+                    borderRadius: '20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
                     padding: { xs: 0, md: 2 },
-                }} >
+                }}
+            >
                 <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1, mt: -1 }}>
                         Búsqueda Avanzada
                     </Typography>
                 </Grid>
+
                 <Grid container alignItems="center">
-
+                    {/* Orden */}
                     <Grid item xs={12}>
-                        {/* Familia */}
-                        <FormControl sx={{ m: 1, width: '95%' }}>
-                            <Autocomplete
-                                multiple
-                                value={selectOption.familia}
-                                onChange={(event, newValue) => handleOptionChange('familia', newValue)}
-                                options={familias || []}
-                                getOptionLabel={(option) => option.nombre}
-                                loading={isFetchingOptions}
-                                renderInput={(params) =>
-                                    <TextField {...params}
-                                        label="Familia"
-                                        sx={{
-                                            '& .MuiInputBase-input': {
-                                                height: '26px',
-                                            },
-                                        }}
-                                    />}
-                                renderTags={(value, getTagProps) =>
-                                    value.map((option, index) => (
-                                        <Typography
-                                            key={option.id}
-                                            variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                            sx={{
-                                                display: 'inline-block',
-                                                fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                color: 'white',
-                                                ml: 2,
-                                                mt: 1
-                                            }}
-                                        >
-                                            {option.nombre}
-                                        </Typography>
-                                    ))
-                                }
-                                isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={familias?.length === 0}
-                            />
-                        </FormControl>
-                        <Grid />
-                        <Grid item xs={12} >
-                            <FormControl sx={{ m: 1, width: '95%' }}>
-                                <Autocomplete
-                                    multiple
-                                    id='grupoUnico'
-                                    value={selectOption.grupo}
-                                    onChange={(event, newValue) => handleOptionChange('grupo', newValue)}
-                                    options={grupos || []}
-                                    getOptionLabel={(option) => option.nombre}
-                                    loading={isFetchingOptions}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Grupo"
-                                            sx={{
-                                                '& .MuiInputBase-input': {
-                                                    height: '26px',
-                                                },
-                                            }}
-                                        />}
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Typography
-                                                key={option.id}
-                                                variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                                sx={{
-                                                    display: 'inline-block',
-                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                    color: 'white',
-                                                    ml: 2,
-                                                    mt: 1
-                                                }}
-                                            >
-                                                {option.nombre}
-                                            </Typography>
-                                        ))
-                                    }
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={grupos?.length === 0}
-                                />
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/*Pais */}
-                            <FormControl sx={{ m: 1, width: '95%' }}>
-                                <Autocomplete
-                                    multiple
-                                    value={selectOption.pais}
-                                    onChange={(event, newValue) => handleOptionChange('pais', newValue)}
-                                    options={paises || []}
-                                    getOptionLabel={(option) => option.nombre}
-                                    loading={isFetchingOptions}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Países"
-                                            sx={{
-                                                '& .MuiInputBase-input': {
-                                                    height: '26px',
-                                                },
-                                            }}
-                                        />}
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Typography
-                                                key={option.id}
-                                                variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                                sx={{
-                                                    display: 'inline-block',
-                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                    color: 'white',
-                                                    ml: 2,
-                                                    mt: 1
-                                                }}
-                                            >
-                                                {option.nombre}
-                                            </Typography>
-                                        ))
-                                    }
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={paises?.length === 0}
-                                />
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* Zona */}
-                            <FormControl sx={{ m: 1, width: '95%' }}>
-                                <Autocomplete
-                                    multiple
-                                    value={selectOption.zona}
-                                    onChange={(event, newValue) => handleOptionChange('zona', newValue)}
-                                    options={zonas || []}
-                                    getOptionLabel={(option) => option.nombre}
-                                    loading={isFetchingOptions}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Zonas"
-                                            sx={{
-                                                '& .MuiInputBase-input': {
-                                                    height: '26px',
-                                                },
-                                            }}
-                                        />}
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Typography
-                                                key={option.id}
-                                                variant="body2" // Elige el variant y otros estilos según tus necesidades
-                                                sx={{
-                                                    display: 'inline-block',
-                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                    color: 'white',
-                                                    ml: 2,
-                                                    mt: 1
-                                                }}
-                                            >
-                                                {option.nombre}
-                                            </Typography>
-                                        ))
-                                    }
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={zonas?.length === 0}
-                                />
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* Científico */}
-                            <FormControl sx={{ m: 1, width: '95%' }}>
-                                <Autocomplete
-                                    multiple
-                                    value={selectOption.cientifico}
-                                    onChange={(event, newValue) => handleOptionChange('cientifico', newValue)}
-                                    options={nCientifico || []}
-                                    getOptionLabel={(option) => option.nombre}
-                                    loading={isFetchingOptions}
-
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Nombre Científico"
-                                            sx={{
-                                                '& .MuiInputBase-input': {
-                                                    height: '26px',
-                                                },
-                                            }}
-                                        />}
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Typography
-                                                key={option.id}
-                                                variant="body1"
-                                                sx={{
-                                                    display: 'inline-block',
-                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                    color: 'white',
-                                                    ml: 2,
-                                                    mt: 1
-                                                }}
-                                            >
-                                                {option.nombre}
-                                            </Typography>
-                                        ))
-                                    }
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nCientifico?.length === 0}
-                                />
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControl sx={{ m: 1, width: '95%' }} >
-                                <Autocomplete
-                                    multiple
-                                    value={selectOption.ingles}
-                                    onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
-                                    options={nIngles || []}
-                                    getOptionLabel={(option) => option.nombre}
-                                    loading={isFetchingOptions}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Nombre Inglés"
-                                            sx={{
-                                                '& .MuiInputBase-input': {
-                                                    height: '26px',
-                                                },
-                                            }}
-                                        />}
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Typography
-                                                key={option.id}
-                                                variant="body1"
-                                                sx={{
-                                                    display: 'inline-block',
-                                                    fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                    color: 'white',
-                                                    ml: 2,
-                                                    mt: 1
-                                                }}
-                                            >
-                                                {option.nombre}
-                                            </Typography>
-                                        ))
-                                    }
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    disabled={nIngles?.length === 0}
-                                />
-                            </FormControl>
-                        </Grid>
-                        <Stack spacing={1} direction="row" justifyContent="center"
-                            alignItems="center"
-                            sx={{
-                                margin: '20px auto', // Centrar horizontalmente el Stack
-                                width: 'fit-content', // Ajustar el ancho al contenido
-                            }} >
-                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
-                                Mostrar
-                            </Button>
-                            <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
-                                Resetear
-                            </Button>
-                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
-                                < CloseIcon /> Cerrar
-                            </Button>
-                        </Stack>
+                        <AutocompleteFilter
+                            label="Orden"
+                            options={orden}
+                            value={selectOption.orden}
+                            onChange={(newValue) => handleOptionChange('orden', newValue)}
+                            loading={isFetchingOptions}
+                        />
                     </Grid>
-                </Grid >
+
+                    {/* Familia */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Familia"
+                            options={familias}
+                            value={selectOption.familia}
+                            onChange={(newValue) => handleOptionChange('familia', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    {/* Grupo */}
+                    <Grid item xs={12} >
+                        <AutocompleteFilter
+                            label="Grupo"
+                            options={grupos}
+                            value={selectOption.grupo}
+                            onChange={(newValue) => handleOptionChange('grupo', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    {/* País */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Países"
+                            options={paises}
+                            value={selectOption.pais}
+                            onChange={(newValue) => handleOptionChange('pais', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    {/* Zona */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Zona"
+                            options={zonas}
+                            value={selectOption.zona}
+                            onChange={(newValue) => handleOptionChange('zona', newValue)}
+                            getOptionLabel={(option) => option.nombre}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    {/* Nombre Científico */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Nombre científico"
+                            options={nCientifico}
+                            value={selectOption.cientifico}
+                            onChange={(newValue) => handleOptionChange('cientifico', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+
+                    {/* Nombre Inglés */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Nombre inglés"
+                            options={nIngles}
+                            value={selectOption.ingles}
+                            onChange={(newValue) => handleOptionChange('ingles', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                </Grid>
+
+                <Stack
+                    spacing={1}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                        margin: '20px auto', // Centrar horizontalmente el Stack
+                        // width: 'fit-content', // Ajustar el ancho al contenido
+                    }} >
+                    <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
+                        < CloseIcon /> Cerrar
+                    </Button>
+                    <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
+                        Resetear
+                    </Button>
+                    <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                        Mostrar
+                    </Button>
+                </Stack>
             </Grid>
         </React.Fragment >
-    )
+    );
 };

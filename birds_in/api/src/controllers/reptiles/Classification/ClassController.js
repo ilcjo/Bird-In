@@ -1,4 +1,4 @@
-const { Reptiles, Familias_reptiles, Grupos_reptiles } = require("../../../config/db/db");
+const { Reptiles, Familias_reptiles, Grupos_reptiles, Order_reptiles } = require("../../../config/db/db");
 
 const createFamilias = async (familia) => {
     try {
@@ -84,6 +84,7 @@ const borrarFamilias = async (idF) => {
 };
 
 const createGrupos = async (grupo) => {
+    console.log('que llegi:', grupo )
     try {
         if (grupo) {
             await Grupos_reptiles.create({
@@ -167,6 +168,97 @@ const borrarGrupos = async (idG) => {
     }
 };
 
+const createOrder = async (nombreG, nombreC) => {
+    console.log(nombreC, nombreG)
+    try {
+        if (nombreC && nombreG) {
+            await Order_reptiles.create({
+                nombre: nombreG,
+                nombre_comun: nombreC
+
+            });
+            return "Orden creado correctamente."
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
+const updateOrder = async (nombreG, nombreComun, idOrder) => {
+    try {
+        // Verifica si el ID de la Order existe
+        const existingOrder = await Order_reptiles.findOne({
+            where: { id_order: idOrder },
+        });
+
+        if (!existingOrder) {
+            throw new Error("El ID de Order especificado no existe.");
+        }
+
+        if (idOrder <= 0) {
+            throw new Error("El ID no es válido.");
+        }
+
+        // Verifica que los nombres sean cadenas de texto no vacías
+        if (typeof nombreG !== 'string' || nombreG.trim() === '') {
+            throw new Error("El nombre científico no es válido. Debe ser una cadena de texto no vacía.");
+        }
+
+        if (typeof nombreComun !== 'string' || nombreComun.trim() === '') {
+            throw new Error("El nombre común no es válido. Debe ser una cadena de texto no vacía.");
+        }
+
+        // Verifica si hay cambios antes de actualizar
+        if (nombreG !== existingOrder.nombre || nombreComun !== existingOrder.nombre_comun) {
+            await Order_reptiles.update(
+                { nombre: nombreG, nombre_comun: nombreComun },
+                { where: { id_order: idOrder } }
+            );
+            return "Order actualizado correctamente.";
+        } else {
+            return "No se realizaron cambios, los valores son los mismos.";
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        throw error;
+    }
+};
+
+
+const borrarOrder = async (idG) => {
+    try {
+        // Buscar todas las Mamiferos que tienen el ID de la familia a cambiar
+        const RegistrosConIdOrder = await Reptiles.findAll({
+            where: {
+                orders_id_order: idG,
+            },
+        });
+
+        // Cambiar el ID de familia solo en las Mamiferos encontradas
+        await Reptiles.update(
+            {
+                orders_id_order: 4, // Cambiar el ID de familia al valor not specified
+            },
+            {
+                where: {
+                    orders_id_order: idG,
+                },
+            }
+        );
+
+        await Order_reptiles.destroy({
+            where: {
+                id_order: idG,
+            },
+        });
+
+        return `Se actualizaron ${RegistrosConIdOrder.length} Reptiles al nuevo ID de Order  y Familia .`;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
 
 module.exports = {
     createFamilias,
@@ -175,4 +267,7 @@ module.exports = {
     createGrupos,
     updateGrupo,
     borrarGrupos,
+    createOrder,
+    updateOrder,
+    borrarOrder,
 }

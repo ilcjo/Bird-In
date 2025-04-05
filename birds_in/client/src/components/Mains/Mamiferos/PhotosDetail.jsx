@@ -32,7 +32,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
         setTimeout(() => {
             switch (isOne) {
                 case false:
-                    console.log(copyFilters)
+                    // console.log(copyFilters)
                     dispatch(sendParameter(copyFilters));
                     setPage(1)
                     break;

@@ -41,6 +41,47 @@ export const eliminarGrupo = (id) => {
     }
 };
 
+export const addOrden = (info) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post('reptiles/clasificacion/crearOrden/', info)
+            return response.data
+        } catch (error) {
+            console.log(error);
+            throw error;
+            // throw error.response.data;
+        }
+    }
+};
+
+export const updateOrden = (info) => {
+
+    return async (dispatch) => {
+        try {
+            const response = await axios.put('reptiles/clasificacion/actualizarOrden/', info)
+            return response.data
+        } catch (error) {
+            console.log(error);
+            throw error;
+            // throw error.response.data;
+        }
+    }
+};
+
+export const eliminarOrden = (id) => {
+
+    return async (dispatch) => {
+        try {
+            const response = await axios.delete(`reptiles/clasificacion/eliminarOrden?idGrupo=${id}`)
+            return response.data
+        } catch (error) {
+            console.log(error);
+            throw error;
+            // throw error.response.data;
+        }
+    }
+};
+
 export const addFamilia = (info) => {
     return async (dispatch) => {
         try {
@@ -86,6 +127,19 @@ export const checkDuplicadosGrupo = (nameg) => {
     return async (dispatch) => {
         try {
             const response = await axios.get(`/reptiles/gruposFamilias?grupoName=${nameg}`);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+};
+
+export const checkDuplicadosOrden = (nameg) => {
+    console.log(nameg, 'soy le nombre que envio')
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/reptiles/gruposFamilias?ordenName=${nameg}`);
             return response.data;
         } catch (error) {
             console.error(error);

@@ -2,20 +2,18 @@ import * as React from 'react';
 import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../../../assets/styles/zoom.css'
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+
 //ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 //COMPONENTS
-import ImageDragContainer from './ImageDragContainer';
 import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
+import { EditImageCards } from '../../../Cards/EditImageCards';
 //redux
 import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/reptiles/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/reptiles/actions/crudAction';
 import { getRegistro } from '../../../../redux/reptiles/slices/UpdateSlice';
-
 
 export const CoverDelete = ({
     isCreate,
@@ -37,8 +35,6 @@ export const CoverDelete = ({
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
-    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
     const handleSetAsCover = async (id, url, destacada) => {
         // console.log(id)
@@ -72,6 +68,10 @@ export const CoverDelete = ({
             setErrorSnackbarOpen(true);
         }
     };
+
+    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
+
 
     const handleImageClick = (url) => {
         // console.log('dentro del handleimage:', url)
@@ -109,6 +109,7 @@ export const CoverDelete = ({
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
             // Realizar la eliminación de fotos
+            console.log(selectedIds, selectedUrls)
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
             await dispatch(getInfoForUpdate(infoForUpdate.id_reptil));
@@ -140,11 +141,12 @@ export const CoverDelete = ({
         }
     }, [isCreate])
 
-    const [images, setImages] = React.useState(infoForUpdate.imagenes_reptiles || []);
-console.log(infoForUpdate.imagenes_reptiles)
     return (
         <React.Fragment>
-            <Loading message={loadingMessage} open={showBackdrop} />
+            <Loading
+                message={loadingMessage}
+                open={showBackdrop}
+            />
             <Grid container spacing={5} sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -155,25 +157,25 @@ console.log(infoForUpdate.imagenes_reptiles)
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
                 padding: '0px 40px 30px 0px',
-                borderRadius: '0px 0px 0px 0px',
-                mb: 1
-
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
-                            <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
-                                Imágenes {nombre ? ` ${nombre}` : 'del Mamífero'}
+                            <Typography variant='h2' color='primary'>
+                                Imágenes {nombre ? ` ${nombre}` : 'del Registro '}
                             </Typography>
                         </Grid>
                         {!isCreate && (
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
-                                        fontSize: '1rem',
+                                        fontSize: '1.1rem',
                                         fontWeight: 'bold',
-                                        backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                                        backdropFilter: 'blur(2px)',
+                                        // color: theme.palette.primary.light,
+                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                                     }}
                                     variant="outlined"
                                     onClick={handleReturnSearch}
@@ -184,10 +186,10 @@ console.log(infoForUpdate.imagenes_reptiles)
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
+                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
+                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
                         variant="contained"
                         color="error"
@@ -197,68 +199,59 @@ console.log(infoForUpdate.imagenes_reptiles)
                     >
                         Eliminar selección
                     </Button>
-
+                    {infoForUpdate && infoForUpdate.imagenes_reptiles && infoForUpdate.imagenes_reptiles.length > 0 && (
+                        <Grid container spacing={2} sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            m: 0
+                        }}>
+                            {infoForUpdate.imagenes_reptiles.map((imageUrl, index) => (
+                                <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
+                                    <EditImageCards
+                                        imageUrl={imageUrl}
+                                        index={index}
+                                        handleImageClick={handleImageClick}
+                                        handleSetAsCover={handleSetAsCover}
+                                        handleDeleteCheckBox={handleDeleteCheckBox}
+                                    />
+                                </Grid>
+                            ))}
+                            <CarruselGalleryDelete
+                                isOpen={isGalleryOpen}
+                                images={infoForUpdate.imagenes_reptiles}
+                                selectedIndex={selectedImageIndex}
+                                onClose={handleCloseGallery}
+                            />
+                        </Grid>
+                    )}
+                    {!infoForUpdate || !infoForUpdate.imagenes_reptiles || infoForUpdate.imagenes_reptiles.length === 0 && (
+                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                            No hay imágenes subidas.
+                        </Typography>
+                    )}
                 </Grid>
-
             </Grid>
-            <Grid sx={{
-                margin: '0 auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(2px)',
-                borderRadius: '0px 0px 20px 20px',
-                mb: 10,
-            }}>
-                <DndProvider backend={HTML5Backend}>
-                    <ImageDragContainer
-                        images={infoForUpdate.imagenes_reptiles}
-                        handleImageClick={handleImageClick}
-                        handleSetAsCover={handleSetAsCover}
-                        handleDeleteCheckBox={handleDeleteCheckBox}
-                        loading={setLoadingMessage}
-                        backDrop={setShowBackdrop}
-                        snackBar={setSnackbarOpen}
-                        messageBar={setSnackbarMessage}
-                        errorMessage={setErrorMessage}
-                        errorBar={setErrorSnackbarOpen}
-                        idRegistro={infoForUpdate.id_reptil}
-                    />
-                </DndProvider>
-                <CarruselGalleryDelete
-                    isOpen={isGalleryOpen}
-                    images={infoForUpdate.imagenes_reptiles}
-                    selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
-                />
-
-                {images.length === 0 && (
-                    <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                        No hay imágenes subidas.
-                    </Typography>
-                )}
-            </Grid>
-            {/* <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
-            <Snackbar open={errorSnackbarOpen} autoHideDuration={6000} onClose={() => setErrorSnackbarOpen(false)}>
-                <Alert elevation={6} variant="filled" severity="error" onClose={() => setErrorSnackbarOpen(false)}>
-                    {errorMessage}
-                </Alert>
-            </Snackbar> */}
             <Snackbar
                 open={snackbarOpen}
-                autoHideDuration={6000}
+                autoHideDuration={9000}
                 onClose={() => setSnackbarOpen(false)}
                 message={snackbarMessage}
             />
             <Snackbar
                 open={errorSnackbarOpen}
-                autoHideDuration={6000}
+                autoHideDuration={9000}
                 onClose={() => setErrorSnackbarOpen(false)}
-                message={errorMessage}
-                action={
-                    <Button color="inherit" onClick={() => setErrorSnackbarOpen(false)}>
-                        Cerrar
-                    </Button>
-                }
-            />
+            >
+                <Alert
+                    elevation={6}
+                    variant="filled"
+                    severity="error"
+                    onClose={() => setErrorSnackbarOpen(false)}
+                >
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </React.Fragment>
     );
 }

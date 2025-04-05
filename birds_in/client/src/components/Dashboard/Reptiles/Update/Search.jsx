@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 //COMPONENTS
 import { IndexTabsUpdates } from './IndexTabsUpdates';
 import { Loading } from '../../../utils/Loading';
-import { getInfoForUpdate } from '../../../../redux/reptiles/actions/crudAction';
+import { getInfoForUpdate, getInfoForUpdateName } from '../../../../redux/reptiles/actions/crudAction';
 //redux
 
 export const Search = ({ changeTab }) => {
@@ -44,6 +44,28 @@ export const Search = ({ changeTab }) => {
             setShowSearch(false);
         }
     };
+    const handleButtonClickFromCreate = () => {
+        let valor = localStorage.getItem('nombreIngles');
+        if (valor) {
+            try {
+                valor = JSON.parse(valor); // Asegurarse de parsear el JSON si es necesario
+            } catch (e) {
+                console.error('Error al parsear nombreIngles:', e);
+            }
+            dispatch(getInfoForUpdateName(valor)); // Llama al action con el valor obtenido
+            setShowUpdate(true); // Cambia a la vista de actualización
+            setShowSearch(false); // Oculta la vista de búsqueda
+        } else {
+            console.error('nombreIngles no se encuentra en localStorage');
+        }
+    };
+
+    React.useEffect(() => {
+        let isFrom = localStorage.getItem('isFromCreateImage');
+        if (isFrom) {
+            handleButtonClickFromCreate()
+        }
+    }, []);
 
     React.useEffect(() => {
         if (selected) {
@@ -51,24 +73,15 @@ export const Search = ({ changeTab }) => {
         }
     }, [selected]);
 
-    //tengo una idea de hacer una rta 
-    //donde solo busque lso nombre después busco el ave 
-    //que selecciona y si pone la info, para hacerlo mas rápido
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                setShowBackdrop(true)
-                setLoadingMessage('Cargando Todos las Reptiles Por Favor Espere...');
+                setShowBackdrop(true);
+                setLoadingMessage('Cargando Todos los Reptiles, por favor espere...');
                 const response = await axios.get('/reptiles/nombres');
-                const data = response.data;
-                // const validData = data.filter((item) => item.nombre_ingles);
-                // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
-                // validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
-                // localStorage.setItem('sData', JSON.stringify(validData));
-                setData(data);
+                setData(response.data);
             } catch (error) {
-                console.error("Error al obtener los datos:", error);
-
+                console.error('Error al obtener los datos:', error);
             } finally {
                 setShowBackdrop(false);
             }
@@ -90,14 +103,14 @@ export const Search = ({ changeTab }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         width: '170vh',
-                        height: '40vh',
+                        height: '30vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                        backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                        backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
                         marginTop: 'auto',
                         borderRadius: '10px',
                     }} >
-                        <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
-                            <Typography variant="h2" color="primary">
+                        <Grid item xs={12} sm={12} sx={{ mt: 0, mr: -50 }}>
+                            <Typography variant="h1" color="primary">
                                 Buscar Registro
                             </Typography>
                         </Grid>
@@ -115,18 +128,19 @@ export const Search = ({ changeTab }) => {
                                     />
                                 )}
 
-                                sx={{ mb: 3, mt: -10 }}
+                                sx={{ mb: 3, mt: -5 }}
                             />
                         </Grid>
                     </Grid>
                 </React.Fragment>
             )}
-            {showUpdate && < IndexTabsUpdates
-                changeTab={changeTab}
-                showUpdate={setShowUpdate}
-                showSearch={setShowSearch}
-                selected={setSelected}
-            />}
+            {showUpdate &&
+                < IndexTabsUpdates
+                    changeTab={changeTab}
+                    showUpdate={setShowUpdate}
+                    showSearch={setShowSearch}
+                    selected={setSelected}
+                />}
         </React.Fragment>
     );
 };

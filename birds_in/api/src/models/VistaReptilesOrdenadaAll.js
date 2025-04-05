@@ -15,11 +15,15 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        nombre_genero: {
+        nombre_familia: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        nombre_familia: {
+        nombre_order: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        nombre_grupo: {
             type: DataTypes.STRING,
             allowNull: false,
         },

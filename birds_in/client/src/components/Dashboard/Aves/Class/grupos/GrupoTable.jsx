@@ -203,6 +203,19 @@ export const GrupoTable = ({
                                         {editMode === index ? (
                                             <>
                                                 <Button
+                                                    onClick={handleCancelEdit}
+                                                    sx={{
+                                                        fontSize: '1rem',
+                                                        ml: 2,
+                                                        mt: 0.7,
+                                                        textTransform: 'none',
+                                                    }}
+                                                    variant="contained"
+                                                    color="error"
+                                                >
+                                                    Cancelar
+                                                </Button>
+                                                <Button
                                                     onClick={saveChanges}
                                                     sx={{
                                                         fontSize: '1rem',
@@ -216,19 +229,7 @@ export const GrupoTable = ({
                                                 >
                                                     Grabar
                                                 </Button>
-                                                <Button
-                                                    onClick={handleCancelEdit}
-                                                    sx={{
-                                                        fontSize: '1rem',
-                                                        ml: 2,
-                                                        mt: 0.7,
-                                                        textTransform: 'none',
-                                                    }}
-                                                    variant="contained"
-                                                    color="error"
-                                                >
-                                                    Cancelar
-                                                </Button>
+
                                             </>
                                         ) : (
                                             <Grid container sx={{ maxHeight: 450 }}>

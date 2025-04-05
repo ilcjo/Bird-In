@@ -98,7 +98,7 @@ export const Search = ({ changeTab }) => {
                         width: '170vh',
                         height: '30vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                        backdropFilter: 'blur(4px)',
+                        backdropFilter: 'blur(3px)',
                         marginTop: 'auto',
                         borderRadius: '10px',
                     }}>

@@ -282,4 +282,4 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             </Grid>
         </React.Fragment>
     );
-}
+};

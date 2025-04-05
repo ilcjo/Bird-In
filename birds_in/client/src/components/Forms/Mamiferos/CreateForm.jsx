@@ -73,7 +73,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         grupo: false,
         ingles: false,
     });
-    console.log(createData, 'info sde ahora')
+    // console.log(createData, 'info sde ahora')
     const handleImageChange = (event) => {
         const selectedImages = event.target.files;
         if (selectedImages.length > 0) {
@@ -416,7 +416,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -491,7 +491,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
                                 <TextField
                                     name="cientifico"
-                                    label="Nombre Científico"
+                                    label="Nombre científico"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
                                     type='text'

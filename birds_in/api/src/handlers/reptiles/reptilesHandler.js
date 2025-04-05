@@ -7,15 +7,35 @@ const {
    FTP_PASS_2,
 } = process.env
 
-const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateRegister, findDataById, findDataByName, sendAndUpdateRegister, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, getClassGrupoFamilia, findAllEnglishNames, findGroupNameDuplicate, findFamilyNameDuplicate } = require('../../controllers/reptiles/reptilesController');
-const { deletePhotoFromFTPReptiles } = require('../../services/deletFtp');
 const { VistaReptilesOrdenadaAll } = require('../../config/db/db');
+const { fetchFilterRegister, fetchOptions, filterOptionsPaisZonas, filterOptions, sendAndCreateRegister, findDataById, findDataByName, sendAndUpdateRegister, findPhotosId, setDbCover, getContadores, deleteRegistroDb, findNameDuplicate, getClassGrupoFamilia, findAllEnglishNames, findGroupNameDuplicate, findFamilyNameDuplicate, saveDbPhotoOrder, findOrdenNameDuplicate } = require('../../controllers/reptiles/reptilesController');
+const { deletePhotoFromFTPReptiles } = require('../../services/deletFtp');
 
 const getFilterInfo = async (req, res) => {
 
-   const { familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage } = req.query;
+   const {
+      orden,
+      familia,
+      grupo,
+      pais,
+      zonas,
+      nombreCientifico,
+      nombreIngles,
+      page,
+      perPage
+   } = req.query;
    try {
-      const allData = await fetchFilterRegister(familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage)
+      const allData = await fetchFilterRegister(
+         orden,
+         familia,
+         grupo,
+         pais,
+         zonas,
+         nombreCientifico,
+         nombreIngles,
+         page,
+         perPage
+      )
       if (allData.length === 0) {
          return res.status(404).json({ message: 'No se encontraron aves que cumplan con los criterios de búsqueda.' });
       }
@@ -37,30 +57,37 @@ const selectOptions = async (req, res) => {
 };
 
 const getFilterOptions = async (req, res,) => {
-   const { familia,
+   const {
+      orden,
+      familia,
       grupo,
-      nombreCientifico,
-      nombreIngles,
       pais,
       zonas,
+      nombreCientifico,
+      nombreIngles,
    } = req.query;
+   console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles, 'llegue')
    try {
       let newOptions;
       if (zonas || pais) {
          newOptions = await filterOptionsPaisZonas(familia,
+            orden,
+            familia,
             grupo,
-            nombreCientifico,
-            nombreIngles,
             pais,
             zonas,
+            nombreCientifico,
+            nombreIngles,
          );
       } else {
-         newOptions = await filterOptions(familia,
+         newOptions = await filterOptions(
+            orden,
+            familia,
             grupo,
-            nombreCientifico,
-            nombreIngles,
             pais,
             zonas,
+            nombreCientifico,
+            nombreIngles,
          );
       }
       return res.status(200).json(newOptions);
@@ -71,8 +98,9 @@ const getFilterOptions = async (req, res,) => {
 
 const createRegistro = async (req, res) => {
    const {
-      grupo,
+      order,
       familia,
+      grupo,
       pais,
       zona,
       cientifico,
@@ -85,15 +113,17 @@ const createRegistro = async (req, res) => {
    try {
 
       const successCreate = await sendAndCreateRegister(
-         grupo,
+         order,
          familia,
+         grupo,
          pais,
          zona,
          cientifico,
          ingles,
          comun,
          urlWiki,
-         urlImagen)
+         urlImagen
+      )
       return res.status(200).json(successCreate)
 
    } catch (error) {
@@ -188,8 +218,9 @@ const findInfoForUpdateName = async (req, res) => {
 
 const updateInfoRegister = async (req, res) => {
    const {
-      grupo,
+      order,
       familia,
+      grupo,
       pais,
       zona,
       cientifico,
@@ -202,8 +233,9 @@ const updateInfoRegister = async (req, res) => {
 
    try {
       const succesUpdate = await sendAndUpdateRegister(
-         grupo,
+         order,
          familia,
+         grupo,
          pais,
          zona,
          cientifico,
@@ -222,7 +254,7 @@ const updateInfoRegister = async (req, res) => {
 
 const deletePhotos = async (req, res) => {
    const { ids, urls } = req.body;
-   console.log(urls)
+   // console.log(urls)
    try {
       const deletedFtp = await deletePhotoFromFTPReptiles(urls);
 
@@ -298,8 +330,10 @@ const getExcel = async (req, res) => {
          { header: 'Nombre Inglés', key: 'nombre_ingles', width: 20 },
          { header: 'Nombre Científico', key: 'nombre_cientifico', width: 20 },
          { header: 'Nombre Común', key: 'nombre_comun', width: 20 },
-         { header: 'Nombre Genero', key: 'nombre_genero', width: 20 },
+         { header: 'Nombre Orden', key: 'nombre_orden', width: 20 },
+         { header: 'Nombre Order', key: 'nombre_order', width: 20 },
          { header: 'Nombre Familia', key: 'nombre_familia', width: 20 },
+         { header: 'Nombre Grupo', key: 'nombre_grupo', width: 20 },
          { header: 'Paises', key: 'paises', width: 20 },
          { header: 'Zonas', key: 'zonas', width: 20 },
          { header: 'URL Wiki', key: 'url_wiki', width: 20 },
@@ -314,8 +348,9 @@ const getExcel = async (req, res) => {
             nombre_ingles: registro.nombre_ingles,
             nombre_cientifico: registro.nombre_cientifico,
             nombre_comun: registro.nombre_comun,
-            nombre_genero: registro.nombre_genero,
             nombre_familia: registro.nombre_familia,
+            nombre_orden: registro.nombre_orden,
+            nombre_order: registro.nombre_order,
             paises: registro.paises,
             zonas: registro.zonas,
             url_wiki: registro.url_wiki,
@@ -349,9 +384,9 @@ const getAllNombres = async (req, res) => {
 };
 
 const checkClases = async (req, res) => {
-   const { familiaID, grupoID } = req.query
+   const { familiaID, orderID, grupoID } = req.query
    try {
-      const message = await getClassGrupoFamilia(familiaID, grupoID)
+      const message = await getClassGrupoFamilia(familiaID, orderID, grupoID)
       return res.status(200).json(message);
    } catch (error) {
       res.status(500).json({ error: error.message });
@@ -359,27 +394,42 @@ const checkClases = async (req, res) => {
 };
 
 const checkDuplicateNames = async (req, res) => {
-   const { grupoName, familiaName } = req.query;
+   const { grupoName, familiaName, ordenName } = req.query;
    try {
       if (grupoName) {
          const message = await findGroupNameDuplicate(grupoName);
+         return res.status(200).json({ message });
+      } else if (ordenName) {
+         console.log('llegue')
+         const message = await findOrdenNameDuplicate(ordenName);
          return res.status(200).json({ message });
       } else if (familiaName) {
          const message = await findFamilyNameDuplicate(familiaName);
          return res.status(200).json({ message });
       } else {
          // Si no se proporcionan ni grupoName ni familiaName, se devuelve un error
-         return res.status(400).json({ error: "Debe proporcionar un nombre de grupo o de familia." });
+         return res.status(400).json({ error: "Debe proporcionar un nombre nombre de order o de familia." });
       }
    } catch (error) {
       return res.status(500).json({ error: error.message });
    }
 };
+
+const saveOrderImages = async (req, res) => {
+   const { arrayImages } = req.body
+   // console.log('handler:',arrayImages)
+   try {
+      const newCover = await saveDbPhotoOrder(arrayImages)
+      return res.status(200).json(newCover);
+
+   } catch (error) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+   }
+};
+
 module.exports = {
-   checkClases,
    checkDuplicateNames,
-   getAllNombres,
-   getExcel,
+   checkClases,
    createRegistro,
    getFilterInfo,
    selectOptions,
@@ -392,7 +442,10 @@ module.exports = {
    setCoverPhoto,
    contandoRegistros,
    deleteRegistro,
-   checkRegisterDuplicate
+   checkRegisterDuplicate,
+   getAllNombres,
+   getExcel,
+   saveOrderImages
 
 }
 

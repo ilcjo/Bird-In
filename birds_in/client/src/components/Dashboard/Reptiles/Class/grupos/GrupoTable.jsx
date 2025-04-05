@@ -19,8 +19,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { eliminarGrupo, updateGrupo } from '../../../../../redux/mamiferos/actions/CrudClass';
-import { getOptionsDataM } from '../../../../../redux/mamiferos/actions/fetchOptions';
+import { eliminarGrupo, updateGrupo } from '../../../../../redux/reptiles/actions/CrudClass';
+import { getOptionsDataR } from '../../../../../redux/reptiles/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -52,15 +52,14 @@ export const GrupoTable = ({
 }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { grupos } = useSelector(state => state.filters.options);
-    console.log(grupos, 'orden;')
+    const { grupos } = useSelector(state => state.filterRep.options);
+
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
         idGrupo: 0
     });
     const [editMode, setEditMode] = React.useState(null);
     const [searchTerm, setSearchTerm] = React.useState('');
-
 
     const handleEditGrupo = (id, field, newValue) => {
         setNombreGrupos((prevValues) => ({
@@ -77,7 +76,7 @@ export const GrupoTable = ({
                 onloading(true);
                 loadingMessage('Eliminando...');
                 await dispatch(eliminarGrupo(id));
-                await dispatch(getOptionsDataM());
+                await dispatch(getOptionsDataR());
                 onloading(false);
                 successMessages('Grupo Eliminado');
                 showSnackBar(true);
@@ -105,7 +104,7 @@ export const GrupoTable = ({
             onloading(true);
             loadingMessage('Actualizando...');
             await dispatch(updateGrupo(nombreGrupos));
-            await dispatch(getOptionsDataM());
+            await dispatch(getOptionsDataR());
             onloading(false);
             successMessages('Grupo actualizado correctamente');
             showSnackBar(true);
@@ -203,7 +202,7 @@ export const GrupoTable = ({
                                             />
                                         ) : (
                                             item.nombre
-                                        )}
+                                        )}s 
                                     </TableCell>
                                     <TableCell align="center" colSpan={2} style={{ color: theme.palette.primary.light }}>
                                         {editMode === item.id ? (
@@ -221,7 +220,6 @@ export const GrupoTable = ({
                                                 >
                                                     Cancelar
                                                 </Button>
-
                                                 <Button
                                                     onClick={saveChanges}
                                                     sx={{
@@ -236,6 +234,7 @@ export const GrupoTable = ({
                                                 >
                                                     Grabar
                                                 </Button>
+
 
                                             </>
                                         ) : (

@@ -27,10 +27,10 @@ export const FamiliaAddForm = ({
         // Verificar si el nombre de la familia está vacío
         if (!nombreF.trim()) {
             showErrorSnack(true);
-            errorMessage('El nombre de la familia no puede estar vacío.');
+            errorMessage('El nombre de la Familia no puede estar vacío.');
             return;
         }
-        
+
         try {
             onloading(true);
             loadingMessage('Chequeando...');
@@ -59,28 +59,6 @@ export const FamiliaAddForm = ({
         }
     };
 
-    const labelStyles = {
-        color: theme.palette.primary.main,
-        marginTop: '-10px',
-    };
-
-    const inputStyles = {
-        color: theme.palette.primary.light,
-        backgroundColor: 'rgba(204,214,204,0.17)',
-        borderRadius: '9px',
-        height: '60px',
-        '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '10px',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'none',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main,
-            backgroundColor: 'rgba(0,56,28,0.22)',
-        },
-    };
 
     return (
         <div>
@@ -91,28 +69,20 @@ export const FamiliaAddForm = ({
                 mb: 0
             }}>
                 <Grid item xs={12} sm={9}>
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
+                    <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
                         Agregar Nueva Familia
-                        <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+                        <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
                     </Typography>
                 </Grid>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={12}>
                     <TextField
                         fullWidth
                         label="Nombre de Familia"
                         value={nombreFamilia.nombreF}
                         onChange={(e) => setNombreFamilia({ ...nombreFamilia, nombreF: e.target.value })}
-                        InputLabelProps={{
-                            sx: labelStyles,
-                        }}
-                        InputProps={{
-                            sx: inputStyles,
-                        }}
                     />
-                </Grid>
-                <Grid item xs={12} md={2}>
                     <Button
-                        sx={{ mt: -1.5 }}
+                        sx={{ mt: 1 }}
                         variant="contained"
                         color="primary"
                         startIcon={<AddIcon />}

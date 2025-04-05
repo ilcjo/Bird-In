@@ -1,22 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  //familia grupo zona  y pais //filt+ create+
   options: [],
-  saveOptions: [],
   extraOptions: [],
+  saveOptions: [],
   filtersOn: false,
-  noMoreResults: true,//filt+det+main
-  currentFilters: { //filt+
-    grupo: [],
+  noMoreResults: true,
+  currentFilters: {
+    orden: [],
     familia: [],
+    grupo: [],
     pais: [],
     zona: [],
     cientifico: [],
     ingles: [],
   },
   filters: '',
-  copyFilters: {},//gilt+det+main
+  copyFilters: {},
   currentPage: 0
 };
 
@@ -36,10 +36,11 @@ export const filtersRep = createSlice({
       state.currentPage = action.payload
     },
     saveFilters: (state, action) => {
-      const { grupo, familia, pais, cientifico, ingles, zona } = action.payload
+      const { orden, familia, grupo, pais, cientifico, ingles, zona } = action.payload
       state.currentFilters = {
-        grupo: grupo.map(option => ({ id: option.id, nombre: option.nombre })),
+        orden: orden.map(option => ({ id: option.id, nombre: option.nombre })),
         familia: familia.map(option => ({ id: option.id, nombre: option.nombre })),
+        grupo: grupo.map(option => ({ id: option.id, nombre: option.nombre })),
         pais: pais.map(option => ({ id: option.id, nombre: option.nombre })),
         zona: zona.map(option => ({ id: option.id, nombre: option.nombre })),
         cientifico: cientifico.map(option => ({ id: option.id, nombre: option.nombre })),
@@ -51,8 +52,9 @@ export const filtersRep = createSlice({
     },
     resetCurrentFilters: (state) => {
       state.currentFilters = {
-        grupo: [],
+        orden: [],
         familia: [],
+        grupo: [],
         pais: [],
         zona: [],
         cientifico: [],
@@ -78,12 +80,18 @@ export const filtersRep = createSlice({
         grupos: action.payload.grupos
       };
     },
+    updateOrdersOptions: (state, action) => {
+      state.extraOptions = {
+        orders: action.payload.orders
+      };
+    },
   },
 });
 
 export const {
   updateFamiliaOptions,
   updateGrupoOptions,
+  updateOrdersOptions,
   fetchOptions,
   newOptions,
   saveFilters,
