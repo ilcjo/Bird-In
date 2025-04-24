@@ -72,7 +72,7 @@ export const clasesOrder = (id) => {
   }
 };
 
-export const clasesGrupo = (idgrupo) => {
+export const clasesGrupos = (idgrupo) => {
   // console.log('llegue', idgrupo)
   return async (dispatch) => {
     try {

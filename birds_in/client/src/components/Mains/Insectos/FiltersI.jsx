@@ -152,9 +152,9 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             <Grid component={Box}
                 sx={{
                     height: 'auto',
-                    borderRadius: '20px 20px 20px 20px',
+                    borderRadius: '20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
-                    padding: { xs: 0, md: 2 },
+                    padding: { xs: 0, md: 1 },
                 }} >
                 <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1, mt: -1 }}>
@@ -415,15 +415,17 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 margin: '20px auto', // Centrar horizontalmente el Stack
                                 width: 'fit-content', // Ajustar el ancho al contenido
                             }} >
-                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
-                                Mostrar
+                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
+                                < CloseIcon /> Cerrar
                             </Button>
                             <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
                                 Resetear
                             </Button>
-                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
-                                < CloseIcon /> Cerrar
+
+                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                                Mostrar
                             </Button>
+
                         </Stack>
                     </Grid>
                 </Grid >

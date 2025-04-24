@@ -40,7 +40,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
           <React.Fragment key={index}>
             <Grid container spacing={1}>
               <Grid item xs={3.5}>
-                <Typography variant="h4" color='primary.light'>
+                <Typography variant="h4" color='white'>
                   PAÍS:
                   <Typography variant='h1' color='primary' sx={{ mb: 0 }}>
                     {data.paise.nombre || 'N/A'}
@@ -81,7 +81,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
               </Grid>
 
               <Grid item xs={7}>
-                <Typography variant="h4" color='primary.light'>
+                <Typography variant="h4" color='white'>
                   ZONA:
                   <Typography variant='h1' color='primary'>
                     {data.zona.nombre || 'N/A'}

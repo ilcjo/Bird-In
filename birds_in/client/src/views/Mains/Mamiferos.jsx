@@ -113,7 +113,7 @@ export const Mamiferos = () => {
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={true}
-          // maxWidth='md'
+          maxWidth='xs'
         >
           <Filters isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>

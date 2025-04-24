@@ -237,8 +237,8 @@ const updateInfoRegister = async (req, res) => {
    try {
       const succesUpdate = await sendAndUpdateRegister(
          order,
-         familia,
          grupo,
+         familia,
          pais,
          zona,
          cientifico,

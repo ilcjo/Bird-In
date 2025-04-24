@@ -22,7 +22,7 @@ export const LandsCapes = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, infoLands, filtersP, noMoreResults, oneLand, total } = useSelector(state => state.landscapeSlice)
+  const { loading, infoLands, filtersP, noMoreResults, oneLand, total, saltar } = useSelector(state => state.landscapeSlice)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
@@ -48,8 +48,13 @@ export const LandsCapes = () => {
   };
 
   React.useEffect(() => {
-    dispatch(resetInfoLand());
-    dispatch(isOneLand(null))
+    if (saltar) {
+      setFilterDialogOpen(false)
+    } else {
+      dispatch(resetInfoLand());
+      dispatch(isOneLand(null))
+    }
+
   }, []);
 
   React.useEffect(() => {
@@ -90,25 +95,25 @@ export const LandsCapes = () => {
         }}
       >
         {!isFilterDialogOpen && infoLands.length > 1 && (
-        <Fab
-          variant="extended"
-          size="medium"
-          color="primary"
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-            zIndex: 1000,
-            fontWeight: 'bold',
-            '&:hover': {
-              color: 'white',
-            }
-          }}
-          onClick={stepBack}
-        >
-          <ArrowBackIcon sx={{ mr: 1 }} />
-          Regresar
-        </Fab>
+          <Fab
+            variant="extended"
+            size="medium"
+            color="primary"
+            sx={{
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+              zIndex: 1000,
+              fontWeight: 'bold',
+              '&:hover': {
+                color: 'white',
+              }
+            }}
+            onClick={stepBack}
+          >
+            <ArrowBackIcon sx={{ mr: 1 }} />
+            Regresar
+          </Fab>
         )}
         <Dialog
           open={isFilterDialogOpen}

@@ -17,6 +17,7 @@ const initialState = {
     oneLand: false,
     loading: false,
     total: 0,
+    saltar: false,
 };
 
 export const landscapeSlice = createSlice({
@@ -24,6 +25,9 @@ export const landscapeSlice = createSlice({
     initialState,
 
     reducers: {
+        isSaltar: (state, action) => {
+            state.saltar = action.payload
+        },
         fetchInfo: (state, action) => {
             state.infoLands = action.payload
         },
@@ -93,6 +97,6 @@ export const landscapeSlice = createSlice({
 });
 
 export const {
-    fetchInfo, copyInfo, loadMoreDataSuccess, fetchOptions, returnFilters, newOptions, setCurrentPage, saveFilters, stringParameter, searchBarResult, resetCurrentFilters, saveOptionsP, resetInfoLand, setNoMoreResults, saveCounting, copingFilters, isOneLand, howMuch, cargando
+    isSaltar, fetchInfo, copyInfo, loadMoreDataSuccess, fetchOptions, returnFilters, newOptions, setCurrentPage, saveFilters, stringParameter, searchBarResult, resetCurrentFilters, saveOptionsP, resetInfoLand, setNoMoreResults, saveCounting, copingFilters, isOneLand, howMuch, cargando
 } = landscapeSlice.actions;
 export default landscapeSlice.reducer;

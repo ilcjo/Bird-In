@@ -127,7 +127,7 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     padding: { xs: 0, md: 2 },
                 }} >
                 <Grid item >
-                    <Typography variant="h2" color='primary.light' sx={{ m: 1, mt: -1 }}>
+                    <Typography variant="h2" color='white' sx={{ m: 1, mt: -1 }}>
                         Búsqueda Avanzada
                     </Typography>
                 </Grid>
@@ -159,15 +159,16 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             margin: '20px auto', // Centrar horizontalmente el Stack
                             width: 'fit-content', // Ajustar el ancho al contenido
                         }} >
-                        <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
-                            Mostrar
+                        <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
+                            < CloseIcon /> Cerrar
                         </Button>
                         <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
                             Resetear
                         </Button>
-                        <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
-                            < CloseIcon /> Cerrar
+                        <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                            Mostrar
                         </Button>
+
                     </Stack>
                 </Grid>
             </Grid >

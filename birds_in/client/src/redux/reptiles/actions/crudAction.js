@@ -16,6 +16,7 @@ export const createRegistro = (formData) => {
 };
 
 export const actualizarRegistro = (info) => {
+  console.log(info, 'enviar al back')
   return async (dispatch) => {
     try {
       const response = await axios.put('reptiles/update', info)

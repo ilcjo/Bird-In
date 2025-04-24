@@ -27,7 +27,7 @@ import { Loading } from '../../utils/Loading';
 //redux
 import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/reptiles/actions/crudAction';
 import { UpdateImage } from '../../../redux/reptiles/actions/photosAction';
-import { clasesFamilia, clasesGrupo } from '../../../redux/reptiles/actions/fetchOptions';
+import { clasesFamilia, clasesGrupos, clasesOrder } from '../../../redux/reptiles/actions/fetchOptions';
 
 
 export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, selected, changeImagenExist }) => {
@@ -39,7 +39,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const { infoForUpdate } = useSelector(state => state.updateReptil)
     console.log(infoForUpdate, 'esto es la info')
     const initialCreateData = {
-        order: infoForUpdate.order_reptil || null,
+        order: infoForUpdate.order_reptile || null,
         familia: infoForUpdate.familias_reptile || null,
         grupo: infoForUpdate.grupos_reptile || null,
         pais: infoForUpdate.paises || [],

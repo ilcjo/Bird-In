@@ -647,8 +647,8 @@ const findDataByName = async (name) => {
                     }, // Atributos que deseas de Paises
                 },
                 { model: Order_reptiles, attributes: ['nombre', ['id_order', 'id',], ['nombre_comun', 'comun']] },
-                { model: Grupos_reptiles, attributes: ['nombre', ['id_grupo', 'id']] },
                 { model: Familias_reptiles, attributes: ['nombre', ['id_familia', 'id']] },
+                { model: Grupos_reptiles, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
             attributes: [
                 'id_reptil',
@@ -681,6 +681,7 @@ const sendAndUpdateRegister = async (
     idRegistro,
     image_orden
 ) => {
+    console.log('GRUPO:->',grupo)
     try {
         // Obtener el registro existente de la base de datos
         const existingInsect = await Reptiles.findOne({

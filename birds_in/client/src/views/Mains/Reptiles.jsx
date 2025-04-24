@@ -113,7 +113,7 @@ export const Reptiles = () => {
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={true}
-        // maxWidth='md'
+          maxWidth='xs'
         >
           <FiltersR isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>

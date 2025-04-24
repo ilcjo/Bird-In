@@ -189,7 +189,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     padding: { xs: 0, md: 2 },
                 }} >
                 <Grid item >
-                    <Typography variant="h2" color='primary.light' sx={{ m: 1, mt: -1 }}>
+                    <Typography variant="h2" color='white' sx={{ m: 1, mt: -1 }}>
                         Búsqueda Avanzada
                     </Typography>
                 </Grid>
@@ -203,56 +203,57 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             onChange={(newValue) => handleOptionChange('familia', newValue)}
                             loading={isFetchingOptions}
                         />
-                        <Grid />
-                        <Grid item xs={12} >
-                            <AutocompleteFilter
-                                label="Grupo"
-                                options={grupos}
-                                value={selectOption.grupo}
-                                onChange={(newValue) => handleOptionChange('grupo', newValue)}
-                                loading={isFetchingOptions}
-                            />
-                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} >
+                        <AutocompleteFilter
+                            label="Grupo"
+                            options={grupos}
+                            value={selectOption.grupo}
+                            onChange={(newValue) => handleOptionChange('grupo', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
 
-                        <Grid item xs={12}>
-                            {/*Pais */}
-                            <AutocompleteFilter
-                                label="Países"
-                                loading={isFetchingOptions}
-                                value={selectOption.pais}
-                                onChange={(newValue) => handleOptionChange('pais', newValue)}
-                                options={paises || []}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* Zona */}
-                            <AutocompleteFilter
-                                label="Zonas"
-                                loading={isFetchingOptions}
-                                value={selectOption.zona}
-                                onChange={(newValue) => handleOptionChange('zona', newValue)}
-                                options={zonas || []}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* Científico */}
-                            <AutocompleteFilter
-                                label="Nombre científico"
-                                value={selectOption.cientifico}
-                                onChange={(newValue) => handleOptionChange('cientifico', newValue)}
-                                options={nCientifico || []}
-                                loading={isFetchingOptions}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <AutocompleteFilter
-                                label="Nombre en Ingles"
-                                value={selectOption.ingles}
-                                onChange={(newValue) => handleOptionChange('ingles', newValue)}
-                                options={nIngles || []}
-                                loading={isFetchingOptions}
-                            />
-                        </Grid>
+                    <Grid item xs={12}>
+                        {/*Pais */}
+                        <AutocompleteFilter
+                            label="Países"
+                            loading={isFetchingOptions}
+                            value={selectOption.pais}
+                            onChange={(newValue) => handleOptionChange('pais', newValue)}
+                            options={paises || []}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        {/* Zona */}
+                        <AutocompleteFilter
+                            label="Zonas"
+                            loading={isFetchingOptions}
+                            value={selectOption.zona}
+                            onChange={(newValue) => handleOptionChange('zona', newValue)}
+                            options={zonas || []}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        {/* Científico */}
+                        <AutocompleteFilter
+                            label="Nombre científico"
+                            value={selectOption.cientifico}
+                            onChange={(newValue) => handleOptionChange('cientifico', newValue)}
+                            options={nCientifico || []}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Nombre en Ingles"
+                            value={selectOption.ingles}
+                            onChange={(newValue) => handleOptionChange('ingles', newValue)}
+                            options={nIngles || []}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
                         <Stack spacing={1} direction="row" justifyContent="center"
                             alignItems="center"
                             sx={{

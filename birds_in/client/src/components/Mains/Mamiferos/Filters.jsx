@@ -163,22 +163,19 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     }, []);
     return (
         <React.Fragment>
-            <Grid
-                component={Box}
+            <Grid component={Box}
                 sx={{
                     height: 'auto',
                     borderRadius: '20px',
                     backgroundColor: 'rgba(0, 61, 21, 0.0)',
-                    padding: { xs: 0, md: 2 },
-                }}
-            >
+                    padding: { xs: 0, md: 1 },
+                }}>
                 <Grid item>
-                    <Typography variant="h2" color="primary.light" sx={{ m: 1, mt: -1 }}>
+                    <Typography variant="h2" color="white" sx={{ m: 1, mt: -1 }}>
                         Búsqueda Avanzada
                     </Typography>
                 </Grid>
-
-                <Grid container alignItems="center" >
+                <Grid container alignItems="center">
                     {/* Orden */}
                     <Grid item xs={12}>
                         <AutocompleteFilter
@@ -256,30 +253,29 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             loading={isFetchingOptions}
                         />
                     </Grid>
-                </Grid>
 
-                {/* Botones */}
-                <Stack
-                    spacing={1}
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    sx={{
-                        margin: '20px auto',
-                        // width: 'fit-content',
-                    }}
-                >
-                    <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
-                        <CloseIcon /> Cerrar
-                    </Button>
-                    <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
-                        Resetear
-                    </Button>
-                    <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
-                        Mostrar
-                    </Button>
-                </Stack>
+                    {/* Botones */}
+                    <Grid item xs={12}>
+                        <Stack
+                            spacing={1}
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{ margin: '20px auto' }}
+                        >
+                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
+                                <CloseIcon /> Cerrar
+                            </Button>
+                            <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
+                                Resetear
+                            </Button>
+                            <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                                Mostrar
+                            </Button>
+                        </Stack>
+                    </Grid>
+                </Grid>
             </Grid>
-        </React.Fragment>
+        </React.Fragment >
     );
 };

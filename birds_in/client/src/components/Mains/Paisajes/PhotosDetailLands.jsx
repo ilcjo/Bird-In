@@ -10,7 +10,7 @@ import { HeaderLand } from './HeaderLand';
 import { Loading } from '../../utils/Loading';
 //redux
 import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
-import { resetInfoLand, setNoMoreResults } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { isSaltar, resetInfoLand, setNoMoreResults } from '../../../redux/paisaje/slicesP/LandscapeSlice';
 import { CopyRight } from '../../CopyRight';
 
 export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
@@ -49,6 +49,7 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
     React.useEffect(() => {
         // Restablece noMoreResults a false cuando se render el componente
         dispatch(setNoMoreResults(true));
+        dispatch(isSaltar(false))
     }, [dispatch]);
 
     React.useEffect(() => {

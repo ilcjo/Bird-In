@@ -25,7 +25,7 @@ import { StyledTextField } from '../../../assets/styles/MUIstyles';
 //redux
 import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/reptiles/actions/crudAction';
 import { saveImageFtp } from '../../../redux/reptiles/actions/photosAction';
-import { clasesFamilia, clasesGrupo, clasesOrder } from '../../../redux/reptiles/actions/fetchOptions';
+import { clasesFamilia, clasesGrupos, clasesOrder } from '../../../redux/reptiles/actions/fetchOptions';
 
 
 export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {

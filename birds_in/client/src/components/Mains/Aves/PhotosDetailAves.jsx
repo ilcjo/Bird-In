@@ -21,6 +21,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
     const mainImage = featuredImage ? encodeURI(featuredImage.url) : null;
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..');
+   
 
     const stepBack = () => {
         setShowBackdrop(true);

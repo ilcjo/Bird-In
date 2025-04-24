@@ -231,11 +231,12 @@ const updateInfoRegister = async (req, res) => {
       id,
    } = req.body;
 
+   console.log('GRUPO:->',grupo, 'ID:_>',id)
    try {
       const succesUpdate = await sendAndUpdateRegister(
          order,
-         familia,
          grupo,
+         familia,
          pais,
          zona,
          cientifico,

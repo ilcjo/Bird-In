@@ -15,6 +15,7 @@ import { Loading } from '../../components/utils/Loading'
 import { isOneBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
 import { loadMoreData } from '../../redux/birds/actions/infoAction';
 import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves';
+import { getOptionsDataP } from '../../redux/paisaje/actionsP/fetchOptionsLand';
 
 export const Aves = () => {
 
@@ -49,6 +50,7 @@ export const Aves = () => {
   React.useEffect(() => {
     dispatch(resetInfoBird());
     dispatch(isOneBird(null))
+    dispatch(getOptionsDataP());
   }, []);
 
   React.useEffect(() => {
@@ -115,7 +117,7 @@ export const Aves = () => {
           open={isFilterDialogOpen}
           onClose={() => { }}
           fullWidth={false}
-        // maxWidth='md'
+          maxWidth='xs'
         >
           <FiltersAves isFilterOpen={isFilterDialogOpen} setIsFilterOpen={setFilterDialogOpen} pages={setPage} />
         </Dialog>
