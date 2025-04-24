@@ -185,11 +185,11 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                                 // to={'/paisajes'}
                                 style={{
                                   textDecoration: 'underline',
-                                  color: theme.palette.main,
+                                  color: theme.palette.primary.main,
                                   cursor: 'pointer',
                                 }}
                                 onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-                                onMouseLeave={e => (e.target.style.color = '')}
+                                onMouseLeave={e => (e.target.style.color = theme.palette.primary.main)}
                               >
                                 {nombre}
                               </Link>
@@ -238,11 +238,11 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                                 // to={'/paisajes'}
                                 style={{
                                   textDecoration: 'underline',
-                                  color: theme.palette.main,
+                                  color:  theme.palette.primary.main,
                                   cursor: 'pointer',
                                 }}
                                 onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-                                onMouseLeave={e => (e.target.style.color = '')}
+                                onMouseLeave={e => (e.target.style.color =  theme.palette.primary.main)}
                               >
                                 {nombre}
                               </Link>
