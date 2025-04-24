@@ -10,6 +10,11 @@ const serverName = 'APIBird';
 server.set('serverName', serverName);
 
 server.use(cookieParser());
+// 🔥 Este middleware evita que el navegador use su caché
+server.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
 server.use(express.urlencoded({ extended: true, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
 server.use(morgan('dev'));

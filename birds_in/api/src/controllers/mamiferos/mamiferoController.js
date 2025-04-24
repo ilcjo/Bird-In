@@ -24,11 +24,17 @@ const buildWhereClause = (familia, order, grupo, nombreCientifico, nombreIngles)
         const orderArray = grupo.split(',').map(Number);
         whereClause.grupos_id_grupo = orderArray;
     }
+    // if (nombreCientifico) {
+    //     whereClause.nombre_cientifico = { [Op.like]: `${nombreCientifico}%` };
+    // }
     if (nombreCientifico) {
-        whereClause.nombre_cientifico = { [Op.like]: `${nombreCientifico}%` };
+        whereClause.nombre_cientifico = nombreCientifico;
     }
+    // if (nombreIngles) {
+    //     whereClause.nombre_ingles = { [Op.like]: `${nombreIngles}%` };
+    // }
     if (nombreIngles) {
-        whereClause.nombre_ingles = { [Op.like]: `${nombreIngles}%` };
+        whereClause.nombre_ingles = nombreIngles;
     }
     return whereClause;
 };
@@ -565,6 +571,7 @@ const sendAndCreateRegister = async (
 };
 
 const findDataById = async (id) => {
+    console.log('llegue controler con id')
     try {
         const registro = await Mamiferos.findOne({
             where: { id_mamifero: id },
@@ -605,6 +612,7 @@ const findDataById = async (id) => {
                 'url_wiki',],
             order: [[{ model: Imagenes_mamiferos }, 'orden_imagenes', 'ASC']],  // Atributos de Mamiferos que deseas
         });
+        // console.log(registro, '<--encontrado')
         return registro;
     } catch (error) {
         // Manejar errores de consulta
@@ -679,6 +687,9 @@ const sendAndUpdateRegister = async (
     idRegistro,
     image_orden
 ) => {
+    console.log("Entró a sendAndUpdateRegister");
+    console.log('llegue par actualizar el registro CONTROLLER: ',
+        order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
     try {
         // Obtener el registro existente de la base de datos
         const existingInsect = await Mamiferos.findOne({
@@ -701,7 +712,7 @@ const sendAndUpdateRegister = async (
             familias_id_familia: familia.id !== existingInsect.familias_id_familia ? familia.id : undefined,
             grupos_id_grupo: grupo.id !== existingInsect.grupos_id_grupo ? grupo.id : undefined,
         };
-
+        console.log(cambios, 'cambios de la data')
         // Filtrar valores undefined
         const cambiosFiltrados = Object.fromEntries(Object.entries(cambios).filter(([key, value]) => value !== undefined));
 

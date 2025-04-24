@@ -25,11 +25,17 @@ const buildWhereClause = (familia, order, grupo, nombreCientifico, nombreIngles)
         whereClause.grupos_id_grupo = grupoArray;
     }
     if (nombreCientifico) {
-        whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
+        whereClause.nombre_cientifico = nombreCientifico;
     }
     if (nombreIngles) {
-        whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
+        whereClause.nombre_ingles = nombreIngles;
     }
+    // if (nombreCientifico) {
+    //     whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
+    // }
+    // if (nombreIngles) {
+    //     whereClause.nombre_ingles = { [Op.like]: `%${nombreIngles}%` };
+    // }
     return whereClause;
 };
 
@@ -681,8 +687,11 @@ const sendAndUpdateRegister = async (
     idRegistro,
     image_orden
 ) => {
-    console.log('GRUPO:->',grupo)
+   
     try {
+        console.log("Entró a sendAndUpdateRegister");
+        console.log('llegue par actualizar el registro CONTROLLER: ',
+            order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
         // Obtener el registro existente de la base de datos
         const existingInsect = await Reptiles.findOne({
             where: {

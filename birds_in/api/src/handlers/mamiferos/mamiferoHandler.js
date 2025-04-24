@@ -22,7 +22,7 @@ const getAllNombres = async (req, res) => {
 };
 
 const getFilterInfo = async (req, res) => {
-
+   console.log('HANDLER LLEGUE HOLI')
    const {
       orden,
       familia,
@@ -188,6 +188,7 @@ const uploadImageftp = async (req, res) => {
 
 const findInfoForUpdate = async (req, res) => {
    const { id } = req.query;
+   console.log('llegue handler findInfoForUpdate RUTA /get_update ')
    try {
       if (!id) {
          return res.status(400).json({ error: 'ID de Registro no proporcionado' });
@@ -235,10 +236,12 @@ const updateInfoRegister = async (req, res) => {
    } = req.body;
 
    try {
+      console.log('llegue par actualizar el registro handler: ',
+         order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
       const succesUpdate = await sendAndUpdateRegister(
          order,
-         grupo,
          familia,
+         grupo,
          pais,
          zona,
          cientifico,

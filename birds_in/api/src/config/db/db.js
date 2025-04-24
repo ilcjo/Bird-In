@@ -13,7 +13,7 @@ const {
 } = process.env
 
 const db = new Sequelize(`mariadb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
-  logging: process.env.NODE_ENV !== 'production' ? console.log : false,
+  logging: process.env.NODE_ENV !== 'production' ? console.log : true,
   dialectOptions: {
     connectTimeout: 30000, // Aumenta el tiempo de conexión a 30 segundos (30000 ms)
   },
@@ -74,13 +74,15 @@ Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
 Paises.hasOne(Paisajes, { foreignKey: 'paises_id_pais' });
 Paisajes.belongsTo(Zonas, { foreignKey: 'zonas_id_zona' });
 Zonas.hasOne(Paisajes, { foreignKey: 'zonas_id_zona' });
+
 // => MAMÍFEROS
 Mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' })
-Familias_mamiferos.hasOne(Mamiferos, { foreignKey: 'familias_id_familia' })
+Familias_mamiferos.hasMany(Mamiferos, { foreignKey: 'familias_id_familia' })
 Mamiferos.belongsTo(Order_mamiferos, { foreignKey: 'orders_id_order' })
-Order_mamiferos.hasOne(Mamiferos, { foreignKey: 'orders_id_order' })
+Order_mamiferos.hasMany(Mamiferos, { foreignKey: 'orders_id_order' })
 Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'grupos_id_grupo' })
-Grupos_mamiferos.hasOne(Mamiferos, { foreignKey: 'grupos_id_grupo' })
+Grupos_mamiferos.hasMany(Mamiferos, { foreignKey: 'grupos_id_grupo' })
+
 // => MAMÍFEROS
 // // Nueva relación: Una familia tiene muchos grupos
 // Familias_mamiferos.hasMany(Grupos_mamiferos, { foreignKey: 'familias_id_familia' });
@@ -91,17 +93,17 @@ Grupos_mamiferos.hasOne(Mamiferos, { foreignKey: 'grupos_id_grupo' })
 
 // =>REPTILES
 Reptiles.belongsTo(Familias_reptiles, { foreignKey: 'familias_id_familia' })
-Familias_reptiles.hasOne(Reptiles, { foreignKey: 'familias_id_familia' })
+Familias_reptiles.hasMany(Reptiles, { foreignKey: 'familias_id_familia' })
 Reptiles.belongsTo(Order_reptiles, { foreignKey: 'orders_id_order' })
-Order_reptiles.hasOne(Reptiles, { foreignKey: 'orders_id_order' })
-Reptiles.belongsTo(Grupos_reptiles, { foreignKey: 'orders_id_order' })
-Grupos_reptiles.hasOne(Reptiles, { foreignKey: 'orders_id_order' })
+Order_reptiles.hasMany(Reptiles, { foreignKey: 'orders_id_order' })
+Reptiles.belongsTo(Grupos_reptiles, { foreignKey: 'grupos_id_grupo' })
+Grupos_reptiles.hasMany(Reptiles, { foreignKey: 'grupos_id_grupo' })
 
 // // =>INSECTOS
 Insectos.belongsTo(Familias_insectos, { foreignKey: 'familias_id_familia' })
-Familias_insectos.hasOne(Insectos, { foreignKey: 'familias_id_familia' })
+Familias_insectos.hasMany(Insectos, { foreignKey: 'familias_id_familia' })
 Insectos.belongsTo(Grupos_insectos, { foreignKey: 'orders_id_order' })
-Grupos_insectos.hasOne(Insectos, { foreignKey: 'orders_id_order' })
+Grupos_insectos.hasMany(Insectos, { foreignKey: 'orders_id_order' })
 
 // UNO A MUCHOS
 
