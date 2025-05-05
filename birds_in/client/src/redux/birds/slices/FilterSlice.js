@@ -16,7 +16,8 @@ const initialState = {
   },
   filters: '',
   copyFilters: {},
-  currentPage: 0
+  currentPage: 0,
+  
 };
 
 export const filter = createSlice({
@@ -24,7 +25,7 @@ export const filter = createSlice({
   initialState,
 
   reducers: {
-
+    
     fetchOptions: (state, action) => {
       state.options = action.payload
     },

@@ -21,7 +21,7 @@ export const Aves = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, infoBirds, oneBird, total } = useSelector(state => state.birdSlice)
+  const { loading, infoBirds, oneBird, total, saltar } = useSelector(state => state.birdSlice)
   const { filters, noMoreResults } = useSelector(state => state.filterSlice)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
@@ -48,9 +48,13 @@ export const Aves = () => {
   };
 
   React.useEffect(() => {
-    dispatch(resetInfoBird());
-    dispatch(isOneBird(null))
-    dispatch(getOptionsDataP());
+    if (saltar) {
+      setFilterDialogOpen(false)
+    } else {
+      dispatch(resetInfoBird());
+      dispatch(isOneBird(null))
+      dispatch(getOptionsDataP());
+    }
   }, []);
 
   React.useEffect(() => {

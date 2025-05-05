@@ -5,11 +5,11 @@ import { setNoMoreResults } from "../slices/FilterSlice";
 import { createParams } from "../../../components/utils/convertId";
 
 export const sendParameter = (selectedOptions) => {
-    // console.log(selectedOptions, 'soy parámetros que llegan')
+    console.log(selectedOptions, 'soy parámetros reptiles que llegan')
     return async (dispatch) => {
         try {
             const queryParams = createParams(selectedOptions)
-            // console.log(queryParams, 'soy query params')
+            console.log(queryParams, 'soy query params')
             const response = await axios.get(`/reptiles/filtros?${queryParams}`);
             const data = response.data.registrosFiltrados;
             const result = response.data.isLastPage

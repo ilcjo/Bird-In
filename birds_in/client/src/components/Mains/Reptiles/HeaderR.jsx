@@ -1,10 +1,52 @@
 import * as React from 'react'
-import { Box, Button, Divider, Grid, Typography, useTheme, } from '@mui/material'
+import { Box, Button, Divider, Grid, Tooltip, Typography, useTheme, } from '@mui/material'
 import { formatData } from '../../utils/formatDetail';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
+import { copingFilters, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
 
 export const HeaderR = ({ imageUrl, registro, back }) => {
+  const { paises = [], zonas = [] } = useSelector(state => state.landscapeSlice.optionsP)
   const theme = useTheme()
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const handleClick = async (e, tipo, nombre) => {
+    e.preventDefault();
+
+    const optionList = tipo === 'pais' ? paises : zonas;
+    const selectedItem = optionList.find(item => item.nombre === nombre);
+
+    if (!selectedItem) {
+      console.warn('No se encontró el item en las opciones');
+      return;
+    }
+
+    const selectedOption = tipo === 'pais'
+      ? { pais: [selectedItem] }
+      : { zona: [selectedItem] };
+
+    try {
+      const resultLength = await dispatch(sendParameterP(selectedOption));
+
+      // Armar el payload para saveFilters
+      const filtersPayload = {
+        pais: tipo === 'pais' ? [selectedItem] : [],
+        zona: tipo === 'zona' ? [selectedItem] : [],
+      };
+
+      dispatch(saveFilters(filtersPayload));
+      dispatch(copingFilters());
+      dispatch(isSaltar(true));
+
+      dispatch(isOneLand(resultLength === 1));
+
+      navigate('/paisajes');
+    } catch (error) {
+      console.error('Error al registrar visita', error);
+    }
+  };
   // console.log('q',registro)
   return (
     <Box
@@ -55,18 +97,18 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
                 <Typography variant='h5' color='white' sx={{ mb: 1, mt: -2 }}>
-                  ORDEN: {data.order_reptile?.nombre || 'N/A'} - {data.order_reptile?.nombre_comun || 'N/A'}
+                  ORDEN {data.order_reptile?.nombre || 'N/A'} - {data.order_reptile?.nombre_comun || 'N/A'}
                 </Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography variant='body1' color='primary.light' sx={{ mb: 1, mt: -2 }}>
-                  {data.familias_reptile.nombre || 'N/A'} / {data.grupos_reptile?.nombre || 'N/A'}
+                  {data.familias_reptile?.nombre || 'N/A'} / {data.grupos_reptile?.nombre || 'N/A'}
                 </Typography>
               </Grid>
 
               <Grid item xs={12} >
                 <Typography variant="h5" color='white' >
-                  NOMBRE EN INGLÉS:
+                  NOMBRE EN INGLÉS
                 </Typography>
                 <Typography variant='h1' color='primary' >
                   {data.nombre_ingles || 'N/A'}
@@ -90,20 +132,20 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
               </Grid>
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography variant="h5" color='white' sx={{ mb: 1 }} >
-                  NOMBRE CIENTÍFICO:
+                  NOMBRE CIENTÍFICO
                   <Typography variant='body1' color='primary.light' sx={{ mb: 0.5 }}>
                     {data.nombre_cientifico || 'N/A'}
                   </Typography>
                 </Typography>
                 <Typography variant="h5" color='white' sx={{ mb: 0 }}>
-                  NOMBRE COMÚN:
+                  NOMBRE COMÚN
                 </Typography>
                 <Typography variant='body2' color='primary.light'>
                   {data.nombre_comun || 'N/A'}
                 </Typography>
               </Grid>
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Typography variant="h5" color='white' sx={{ mb: 1 }}>
                   PAÍS:
                   <Typography variant='body1' color='primary.light' sx={{ mb: 0 }}>
@@ -116,6 +158,88 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
                     {formatData(data.zonasReptiles) || 'N/A'}
                   </Typography>
                 </Typography>
+              </Grid> */}
+              <Grid item xs={12}>
+                <Typography variant="h5" color="white" sx={{ mb: 1 }}>
+                  PAÍS
+                  <Box component="div" sx={{ display: 'inline', ml: 1 }}>
+                    {data.paises?.length > 0 ? data.paises.map((pais, i) => {
+                      const nombre = pais.nombre;
+                      const esLink = paises.some(p => p.nombre === nombre);
+                      const isLast = i === data.paises.length - 1;
+
+                      return (
+                        <React.Fragment key={i}>
+                          {esLink ? (
+                            <Tooltip title="Ver Galería" arrow>
+                              <Link
+                                onClick={(e) => handleClick(e, 'pais', nombre)}
+                                // to={'/paisajes'}
+                                style={{
+                                  textDecoration: 'underline',
+                                  color: theme.palette.primary.main,
+                                  cursor: 'pointer',
+                                }}
+                                onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
+                                onMouseLeave={e => (e.target.style.color = theme.palette.primary.main)}
+                              >
+                                {nombre}
+                              </Link>
+                            </Tooltip>
+                          ) : (
+                            <Typography component="span" sx={{ display: 'inline', color: 'primary.light' }}>
+                              {nombre}
+                            </Typography>
+                          )}
+                          {!isLast && ' , '}
+                        </React.Fragment>
+                      );
+                    }) : (
+                      <Typography variant="body1" color="primary.light">N/A</Typography>
+                    )}
+                  </Box>
+                </Typography>
+
+                <Typography variant="h5" color="white" sx={{ mb: 1 }}>
+                  ZONAS
+                  <Box component="div" sx={{ display: 'inline', ml: 1 }}>
+                    {data.zonasReptiles?.length > 0 ? data.zonasReptiles.map((zona, i) => {
+                      const nombre = zona.nombre;
+                      const esLink = zonas.some(z => z.nombre === nombre);
+                      const isLast = i === data.zonasReptiles.length - 1;
+
+                      return (
+                        <React.Fragment key={i}>
+                          {esLink ? (
+                            <Tooltip title="Ver Galería" arrow>
+                              <Link
+                                onClick={(e) => handleClick(e, 'zona', nombre)}
+                                // to={'/paisajes'}
+                                style={{
+                                  textDecoration: 'underline',
+                                  color: theme.palette.primary.main,
+                                  cursor: 'pointer',
+                                }}
+                                onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
+                                onMouseLeave={e => (e.target.style.color = theme.palette.primary.main)}
+                              >
+                                {nombre}
+                              </Link>
+                            </Tooltip>
+                          ) : (
+                            <Typography component="span" sx={{ display: 'inline', color: 'primary.light' }}>
+                              {nombre}
+                            </Typography>
+                          )}
+                          {!isLast && ', '}
+                        </React.Fragment>
+                      );
+                    }) : (
+                      <Typography variant="body1" color="primary.light">N/A</Typography>
+                    )}
+                  </Box>
+                </Typography>
+
               </Grid>
             </Grid>
           </React.Fragment>

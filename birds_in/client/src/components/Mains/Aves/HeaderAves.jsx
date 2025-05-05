@@ -99,13 +99,13 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
                 <Typography variant='h4' color='primary.light' sx={{ mb: 1, mt: -2 }}>
-                  {data.familia.nombre || 'N/A'} / {data.grupo.nombre || 'N/A'}
+                  {data.familia?.nombre || 'N/A'} / {data.grupo?.nombre || 'N/A'}
                 </Typography>
               </Grid>
 
               <Grid item xs={12} >
                 <Typography variant="h5" color='white' >
-                  NOMBRE EN INGLÉS:
+                  NOMBRE EN INGLÉS
                 </Typography>
                 <Typography variant='h1' color='primary' sx={{}} >
                   {data.nombre_ingles || 'N/A'}
@@ -154,13 +154,13 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
               {/* <Grid container spacing={1}> */}
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography variant="h5" color='white' sx={{ mb: 1 }} >
-                  NOMBRE CIENTÍFICO:
+                  NOMBRE CIENTÍFICO
                   <Typography variant='body1' color='primary.light' sx={{ mb: 0.5 }}>
                     {data.nombre_cientifico || 'N/A'}
                   </Typography>
                 </Typography>
                 <Typography variant="h5" color='white' sx={{ mb: 0 }}>
-                  NOMBRE COMÚN:
+                  NOMBRE COMÚN
                   <Typography variant='body1' color='primary.light'>
                     {data.nombre_comun || 'N/A'}
                   </Typography>
@@ -169,7 +169,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
 
               <Grid item xs={12}>
                 <Typography variant="h5" color="white" sx={{ mb: 1 }}>
-                  PAÍS:
+                  PAÍS
                   <Box component="div" sx={{ display: 'inline', ml: 1 }}>
                     {data.paises?.length > 0 ? data.paises.map((pais, i) => {
                       const nombre = pais.nombre;
@@ -222,7 +222,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                   </Typography>
                 </Typography> */}
                 <Typography variant="h5" color="white" sx={{ mb: 1 }}>
-                  ZONAS:
+                  ZONAS
                   <Box component="div" sx={{ display: 'inline', ml: 1 }}>
                     {data.zonasAves?.length > 0 ? data.zonasAves.map((zona, i) => {
                       const nombre = zona.nombre;

@@ -20,7 +20,7 @@ export const Mamiferos = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, info, isOne, total } = useSelector(state => state.dataSlice)
+  const { loading, info, isOne, total, saltar } = useSelector(state => state.dataSlice)
   const { filters, noMoreResults } = useSelector(state => state.filters)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
@@ -47,8 +47,12 @@ export const Mamiferos = () => {
   };
 
   React.useEffect(() => {
+    if (saltar) {
+      setFilterDialogOpen(false)
+    } else {
     dispatch(resetInfo());
-    dispatch(isOneR(null))//falta
+    dispatch(isOneR(null))
+    }
   }, []);
 
   React.useEffect(() => {

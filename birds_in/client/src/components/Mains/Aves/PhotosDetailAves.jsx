@@ -3,33 +3,44 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Divider, Fab, Grid, Typography, useTheme } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { sendParameter } from '../../../redux/birds/actions/filterAction';
+import { backInfo, sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
 import { resetInfoBird } from '../../../redux/birds/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/birds/slices/FilterSlice';
 import { ImagesCards } from '../../Cards/ImagesCards';
 import { Loading } from '../../utils/Loading';
 import { HeaderAves } from './HeaderAves';
 import { CopyRight } from '../../CopyRight';
+import { useNavigate } from 'react-router-dom';
+import { isSaltar } from '../../../redux/paisaje/slicesP/LandscapeSlice';
 
 export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { oneBird } = useSelector(state => state.birdSlice);
+    const navigate = useNavigate()
+    const { oneBird, saltar } = useSelector(state => state.birdSlice);
     const { copyFilters } = useSelector(state => state.filterSlice);
+    const { filtersP } = useSelector(state => state.landscapeSlice)
     const birds = useSelector(state => state.birdSlice.infoBirds);
     const allImages = birds.flatMap(bird => bird.imagenes_aves);
     const featuredImage = allImages.find(image => image.destacada);
     const mainImage = featuredImage ? encodeURI(featuredImage.url) : null;
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..');
-   
+
 
     const stepBack = () => {
         setShowBackdrop(true);
         setTimeout(() => {
-            if (!oneBird) {
+            if (saltar) {
+                dispatch(backInfo(filtersP))
+                dispatch(isSaltar(true))
+                navigate('/paisajes')
+            }
+            else if (!oneBird) {
                 dispatch(sendParameter(copyFilters));
                 setPage(1);
-            } else {
+            }
+            else {
                 setIsFilterOpen(true);
                 dispatch(resetInfoBird());
                 setShowBackdrop(false);

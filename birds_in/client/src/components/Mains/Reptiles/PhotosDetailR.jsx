@@ -13,13 +13,18 @@ import { resetInfo } from '../../../redux/reptiles/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/reptiles/slices/FilterSlice';
 import { HeaderR } from './HeaderR';
 import { CopyRight } from '../../CopyRight';
+import { isSaltar } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { backInfo } from '../../../redux/paisaje/actionsP/fetchAllLands';
+import { useNavigate } from 'react-router-dom';
 
 export const PhotosDetailR = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { isOne, info } = useSelector(state => state.dataReptil)
+     const navigate = useNavigate()
+    const { isOne, info, saltar } = useSelector(state => state.dataReptil)
     const { copyFilters } = useSelector(state => state.filterRep)
+    const { filtersP } = useSelector(state => state.landscapeSlice)
     const allImages = info.flatMap(registro => registro.imagenes_reptiles);
     const featuredImage = allImages.find(image => image.destacada);
     const mainImage = featuredImage ? encodeURI(featuredImage.url) : null;
@@ -27,9 +32,18 @@ export const PhotosDetailR = ({ setIsFilterOpen, setPage }) => {
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..')
 
     const stepBack = () => {
+        
         setShowBackdrop(true)
         // console.log(copyFilters, 'regreso copy filter')
         setTimeout(() => {
+             if (saltar) {
+                            // Caso prioritario: si saltar es true, haces esto y terminas
+                            dispatch(backInfo(filtersP));
+                            dispatch(isSaltar(true));
+                            navigate('/paisajes');
+                            return; // Importante para que no siga al switch
+                        }
+            
             switch (isOne) {
                 case false:
                     // console.log(copyFilters)

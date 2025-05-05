@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  info: [],//det+main
+  info: [],
   copyInfo: [],
   count: {},
-  isOne: null,//filt+det
-  loading: false,//filt+
+  isOne: null,
+  loading: false,
   total: 0,
+  saltar: false,
 };
 
 export const dataRep = createSlice({
@@ -14,6 +15,9 @@ export const dataRep = createSlice({
   initialState,
 
   reducers: {
+    isSaltarRept: (state, action) => {
+      state.saltar = action.payload
+    },
     setInfo(state, action) {
       state.info = action.payload;
     },
@@ -52,6 +56,7 @@ export const dataRep = createSlice({
 });
 
 export const {
+  isSaltarRept,
   setInfo,
   fetchInfo,
   copyInfo,

@@ -21,11 +21,11 @@ export const loadMoreData = (currentPage, parameters) => {
 };
 
 export const sendParameterP = (selectedOptions) => {
-  console.log(selectedOptions,'llega las opciones antes de query')
+  // console.log(selectedOptions,'llega las opciones antes de query')
   return async (dispatch) => {
     try {
       const queryParams = createParams(selectedOptions)
-      console.log(queryParams, 'queryparam que se va a enviar')
+      // console.log(queryParams, 'queryparam que se va a enviar')
       const response = await axios.get(`/paisajes/filtros?${queryParams}`);
       const data = response.data.RegistrosFiltrados;
       const result = response.data.isLastPage
@@ -46,9 +46,12 @@ export const sendParameterP = (selectedOptions) => {
 export const backInfo = (params) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`/aves/filtros?${params}`);
+      const response = await axios.get(`/paisajes/filtros?${params}`);
       const data = response.data.RegistrosFiltrados;
-      dispatch(returnFilters(data))
+      dispatch(stringParameter(queryParams))
+      // dispatch(returnFilters(data))
+      dispatch(setNoMoreResults(result));
+      dispatch(howMuch(total));
     } catch (error) {
       console.log('error enviando datos:', error);
     }

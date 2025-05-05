@@ -60,7 +60,7 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
 
               <Grid item xs={12} >
                 <Typography variant="h4" color='primary.light' >
-                  NOMBRE EN INGLÉS:
+                  NOMBRE EN INGLÉS
                 </Typography>
                 <Typography variant='h1' color='primary' >
                   {data.nombre_ingles || 'N/A'}
@@ -84,13 +84,13 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
               </Grid>
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography variant="h4" color='primary.light' sx={{ mb: 1 }} >
-                  NOMBRE CIENTÍFICO:
+                  NOMBRE CIENTÍFICO
                   <Typography variant='h6' color='primary.light' sx={{ mb: 0.5 }}>
                     {data.nombre_cientifico || 'N/A'}
                   </Typography>
                 </Typography>
                 <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
-                  NOMBRE COMÚN:
+                  NOMBRE COMÚN
                   <Typography variant='h6' color='primary.light'>
                     {data.nombre_comun || 'N/A'}
                   </Typography>
@@ -99,13 +99,13 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
 
               <Grid item xs={12}>
                 <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
-                  PAÍS:
+                  PAÍS
                   <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
                     {formatData(data.paises) || 'N/A'}
                   </Typography>
                 </Typography>
                 <Typography variant="h4" color="primary.light">
-                  ZONAS:
+                  ZONAS
                   <Typography variant="h6" color="primary.light" sx={{ mb: 1.5 }}>
                     {formatData(data.zonasInsectos) || 'N/A'}
                   </Typography>

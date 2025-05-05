@@ -11,7 +11,8 @@ export const Header = ({ imageUrl, registro, back }) => {
   const { paises = [], zonas = [] } = useSelector(state => state.landscapeSlice.optionsP)
   const theme = useTheme()
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
   const handleClick = async (e, tipo, nombre) => {
     e.preventDefault();
 
@@ -106,17 +107,17 @@ export const Header = ({ imageUrl, registro, back }) => {
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
                 <Typography variant='h5' color='white' sx={{ mb: 1, mt: -2 }}>
-                  ORDEN: {data.order_mamifero.nombre || 'N/A'} - {data.order_mamifero.nombre_comun || 'N/A'}
+                  ORDEN {data.order_mamifero?.nombre || 'N/A'} - {data.order_mamifero?.nombre_comun || 'N/A'}
                 </Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography variant='body1' color='primary.light' sx={{ mb: 1, mt: -1 }}>
-                  {data.familias_mamifero.nombre || 'N/A'} / {data.grupos_mamifero.nombre || 'N/A'}
+                  {data.familias_mamifero?.nombre || 'N/A'} / {data.grupos_mamifero?.nombre || 'N/A'}
                 </Typography>
               </Grid>
               <Grid item xs={12} >
                 <Typography variant="h5" color='white' >
-                  NOMBRE EN INGLÉS:
+                  NOMBRE EN INGLÉS
                 </Typography>
                 <Typography variant='h1' color='primary' >
                   {data.nombre_ingles || 'N/A'}
@@ -147,13 +148,13 @@ export const Header = ({ imageUrl, registro, back }) => {
               {/* <Grid container spacing={1}> */}
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography variant="h5" color='white' sx={{ mb: 1 }} >
-                  NOMBRE CIENTÍFICO:
+                  NOMBRE CIENTÍFICO
                   <Typography variant='body1' color='primary.light' sx={{ mb: 0.5 }}>
                     {data.nombre_cientifico || 'N/A'}
                   </Typography>
                 </Typography>
                 <Typography variant="h5" color='white' sx={{ mb: 0 }}>
-                  NOMBRE COMÚN:
+                  NOMBRE COMÚN
                   <Typography variant='body2' color='primary.light'>
                     {data.nombre_comun || 'N/A'}
                   </Typography>
@@ -176,7 +177,7 @@ export const Header = ({ imageUrl, registro, back }) => {
               </Grid> */}
               <Grid item xs={12}>
                 <Typography variant="h5" color="white" sx={{ mb: 1 }}>
-                  PAÍS:
+                  PAÍS
                   <Box component="div" sx={{ display: 'inline', ml: 1 }}>
                     {data.paises?.length > 0 ? data.paises.map((pais, i) => {
                       const nombre = pais.nombre;
@@ -216,7 +217,7 @@ export const Header = ({ imageUrl, registro, back }) => {
                 </Typography>
 
                 <Typography variant="h5" color="white" sx={{ mb: 1 }}>
-                  ZONAS:
+                  ZONAS
                   <Box component="div" sx={{ display: 'inline', ml: 1 }}>
                     {data.zonasMamiferos?.length > 0 ? data.zonasMamiferos.map((zona, i) => {
                       const nombre = zona.nombre;

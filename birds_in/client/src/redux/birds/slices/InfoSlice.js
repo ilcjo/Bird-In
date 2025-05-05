@@ -7,6 +7,7 @@ const initialState = {
   oneBird: null,//filt+det
   loading: false,//filt+
   total: 0,
+  saltar: false,
 };
 
 export const info = createSlice({
@@ -14,6 +15,9 @@ export const info = createSlice({
   initialState,
 
   reducers: {
+    isSaltarBird: (state, action) => {
+      state.saltar = action.payload
+  },
     setBirdInfo(state, action) {
       state.infoBirds = action.payload;
     },
@@ -56,6 +60,7 @@ export const info = createSlice({
 });
 
 export const {
+  isSaltarBird,
   setBirdInfo,
   fetchInfo,
   copyInfo,

@@ -20,7 +20,7 @@ export const Reptiles = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, info, isOne, total } = useSelector(state => state.dataReptil)
+  const { loading, info, isOne, total, saltar } = useSelector(state => state.dataReptil)
   const { filters, noMoreResults } = useSelector(state => state.filterRep)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
@@ -47,8 +47,12 @@ export const Reptiles = () => {
   };
 
   React.useEffect(() => {
-    dispatch(resetInfo());
-    dispatch(isOneR(null))//falta
+    if (saltar) {
+      setFilterDialogOpen(false)
+    } else {
+      dispatch(resetInfo());
+      dispatch(isOneR(null))
+    }
   }, []);
 
   React.useEffect(() => {

@@ -13,12 +13,17 @@ import { resetInfo } from '../../../redux/mamiferos/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/mamiferos/slices/FilterSlice';
 import { Header } from './Header';
 import { CopyRight } from '../../CopyRight';
+import { isSaltar } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { backInfo } from '../../../redux/paisaje/actionsP/fetchAllLands';
+import { useNavigate } from 'react-router-dom';
 
 export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { isOne, info } = useSelector(state => state.dataSlice)
+    const navigate = useNavigate()
+    const { isOne, info, saltar } = useSelector(state => state.dataSlice)
+    const { filtersP } = useSelector(state => state.landscapeSlice)
     const { copyFilters } = useSelector(state => state.filters)
     const allImages = info.flatMap(registro => registro.imagenes_mamiferos);
     const featuredImage = allImages.find(image => image.destacada);
@@ -26,23 +31,54 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..')
 
+    // const stepBack = () => {
+    //     setShowBackdrop(true)
+    //     // console.log(copyFilters, 'regreso copy filter')
+    //     setTimeout(() => {
+    //         switch (isOne) {
+    //             case false:
+    //                 // console.log(copyFilters)
+    //                 dispatch(sendParameter(copyFilters));
+    //                 setPage(1)
+    //                 break;
+    //             case true:
+    //                 setIsFilterOpen(true);
+    //                 dispatch(resetInfo())
+    //                 setShowBackdrop(false)
+    //                 break;
+    //             default:
+    //                 // Código que se ejecutará si isOne no es ni true ni false
+    //                 break;
+    //         }
+    //     }, 1000);
+    // };
+
     const stepBack = () => {
-        setShowBackdrop(true)
-        // console.log(copyFilters, 'regreso copy filter')
+        setShowBackdrop(true);
+
         setTimeout(() => {
+            if (saltar) {
+                // Caso prioritario: si saltar es true, haces esto y terminas
+                dispatch(backInfo(filtersP));
+                dispatch(isSaltar(true));
+                navigate('/paisajes');
+                return; // Importante para que no siga al switch
+            }
+
+            // Si no estamos en modo 'saltar', evaluamos el resto con switch
             switch (isOne) {
                 case false:
-                    // console.log(copyFilters)
                     dispatch(sendParameter(copyFilters));
-                    setPage(1)
+                    setPage(1);
                     break;
                 case true:
                     setIsFilterOpen(true);
-                    dispatch(resetInfo())
-                    setShowBackdrop(false)
+                    dispatch(resetInfo());
+                    setShowBackdrop(false);
                     break;
                 default:
-                    // Código que se ejecutará si isOne no es ni true ni false
+                    // Aquí puedes manejar casos inesperados
+                    console.warn('Estado inesperado de oneBird:', oneBird);
                     break;
             }
         }, 1000);

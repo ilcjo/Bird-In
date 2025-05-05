@@ -15,6 +15,9 @@ import { PhotosDetailLands } from '../../components/Mains/Paisajes/PhotosDetailL
 import { isOneLand, resetInfoLand } from '../../redux/paisaje/slicesP/LandscapeSlice';
 import { loadMoreData } from '../../redux/paisaje/actionsP/fetchAllLands';
 import { CardsLand } from '../../components/Cards/Paisaje/CardsLand';
+import { isSaltarRept, resetInfo } from '../../redux/reptiles/slices/InfoSlice';
+import { isSaltarMa, resetInfo as resetInfoM } from '../../redux/mamiferos/slices/InfoSlice'
+import { isSaltarBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
 //STYLES
 
 
@@ -52,7 +55,13 @@ export const LandsCapes = () => {
       setFilterDialogOpen(false)
     } else {
       dispatch(resetInfoLand());
+      dispatch(resetInfo())
+      dispatch(resetInfoBird())
+      dispatch(resetInfoM())
       dispatch(isOneLand(null))
+      dispatch(isSaltarBird(false))
+      dispatch(isSaltarMa(false))
+      dispatch(isSaltarRept(false))
     }
 
   }, []);

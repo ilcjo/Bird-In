@@ -4,7 +4,7 @@ export const createIdString = (array) => {
 };
 
 export const createParams = (selectedOptions) => {
-  console.log('soy selectedopction',selectedOptions)
+  // console.log('soy selected option',selectedOptions)
   let queryParams = '';
 
   if (selectedOptions.orden && selectedOptions.orden.length > 0) {
@@ -33,7 +33,7 @@ export const createParams = (selectedOptions) => {
     queryParams += queryParams ? '&' : '';
     queryParams += selectedOptions.cientifico.map(nombre => `nombreCientifico=${encodeURIComponent(nombre.nombre)}`).join('&');
   }
-  console.log('1ueryparams',queryParams)
+  // console.log('1ueryparams',queryParams)
   return queryParams
 
 
