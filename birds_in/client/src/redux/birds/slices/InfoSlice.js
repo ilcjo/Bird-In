@@ -17,7 +17,7 @@ export const info = createSlice({
   reducers: {
     isSaltarBird: (state, action) => {
       state.saltar = action.payload
-  },
+    },
     setBirdInfo(state, action) {
       state.infoBirds = action.payload;
     },

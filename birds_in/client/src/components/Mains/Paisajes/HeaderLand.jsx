@@ -81,7 +81,10 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
         await Promise.all([
           dispatch(sendParameterAves(selectOption)),
           dispatch(sendParameterMamiferos(selectOption)),
-          dispatch(sendParameterReptiles(selectOption))
+          dispatch(sendParameterReptiles(selectOption)),
+          dispatch(isSaltarBird(false)),
+          dispatch(isSaltarMa(false)),
+          dispatch(isSaltarRept(false))
         ]);
 
       } catch (error) {
