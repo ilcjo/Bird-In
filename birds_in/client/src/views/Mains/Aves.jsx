@@ -12,7 +12,7 @@ import { FiltersAves } from '../../components/Mains/Aves/FiltersAves'
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
 //REDUX
-import { isOneBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
+import { isOneBird, isSaltarBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
 import { loadMoreData } from '../../redux/birds/actions/infoAction';
 import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves';
 import { getOptionsDataP } from '../../redux/paisaje/actionsP/fetchOptionsLand';
@@ -54,6 +54,7 @@ export const Aves = () => {
       dispatch(resetInfoBird());
       dispatch(isOneBird(null))
       dispatch(getOptionsDataP());
+      dispatch(isSaltarBird(false))
     }
   }, []);
 

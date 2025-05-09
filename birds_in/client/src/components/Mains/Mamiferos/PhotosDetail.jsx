@@ -61,7 +61,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
                 // Caso prioritario: si saltar es true, haces esto y terminas
                 dispatch(backInfo(filtersP));
                 dispatch(isSaltar(true));
-                navigate('/paisajes');
+                // navigate('/paisajes');
                 return; // Importante para que no siga al switch
             }
 

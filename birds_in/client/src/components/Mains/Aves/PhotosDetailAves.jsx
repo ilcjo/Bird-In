@@ -35,6 +35,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
                 dispatch(backInfo(filtersP))
                 dispatch(isSaltar(true))
                 navigate('/paisajes')
+                dispatch(resetInfoBird())
             }
             else if (!oneBird) {
                 dispatch(sendParameter(copyFilters));

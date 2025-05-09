@@ -174,6 +174,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                     {data.paises?.length > 0 ? data.paises.map((pais, i) => {
                       const nombre = pais.nombre;
                       const esLink = paises.some(p => p.nombre === nombre);
+                      console.log(esLink, 'soy link de pais')
                       const isLast = i === data.paises.length - 1;
 
                       return (
@@ -227,6 +228,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                     {data.zonasAves?.length > 0 ? data.zonasAves.map((zona, i) => {
                       const nombre = zona.nombre;
                       const esLink = zonas.some(z => z.nombre === nombre);
+                      console.log(esLink, 'soy link de zona')
                       const isLast = i === data.zonasAves.length - 1;
 
                       return (
