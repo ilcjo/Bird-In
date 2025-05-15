@@ -15,14 +15,17 @@ import { CardsReptil } from '../../components/Cards/Reptiles/CardsReptil';
 //REDUX
 import { loadMoreData } from '../../redux/reptiles/actions/infoAction';
 import { isOneR, resetInfo, } from '../../redux/reptiles/slices/InfoSlice';
+import { isOneLand, resetInfoLand } from '../../redux/paisaje/slicesP/LandscapeSlice';
+import { getOptionsDataP } from '../../redux/paisaje/actionsP/fetchOptionsLand';
 
 export const Reptiles = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, info, isOne, total, saltar } = useSelector(state => state.dataReptil)
+  const { loading, info, isOne, total, saltarR } = useSelector(state => state.dataReptil)
   const { filters, noMoreResults } = useSelector(state => state.filterRep)
   const { allCustom } = useSelector((state) => state.customizesSlice);
+  const { isRept } = useSelector(state => state.landscapeSlice)
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -47,11 +50,16 @@ export const Reptiles = () => {
   };
 
   React.useEffect(() => {
-    if (saltar) {
+    if (saltarR) {
+      setFilterDialogOpen(false)
+    } else if (isRept) {
       setFilterDialogOpen(false)
     } else {
       dispatch(resetInfo());
       dispatch(isOneR(null))
+      dispatch(resetInfoLand())
+      dispatch(getOptionsDataP())
+      dispatch(isOneLand(null))
     }
   }, []);
 

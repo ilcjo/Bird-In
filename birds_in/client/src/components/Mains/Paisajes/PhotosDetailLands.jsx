@@ -17,14 +17,16 @@ import { backInfo as backInfoMam } from '../../../redux/mamiferos/actions/filter
 import { backInfo as backInfoRept } from '../../../redux/reptiles/actions/filterAction';
 import { useNavigate } from 'react-router-dom';
 import { isSaltarBird } from '../../../redux/birds/slices/InfoSlice';
+import { isSaltarMa } from '../../../redux/mamiferos/slices/InfoSlice';
 
 export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const { copyFiltersP, oneLand, saltarP, filtersP, isBird } = useSelector(state => state.landscapeSlice)
+    const { copyFiltersP, oneLand, saltarP, filtersP, isBird, isMa } = useSelector(state => state.landscapeSlice)
     const { filters, currentFilters } = useSelector(state => state.filterSlice);
+    const filtersM = useSelector(state => state.filters.filters);
     const Register = useSelector(state => state.landscapeSlice.infoLands)
     const allImages = Register.flatMap(bird => bird.imagenes_paisajes);
     const featuredImage = allImages.find(image => image.destacada);
@@ -41,7 +43,12 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                 dispatch(isSaltarBird(false));
                 navigate('/aves');
                 dispatch(resetInfoLand())
-                return; // Importante para que no siga al switch
+                return;
+            } else if (isMa) {
+                dispatch(backInfoMam(filtersM))
+                dispatch(isSaltarMa(false))
+                navigate('/mamiferos');
+                dispatch(resetInfoLand())
             }
             switch (oneLand) {
                 case false:

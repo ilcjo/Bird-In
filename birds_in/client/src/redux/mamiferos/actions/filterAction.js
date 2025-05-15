@@ -26,6 +26,28 @@ export const sendParameter = (selectedOptions) => {
     };
 };
 
+export const sendParameterSaltoM = (selectedOptions) => {
+    console.log(selectedOptions, 'soy parámetros mamifero que llegan')
+    return async (dispatch) => {
+        try {
+            const queryParams = createParams(selectedOptions)
+            // console.log(queryParams, 'soy query params')
+            const response = await axios.get(`/mamiferos/filtros?${queryParams}`);
+            const data = response.data.registrosFiltrados;
+            const result = response.data.isLastPage
+            const total = response.data.totalResultsCount
+            // dispatch(stringParameter(queryParams))
+            dispatch(returnFilters(data))
+            dispatch(setNoMoreResults(result));
+            dispatch(howMuch(total));
+            return data.length;
+
+        } catch (error) {
+            console.log('error enviando datos:', error);
+        }
+    };
+};
+
 export const backInfo = (params) => {
     // console.log(params)
     return async (dispatch) => {

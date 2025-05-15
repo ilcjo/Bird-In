@@ -19,7 +19,7 @@ import { saveFilters as saveAvesFilters } from '../../../redux/birds/slices/Filt
 import { saveFilters as saveMamiferosFilters } from '../../../redux/mamiferos/slices/FilterSlice';
 import { sendParameter as sendParameterAves, sendParameterSalto } from '../../../redux/birds/actions/filterAction';
 import { sendParameter as sendParameterReptiles } from '../../../redux/reptiles/actions/filterAction';
-import { sendParameter as sendParameterMamiferos } from '../../../redux/mamiferos/actions/filterAction';
+import { sendParameter as sendParameterMamiferos, sendParameterSaltoM } from '../../../redux/mamiferos/actions/filterAction';
 import { copingFilters as copingFiltersAves } from '../../../redux/birds/slices/FilterSlice';
 import { copingFilters as copingFiltersReptiles } from '../../../redux/reptiles/slices/FilterSlice';
 import { copingFilters as copingFiltersMamiferos } from '../../../redux/mamiferos/slices/FilterSlice';
@@ -27,6 +27,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cargando, isOneBird, isSaltarBird } from '../../../redux/birds/slices/InfoSlice';
 import { isOneR, isSaltarRept } from '../../../redux/reptiles/slices/InfoSlice';
 import { isOneR as isOneMa, isSaltarMa } from '../../../redux/mamiferos/slices/InfoSlice';
+import { copingFilters, isFromMam, isOneLand, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
 
 export const HeaderLand = ({ imageUrl, register, back }) => {
   // console.log(register,'esto llego')
@@ -78,7 +80,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
       try {
         await Promise.all([
           dispatch(sendParameterSalto(selectOption)),
-          dispatch(sendParameterMamiferos(selectOption)),
+          dispatch(sendParameterSaltoM(selectOption)),
           dispatch(sendParameterReptiles(selectOption)),
           dispatch(isSaltarBird(false)),
           dispatch(isSaltarMa(false)),

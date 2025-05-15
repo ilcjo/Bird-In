@@ -5,7 +5,7 @@ import { setNoMoreResults } from "../slices/FilterSlice";
 import { createParams } from "../../../components/utils/convertId";
 
 export const sendParameter = (selectedOptions) => {
-    console.log(selectedOptions, 'soy param que llegan aves')
+    // console.log(selectedOptions, 'soy param que llegan aves')
     return async (dispatch) => {
         try {
             const queryParams = createParams(selectedOptions)
@@ -27,7 +27,7 @@ export const sendParameter = (selectedOptions) => {
 };
 
 export const sendParameterSalto = (selectedOptions) => {
-    console.log(selectedOptions, 'soy param que llegan aves')
+    // console.log(selectedOptions, 'soy param que llegan aves')
     return async (dispatch) => {
         try {
             const queryParams = createParams(selectedOptions)
@@ -49,7 +49,7 @@ export const sendParameterSalto = (selectedOptions) => {
 };
 
 export const backInfo = (params) => {
-    console.log(params)
+    // console.log(params)
     return async (dispatch) => {
         try {
             const response = await axios.get(`/aves/filtros?${params}`);

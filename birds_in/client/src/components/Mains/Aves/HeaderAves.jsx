@@ -8,6 +8,7 @@ import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
 import { copingFilters, isFromBird, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
 import { saveFilters as saveAvesFilters } from '../../../redux/birds/slices/FilterSlice';
 import { copingFilters as copingFiltersAves } from '../../../redux/birds/slices/FilterSlice';
+
 export const HeaderAves = ({ imageUrl, bird, back }) => {
   const { paises = [], zonas = [] } = useSelector(state => state.landscapeSlice.optionsP)
   const theme = useTheme()
@@ -37,8 +38,8 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
         pais: tipo === 'pais' ? [selectedItem] : [],
         zona: tipo === 'zona' ? [selectedItem] : [],
       };
-      dispatch(saveFilters(filtersPayload));
       dispatch(copingFiltersAves())
+      dispatch(saveFilters(filtersPayload));
       dispatch(copingFilters());
       dispatch(isSaltar(true));
       dispatch(isFromBird(true))

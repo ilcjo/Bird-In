@@ -15,14 +15,17 @@ import { PhotosDetail } from '../../components/Mains/Mamiferos/PhotosDetail';
 import { loadMoreData } from '../../redux/mamiferos/actions/infoAction';
 import { isOneR, resetInfo, } from '../../redux/mamiferos/slices/InfoSlice';
 import { CardsMamiferos } from '../../components/Cards/Mamiferos/CardsMamiferos';
+import { isOneLand, resetInfoLand } from '../../redux/paisaje/slicesP/LandscapeSlice';
+import { getOptionsDataP } from '../../redux/paisaje/actionsP/fetchOptionsLand';
 
 export const Mamiferos = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, info, isOne, total, saltar } = useSelector(state => state.dataSlice)
+  const { loading, info, isOne, total, saltarM } = useSelector(state => state.dataSlice)
   const { filters, noMoreResults } = useSelector(state => state.filters)
   const { allCustom } = useSelector((state) => state.customizesSlice);
+  const { isMa } = useSelector(state => state.landscapeSlice)
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -47,11 +50,16 @@ export const Mamiferos = () => {
   };
 
   React.useEffect(() => {
-    if (saltar) {
+    if (saltarM) {
+      setFilterDialogOpen(false)
+    } else if (isMa) {
       setFilterDialogOpen(false)
     } else {
-    dispatch(resetInfo());
-    dispatch(isOneR(null))
+      dispatch(resetInfo());
+      dispatch(isOneR(null))
+      dispatch(resetInfoLand());
+      dispatch(getOptionsDataP());
+      dispatch(isOneLand(null))
     }
   }, []);
 

@@ -9,7 +9,7 @@ import { ImagesCards } from '../../Cards/ImagesCards'
 import { Loading } from '../../utils/Loading';
 //REDUX
 import { sendParameter } from '../../../redux/mamiferos/actions/filterAction';
-import { resetInfo } from '../../../redux/mamiferos/slices/InfoSlice';
+import { isSaltarMa, resetInfo } from '../../../redux/mamiferos/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/mamiferos/slices/FilterSlice';
 import { Header } from './Header';
 import { CopyRight } from '../../CopyRight';
@@ -58,18 +58,16 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
 
         setTimeout(() => {
             if (saltarM) {
-                // Caso prioritario: si saltar es true, haces esto y terminas
                 dispatch(backInfo(filtersP));
                 dispatch(isSaltar(true));
-                navigate('/paisajes');
+                dispatch(isSaltarMa(false))
                 dispatch(resetInfo())
-                return; // Importante para que no siga al switch
+                navigate('/paisajes');
+                return; 
             }
-
-            // Si no estamos en modo 'saltar', evaluamos el resto con switch
             switch (isOne) {
                 case false:
-                    dispatch(sendParameterP(copyFilters));
+                    dispatch(sendParameter(copyFilters));
                     setPage(1);
                     break;
                 case true:
@@ -78,7 +76,6 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
                     setShowBackdrop(false);
                     break;
                 default:
-                    // Aquí puedes manejar casos inesperados
                     console.warn('Estado inesperado de oneBird:', oneBird);
                     break;
             }

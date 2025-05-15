@@ -5,7 +5,8 @@ import { formatData } from '../../utils/formatDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
-import { copingFilters, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { copingFilters, isFromMam, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { copingFilters as copingFiltersMam } from '../../../redux/mamiferos/slices/FilterSlice';
 
 export const Header = ({ imageUrl, registro, back }) => {
   const { paises = [], zonas = [] } = useSelector(state => state.landscapeSlice.optionsP)
@@ -37,12 +38,12 @@ export const Header = ({ imageUrl, registro, back }) => {
         zona: tipo === 'zona' ? [selectedItem] : [],
       };
 
+      dispatch(copingFiltersMam());
       dispatch(saveFilters(filtersPayload));
       dispatch(copingFilters());
       dispatch(isSaltar(true));
-
+      dispatch(isFromMam(true))
       dispatch(isOneLand(resultLength === 1));
-
       navigate('/paisajes');
     } catch (error) {
       console.error('Error al registrar visita', error);
