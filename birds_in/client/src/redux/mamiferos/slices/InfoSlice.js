@@ -7,7 +7,7 @@ const initialState = {
   isOne: null,
   loading: false,
   total: 0,
-  saltar: false,
+  saltarM: false,
 };
 
 export const data = createSlice({
@@ -16,7 +16,7 @@ export const data = createSlice({
 
   reducers: {
     isSaltarMa: (state, action) => {
-      state.saltar = action.payload
+      state.saltarM = action.payload
   },
     setInfo(state, action) {
       state.info = action.payload;

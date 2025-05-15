@@ -17,7 +17,10 @@ const initialState = {
     oneLand: false,
     loading: false,
     total: 0,
-    saltar: false,
+    saltarP: false,
+    isBird: false,
+    isRept: false,
+    isMa: false
 };
 
 export const landscapeSlice = createSlice({
@@ -25,8 +28,17 @@ export const landscapeSlice = createSlice({
     initialState,
 
     reducers: {
+        isFromBird: (state, action) => {
+            state.isBird = action.payload
+        },
+        isFromMam: (state, action) => {
+            state.isMa = action.payload
+        },
+        isSFromRept: (state, action) => {
+            state.isRept = action.payload
+        },
         isSaltar: (state, action) => {
-            state.saltar = action.payload
+            state.saltarP = action.payload
         },
         fetchInfo: (state, action) => {
             state.infoLands = action.payload
@@ -97,6 +109,6 @@ export const landscapeSlice = createSlice({
 });
 
 export const {
-    isSaltar, fetchInfo, copyInfo, loadMoreDataSuccess, fetchOptions, returnFilters, newOptions, setCurrentPage, saveFilters, stringParameter, searchBarResult, resetCurrentFilters, saveOptionsP, resetInfoLand, setNoMoreResults, saveCounting, copingFilters, isOneLand, howMuch, cargando
+    isFromBird, isFromMam, isSFromRept, isSaltar, fetchInfo, copyInfo, loadMoreDataSuccess, fetchOptions, returnFilters, newOptions, setCurrentPage, saveFilters, stringParameter, searchBarResult, resetCurrentFilters, saveOptionsP, resetInfoLand, setNoMoreResults, saveCounting, copingFilters, isOneLand, howMuch, cargando
 } = landscapeSlice.actions;
 export default landscapeSlice.reducer;

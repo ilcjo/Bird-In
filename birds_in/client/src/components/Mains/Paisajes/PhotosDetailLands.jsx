@@ -12,12 +12,19 @@ import { Loading } from '../../utils/Loading';
 import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
 import { isSaltar, resetInfoLand, setNoMoreResults } from '../../../redux/paisaje/slicesP/LandscapeSlice';
 import { CopyRight } from '../../CopyRight';
+import { backInfo as backInfoBird } from '../../../redux/birds/actions/filterAction';
+import { backInfo as backInfoMam } from '../../../redux/mamiferos/actions/filterAction';
+import { backInfo as backInfoRept } from '../../../redux/reptiles/actions/filterAction';
+import { useNavigate } from 'react-router-dom';
+import { isSaltarBird } from '../../../redux/birds/slices/InfoSlice';
 
 export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { copyFiltersP, oneLand } = useSelector(state => state.landscapeSlice)
+    const navigate = useNavigate();
+    const { copyFiltersP, oneLand, saltarP, filtersP, isBird } = useSelector(state => state.landscapeSlice)
+    const { filters, currentFilters } = useSelector(state => state.filterSlice);
     const Register = useSelector(state => state.landscapeSlice.infoLands)
     const allImages = Register.flatMap(bird => bird.imagenes_paisajes);
     const featuredImage = allImages.find(image => image.destacada);
@@ -29,6 +36,13 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
         setShowBackdrop(true)
         // console.log(copyFiltersP, 'regreso copy filter')
         setTimeout(() => {
+            if (isBird) {
+                dispatch(backInfoBird(filters));
+                dispatch(isSaltarBird(false));
+                navigate('/aves');
+                dispatch(resetInfoLand())
+                return; // Importante para que no siga al switch
+            }
             switch (oneLand) {
                 case false:
                     dispatch(sendParameterP(copyFiltersP));
@@ -49,7 +63,7 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
     React.useEffect(() => {
         // Restablece noMoreResults a false cuando se render el componente
         dispatch(setNoMoreResults(true));
-        dispatch(isSaltar(false))
+        // dispatch(isSaltar(false))
     }, [dispatch]);
 
     React.useEffect(() => {

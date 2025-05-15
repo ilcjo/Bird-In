@@ -39,9 +39,7 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
       dispatch(saveFilters(filtersPayload));
       dispatch(copingFilters());
       dispatch(isSaltar(true));
-
       dispatch(isOneLand(resultLength === 1));
-
       navigate('/paisajes');
     } catch (error) {
       console.error('Error al registrar visita', error);

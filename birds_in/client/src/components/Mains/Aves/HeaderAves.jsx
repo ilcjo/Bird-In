@@ -5,9 +5,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
-import { copingFilters, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
-
-
+import { copingFilters, isFromBird, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { saveFilters as saveAvesFilters } from '../../../redux/birds/slices/FilterSlice';
+import { copingFilters as copingFiltersAves } from '../../../redux/birds/slices/FilterSlice';
 export const HeaderAves = ({ imageUrl, bird, back }) => {
   const { paises = [], zonas = [] } = useSelector(state => state.landscapeSlice.optionsP)
   const theme = useTheme()
@@ -16,40 +16,39 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
 
   const handleClick = async (e, tipo, nombre) => {
     e.preventDefault();
-  
+
     const optionList = tipo === 'pais' ? paises : zonas;
     const selectedItem = optionList.find(item => item.nombre === nombre);
-  
+
     if (!selectedItem) {
       console.warn('No se encontró el item en las opciones');
       return;
     }
-  
+
     const selectedOption = tipo === 'pais'
       ? { pais: [selectedItem] }
       : { zona: [selectedItem] };
-  
+
     try {
       const resultLength = await dispatch(sendParameterP(selectedOption));
-  
+
       // Armar el payload para saveFilters
       const filtersPayload = {
         pais: tipo === 'pais' ? [selectedItem] : [],
         zona: tipo === 'zona' ? [selectedItem] : [],
       };
-  
       dispatch(saveFilters(filtersPayload));
+      dispatch(copingFiltersAves())
       dispatch(copingFilters());
       dispatch(isSaltar(true));
-  
+      dispatch(isFromBird(true))
       dispatch(isOneLand(resultLength === 1));
-  
       navigate('/paisajes');
     } catch (error) {
       console.error('Error al registrar visita', error);
     }
   };
-  
+
   return (
     <Box
       component="div"
@@ -240,11 +239,11 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
                                 // to={'/paisajes'}
                                 style={{
                                   textDecoration: 'underline',
-                                  color:  theme.palette.primary.main,
+                                  color: theme.palette.primary.main,
                                   cursor: 'pointer',
                                 }}
                                 onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-                                onMouseLeave={e => (e.target.style.color =  theme.palette.primary.main)}
+                                onMouseLeave={e => (e.target.style.color = theme.palette.primary.main)}
                               >
                                 {nombre}
                               </Link>

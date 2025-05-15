@@ -4,7 +4,7 @@ import { Box, Divider, Fab, Grid, Typography, useTheme } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { sendParameter } from '../../../redux/birds/actions/filterAction';
 import { backInfo, sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
-import { resetInfoBird } from '../../../redux/birds/slices/InfoSlice';
+import { isSaltarBird, resetInfoBird } from '../../../redux/birds/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/birds/slices/FilterSlice';
 import { ImagesCards } from '../../Cards/ImagesCards';
 import { Loading } from '../../utils/Loading';
@@ -17,7 +17,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    const { oneBird, saltar } = useSelector(state => state.birdSlice);
+    const { oneBird, saltarB } = useSelector(state => state.birdSlice);
     const { copyFilters } = useSelector(state => state.filterSlice);
     const { filtersP } = useSelector(state => state.landscapeSlice)
     const birds = useSelector(state => state.birdSlice.infoBirds);
@@ -31,11 +31,12 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
     const stepBack = () => {
         setShowBackdrop(true);
         setTimeout(() => {
-            if (saltar) {
+            if (saltarB) {
                 dispatch(backInfo(filtersP))
                 dispatch(isSaltar(true))
-                navigate('/paisajes')
+                dispatch(isSaltarBird(false))
                 dispatch(resetInfoBird())
+                navigate('/paisajes')
             }
             else if (!oneBird) {
                 dispatch(sendParameter(copyFilters));
@@ -51,6 +52,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
 
     React.useEffect(() => {
         dispatch(setNoMoreResults(true));
+        // dispatch(isSaltarBird(false))
     }, [dispatch]);
 
     React.useEffect(() => {

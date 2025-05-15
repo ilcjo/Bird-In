@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Box, Button, Typography, IconButton, Divider, useTheme, useMediaQuery, Tooltip } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
+import { isFromBird, isSaltar } from '../redux/paisaje/slicesP/LandscapeSlice';
+import { isSaltarBird } from '../redux/birds/slices/InfoSlice';
 
 const sections = [
   { id: 'aves', title: 'Aves', description: 'Fotografías de aves' },
@@ -17,12 +19,17 @@ const sections = [
 
 export const HomeMenu = () => {
   const theme = useTheme();
+  const  dispatch = useDispatch()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSobreMi, setShowSobreMi] = React.useState(true);
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const admin = localStorage.getItem('tipoCliente');
   const isAdmin = admin === 'admin';
-
+  React.useEffect(() => {
+        dispatch(isSaltarBird(false)),
+        dispatch(isFromBird(false)),
+        dispatch(isSaltar(false))
+    }, []);
   // Access image URLs
   const images = {
     aves: allCustom.cover_birds,

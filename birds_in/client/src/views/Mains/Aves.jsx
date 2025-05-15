@@ -16,14 +16,18 @@ import { isOneBird, isSaltarBird, resetInfoBird } from '../../redux/birds/slices
 import { loadMoreData } from '../../redux/birds/actions/infoAction';
 import { PhotosDetailAves } from '../../components/Mains/Aves/PhotosDetailAves';
 import { getOptionsDataP } from '../../redux/paisaje/actionsP/fetchOptionsLand';
+import { isOneLand, resetInfoLand } from '../../redux/paisaje/slicesP/LandscapeSlice';
+import { isSaltarMa, resetInfo as resetInfoM } from '../../redux/mamiferos/slices/InfoSlice';
+import { isSaltarRept, resetInfo } from '../../redux/reptiles/slices/InfoSlice';
 
 export const Aves = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, infoBirds, oneBird, total, saltar } = useSelector(state => state.birdSlice)
+  const { loading, infoBirds, oneBird, total, saltarB } = useSelector(state => state.birdSlice)
   const { filters, noMoreResults } = useSelector(state => state.filterSlice)
   const { allCustom } = useSelector((state) => state.customizesSlice);
+  const { isBird } = useSelector(state => state.landscapeSlice)
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -48,13 +52,21 @@ export const Aves = () => {
   };
 
   React.useEffect(() => {
-    if (saltar) {
+    if (saltarB) {
+      setFilterDialogOpen(false)
+    } else if (isBird) {
       setFilterDialogOpen(false)
     } else {
-      dispatch(resetInfoBird());
+      dispatch(resetInfoLand());
+      dispatch(resetInfo())
+      dispatch(resetInfoBird())
+      dispatch(resetInfoM())
+      dispatch(isOneLand(null))
+      dispatch(isSaltarBird(false))
+      dispatch(isSaltarMa(false))
+      dispatch(isSaltarRept(false))
       dispatch(isOneBird(null))
       dispatch(getOptionsDataP());
-      dispatch(isSaltarBird(false))
     }
   }, []);
 

@@ -14,7 +14,7 @@ import { setNoMoreResults } from '../../../redux/mamiferos/slices/FilterSlice';
 import { Header } from './Header';
 import { CopyRight } from '../../CopyRight';
 import { isSaltar } from '../../../redux/paisaje/slicesP/LandscapeSlice';
-import { backInfo } from '../../../redux/paisaje/actionsP/fetchAllLands';
+import { backInfo, sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
 import { useNavigate } from 'react-router-dom';
 
 export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
@@ -22,7 +22,7 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { isOne, info, saltar } = useSelector(state => state.dataSlice)
+    const { isOne, info, saltarM } = useSelector(state => state.dataSlice)
     const { filtersP } = useSelector(state => state.landscapeSlice)
     const { copyFilters } = useSelector(state => state.filters)
     const allImages = info.flatMap(registro => registro.imagenes_mamiferos);
@@ -57,18 +57,19 @@ export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
         setShowBackdrop(true);
 
         setTimeout(() => {
-            if (saltar) {
+            if (saltarM) {
                 // Caso prioritario: si saltar es true, haces esto y terminas
                 dispatch(backInfo(filtersP));
                 dispatch(isSaltar(true));
-                // navigate('/paisajes');
+                navigate('/paisajes');
+                dispatch(resetInfo())
                 return; // Importante para que no siga al switch
             }
 
             // Si no estamos en modo 'saltar', evaluamos el resto con switch
             switch (isOne) {
                 case false:
-                    dispatch(sendParameter(copyFilters));
+                    dispatch(sendParameterP(copyFilters));
                     setPage(1);
                     break;
                 case true:

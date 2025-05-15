@@ -25,7 +25,7 @@ export const LandsCapes = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, infoLands, filtersP, noMoreResults, oneLand, total, saltar } = useSelector(state => state.landscapeSlice)
+  const { loading, infoLands, filtersP, noMoreResults, oneLand, total, saltarP } = useSelector(state => state.landscapeSlice)
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
@@ -51,7 +51,7 @@ export const LandsCapes = () => {
   };
 
   React.useEffect(() => {
-    if (saltar) {
+    if (saltarP) {
       setFilterDialogOpen(false)
     } else {
       dispatch(resetInfoLand());

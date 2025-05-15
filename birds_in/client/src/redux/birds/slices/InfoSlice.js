@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  infoBirds: [],//det+main
+  infoBirds: [],
   copyInfoBirds: [],
   count: {},
-  oneBird: null,//filt+det
-  loading: false,//filt+
+  oneBird: null,
+  loading: false,
   total: 0,
-  saltar: false,
+  saltarB: false,
 };
 
 export const info = createSlice({
@@ -16,7 +16,7 @@ export const info = createSlice({
 
   reducers: {
     isSaltarBird: (state, action) => {
-      state.saltar = action.payload
+      state.saltarB = action.payload
     },
     setBirdInfo(state, action) {
       state.infoBirds = action.payload;

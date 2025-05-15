@@ -17,7 +17,7 @@ import WhatshotIcon from '@mui/icons-material/Whatshot';
 import { saveFilters as saveReptilFilters } from '../../../redux/reptiles/slices/FilterSlice';
 import { saveFilters as saveAvesFilters } from '../../../redux/birds/slices/FilterSlice';
 import { saveFilters as saveMamiferosFilters } from '../../../redux/mamiferos/slices/FilterSlice';
-import { sendParameter as sendParameterAves } from '../../../redux/birds/actions/filterAction';
+import { sendParameter as sendParameterAves, sendParameterSalto } from '../../../redux/birds/actions/filterAction';
 import { sendParameter as sendParameterReptiles } from '../../../redux/reptiles/actions/filterAction';
 import { sendParameter as sendParameterMamiferos } from '../../../redux/mamiferos/actions/filterAction';
 import { copingFilters as copingFiltersAves } from '../../../redux/birds/slices/FilterSlice';
@@ -75,11 +75,9 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
       selectOption = { pais: [{ id: pais }] };
     }
     console.log(selectOption);
-      
-
       try {
         await Promise.all([
-          dispatch(sendParameterAves(selectOption)),
+          dispatch(sendParameterSalto(selectOption)),
           dispatch(sendParameterMamiferos(selectOption)),
           dispatch(sendParameterReptiles(selectOption)),
           dispatch(isSaltarBird(false)),

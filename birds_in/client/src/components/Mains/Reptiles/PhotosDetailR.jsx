@@ -22,7 +22,7 @@ export const PhotosDetailR = ({ setIsFilterOpen, setPage }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
      const navigate = useNavigate()
-    const { isOne, info, saltar } = useSelector(state => state.dataReptil)
+    const { isOne, info, saltarR } = useSelector(state => state.dataReptil)
     const { copyFilters } = useSelector(state => state.filterRep)
     const { filtersP } = useSelector(state => state.landscapeSlice)
     const allImages = info.flatMap(registro => registro.imagenes_reptiles);
@@ -36,11 +36,12 @@ export const PhotosDetailR = ({ setIsFilterOpen, setPage }) => {
         setShowBackdrop(true)
         // console.log(copyFilters, 'regreso copy filter')
         setTimeout(() => {
-             if (saltar) {
+             if (saltarR) {
                             // Caso prioritario: si saltar es true, haces esto y terminas
                             dispatch(backInfo(filtersP));
                             dispatch(isSaltar(true));
                             navigate('/paisajes');
+                            dispatch(resetInfo())
                             return; // Importante para que no siga al switch
                         }
             
