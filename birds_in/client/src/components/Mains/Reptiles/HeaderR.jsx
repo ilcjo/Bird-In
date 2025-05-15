@@ -5,13 +5,15 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
-import { copingFilters, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { copingFilters, isOneLand, isSaltar, isSFromRept, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { copingFilters as copingFilterRept } from '../../../redux/reptiles/slices/FilterSlice';
 
 export const HeaderR = ({ imageUrl, registro, back }) => {
   const { paises = [], zonas = [] } = useSelector(state => state.landscapeSlice.optionsP)
   const theme = useTheme()
   const navigate = useNavigate();
   const dispatch = useDispatch()
+
   const handleClick = async (e, tipo, nombre) => {
     e.preventDefault();
 
@@ -35,10 +37,11 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
         pais: tipo === 'pais' ? [selectedItem] : [],
         zona: tipo === 'zona' ? [selectedItem] : [],
       };
-
+      dispatch(copingFilterRept())
       dispatch(saveFilters(filtersPayload));
       dispatch(copingFilters());
       dispatch(isSaltar(true));
+      dispatch(isSFromRept(true))
       dispatch(isOneLand(resultLength === 1));
       navigate('/paisajes');
     } catch (error) {

@@ -18,7 +18,7 @@ import { saveFilters as saveReptilFilters } from '../../../redux/reptiles/slices
 import { saveFilters as saveAvesFilters } from '../../../redux/birds/slices/FilterSlice';
 import { saveFilters as saveMamiferosFilters } from '../../../redux/mamiferos/slices/FilterSlice';
 import { sendParameter as sendParameterAves, sendParameterSalto } from '../../../redux/birds/actions/filterAction';
-import { sendParameter as sendParameterReptiles } from '../../../redux/reptiles/actions/filterAction';
+import { sendParameter as sendParameterReptiles, sendParameterSaltoRept } from '../../../redux/reptiles/actions/filterAction';
 import { sendParameter as sendParameterMamiferos, sendParameterSaltoM } from '../../../redux/mamiferos/actions/filterAction';
 import { copingFilters as copingFiltersAves } from '../../../redux/birds/slices/FilterSlice';
 import { copingFilters as copingFiltersReptiles } from '../../../redux/reptiles/slices/FilterSlice';
@@ -81,7 +81,7 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
         await Promise.all([
           dispatch(sendParameterSalto(selectOption)),
           dispatch(sendParameterSaltoM(selectOption)),
-          dispatch(sendParameterReptiles(selectOption)),
+          dispatch(sendParameterSaltoRept(selectOption)),
           dispatch(isSaltarBird(false)),
           dispatch(isSaltarMa(false)),
           dispatch(isSaltarRept(false))
@@ -245,7 +245,6 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
         cientifico:[],
         orden: []
       };
-  
       dispatch(saveReptilFilters(filtersPayload));
       dispatch(copingFiltersReptiles());
       navigate('/reptiles');

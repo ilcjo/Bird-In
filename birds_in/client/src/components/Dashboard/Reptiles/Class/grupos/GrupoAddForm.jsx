@@ -25,7 +25,7 @@ export const GrupoAddForm = ({
 
   const handleAgregar = async () => {
     const { nombreG } = nombreGrupos;
- console.log(nombreGrupos, '<---nombre')
+//  console.log(nombreGrupos, '<---nombre')
     // Verificar si el nombre de la familia está vacío
     if (!nombreG.trim()) {
       showErrorSnack(true);

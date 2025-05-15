@@ -9,7 +9,7 @@ import { ImagesCards } from '../../Cards/ImagesCards'
 import { Loading } from '../../utils/Loading';
 //REDUX
 import { sendParameter } from '../../../redux/reptiles/actions/filterAction';
-import { resetInfo } from '../../../redux/reptiles/slices/InfoSlice';
+import { isSaltarRept, resetInfo } from '../../../redux/reptiles/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/reptiles/slices/FilterSlice';
 import { HeaderR } from './HeaderR';
 import { CopyRight } from '../../CopyRight';
@@ -23,8 +23,8 @@ export const PhotosDetailR = ({ setIsFilterOpen, setPage }) => {
     const dispatch = useDispatch()
      const navigate = useNavigate()
     const { isOne, info, saltarR } = useSelector(state => state.dataReptil)
-    const { copyFilters } = useSelector(state => state.filterRep)
     const { filtersP } = useSelector(state => state.landscapeSlice)
+    const { copyFilters } = useSelector(state => state.filterRep)
     const allImages = info.flatMap(registro => registro.imagenes_reptiles);
     const featuredImage = allImages.find(image => image.destacada);
     const mainImage = featuredImage ? encodeURI(featuredImage.url) : null;
@@ -37,14 +37,13 @@ export const PhotosDetailR = ({ setIsFilterOpen, setPage }) => {
         // console.log(copyFilters, 'regreso copy filter')
         setTimeout(() => {
              if (saltarR) {
-                            // Caso prioritario: si saltar es true, haces esto y terminas
                             dispatch(backInfo(filtersP));
                             dispatch(isSaltar(true));
-                            navigate('/paisajes');
+                            dispatch(isSaltarRept(false))
                             dispatch(resetInfo())
-                            return; // Importante para que no siga al switch
+                            navigate('/paisajes');
+                            return; 
                         }
-            
             switch (isOne) {
                 case false:
                     // console.log(copyFilters)

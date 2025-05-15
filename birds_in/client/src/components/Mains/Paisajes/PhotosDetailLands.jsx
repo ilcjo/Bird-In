@@ -14,19 +14,21 @@ import { isSaltar, resetInfoLand, setNoMoreResults } from '../../../redux/paisaj
 import { CopyRight } from '../../CopyRight';
 import { backInfo as backInfoBird } from '../../../redux/birds/actions/filterAction';
 import { backInfo as backInfoMam } from '../../../redux/mamiferos/actions/filterAction';
-import { backInfo as backInfoRept } from '../../../redux/reptiles/actions/filterAction';
+import { backInfo, backInfo as backInfoRept } from '../../../redux/reptiles/actions/filterAction';
 import { useNavigate } from 'react-router-dom';
 import { isSaltarBird } from '../../../redux/birds/slices/InfoSlice';
 import { isSaltarMa } from '../../../redux/mamiferos/slices/InfoSlice';
+import { isSaltarRept } from '../../../redux/reptiles/slices/InfoSlice';
 
 export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const { copyFiltersP, oneLand, saltarP, filtersP, isBird, isMa } = useSelector(state => state.landscapeSlice)
+    const { copyFiltersP, oneLand, saltarP, filtersP, isBird, isMa, isRept } = useSelector(state => state.landscapeSlice)
     const { filters, currentFilters } = useSelector(state => state.filterSlice);
     const filtersM = useSelector(state => state.filters.filters);
+    const filtersR = useSelector(state => state.filterRep.filters)
     const Register = useSelector(state => state.landscapeSlice.infoLands)
     const allImages = Register.flatMap(bird => bird.imagenes_paisajes);
     const featuredImage = allImages.find(image => image.destacada);
@@ -48,6 +50,11 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                 dispatch(backInfoMam(filtersM))
                 dispatch(isSaltarMa(false))
                 navigate('/mamiferos');
+                dispatch(resetInfoLand())
+            } else if (isRept) {
+                dispatch(backInfo(filtersR))
+                dispatch(isSaltarRept(false))
+                navigate('/reptiles');
                 dispatch(resetInfoLand())
             }
             switch (oneLand) {

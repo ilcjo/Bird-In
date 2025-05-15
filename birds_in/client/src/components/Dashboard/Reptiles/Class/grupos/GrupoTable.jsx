@@ -202,7 +202,7 @@ export const GrupoTable = ({
                                             />
                                         ) : (
                                             item.nombre
-                                        )}s 
+                                        )}
                                     </TableCell>
                                     <TableCell align="center" colSpan={2} style={{ color: theme.palette.primary.light }}>
                                         {editMode === item.id ? (
