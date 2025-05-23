@@ -33,7 +33,7 @@ const StyledTab = styled(Tab)({
 export const IndexD = () => {
   const dispatch = useDispatch();
   const theme = useTheme()
-  const [selectedTab, setSelectedTab] = React.useState(1);
+  const [selectedTab, setSelectedTab] = React.useState(0);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [onloading, setOnLoading] = React.useState(false);
@@ -91,11 +91,11 @@ export const IndexD = () => {
           }
         }}
       >
-        <StyledTab label={<Typography variant='h5'>Actualizar</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Crear</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Contadores</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Familias/Géneros</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} />
+        {/* <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} /> */}
+        {/* <StyledTab label={<Typography variant='h5'>Crear</Typography>} /> */}
+        {/* <StyledTab label={<Typography variant='h5'>Contadores</Typography>} /> */}
+        {/* <StyledTab label={<Typography variant='h5'>Familias/Géneros</Typography>} /> */}
+        {/* <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} /> */}
       </StyledTabs>
       <div>
         {selectedTab === 0 && (

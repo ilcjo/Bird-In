@@ -13,11 +13,13 @@ import { HeaderI } from './HeaderI';
 import { sendParameter } from '../../../redux/insectos/actions/filterAction';
 import { resetInfo } from '../../../redux/insectos/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/insectos/slices/FilterSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const PhotosDetailI = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { isOne, info } = useSelector(state => state.data)
     const { copyFilters } = useSelector(state => state.filter)
     const allImages = info.flatMap(registro => registro.imagenes_insectos);
@@ -28,24 +30,7 @@ export const PhotosDetailI = ({ setIsFilterOpen, setPage }) => {
 
     const stepBack = () => {
         setShowBackdrop(true)
-        // console.log(copyFilters, 'regreso copy filter')
-        setTimeout(() => {
-            switch (isOne) {
-                case false:
-                    // console.log(copyFilters)
-                    dispatch(sendParameter(copyFilters));
-                    setPage(1)
-                    break;
-                case true:
-                    setIsFilterOpen(true);
-                    dispatch(resetInfo())
-                    setShowBackdrop(false)
-                    break;
-                default:
-                    // Código que se ejecutará si isOne no es ni true ni false
-                    break;
-            }
-        }, 1000);
+        navigate('/menu');
     };
 
     React.useEffect(() => {

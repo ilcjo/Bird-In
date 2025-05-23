@@ -141,7 +141,7 @@ export const CoverDelete = ({
     }, [isCreate])
 
     const [images, setImages] = React.useState(infoForUpdate.imagenes_mamiferos || []);
-console.log(infoForUpdate.imagenes_mamiferos)
+    console.log(infoForUpdate.imagenes_mamiferos)
     return (
         <React.Fragment>
             <Loading message={loadingMessage} open={showBackdrop} />
@@ -153,7 +153,7 @@ console.log(infoForUpdate.imagenes_mamiferos)
                 minWidth: '1200px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(2px)',
+                backdropFilter: 'blur(3px)',
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 0px 0px',
                 mb: 1

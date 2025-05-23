@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
-import { isFromBird, isFromMam, isSaltar } from '../redux/paisaje/slicesP/LandscapeSlice';
+import { isFromBird, isFromMam, isSaltar, isSFromRept } from '../redux/paisaje/slicesP/LandscapeSlice';
 import { isSaltarBird } from '../redux/birds/slices/InfoSlice';
 import { isSaltarMa } from '../redux/mamiferos/slices/InfoSlice';
+import { isSaltarRept } from '../redux/reptiles/slices/InfoSlice';
 
 const sections = [
   { id: 'aves', title: 'Aves', description: 'Fotografías de aves' },
   { id: 'mamiferos', title: 'Mamiferos', description: 'Fotografías de Mamiferos' },
-  { id: 'reptiles', title: 'Reptiles', description: 'Fotografías de Reptiles' },
+  { id: 'reptiles', title: 'Reptiles y Anfibios', description: 'Fotografías de Reptiles' },
   { id: 'paisajes', title: 'Paisajes', description: 'Fotografías de paisajes' },
   { id: 'peces', title: 'Peces', description: 'Fotografías de peces' },
   { id: 'insectos', title: 'Insectos', description: 'Fotografías de Insectos' },
@@ -28,10 +29,13 @@ export const HomeMenu = () => {
   const isAdmin = admin === 'admin';
   React.useEffect(() => {
         dispatch(isSaltarBird(false)),
+        dispatch(isSaltar(false)),
+        dispatch(isSaltarMa(false)),
         dispatch(isFromBird(false)),
-        dispatch(isSaltar(false))
-        dispatch(isSaltarMa(false))
-        dispatch(isFromMam(false))
+        dispatch(isFromMam(false)),
+        dispatch(isSFromRept(false)),
+      dispatch(isSaltarRept(false))
+        
     }, []);
   // Access image URLs
   const images = {

@@ -102,8 +102,8 @@ Grupos_reptiles.hasMany(Reptiles, { foreignKey: 'grupos_id_grupo' })
 // // =>INSECTOS
 Insectos.belongsTo(Familias_insectos, { foreignKey: 'familias_id_familia' })
 Familias_insectos.hasMany(Insectos, { foreignKey: 'familias_id_familia' })
-Insectos.belongsTo(Grupos_insectos, { foreignKey: 'orders_id_order' })
-Grupos_insectos.hasMany(Insectos, { foreignKey: 'orders_id_order' })
+Insectos.belongsTo(Grupos_insectos, { foreignKey: 'grupos_id_grupo' })
+Grupos_insectos.hasMany(Insectos, { foreignKey: 'grupos_id_grupo' })
 
 // UNO A MUCHOS
 

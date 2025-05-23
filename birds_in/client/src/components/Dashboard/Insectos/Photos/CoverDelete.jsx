@@ -152,22 +152,22 @@ export const CoverDelete = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-                minWidth: '1200px',
+                minWidth: '1400px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(2px)',
+                backdropFilter: 'blur(3px)',
                 padding: '0px 40px 30px 0px',
-                borderRadius: '0px 0px 20px 20px',
-                mb: 10,
+                borderRadius: '0px 0px 0px 0px',
+                mb: 1,
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
-                            <Typography variant='h2' color='primary'>
-                                Imágenes {nombre ? ` ${nombre}` : 'del Registro '}
+                            <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
+                                Imágenes {nombre ? ` ${nombre}` : 'del Registro'}
                             </Typography>
                         </Grid>
-                        {!isCreate && (
+                        {/* {!isCreate && (
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
@@ -184,9 +184,9 @@ export const CoverDelete = ({
                                     Buscar Otro Registro
                                 </Button>
                             </Grid>
-                        )}
+                        )} */}
                     </Grid>
-                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
@@ -200,7 +200,7 @@ export const CoverDelete = ({
                         Eliminar selección
                     </Button>
                     {infoForUpdate && infoForUpdate.imagenes_insectos && infoForUpdate.imagenes_insectos.length > 0 && (
-                        <Grid container spacing={2} sx={{
+                        <Grid container spacing={1} sx={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',

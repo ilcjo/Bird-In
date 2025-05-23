@@ -25,12 +25,19 @@ export const Search = ({ changeTab }) => {
     const [showUpdate, setShowUpdate] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(true);
 
-    const handleSelect = (registro) => {
-        console.log(registro)
-        localStorage.setItem('nombreIngles', JSON.stringify(registro.nombre_ingles))
-        setSelected(registro);
+  const handleSelect = (registro) => {
+    console.log(registro);
+    localStorage.setItem('nombreIngles', JSON.stringify(registro.nombre_ingles));
+    setSelected(registro); // Solo esto
+};
+
+// Nuevo useEffect que se ejecuta cuando selected cambia
+React.useEffect(() => {
+    if (selected) {
         handleButtonClick();
-    };
+    }
+}, [selected]);
+
 
     const handleButtonClick = () => {
         setShowBackdrop(true)
@@ -45,37 +52,35 @@ export const Search = ({ changeTab }) => {
         }
     };
 
-    React.useEffect(() => {
-        if (selected) {
-            handleButtonClick();
-        }
-    }, [selected]);
-
     //tengo una idea de hacer una rta 
     //donde solo busque lso nombre después busco el ave 
     //que selecciona y si pone la info, para hacerlo mas rápido
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setShowBackdrop(true)
-                setLoadingMessage('Cargando Todos los Insectos Por Favor Espere...');
-                const response = await axios.get('/insectos/nombres');
-                const data = response.data;
-                // const validData = data.filter((item) => item.nombre_ingles);
-                // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
-                // validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
-                // localStorage.setItem('sData', JSON.stringify(validData));
-                setData(data);
-            } catch (error) {
-                console.error("Error al obtener los datos:", error);
+   React.useEffect(() => {
+    const fetchData = async () => {
+        try {
+            setShowBackdrop(true);
+            setLoadingMessage('Cargando Registro...');
+            const response = await axios.get('/insectos/nombres');
+            const data = response.data;
 
-            } finally {
-                setShowBackdrop(false);
+            if (data.length === 1) {
+                const registroUnico = data[0];
+                setData(data); // Por si se necesita para algo más
+                handleSelect(registroUnico); // Selecciona automáticamente
+            } else {
+                console.warn("Se esperaban 1 solo registro, pero llegaron", data.length);
+                setData(data); // Aún los muestra si hay más
             }
-        };
+        } catch (error) {
+            console.error("Error al obtener los datos:", error);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
 
-        fetchData();
-    }, [showUpdate]);
+    fetchData();
+}, []);
+
 
     return (
         <React.Fragment>

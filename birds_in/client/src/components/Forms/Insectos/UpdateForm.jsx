@@ -161,10 +161,10 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const handleDeleteRegistro = async () => {
         try {
             setShowBackdrop(true);
-            setLoadingMessage('Eliminando Registro del ...');
+            setLoadingMessage('Eliminando Registro del servidor...');
             await dispatch(deleteRegistro(infoForUpdate.id_insecto));
             setOpenSnackbar(true);
-            setSnackBarMessage('El Registro del Registro se ha eliminado correctamente');
+            setSnackBarMessage('El Registro se ha eliminado correctamente');
             setTimeout(() => {
                 handleReturnSearch()
             }, 2000);
@@ -227,11 +227,11 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
             setImageFiles([]);
             setAllImageURLs([])
             if (imageUrl) {
-                setSnackBarMessage('El  se ha Actualizado correctamente.');
+                setSnackBarMessage('El Registro se ha Actualizado correctamente.');
                 dispatch(getInfoForUpdate(infoForUpdate.id_insecto));
                 changeImagenExist();
             } else {
-                setSnackBarMessage('El  se ha Actualizado correctamente.');
+                setSnackBarMessage('El Registro se ha Actualizado correctamente.');
                 dispatch(getInfoForUpdate(infoForUpdate.id_insecto));
             }
         } catch (error) {
@@ -302,7 +302,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -310,12 +310,12 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 3 }}>
+                                <Typography variant='h1' color='primary' sx={{ mb: 3 }}>
                                     Formulario de Actualización
                                 </Typography>
                             </Grid>
 
-                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            {/* <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <Button
                                     sx={{
                                         fontSize: '1.1rem',
@@ -330,10 +330,10 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                 >
                                     Buscar Otro Registro
                                 </Button>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
 
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
@@ -355,43 +355,46 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Registro
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <StyledTextField
+                            <Grid item xs={12} sm={12}>
+                                <TextField
                                     name="ingles"
-                                    label="Nombre en Ingles"
+                                    label="Orden"
                                     value={createData.ingles}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                <StyledTextField
+                                {/* <TextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                <StyledTextField
+                                <TextField
                                     name="cientifico"
-                                    label="Nombre científico (Especie)"
+                                    label="Nombre científico"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
-                                    variant="filled"
+                                    variant="outlined"
                                     margin="dense"
+                                    InputProps={{
+                                        style: { fontStyle: 'italic' } // Aplica estilo cursiva al texto
+                                    }}
                                     fullWidth
-                                />
+                                /> */}
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
@@ -462,9 +465,9 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     )}
                                 />
 
-                            </Grid>
+                            </Grid> */}
                         </Grid>
-                        <Grid container spacing={1}>
+                        {/* <Grid container spacing={1}>
                             <Grid item xs={12} sm={12}>
                                 <Autocomplete
                                     disablePortal
@@ -550,50 +553,50 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     }
 
                                 />
-                            </Grid>
+                            </Grid> */}
 
-                            <Grid item xs={12} sm={12}>
-                                <StyledTextField
-                                    name="urlWiki"
-                                    label='URL Wiki'
-                                    variant="filled"
-                                    value={createData.urlWiki}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    shrink='true'
-                                    margin="dense"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                name="urlWiki"
+                                label='URL Wiki'
+                                variant="outlined"
+                                value={createData.urlWiki}
+                                onChange={handleInputChange}
+                                fullWidth
+                                shrink='true'
+                                margin="dense"
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
 
-                                                <IconButton onClick={handleLogoClickW}
-                                                    sx={{
-                                                        zIndex: 1,
-                                                        '&:hover': {
-                                                            zIndex: 2,
-                                                        },
-                                                    }}
-                                                >
-                                                    <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                <Button
-                                    endIcon={<DeleteForeverIcon />}
-                                    variant="contained"
-                                    color='custom'
-                                    onClick={handleDeleteRegistro}
-                                    sx={{
-                                        color: theme.palette.primary.light,
-                                    }}
-                                >
-                                    Eliminar Registro
-                                </Button>
-                            </Grid>
+                                            <IconButton onClick={handleLogoClickW}
+                                                sx={{
+                                                    zIndex: 1,
+                                                    '&:hover': {
+                                                        zIndex: 2,
+                                                    },
+                                                }}
+                                            >
+                                                <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
+                            <Button
+                                endIcon={<DeleteForeverIcon />}
+                                variant="contained"
+                                color='custom'
+                                onClick={handleDeleteRegistro}
+                                sx={{
+                                    color: theme.palette.primary.light,
+                                }}
+                            >
+                                Eliminar Registro
+                            </Button>
+                            {/* </Grid> */}
                         </Grid>
                     </Grid>
                 </Grid>

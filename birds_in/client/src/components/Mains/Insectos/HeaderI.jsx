@@ -52,15 +52,15 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
         {registro.map((data, index) => (
           <React.Fragment key={index}>
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Typography variant='h6' color='primary.light' sx={{ mb: 1, mt: -2 }}>
                   {data.familias_insecto.nombre || 'N/A'} / {data.grupos_insecto.nombre || 'N/A'}
                 </Typography>
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} >
-                <Typography variant="h4" color='primary.light' >
-                  NOMBRE EN INGLÉS
+                <Typography variant="h4" color='white' sx={{mb:1, mt:2}} >
+                  ORDEN
                 </Typography>
                 <Typography variant='h1' color='primary' >
                   {data.nombre_ingles || 'N/A'}
@@ -82,23 +82,23 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
                   Wiki
                 </Button>
               </Grid>
-              <Grid item xs={12} sx={{ mt: 2 }}>
-                <Typography variant="h4" color='primary.light' sx={{ mb: 1 }} >
+              {/* <Grid item xs={12} sx={{ mt: 2 }}>
+                <Typography variant="h5" color='white' sx={{ mb: 1 }} >
                   NOMBRE CIENTÍFICO
-                  <Typography variant='h6' color='primary.light' sx={{ mb: 0.5 }}>
+                  <Typography variant='body1' color='primary.light' sx={{ mb: 0.5, fontStyle: 'italic'  }}>
                     {data.nombre_cientifico || 'N/A'}
                   </Typography>
                 </Typography>
-                <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
+                <Typography variant="h5" color='white' sx={{ mb: 0.5 }}>
                   NOMBRE COMÚN
-                  <Typography variant='h6' color='primary.light'>
+                  <Typography variant='body2' color='primary.light'>
                     {data.nombre_comun || 'N/A'}
                   </Typography>
                 </Typography>
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12}>
-                <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
+                {/* <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
                   PAÍS
                   <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
                     {formatData(data.paises) || 'N/A'}
@@ -109,7 +109,7 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
                   <Typography variant="h6" color="primary.light" sx={{ mb: 1.5 }}>
                     {formatData(data.zonasInsectos) || 'N/A'}
                   </Typography>
-                </Typography>
+                </Typography> */}
               </Grid>
             </Grid>
           </React.Fragment>

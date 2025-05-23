@@ -134,11 +134,11 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography variant="h5" color='white' sx={{ mb: 1 }} >
                   NOMBRE CIENTÍFICO
-                  <Typography variant='body1' color='primary.light' sx={{ mb: 0.5 }}>
+                  <Typography variant='body1' color='primary.light' sx={{ mb: 0.5, fontStyle: 'italic' }}>
                     {data.nombre_cientifico || 'N/A'}
                   </Typography>
                 </Typography>
-                <Typography variant="h5" color='white' sx={{ mb: 0 }}>
+                <Typography variant="h5" color='white' sx={{ mb: 0.5 }}>
                   NOMBRE COMÚN
                 </Typography>
                 <Typography variant='body2' color='primary.light'>

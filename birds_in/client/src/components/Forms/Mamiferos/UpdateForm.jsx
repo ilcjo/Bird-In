@@ -261,10 +261,10 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const handleDeleteRegistro = async () => {
         try {
             setShowBackdrop(true);
-            setLoadingMessage('Eliminando Registro del ...');
+            setLoadingMessage('Eliminando Registro del servidor...');
             await dispatch(deleteRegistro(infoForUpdate.id_mamifero));
             setOpenSnackbar(true);
-            setSnackBarMessage('El Registro del Registro se ha eliminado correctamente');
+            setSnackBarMessage('El Registro se ha eliminado correctamente');
             setTimeout(() => {
                 handleReturnSearch()
             }, 2000);
