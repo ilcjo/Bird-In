@@ -315,7 +315,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                 </Typography>
                             </Grid>
 
-                            {/* <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <Button
                                     sx={{
                                         fontSize: '1.1rem',
@@ -330,7 +330,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                 >
                                     Buscar Otro Registro
                                 </Button>
-                            </Grid> */}
+                            </Grid>
                         </Grid>
 
                         <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >

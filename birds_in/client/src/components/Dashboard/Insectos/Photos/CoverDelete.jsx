@@ -167,7 +167,7 @@ export const CoverDelete = ({
                                 Imágenes {nombre ? ` ${nombre}` : 'del Registro'}
                             </Typography>
                         </Grid>
-                        {/* {!isCreate && (
+                        {!isCreate && (
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
@@ -184,7 +184,7 @@ export const CoverDelete = ({
                                     Buscar Otro Registro
                                 </Button>
                             </Grid>
-                        )} */}
+                        )}
                     </Grid>
                     <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes

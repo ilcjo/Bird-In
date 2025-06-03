@@ -30,7 +30,25 @@ export const PhotosDetailI = ({ setIsFilterOpen, setPage }) => {
 
     const stepBack = () => {
         setShowBackdrop(true)
-        navigate('/menu');
+                // console.log(copyFilters, 'regreso copy filter')
+        setTimeout(() => {
+            switch (isOne) {
+                case false:
+                    // console.log(copyFilters)
+                    dispatch(sendParameter(copyFilters));
+                    setPage(1)
+                    break;
+                case true:
+                    setIsFilterOpen(true);
+                    dispatch(resetInfo())
+                    setShowBackdrop(false)
+                    break;
+                default:
+                    // Código que se ejecutará si isOne no es ni true ni false
+                    break;
+            }
+        }, 1000);
+
     };
 
     React.useEffect(() => {
