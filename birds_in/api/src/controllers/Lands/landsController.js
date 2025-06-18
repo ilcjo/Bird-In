@@ -47,7 +47,7 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
             limit: perPageConvert,
             offset: offset
         });
-// console.log(RegistrosFiltrados)
+        // console.log(RegistrosFiltrados)
         // Contar el total de paisajes
         const totalResults = await Paisajes.count({
             where: Object.keys(whereClause).length > 0 ? whereClause : {} // Si no hay filtros, contar todo
@@ -273,27 +273,29 @@ const findDataByIdP = async (id) => {
                         ['url_paisaje', 'url'],
                         'id',
                         'destacada',
-                        [Sequelize.literal('SUBSTRING_INDEX(url_paisaje, "_", -1)'), 'titulo']
-                        ,] // Atributos que deseas de Imagenes_aves
+                        'orden_imagen',
+                        [Sequelize.literal('SUBSTRING_INDEX(url_paisaje, "_", -1)'), 'titulo'],
+                    ],
+                    // No pongas order aquí
                 },
                 { model: Paises, attributes: ['nombre', ['id_pais', 'id']] },
                 { model: Zonas, attributes: [['nombre_zona', 'nombre'], ['id_zona', 'id']] },
             ],
-            attributes: [
-                'id',
-                'descripcion',
-                'url',
-                'map'
-            ], // Atributos
-            order: [[{ model: Imagenes_paisajes }, 'orden_imagen', 'ASC']],
+            attributes: ['id', 'descripcion', 'url', 'map'],
         });
+
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (Registro && Registro.imagenes_paisajes) {
+            Registro.imagenes_paisajes.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
+
         return Registro;
     } catch (error) {
-        // Manejar errores de consulta
         console.error('Error en la consulta:', error);
         throw error;
     }
 };
+
 
 
 const findDataByNameP = async (id) => {
@@ -307,8 +309,10 @@ const findDataByNameP = async (id) => {
                         ['url_paisaje', 'url'],
                         'id',
                         'destacada',
+                        'orden_imagen',
                         [Sequelize.literal('SUBSTRING_INDEX(url_paisaje, "_", -1)'), 'titulo']
-                        ,] // Atributos que deseas de Imagenes
+                        ,],
+                    // order: [[Sequelize.literal('CAST("Imagenes_paisajes"."orden_imagen" AS INTEGER)'), 'ASC']],
                 },
                 { model: Paises, attributes: ['nombre', ['id_pais', 'id']] },
                 { model: Zonas, attributes: [['nombre_zona', 'nombre'], ['id_zona', 'id']] },
@@ -319,8 +323,13 @@ const findDataByNameP = async (id) => {
                 'url',
                 'map'
             ],
-            order: [[{ model: Imagenes_paisajes }, 'orden_imagen', 'ASC']],
+
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (Registro && Registro.imagenes_paisajes) {
+            Registro.imagenes_paisajes.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
+
         return Registro;
     } catch (error) {
         // Manejar errores de consulta

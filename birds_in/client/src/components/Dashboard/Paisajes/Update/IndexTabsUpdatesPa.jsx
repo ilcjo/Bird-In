@@ -31,6 +31,9 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
     selectedRegister,
     history }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
+    const [coverSelected, setCoverSelected] = React.useState(false);
+    const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
+
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -53,7 +56,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                     localStorage.removeItem('isFromCreateImage');
                     localStorage.removeItem('isExist');
                 }, 10000); // Ejecuta después de completar el update
-              
+
             } else if (isFromImage === 'false' && isExist === 'true') {
                 setSelectedTab(0);
                 localStorage.removeItem('nombre');
@@ -74,21 +77,23 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h5' >
+                    <StyledTab label={<Typography variant='h4' >
                         Información
                     </Typography>} />
-                    <StyledTab label={<Typography variant='h5' >
+                    <StyledTab label={<Typography variant='h4' >
                         Imágenes Existente
                     </Typography>} onClick={handleNavigateToCoverDelete} />
                 </StyledTabs>
                 <Box sx={{}}>
                     {selectedTab === 0 && (
                         <React.Fragment>
-                            <UpdatePaisaje changeTab={changeTab}
+                            <UpdatePaisaje
+                                changeTab={changeTab}
                                 showUpdateRegister={showUpdateRegister}
                                 showSearchRegister={showSearchRegister}
                                 selectedRegister={selectedRegister}
                                 changeImagenExist={handleNavigateToCoverDelete}
+                                isImages={() => setImagesExistTabEnabled(true)}
                             />
                         </React.Fragment>
                     )}

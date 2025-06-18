@@ -69,7 +69,7 @@ export const IndexTabsCreateP = ({
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h5' >
+                    <StyledTab label={<Typography variant='h4' >
                         Información
                     </Typography>} />
                     {/* <StyledTab

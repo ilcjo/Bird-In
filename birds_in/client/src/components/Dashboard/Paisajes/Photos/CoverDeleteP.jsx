@@ -5,7 +5,7 @@ import '../../../../assets/styles/zoom.css'
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 //GLOBAL STATE
-import { getInfoForUpdatePa } from '../../../../redux/paisaje/actionsP/createLands';
+import { getInfoForUpdatePa, saveOrderPhotos } from '../../../../redux/paisaje/actionsP/createLands';
 import { sendCoverPhotoP, sendPhotosDeleteP } from '../../../../redux/paisaje/actionsP/DeletCoverPaisaje';
 //ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,6 +16,7 @@ import { Loading } from '../../../utils/Loading';
 import { getLand } from '../../../../redux/paisaje/slicesP/createLandSlice';
 import { EditImageCardsP } from '../../../Cards/Paisaje/EditImageCardsP';
 import ImageDragContainer from './ImageDragContainer';
+import PhotosOrganizerContainer from './PhotosOrganizerContainer';
 
 export const CoverDeleteP = ({
     isCreate,
@@ -42,9 +43,8 @@ export const CoverDeleteP = ({
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
     // console.log(selectedImages)
 
-
     const handleSetAsCover = async (id, url, destacada) => {
-
+        console.log(id, url)
         try {
             // Marcar la imagen como portada actual
             setHighlightedImage((prev) => {
@@ -143,8 +143,38 @@ export const CoverDeleteP = ({
         }
     }, [isCreate])
 
+    const saveOrderToDB = async (orderedImages) => {
+        setShowBackdrop(true);
+        setLoadingMessage('Guardando orden...');
+
+        const formattedImages = orderedImages.map((image, index) => ({
+            id: image.id,
+            orden: index + 1
+        }));
+
+        try {
+            await dispatch(saveOrderPhotos(formattedImages));
+            console.log("Orden guardado en la base de datos.");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));  // usa el id correcto
+            setSnackbarOpen(true);
+            setSnackbarMessage('Orden de imágenes guardado Exitosamente');
+        } catch (error) {
+            console.error("Error al guardar el orden:", error);
+            setErrorMessage(`Error: ${error.message || "Ocurrió un error inesperado"}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+React.useEffect(() => {
+    if (infoLandForUpdate?.imagenes_paisajes) {
+        setImages(infoLandForUpdate.imagenes_paisajes);
+    }
+}, [infoLandForUpdate?.imagenes_paisajes]);
 
     const [images, setImages] = React.useState(infoLandForUpdate.imagenes_paisajes);
+    
     return (
         <React.Fragment>
             <Loading
@@ -168,7 +198,7 @@ export const CoverDeleteP = ({
                 <Grid item xs={12} md={12}>
                     <Grid container >
                         <Grid item xs={12} sm={9}>
-                            <Typography variant='h2' color='primary'>
+                            <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombreP ? ` ${nombreP}` : 'del Paisaje'}
                             </Typography>
                         </Grid>
@@ -176,7 +206,7 @@ export const CoverDeleteP = ({
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
-                                        fontSize: '1.1rem',
+                                        fontSize: '1rem',
                                         fontWeight: 'bold',
                                         // color: theme.palette.primary.light,
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -191,7 +221,7 @@ export const CoverDeleteP = ({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h5' color='primary.light' sx={{ mt: 2 }}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
@@ -200,7 +230,7 @@ export const CoverDeleteP = ({
                         color="error"
                         onClick={handleDeleteButtonClick}
                         endIcon={<DeleteIcon />}
-                        sx={{ mt: 0, mb: 2, color: 'primary.light' }}
+                        sx={{ mt: 0, mb: 0, color: 'primary.light' }}
                     >
                         Eliminar selección
                     </Button>
@@ -209,10 +239,11 @@ export const CoverDeleteP = ({
             <Grid sx={{
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backdropFilter: 'blur(2px)',
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
             }}>
-                <DndProvider backend={HTML5Backend}>
+                {/* <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
                         images={infoLandForUpdate.imagenes_paisajes}
                         handleImageClick={handleImageClick}
@@ -226,7 +257,19 @@ export const CoverDeleteP = ({
                         errorBar={setErrorSnackbarOpen}
                         id={infoLandForUpdate.id}
                     />
-                </DndProvider>
+                </DndProvider> */}
+                <PhotosOrganizerContainer
+                    initialImages={images}
+                    handleSetAsCover={handleSetAsCover}
+                    handleDeleteCheckBox={handleDeleteCheckBox}
+                    handleImageClick={handleImageClick}
+                    highlightedImage={highlightedImage}
+                    onSaveOrder={(updatedImages) => {
+                        console.log('Nuevo orden:', updatedImages);
+                    }}
+                    onSaveToDB={saveOrderToDB}
+                />
+
                 <CarruselGalleryDelete
                     isOpen={isGalleryOpen}
                     images={infoLandForUpdate.imagenes_paisajes}

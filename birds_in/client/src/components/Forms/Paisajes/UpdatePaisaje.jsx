@@ -178,17 +178,6 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
         }
     };
 
-    const handleLogoClickW = () => {
-        if (createData.urlWiki) {
-            window.open(createData.urlWiki, '_blank');
-        }
-    };
-
-    const handleMapsClick = () => {
-        if (createData.map) {
-            window.open(createData.map, '_blank');
-        }
-    };
 
     const handleReturnSearch = () => {
         showUpdateRegister(false)
@@ -229,6 +218,18 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
         setOpenSnackbar(false);
     };
 
+    
+    const handleLogoClickW = () => {
+        if (createData.urlWiki) {
+            window.open(createData.urlWiki, '_blank');
+        }
+    };
+
+    const handleMapsClick = () => {
+        if (createData.map) {
+            window.open(createData.map, '_blank');
+        }
+    };
     return (
         <React.Fragment>
             <Box
@@ -252,7 +253,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 3 }} >
+                                <Typography variant='h1' color='primary' sx={{ mb: 1.5 }} >
                                     Formulario de Actualización
                                 </Typography>
                             </Grid>
@@ -260,7 +261,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
-                                        fontSize: '1.1rem',
+                                        fontSize: '1rem',
                                         fontWeight: 'bold',
                                         // color: theme.palette.primary.light,
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
@@ -275,7 +276,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Subir imágenes a la Galería
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
@@ -299,7 +300,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                     </Grid>
 
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 3 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Paisaje
                             <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>

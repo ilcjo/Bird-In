@@ -16,7 +16,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(0, 56, 28, 0.1)',
   backdropFilter: 'blur(8px)',
   borderRadius: '10px 10px 0px 0px',
-  marginTop: '100px',
+  marginTop: '110px',
   '& .Mui-selected': {
     backgroundColor: theme.palette.custom.light,
   },
@@ -91,9 +91,9 @@ export const IndexDP = () => {
           }
         }}
       >
-        <StyledTab label={<Typography variant='h5'>Actualizar</Typography>} />
-        <StyledTab label={<Typography variant='h5' >Crear</Typography>} />
-        <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} />
+        <StyledTab label={<Typography variant='h4' >Crear</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Descargar Excel</Typography>} />
       </StyledTabs >
       <div>
         {selectedTab === 0 && (
