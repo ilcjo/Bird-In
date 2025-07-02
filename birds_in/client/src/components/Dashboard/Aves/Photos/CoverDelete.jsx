@@ -14,9 +14,10 @@ import { Loading } from '../../../utils/Loading';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 import ImageDragContainer from './ImageDragContainer';
 // redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/birds/actions/photosAction';
+import { saveOrderPhotos, sendCoverPhoto, sendPhotosDelete } from '../../../../redux/birds/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
 import { getAve } from '../../../../redux/birds/slices/UpdateSlice';
+import PhotosOrganizerContainer from './PhotosOrganizerContainer';
 
 export const CoverDelete = ({
     isCreate,
@@ -126,6 +127,38 @@ export const CoverDelete = ({
         }
     }, [isCreate]);
 
+
+    const saveOrderToDB = async (orderedImages) => {
+        setShowBackdrop(true);
+        setLoadingMessage('Guardando orden...');
+
+        const formattedImages = orderedImages.map((image, index) => ({
+            id: image.id,
+            orden: index + 1
+        }));
+
+        try {
+            await dispatch(saveOrderPhotos(formattedImages));
+            console.log("Orden guardado en la base de datos.");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));  // usa el id correcto
+            setSnackbarOpen(true);
+            setSnackbarMessage('Orden de imágenes guardado Exitosamente');
+        } catch (error) {
+            console.error("Error al guardar el orden:", error);
+            setErrorMessage(`Error: ${error.message || "Ocurrió un error inesperado"}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+
+    React.useEffect(() => {
+        if (infoAveForUpdate?.imagenes_aves) {
+            setImages(infoAveForUpdate.imagenes_aves);
+        }
+    }, [infoAveForUpdate?.imagenes_aves]);
+
     const [images, setImages] = React.useState(infoAveForUpdate.imagenes_aves);
 
     return (
@@ -194,7 +227,7 @@ export const CoverDelete = ({
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
             }}>
-                <DndProvider backend={HTML5Backend}>
+                {/* <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
                         images={infoAveForUpdate.imagenes_aves}
                         handleImageClick={handleImageClick}
@@ -208,7 +241,18 @@ export const CoverDelete = ({
                         errorBar={setErrorSnackbarOpen}
                         id={infoAveForUpdate.id}
                     />
-                </DndProvider>
+                </DndProvider> */}
+                <PhotosOrganizerContainer
+                    initialImages={images}
+                    handleSetAsCover={handleSetAsCover}
+                    handleDeleteCheckBox={handleDeleteCheckBox}
+                    handleImageClick={handleImageClick}
+                    highlightedImage={highlightedImage}
+                    onSaveOrder={(updatedImages) => {
+                        console.log('Nuevo orden:', updatedImages);
+                    }}
+                    onSaveToDB={saveOrderToDB}
+                />
                 <CarruselGalleryDelete
                     isOpen={isGalleryOpen}
                     images={infoAveForUpdate.imagenes_aves}
@@ -223,13 +267,13 @@ export const CoverDelete = ({
             </Grid>
             <Snackbar
                 open={snackbarOpen}
-                autoHideDuration={6000}
+                autoHideDuration={9000}
                 onClose={() => setSnackbarOpen(false)}
                 message={snackbarMessage}
             />
             <Snackbar
                 open={errorSnackbarOpen}
-                autoHideDuration={6000}
+                autoHideDuration={9000}
                 onClose={() => setErrorSnackbarOpen(false)}
                 message={errorMessage}
                 action={

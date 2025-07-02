@@ -612,6 +612,10 @@ const findDataById = async (id) => {
                 'url_wiki',],
             order: [[{ model: Imagenes_mamiferos }, 'orden_imagenes', 'ASC']],  // Atributos de Mamiferos que deseas
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (registro && registro.imagenes_mamiferos) {
+            registro.imagenes_mamiferos.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         // console.log(registro, '<--encontrado')
         return registro;
     } catch (error) {
@@ -664,6 +668,10 @@ const findDataByName = async (name) => {
                 'url_wiki',],
             order: [[{ model: Imagenes_mamiferos }, 'orden_imagenes', 'ASC']],  // Atributos de Mamiferos que deseas
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (registro && registro.imagenes_mamiferos) {
+            registro.imagenes_mamiferos.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         return registro;
     } catch (error) {
         // Manejar errores de consulta

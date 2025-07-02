@@ -12,9 +12,10 @@ import ImageDragContainer from './ImageDragContainer';
 import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
 //redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/reptiles/actions/photosAction';
+import { saveOrderPhotos, sendCoverPhoto, sendPhotosDelete } from '../../../../redux/reptiles/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/reptiles/actions/crudAction';
 import { getRegistro } from '../../../../redux/reptiles/slices/UpdateSlice';
+import PhotosOrganizerContainer from '../../Paisajes/Photos/PhotosOrganizerContainer';
 
 
 export const CoverDelete = ({
@@ -140,8 +141,39 @@ export const CoverDelete = ({
         }
     }, [isCreate])
 
+    const saveOrderToDB = async (orderedImages) => {
+        setShowBackdrop(true);
+        setLoadingMessage('Guardando orden...');
+
+        const formattedImages = orderedImages.map((image, index) => ({
+            id: image.id,
+            orden: index + 1
+        }));
+
+        try {
+            await dispatch(saveOrderPhotos(formattedImages));
+            console.log("Orden guardado en la base de datos.");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_reptil));  // usa el id correcto
+            setSnackbarOpen(true);
+            setSnackbarMessage('Orden de imágenes guardado Exitosamente');
+        } catch (error) {
+            console.error("Error al guardar el orden:", error);
+            setErrorMessage(`Error: ${error.message || "Ocurrió un error inesperado"}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+
+    React.useEffect(() => {
+        if (infoForUpdate?.imagenes_reptiles) {
+            setImages(infoForUpdate.imagenes_reptiles);
+        }
+    }, [infoForUpdate?.imagenes_reptiles]);
+
     const [images, setImages] = React.useState(infoForUpdate.imagenes_reptiles || []);
-console.log(infoForUpdate.imagenes_reptiles)
+    console.log(infoForUpdate.imagenes_reptiles)
     return (
         <React.Fragment>
             <Loading message={loadingMessage} open={showBackdrop} />
@@ -208,7 +240,7 @@ console.log(infoForUpdate.imagenes_reptiles)
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
             }}>
-                <DndProvider backend={HTML5Backend}>
+                {/* <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
                         images={infoForUpdate.imagenes_reptiles}
                         handleImageClick={handleImageClick}
@@ -222,7 +254,18 @@ console.log(infoForUpdate.imagenes_reptiles)
                         errorBar={setErrorSnackbarOpen}
                         idRegistro={infoForUpdate.id_reptil}
                     />
-                </DndProvider>
+                </DndProvider> */}
+                <PhotosOrganizerContainer
+                    initialImages={images}
+                    handleSetAsCover={handleSetAsCover}
+                    handleDeleteCheckBox={handleDeleteCheckBox}
+                    handleImageClick={handleImageClick}
+                    highlightedImage={highlightedImage}
+                    onSaveOrder={(updatedImages) => {
+                        console.log('Nuevo orden:', updatedImages);
+                    }}
+                    onSaveToDB={saveOrderToDB}
+                />
                 <CarruselGalleryDelete
                     isOpen={isGalleryOpen}
                     images={infoForUpdate.imagenes_reptiles}

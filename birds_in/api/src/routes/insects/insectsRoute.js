@@ -1,7 +1,7 @@
 const { Router } = require('express')
 
 const upload = require('../../utils/multerConfig')
-const { createInsect, getFilterInfo, selectOptions, getFilterOptions, uploadImageftp, findInfoForUpdate, findInfoForUpdateName, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getExcel, getAllNombres, checkClases, checkDuplicateNames } = require('../../handlers/insects/insectHandler')
+const { createInsect, getFilterInfo, selectOptions, getFilterOptions, uploadImageftp, findInfoForUpdate, findInfoForUpdateName, updateInfoRegister, deletePhotos, setCoverPhoto, contandoRegistros, deleteRegistro, checkRegisterDuplicate, getExcel, getAllNombres, checkClases, checkDuplicateNames, saveOrderImages } = require('../../handlers/insects/insectHandler')
 
 const InsectRouter = Router()
 InsectRouter
@@ -22,5 +22,8 @@ InsectRouter
     .get('/nombres', getAllNombres)
     .get('/clases', checkClases)
     .get('/gruposFamilias', checkDuplicateNames)
+    .post('/guardar_orden_images', saveOrderImages)
+
+
 
 module.exports = InsectRouter

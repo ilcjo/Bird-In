@@ -613,6 +613,10 @@ const findDataById = async (id) => {
                 'url_wiki',], // Atributos de Reptiles que deseas
             order: [[{ model: Imagenes_reptiles }, 'orden_imagenes', 'ASC']],  // Atributos de Mamiferos que deseas
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (registro && registro.imagenes_mamiferos) {
+            registro.imagenes_mamiferos.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         return registro;
     } catch (error) {
         // Manejar errores de consulta
@@ -664,6 +668,10 @@ const findDataByName = async (name) => {
                 'url_wiki',], // Atributos de Reptiles que deseas
             order: [[{ model: Imagenes_reptiles }, 'orden_imagenes', 'ASC']],  // Atributos de Mamiferos que deseas
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (registro && registro.imagenes_mamiferos) {
+            registro.imagenes_mamiferos.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         return registro;
     } catch (error) {
         // Manejar errores de consulta
@@ -687,7 +695,7 @@ const sendAndUpdateRegister = async (
     idRegistro,
     image_orden
 ) => {
-   
+
     try {
         console.log("Entró a sendAndUpdateRegister");
         console.log('llegue par actualizar el registro CONTROLLER: ',

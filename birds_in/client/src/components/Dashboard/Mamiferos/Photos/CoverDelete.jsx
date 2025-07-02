@@ -12,9 +12,10 @@ import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
 import ImageDragContainer from './ImageDragContainer';
 //redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/mamiferos/actions/photosAction';
+import { saveOrderPhotos, sendCoverPhoto, sendPhotosDelete } from '../../../../redux/mamiferos/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/mamiferos/actions/crudAction';
 import { getRegistro } from '../../../../redux/mamiferos/slices/UpdateSlice';
+import PhotosOrganizerContainer from './PhotosOrganizerContainer';
 
 
 export const CoverDelete = ({
@@ -140,6 +141,37 @@ export const CoverDelete = ({
         }
     }, [isCreate])
 
+    const saveOrderToDB = async (orderedImages) => {
+        setShowBackdrop(true);
+        setLoadingMessage('Guardando orden...');
+
+        const formattedImages = orderedImages.map((image, index) => ({
+            id: image.id,
+            orden: index + 1
+        }));
+
+        try {
+            await dispatch(saveOrderPhotos(formattedImages));
+            console.log("Orden guardado en la base de datos.");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));  // usa el id correcto
+            setSnackbarOpen(true);
+            setSnackbarMessage('Orden de imágenes guardado Exitosamente');
+        } catch (error) {
+            console.error("Error al guardar el orden:", error);
+            setErrorMessage(`Error: ${error.message || "Ocurrió un error inesperado"}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+
+    React.useEffect(() => {
+        if (infoForUpdate?.imagenes_mamiferos) {
+            setImages(infoForUpdate.imagenes_mamiferos);
+        }
+    }, [infoForUpdate?.imagenes_mamiferos]);
+
     const [images, setImages] = React.useState(infoForUpdate.imagenes_mamiferos || []);
     console.log(infoForUpdate.imagenes_mamiferos)
     return (
@@ -208,7 +240,7 @@ export const CoverDelete = ({
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
             }}>
-                <DndProvider backend={HTML5Backend}>
+                {/* <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
                         images={infoForUpdate.imagenes_mamiferos}
                         handleImageClick={handleImageClick}
@@ -222,7 +254,18 @@ export const CoverDelete = ({
                         errorBar={setErrorSnackbarOpen}
                         idMamifero={infoForUpdate.id_mamifero}
                     />
-                </DndProvider>
+                </DndProvider> */}
+                <PhotosOrganizerContainer
+                    initialImages={images}
+                    handleSetAsCover={handleSetAsCover}
+                    handleDeleteCheckBox={handleDeleteCheckBox}
+                    handleImageClick={handleImageClick}
+                    highlightedImage={highlightedImage}
+                    onSaveOrder={(updatedImages) => {
+                        console.log('Nuevo orden:', updatedImages);
+                    }}
+                    onSaveToDB={saveOrderToDB}
+                />
                 <CarruselGalleryDelete
                     isOpen={isGalleryOpen}
                     images={infoForUpdate.imagenes_mamiferos}

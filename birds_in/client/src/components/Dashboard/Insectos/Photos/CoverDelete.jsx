@@ -11,9 +11,10 @@ import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
 import { Loading } from '../../../utils/Loading';
 import { EditImageCards } from '../../../Cards/EditImageCards';
 //redux
-import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/insectos/actions/photosAction';
+import { saveOrderPhotos, sendCoverPhoto, sendPhotosDelete } from '../../../../redux/insectos/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/insectos/actions/crudAction';
 import { getRegistro } from '../../../../redux/insectos/slices/UpdateSlice';
+import PhotosOrganizerContainer from './PhotosOrganizerContainer';
 
 export const CoverDelete = ({
     isCreate,
@@ -35,6 +36,8 @@ export const CoverDelete = ({
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
+    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
     const handleSetAsCover = async (id, url, destacada) => {
         // console.log(id)
@@ -69,8 +72,6 @@ export const CoverDelete = ({
         }
     };
 
-    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
 
 
     const handleImageClick = (url) => {
@@ -141,6 +142,39 @@ export const CoverDelete = ({
         }
     }, [isCreate])
 
+    const saveOrderToDB = async (orderedImages) => {
+        setShowBackdrop(true);
+        setLoadingMessage('Guardando orden...');
+
+        const formattedImages = orderedImages.map((image, index) => ({
+            id: image.id,
+            orden: index + 1
+        }));
+
+        try {
+            await dispatch(saveOrderPhotos(formattedImages));
+            console.log("Orden guardado en la base de datos.");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_insecto));  // usa el id correcto
+            setSnackbarOpen(true);
+            setSnackbarMessage('Orden de imágenes guardado Exitosamente');
+        } catch (error) {
+            console.error("Error al guardar el orden:", error);
+            setErrorMessage(`Error: ${error.message || "Ocurrió un error inesperado"}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+
+    React.useEffect(() => {
+        if (infoForUpdate?.imagenes_insectos) {
+            setImages(infoForUpdate.imagenes_insectos);
+        }
+    }, [infoForUpdate?.imagenes_insectos]);
+
+    const [images, setImages] = React.useState(infoForUpdate.imagenes_insectos || []);
+
     return (
         <React.Fragment>
             <Loading
@@ -152,7 +186,7 @@ export const CoverDelete = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-                minWidth: '1400px',
+                minWidth: '1200px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(3px)',
@@ -164,7 +198,7 @@ export const CoverDelete = ({
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
-                                Imágenes {nombre ? ` ${nombre}` : 'del Registro'}
+                                Imágenes {nombre ? ` ${nombre}` : 'del Insecto'}
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -199,48 +233,49 @@ export const CoverDelete = ({
                     >
                         Eliminar selección
                     </Button>
-                    {infoForUpdate && infoForUpdate.imagenes_insectos && infoForUpdate.imagenes_insectos.length > 0 && (
-                        <Grid container spacing={1} sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            m: 0
-                        }}>
-                            {infoForUpdate.imagenes_insectos.map((imageUrl, index) => (
-                                <Grid item key={imageUrl.id} sx={{ mt: 5 }}>
-                                    <EditImageCards
-                                        imageUrl={imageUrl}
-                                        index={index}
-                                        handleImageClick={handleImageClick}
-                                        handleSetAsCover={handleSetAsCover}
-                                        handleDeleteCheckBox={handleDeleteCheckBox}
-                                    />
-                                </Grid>
-                            ))}
-                            <CarruselGalleryDelete
-                                isOpen={isGalleryOpen}
-                                images={infoForUpdate.imagenes_insectos}
-                                selectedIndex={selectedImageIndex}
-                                onClose={handleCloseGallery}
-                            />
-                        </Grid>
-                    )}
-                    {!infoForUpdate || !infoForUpdate.imagenes_insectos || infoForUpdate.imagenes_insectos.length === 0 && (
-                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
-                            No hay imágenes subidas.
-                        </Typography>
-                    )}
                 </Grid>
+
             </Grid>
+            <Grid sx={{
+                margin: '0 auto',
+                backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backdropFilter: 'blur(2px)',
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
+            }}>
+                <PhotosOrganizerContainer
+                    initialImages={images}
+                    handleSetAsCover={handleSetAsCover}
+                    handleDeleteCheckBox={handleDeleteCheckBox}
+                    handleImageClick={handleImageClick}
+                    highlightedImage={highlightedImage}
+                    onSaveOrder={(updatedImages) => {
+                        console.log('Nuevo orden:', updatedImages);
+                    }}
+                    onSaveToDB={saveOrderToDB}
+                />
+                <CarruselGalleryDelete
+                    isOpen={isGalleryOpen}
+                    images={infoForUpdate.imagenes_insectos}
+                    selectedIndex={selectedImageIndex}
+                    onClose={handleCloseGallery}
+                />
+
+                {images.length === 0 && (
+                    <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                        No hay imágenes subidas.
+                    </Typography>
+                )}
+            </Grid >
             <Snackbar
                 open={snackbarOpen}
-                autoHideDuration={9000}
+                autoHideDuration={6000}
                 onClose={() => setSnackbarOpen(false)}
                 message={snackbarMessage}
             />
             <Snackbar
                 open={errorSnackbarOpen}
-                autoHideDuration={9000}
+                autoHideDuration={6000}
                 onClose={() => setErrorSnackbarOpen(false)}
             >
                 <Alert
@@ -252,6 +287,6 @@ export const CoverDelete = ({
                     {errorMessage}
                 </Alert>
             </Snackbar>
-        </React.Fragment>
+        </React.Fragment >
     );
 }

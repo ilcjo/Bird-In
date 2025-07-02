@@ -9,7 +9,7 @@ const {
 
 const { deletePhotoFromFTPInsectos } = require('../../services/deletFtp');
 const { VistaInsectosOrdenaAll } = require('../../config/db/db');
-const { sendAndCreateInsect, fetchFilterInsect, fetchOptions, filterOptionsPaisZonas, findDataById, findDataByName, sendAndUpdateInsect, setDbCover, getContadores, findNameDuplicate, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate, findFamilyNameDuplicate, findPhotosId, deleteRegistroDb } = require('../../controllers/insects/insectsController');
+const { sendAndCreateInsect, fetchFilterInsect, fetchOptions, filterOptionsPaisZonas, findDataById, findDataByName, sendAndUpdateInsect, setDbCover, getContadores, findNameDuplicate, findAllEnglishNames, getClassGrupoFamilia, findGroupNameDuplicate, findFamilyNameDuplicate, findPhotosId, deleteRegistroDb, saveDbPhotoOrder } = require('../../controllers/insects/insectsController');
 
 const getFilterInfo = async (req, res) => {
 
@@ -373,7 +373,20 @@ const checkDuplicateNames = async (req, res) => {
    }
 };
 
+const saveOrderImages = async (req, res) => {
+   const { arrayImages } = req.body
+   // console.log('handler:',arrayImages)
+   try {
+      const newCover = await saveDbPhotoOrder(arrayImages)
+      return res.status(200).json(newCover);
+
+   } catch (error) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+   }
+};
+
 module.exports = {
+   saveOrderImages,
    getAllNombres,
    getExcel,
    checkClases,

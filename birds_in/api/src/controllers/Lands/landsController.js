@@ -283,7 +283,6 @@ const findDataByIdP = async (id) => {
             ],
             attributes: ['id', 'descripcion', 'url', 'map'],
         });
-
         // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
         if (Registro && Registro.imagenes_paisajes) {
             Registro.imagenes_paisajes.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));

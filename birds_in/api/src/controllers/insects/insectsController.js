@@ -51,7 +51,10 @@ const buildIncludeArray = () => {
         {
             model: Imagenes_insectos,
             as: 'imagenes_insectos',
-            attributes: [['url_insecto', 'url'], 'destacada']
+            attributes: [['url_insecto', 'url'], 'destacada', 'orden_imagen'],
+            order: [['orden_imagen', 'ASC']],
+            separate: true
+
         },
 
     ];
@@ -467,6 +470,7 @@ const findDataById = async (id) => {
                     attributes: [['url_insecto', 'url'],
                         'id',
                         'destacada',
+                        'orden_imagen',
                     [Sequelize.literal('SUBSTRING_INDEX(url_insecto, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_insectos
                 },
@@ -495,6 +499,10 @@ const findDataById = async (id) => {
                 'nombre_comun',
                 'url_wiki',] // Atributos de Insectos que deseas
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (registro && registro.imagenes_insectos) {
+            registro.imagenes_insectos.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         return registro;
     } catch (error) {
         // Manejar errores de consulta
@@ -514,6 +522,7 @@ const findDataByName = async (name) => {
                     attributes: ['url_insecto',
                         'id',
                         'destacada',
+                        'orden_imagen',
                         [Sequelize.literal('SUBSTRING_INDEX(url_insecto, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_insectos
                 },
@@ -542,6 +551,10 @@ const findDataByName = async (name) => {
                 'nombre_comun',
                 'url_wiki',] // Atributos de Insectos que deseas
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (registro && registro.imagenes_insectos) {
+            registro.imagenes_insectos.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         return registro;
     } catch (error) {
         // Manejar errores de consulta
@@ -830,7 +843,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
     try {
         if (idfamilia) {
             // Buscar todas las aves con el id_familia dado
-            const aves = await  Insectos.findAll({
+            const aves = await Insectos.findAll({
                 where: {
                     familias_id_familia: idfamilia
                 },
@@ -928,7 +941,35 @@ const findFamilyNameDuplicate = async (nombreFamilia) => {
     }
 };
 
+const saveDbPhotoOrder = async (imagesArray) => {
+    // console.log('llego array al controller:', imagesArray)
+    try {
+        // Itera sobre cada imagen en el array
+        for (const image of imagesArray) {
+            const { id, orden } = image;  // Extrae el id y el orden de cada imagen
+
+            // Busca el registro en la base de datos que coincida con el id de la imagen
+            const existingImage = await Imagenes_insectos.findOne({
+                where: { id: id }
+            });
+
+            // Si encuentra un registro con el id, actualiza el campo orden_imagenes
+            if (existingImage) {
+                await existingImage.update({ orden_imagen: orden });
+            } else {
+                console.warn(`No se encontró una imagen con ID ${id}.`);
+            }
+        }
+
+        return "Orden de imágenes actualizado correctamente.";
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+
 module.exports = {
+    saveDbPhotoOrder,
     findAllEnglishNames,
     getClassGrupoFamilia,
     findFamilyNameDuplicate,

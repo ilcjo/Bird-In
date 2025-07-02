@@ -17,6 +17,10 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull: true
         },
+         orden_imagen: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
     }, { timestamps: false, }
     )
 }

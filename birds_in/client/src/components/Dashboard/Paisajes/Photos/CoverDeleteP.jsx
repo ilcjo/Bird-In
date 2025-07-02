@@ -167,6 +167,7 @@ export const CoverDeleteP = ({
             setShowBackdrop(false);
         }
     };
+    
 React.useEffect(() => {
     if (infoLandForUpdate?.imagenes_paisajes) {
         setImages(infoLandForUpdate.imagenes_paisajes);

@@ -879,6 +879,10 @@ const findDataById = async (id) => {
                 'url_bird',], // Atributos de Aves que deseas
             order: [[{ model: Imagenes_aves }, 'orden_imagen', 'ASC']],
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (ave && ave.imagenes_aves) {
+            ave.imagenes_aves.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         return ave;
     } catch (error) {
         // Manejar errores de consulta
@@ -929,6 +933,10 @@ const findDataByName = async (name) => {
                 'url_bird',], // Atributos de Aves que deseas
             order: [[{ model: Imagenes_aves }, 'orden_imagen', 'ASC']],
         });
+        // ✅ Ordenar manualmente las imágenes (por orden_imagen como número)
+        if (ave && ave.imagenes_aves) {
+            ave.imagenes_aves.sort((a, b) => Number(a.orden_imagen) - Number(b.orden_imagen));
+        }
         return ave;
     } catch (error) {
         // Manejar errores de consulta

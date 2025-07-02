@@ -135,8 +135,6 @@ export const SearchLands = ({ changeTab }) => {
         };
         fetchData();
     }, [showUpdateRegister]);
-    
-
 
     return (
         <React.Fragment>

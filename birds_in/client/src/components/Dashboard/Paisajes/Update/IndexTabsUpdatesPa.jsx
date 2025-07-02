@@ -34,7 +34,6 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
     const [coverSelected, setCoverSelected] = React.useState(false);
     const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
 
-
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
