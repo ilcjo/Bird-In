@@ -23,7 +23,8 @@ export const CoverDelete = ({
     selected,
     setCoverSelected,
 }) => {
-
+    const organizerRef = React.useRef(null);
+    const inputRefs = React.useRef({});
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
@@ -106,16 +107,29 @@ export const CoverDelete = ({
             // Mostrar el indicador de carga
             setShowBackdrop(true);
             setLoadingMessage('Borrando Fotografías Seleccionadas')
-            // Separar IDs y URLs en arrays diferentes
+            // 1️⃣ Obtener imágenes ordenadas del hijo
+            const currentImages = organizerRef.current.getCurrentImages();
+            console.log("📦 Imágenes actuales desde el hijo:", currentImages);
+            // 2️⃣ Filtra y reordena
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
-            // Realizar la eliminación de fotos
-            console.log(selectedIds, selectedUrls)
+            const updatedImages = currentImages
+                .filter((img) => !selectedIds.includes(img.id))
+                .map((img, index) => ({
+                    ...img,
+                    orden_imagen: index + 1
+                }));
+
+            // 3️⃣ Guarda orden actualizado
+            await saveOrderToDB(updatedImages);
+            // console.log(selectedIds, selectedUrls)
+            // 4️⃣ Elimina en base
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
             await dispatch(getInfoForUpdate(infoForUpdate.id_insecto));
-            setSnackbarMessage('Fotografías Eliminadas con éxito');
+            setImages(updatedImages);
             setSelectedImages([])
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setShowBackdrop(false)
             setSnackbarOpen(true);
         } catch (error) {
@@ -173,7 +187,15 @@ export const CoverDelete = ({
         }
     }, [infoForUpdate?.imagenes_insectos]);
 
-    const [images, setImages] = React.useState(infoForUpdate.imagenes_insectos || []);
+    const [images, setImages] = React.useState(infoForUpdate.imagenes_insectos);
+
+
+    const handleCloseViewer = () => {
+        setIsGalleryOpen(false);
+        setTimeout(() => {
+            inputRefs.current[focusedImageId]?.focus(); // Vuelve a enfocar
+        }, 100); // Pequeño delay para esperar que el viewer se cierre
+    };
 
     return (
         <React.Fragment>
@@ -211,6 +233,7 @@ export const CoverDelete = ({
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                                     }}
+                                    id="boton-buscar"
                                     variant="outlined"
                                     onClick={handleReturnSearch}
                                     startIcon={<SearchIcon />}
@@ -225,11 +248,12 @@ export const CoverDelete = ({
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
+                        id="boton-eliminar"
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
                         endIcon={<DeleteIcon />}
-                        sx={{ mt: 0, mb: 2, color: 'primary.light' }}
+                        sx={{ mt: 0, mb: 0, color: 'primary.light' }}
                     >
                         Eliminar selección
                     </Button>
@@ -244,6 +268,7 @@ export const CoverDelete = ({
                 mb: 10,
             }}>
                 <PhotosOrganizerContainer
+                    ref={organizerRef}
                     initialImages={images}
                     handleSetAsCover={handleSetAsCover}
                     handleDeleteCheckBox={handleDeleteCheckBox}
@@ -258,7 +283,7 @@ export const CoverDelete = ({
                     isOpen={isGalleryOpen}
                     images={infoForUpdate.imagenes_insectos}
                     selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
+                    onClose={handleCloseViewer}
                 />
 
                 {images.length === 0 && (

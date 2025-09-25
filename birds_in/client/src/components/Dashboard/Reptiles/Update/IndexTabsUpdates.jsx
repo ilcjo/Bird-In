@@ -31,7 +31,6 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
     const [coverSelected, setCoverSelected] = React.useState(false);
     const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
 
-
     //función que determina si tiene cover en true
     const handleSetCoverSelected = (isSelected) => {
         setCoverSelected(isSelected);
@@ -50,7 +49,6 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
             // console.log('llegue a funcion que abre la pesataña');
             let isFromImage = localStorage.getItem('isFromCreateImage');
             let isExist = localStorage.getItem('isExist');
-
             if (isFromImage === 'true' && isExist === 'false') {
                 // await handleButtonClickFromCreate(); // Espera a que se complete el update
                 setTimeout(() => {
@@ -79,7 +77,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h4' >
+                    <StyledTab id='info-boton' label={<Typography variant='h4' >
                         Información
                     </Typography>} />
                     <StyledTab label={<Typography variant='h4' >

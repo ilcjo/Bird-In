@@ -14,7 +14,7 @@ import { CardsInsecto } from '../../components/Cards/Insectos/CardsInsecto';
 import { PhotosDetailI } from '../../components/Mains/Insectos/PhotosDetailI';
 //REDUX
 import { loadMoreData } from '../../redux/insectos/actions/infoAction';
-import { isOneR, resetInfo, } from '../../redux/insectos/slices/InfoSlice';
+import {  resetInfo, } from '../../redux/insectos/slices/InfoSlice';
 import { sendParameter } from '../../redux/insectos/actions/filterAction';
 import { copingFilters } from '../../redux/insectos/slices/FilterSlice';
 
@@ -53,12 +53,11 @@ export const Insectos = () => {
   const stepBack = () => {
     setFilterDialogOpen(true)
     dispatch(resetInfo())
-    dispatch(isOneR(null))
   };
 
   React.useEffect(() => {
     dispatch(resetInfo());
-    dispatch(isOneR(null))
+    // dispatch(isOneR(null))
   }, []);
 
   React.useEffect(() => {
@@ -71,9 +70,9 @@ export const Insectos = () => {
         dispatch(copingFilters());
 
         if (resultLength === 1) {
-          dispatch(isOneR(true));
+          // dispatch(isOneR(true));
         } else {
-          dispatch(isOneR(false));
+          // dispatch(isOneR(false));
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);

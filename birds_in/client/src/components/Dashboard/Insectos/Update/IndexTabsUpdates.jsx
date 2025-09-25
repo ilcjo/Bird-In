@@ -39,7 +39,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
     
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto',  minWidth: '1500px' }}>
+            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto',  minWidth: '1200px' }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -47,14 +47,14 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h4' >
+                    <StyledTab id='info-boton' label={<Typography variant='h4' >
                         Información
                     </Typography>} />
                     <StyledTab label={<Typography variant='h4' >
                         Imágenes Existente
                     </Typography>} onClick={handleNavigateToCoverDelete} />
                 </StyledTabs>
-                <Box sx={{ width: '100%', maxWidth: '100%' }}>
+                <Box sx={{}}>
                     {selectedTab === 0 && (
                         <React.Fragment>
                             <UpdateForm

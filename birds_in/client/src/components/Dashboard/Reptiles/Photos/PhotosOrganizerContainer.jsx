@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 import {
   Grid,
   Card,
@@ -8,17 +8,14 @@ import {
   IconButton,
   Box,
   Checkbox,
-  TextField,
-  Button,
   Tooltip,
   Fab
 } from '@mui/material';
 import BeenhereTwoToneIcon from '@mui/icons-material/BeenhereTwoTone';
 import TurnedInTwoToneIcon from '@mui/icons-material/TurnedInTwoTone';
 import SaveIcon from '@mui/icons-material/Save';
-import SwitchAccessShortcutIcon from '@mui/icons-material/SwitchAccessShortcut';
 
-const PhotosOrganizerContainer = ({
+const PhotosOrganizerContainer = React.forwardRef(({
   initialImages,
   handleSetAsCover,
   handleDeleteCheckBox,
@@ -26,16 +23,41 @@ const PhotosOrganizerContainer = ({
   onSaveOrder,
   onSaveToDB,
   highlightedImage
-}) => {
+}, ref) => {
   const [images, setImages] = useState(initialImages || []);
-  const [manualOrder, setManualOrder] = useState({});
   const [orientations, setOrientations] = useState({});
-console.log(initialImages, 'soy imagen')
-    useEffect(() => {
-    setImages(initialImages || []);
-  }, [initialImages])
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedToMoveIndex, setSelectedToMoveIndex] = useState(null);
 
-   useEffect(() => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleFocus = () => console.log('🟢 FOCUS ganado');
+    const handleBlur = () => console.log('🔴 FOCUS perdido');
+
+    container.addEventListener('focus', handleFocus);
+    container.addEventListener('blur', handleBlur);
+
+    return () => {
+      container.removeEventListener('focus', handleFocus);
+      container.removeEventListener('blur', handleBlur);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    setImages(initialImages || []);
+  }, [initialImages]);
+
+  useEffect(() => {
     if (!initialImages) return;
     initialImages.forEach((img) => {
       const imageObj = new Image();
@@ -49,132 +71,117 @@ console.log(initialImages, 'soy imagen')
     });
   }, [initialImages]);
 
-  // const handleManualOrderChange = (id, value) => {
-  //   setManualOrder((prev) => ({
-  //     ...prev,
-  //     [id]: value
-  //   }));
-  // };
-
-  React.useEffect(() => {
-  if (initialImages && initialImages.length > 0) {
-    const initialOrder = {};
-    initialImages.forEach((img, index) => {
-      initialOrder[img.id] = index + 1;
-    });
-    setManualOrder(initialOrder);
-  }
-}, [initialImages]);
-
-  const handleOrganizeClick = () => {
-    const sorted = [...images].sort((a, b) => {
-      const orderA = parseInt(manualOrder[a.id], 10);
-      const orderB = parseInt(manualOrder[b.id], 10);
-      if (isNaN(orderA)) return 1;
-      if (isNaN(orderB)) return -1;
-      return orderA - orderB;
-    });
-
-    setImages(sorted);
-    if (onSaveOrder) onSaveOrder(sorted);
+  const handleSave = () => {
+    if (onSaveOrder) onSaveOrder(images);
+    if (onSaveToDB) onSaveToDB(images);
   };
 
-  const handleManualOrderChange = (id, value) => {
-    const numericValue = parseInt(value, 10);
-    if (numericValue < 0 && value !== '') return;
+  useImperativeHandle(ref, () => ({
+    focusContainer: () => {
+      containerRef.current?.focus();
+    },
+    getCurrentImages: () => images
+  }));
 
-    const updatedOrder = {
-      ...manualOrder,
-      [id]: value
-    };
+  const handleBlur = () => {
+    setTimeout(() => {
+      const active = document.activeElement;
 
-    setManualOrder(updatedOrder);
+      const isInsideContainer = containerRef.current?.contains(active);
+      const isInEliminarBtn = document.getElementById('boton-eliminar')?.contains(active);
+      const isInBuscarBtn = document.getElementById('boton-buscar')?.contains(active);
+      const isInInfoBtn = document.getElementById('info-boton')?.contains(active);
 
-    const sorted = [...images].sort((a, b) => {
-      const orderA = parseInt(updatedOrder[a.id], 10);
-      const orderB = parseInt(updatedOrder[b.id], 10);
-      if (isNaN(orderA)) return 1;
-      if (isNaN(orderB)) return -1;
-      return orderA - orderB;
-    });
-
-    setImages(sorted);
-    if (onSaveOrder) onSaveOrder(sorted);
+      if (
+        selectedToMoveIndex !== null &&
+        !isInsideContainer &&
+        !isInEliminarBtn &&
+        !isInBuscarBtn &&
+        !isInInfoBtn
+      ) {
+        containerRef.current?.focus();
+      }
+    }, 50);
   };
 
-  const handleValidatedSave = () => {
-  const values = Object.values(manualOrder)
-    .filter(v => v !== '')
-    .map(v => parseInt(v, 10))
-    .filter(v => !isNaN(v));
 
-  const hasDuplicates = new Set(values).size !== values.length;
-  const isSequential = values
-    .sort((a, b) => a - b)
-    .every((num, idx) => num === idx + 1);
+  const handleKeyDown = (event) => {
+    if (selectedToMoveIndex === null) return;
 
-  if (hasDuplicates || !isSequential) {
-    alert('El orden debe ser una secuencia única y consecutiva (1, 2, 3, ...).');
-    return;
-  }
+    if (event.key === '1' && selectedToMoveIndex > 0) {
+      const newImages = [...images];
+      [newImages[selectedToMoveIndex - 1], newImages[selectedToMoveIndex]] =
+        [newImages[selectedToMoveIndex], newImages[selectedToMoveIndex - 1]];
+      setImages(newImages);
+      setSelectedToMoveIndex(selectedToMoveIndex - 1);
+    }
 
-  // Si pasa la validación, ordenamos las imágenes y las guardamos
-  const sorted = [...images].sort((a, b) => {
-    const orderA = parseInt(manualOrder[a.id], 10);
-    const orderB = parseInt(manualOrder[b.id], 10);
-    if (isNaN(orderA)) return 1;
-    if (isNaN(orderB)) return -1;
-    return orderA - orderB;
-  });
+    if (event.key === '2' && selectedToMoveIndex < images.length - 1) {
+      const newImages = [...images];
+      [newImages[selectedToMoveIndex + 1], newImages[selectedToMoveIndex]] =
+        [newImages[selectedToMoveIndex], newImages[selectedToMoveIndex + 1]];
+      setImages(newImages);
+      setSelectedToMoveIndex(selectedToMoveIndex + 1);
+    }
 
-  setImages(sorted);
-  if (onSaveOrder) onSaveOrder(sorted);
-  onSaveToDB(sorted)
-};
+    if (event.key === 'Delete') {
+      const imageToDelete = images[selectedToMoveIndex];
+      if (imageToDelete) {
+        handleDeleteCheckBox(imageToDelete.id, imageToDelete.url);
+        const newImages = images.filter((_, i) => i !== selectedToMoveIndex);
+        setImages(newImages);
+        setSelectedToMoveIndex(null);
+      }
+    }
+  };
+
 
   return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          gap: 2,
-          px: 4,
-          mb: 2,
-          mt: -1
-        }}
-      >
-        {/* <Tooltip title="Organizar fotos" placement="top">
-          <Fab color="primary" onClick={handleOrganizeClick}>
-            <SwitchAccessShortcutIcon />
-          </Fab>
-        </Tooltip> */}
-
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      onBlur={handleBlur}
+      onFocus={() => console.log('🟢 FOCUS ganado')}
+      onKeyDown={handleKeyDown}
+      style={{ outline: 'none' }}
+    >
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 2, px: 4, mb: 2, mt: -1 }}>
         <Tooltip title="Guardar orden" placement="top">
-          <Fab color="primary" onClick={handleValidatedSave}>
+          <Fab color="primary" onClick={handleSave}>
             <SaveIcon />
           </Fab>
         </Tooltip>
       </Box>
-
-      <Grid container spacing={1} sx={{
-
-        display: 'flex',
-        justifyContent: 'center', // Centra horizontalmente las tarjetas
-        alignItems: 'center',
-      }}>
+      <Typography variant="h4" color="primary" sx={{ px: 4, mb: 2, mt: -1 }}>
+        Usa <strong>1</strong> para mover a la Izquierda <strong>2</strong> para mover a la Derecha
+      </Typography>
+      <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {images.map((imageUrl, index) => (
           <Grid key={imageUrl.id} item>
-            <Card sx={{
-              borderRadius: '6px',
-              p: '0 auto',
-              width: { xs: 450, sm: 450, md: 470, lg: 470 },
-              minWidth: { xs: 450, sm: 450, md: 470, lg: 470 },
-              margin: '0px 0px',
-              flexDirection: 'column',
-              background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)',
-            }}>
+            <Card
+              sx={{
+                borderRadius: '6px',
+                width: { xs: 450, sm: 450, md: 470, lg: 470 },
+                minWidth: { xs: 450, sm: 450, md: 470, lg: 470 },
+                margin: '0px 0px',
+                flexDirection: 'column',
+                background: 'linear-gradient(to top, rgba(0,56,28,0.5), transparent)',
+                border: selectedToMoveIndex === index ? '3px solid #FFD700' : 'none'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedIndex(index);
+                setTimeout(() => {
+                  containerRef.current?.focus();
+                }, 0);
+              }}
+
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                if (selectedIndex === index) setSelectedIndex(null);
+              }}
+
+            >
               <CardActionArea
                 sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                 onClick={() => handleImageClick(imageUrl.url)}
@@ -195,16 +202,8 @@ console.log(initialImages, 'soy imagen')
                   }}
                 >
                   {imageUrl.destacada ? (
-                    <Box sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      background: 'linear-gradient(to top, rgba(0,56,28,0.50), transparent)',
-                      borderRadius: '0px 0px 30px 30px',
-                    }}>
-                      <Typography variant="h4" color='primary' sx={{ mb: 0.5, color: 'white', m: 0.5 }}>
-                        Portada
-                      </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'linear-gradient(to top, rgba(0,56,28,0.50), transparent)', borderRadius: '0px 0px 30px 30px' }}>
+                      <Typography variant="h4" color="white" sx={{ mb: 0.5, m: 0.5 }}>Portada</Typography>
                       <BeenhereTwoToneIcon fontSize="large" sx={{ mb: 0.5, color: 'yellow' }} />
                     </Box>
                   ) : (
@@ -214,77 +213,49 @@ console.log(initialImages, 'soy imagen')
                 <img
                   src={imageUrl.url}
                   alt={`Imagen ${index + 1}`}
-                  style={{
-                    height: 290,
-                    objectFit: orientations[imageUrl.id] ? 'cover' : 'scale-down',
-                    width: '100%',
-                  }}
+                  style={{ height: 290, objectFit: orientations[imageUrl.id] ? 'cover' : 'scale-down', width: '100%' }}
                   loading="lazy"
                 />
               </CardActionArea>
               <CardContent sx={{ height: 'auto' }}>
                 <Grid container alignItems="center" spacing={1}>
-                  <Grid item xs={9}>
-                    <Typography variant="h6" color="white">
-                      {imageUrl.titulo}
-                    </Typography>
+                  <Grid item xs={9} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Checkbox
+                      color="success"
+                      checked={selectedToMoveIndex === index}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        setSelectedToMoveIndex(e.target.checked ? index : null);
+                      }}
+                      inputProps={{ 'aria-label': 'Seleccionar para mover' }}
+                      sx={{ p: 0, mr: 1 }}
+                    />
+                    <Typography variant="h6" color="white">{imageUrl.titulo}</Typography>
                   </Grid>
+
                   <Grid item xs={3}>
                     <Checkbox
+                      id="boton-eliminar"
                       color="error"
                       onChange={() => handleDeleteCheckBox(imageUrl.id, imageUrl.url)}
                       sx={{ position: 'absolute', left: '85%', mt: -3 }}
                     />
                     <Typography
                       variant="h4"
-                      sx={{
-                        position: 'absolute',
-                        mt: 1,
-                        left: '83%',
-                        fontSize: 'medium',
-                        mb: 1
-                      }}
-                      color='error'
+                      sx={{ position: 'absolute', mt: 1, left: '83%', fontSize: 'medium', mb: 1 }}
+                      color="error"
                     >
                       Eliminar
                     </Typography>
                   </Grid>
                 </Grid>
-                <TextField
-                  label="Orden"
-                  type="number"
-                  size="small"
-                  variant="outlined"
-                  value={manualOrder[imageUrl.id] || ''}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value, 10);
-                    if (value >= 0 || e.target.value === '') {
-                      handleManualOrderChange(imageUrl.id, e.target.value);
-                    }
-                  }}
-                  sx={{
-                    mt: 2,
-                    width: '80px',
-                    input: { color: 'white', textAlign: 'center' },
-                    label: { color: 'white' },
-                  }}
-                  InputProps={{
-                    style: {
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                    }
-                  }}
-                />
-
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
-
-
-
-    </>
+    </div>
   );
-};
+});
 
 export default PhotosOrganizerContainer;

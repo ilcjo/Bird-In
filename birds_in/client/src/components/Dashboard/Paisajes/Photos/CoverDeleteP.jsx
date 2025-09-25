@@ -25,7 +25,8 @@ export const CoverDeleteP = ({
     selectedRegister,
     setCoverSelected,
 }) => {
-
+    const organizerRef = React.useRef(null);
+    const inputRefs = React.useRef({});
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombreP = localStorage.getItem('nombrePaisaje') || 'del Paisaje';
@@ -44,7 +45,7 @@ export const CoverDeleteP = ({
     // console.log(selectedImages)
 
     const handleSetAsCover = async (id, url, destacada) => {
-        console.log(id, url)
+        // console.log(id, url)
         try {
             // Marcar la imagen como portada actual
             setHighlightedImage((prev) => {
@@ -107,16 +108,29 @@ export const CoverDeleteP = ({
             // Mostrar el indicador de carga
             setShowBackdrop(true);
             setLoadingMessage('Borrando Fotografías Seleccionadas')
-            // Separar IDs y URLs en arrays diferentes
+            // 1️⃣ Obtener imágenes ordenadas del hijo
+            const currentImages = organizerRef.current.getCurrentImages();
+            console.log("📦 Imágenes actuales desde el hijo:", currentImages);
+            // 2️⃣ Filtra y reordena
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
             // console.log('imagenes url', selectedUrls)
+            const updatedImages = currentImages
+                .filter((img) => !selectedIds.includes(img.id))
+                .map((img, index) => ({
+                    ...img,
+                    orden_imagen: index + 1
+                }));
+
+            // 3️⃣ Guarda orden actualizado
+            await saveOrderToDB(updatedImages);
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDeleteP(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
             await dispatch(getInfoForUpdatePa(infoLandForUpdate.id));
-            setSnackbarMessage('Fotografías Eliminadas con éxito');
+            setImages(updatedImages);
             setSelectedImages([])
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setShowBackdrop(false)
             setSnackbarOpen(true);
         } catch (error) {
@@ -167,15 +181,22 @@ export const CoverDeleteP = ({
             setShowBackdrop(false);
         }
     };
-    
-React.useEffect(() => {
-    if (infoLandForUpdate?.imagenes_paisajes) {
-        setImages(infoLandForUpdate.imagenes_paisajes);
-    }
-}, [infoLandForUpdate?.imagenes_paisajes]);
+
+    React.useEffect(() => {
+        if (infoLandForUpdate?.imagenes_paisajes) {
+            setImages(infoLandForUpdate.imagenes_paisajes);
+        }
+    }, [infoLandForUpdate?.imagenes_paisajes]);
 
     const [images, setImages] = React.useState(infoLandForUpdate.imagenes_paisajes);
-    
+
+    const handleCloseViewer = () => {
+        setIsGalleryOpen(false);
+        setTimeout(() => {
+            inputRefs.current[focusedImageId]?.focus(); // Vuelve a enfocar
+        }, 100); // Pequeño delay para esperar que el viewer se cierre
+    };
+
     return (
         <React.Fragment>
             <Loading
@@ -213,6 +234,7 @@ React.useEffect(() => {
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                                     }}
+                                    id="boton-buscar"
                                     variant="outlined"
                                     onClick={handleReturnSearch}
                                     startIcon={<SearchIcon />}
@@ -227,6 +249,7 @@ React.useEffect(() => {
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
+                        id="boton-eliminar"
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
@@ -260,6 +283,7 @@ React.useEffect(() => {
                     />
                 </DndProvider> */}
                 <PhotosOrganizerContainer
+                    ref={organizerRef}
                     initialImages={images}
                     handleSetAsCover={handleSetAsCover}
                     handleDeleteCheckBox={handleDeleteCheckBox}
@@ -275,7 +299,7 @@ React.useEffect(() => {
                     isOpen={isGalleryOpen}
                     images={infoLandForUpdate.imagenes_paisajes}
                     selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
+                    onClose={handleCloseViewer}
                 />
                 {!infoLandForUpdate || !infoLandForUpdate.imagenes_paisajes || infoLandForUpdate.imagenes_paisajes.length === 0 && (
                     <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>

@@ -23,9 +23,7 @@ export const CarruselGalleryDelete = ({ isOpen, images, onClose,  selectedIndex 
     // Busca el índice de la imagen en base a la URL seleccionada
     const foundIndex = images.findIndex((image) => image.url === selectedIndex);
     // Establece el índice en el estado
-    
       setViewerIndex(foundIndex);
-    
   }, [selectedIndex]);
 
   // Abre el visor cuando 'isOpen' cambia a 'true'

@@ -526,41 +526,46 @@ const sendAndCreateRegister = async (
         // Aplicar conversiones solo si los datos opcionales están presentes
         const convertCientifico = cientifico ? cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase() : null;
         const convertComun = comun ? comun.charAt(0).toUpperCase() + comun.slice(1).toLowerCase() : null;
-        const imagenesRegistrosData = urlImagen.map((imageUrl) => {
-            return {
-                url_reptil: imageUrl,
-            };
-        });
+        // const imagenesRegistrosData = urlImagen.map((imageUrl) => {
+        //     return {
+        //         url_reptil: imageUrl,
+        //     };
+        // });
+        // Crear arreglo de imágenes con orden definido manualmente
+        const imagenesRegistrosData = urlImagen?.length
+            ? urlImagen.map((imageUrl, index) => ({
+                url: imageUrl,
+                orden_imagen: index + 1
+            }))
+            : [];
+
         // Crear un nuevo registro en la tabla "Reptiles" solo si el nombre en inglés está presente
-        if (ingles) {
-            const createNew = await Reptiles.create({
-                nombre_ingles: ingles,
-                nombre_cientifico: convertCientifico,
-                nombre_comun: convertComun,
-                url_wiki: urlWiki,
-                orders_id_order: order.id,
-                familias_id_familia: familia.id,
-                grupos_id_grupo: grupo.id,
-                imagenes_reptiles: imagenesRegistrosData
-            }, {
-                include: Imagenes_reptiles,
-            });
-            for (const pais of paises) {
-                await createNew.addPaises(pais.id);
-            }
-            for (const zonas of zona) {
-                await createNew.addZonasReptiles(zonas.id);
-            }
-            // Busca el registro recién creada por el nombre en inglés
-            const createdRegistro = await Reptiles.findOne({
-                where: {
-                    nombre_ingles: ingles
-                },
-            });
-            return { message: "El registro se ha creado correctamente.", registro: createdRegistro };
-        } else {
-            return { message: "El nombre en inglés es obligatorio.", registro: null };
+        const createNew = await Reptiles.create({
+            nombre_ingles: ingles,
+            nombre_cientifico: convertCientifico,
+            nombre_comun: convertComun,
+            url_wiki: urlWiki,
+            orders_id_order: order.id,
+            familias_id_familia: familia.id,
+            grupos_id_grupo: grupo.id,
+            imagenes_reptiles: imagenesRegistrosData
+        }, {
+            include: Imagenes_reptiles,
+        });
+
+        for (const pais of paises) {
+            await createNew.addPaises(pais.id);
         }
+        for (const zonas of zona) {
+            await createNew.addZonasReptiles(zonas.id);
+        }
+        // Busca el registro recién creada por el nombre en inglés
+        const createdRegistro = await Reptiles.findOne({
+            where: {
+                nombre_ingles: ingles
+            },
+        });
+        return { message: "El registro se ha creado correctamente.", registro: createdRegistro };
     } catch (error) {
         // Manejar específicamente el error de clave única duplicada
         if (error.name === 'SequelizeUniqueConstraintError') {
@@ -569,6 +574,7 @@ const sendAndCreateRegister = async (
         }
         // A continuación, puedes agregar lógica para manejar otros errores específicos si es necesario.
         console.error('Error en la consulta:', error);
+        throw error;
     }
 };
 
@@ -695,11 +701,10 @@ const sendAndUpdateRegister = async (
     idRegistro,
     image_orden
 ) => {
-
     try {
-        console.log("Entró a sendAndUpdateRegister");
-        console.log('llegue par actualizar el registro CONTROLLER: ',
-            order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
+        // console.log("Entró a sendAndUpdateRegister");
+        // console.log('llegue par actualizar el registro CONTROLLER: ',
+        //     order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
         // Obtener el registro existente de la base de datos
         const existingInsect = await Reptiles.findOne({
             where: {
@@ -717,9 +722,10 @@ const sendAndUpdateRegister = async (
             nombre_cientifico: cientifico !== existingInsect.nombre_cientifico ? cientifico : undefined,
             nombre_comun: comun !== existingInsect.nombre_comun ? comun : undefined,
             url_wiki: urlWiki !== existingInsect.url_wiki ? urlWiki : undefined,
-            orders_id_order: order.id !== existingInsect.orders_id_order ? order.id : undefined,
-            familias_id_familia: familia.id !== existingInsect.familias_id_familia ? familia.id : undefined,
-            grupos_id_grupo: grupo.id !== existingInsect.grupos_id_grupo ? grupo.id : undefined,
+            orders_id_order: order?.id !== existingInsect.orders_id_order ? order?.id : undefined,
+            familias_id_familia: familia?.id !== existingInsect.familias_id_familia ? familia?.id : undefined,
+            grupos_id_grupo: grupo?.id !== existingInsect.grupos_id_grupo ? grupo?.id : undefined,
+
         };
 
         // Filtrar valores undefined
@@ -750,11 +756,43 @@ const sendAndUpdateRegister = async (
                 },
             });
         }
-        // console.log(urlImagen)
+        // // console.log(urlImagen)
+        // for (const imageUrl of urlImagen) {
+        //     await Imagenes_reptiles.create({
+        //         reptiles_id_reptil: idRegistro,
+        //         url_reptil: imageUrl,
+        //     });
+        // }
+        // ✅ Obtener todas las imágenes del ave
+        const existingImages = await Imagenes_reptiles.findAll({
+            where: { id: idRegistro },
+            order: [['orden_imagenes', 'ASC']],
+        });
+
+        // ✅ Si existen imágenes sin orden, asignarles orden secuencial
+        let ordenCounter = 1;
+        for (const img of existingImages) {
+            if (img.orden_imagenes === null) {
+                await img.update({ orden_imagenes: ordenCounter });
+            }
+            ordenCounter++;
+        }
+
+        // ✅ Obtener el máximo orden actual después de normalizar
+        const maxOrdenImage = await Imagenes_reptiles.findOne({
+            where: { id: idRegistro },
+            order: [['orden_imagenes', 'DESC']],
+        });
+
+        let lastOrden = maxOrdenImage?.orden_imagenes || 0;
+
+        // ✅ Insertar nuevas imágenes con orden siguiente
         for (const imageUrl of urlImagen) {
+            lastOrden += 1;
             await Imagenes_reptiles.create({
                 reptiles_id_reptil: idRegistro,
                 url_reptil: imageUrl,
+                orden_imagenes: lastOrden,
             });
         }
 

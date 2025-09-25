@@ -524,41 +524,40 @@ const sendAndCreateRegister = async (
         // Aplicar conversiones solo si los datos opcionales están presentes
         const convertCientifico = cientifico ? cientifico.charAt(0).toUpperCase() + cientifico.slice(1).toLowerCase() : null;
         const convertComun = comun ? comun.charAt(0).toUpperCase() + comun.slice(1).toLowerCase() : null;
-        const imagenesRegistrosData = urlImagen.map((imageUrl) => {
-            return {
+        const imagenesRegistrosData = urlImagen?.length
+            ? urlImagen.map((imageUrl, index) => ({
                 url_mamifero: imageUrl,
-            };
-        });
+                orden_imagen: index + 1
+            }))
+            : [];
         // Crear un nuevo registro en la tabla "Mamiferos" solo si el nombre en inglés está presente
-        if (ingles) {
-            const createNew = await Mamiferos.create({
-                nombre_ingles: ingles,
-                nombre_cientifico: convertCientifico,
-                nombre_comun: convertComun,
-                url_wiki: urlWiki,
-                orders_id_order: order.id,
-                familias_id_familia: familia.id,
-                grupos_id_grupo: grupo.id,
-                imagenes_mamiferos: imagenesRegistrosData
-            }, {
-                include: Imagenes_mamiferos,
-            });
-            for (const pais of paises) {
-                await createNew.addPaises(pais.id);
-            }
-            for (const zonas of zona) {
-                await createNew.addZonasMamiferos(zonas.id);
-            }
-            // Busca el registro recién creada por el nombre en inglés
-            const createdRegistro = await Mamiferos.findOne({
-                where: {
-                    nombre_ingles: ingles
-                },
-            });
-            return { message: "El registro se ha creado correctamente.", registro: createdRegistro };
-        } else {
-            return { message: "El nombre en inglés es obligatorio.", registro: null };
+
+        const createNew = await Mamiferos.create({
+            nombre_ingles: ingles,
+            nombre_cientifico: convertCientifico,
+            nombre_comun: convertComun,
+            url_wiki: urlWiki,
+            orders_id_order: order.id,
+            familias_id_familia: familia.id,
+            grupos_id_grupo: grupo.id,
+            imagenes_mamiferos: imagenesRegistrosData
+        }, {
+            include: Imagenes_mamiferos,
+        });
+        for (const pais of paises) {
+            await createNew.addPaises(pais.id);
         }
+        for (const zonas of zona) {
+            await createNew.addZonasMamiferos(zonas.id);
+        }
+        // Busca el registro recién creada por el nombre en inglés
+        const createdRegistro = await Mamiferos.findOne({
+            where: {
+                nombre_ingles: ingles
+            },
+        });
+        return { message: "El registro se ha creado correctamente.", registro: createdRegistro };
+
     } catch (error) {
         // Manejar específicamente el error de clave única duplicada
         if (error.name === 'SequelizeUniqueConstraintError') {
@@ -571,7 +570,7 @@ const sendAndCreateRegister = async (
 };
 
 const findDataById = async (id) => {
-    console.log('llegue controler con id')
+    // console.log('llegue controler con id')
     try {
         const registro = await Mamiferos.findOne({
             where: { id_mamifero: id },
@@ -680,7 +679,6 @@ const findDataByName = async (name) => {
     }
 };
 
-
 const sendAndUpdateRegister = async (
     order,
     familia,
@@ -695,9 +693,9 @@ const sendAndUpdateRegister = async (
     idRegistro,
     image_orden
 ) => {
-    console.log("Entró a sendAndUpdateRegister");
-    console.log('llegue par actualizar el registro CONTROLLER: ',
-        order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
+    // console.log("Entró a sendAndUpdateRegister");
+    // console.log('llegue par actualizar el registro CONTROLLER: ',
+    //     order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
     try {
         // Obtener el registro existente de la base de datos
         const existingInsect = await Mamiferos.findOne({
@@ -720,7 +718,7 @@ const sendAndUpdateRegister = async (
             familias_id_familia: familia.id !== existingInsect.familias_id_familia ? familia.id : undefined,
             grupos_id_grupo: grupo.id !== existingInsect.grupos_id_grupo ? grupo.id : undefined,
         };
-        console.log(cambios, 'cambios de la data')
+        // console.log(cambios, 'cambios de la data')
         // Filtrar valores undefined
         const cambiosFiltrados = Object.fromEntries(Object.entries(cambios).filter(([key, value]) => value !== undefined));
 
@@ -749,11 +747,36 @@ const sendAndUpdateRegister = async (
                 },
             });
         }
-        // console.log(urlImagen)
+        // ✅ Obtener todas las imágenes del mamífero
+        const existingImages = await Imagenes_mamiferos.findAll({
+            where: { mamiferos_id_mamifero: idRegistro },
+            order: [['orden_imagenes', 'ASC']],
+        });
+
+        // ✅ Si existen imágenes sin orden, asignarles orden secuencial
+        let ordenCounter = 1;
+        for (const img of existingImages) {
+            if (img.orden_imagenes === null) {
+                await img.update({ orden_imagenes: ordenCounter });
+            }
+            ordenCounter++;
+        }
+
+        // ✅ Obtener el máximo orden actual después de normalizar
+        const maxOrdenImage = await Imagenes_mamiferos.findOne({
+            where: { mamiferos_id_mamifero: idRegistro },
+            order: [['orden_imagenes', 'DESC']],
+        });
+
+        let lastOrden = maxOrdenImage?.orden_imagenes || 0;
+
+        // ✅ Insertar nuevas imágenes con orden siguiente
         for (const imageUrl of urlImagen) {
+            lastOrden += 1;
             await Imagenes_mamiferos.create({
                 mamiferos_id_mamifero: idRegistro,
                 url_mamifero: imageUrl,
+                orden_imagenes: lastOrden,
             });
         }
 

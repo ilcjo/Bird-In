@@ -15,8 +15,7 @@ import ImageDragContainer from './ImageDragContainer';
 import { saveOrderPhotos, sendCoverPhoto, sendPhotosDelete } from '../../../../redux/mamiferos/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/mamiferos/actions/crudAction';
 import { getRegistro } from '../../../../redux/mamiferos/slices/UpdateSlice';
-import PhotosOrganizerContainer from './PhotosOrganizerContainer';
-
+import PhotosOrganizerContainer from '../../Mamiferos/Photos/PhotosOrganizerContainer';
 
 export const CoverDelete = ({
     isCreate,
@@ -25,7 +24,8 @@ export const CoverDelete = ({
     selected,
     setCoverSelected,
 }) => {
-
+    const organizerRef = React.useRef(null);
+    const inputRefs = React.useRef({});
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
@@ -105,17 +105,30 @@ export const CoverDelete = ({
         try {
             // Mostrar el indicador de carga
             setShowBackdrop(true);
-            setLoadingMessage('Borrando Fotografías Seleccionadas')
+            setLoadingMessage('Guardando orden y borrando Fotografías Seleccionadas')
+            // 1️⃣ Obtener imágenes ordenadas del hijo
+            const currentImages = organizerRef.current.getCurrentImages();
+            console.log("📦 Imágenes actuales desde el hijo:", currentImages);
+
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
+            const updatedImages = currentImages
+                .filter((img) => !selectedIds.includes(img.id))
+                .map((img, index) => ({
+                    ...img,
+                    orden_imagenes: index + 1
+                }));
+            // 3️⃣ Guarda orden actualizado
+            await saveOrderToDB(updatedImages);
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
             await dispatch(getInfoForUpdate(infoForUpdate.id_mamifero));
-            setSnackbarMessage('Fotografías Eliminadas con éxito');
+            setImages(updatedImages);
             setSelectedImages([])
             setShowBackdrop(false)
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSnackbarOpen(true);
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
@@ -172,8 +185,15 @@ export const CoverDelete = ({
         }
     }, [infoForUpdate?.imagenes_mamiferos]);
 
-    const [images, setImages] = React.useState(infoForUpdate.imagenes_mamiferos || []);
-    console.log(infoForUpdate.imagenes_mamiferos)
+    const [images, setImages] = React.useState(infoForUpdate.imagenes_mamiferos);
+    // console.log(infoForUpdate.imagenes_mamiferos)
+    const handleCloseViewer = () => {
+        setIsGalleryOpen(false);
+        setTimeout(() => {
+            inputRefs.current[focusedImageId]?.focus(); // Vuelve a enfocar
+        }, 100); // Pequeño delay para esperar que el viewer se cierre
+    };
+
     return (
         <React.Fragment>
             <Loading message={loadingMessage} open={showBackdrop} />
@@ -207,6 +227,7 @@ export const CoverDelete = ({
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)',
                                         backdropFilter: 'blur(2px)',
                                     }}
+                                    id='boton-buscar'
                                     variant="outlined"
                                     onClick={handleReturnSearch}
                                     startIcon={<SearchIcon />}
@@ -221,6 +242,7 @@ export const CoverDelete = ({
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
                     <Button
+                        id='boton-eliminar'
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
@@ -256,6 +278,7 @@ export const CoverDelete = ({
                     />
                 </DndProvider> */}
                 <PhotosOrganizerContainer
+                    ref={organizerRef}
                     initialImages={images}
                     handleSetAsCover={handleSetAsCover}
                     handleDeleteCheckBox={handleDeleteCheckBox}
@@ -270,7 +293,7 @@ export const CoverDelete = ({
                     isOpen={isGalleryOpen}
                     images={infoForUpdate.imagenes_mamiferos}
                     selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
+                    onClose={handleCloseViewer}
                 />
 
                 {images.length === 0 && (

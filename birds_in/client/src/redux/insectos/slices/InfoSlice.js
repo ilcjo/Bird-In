@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  info: [],//det+main
+  info: [],
   copyInfo: [],
   count: {},
-  isOne: null,//filt+det
-  loading: false,//filt+
+  isOne: null,
+  loading: false,
   total: 0,
 };
 

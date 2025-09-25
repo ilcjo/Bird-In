@@ -78,7 +78,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h4' >
+                    <StyledTab id='info-boton' label={<Typography variant='h4' >
                         Información
                     </Typography>} />
                     <StyledTab label={<Typography variant='h4' >

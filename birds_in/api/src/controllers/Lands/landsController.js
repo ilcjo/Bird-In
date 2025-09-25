@@ -235,10 +235,15 @@ const sendAndCreateLand = async (
         }
 
         // Crear un arreglo de imágenes de paisajes a partir de las URLs proporcionadas
-        const imagenesData = urlImagen.map((imageUrl) => ({
-            url_paisaje: imageUrl,
-        }));
-
+        // const imagenesData = urlImagen.map((imageUrl) => ({
+        //     url_paisaje: imageUrl,
+        // }));
+        const imagenesData = urlImagen?.length
+            ? urlImagen.map((imageUrl, index) => ({
+                url_paisaje: imageUrl,
+                orden_imagen: index + 1
+            }))
+            : [];
         // Verificar si la zona tiene un id válido
         const zonaId = zona && zona.id ? zona.id : null;
 
@@ -382,10 +387,42 @@ const sendAndUpdatePaisaje = async (
                 }
             );
         }
+        // for (const imageUrl of urlImagen) {
+        //     await Imagenes_paisajes.create({
+        //         paisajes_id_paisaje: idPaisaje,
+        //         url_paisaje: imageUrl,
+        //     });
+        // }
+        // ✅ Obtener todas las imágenes del mamífero
+        const existingImages = await Imagenes_paisajes.findAll({
+            where: { paisajes_id_paisaje: idPaisaje },
+            order: [['orden_imagen', 'ASC']],
+        });
+
+        // ✅ Si existen imágenes sin orden, asignarles orden secuencial
+        let ordenCounter = 1;
+        for (const img of existingImages) {
+            if (img.orden_imagen === null) {
+                await img.update({ orden_imagen: ordenCounter });
+            }
+            ordenCounter++;
+        }
+
+        // ✅ Obtener el máximo orden actual después de normalizar
+        const maxOrdenImage = await Imagenes_paisajes.findOne({
+            where: { paisajes_id_paisaje: idPaisaje },
+            order: [['orden_imagen', 'DESC']],
+        });
+
+        let lastOrden = maxOrdenImage?.orden_imagen || 0;
+
+        // ✅ Insertar nuevas imágenes con orden siguiente
         for (const imageUrl of urlImagen) {
+            lastOrden += 1;
             await Imagenes_paisajes.create({
-                paisajes_id_paisaje: idPaisaje,
+                paisajes_id_paisaje: idPaisaje, // ✅ FK correcta
                 url_paisaje: imageUrl,
+                orden_imagen: lastOrden,
             });
         }
         return "El Registro se ha actualizado correctamente.";

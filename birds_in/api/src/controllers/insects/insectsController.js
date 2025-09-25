@@ -577,18 +577,16 @@ const sendAndUpdateInsect = async (
     idRegistro,
 ) => {
     try {
-        // Obtener el registro existente de la base de datos
+        // ✅ Obtener insecto existente
         const existingInsect = await Insectos.findOne({
-            where: {
-                id_insecto: idRegistro,
-            },
+            where: { id_insecto: idRegistro },
         });
 
         if (!existingInsect) {
             throw new Error("El registro con ID especificado no existe.");
         }
 
-        // Verificar si los nuevos valores son diferentes de los actuales antes de actualizar
+        // ✅ Comparar cambios
         const cambios = {
             nombre_ingles: ingles !== existingInsect.nombre_ingles ? ingles : undefined,
             nombre_cientifico: cientifico !== existingInsect.nombre_cientifico ? cientifico : undefined,
@@ -598,11 +596,11 @@ const sendAndUpdateInsect = async (
             familias_id_familia: familia.id !== existingInsect.familias_id_familia ? familia.id : undefined,
         };
 
-        // Filtrar valores undefined
-        const cambiosFiltrados = Object.fromEntries(Object.entries(cambios).filter(([key, value]) => value !== undefined));
+        const cambiosFiltrados = Object.fromEntries(
+            Object.entries(cambios).filter(([_, value]) => value !== undefined)
+        );
 
         if (Object.keys(cambiosFiltrados).length > 0) {
-            // Si nombre_ingles es diferente, hacer el cambio en dos pasos
             if (cambiosFiltrados.nombre_ingles) {
                 const temporalName = `temp_${Math.random().toString(36).substring(2, 15)}`;
 
@@ -619,24 +617,47 @@ const sendAndUpdateInsect = async (
                 delete cambiosFiltrados.nombre_ingles;
             }
 
-            // Actualizar el registro existente en la tabla "Insectos" y sus relaciones
             await Insectos.update(cambiosFiltrados, {
-                where: {
-                    id_insecto: idRegistro,
-                },
-            });
-        }
-        // console.log(urlImagen)
-        for (const imageUrl of urlImagen) {
-            await Imagenes_insectos.create({
-                insectos_id_insecto: idRegistro,
-                url_insecto: imageUrl,
+                where: { id_insecto: idRegistro },
             });
         }
 
+        // ✅ Obtener imágenes actuales
+        const existingImages = await Imagenes_insectos.findAll({
+            where: { insectos_id_insecto: idRegistro },
+            order: [["orden_imagen", "ASC"]],
+        });
+
+        // ✅ Asignar orden a imágenes sin orden
+        let ordenCounter = 1;
+        for (const img of existingImages) {
+            if (img.orden_imagen === null) {
+                await img.update({ orden_imagen: ordenCounter });
+            }
+            ordenCounter++;
+        }
+
+        // ✅ Obtener máximo orden actual
+        const maxOrdenImage = await Imagenes_insectos.findOne({
+            where: { insectos_id_insecto: idRegistro },
+            order: [["orden_imagen", "DESC"]],
+        });
+
+        let lastOrden = maxOrdenImage?.orden_imagen || 0;
+
+        // ✅ Insertar nuevas imágenes
+        for (const imageUrl of urlImagen) {
+            lastOrden += 1;
+            await Imagenes_insectos.create({
+                insectos_id_insecto: idRegistro,
+                url_insecto: imageUrl,
+                orden_imagen: lastOrden,
+            });
+        }
+
+        // ✅ Actualizar relaciones de países y zonas
         const existingRelations = await Insectos.findByPk(idRegistro);
         if (existingRelations) {
-            // Elimina todas las relaciones de países asociadas al registro
             await existingRelations.setPaises([]);
             await existingRelations.setZonasInsectos([]);
         }
@@ -651,8 +672,7 @@ const sendAndUpdateInsect = async (
 
         return "El registro se ha actualizado correctamente.";
     } catch (error) {
-        console.log('Error:', error);
-        // Agrega manejo de errores específicos si es necesario.
+        console.log("Error:", error);
     }
 };
 

@@ -15,7 +15,8 @@ import { Loading } from '../../../utils/Loading';
 import { saveOrderPhotos, sendCoverPhoto, sendPhotosDelete } from '../../../../redux/reptiles/actions/photosAction';
 import { getInfoForUpdate } from '../../../../redux/reptiles/actions/crudAction';
 import { getRegistro } from '../../../../redux/reptiles/slices/UpdateSlice';
-import PhotosOrganizerContainer from '../../Paisajes/Photos/PhotosOrganizerContainer';
+import PhotosOrganizerContainer from './PhotosOrganizerContainer';
+
 
 
 export const CoverDelete = ({
@@ -25,7 +26,8 @@ export const CoverDelete = ({
     selected,
     setCoverSelected,
 }) => {
-
+    const organizerRef = React.useRef(null);
+    const inputRefs = React.useRef({});
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
@@ -46,7 +48,6 @@ export const CoverDelete = ({
         try {
             // Marcar la imagen como portada actual
             setHighlightedImage((prev) => {
-
                 // Deseleccionar la imagen destacada si ya estaba seleccionada
                 if (prev && prev.id === id) {
                     return null;
@@ -106,16 +107,28 @@ export const CoverDelete = ({
             // Mostrar el indicador de carga
             setShowBackdrop(true);
             setLoadingMessage('Borrando Fotografías Seleccionadas')
+            // 1️⃣ Obtener imágenes ordenadas del hijo
+            const currentImages = organizerRef.current.getCurrentImages();
+            console.log("📦 Imágenes actuales desde el hijo:", currentImages);
             // Separar IDs y URLs en arrays diferentes
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
+            const updatedImages = currentImages
+                .filter((img) => !selectedIds.includes(img.id))
+                .map((img, index) => ({
+                    ...img,
+                    orden_imagenes: index + 1
+                }));
+            // 3️⃣ Guarda orden actualizado
+            await saveOrderToDB(updatedImages);
             // Realizar la eliminación de fotos
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
             await dispatch(getInfoForUpdate(infoForUpdate.id_reptil));
-            setSnackbarMessage('Fotografías Eliminadas con éxito');
+            setImages(updatedImages);
             setSelectedImages([])
             setShowBackdrop(false)
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSnackbarOpen(true);
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
@@ -172,8 +185,14 @@ export const CoverDelete = ({
         }
     }, [infoForUpdate?.imagenes_reptiles]);
 
-    const [images, setImages] = React.useState(infoForUpdate.imagenes_reptiles || []);
-    console.log(infoForUpdate.imagenes_reptiles)
+    const [images, setImages] = React.useState(infoForUpdate.imagenes_reptiles);
+    // console.log(infoForUpdate.imagenes_reptiles)
+    const handleCloseViewer = () => {
+        setIsGalleryOpen(false);
+        setTimeout(() => {
+            inputRefs.current[focusedImageId]?.focus(); // Vuelve a enfocar
+        }, 100); // Pequeño delay para esperar que el viewer se cierre
+    };
     return (
         <React.Fragment>
             <Loading message={loadingMessage} open={showBackdrop} />
@@ -207,6 +226,7 @@ export const CoverDelete = ({
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)',
                                         backdropFilter: 'blur(2px)',
                                     }}
+                                    id="boton-buscar"
                                     variant="outlined"
                                     onClick={handleReturnSearch}
                                     startIcon={<SearchIcon />}
@@ -221,6 +241,7 @@ export const CoverDelete = ({
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
                     <Button
+                        id="boton-eliminar"
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
@@ -229,9 +250,7 @@ export const CoverDelete = ({
                     >
                         Eliminar selección
                     </Button>
-
                 </Grid>
-
             </Grid>
             <Grid sx={{
                 margin: '0 auto',
@@ -256,6 +275,7 @@ export const CoverDelete = ({
                     />
                 </DndProvider> */}
                 <PhotosOrganizerContainer
+                    ref={organizerRef}
                     initialImages={images}
                     handleSetAsCover={handleSetAsCover}
                     handleDeleteCheckBox={handleDeleteCheckBox}
@@ -270,7 +290,7 @@ export const CoverDelete = ({
                     isOpen={isGalleryOpen}
                     images={infoForUpdate.imagenes_reptiles}
                     selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
+                    onClose={handleCloseViewer}
                 />
 
                 {images.length === 0 && (

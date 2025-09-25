@@ -1,15 +1,66 @@
-import { Autocomplete, FormControl, TextField, Typography, CircularProgress } from "@mui/material";
+import { Autocomplete, FormControl, TextField, Typography, CircularProgress, Paper } from "@mui/material";
+import { useEffect } from "react";
 
 export const AutocompleteFilter = ({ label, options, value, onChange, loading }) => {
+    // Función para filtrar y ordenar
+    const customFilter = (opts, state) => {
+        const input = state.inputValue?.toLowerCase().trim() || "";
+
+        const filtered = opts.filter(opt => {
+            if (!opt?.nombre) return false; // Evita errores si es null o undefined
+            return opt.nombre
+                .toLowerCase()
+                .split(" ")
+                .some(word => word.startsWith(input));
+        });
+
+        return filtered.sort((a, b) =>
+            (a?.nombre || "").localeCompare(b?.nombre || "", "es", { sensitivity: "base" })
+        );
+    };
+
     return (
         <FormControl sx={{ m: 0.5, width: '95%' }}>
             <Autocomplete
                 multiple
+                filterOptions={customFilter}
                 value={value}
                 onChange={(event, newValue) => onChange(newValue)}
                 options={loading ? [] : options || []} // Muestra un array vacío mientras carga
                 getOptionLabel={(option) => option.nombre}
                 loading={loading}
+                PaperComponent={(props) => (
+                    <Paper
+                        {...props}
+                        sx={{
+                            maxHeight: 350,
+                            overflowY: "auto",
+                            position: "relative",
+                            // Firefox
+                            scrollbarWidth: "auto",
+                            scrollbarColor: "#ff9800 #f0f0f0",
+                            // Webkit (Chrome, Edge, Safari)
+                            "&::-webkit-scrollbar": {
+                                width: "14px", // MUCHO más gruesa
+                            },
+                            "&::-webkit-scrollbar-track": {
+                                background: "#f0f0f0",
+                            },
+                            "&::-webkit-scrollbar-thumb": {
+                                backgroundColor: "#ff9800",
+                                borderRadius: "7px",
+                                border: "3px solid #f0f0f0",
+                                animation: "scrollPulse 1s infinite", // animación fuerte
+                            },
+                            "@keyframes scrollPulse": {
+                                "0%": { backgroundColor: "#ff9800" },
+                                "50%": { backgroundColor: "#ff5722" },
+                                "100%": { backgroundColor: "#ff9800" },
+                            },
+                        }}
+                    />
+                )}
+
                 renderInput={(params) =>
                     <TextField
                         {...params}

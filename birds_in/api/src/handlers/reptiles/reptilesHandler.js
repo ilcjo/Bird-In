@@ -234,7 +234,7 @@ const updateInfoRegister = async (req, res) => {
    
    try {
       console.log('llegue par actualizar el registro handler: ',
-         order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
+         order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO', urlImagen)
       const succesUpdate = await sendAndUpdateRegister(
          order,
          familia,

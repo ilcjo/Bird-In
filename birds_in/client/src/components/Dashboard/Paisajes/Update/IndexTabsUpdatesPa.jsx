@@ -51,10 +51,10 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                 // await handleButtonClickFromCreate(); // Espera a que se complete el update
                 setTimeout(() => {
                     handleNavigateToCoverDelete(); // Ejecuta después del retraso
-                    localStorage.removeItem('nombre');
-                    localStorage.removeItem('isFromCreateImage');
-                    localStorage.removeItem('isExist');
                 }, 10000); // Ejecuta después de completar el update
+                localStorage.removeItem('nombre');
+                localStorage.removeItem('isFromCreateImage');
+                localStorage.removeItem('isExist');
 
             } else if (isFromImage === 'false' && isExist === 'true') {
                 setSelectedTab(0);
@@ -76,7 +76,7 @@ export const IndexTabsUpdatesPa = ({ isEnable, changeTab,
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h4' >
+                    <StyledTab id='info-boton' label={<Typography variant='h4' >
                         Información
                     </Typography>} />
                     <StyledTab label={<Typography variant='h4' >

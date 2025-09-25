@@ -18,7 +18,6 @@ import { saveOrderPhotos, sendCoverPhoto, sendPhotosDelete } from '../../../../r
 import { getInfoForUpdate } from '../../../../redux/birds/actions/crudAction';
 import { getAve } from '../../../../redux/birds/slices/UpdateSlice';
 import PhotosOrganizerContainer from './PhotosOrganizerContainer';
-
 export const CoverDelete = ({
     isCreate,
     showUpdateBird,
@@ -26,6 +25,8 @@ export const CoverDelete = ({
     selectedBird,
     setCoverSelected,
 }) => {
+    const organizerRef = React.useRef(null);
+    const inputRefs = React.useRef({});
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombreAve = localStorage.getItem('nombreIngles') || 'del Ave';
@@ -40,9 +41,9 @@ export const CoverDelete = ({
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
-
+    // console.log(selectedImageIndex)
     const handleSetAsCover = async (id, url, destacada) => {
-        console.log(id, url)
+        // console.log(id, url)
         try {
             setHighlightedImage((prev) => {
                 if (prev && prev.id === id) {
@@ -79,6 +80,9 @@ export const CoverDelete = ({
     const handleCloseGallery = () => {
         setSelectedImageIndex(null);
         setIsGalleryOpen(false);
+        if (organizerRef.current && organizerRef.current.focusContainer) {
+            organizerRef.current.focusContainer();
+        }
     };
 
     const handleDeleteCheckBox = (id, url) => {
@@ -96,13 +100,28 @@ export const CoverDelete = ({
         try {
             setShowBackdrop(true);
             setLoadingMessage('Borrando Fotografías Seleccionadas');
+            // 1️⃣ Obtener imágenes ordenadas del hijo
+            const currentImages = organizerRef.current.getCurrentImages();
+            console.log("📦 Imágenes actuales desde el hijo:", currentImages);
+            // 2️⃣ Filtra y reordena
             const selectedIds = selectedImages.map((img) => img.id);
             const selectedUrls = selectedImages.map((img) => img.url);
+            const updatedImages = currentImages
+                .filter((img) => !selectedIds.includes(img.id))
+                .map((img, index) => ({
+                    ...img,
+                    orden_imagen: index + 1
+                }));
+
+            // 3️⃣ Guarda orden actualizado
+            await saveOrderToDB(updatedImages);
+            // 4️⃣ Elimina en base
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
+            // 5️⃣ Actualiza estado y recarga
             await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
-            setSnackbarMessage('Fotografías Eliminadas con éxito');
+            setImages(updatedImages);
             setSelectedImages([]);
-            setShowBackdrop(false);
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSnackbarOpen(true);
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
@@ -112,6 +131,27 @@ export const CoverDelete = ({
             setShowBackdrop(false);
         }
     };
+
+    // const handleDeleteButtonClick = async () => {
+    //     try {
+    //         setShowBackdrop(true);
+    //         setLoadingMessage('Borrando Fotografías Seleccionadas');
+    //         const selectedIds = selectedImages.map((img) => img.id);
+    //         const selectedUrls = selectedImages.map((img) => img.url);
+    //         await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
+    //         await dispatch(getInfoForUpdate(infoAveForUpdate.id_ave));
+    //         setSnackbarMessage('Fotografías Eliminadas con éxito');
+    //         setSelectedImages([]);
+    //         setShowBackdrop(false);
+    //         setSnackbarOpen(true);
+    //     } catch (error) {
+    //         console.error('Error al eliminar fotos:', error);
+    //         setErrorMessage(`Error al eliminar las fotografías: ${error.message}`);
+    //         setErrorSnackbarOpen(true);
+    //     } finally {
+    //         setShowBackdrop(false);
+    //     }
+    // };
 
     const handleReturnSearch = () => {
         localStorage.removeItem('nombreIngles');
@@ -161,6 +201,13 @@ export const CoverDelete = ({
 
     const [images, setImages] = React.useState(infoAveForUpdate.imagenes_aves);
 
+    const handleCloseViewer = () => {
+        setIsGalleryOpen(false);
+        setTimeout(() => {
+            inputRefs.current[focusedImageId]?.focus(); // Vuelve a enfocar
+        }, 100); // Pequeño delay para esperar que el viewer se cierre
+    };
+
     return (
         <React.Fragment>
             <Loading
@@ -181,7 +228,7 @@ export const CoverDelete = ({
                 mb: 1
             }}>
                 <Grid item xs={12} md={12}>
-                    <Grid container>
+                    <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
@@ -196,6 +243,7 @@ export const CoverDelete = ({
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)',
                                         backdropFilter: 'blur(2px)',
                                     }}
+                                    id="boton-buscar"
                                     variant="outlined"
                                     onClick={handleReturnSearch}
                                     startIcon={<SearchIcon />}
@@ -210,6 +258,7 @@ export const CoverDelete = ({
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
+                        id="boton-eliminar"
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
@@ -243,6 +292,7 @@ export const CoverDelete = ({
                     />
                 </DndProvider> */}
                 <PhotosOrganizerContainer
+                    ref={organizerRef}
                     initialImages={images}
                     handleSetAsCover={handleSetAsCover}
                     handleDeleteCheckBox={handleDeleteCheckBox}
@@ -257,7 +307,8 @@ export const CoverDelete = ({
                     isOpen={isGalleryOpen}
                     images={infoAveForUpdate.imagenes_aves}
                     selectedIndex={selectedImageIndex}
-                    onClose={handleCloseGallery}
+                    onClose={handleCloseViewer}
+
                 />
                 {images.length === 0 && (
                     <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>

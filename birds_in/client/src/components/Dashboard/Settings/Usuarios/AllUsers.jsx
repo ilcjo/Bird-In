@@ -164,6 +164,8 @@ export const AllUsers = () => {
           <TextField
             fullWidth
             variant="outlined"
+            autoComplete="off"
+            name="searchUser"
             placeholder="Buscar Usuario..."
             value={searchTerm}
             onChange={handleSearchChange}
@@ -216,6 +218,8 @@ export const AllUsers = () => {
                             onChange={handlePasswordChange}
                             placeholder="Nueva Contraseña"
                             size="small"
+                            autoComplete="new-password"
+                            name="newPassword"
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="end">
