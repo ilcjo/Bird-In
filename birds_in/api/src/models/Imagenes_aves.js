@@ -21,6 +21,10 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        aves_id_ave: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
     }, { timestamps: false, }
     )
 }

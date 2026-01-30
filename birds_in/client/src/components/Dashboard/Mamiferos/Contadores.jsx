@@ -28,7 +28,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export const Contadores = () => {
     const dispatch = useDispatch();
-    const { allRegistros, allEnglish, allCientifico, allComun, allOrders, allFamilias, allGrupos, allZonas, allCountrys } = useSelector(state => state.dataSlice.count);
+    const { allRegistros, allEnglish, allCientifico, allComun, allFamilias, allGrupos, allZonas, allCountrys } = useSelector(state => state.dataSlice.count);
 
     React.useEffect(() => {
         dispatch(counting());
@@ -42,7 +42,7 @@ export const Contadores = () => {
     ];
 
     const secondHalfData = [
-        { label: 'Número de Ordens', value: allOrders },
+        // { label: 'Número de Ordens', value: allOrders },
         { label: 'Número de Familias', value: allFamilias },
         { label: 'Número de Grupos', value: allGrupos },
         { label: 'Número de Países', value: allCountrys },

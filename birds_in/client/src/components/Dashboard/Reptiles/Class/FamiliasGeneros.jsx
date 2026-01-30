@@ -9,8 +9,7 @@ import { GrupoTable } from './grupos/GrupoTable';
 import { Loading } from '../../../utils/Loading';
 //redux
 import { getOptionsDataR } from '../../../../redux/reptiles/actions/fetchOptions';
-import { OrdenTable } from './order/OrdenTable';
-import { OrdenAddForm } from './order/OrdenAddForm';
+
 
 export const FamiliasGeneros = () => {
     const dispatch = useDispatch()
@@ -77,24 +76,6 @@ export const FamiliasGeneros = () => {
                         showErrorSnack={setErrorSnackOpen}
                     />
                     <GrupoTable
-                        onloading={setOnLoading}
-                        loadingMessage={setLoadingMessage}
-                        showSnackBar={setOpenSnack}
-                        successMessages={setShowSuccessMessages}
-                        errorMessage={setErrorMessage}
-                        showErrorSnack={setErrorSnackOpen}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <OrdenAddForm
-                        onloading={setOnLoading}
-                        loadingMessage={setLoadingMessage}
-                        showSnackBar={setOpenSnack}
-                        successMessages={setShowSuccessMessages}
-                        errorMessage={setErrorMessage}
-                        showErrorSnack={setErrorSnackOpen}
-                    />
-                    <OrdenTable
                         onloading={setOnLoading}
                         loadingMessage={setLoadingMessage}
                         showSnackBar={setOpenSnack}

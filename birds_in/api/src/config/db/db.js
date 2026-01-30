@@ -64,46 +64,54 @@ const {
 // UNO A UNO
 
 // =>AVES
+// Aves.belongsTo(Familias, { foreignKey: 'familias_id_familia' })
+// Familias.hasOne(Aves, { foreignKey: 'familias_id_familia' })
+// Aves.belongsTo(Grupos, { foreignKey: 'grupos_id_grupo' })
+// Grupos.hasOne(Aves, { foreignKey: 'grupos_id_grupo' })
+
+//AVES VERSION2.
+// Familia → muchas Aves
+Familias.hasMany(Aves, { foreignKey: 'familias_id_familia' })
 Aves.belongsTo(Familias, { foreignKey: 'familias_id_familia' })
-Familias.hasOne(Aves, { foreignKey: 'familias_id_familia' })
+// Grupo → muchas Aves
+Grupos.hasMany(Aves, { foreignKey: 'grupos_id_grupo' })
 Aves.belongsTo(Grupos, { foreignKey: 'grupos_id_grupo' })
-Grupos.hasOne(Aves, { foreignKey: 'grupos_id_grupo' })
 
 // =>PAISAJES
-Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
 Paises.hasOne(Paisajes, { foreignKey: 'paises_id_pais' });
-Paisajes.belongsTo(Zonas, { foreignKey: 'zonas_id_zona' });
+Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
 Zonas.hasOne(Paisajes, { foreignKey: 'zonas_id_zona' });
+Paisajes.belongsTo(Zonas, { foreignKey: 'zonas_id_zona' });
 
 // => MAMÍFEROS
-Mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' })
-Familias_mamiferos.hasMany(Mamiferos, { foreignKey: 'familias_id_familia' })
-Mamiferos.belongsTo(Order_mamiferos, { foreignKey: 'orders_id_order' })
-Order_mamiferos.hasMany(Mamiferos, { foreignKey: 'orders_id_order' })
-Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'grupos_id_grupo' })
-Grupos_mamiferos.hasMany(Mamiferos, { foreignKey: 'grupos_id_grupo' })
+//Mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' })
+//Familias_mamiferos.hasMany(Mamiferos, { foreignKey: 'familias_id_familia' })
+//Mamiferos.belongsTo(Order_mamiferos, { foreignKey: 'orders_id_order' })
+//Order_mamiferos.hasMany(Mamiferos, { foreignKey: 'orders_id_order' })
+//Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'grupos_id_grupo' })
+//Grupos_mamiferos.hasMany(Mamiferos, { foreignKey: 'grupos_id_grupo' })
 
 // => MAMÍFEROS
-// // Nueva relación: Una familia tiene muchos grupos
-// Familias_mamiferos.hasMany(Grupos_mamiferos, { foreignKey: 'familias_id_familia' });
-// Grupos_mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' });
-// // Relaciona Mamiferos con Grupos en lugar de Familias
-// Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'orders_id_order' });
-// Grupos_mamiferos.hasMany(Mamiferos, { foreignKey: 'orders_id_order' });
+// Nueva relación: Una familia tiene muchos grupos
+Familias_mamiferos.hasMany(Mamiferos, { foreignKey: 'familias_id_familia' });
+Mamiferos.belongsTo(Familias_mamiferos, { foreignKey: 'familias_id_familia' });
+// Relaciona Mamiferos con Grupos en lugar de Familias
+Grupos_mamiferos.hasMany(Mamiferos, { foreignKey: 'grupos_id_grupo' });
+Mamiferos.belongsTo(Grupos_mamiferos, { foreignKey: 'grupos_id_grupo' });
 
 // =>REPTILES
-Reptiles.belongsTo(Familias_reptiles, { foreignKey: 'familias_id_familia' })
 Familias_reptiles.hasMany(Reptiles, { foreignKey: 'familias_id_familia' })
-Reptiles.belongsTo(Order_reptiles, { foreignKey: 'orders_id_order' })
-Order_reptiles.hasMany(Reptiles, { foreignKey: 'orders_id_order' })
-Reptiles.belongsTo(Grupos_reptiles, { foreignKey: 'grupos_id_grupo' })
+Reptiles.belongsTo(Familias_reptiles, { foreignKey: 'familias_id_familia' })
+// Reptiles.belongsTo(Order_reptiles, { foreignKey: 'orders_id_order' })
+// Order_reptiles.hasMany(Reptiles, { foreignKey: 'orders_id_order' })
 Grupos_reptiles.hasMany(Reptiles, { foreignKey: 'grupos_id_grupo' })
+Reptiles.belongsTo(Grupos_reptiles, { foreignKey: 'grupos_id_grupo' })
 
 // // =>INSECTOS
-Insectos.belongsTo(Familias_insectos, { foreignKey: 'familias_id_familia' })
 Familias_insectos.hasMany(Insectos, { foreignKey: 'familias_id_familia' })
-Insectos.belongsTo(Grupos_insectos, { foreignKey: 'grupos_id_grupo' })
+Insectos.belongsTo(Familias_insectos, { foreignKey: 'familias_id_familia' })
 Grupos_insectos.hasMany(Insectos, { foreignKey: 'grupos_id_grupo' })
+Insectos.belongsTo(Grupos_insectos, { foreignKey: 'grupos_id_grupo' })
 
 // UNO A MUCHOS
 
@@ -131,8 +139,10 @@ Paises.hasMany(Paisajes, { foreignKey: 'paises_id_pais', as: 'paisesPaisajes' })
 Paisajes.belongsTo(Paises, { foreignKey: 'paises_id_pais' });
 
 //Zona-país
-Zonas.hasMany(Paises, { foreignKey: 'id_paises', as: 'zonasPaises' });
-Paises.belongsTo(Zonas, { foreignKey: 'id_paises' });
+// Zonas.hasMany(Paises, { foreignKey: 'id_paises', as: 'zonasPaises' });
+// Paises.belongsTo(Zonas, { foreignKey: 'id_paises' });
+Paises.hasMany(Zonas, { foreignKey: 'id_paises', as: 'zonasPaises' });
+Zonas.belongsTo(Paises, { foreignKey: 'id_paises' });
 // MUCHOS A MUCHOS
 
 //PaisesAves (AVES)

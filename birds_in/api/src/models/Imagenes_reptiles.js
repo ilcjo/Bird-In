@@ -17,6 +17,10 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull: true
         },
+        reptiles_id_reptil: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         orden_imagenes: {
             type: DataTypes.INTEGER,
             allowNull: true

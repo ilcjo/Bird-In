@@ -38,6 +38,17 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        // 👇 FK a Familias
+        familias_id_familia: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        // 👇 FK a Grupos
+        grupos_id_grupo: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+
     }, { timestamps: true }
     );
 };

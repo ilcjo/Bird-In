@@ -43,13 +43,13 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const {
         nIngles = [],
         nCientifico = [],
-        paises = [],
+        paisesAll = [],
         familias = [],
         grupos = [],
         zonas = []
     } = useSelector(state => state.filterSlice.options);
 
-
+console.log('paises en filtros ', paisesAll)
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
         grupo: [],
@@ -60,7 +60,6 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         ingles: [],
         ...selectOptionFromSlice,
     });
-
 
     const handleOptionChange = async (category, newValue) => {
         setIsFetchingOptions(true); // Activa el indicador de carga
@@ -221,7 +220,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             loading={isFetchingOptions}
                             value={selectOption.pais}
                             onChange={(newValue) => handleOptionChange('pais', newValue)}
-                            options={paises || []}
+                            options={paisesAll || []}
                         />
                     </Grid>
                     <Grid item xs={12}>

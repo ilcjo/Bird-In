@@ -22,9 +22,9 @@ const getAllNombres = async (req, res) => {
 };
 
 const getFilterInfo = async (req, res) => {
-   console.log('HANDLER LLEGUE HOLI')
+   // console.log('HANDLER LLEGUE HOLI')
    const {
-      orden,
+      // orden,
       familia,
       grupo,
       pais,
@@ -32,7 +32,7 @@ const getFilterInfo = async (req, res) => {
       nombreCientifico,
       nombreIngles, page, perPage } = req.query;
    try {
-      const allData = await fetchFilterRegister(orden,
+      const allData = await fetchFilterRegister(
          familia,
          grupo,
          pais,
@@ -61,7 +61,6 @@ const selectOptions = async (req, res) => {
 
 const getFilterOptions = async (req, res,) => {
    const {
-      orden,
       familia,
       grupo,
       pais,
@@ -69,12 +68,11 @@ const getFilterOptions = async (req, res,) => {
       nombreCientifico,
       nombreIngles,
    } = req.query;
-   // console.log(orden, familia, grupo, pais, zonas, nombreCientifico, nombreIngles, 'llegue')
+   // console.log( familia, grupo, pais, zonas, nombreCientifico, nombreIngles, 'llegue')
    try {
       let newOptions;
       if (zonas || pais) {
          newOptions = await filterOptionsPaisZonas(
-            orden,
             familia,
             grupo,
             pais,
@@ -84,7 +82,6 @@ const getFilterOptions = async (req, res,) => {
          );
       } else {
          newOptions = await filterOptions(
-            orden,
             familia,
             grupo,
             pais,
@@ -101,7 +98,7 @@ const getFilterOptions = async (req, res,) => {
 
 const createMamifero = async (req, res) => {
    const {
-      order,
+      // order,
       familia,
       grupo,
       pais,
@@ -117,7 +114,7 @@ const createMamifero = async (req, res) => {
    try {
 
       const successCreate = await sendAndCreateRegister(
-         order,
+         // order,
          familia,
          grupo,
          pais,
@@ -188,7 +185,7 @@ const uploadImageftp = async (req, res) => {
 
 const findInfoForUpdate = async (req, res) => {
    const { id } = req.query;
-   console.log('llegue handler findInfoForUpdate RUTA /get_update ')
+   // console.log('llegue handler findInfoForUpdate RUTA /get_update ')
    try {
       if (!id) {
          return res.status(400).json({ error: 'ID de Registro no proporcionado' });
@@ -222,7 +219,7 @@ const findInfoForUpdateName = async (req, res) => {
 
 const updateInfoRegister = async (req, res) => {
    const {
-      order,
+      // order,
       familia,
       grupo,
       pais,
@@ -236,10 +233,10 @@ const updateInfoRegister = async (req, res) => {
    } = req.body;
 
    try {
-      console.log('llegue par actualizar el registro handler: ',
-         order, '<--ORDER', familia, '<--FAMILIA', grupo, '<--GRUPO')
+      // console.log('llegue par actualizar el registro handler: ',
+      //     familia, '<--FAMILIA', grupo, '<--GRUPO')
       const succesUpdate = await sendAndUpdateRegister(
-         order,
+         // order,
          familia,
          grupo,
          pais,
@@ -333,8 +330,8 @@ const getExcel = async (req, res) => {
          { header: 'Nombre Inglés', key: 'nombre_ingles', width: 20 },
          { header: 'Nombre Científico', key: 'nombre_cientifico', width: 20 },
          { header: 'Nombre Común', key: 'nombre_comun', width: 20 },
-         { header: 'Nombre Orden', key: 'nombre_orden', width: 20 },
-         { header: 'Nombre Order', key: 'nombre_order', width: 20 },
+         // { header: 'Nombre Orden', key: 'nombre_orden', width: 20 },
+         // { header: 'Nombre Order', key: 'nombre_order', width: 20 },
          { header: 'Nombre Familia', key: 'nombre_familia', width: 20 },
          { header: 'Nombre Grupo', key: 'nombre_grupo', width: 20 },
          { header: 'Paises', key: 'paises', width: 20 },
@@ -352,8 +349,8 @@ const getExcel = async (req, res) => {
             nombre_cientifico: registro.nombre_cientifico,
             nombre_comun: registro.nombre_comun,
             nombre_familia: registro.nombre_familia,
-            nombre_orden: registro.nombre_orden,
-            nombre_order: registro.nombre_order,
+            // nombre_orden: registro.nombre_orden,
+            // nombre_order: registro.nombre_order,
             paises: registro.paises,
             zonas: registro.zonas,
             url_wiki: registro.url_wiki,
@@ -377,10 +374,10 @@ const getExcel = async (req, res) => {
 };
 
 const checkClases = async (req, res) => {
-   const { familiaID, orderID, grupoID } = req.query
+   const { familiaID,  grupoID } = req.query
 
    try {
-      const message = await getClassGrupoFamilia(familiaID, orderID, grupoID)
+      const message = await getClassGrupoFamilia(familiaID, grupoID)
       return res.status(200).json(message);
    } catch (error) {
       res.status(500).json({ error: error.message });

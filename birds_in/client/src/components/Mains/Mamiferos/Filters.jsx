@@ -41,7 +41,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     const selectOptionFromSlice = useSelector((state) => state.filters.currentFilters);
     const {
-        orden = [],
+        // orden = [],
         familias = [],
         grupos = [],
         paises = [],
@@ -53,7 +53,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
-        orden: [],
+        // orden: [],
         familia: [],
         grupo: [],
         pais: [],
@@ -76,7 +76,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         };
 
         setSelectOption(updatedSelectOption);
-        console.log(updatedSelectOption)
+        // console.log(updatedSelectOption)
         try {
             // Realiza la solicitud para obtener las opciones
             await dispatch(fetchNewOptions(updatedSelectOption))
@@ -134,7 +134,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
             });
         setSelectOption({
-            orden: [],
+            // orden: [],
             familia: [],
             grupo: [],
             pais: [],
@@ -151,7 +151,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         // return () => {
         dispatch(getOptionsDataM());
         setSelectOption({
-            orden: [],
+            // orden: [],
             familia: [],
             grupo: [],
             pais: [],
@@ -176,7 +176,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     </Typography>
                 </Grid>
                 <Grid container alignItems="center">
-                    {/* Orden */}
+                    {/* Orden
                     <Grid item xs={12}>
                         <AutocompleteFilter
                             label="Orden"
@@ -185,7 +185,7 @@ export const Filters = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             onChange={(newValue) => handleOptionChange('orden', newValue)}
                             loading={isFetchingOptions}
                         />
-                    </Grid>
+                    </Grid> */}
 
                     {/* Familia */}
                     <Grid item xs={12}>

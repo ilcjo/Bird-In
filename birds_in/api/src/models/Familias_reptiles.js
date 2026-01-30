@@ -13,10 +13,7 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        id_order: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        }
+        
     },{ timestamps: false, }
     )
 }

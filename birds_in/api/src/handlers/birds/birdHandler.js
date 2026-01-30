@@ -44,7 +44,8 @@ const getFilterInfo = async (req, res) => {
 
    } catch (error) {
       console.error(error);
-      res.status(500).send('Error en el servidor');
+      throw error;
+      // res.status(500).send('Error en el servidor');
    }
 };
 

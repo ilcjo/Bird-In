@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 //components
 import { FamiliaAddForm } from './familias/FamiliaAddForm';
 import { FamiliaTable } from './familias/FamiliaTable';
-import { OrdenAddForm } from './order/OrdenAddForm';
-import { OrdenTable } from './order/OrdenTable';
+// import { OrdenAddForm } from './order/OrdenAddForm';
+// import { OrdenTable } from './order/OrdenTable';
 import { GrupoAddForm } from './grupos/GrupoAddForm';
 import { GrupoTable } from './grupos/GrupoTable';
 import { Loading } from '../../../utils/Loading';
@@ -86,7 +86,7 @@ export const FamiliasGeneros = () => {
                     />
                 </Grid>
 
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <OrdenAddForm
                         onloading={setOnLoading}
                         loadingMessage={setLoadingMessage}
@@ -103,7 +103,7 @@ export const FamiliasGeneros = () => {
                         errorMessage={setErrorMessage}
                         showErrorSnack={setErrorSnackOpen}
                     />
-                </Grid>
+                </Grid> */}
             </Grid>
             <Loading
                 message={loadingMessage}

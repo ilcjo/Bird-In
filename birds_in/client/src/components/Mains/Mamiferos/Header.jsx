@@ -106,13 +106,13 @@ export const Header = ({ imageUrl, registro, back }) => {
         {registro.map((data, index) => (
           <React.Fragment key={index}>
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Typography variant='h5' color='white' sx={{ mb: 1, mt: -2 }}>
                   ORDEN {data.order_mamifero?.nombre || 'N/A'} - {data.order_mamifero?.nombre_comun || 'N/A'}
                 </Typography>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
-                <Typography variant='body1' color='primary.light' sx={{ mb: 1, mt: -1 }}>
+                <Typography variant='h4' color='primary.light' sx={{ mb: 1, mt: -2 }}>
                   {data.familias_mamifero?.nombre || 'N/A'} / {data.grupos_mamifero?.nombre || 'N/A'}
                 </Typography>
               </Grid>

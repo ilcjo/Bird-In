@@ -27,7 +27,7 @@ import { Loading } from '../../utils/Loading';
 //redux
 import { actualizarRegistro, deleteRegistro, getInfoForUpdate } from '../../../redux/reptiles/actions/crudAction';
 import { UpdateImage } from '../../../redux/reptiles/actions/photosAction';
-import { clasesFamilia, clasesGrupos, clasesOrder } from '../../../redux/reptiles/actions/fetchOptions';
+import { clasesFamilia, clasesGrupos } from '../../../redux/reptiles/actions/fetchOptions';
 
 
 export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, selected, changeImagenExist }) => {
@@ -37,9 +37,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
 
     const { paises, familias, orden, grupos, zonas } = useSelector(state => state.filterRep.options)
     const { infoForUpdate } = useSelector(state => state.updateReptil)
-    console.log(infoForUpdate, 'esto es la info')
+    // console.log(infoForUpdate, 'esto es la info')
     const initialCreateData = {
-        order: infoForUpdate.order_reptile || null,
         familia: infoForUpdate.familias_reptile || null,
         grupo: infoForUpdate.grupos_reptile || null,
         pais: infoForUpdate.paises || [],
@@ -95,24 +94,14 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
             try {
                 // Aquí llamas a la función que genera datos extra y actualizas el estado
                 const extraData = await dispatch(clasesFamilia(newValue.id));
-                // console.log(extraData)
-                console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
-
-                // Verificar si extraData contiene familias y grupos
-                const extraOrder = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
+                // console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
                 const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
 
-                // Combinar familias y grupos con las opciones originales
-                const newCombinedOptionsOrders = [
-                    ...extraOrder, // Agregar las familias extra
-                    ...orden,      // Mantener las familias originales
-                ];
                 const newCombinedOptionsGrupos = [
                     ...extraGrupos, // Agregar las familias extra
                     ...grupos,      // Mantener las familias originales
                 ];
 
-                setCombinedOptionsOrders(newCombinedOptionsOrders);
                 setCombinedOptionsGrupos(newCombinedOptionsGrupos)
             } catch (error) {
                 console.error("Error al obtener datos adicionales:", error);
@@ -155,55 +144,19 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         }
     };
 
-    const handleOrderChange = async (event, newValue) => {
-        console.log(newValue)
-        if (!newValue) {
-            // Si el usuario borra la selección, limpiar el estado
-            setCreateData(prevState => ({
-                ...prevState,
-                order: null,
-            }));
-            setCombinedOptionsFamilias(familias);
-            setCombinedOptionsGrupos(grupos);
-            return;
-        }
-
-        setCreateData(prevState => ({
-            ...prevState,
-            order: newValue ?? null,
-        }));
-
-        try {
-            // Obtener datos adicionales (familias y grupos)
-            const extraData = await dispatch(clasesOrder(newValue.id));
-
-            console.log(extraData, 'datos que llegan'); // Verificar datos recibidos
-
-            // Verificar si extraData contiene familias y grupos
-            const extraFamilias = extraData?.familias?.map(f => ({ ...f, type: 'extra' })) || [];
-            const extraGrupos = extraData?.grupos?.map(g => ({ ...g, type: 'extra' })) || [];
-
-            // Combinar con opciones originales
-            setCombinedOptionsFamilias([...extraFamilias, ...familias]);
-            setCombinedOptionsGrupos([...extraGrupos, ...grupos]);
-        } catch (error) {
-            console.error("Error al obtener datos adicionales:", error);
-        }
-    };
-    // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
     React.useEffect(() => {
         const loadInitialData = async () => {
             if (infoForUpdate.familia) {
-                const extraDataOrders = await dispatch(clasesFamilia(infoForUpdate.familia.id));
-                const newCombinedOptionsOrders = [
-                    ...extraDataOrders.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                    ...orden, // Mantén las opciones originales
+                const extraDataGrupos = await dispatch(clasesFamilia(infoForUpdate.familia.id));
+                const newCombinedOptionsGrupos = [
+                    ...extraDataGrupos.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
+                    ...grupos, // Mantén las opciones originales
                 ];
-                setCombinedOptionsOrders(newCombinedOptionsOrders);
+                setCombinedOptionsOrders(newCombinedOptionsGrupos);
             }
 
-            if (infoForUpdate.order) {
-                const extraDataFamilias = await dispatch(clasesOrder(infoForUpdate.order.id));
+            if (infoForUpdate.grupo) {
+                const extraDataFamilias = await dispatch(clasesOrder(infoForUpdate.grupo.id));
                 const newCombinedOptionsFamilias = [
                     ...extraDataFamilias.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
                     ...familias, // Mantén las opciones originales
@@ -213,7 +166,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         };
 
         loadInitialData();
-    }, [infoForUpdate, orden, familias]);
+    }, [infoForUpdate, grupos, familias]);
 
 
     const handleInputChange = (event) => {
@@ -458,6 +411,45 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         style: { fontStyle: 'italic' } // Aplica estilo cursiva al texto
                                     }}
                                 />
+
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-familias"
+                                    // options={familias}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
+                                    options={combinedOptionsFamilias}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.familia}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
+                                    onChange={handleFamiliaChange}
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            label="Familia"
+                                            margin="dense"
+                                        />}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3 }}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
+
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-grupos"
@@ -493,95 +485,6 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         </li>
                                     )}
                                 />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-order"
-                                    // options={order}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Orden'}
-                                    options={combinedOptionsOrders}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.order ?? null}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
-                                    onChange={handleOrderChange}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Orden"
-                                            margin='dense'
-
-                                        />}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3, mt: 1 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-order-name"
-                                    options={combinedOptionsOrders} // Usa la lista combinada de órdenes
-                                    getOptionLabel={(option) => option.order_comun || ''} // Mostrar el nombre común
-                                    value={createData.order} // Asegurar que el valor refleje el estado
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Nombre común del orden"
-                                            margin='dense'
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.order_comun === value?.order_comun}
-
-                                />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-familias"
-                                    // options={familias}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Familias'}
-                                    options={combinedOptionsFamilias}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.familia}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, familia: newValue })}
-                                    onChange={handleFamiliaChange}
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            label="Familia"
-                                            margin="dense"
-                                        />}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
-                                
-
                             </Grid>
                         </Grid>
                         <Grid container spacing={1}>

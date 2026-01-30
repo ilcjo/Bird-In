@@ -9,10 +9,6 @@ module.exports = (sequelize) => {
             primaryKey: true,
             autoIncrement: true
         },
-        nombre_comun: {
-            type: DataTypes.TEXT,
-            allowNull: true
-        },
         nombre_ingles: {
             type: DataTypes.TEXT,
             unique: true,
@@ -22,11 +18,26 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        nombre_comun: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         url_wiki: {
             type: DataTypes.TEXT,
             allowNull: true
         },
-     
+          // 👇 FK a Familias
+        familias_id_familia: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        // 👇 FK a Grupos
+        grupos_id_grupo: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+      
+
     }, { timestamps: true, }
     )
 }

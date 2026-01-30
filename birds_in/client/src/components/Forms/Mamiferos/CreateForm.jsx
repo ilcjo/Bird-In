@@ -26,8 +26,8 @@ import { StyledTextField } from '../../../assets/styles/MUIstyles';
 import { createRegistro, duplicateNameCheck, getInfoForUpdateName } from '../../../redux/mamiferos/actions/crudAction';
 import { saveImageFtp } from '../../../redux/mamiferos/actions/photosAction';
 import { clasesFamilia, clasesGrupos, clasesOrder, getOptionsDataM } from '../../../redux/mamiferos/actions/fetchOptions';
-import { Search } from '../../Dashboard/Mamiferos/Update/Search';
-import { IndexTabsUpdates } from '../../Dashboard/Mamiferos/Update/IndexTabsUpdates';
+// import { Search } from '../../Dashboard/Mamiferos/Update/Search';
+// import { IndexTabsUpdates } from '../../Dashboard/Mamiferos/Update/IndexTabsUpdates';
 
 
 export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
@@ -35,7 +35,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, orden, grupos, zonas } = useSelector(state => state.filters.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filters.options)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -47,15 +47,15 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [snackBarMessage, setSnackBarMessage] = React.useState('El Mamífero se a creado correctamente.');
     const [RegisterCreated, setRegisterCreated] = React.useState(false);
     const [formSubmitted, setFormSubmitted] = React.useState(false);
+    // const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(orden);
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
-    const [combinedOptionsOrders, setCombinedOptionsOrders] = React.useState(orden);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
     const [isFromCreate, setIsFromCreate] = React.useState(false);
     const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
     // console.log(combinedOptionsOrders, 'combinados order')
     const [createData, setCreateData] = React.useState({
-        order: null,
-        orderComun: null,
+        // order: null,
+        // orderComun: null,
         familia: null,
         grupo: null,
         pais: [],
@@ -68,7 +68,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     });
 
     const [errors, setErrors] = React.useState({
-        order: false,
+        // order: false,
         familia: false,
         grupo: false,
         ingles: false,
@@ -148,9 +148,9 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         event.preventDefault();
         const newErrors = {};
         setFormSubmitted(true);
-        if (!createData.order) {
-            newErrors.order = true;
-        }
+        // if (!createData.order) {
+        //     newErrors.order = true;
+        // }
         if (!createData.familia) {
             newErrors.familia = true;
         }
@@ -268,23 +268,23 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 // Aquí llamas a la función que genera datos extra y actualizas el estado
                 const extraData = await dispatch(clasesFamilia(newValue.id));
                 // console.log(extraData)
-                console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
+                // console.log(extraData, 'datos que llegan'); // Verificar qué datos llegan
 
                 // Verificar si extraData contiene familias y grupos
-                const extraOrder = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
+                // const extraOrder = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
                 const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
 
                 // Combinar familias y grupos con las opciones originales
-                const newCombinedOptionsOrders = [
-                    ...extraOrder, // Agregar las familias extra
-                    ...orden,      // Mantener las familias originales
-                ];
+                // const newCombinedOptionsOrders = [
+                //     ...extraOrder, // Agregar las familias extra
+                //     ...orden,      // Mantener las familias originales
+                // ];
                 const newCombinedOptionsGrupos = [
                     ...extraGrupos, // Agregar las familias extra
                     ...grupos,      // Mantener las familias originales
                 ];
 
-                setCombinedOptionsOrders(newCombinedOptionsOrders);
+                // setCombinedOptionsOrders(newCombinedOptionsOrders);
                 setCombinedOptionsGrupos(newCombinedOptionsGrupos)
             } catch (error) {
                 console.error("Error al obtener datos adicionales:", error);
@@ -328,42 +328,42 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     //     }
     // };
 
-    const handleOrderChange = async (event, newValue) => {
-        if (!newValue) {
-            // Si el usuario borra la selección, limpiar el estado
-            setCreateData(prevState => ({
-                ...prevState,
-                order: null,
-                orderComun: "",
-            }));
-            setCombinedOptionsFamilias(familias);
-            setCombinedOptionsGrupos(grupos);
-            return;
-        }
+    // const handleOrderChange = async (event, newValue) => {
+    //     if (!newValue) {
+    //         // Si el usuario borra la selección, limpiar el estado
+    //         setCreateData(prevState => ({
+    //             ...prevState,
+    //             order: null,
+    //             orderComun: "",
+    //         }));
+    //         setCombinedOptionsFamilias(familias);
+    //         setCombinedOptionsGrupos(grupos);
+    //         return;
+    //     }
 
-        setCreateData(prevState => ({
-            ...prevState,
-            order: newValue ?? null,
-            orderComun: newValue.order_comun || "", // Asegura que orderComun se actualice
-        }));
+    //     setCreateData(prevState => ({
+    //         ...prevState,
+    //         order: newValue ?? null,
+    //         orderComun: newValue.order_comun || "", // Asegura que orderComun se actualice
+    //     }));
 
-        try {
-            // Obtener datos adicionales (familias y grupos)
-            const extraData = await dispatch(clasesOrder(newValue.id));
+    //     try {
+    //         // Obtener datos adicionales (familias y grupos)
+    //         const extraData = await dispatch(clasesOrder(newValue.id));
 
-            console.log(extraData, 'datos que llegan'); // Verificar datos recibidos
+    //         console.log(extraData, 'datos que llegan'); // Verificar datos recibidos
 
-            // Verificar si extraData contiene familias y grupos
-            const extraFamilias = extraData?.familias?.map(f => ({ ...f, type: 'extra' })) || [];
-            const extraGrupos = extraData?.grupos?.map(g => ({ ...g, type: 'extra' })) || [];
+    //         // Verificar si extraData contiene familias y grupos
+    //         const extraFamilias = extraData?.familias?.map(f => ({ ...f, type: 'extra' })) || [];
+    //         const extraGrupos = extraData?.grupos?.map(g => ({ ...g, type: 'extra' })) || [];
 
-            // Combinar con opciones originales
-            setCombinedOptionsFamilias([...extraFamilias, ...familias]);
-            setCombinedOptionsGrupos([...extraGrupos, ...grupos]);
-        } catch (error) {
-            console.error("Error al obtener datos adicionales:", error);
-        }
-    };
+    //         // Combinar con opciones originales
+    //         setCombinedOptionsFamilias([...extraFamilias, ...familias]);
+    //         setCombinedOptionsGrupos([...extraGrupos, ...grupos]);
+    //     } catch (error) {
+    //         console.error("Error al obtener datos adicionales:", error);
+    //     }
+    // };
 
 
     const handleGruposChange = async (event, newValue) => {
@@ -381,20 +381,20 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
                 // Verificar si extraData contiene familias y grupos
                 const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
-                const extraOrders = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
+                // const extraOrders = extraData.orders ? extraData.orders.map(o => ({ ...o, type: 'extra' })) : [];
 
                 // Combinar familias y grupos con las opciones originales
                 const newCombinedOptionsFamilia = [
                     ...extraFamilias, // Agregar las familias extra
                     ...familias,      // Mantener las familias originales
                 ];
-                const newCombinedOptionsOrders = [
-                    ...extraOrders, // Agregar las familias extra
-                    ...grupos,      // Mantener las familias originales
-                ];
+                // const newCombinedOptionsOrders = [
+                //     ...extraOrders, // Agregar las familias extra
+                //     ...grupos,      // Mantener las familias originales
+                // ];
 
                 setCombinedOptionsFamilias(newCombinedOptionsFamilia);
-                setCombinedOptionsOrders(newCombinedOptionsOrders)
+                // setCombinedOptionsOrders(newCombinedOptionsOrders)
             } catch (error) {
                 console.error("Error al obtener datos adicionales:", error);
             }
@@ -499,126 +499,9 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     margin="dense"
                                     fullWidth
                                 />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-grupos"
-                                    // options={grupos || ''}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupo'}
-                                    options={combinedOptionsGrupos}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.grupo}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
-                                    onChange={handleGruposChange}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Grupo"
-                                            margin="dense"
-                                            error={formSubmitted && !createData.grupo} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    fontSize: '1.1rem',
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                // mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    // sx={{ mb: 3, mt: 1 }}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
-                            </Grid>
+                                                          </Grid>
 
                             <Grid item xs={12} sm={6}>
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-orders"
-                                    // options={order}
-                                    options={combinedOptionsOrders}
-                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Orden'}
-                                    getOptionLabel={(option) => option.nombre}
-                                    value={createData.order ?? null}
-                                    onChange={handleOrderChange}
-                                    // onChange={(event, newValue) => setCreateData({ ...createData, order: newValue })}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Orden"
-                                            margin='dense'
-                                            error={formSubmitted && !createData.order} // Add error state to the TextField
-                                            helperText={formSubmitted && !createData.order ? 'Este Campo es obligatorio *' : ''}
-                                            FormHelperTextProps={{
-                                                sx: {
-                                                    /* Agrega los estilos que desees para el texto del helper text */
-                                                    fontSize: '1.1rem',
-                                                    // color: theme.palette.secondary.main,
-                                                    fontWeight: 'bold'
-                                                },
-                                            }}
-                                            sx={{
-                                                // mb: 1,
-                                                '& .MuiInputBase-input': {
-                                                    // height: '30px',
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                    filterOptions={(options, state) => {
-                                        // Filtra las opciones para que coincidan solo al principio de las letras
-                                        const inputValue = state.inputValue.toLowerCase();
-                                        return options.filter((option) =>
-                                            option.nombre.toLowerCase().startsWith(inputValue)
-                                        );
-                                    }}
-                                    renderGroup={(params) => (
-                                        <li key={params.key}>
-                                            <Divider sx={{ mt: 1, mb: 1 }} />
-                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
-                                                {params.group}
-                                            </Typography>
-                                            <ul style={{ padding: 0 }}>{params.children}</ul>
-                                        </li>
-                                    )}
-                                />
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-order-name"
-                                    options={combinedOptionsOrders} // Usa la lista combinada de órdenes
-                                    getOptionLabel={(option) => option.order_comun || ''} // Mostrar el nombre común
-                                    value={createData.order ?? null} // Asegurar que el valor refleje el estado
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Order"
-                                            margin='dense'
-                                            error={formSubmitted && !createData.orderComun}
-                                            helperText={formSubmitted && !createData.orderComun ? 'Este Campo es obligatorio *' : ''}
-                                        />
-                                    )}
-                                    isOptionEqualToValue={(option, value) => option.order_comun === value?.order_comun}
-                                />
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
@@ -650,6 +533,55 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                         />
                                     )}
                                     isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    filterOptions={(options, state) => {
+                                        // Filtra las opciones para que coincidan solo al principio de las letras
+                                        const inputValue = state.inputValue.toLowerCase();
+                                        return options.filter((option) =>
+                                            option.nombre.toLowerCase().startsWith(inputValue)
+                                        );
+                                    }}
+                                    renderGroup={(params) => (
+                                        <li key={params.key}>
+                                            <Divider sx={{ mt: 1, mb: 1 }} />
+                                            <Typography variant="subtitle2" sx={{ pl: 2, color: 'text.secondary' }}>
+                                                {params.group}
+                                            </Typography>
+                                            <ul style={{ padding: 0 }}>{params.children}</ul>
+                                        </li>
+                                    )}
+                                />
+  <Autocomplete
+                                    disablePortal
+                                    id="combo-box-grupos"
+                                    // options={grupos || ''}
+                                    groupBy={(option) => option.type === 'extra' ? 'Recomendados' : 'Grupo'}
+                                    options={combinedOptionsGrupos}
+                                    getOptionLabel={(option) => option.nombre}
+                                    value={createData.grupo}
+                                    // onChange={(event, newValue) => setCreateData({ ...createData, grupo: newValue })}
+                                    onChange={handleGruposChange}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Grupo"
+                                            margin="dense"
+                                            error={formSubmitted && !createData.grupo} // Add error state to the TextField
+                                            helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}
+                                            FormHelperTextProps={{
+                                                sx: {
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                            }}
+                                            sx={{
+                                                // mb: 1,
+                                                '& .MuiInputBase-input': {
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                    isOptionEqualToValue={(option, value) => option.id === value?.id}
+                                    // sx={{ mb: 3, mt: 1 }}
                                     filterOptions={(options, state) => {
                                         // Filtra las opciones para que coincidan solo al principio de las letras
                                         const inputValue = state.inputValue.toLowerCase();

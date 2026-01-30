@@ -7,7 +7,6 @@ const initialState = {
   filtersOn: false,
   noMoreResults: true,
   currentFilters: {
-    orden: [],
     familia: [],
     grupo: [],
     pais: [],
@@ -36,9 +35,8 @@ export const filtersRep = createSlice({
       state.currentPage = action.payload
     },
     saveFilters: (state, action) => {
-      const { orden, familia, grupo, pais, cientifico, ingles, zona } = action.payload
+      const { familia, grupo, pais, cientifico, ingles, zona } = action.payload
       state.currentFilters = {
-        orden: orden.map(option => ({ id: option.id, nombre: option.nombre })),
         familia: familia.map(option => ({ id: option.id, nombre: option.nombre })),
         grupo: grupo.map(option => ({ id: option.id, nombre: option.nombre })),
         pais: pais.map(option => ({ id: option.id, nombre: option.nombre })),
@@ -52,7 +50,6 @@ export const filtersRep = createSlice({
     },
     resetCurrentFilters: (state) => {
       state.currentFilters = {
-        orden: [],
         familia: [],
         grupo: [],
         pais: [],
@@ -78,11 +75,6 @@ export const filtersRep = createSlice({
     updateGrupoOptions: (state, action) => {
       state.extraOptions = {
         grupos: action.payload.grupos
-      };
-    },
-    updateOrdersOptions: (state, action) => {
-      state.extraOptions = {
-        orders: action.payload.orders
       };
     },
   },

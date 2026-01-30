@@ -198,7 +198,8 @@ const buildWhereClause = (familia, grupo, nombreCientifico, nombreIngles) => {
     }
     if (grupo) {
         const grupoArray = grupo.split(',').map(Number);
-        whereClause.grupos_id_grupo = grupoArray;
+        whereClause.grupos_id_grupo = { [Op.in]: grupoArray };
+
     }
     if (nombreCientifico) {
         whereClause.nombre_cientifico = { [Op.like]: `%${nombreCientifico}%` };
@@ -209,25 +210,12 @@ const buildWhereClause = (familia, grupo, nombreCientifico, nombreIngles) => {
     return whereClause;
 };
 
-const buildIncludeArray = () => {
+const buildIncludeArray = (pais, zonas) => {
     return [
         { model: Grupos, as: 'grupo', attributes: ['nombre'] },
         { model: Familias, as: 'familia', attributes: ['nombre'] },
-        {
-            model: Paises, // El mismo alias que en la definición de la asociación
-            attributes: ['nombre', 'id_pais'],
-            through: {
-                attributes: []
-            }
-        },
-        {
-            model: Zonas,
-            as: 'zonasAves', // El mismo alias que en la definición de la asociación
-            attributes: [['nombre_zona', 'nombre'], 'id_zona'],
-            through: {
-                attributes: ['zonas_id_zona']
-            }
-        },
+        buildPaisInclude(pais),
+        buildZonasInclude(zonas),
         {
             model: Imagenes_aves,
             as: 'imagenes_aves',
@@ -239,30 +227,51 @@ const buildIncludeArray = () => {
     ];
 };
 
-const buildIncludeForPais = (pais) => {
-    return {
-        model: Paises,
-        attributes: ['nombre', 'id_pais'],
-        through: {
-            attributes: [],
-        },
-        where: { id_pais: pais }
-    };
-};
+const buildPaisInclude = (pais) => ({
+    model: Paises,
+    attributes: ['nombre', 'id_pais',],
+    through: { attributes: [] },
+    ...(pais && {
+        where: { id_pais: pais },
+        required: true
+    })
+});
 
-const buildIncludeForZonas = (zonas) => {
-    return {
-        model: Zonas,
-        as: 'zonasAves',
-        attributes: ['nombre_zona', 'id_zona'],
-        through: {
-            attributes: [],
-        },
-        where: {
-            id_zona: zonas,
-        },
-    };
-};
+const buildZonasInclude = (zonas) => ({
+    model: Zonas,
+    as: 'zonasAves',
+    attributes: [['nombre_zona', 'nombre'], 'id_zona'],
+    through: { attributes: [] },
+    ...(zonas && {
+        where: { id_zona: zonas },
+        required: true
+    })
+});
+
+// const buildIncludeForPais = (pais) => {
+//     return {
+//         model: Paises,
+//         attributes: ['nombre', 'id_pais'],
+//         through: {
+//             attributes: [],
+//         },
+//         where: { id_pais: pais }
+//     };
+// };
+
+// const buildIncludeForZonas = (zonas) => {
+//     return {
+//         model: Zonas,
+//         as: 'zonasAves',
+//         attributes: ['nombre_zona', 'id_zona'],
+//         through: {
+//             attributes: [],
+//         },
+//         where: {
+//             id_zona: zonas,
+//         },
+//     };
+// };
 
 const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, pais, zonas, page, perPage) => {
     try {
@@ -270,15 +279,15 @@ const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, 
         nombreIngles = decodeQueryParam(nombreIngles);
 
         const whereClause = buildWhereClause(familia, grupo, nombreCientifico, nombreIngles);
-        let includeArr = buildIncludeArray();
+        let includeArr = buildIncludeArray(pais, zonas);
 
-        if (pais) {
-            includeArr.push(buildIncludeForPais(pais));
-        }
+        // if (pais) {
+        //     includeArr.push(buildIncludeForPais(pais));
+        // }
 
-        if (zonas) {
-            includeArr.push(buildIncludeForZonas(zonas));
-        }
+        // if (zonas) {
+        //     includeArr.push(buildIncludeForZonas(zonas));
+        // }
 
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
@@ -292,25 +301,31 @@ const fetchFilterBirds = async (familia, grupo, nombreCientifico, nombreIngles, 
             order: [['nombre_ingles', 'ASC']],
         });
 
-        let totalResultsCount;
-        if (pais && zonas) {
-            totalResultsCount = await Aves.count({
-                where: whereClause,
-                include: [buildIncludeForPais(pais), buildIncludeForZonas(zonas)]
-            });
-        } else if (pais) {
-            totalResultsCount = await Aves.count({
-                where: whereClause,
-                include: [buildIncludeForPais(pais)]
-            });
-        } else if (zonas) {
-            totalResultsCount = await Aves.count({
-                where: whereClause,
-                include: [buildIncludeForZonas(zonas)]
-            });
-        } else {
-            totalResultsCount = await Aves.count({ where: whereClause });
-        }
+        //  let totalResultsCount;
+        const totalResultsCount = await Aves.count({
+            where: whereClause,
+            include: buildIncludeArray(pais, zonas),
+            distinct: true
+        });
+
+        // if (pais && zonas) {
+        //     totalResultsCount = await Aves.count({
+        //         where: whereClause,
+        //         include: [buildIncludeForPais(pais), buildIncludeForZonas(zonas)]
+        //     });
+        // } else if (pais) {
+        //     totalResultsCount = await Aves.count({
+        //         where: whereClause,
+        //         include: [buildIncludeForPais(pais)]
+        //     });
+        // } else if (zonas) {
+        //     totalResultsCount = await Aves.count({
+        //         where: whereClause,
+        //         include: [buildIncludeForZonas(zonas)]
+        //     });
+        // } else {
+        //    totalResultsCount = await Aves.count({ where: whereClause });
+        // }
 
         const totalPages = Math.ceil(totalResultsCount / perPageConvert);
         const isLastPage = totalResultsCount <= 8 || pageConvert >= totalPages;
@@ -447,6 +462,7 @@ const fetchOptions = async () => {
         attributes: [['id_pais', 'id'], 'nombre',],
         order: [['nombre', 'ASC']]
     });
+    // console.log(optionsPaises, 'encontre paises:')
     const optionsZonas = await Zonas.findAll({
         attributes: [['id_zona', 'id'], ['nombre_zona', 'nombre'],
         [
@@ -497,7 +513,7 @@ const filterOptions = async (grupo, familia, pais, nombreIngles, nombreCientific
         zonas,
         page,
         perpage)
-    // console.log(allResults)
+    // console.log(allResults, 'los resultados de aves filtradas de opciones')
     const newOptions = {
         grupos: [],
         familias: [],
@@ -627,6 +643,15 @@ const filterOptionsPaisZonas = async (familia,
     pais,
     zonas,
 ) => {
+    // console.log('FILTROS RECIBIDOS:', {
+    //   pais,
+    //   zonas
+    // });
+    const paisId = pais ? Number(pais) : null;
+
+    const zonasIds = zonas
+        ? (Array.isArray(zonas) ? zonas.map(Number) : [Number(zonas)])
+        : null;
 
     const perpage = '0'
     const page = '0'
@@ -639,7 +664,7 @@ const filterOptionsPaisZonas = async (familia,
         zonas,
         page,
         perpage)
-    // console.log(allResults, 'los resultadis qe llegan')
+    // console.log(allResults.avesFiltradas, 'los resultadis qe llegan pais zona')
     const newOptions = {
         grupos: [],
         familias: [],
@@ -797,9 +822,9 @@ const sendAndCreateBird = async (
         // Crear arreglo de imágenes con orden definido manualmente
         const imagenesAvesData = urlImagen?.length
             ? urlImagen.map((imageUrl, index) => ({
-                  url: imageUrl,
-                  orden_imagen: index + 1
-              }))
+                url: imageUrl,
+                orden_imagen: index + 1
+            }))
             : [];
 
         // Crear nuevo ave con las imágenes incluidas
@@ -1044,98 +1069,98 @@ const findDataByName = async (name) => {
 //     }
 // };
 const sendAndUpdateBird = async (
-  grupo,
-  familia,
-  paises,
-  zona,
-  cientifico,
-  ingles,
-  comun,
-  urlWiki,
-  urlBird,
-  urlImagen,
-  idAve,
+    grupo,
+    familia,
+    paises,
+    zona,
+    cientifico,
+    ingles,
+    comun,
+    urlWiki,
+    urlBird,
+    urlImagen,
+    idAve,
 ) => {
-  try {
-    const existingBird = await Aves.findOne({ where: { id_ave: idAve } });
-    if (!existingBird) throw new Error("El ave con ID especificado no existe.");
+    try {
+        const existingBird = await Aves.findOne({ where: { id_ave: idAve } });
+        if (!existingBird) throw new Error("El ave con ID especificado no existe.");
 
-    const cambios = {
-      nombre_ingles: ingles !== existingBird.nombre_ingles ? ingles : undefined,
-      nombre_cientifico: cientifico !== existingBird.nombre_cientifico ? cientifico : undefined,
-      nombre_comun: comun !== existingBird.nombre_comun ? comun : undefined,
-      url_wiki: urlWiki !== existingBird.url_wiki ? urlWiki : undefined,
-      url_bird: urlBird !== existingBird.url_bird ? urlBird : undefined,
-      grupos_id_grupo: grupo.id !== existingBird.grupos_id_grupo ? grupo.id : undefined,
-      familias_id_familia: familia.id !== existingBird.familias_id_familia ? familia.id : undefined,
-    };
+        const cambios = {
+            nombre_ingles: ingles !== existingBird.nombre_ingles ? ingles : undefined,
+            nombre_cientifico: cientifico !== existingBird.nombre_cientifico ? cientifico : undefined,
+            nombre_comun: comun !== existingBird.nombre_comun ? comun : undefined,
+            url_wiki: urlWiki !== existingBird.url_wiki ? urlWiki : undefined,
+            url_bird: urlBird !== existingBird.url_bird ? urlBird : undefined,
+            grupos_id_grupo: grupo.id !== existingBird.grupos_id_grupo ? grupo.id : undefined,
+            familias_id_familia: familia.id !== existingBird.familias_id_familia ? familia.id : undefined,
+        };
 
-    const cambiosFiltrados = Object.fromEntries(
-      Object.entries(cambios).filter(([_, v]) => v !== undefined)
-    );
+        const cambiosFiltrados = Object.fromEntries(
+            Object.entries(cambios).filter(([_, v]) => v !== undefined)
+        );
 
-    if (Object.keys(cambiosFiltrados).length > 0) {
-      if (cambiosFiltrados.nombre_ingles) {
-        const temporalName = `temp_${Math.random().toString(36).substring(2, 15)}`;
-        await Aves.update({ nombre_ingles: temporalName }, { where: { id_ave: idAve } });
-        await Aves.update({ nombre_ingles: ingles }, { where: { id_ave: idAve } });
-        delete cambiosFiltrados.nombre_ingles;
-      }
+        if (Object.keys(cambiosFiltrados).length > 0) {
+            if (cambiosFiltrados.nombre_ingles) {
+                const temporalName = `temp_${Math.random().toString(36).substring(2, 15)}`;
+                await Aves.update({ nombre_ingles: temporalName }, { where: { id_ave: idAve } });
+                await Aves.update({ nombre_ingles: ingles }, { where: { id_ave: idAve } });
+                delete cambiosFiltrados.nombre_ingles;
+            }
 
-      await Aves.update(cambiosFiltrados, { where: { id_ave: idAve } });
+            await Aves.update(cambiosFiltrados, { where: { id_ave: idAve } });
+        }
+
+        // ✅ Obtener todas las imágenes del ave
+        const existingImages = await Imagenes_aves.findAll({
+            where: { aves_id_ave: idAve },
+            order: [['orden_imagen', 'ASC']],
+        });
+
+        // ✅ Si existen imágenes sin orden, asignarles orden secuencial
+        let ordenCounter = 1;
+        for (const img of existingImages) {
+            if (img.orden_imagen === null) {
+                await img.update({ orden_imagen: ordenCounter });
+            }
+            ordenCounter++;
+        }
+
+        // ✅ Obtener el máximo orden actual después de normalizar
+        const maxOrdenImage = await Imagenes_aves.findOne({
+            where: { aves_id_ave: idAve },
+            order: [['orden_imagen', 'DESC']],
+        });
+
+        let lastOrden = maxOrdenImage?.orden_imagen || 0;
+
+        // ✅ Insertar nuevas imágenes con orden siguiente
+        for (const imageUrl of urlImagen) {
+            lastOrden += 1;
+            await Imagenes_aves.create({
+                aves_id_ave: idAve,
+                url: imageUrl,
+                orden_imagen: lastOrden,
+            });
+        }
+
+        const existingRelations = await Aves.findByPk(idAve);
+        if (existingRelations) {
+            await existingRelations.setPaises([]);
+            await existingRelations.setZonasAves([]);
+        }
+
+        for (const pais of paises) {
+            await existingRelations.addPaises(pais.id);
+        }
+
+        for (const zonita of zona) {
+            await existingRelations.addZonasAves(zonita.id);
+        }
+
+        return "El ave se ha actualizado correctamente.";
+    } catch (error) {
+        console.log("Error:", error);
     }
-
-    // ✅ Obtener todas las imágenes del ave
-    const existingImages = await Imagenes_aves.findAll({
-      where: { aves_id_ave: idAve },
-      order: [['orden_imagen', 'ASC']],
-    });
-
-    // ✅ Si existen imágenes sin orden, asignarles orden secuencial
-    let ordenCounter = 1;
-    for (const img of existingImages) {
-      if (img.orden_imagen === null) {
-        await img.update({ orden_imagen: ordenCounter });
-      }
-      ordenCounter++;
-    }
-
-    // ✅ Obtener el máximo orden actual después de normalizar
-    const maxOrdenImage = await Imagenes_aves.findOne({
-      where: { aves_id_ave: idAve },
-      order: [['orden_imagen', 'DESC']],
-    });
-
-    let lastOrden = maxOrdenImage?.orden_imagen || 0;
-
-    // ✅ Insertar nuevas imágenes con orden siguiente
-    for (const imageUrl of urlImagen) {
-      lastOrden += 1;
-      await Imagenes_aves.create({
-        aves_id_ave: idAve,
-        url: imageUrl,
-        orden_imagen: lastOrden,
-      });
-    }
-
-    const existingRelations = await Aves.findByPk(idAve);
-    if (existingRelations) {
-      await existingRelations.setPaises([]);
-      await existingRelations.setZonasAves([]);
-    }
-
-    for (const pais of paises) {
-      await existingRelations.addPaises(pais.id);
-    }
-
-    for (const zonita of zona) {
-      await existingRelations.addZonasAves(zonita.id);
-    }
-
-    return "El ave se ha actualizado correctamente.";
-  } catch (error) {
-    console.log("Error:", error);
-  }
 };
 
 
@@ -1331,9 +1356,7 @@ const getClassGrupoFamilia = async (idfamilia, idgrupo) => {
             // Buscar los grupos con los id_grupo obtenidos
             const grupos = await Grupos.findAll({
                 where: {
-                    id_grupo: {
-                        [Op.in]: idGrupos
-                    }
+                    id_grupo: { [Op.in]: idGrupos }
                 },
                 attributes: [['id_grupo', 'id'], 'nombre']
             });

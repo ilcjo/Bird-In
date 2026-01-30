@@ -3,21 +3,55 @@ import { useEffect } from "react";
 
 export const AutocompleteFilter = ({ label, options, value, onChange, loading }) => {
     // Función para filtrar y ordenar
+    // const customFilter = (opts, state) => {
+    //     const input = state.inputValue?.toLowerCase().trim() || "";
+
+    //     const filtered = opts.filter(opt => {
+    //         if (!opt?.nombre) return false; // Evita errores si es null o undefined
+    //         return opt.nombre
+    //             .toLowerCase()
+    //             .split(" ")
+    //             .some(word => word.startsWith(input));
+    //     });
+
+    //     return filtered.sort((a, b) =>
+    //         (a?.nombre || "").localeCompare(b?.nombre || "", "es", { sensitivity: "base" })
+    //     );
+    // };
+
+    // console.log(options, 'soy opciones')
     const customFilter = (opts, state) => {
-        const input = state.inputValue?.toLowerCase().trim() || "";
+    const input = state.inputValue?.toLowerCase().trim() || "";
 
-        const filtered = opts.filter(opt => {
-            if (!opt?.nombre) return false; // Evita errores si es null o undefined
-            return opt.nombre
-                .toLowerCase()
-                .split(" ")
-                .some(word => word.startsWith(input));
-        });
-
-        return filtered.sort((a, b) =>
+    // Si no hay texto de búsqueda, retorna todos los elementos ordenados
+    if (!input) {
+        return opts.sort((a, b) =>
             (a?.nombre || "").localeCompare(b?.nombre || "", "es", { sensitivity: "base" })
         );
-    };
+    }
+
+    const filtered = opts.filter(opt => {
+        if (!opt?.nombre) return false;
+
+        const name = opt.nombre.toLowerCase();
+
+        // Dividir tanto por espacios como por guiones, guiones bajos o barras
+        const parts = name.split(/[\s\-_\/]+/);
+
+        // Coincidencia si alguna parte empieza con el input
+        const startsWithMatch = parts.some(word => word.startsWith(input));
+
+        // También considerar coincidencias dentro del nombre completo
+        const includesMatch = name.includes(input);
+
+        return startsWithMatch || includesMatch;
+    });
+
+    return filtered.sort((a, b) =>
+        (a?.nombre || "").localeCompare(b?.nombre || "", "es", { sensitivity: "base" })
+    );
+};
+
 
     return (
         <FormControl sx={{ m: 0.5, width: '95%' }}>

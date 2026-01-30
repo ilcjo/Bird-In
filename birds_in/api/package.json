@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^1.6.2",
     "basic-ftp": "^5.0.3",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
@@ -27,7 +27,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.5.2",
-    "nodemailer": "^6.9.7",
+    "nodemailer": "^7.0.13",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

@@ -11,18 +11,18 @@ const decodeQueryParam = (param) => {
     return param ? decodeURIComponent(param) : null;
 };
 
-const buildWhereClause = (familia, order, grupo, nombreCientifico, nombreIngles) => {
+const buildWhereClause = (familia, grupo, nombreCientifico, nombreIngles) => {
     const whereClause = {};
     if (familia) {
         whereClause.familias_id_familia = familia;
     }
-    if (order) {
-        const orderArray = order.split(',').map(Number);
-        whereClause.orders_id_order = orderArray;
-    }
+    // if (order) {
+    //     const orderArray = order.split(',').map(Number);
+    //     whereClause.orders_id_order = orderArray;
+    // }
     if (grupo) {
-        const orderArray = grupo.split(',').map(Number);
-        whereClause.grupos_id_grupo = orderArray;
+        const grupoArray = grupo.split(',').map(Number);
+        whereClause.grupos_id_grupo = { [Op.in]: grupoArray };
     }
     // if (nombreCientifico) {
     //     whereClause.nombre_cientifico = { [Op.like]: `${nombreCientifico}%` };
@@ -39,26 +39,28 @@ const buildWhereClause = (familia, order, grupo, nombreCientifico, nombreIngles)
     return whereClause;
 };
 
-const buildIncludeArray = () => {
+const buildIncludeArray = (pais, zonas) => {
     return [
-        { model: Order_mamiferos, attributes: ['nombre', 'nombre_comun'] },
+        // { model: Order_mamiferos, attributes: ['nombre', 'nombre_comun'] },
         { model: Familias_mamiferos, attributes: ['nombre'] },
         { model: Grupos_mamiferos, attributes: ['nombre'] },
-        {
-            model: Paises, // El mismo alias que en la definición de la asociación
-            attributes: ['nombre', 'id_pais'],
-            through: {
-                attributes: []
-            }
-        },
-        {
-            model: Zonas,
-            as: 'zonasMamiferos', // El mismo alias que en la definición de la asociación
-            attributes: [['nombre_zona', 'nombre'], 'id_zona'],
-            through: {
-                attributes: ['zonas_id_zona']
-            }
-        },
+        buildIncludeForPais(pais),
+        buildIncludeForZonas(zonas),
+        // {
+        //     model: Paises, // El mismo alias que en la definición de la asociación
+        //     attributes: ['nombre', 'id_pais'],
+        //     through: {
+        //         attributes: []
+        //     }
+        // },
+        // {
+        //     model: Zonas,
+        //     as: 'zonasMamiferos', // El mismo alias que en la definición de la asociación
+        //     attributes: [['nombre_zona', 'nombre'], 'id_zona'],
+        //     through: {
+        //         attributes: ['zonas_id_zona']
+        //     }
+        // },
         {
             model: Imagenes_mamiferos,
             as: 'imagenes_mamiferos',
@@ -70,33 +72,29 @@ const buildIncludeArray = () => {
     ];
 };
 
-const buildIncludeForPais = (pais) => {
-    return {
-        model: Paises,
-        attributes: ['nombre', 'id_pais'],
-        through: {
-            attributes: [],
-        },
-        where: { id_pais: pais }
-    };
-};
+const buildIncludeForPais = (pais) => ({
+    model: Paises,
+    attributes: ['nombre', 'id_pais'],
+    through: { attributes: [], },
+    ...(pais && {
+        where: { id_pais: pais },
+        required: true
+    })
+});
 
-const buildIncludeForZonas = (zonas) => {
-    return {
-        model: Zonas,
-        as: 'zonasMamiferos',
-        attributes: ['nombre_zona', 'id_zona'],
-        through: {
-            attributes: [],
-        },
-        where: {
-            id_zona: zonas,
-        },
-    };
-};
+const buildIncludeForZonas = (zonas) => ({
+    model: Zonas,
+    as: 'zonasMamiferos',
+    attributes: ['nombre_zona', 'id_zona'],
+    through: { attributes: [], },
+    ...(zonas && {
+        where: { id_zona: zonas },
+        required: true
+    })
+});
 
 const fetchFilterRegister = async (
-    orden,
+    // orden,
     familia,
     grupo,
     pais,
@@ -109,16 +107,16 @@ const fetchFilterRegister = async (
         nombreCientifico = decodeQueryParam(nombreCientifico);
         nombreIngles = decodeQueryParam(nombreIngles);
 
-        const whereClause = buildWhereClause(familia, orden, grupo, nombreCientifico, nombreIngles);
-        let includeArr = buildIncludeArray();
+        const whereClause = buildWhereClause(familia, grupo, nombreCientifico, nombreIngles);
+        let includeArr = buildIncludeArray(pais, zonas);
 
-        if (pais) {
-            includeArr.push(buildIncludeForPais(pais));
-        }
+        // if (pais) {
+        //     includeArr.push(buildIncludeForPais(pais));
+        // }
 
-        if (zonas) {
-            includeArr.push(buildIncludeForZonas(zonas));
-        }
+        // if (zonas) {
+        //     includeArr.push(buildIncludeForZonas(zonas));
+        // }
 
         const pageConvert = Number(page) || DEFAULT_PAGE;
         const perPageConvert = perPage === '0' ? undefined : Number(perPage) || DEFAULT_PER_PAGE;
@@ -132,25 +130,29 @@ const fetchFilterRegister = async (
             order: [['nombre_ingles', 'ASC']],
         });
 
-        let totalResultsCount;
-        if (pais && zonas) {
-            totalResultsCount = await Mamiferos.count({
-                where: whereClause,
-                include: [buildIncludeForPais(pais), buildIncludeForZonas(zonas)]
-            });
-        } else if (pais) {
-            totalResultsCount = await Mamiferos.count({
-                where: whereClause,
-                include: [buildIncludeForPais(pais)]
-            });
-        } else if (zonas) {
-            totalResultsCount = await Mamiferos.count({
-                where: whereClause,
-                include: [buildIncludeForZonas(zonas)]
-            });
-        } else {
-            totalResultsCount = await Mamiferos.count({ where: whereClause });
-        }
+        // let totalResultsCount;
+        // if (pais && zonas) {
+        //     totalResultsCount = await Mamiferos.count({
+        //         where: whereClause,
+        //         include: [buildIncludeForPais(pais), buildIncludeForZonas(zonas)]
+        //     });
+        // } else if (pais) {
+        //     totalResultsCount = await Mamiferos.count({
+        //         where: whereClause,
+        //         include: [buildIncludeForPais(pais)]
+        //     });
+        // } else if (zonas) {
+        //     totalResultsCount = await Mamiferos.count({
+        //         where: whereClause,
+        //         include: [buildIncludeForZonas(zonas)]
+        //     });
+        // } else {
+        const totalResultsCount = await Mamiferos.count({
+            where: whereClause,
+            include: buildIncludeArray(pais, zonas),
+            distinct: true
+        });
+        // }
 
         const totalPages = Math.ceil(totalResultsCount / perPageConvert);
         const isLastPage = totalResultsCount <= 8 || pageConvert >= totalPages;
@@ -164,10 +166,10 @@ const fetchFilterRegister = async (
 
 
 const fetchOptions = async () => {
-    const optionsOrders = await Order_mamiferos.findAll({
-        attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']],
-        order: [['nombre', 'ASC']]
-    });
+    // const optionsOrders = await Order_mamiferos.findAll({
+    //     attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']],
+    //     order: [['nombre', 'ASC']]
+    // });
     const optionsFamilias = await Familias_mamiferos.findAll({
         attributes: ['nombre', ['id_familia', 'id']],
         order: [['nombre', 'ASC']]
@@ -212,7 +214,7 @@ const fetchOptions = async () => {
     // const nombrezonas = mapFieldValues(optionsZonas, 'nombre_zona', 'id_zona')
     // console.log(optionsOrders)
     return {
-        orden: optionsOrders,
+        // orden: optionsOrders,
         familias: optionsFamilias,
         grupos: optionsGrupos,
         paises: optionsPaises,
@@ -223,7 +225,7 @@ const fetchOptions = async () => {
 };
 
 const filterOptions = async (
-    orden,
+    // orden,
     familia,
     grupo,
     pais,
@@ -233,7 +235,7 @@ const filterOptions = async (
     const perpage = '0';
     const page = '0';
     const allResults = await fetchFilterRegister(
-        orden,
+        // orden,
         familia,
         grupo,
         pais,
@@ -245,7 +247,7 @@ const filterOptions = async (
     );
     // console.log(allResults)
     const newOptions = {
-        orden: [],
+        // orden: [],
         familias: [],
         grupos: [],
         paises: [],
@@ -254,16 +256,16 @@ const filterOptions = async (
         nCientifico: [],
     };
 
-    const orderSet = new Set();
-    allResults.registrosFiltrados.forEach(registro => {
-        if (registro.dataValues && registro.order_mamifero && registro.order_mamifero.dataValues) {
-            orderSet.add(JSON.stringify({
-                id: registro.dataValues.orders_id_order,
-                nombre: registro.order_mamifero.dataValues.nombre
-            }));
-        }
-    });
-    newOptions.orden = Array.from(orderSet).map(order => JSON.parse(order));
+    // const orderSet = new Set();
+    // allResults.registrosFiltrados.forEach(registro => {
+    //     if (registro.dataValues && registro.order_mamifero && registro.order_mamifero.dataValues) {
+    //         orderSet.add(JSON.stringify({
+    //             id: registro.dataValues.orders_id_order,
+    //             nombre: registro.order_mamifero.dataValues.nombre
+    //         }));
+    //     }
+    // });
+    // newOptions.orden = Array.from(orderSet).map(order => JSON.parse(order));
 
     const familiasSet = new Set();
     allResults.registrosFiltrados.forEach(registro => {
@@ -334,7 +336,7 @@ const filterOptions = async (
 
 
 const filterOptionsPaisZonas = async (
-    orden,
+    // orden,
     familia,
     grupo,
     pais,
@@ -347,7 +349,7 @@ const filterOptionsPaisZonas = async (
 
     // Obtener los resultados filtrados
     const allResults = await fetchFilterRegister(
-        orden,
+        // orden,
         familia,
         grupo,
         pais,
@@ -358,10 +360,10 @@ const filterOptionsPaisZonas = async (
         perpage
     );
 
-    console.log(allResults?.registrosFiltrados);
+    // console.log(allResults?.registrosFiltrados);
 
     const newOptions = {
-        orden: [],
+        // orden: [],
         familias: [],
         grupos: [],
         paises: [],
@@ -449,16 +451,16 @@ const filterOptionsPaisZonas = async (
     }
 
     // Construir opciones de órdenes
-    const orderSet = new Set();
-    allResults.registrosFiltrados.forEach(registro => {
-        if (registro.order_mamifero?.dataValues) {
-            orderSet.add(JSON.stringify({
-                id: registro.dataValues.orders_id_order,
-                nombre: registro.order_mamifero.dataValues.nombre,
-            }));
-        }
-    });
-    newOptions.orden = Array.from(orderSet).map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    // const orderSet = new Set();
+    // allResults.registrosFiltrados.forEach(registro => {
+    //     if (registro.order_mamifero?.dataValues) {
+    //         orderSet.add(JSON.stringify({
+    //             id: registro.dataValues.orders_id_order,
+    //             nombre: registro.order_mamifero.dataValues.nombre,
+    //         }));
+    //     }
+    // });
+    // newOptions.orden = Array.from(orderSet).map(JSON.parse).sort((a, b) => a.nombre.localeCompare(b.nombre));
 
     // Construir opciones de familias
     const familiasSet = new Set();
@@ -505,7 +507,7 @@ const filterOptionsPaisZonas = async (
 
 
 const sendAndCreateRegister = async (
-    order,
+    // order,
     familia,
     grupo,
     paises,
@@ -537,7 +539,7 @@ const sendAndCreateRegister = async (
             nombre_cientifico: convertCientifico,
             nombre_comun: convertComun,
             url_wiki: urlWiki,
-            orders_id_order: order.id,
+            // orders_id_order: order.id,
             familias_id_familia: familia.id,
             grupos_id_grupo: grupo.id,
             imagenes_mamiferos: imagenesRegistrosData
@@ -599,7 +601,7 @@ const findDataById = async (id) => {
                         attributes: [],
                     }, // Atributos que deseas de Paises
                 },
-                { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']] },
+                // { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id'], ['nombre_comun', 'order_comun']] },
                 { model: Familias_mamiferos, attributes: ['nombre', ['id_familia', 'id']] },
                 { model: Grupos_mamiferos, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
@@ -655,7 +657,7 @@ const findDataByName = async (name) => {
                         attributes: [],
                     }, // Atributos que deseas de Paises
                 },
-                { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id',], ['nombre_comun', 'comun']] },
+                // { model: Order_mamiferos, attributes: ['nombre', ['id_order', 'id',], ['nombre_comun', 'comun']] },
                 { model: Familias_mamiferos, attributes: ['nombre', ['id_familia', 'id']] },
                 { model: Grupos_mamiferos, attributes: ['nombre', ['id_grupo', 'id']] },
             ],
@@ -680,7 +682,7 @@ const findDataByName = async (name) => {
 };
 
 const sendAndUpdateRegister = async (
-    order,
+    // order,
     familia,
     grupo,
     paises,
@@ -714,7 +716,7 @@ const sendAndUpdateRegister = async (
             nombre_cientifico: cientifico !== existingInsect.nombre_cientifico ? cientifico : undefined,
             nombre_comun: comun !== existingInsect.nombre_comun ? comun : undefined,
             url_wiki: urlWiki !== existingInsect.url_wiki ? urlWiki : undefined,
-            orders_id_order: order.id !== existingInsect.orders_id_order ? order.id : undefined,
+            // orders_id_order: order.id !== existingInsect.orders_id_order ? order.id : undefined,
             familias_id_familia: familia.id !== existingInsect.familias_id_familia ? familia.id : undefined,
             grupos_id_grupo: grupo.id !== existingInsect.grupos_id_grupo ? grupo.id : undefined,
         };
@@ -880,7 +882,7 @@ const getContadores = async () => {
             }],
         });
 
-        const allOrders = await Order_mamiferos.count();
+        // const allOrders = await Order_mamiferos.count();
         const allFamilias = await Familias_mamiferos.count()
         const allGrupos = await Grupos_mamiferos.count()
         const allZonas = await Zonas.count({
@@ -896,7 +898,7 @@ const getContadores = async () => {
         })
 
 
-        return { allRegistros, allEnglish, allCientifico, allComun, allOrders, allFamilias, allGrupos, allZonas, allCountrys }
+        return { allRegistros, allEnglish, allCientifico, allComun, allFamilias, allGrupos, allZonas, allCountrys }
     } catch (error) {
         console.error('Error:', error);
         throw error;
@@ -1044,8 +1046,7 @@ const findAllEnglishNames = async () => {
 //     }
 // };
 
-const getClassGrupoFamilia = async (idfamilia, idorder, idgrupo,) => {
-    console.log(idorder)
+const getClassGrupoFamilia = async (idfamilia, idgrupo,) => {
     try {
         let result = {};
 
@@ -1054,24 +1055,24 @@ const getClassGrupoFamilia = async (idfamilia, idorder, idgrupo,) => {
                 // Buscar mamíferos por familia
                 const mamiferos = await Mamiferos.findAll({
                     where: { familias_id_familia: idfamilia },
-                    attributes: ['grupos_id_grupo', 'orders_id_order'],
-                    group: ['grupos_id_grupo', 'orders_id_order']
+                    attributes: ['grupos_id_grupo'],
+                    group: ['grupos_id_grupo']
                 });
 
                 const idGrupos = [...new Set(mamiferos.map(m => m.grupos_id_grupo))];
-                const idOrders = [...new Set(mamiferos.map(m => m.orders_id_order))];
+                // const idOrders = [...new Set(mamiferos.map(m => m.orders_id_order))];
 
                 const grupos = await Grupos_mamiferos.findAll({
                     where: { id_grupo: { [Op.in]: idGrupos } },
                     attributes: [['id_grupo', 'id'], 'nombre']
                 });
 
-                const orders = await Order_mamiferos.findAll({
-                    where: { id_order: { [Op.in]: idOrders } },
-                    attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
-                });
+                // const orders = await Order_mamiferos.findAll({
+                //     where: { id_order: { [Op.in]: idOrders } },
+                //     attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
+                // });
 
-                result = { grupos, orders };
+                result = { grupos };
                 break;
             }
 
@@ -1079,54 +1080,54 @@ const getClassGrupoFamilia = async (idfamilia, idorder, idgrupo,) => {
                 // Buscar mamíferos por grupo
                 const mamiferos = await Mamiferos.findAll({
                     where: { grupos_id_grupo: idgrupo },
-                    attributes: ['familias_id_familia', 'orders_id_order'],
-                    group: ['familias_id_familia', 'orders_id_order']
+                    attributes: ['familias_id_familia'],
+                    group: ['familias_id_familia']
                 });
 
                 const idFamilias = [...new Set(mamiferos.map(m => m.familias_id_familia))];
-                const idOrders = [...new Set(mamiferos.map(m => m.orders_id_order))];
+                // const idOrders = [...new Set(mamiferos.map(m => m.orders_id_order))];
 
                 const familias = await Familias_mamiferos.findAll({
                     where: { id_familia: { [Op.in]: idFamilias } },
                     attributes: [['id_familia', 'id'], 'nombre']
                 });
 
-                const orders = await Order_mamiferos.findAll({
-                    where: { id_order: { [Op.in]: idOrders } },
-                    attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
-                });
+                // const orders = await Order_mamiferos.findAll({
+                //     where: { id_order: { [Op.in]: idOrders } },
+                //     attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
+                // });
 
-                result = { familias, orders };
+                result = { familias };
                 break;
             }
 
-            case !!idorder: {
-                // Buscar mamíferos por orden
-                const mamiferos = await Mamiferos.findAll({
-                    where: { orders_id_order: idorder },
-                    attributes: ['familias_id_familia', 'grupos_id_grupo'],
-                    group: ['familias_id_familia', 'grupos_id_grupo']
-                });
+            // case !!idorder: {
+            //     // Buscar mamíferos por orden
+            //     const mamiferos = await Mamiferos.findAll({
+            //         where: { orders_id_order: idorder },
+            //         attributes: ['familias_id_familia', 'grupos_id_grupo'],
+            //         group: ['familias_id_familia', 'grupos_id_grupo']
+            //     });
 
-                const idFamilias = [...new Set(mamiferos.map(m => m.familias_id_familia))];
-                const idGrupos = [...new Set(mamiferos.map(m => m.grupos_id_grupo))];
+            //     const idFamilias = [...new Set(mamiferos.map(m => m.familias_id_familia))];
+            //     const idGrupos = [...new Set(mamiferos.map(m => m.grupos_id_grupo))];
 
-                const familias = await Familias_mamiferos.findAll({
-                    where: { id_familia: { [Op.in]: idFamilias } },
-                    attributes: [['id_familia', 'id'], 'nombre']
-                });
+            //     const familias = await Familias_mamiferos.findAll({
+            //         where: { id_familia: { [Op.in]: idFamilias } },
+            //         attributes: [['id_familia', 'id'], 'nombre']
+            //     });
 
-                const grupos = await Grupos_mamiferos.findAll({
-                    where: { id_grupo: { [Op.in]: idGrupos } },
-                    attributes: [['id_grupo', 'id'], 'nombre']
-                });
+            //     const grupos = await Grupos_mamiferos.findAll({
+            //         where: { id_grupo: { [Op.in]: idGrupos } },
+            //         attributes: [['id_grupo', 'id'], 'nombre']
+            //     });
 
-                result = { familias, grupos };
-                break;
-            }
+            //     result = { familias, grupos };
+            //     break;
+            //  }
 
             default:
-                throw new Error("Debes proporcionar al menos un parámetro (idfamilia, idgrupo o idorder).");
+                throw new Error("Debes proporcionar al menos un parámetro (idfamilia, idgrupo).");
         }
 
         return result;
@@ -1151,16 +1152,16 @@ const getClassGrupoFamiliaOTRO = async (idfamilia, idorder, idgrupo) => {
             const idOrders = registro.map(registro => registro.id_order);
 
             // Buscar los order con los id_order obtenidos
-            const order = await Order_mamiferos.findAll({
-                where: {
-                    id_order: {
-                        [Op.in]: idOrders
-                    }
-                },
-                attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
-            });
+            // const order = await Order_mamiferos.findAll({
+            //     where: {
+            //         id_order: {
+            //             [Op.in]: idOrders
+            //         }
+            //     },
+            //     attributes: [['id_order', 'id'], 'nombre', ['nombre_comun', 'comun']]
+            // });
 
-            return { order };
+            // return { order };
         } else if (idorder) {
             // Buscar las aves con el id_order dado
             const aves = await Familias_mamiferos.findAll({

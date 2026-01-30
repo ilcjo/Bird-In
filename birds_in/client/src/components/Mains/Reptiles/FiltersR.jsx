@@ -41,7 +41,6 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     const selectOptionFromSlice = useSelector((state) => state.filterRep.currentFilters);
     const {
-        orden = [],
         familias = [],
         grupos = [],
         paises = [],
@@ -53,7 +52,6 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
-        orden: [],
         familia: [],
         grupo: [],
         pais: [],
@@ -76,7 +74,7 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         };
 
         setSelectOption(updatedSelectOption);
-        console.log(updatedSelectOption)
+        // console.log(updatedSelectOption)
         try {
             dispatch(fetchNewOptions(updatedSelectOption))
         } catch (error) {
@@ -126,7 +124,6 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
             });
         setSelectOption({
-            orden: [],
             familia: [],
             grupo: [],
             pais: [],
@@ -143,7 +140,6 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         // return () => {
         dispatch(getOptionsDataR());
         setSelectOption({
-            orden: [],
             familia: [],
             grupo: [],
             pais: [],
@@ -172,17 +168,6 @@ export const FiltersR = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 </Grid>
 
                 <Grid container alignItems="center">
-                    {/* Orden */}
-                    <Grid item xs={12}>
-                        <AutocompleteFilter
-                            label="Orden"
-                            options={orden}
-                            value={selectOption.orden}
-                            onChange={(newValue) => handleOptionChange('orden', newValue)}
-                            loading={isFetchingOptions}
-                        />
-                    </Grid>
-
                     {/* Familia */}
                     <Grid item xs={12}>
                         <AutocompleteFilter

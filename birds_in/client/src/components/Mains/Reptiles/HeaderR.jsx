@@ -97,12 +97,7 @@ export const HeaderR = ({ imageUrl, registro, back }) => {
           <React.Fragment key={index}>
             <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
               <Grid item xs={12}>
-                <Typography variant='h5' color='white' sx={{ mb: 1, mt: -2 }}>
-                  ORDEN {data.order_reptile?.nombre || 'N/A'} - {data.order_reptile?.nombre_comun || 'N/A'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant='body1' color='primary.light' sx={{ mb: 1, mt: -2 }}>
+                <Typography variant='h4' color='primary.light' sx={{ mb: 1, mt: -2 }}>
                   {data.familias_reptile?.nombre || 'N/A'} / {data.grupos_reptile?.nombre || 'N/A'}
                 </Typography>
               </Grid>
