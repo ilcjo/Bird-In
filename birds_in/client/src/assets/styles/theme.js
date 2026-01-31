@@ -8,17 +8,17 @@ const theme = createTheme({
     primary: {
       light: '#ccd6cc',
       main: '#C1C700',
-      dark:' #3A5A40',
+      dark: ' #3A5A40',
       //dark: '#103300',
       // dark: '#004E37',
       contrastText: '#004E37',
     },
     secondary: {
-      light: '#C1C700',
-      main: '#103300',
+      light: '#f0f67d',
+      main: '#f7fff7',
       // main: '#004E37', //verde
-      dark: '#A3A3A3',
-      contrastText: '#ccd6cc',
+      dark: '#103300',
+      contrastText: '#f7fff7',
     },
     custom: {
       light: alpha('#CCD6CC', 0.17),
@@ -34,22 +34,23 @@ const theme = createTheme({
       fontWeight: 600,
     },
     h2: {
-      fontSize: '1.6rem',
+      fontSize: '1.5rem',
       fontWeight: 600,
+      letterSpacing: '3px',
       // my: 1,
     },
     h3: {
       fontSize: '1.4rem',
-      fontWeight: 600,
+      fontWeight: 400,
     },
     h4: {
       fontSize: '1.2rem',
-      fontWeight: 600,
+      fontWeight: 300,
       // marginLeft: '6px'
     },
     h5: {
       fontSize: '1rem',
-      fontWeight: 600,
+      fontWeight: 200,
     },
     body1: {
       fontSize: '1.3rem',
@@ -114,22 +115,22 @@ const theme = createTheme({
             // padding: '0px',
             // borderRadius: '9px',}
             borderColor: '#ccd6cc !important',
-            
+
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#C1C700 !important',
-            
+
             // backgroundColor: 'transparent',
             // borderRadius: '9px',
             // height: '70px',
           },
-        //   '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
-        //     // Agrega los estilos que desees para el Select
-        //     // height: '70px',
+          //   '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+          //     // Agrega los estilos que desees para el Select
+          //     // height: '70px',
 
-        //   },
+          //   },
         },
-      
+
       },
       defaultProps: {
         InputLabelProps: {
@@ -175,8 +176,8 @@ const theme = createTheme({
           textTransform: 'none',
           borderRadius: '5px',
           '&:hover': {
-            backgroundColor: 'transparent', // Cambia el color de fondo en hover
-            color: '#ccd6cc', // Cambia el color del texto en hover
+            backgroundColor: ' rgba(235, 244, 170, 0.15)', // Cambia el color de fondo en hover
+            color: 'rgb(235, 247, 156)', // Cambia el color del texto en hover
             textTransform: 'none',
           },
         },
@@ -207,7 +208,6 @@ const theme = createTheme({
 
   global: {
     body: {
-
       margin: 0, // Establece el margen del cuerpo a 0
       padding: 0,
 

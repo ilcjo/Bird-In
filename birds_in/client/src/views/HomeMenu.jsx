@@ -5,10 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import { CopyRight } from '../components/CopyRight';
 import { isFromBird, isFromMam, isSaltar, isSFromRept } from '../redux/paisaje/slicesP/LandscapeSlice';
 import { isSaltarBird } from '../redux/birds/slices/InfoSlice';
 import { isSaltarMa } from '../redux/mamiferos/slices/InfoSlice';
 import { isSaltarRept } from '../redux/reptiles/slices/InfoSlice';
+import fondo from '../assets/images/fondo.png';
+
 
 const sections = [
   { id: 'aves', title: 'Aves', description: 'Fotografías de aves' },
@@ -21,22 +25,22 @@ const sections = [
 
 export const HomeMenu = () => {
   const theme = useTheme();
-  const  dispatch = useDispatch()
+  const dispatch = useDispatch()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSobreMi, setShowSobreMi] = React.useState(true);
   const { allCustom } = useSelector((state) => state.customizesSlice);
   const admin = localStorage.getItem('tipoCliente');
   const isAdmin = admin === 'admin';
   React.useEffect(() => {
-        dispatch(isSaltarBird(false)),
-        dispatch(isSaltar(false)),
-        dispatch(isSaltarMa(false)),
-        dispatch(isFromBird(false)),
-        dispatch(isFromMam(false)),
-        dispatch(isSFromRept(false)),
+    dispatch(isSaltarBird(false)),
+      dispatch(isSaltar(false)),
+      dispatch(isSaltarMa(false)),
+      dispatch(isFromBird(false)),
+      dispatch(isFromMam(false)),
+      dispatch(isSFromRept(false)),
       dispatch(isSaltarRept(false))
-        
-    }, []);
+
+  }, []);
   // Access image URLs
   const images = {
     aves: allCustom.cover_birds,
@@ -51,98 +55,160 @@ export const HomeMenu = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#103300',
-        padding: '0px',
-        minHeight: '100vh',
-        display: 'grid',
-        gridTemplateColumns: isMobile ? 'repeat(1, 1fr)' : (showSobreMi ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)'),
-        gridTemplateRows: 'repeat(2, 1fr)',
-        gap: '0px',
-        transition: 'grid-template-columns 0.5s ease-in-out',
-        
+        minHeight: '110vh',
+        width: '100%',
+        paddingTop: '90px',
+        position: 'relative',
+        backgroundImage: `url(${fondo})`,
+        backgroundSize: '100% 100%',
+        backgroundPosition: 'center',
       }}
     >
-      {sections.map((section) => (
+
+      {/* Overlay */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(11, 53, 15, 0.45)',
+          backdropFilter: 'blur(0px)',
+          zIndex: 1,
+        }}
+      >
+
+        {/* GRID */}
         <Box
-          key={section.id}
           sx={{
+            padding: { xs: '16px', md: '32px', lg: '80px 50px 50px 50px' },
+            minHeight: '10vh',
+            display: 'grid',
+            gridTemplateColumns: isMobile
+              ? 'repeat(1, 1fr)'
+              : showSobreMi
+                ? 'repeat(4, 1fr)'
+                : 'repeat(3, 1fr)',
+            gridTemplateRows: 'repeat(2, 1fr)',
+            gap: { xs: '16px', md: '15px' },
+            transition: 'grid-template-columns 0.5s ease-in-out',
+
             position: 'relative',
-            overflow: 'hidden',
-            transition: 'transform 0.5s ease-in-out',
-           '&:hover img': {
-      transform: 'scale(1.1)', // Aumenta el tamaño de la imagen en hover
-    },
-            height: '50vh',
-            display: 'flex',
-            // flexDirection: 'column',
-            // justifyContent: 'flex-end', // Align content at the bottom
-            gridColumn: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
-            gridRow: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
+            zIndex: 2,
           }}
         >
-            <RouterLink to={`/${section.id}`}  style={{
-    display: 'block', // Asegura que el enlace ocupe el área completa
-    width: '100%',    // Mantén las dimensiones del enlace y la imagen
-    height: '100%',
-  }}>
-          <img
-            src={images[section.id]}
-            alt={section.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px 0px 10px 0px', pointerEvents: 'none', transition: 'transform 0.5s ease-in-out', }}
-          />
-          </RouterLink>
-          <Box
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
-              color: '#fff',
-              borderRadius: '0px 0px 10px 0px',
-              '&:hover .title-text': { color: theme.palette.primary.main }, // Cambia color del texto en hover
-              '&:hover .divider-line': { transform: 'translateX(10px)' },
-            }}
-          >
-              <RouterLink to={`/${section.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              
-            <Typography variant="h1" color="white" 
-              className="title-text"
-            sx={{
-    mb: '-5px',
-    ml: 2,
-    transition: 'color 0.3s ease-in-out', // Transición para el color
-  }}>
-             
-              {section.title}
-            </Typography>
-            <Divider 
-            className="divider-line"
-            sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '30%',
-                 transition: 'transform 0.3s ease-in-out', // Agregamos transición
-                 transformOrigin: 'left', // Punto de origen del movimiento
-               }} />
-            </RouterLink>
+
+          {sections.map((section) => (
             <Box
+              key={section.id}
+              //       sx={{
+              //         position: 'relative',
+              //         overflow: 'hidden',
+              //         transition: 'transform 0.5s ease-in-out',
+              //        '&:hover img': {
+              //   transform: 'scale(1.1)', // Aumenta el tamaño de la imagen en hover
+              // },
+              //         height: '50vh',
+              //         display: 'flex',
+              //         // flexDirection: 'column',
+              //         // justifyContent: 'flex-end', // Align content at the bottom
+              //         gridColumn: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
+              //         gridRow: isMobile ? 'auto' : (section.id === 'SobreMi' && !showSobreMi ? 'auto' : 'auto'),
+              //       }}
               sx={{
+                position: 'relative',
+                overflow: 'hidden',
+                height: '40vh',
                 display: 'flex',
-                justifyContent: 'space-between', // Distribute space between title and buttons
-                alignItems: 'center', // Center content vertically
+
+                borderRadius: '10px',
+                background: 'rgba(0,0,0,0.25)',
+                backdropFilter: 'blur(6px)',
+
+                boxShadow: `
+    0 0 0 1px rgba(255,255,255,0.15),
+    0 20px 40px rgba(0,0,0,0.45)
+  `,
+
+                transition: 'transform 0.35s ease',
+                '&:hover': {
+                  transform: 'scale(1.015)',
+                },
+
+                '&:hover img': {
+                  // transform: 'scale(1.1)',
+                },
               }}
+
             >
-              <Box sx={{ display: 'flex', gap: '0px', marginLeft: 'auto' }}>
-                {isAdmin && section.id !== 'SobreMi' && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    component={RouterLink}
-                    sx={{borderRadius: '0px 0px 10px 0px', fontSize:{xs:'1rem'}}}
-                    to={`/panel${section.id}`}
-                  >
-                    Editar
-                  </Button>
-                )}
-                {/* <Button
+              <RouterLink to={`/${section.id}`} style={{
+                display: 'block', // Asegura que el enlace ocupe el área completa
+                width: '100%',    // Mantén las dimensiones del enlace y la imagen
+                height: '100%',
+              }}>
+                <img
+                  src={images[section.id]}
+                  alt={section.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', transition: 'transform 0.5s ease-in-out', }}
+                />
+              </RouterLink>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  background: 'linear-gradient(to top, rgba(1, 26, 4, 0.8),transparent)',
+
+                  // background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
+                  color: '#fff',
+                  // borderRadius: '0px 0px 10px 0px',
+                  // '&:hover .title-text': { color: theme.palette.primary.main }, // Cambia color del texto en hover
+                  // '&:hover .divider-line': { transform: 'translateX(10px)' },
+                }}
+              >
+                <RouterLink to={`/${section.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+
+                  <Typography variant="h2" color="white"
+                    className="title-text"
+                    sx={{
+
+                      mb: '-5px',
+                      ml: 2,
+                      transition: 'color 0.3s ease-in-out', // Transición para el color
+                    }}>
+
+                    {section.title}
+                  </Typography>
+                  <Divider
+                    className="divider-line"
+                    sx={{
+                      ml: 2, my: 1, borderColor: 'rgba(234, 240, 234, 0.4)', borderWidth: '1.3px', borderRadius: '2px', width: '50%',
+                      transition: 'transform 0.3s ease-in-out', // Agregamos transición
+                      transformOrigin: 'left', // Punto de origen del movimiento
+                    }} />
+                </RouterLink>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between', // Distribute space between title and buttons
+                    alignItems: 'center', // Center content vertically
+                    px: 2,
+                    pb: 2,
+                  }}
+                >
+                  <Box sx={{ display: 'flex', marginLeft: 'auto' }}>
+                    {isAdmin && section.id !== 'SobreMi' && (
+                      <Button
+                        endIcon={<ArrowForwardIcon />}
+                        variant="outlined"
+                        color="secondary"
+                        component={RouterLink}
+                        sx={{ fontSize: { xs: '1rem' } }}
+                        to={`/panel${section.id}`}
+                      >
+                        Editar
+                      </Button>
+                    )}
+                    {/* <Button
                   variant="contained"
                   color="primary"
                   sx={{borderRadius: '0px 0px 10px 0px'}}
@@ -151,434 +217,86 @@ export const HomeMenu = () => {
                 >
                   {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
                 </Button> */}
+                  </Box>
+                </Box>
               </Box>
             </Box>
-          </Box>
-        </Box>
-      ))}
+          ))}
 
-      {/* Panel "Sobre Mi" */}
-      {isMobile || showSobreMi ? (
-        <Box
-          sx={{
-            gridColumn: isMobile ? 'auto' : (showSobreMi ? '4 / span 1' : 'auto'),
-            gridRow: isMobile ? 'auto' : (showSobreMi ? '1 / span 2' : 'auto'),
-            position: 'relative',
-            overflow: 'hidden',
-            height: '100%',
-            transition: 'transform 0.5s ease-in-out',
-            filter: 'grayscale(50%)', // Estado inicial en blanco y negro
-            '&:hover': {
-              filter: 'grayscale(0%)',  // Recupera los colores en hover
-    },
-          }}
-        >
-          <img
-            src={images['SobreMi']}
-            alt="Sobre Mi"
-            style={{ width: '100%', height: '100%', objectFit: 'cover',
-        transition: 'transform 0.5s ease-in-out, ' }}
-          />
-          <Box
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              padding: '20px',
-              height:'20%',
-              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
-              color: '#fff',
-              '&:hover .title-text': { color: theme.palette.primary.main }, // Cambia color del texto en hover
-              '&:hover .divider-line': { transform: 'translateX(10px)' },
-            }}
-          >
-            <Typography variant="h1" color="white"
-             className="title-text"
-             sx={{
-     mb: '-5px',
-     ml: 2,
-     transition: 'color 0.3s ease-in-out', // Transición para el color
-   }}>
-              Sobre Mi
-            </Typography>
-              <Divider 
-              className="divider-line"
-              sx={{ my: 1, borderColor: theme.palette.primary.main, borderWidth: '1.3px', borderRadius: '2px', width: '30%',   transition: 'transform 0.3s ease-in-out', // Agregamos transición
-                 transformOrigin: 'left',  }} />
-            <Box mt={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                component={RouterLink}
-                to="/SobreMi"
-                sx={{ top: {xs: '-25px',md:'20px'}, left:{xs:'150px', md:'0px'}}}
+          {/* Panel "Sobre Mi" */}
+          {isMobile || showSobreMi ? (
+            <Box
+              sx={{
+                gridColumn: isMobile ? 'auto' : (showSobreMi ? '4 / span 1' : 'auto'),
+                gridRow: isMobile ? 'auto' : (showSobreMi ? '1 / span 2' : 'auto'),
+                position: 'relative',
+                overflow: 'hidden',
+                height: '100%',
+                borderRadius: '10px',
+                transition: 'transform 0.5s ease-in-out',
+                filter: 'grayscale(50%)', // Estado inicial en blanco y negro
+                '&:hover': {
+                  filter: 'grayscale(0%)',  // Recupera los colores en hover
+                },
+              }}
+            >
+              <img
+                src={images['SobreMi']}
+                alt="Sobre Mi"
+                style={{
+                  width: '100%', height: '100%', objectFit: 'cover',
+                  transition: 'transform 0.5s ease-in-out, '
+                }}
+              />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  padding: '20px',
+                  height: '30%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  background: 'linear-gradient(to top, rgba(1, 26, 4, 0.8), transparent)',
+                }}
               >
-                Leer
-              </Button>
+                <Typography variant="h2" color="white"
+                  className="title-text"
+                  sx={{
+
+
+                    transition: 'color 0.3s ease',
+                  }}>
+                  Sobre Mi
+                </Typography>
+                <Divider
+                  className="divider-line"
+                  sx={{
+                    my: 1, borderColor: theme.palette.secondary.main, borderWidth: '1.3px', borderRadius: '2px', width: '50%', transition: 'transform 0.3s ease-in-out', // Agregamos transición
+                    transformOrigin: 'start',
+                  }} />
+                <Typography variant="body1" color="secondary"
+                  sx={{ pr: 5 }}
+                >Observador paciente y amante de la vida silvestre</Typography>
+                <Box mt={2} sx={{ display: 'flex', justifyContent: 'start' }}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    component={RouterLink}
+                    to="/SobreMi"
+                    sx={{ top: { xs: '-25px', md: '20px' }, left: { xs: '150px', md: '0px' } }}
+                  >
+                    Leer
+                  </Button>
+                </Box>
+              </Box>
             </Box>
-          </Box>
+
+          ) : null}
         </Box>
-      ) : null}
+        <CopyRight.Photo />
+      </Box>
     </Box>
   );
 };
-
-// import * as React from 'react';
-// import { Box, Button, Typography, useTheme } from '@mui/material';
-// import { Link as RouterLink } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
-
-// const sections = [
-//   { id: 'aves', title: 'Aves', description: 'Fotografías de aves' },
-//   { id: 'mamiferos', title: 'Mamiferos', description: 'Fotografías de Mamiferos' },
-//   { id: 'reptiles', title: 'Reptiles', description: 'Fotografías de Reptiles' },
-//   { id: 'insectos', title: 'Insectos', description: 'Fotografías de Insectos' },
-//   { id: 'peces', title: 'Peces', description: 'Fotografías de peces' },
-//   { id: 'paisajes', title: 'Paisajes', description: 'Fotografías de paisajes' },
-//   { id: 'SobreMi', title: 'Sobre Mi', description: 'Leer sobre mi' },
-// ];
-
-// export const HomeMenu = () => {
-//   const theme = useTheme();
-//   const admin = localStorage.getItem('tipoCliente');
-//   const isAdmin = admin === 'admin';
-//   const { allCustom } = useSelector((state) => state.customizesSlice);
-
-//   // Access image URLs
-//   const images = {
-//     aves: allCustom.cover_birds,
-//     mamiferos: allCustom.cover_animals,
-//     reptiles: allCustom.cover_reptile,
-//     insectos: allCustom.cover_insect,
-//     peces: allCustom.cover_fish,
-//     paisajes: allCustom.cover_land,
-//     SobreMi: allCustom.cover_about,
-//   };
-
-//   return (
-//     <Box
-//       sx={{
-//         backgroundColor: '#103300',
-//         padding: '0px',
-//         minHeight: '100vh',
-//         maxHeight: '',
-//         display: 'grid',
-//         gridTemplateColumns: 'repeat(3, 1fr) 1fr',
-//         gridTemplateRows: 'repeat(2, 1fr)',
-//         gap: '3px',
-//       }}
-//     >
-//       {sections.slice(0, 6).map((section) => (
-//         <Box
-//           key={section.id}
-//           sx={{
-//             position: 'relative',
-//             // borderRadius: '500px',
-//             overflow: 'hidden',
-//             transition: 'transform 0.5s ease-in-out',
-//             '&:hover': { transform: 'scale(1)' },
-//             height: '49vh',
-//           }}
-//         >
-//           <img
-//             src={images[section.id]}
-//             alt={section.title}
-//             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-//           />
-//           <Box
-//             sx={{
-//               position: 'absolute',
-//               bottom: 0,
-//               left: 0,
-//               width: '100%',
-//               padding: '20px',
-//               background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
-//               color: '#fff',
-//             }}
-//           >
-            
-//             {/* <Typography variant="body2" color="primary.light">
-//               {section.description}
-//             </Typography> */}
-//             <Box mt={0} sx={{ display: 'flex', justifyContent: 'center' }}>
-//             <Typography variant="h2" color="primary.main">
-//               {section.title}
-//             </Typography>
-//               <Button
-//                 variant="contained"
-//                 color="primary"
-//                 component={RouterLink}
-//                 to={`/${section.id}`}
-//                 sx={{ marginRight: '10px' }}
-//               >
-//                 {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
-//               </Button>
-//               {isAdmin && section.id !== 'SobreMi' && (
-//                 <Button
-//                   variant="outlined"
-//                   color="primary"
-//                   component={RouterLink}
-//                   to={`/panel${section.id}`}
-//                 >
-//                   Editar
-//                 </Button>
-//               )}
-//             </Box>
-//           </Box>
-//         </Box>
-//       ))}
-
-//       <Box
-//         sx={{
-//           gridColumn: '4 / span 1',
-//           gridRow: '1 / span 2',
-//           position: 'relative',
-//           borderRadius: '0px',
-//           overflow: 'hidden',
-//           transition: 'transform 0.5s ease-in-out',
-//           '&:hover': { transform: 'scale(1)' },
-//           height: '100%',
-
-//         }}
-//       >
-//         <img
-//           src={images['SobreMi']}
-//           alt="Sobre Mi"
-//           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-//         />
-//         <Box
-//           sx={{
-//             position: 'absolute',
-//             bottom: 0,
-//             left: 0,
-//             width: '100%',
-//             padding: '20px',
-//             background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
-//             color: '#fff',
-//           }}
-//         >
-//           <Typography variant="h5" color="primary.main">
-//             Sobre Mi
-//           </Typography>
-//           <Typography variant="body2" color="primary.light">
-//             Leer sobre mi
-//           </Typography>
-//           <Box mt={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-//             <Button
-//               variant="contained"
-//               color="primary"
-//               component={RouterLink}
-//               to="/SobreMi"
-//             >
-//               Leer
-//             </Button>
-//           </Box>
-//         </Box>
-//       </Box>
-//     </Box>
-//   );
-// };
-
-
-
-
-// import * as React from 'react';
-// import { Box, Button, Divider, Grid, Typography, useTheme } from '@mui/material';
-// import { Link as RouterLink } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
-
-// const sections = [
-//   {
-//     id: 'aves',
-//     title: 'Aves',
-//     description: 'Fotografías de aves',
-//   },
-//   {
-//     id: 'animales',
-//     title: 'Animales',
-//     description: 'Fotografías de animales',
-//   },
-//   {
-//     id: 'peces',
-//     title: 'Peces',
-//     description: 'Fotografías de peces',
-//   },
-//   {
-//     id: 'paisajes',
-//     title: 'Paisajes',
-//     description: 'Fotografías de paisajes',
-//   },
-//   {
-//     id: 'flores',
-//     title: 'Flores',
-//     description: 'Fotografías de Flores',
-//   },
-//   {
-//     id: 'SobreMi',
-//     title: 'Sobre Mi',
-//     description: 'Leer sobre mi',
-//   },
-// ];
-
-// export const HomeMenu = () => {
-//   const theme = useTheme();
-//   const admin = localStorage.getItem('tipoCliente');
-//   const isAdmin = admin === 'admin';
-//   const { allCustom } = useSelector((state) => state.customizesSlice);
-//   const [selectedSection, setSelectedSection] = React.useState(null);
-//   const [hoveredSection, setHoveredSection] = React.useState(null);
-
-//   const handleSectionClick = (sectionId) => {
-//     setSelectedSection(sectionId); // Al hacer clic en una sección, guarda la sección en el estado
-//     localStorage.setItem('panel', sectionId); // Guarda la sección seleccionada en el localStorage
-//   };
-
-//   const renderPanelButton = (sectionId) => {
-//     if (isAdmin && sectionId !== 'SobreMi') {
-//       return (
-//         <Button
-//           variant="outlined"
-//           color="primary"
-//           component={RouterLink}
-//           to={`/panel${sectionId}`}
-//         >
-//           Editar
-//         </Button>
-//       );
-//     }
-//     return null;
-//   };
-
-//   // Accede a las propiedades específicas de allCustom para obtener las URL de las imágenes
-//   const images = {
-//     aves: allCustom.cover_birds,
-//     animales: allCustom.cover_animals,
-//     peces: allCustom.cover_fish,
-//     flores: allCustom.cover_flowers,
-//     paisajes: allCustom.cover_land,
-//     SobreMi: allCustom.cover_about,
-//     panelAdministrador: allCustom.covert_admin,
-//   };
-
-//   return (
-//     <div>
-
-//       <Grid container spacing={0} sx={{ height: '100vh', justifyContent: 'center', alignItems: 'stretch', backgroundColor: '#103300', overflow: { lg: 'hidden' }, }}>
-//         {sections.map((section, index) => (
-//           (isAdmin || section.id !== 'panelAdministrador') && (
-//             <Grid item xs={12} sm={6} md={2} key={section.id}
-//               sx={{
-//                 margin: '0px',
-//                 mt: 0,
-//                 transition: 'filter 0.5s ease-in-out',
-//                 filter: 'none',
-//               }}
-//             >
-//               <Box
-//                 sx={{
-//                   position: 'relative',
-//                   width: '100%',
-//                   height: { xs: '600px', md: '100%' }, // Altura fija para XS y altura automática para MD y superiores
-//                   minHeight: { xs: '600px' }, // Altura mínima para XS
-//                   borderRadius: { xs: 0, md: '0px 0px 0px 0px' },
-//                   transition: 'transform 0.5s ease-in-out, border-radius 0.3s ease-in-out',
-//                   zIndex: 1, // Asegura que el elemento tenga un zIndex base
-//                   transform: 'scale(1)',
-//                   animation: `fadeIn 1s ease-out ${index * 0.5}s both`,
-//                   '&:hover': {
-//                     borderRadius: '0px 0px 50px 50px',
-//                     transform: 'scale(1.06)',
-//                     zIndex: 10,
-//                   },
-//                   '&:hover::before': {
-//                     content: '""',
-//                     position: 'absolute',
-//                     top: 0,
-//                     left: 0,
-//                     width: '100%',
-//                     height: '100%',
-//                     backgroundColor: 'rgba(255, 255, 255, 0.05)', // Establece el fondo transparente deseado
-//                     zIndex: 2, // Asegura que el blur esté encima
-//                     transition: 'filter 0.3s ease-in-out',
-//                   },
-//                   '&:hover .title': {
-//                     fontSize: '2.8rem', // Tamaño de fuente más grande al hacer hover
-//                     color: 'white'
-//                   },
-//                   '&:hover .divider': {
-//                     width: '50%', // Ancho del divider al hacer hover
-//                   },
-//                 }}
-//               >
-//                 <img
-//                   src={images[section.id]}
-//                   alt={section.title}
-//                   style={{
-//                     width: '100%',
-//                     height: '100%',
-//                     objectFit: 'cover',
-//                     borderRadius: { xs: 0, md: '0px 0px 100px 100px' },
-//                     maxWidth: '100%',
-//                     maxHeight: '100%',
-//                   }}
-//                   onClick={() => handleSectionClick(section.id)}
-//                 />
-//                 <Box
-//                   sx={{
-//                     position: 'absolute',
-//                     bottom: 0,
-//                     left: 0,
-//                     width: '100%',
-//                     background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
-//                     color: '#fff',
-//                     borderRadius: { xs: 0, md: '0px 0px 0px 0px' },
-//                     transition: 'transform 0.3s ease-in-out, border-radius 0.3s ease-in-out',
-//                     zIndex: 3,
-//                     '&:hover': {
-//                       borderRadius: '0px 0px 50px 50px',
-//                     },
-//                   }}
-//                 >
-//                   <Typography className="title" variant="h1" color="primary.main" sx={{ marginBottom: '3px', textAlign: 'center', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }} >
-//                     {section.title}
-//                   </Typography>
-//                   <Divider className="divider" sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', margin: 'auto' }} />
-//                   <Typography variant="h4" color="primary.light" sx={{ textAlign: 'center', mt: 2 }}>
-//                     {section.description}
-//                   </Typography>
-//                   <Box mt={2} sx={{ display: 'flex', justifyContent: 'center', mb: 7, }}>
-//                     <Button
-//                       variant="contained"
-//                       color="primary"
-//                       component={RouterLink}
-//                       to={`/${section.id}`}
-//                       sx={{ marginRight: '10px' }}
-//                     >
-//                       {section.id === 'SobreMi' ? 'Leer' : 'Galería'}
-//                     </Button>
-//                     {(section.id !== 'SobreMi' && section.id !== 'panelAdministrador') && (
-//                       renderPanelButton(section.id)
-//                     )}
-//                   </Box>
-//                 </Box>
-//               </Box>
-//             </Grid>
-//           )
-//         ))}
-//       </Grid>
-//       <style>
-//         {`
-//     @keyframes fadeIn {
-//       from {
-//         opacity: 0;
-//       }
-//       to {
-//         opacity: 1;
-//       }
-//     }
-//   `}
-//       </style>
-//     </div >
-//   );
-// };

@@ -68,31 +68,72 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
           top: 0,
           left: 0,
           width: '100%',
-          zIndex: 999,
+          height: '50px',
+          zIndex: 1400,
           backdropFilter: 'blur(9px)',
-          justifyContent: 'space-between',
+          // background: 'rgba(0, 0, 0, 0.35)',
+          borderBottom: '2px solid rgba(255,255,255,0.15)',
+          display: 'flex',
           alignItems: 'center',
-          height: '5.5vh',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          justifyContent: 'space-between',
+          // boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Link to="/menu" style={{ marginLeft: '30px', width: 'auto', height: '110%', marginBottom: '100px', backgroundColor: '#004E37', borderRadius: '0px 0px 50px 50px' }}>
+        {/* <Link to="/menu" style={{ display: 'flex', alignItems: 'center', height: '100%',
+    paddingLeft: '16px', }}>
           <img src={allCustom.logo} alt="Logo"
-            style={{ width: 'auto', height: '200%', marginBottom: '52px', backgroundColor: '#103300', borderRadius: '0px 0px 50px 50px' }}
+            style={{  backgroundColor: '#103300', width: 'auto', height: '30px', borderRadius: '50%', border: '1px solid #f7fff7' }}
             loading="lazy" />
+        </Link> */}
+        <Link
+          to="/menu"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+            paddingLeft: '20px',
+            paddingTop: '0px'
+          }}
+        >
+          <Box
+            sx={{
+              paddingTop:5,
+              height: 80,        
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '0px 0px 50px 50px',
+              backgroundColor: '#103300',
+              border: '1px solid #f7fff7',
+              flexShrink: 0,    
+            }}
+          >
+            <img
+              src={allCustom.logo}
+              alt="Logo"
+              style={{
+                height: '90%',
+                width: '90%',
+                objectFit: 'contain',
+              }}
+              loading="lazy"
+            />
+          </Box>
         </Link>
-        <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mt: -13, mr: 1, gap: '10px' }}>
+
+        <Grid item sx={{ display: 'flex', alignItems: 'flex-start', mr: 1, gap: 2 }}>
           {ShowMantButton && isAdmin && (
             <Button
               sx={{
                 fontSize: '1rem',
-                fontWeight: 'bold',
-                color: 'white',
+                // textTransform: 'none',
+                // fontWeight: 'bold',
+                color: theme.palette.secondary.main,
                 '&:hover': {
-                  color: theme.palette.primary.main,
-                  borderBottom: '2px solid #C1C700',
+                  color: theme.palette.secondary.main,
+                  borderBottom: '1px solid #f0f67d',
                   borderRadius: '0px',
-                  borderWidth: '3px'
+                  borderWidth: '1px'
                 },
               }}
               variant="text"
@@ -102,17 +143,16 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               {!isMobile && 'Mantenimiento'}
             </Button>
           )}
-           {ShowBackButton && (
+          {ShowBackButton && (
             <Button
               sx={{
                 fontSize: '1rem',
-                fontWeight: 'bold',
-                color: 'white',
+                color: theme.palette.secondary.main,
                 '&:hover': {
-                  color: theme.palette.primary.main,
-                  borderBottom: '2px solid #C1C700',
+                  color: theme.palette.secondary.main,
+                  borderBottom: '1px solid #f0f67d',
                   borderRadius: '0px',
-                  borderWidth: '3px'
+                  borderWidth: '1px'
                 },
               }}
               variant="text"
@@ -126,13 +166,12 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
             <Button
               sx={{
                 fontSize: '1rem',
-                fontWeight: 'bold',
-                color: 'white',
+                color: theme.palette.secondary.main,
                 '&:hover': {
-                  color: theme.palette.primary.main,
-                  borderBottom: '2px solid #C1C700',
+                  color: theme.palette.secondary.main,
+                  borderBottom: '1px solid #f0f67d',
                   borderRadius: '0px',
-                  borderWidth: '3px'
+                  borderWidth: '1px'
                 },
               }}
               variant="text"
@@ -142,17 +181,16 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               {!isMobile && 'Abrir Filtro'}
             </Button>
           )}
-         
+
           <Button
             sx={{
               fontSize: '1rem',
-              fontWeight: 'bold',
-              color: 'white',
+              color: theme.palette.secondary.main,
               '&:hover': {
-                color: theme.palette.primary.main,
-                  borderBottom: '2px solid #C1C700',
-                  borderRadius: '0px',
-                  borderWidth: '3px'
+                color: theme.palette.secondary.main,
+                borderBottom: '1px solid #f0f67d',
+                borderRadius: '0px',
+                borderWidth: '1px'
               },
             }}
             variant="text"

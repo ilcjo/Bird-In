@@ -16,7 +16,7 @@ CopyRight.Photo = () => (
             //   height: '100vh',
         }}
     >
-        <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 5 }}>
+        <Typography variant="subtitle1"  sx={{ mt: 4, color: 'rgba(239, 246, 196, 0.81)' }}>
             © {new Date().getFullYear()} Moisés Sterimberg Photo Collection.
             <br></br>
             All rights reserved.
