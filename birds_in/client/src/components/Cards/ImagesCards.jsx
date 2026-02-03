@@ -34,8 +34,8 @@ export const ImagesCards = ({ foto, name, arrayImages }) => {
     <Card
       sx={{
         borderRadius: '6px',
-        width: { xs: '100%', sm: 480, md: 480, lg: 480},
-        minWidth: { xs: '100%', sm: 480, md: 480, lg: 480 },
+        width: { xs: '100%', sm: 470, md: 470, lg: 470},
+        minWidth: { xs: '100%', sm: 470, md: 470, lg: 470 },
         margin: 0,
         flexDirection: 'column',
         overflow: 'hidden',

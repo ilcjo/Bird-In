@@ -13,6 +13,14 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     width: '100%',
     '& .Mui-selected': {
         backgroundColor: theme.palette.custom.light,
+        background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.38) 0%,
+    // rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
     },
 }));
 const StyledTab = styled(Tab)({

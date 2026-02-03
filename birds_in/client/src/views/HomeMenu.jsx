@@ -73,6 +73,7 @@ export const HomeMenu = () => {
           background: 'rgba(11, 53, 15, 0.45)',
           backdropFilter: 'blur(0px)',
           zIndex: 1,
+          
         }}
       >
 
@@ -134,14 +135,14 @@ export const HomeMenu = () => {
                 },
 
                 '&:hover img': {
-                  // transform: 'scale(1.1)',
+                  opacity: 0.8,
                 },
               }}
 
             >
               <RouterLink to={`/${section.id}`} style={{
-                display: 'block', // Asegura que el enlace ocupe el área completa
-                width: '100%',    // Mantén las dimensiones del enlace y la imagen
+                display: 'block', 
+                width: '100%',    
                 height: '100%',
               }}>
                 <img
@@ -157,7 +158,7 @@ export const HomeMenu = () => {
                   left: 0,
                   width: '100%',
                   background: 'linear-gradient(to top, rgba(1, 26, 4, 0.8),transparent)',
-
+  transition: 'opacity 0.35s ease-in-out',
                   // background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
                   color: '#fff',
                   // borderRadius: '0px 0px 10px 0px',
@@ -233,7 +234,7 @@ export const HomeMenu = () => {
                 overflow: 'hidden',
                 height: '100%',
                 borderRadius: '10px',
-                transition: 'transform 0.5s ease-in-out',
+                transition: 'transform 1s ease-in-out',
                 filter: 'grayscale(50%)', // Estado inicial en blanco y negro
                 '&:hover': {
                   filter: 'grayscale(0%)',  // Recupera los colores en hover

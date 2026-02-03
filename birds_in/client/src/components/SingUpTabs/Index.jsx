@@ -40,7 +40,8 @@ export const Index = ({ open }) => {
         minHeight: { xs: '85%', md: '70%', lg: '90%' },
         maxHeight: { xs: '85%', md: '70%', lg: '90%' },
         minWidth: { xs: '90%', md: '70%', lg: '40%' },
-        maxWidth: '40%'
+        maxWidth: '40%',
+        
       }
     }}
     >

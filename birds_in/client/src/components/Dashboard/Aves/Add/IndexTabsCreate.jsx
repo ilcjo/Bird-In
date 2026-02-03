@@ -7,20 +7,27 @@ import { CoverDelete } from '../Photos/CoverDelete';
 import { CoverDeleteOrigin } from '../Photos/CoverDeleteOrigin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+    backgroundColor: 'rgba(65, 99, 69, 0.55)',
+    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     width: '100%',
     boxSizing: 'border-box',
     '& .Mui-selected': {
         backgroundColor: theme.palette.custom.light,
+        background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.38) 0%,
+    
+  )
+`,
     },
 }));
 const StyledTab = styled(Tab)({
     minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
     textTransform: 'none',
-    color: '#ccd6cc',
+    color: '#05fe05',
     '&.Mui-selected .MuiTypography-root': {
         color: '#C1C700',
     },
@@ -58,7 +65,7 @@ export const IndexTabsCreate = ({
         setCoverSelected(isSelected);
     };
 
-    
+
     React.useEffect(() => {
         localStorage.removeItem('isFromCreateImage');
         localStorage.removeItem('isExist');
@@ -67,12 +74,22 @@ export const IndexTabsCreate = ({
 
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px' }}>
+            <Box sx={{
+                width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px', background: `
+  linear-gradient(
+    180deg,
+   rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
+                borderRadius: '15px'
+            }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
                     textColor='primary'
-                    indicatorColor="primary"
+                    indicatorColor="secondary"
                     aria-label="tabsInfoActualizar"
                 >
                     <StyledTab label={<Typography variant='h4' >

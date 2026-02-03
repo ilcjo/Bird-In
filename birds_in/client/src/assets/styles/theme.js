@@ -7,14 +7,14 @@ const theme = createTheme({
   palette: {
     primary: {
       light: '#ccd6cc',
-      main: '#C1C700',
+      main: '#d7cd07',
       dark: ' #3A5A40',
       //dark: '#103300',
       // dark: '#004E37',
       contrastText: '#004E37',
     },
     secondary: {
-      light: '#f0f67d',
+      light: '#d7cd07',
       main: '#f7fff7',
       // main: '#004E37', //verde
       dark: '#103300',
@@ -30,13 +30,14 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Arsenal',
     h1: {
-      fontSize: '1.7rem',
+      fontSize: '1.8rem',
       fontWeight: 600,
+      letterSpacing: '1px',
     },
     h2: {
       fontSize: '1.5rem',
-      fontWeight: 600,
-      letterSpacing: '3px',
+      fontWeight: 500,
+      letterSpacing: '2px',
       // my: 1,
     },
     h3: {
@@ -74,6 +75,14 @@ const theme = createTheme({
           WebkitBackdropFilter: 'blur(10px)',
           padding: '20px',
           borderRadius: '9px',
+            background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
         },
       },
     },
@@ -163,7 +172,8 @@ const theme = createTheme({
           fontSize: '1rem', // Aumentar el tamaño del texto a 1.2 rem
           fontWeight: 'bold', // Hacer el texto negrita
           textTransform: 'none',
-          borderRadius: '5px',
+          borderRadius: '5px', 
+          color:'#103300',
           '&:hover': {
             backgroundColor: 'transparent', // Cambia el color de fondo en hover
             color: '#ccd6cc', // Cambia el color del texto en hover

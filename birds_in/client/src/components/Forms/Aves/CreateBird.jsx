@@ -335,13 +335,13 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             <Grid item xs={12} sm={9}>
                                 <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Creación
+                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                                 </Typography>
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 2 }} >
                             Subir imágenes a Galería
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
                         <Grid container sx={{}} >
@@ -363,9 +363,9 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h3' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Ave
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                            {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} /> */}
                         </Typography>
 
                         <Grid container spacing={2}>

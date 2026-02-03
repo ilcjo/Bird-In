@@ -85,15 +85,23 @@ export const FamiliaAddForm = ({
     return (
         <div>
             <Grid alignItems="center" container spacing={1} sx={{
-                backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backgroundColor: 'rgba(242, 246, 219, 0.46))',
                 p: 3,
                 borderRadius: '10px',
-                mb: 0
+                mb: 0,
+//                  background: `
+//   linear-gradient(
+//     180deg,
+//     rgba(242, 246, 219, 0.46) 0%,
+//     rgba(65, 99, 69, 0.75) 50%,
+//     rgba(65, 99, 69, 0.42) 100%
+//   )
+// `,
             }}>
                 <Grid item xs={12} sm={9}>
                     <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
                         Agregar Nueva Familia
-                        <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
+                        {/* <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} /> */}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} md={9}>

@@ -44,7 +44,15 @@ export const FamiliasGrupos = () => {
                 margin: '0 auto',
                 padding: '40px 40px 30px 40px',
                 borderRadius: '20px 20px 20px 20px',
-                mb: 10
+                mb: 10,
+                 background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
             }} >
                 <Grid item xs={6}>
                     <FamiliaAddForm

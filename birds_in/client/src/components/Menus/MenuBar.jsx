@@ -103,7 +103,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: '0px 0px 50px 50px',
-              backgroundColor: '#103300',
+              backgroundColor: '#3A5A40',
               border: '1px solid #f7fff7',
               flexShrink: 0,    
             }}

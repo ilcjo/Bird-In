@@ -94,7 +94,7 @@ export const GrupoAddForm = ({
     <div>
       <Grid alignItems="center" container spacing={1} sx={{
         //   margin: 5,
-        backgroundColor: 'rgba(0, 56, 28, 0.1)',
+        backgroundColor: 'rgba(242, 246, 219, 0.46))',
         p: 3,
         borderRadius: '10px',
         mb: 0
@@ -102,7 +102,7 @@ export const GrupoAddForm = ({
         <Grid item xs={12} sm={9}>
           <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
             Agregar Nuevo Grupo
-            <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} />
+            {/* <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main, }} /> */}
           </Typography>
         </Grid>
         <Grid item xs={12} md={9}>

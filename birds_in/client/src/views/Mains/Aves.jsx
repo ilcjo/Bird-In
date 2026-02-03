@@ -19,7 +19,7 @@ import { getOptionsDataP } from '../../redux/paisaje/actionsP/fetchOptionsLand';
 import { isOneLand, resetInfoLand } from '../../redux/paisaje/slicesP/LandscapeSlice';
 import { isSaltarMa, resetInfo as resetInfoM } from '../../redux/mamiferos/slices/InfoSlice';
 import { isSaltarRept, resetInfo } from '../../redux/reptiles/slices/InfoSlice';
-
+import fondo from '../../../src/assets/images/fondo.png'
 export const Aves = () => {
 
   const theme = useTheme()
@@ -93,11 +93,12 @@ export const Aves = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
+          paddingTop: '90px',
           p: infoBirds.length === 1 ? 0 : 2,
           '::before': {
             content: '""',
-            display: 'block',
             position: 'absolute',
+            display: 'block',
             top: 0,
             left: 0,
             width: '100%',
@@ -105,22 +106,25 @@ export const Aves = () => {
             opacity: 0.5, // Opcional para mayor discreción
             pointerEvents: 'none', // Impide la interacción con la imagen
           }
-
         }}
       >
         {!isFilterDialogOpen && infoBirds.length > 1 && (
           <Fab
             variant="extended"
             size="medium"
-            color="primary"
+            color="secondary"
             sx={{
               position: 'fixed',
               bottom: 16,
               right: 16,
               zIndex: 1000,
               fontWeight: 'bold',
+              color: '#103300',
+              textTransform: 'none',
               '&:hover': {
-                color: 'white',
+                backgroundColor: 'transparent', // Cambia el color de fondo en hover
+                color: '#ccd6cc', // Cambia el color del texto en hover
+                textTransform: 'none',
               }
             }}
             onClick={stepBack}
@@ -152,8 +156,16 @@ export const Aves = () => {
               justifyContent: 'center',
               width: '100%',
               margin: 'auto',
-              backgroundColor: 'rgba(0, 56, 28, 0.1)',
-              backdropFilter: 'blur(8px)',
+              // backgroundImage: `url(${fondo})`,
+              background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.27) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.75) 100%
+  )
+`,
+              backdropFilter: 'blur(7px)',
               paddingBottom: '50px',
               borderRadius: '20px',
               mb: 10,
@@ -167,13 +179,13 @@ export const Aves = () => {
               spacing={1}
               sx={{ width: '100%' }}>
               <Grid item xs={12} sm={6} lg={6} >
-                <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center', marginLeft: '20px', mt: 5 }}>
+                <Typography variant='h1' color='secondary.dark' sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', marginLeft: '20px', mt: 5 }}>
                   Resultados
-                  <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
+                  {/* <FilterListIcon fontSize='large' sx={{ ml: 1 }} /> */}
                 </Typography>
-                <Typography variant='h4' color='white' sx={{ marginLeft: '20px' }}>
-                  Total de Aves Filtradas: {total}
-                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                <Typography variant='body1' color='secondary.dark' sx={{ marginLeft: '20px', mb: 5 }}>
+                  {total} aves encontradas
+                  {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} /> */}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} lg={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
@@ -207,7 +219,7 @@ export const Aves = () => {
                   fontSize: '1rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
-                  color: theme.palette.primary.main,
+                  color: theme.palette.secondary.main,
                   borderRadius: '800px',
                 }}
                 variant="outline"
@@ -235,7 +247,8 @@ export const Aves = () => {
               padding: '40px',
               borderRadius: '20px',
               mb: 10,
-              mt: 10
+              mt: 10,
+
             }}
           >
             <Grid container

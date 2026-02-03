@@ -29,6 +29,7 @@ export const DashAves = () => {
           height: '100%',
           overflow: 'hidden',
           margin: 0,
+          
         }}
       >
         <IndexD />

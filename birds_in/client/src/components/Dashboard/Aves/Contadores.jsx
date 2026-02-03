@@ -55,7 +55,15 @@ export const Contadores = () => {
             padding: '20px',
             margin: '0px',
             width: '40vw',
-            borderRadius: 3
+            borderRadius: 3,
+             background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
         }}>
             <Table>
                 <TableHead>

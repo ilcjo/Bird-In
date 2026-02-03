@@ -11,6 +11,7 @@ import { Loading } from '../../utils/Loading';
 import { HeaderAves } from './HeaderAves';
 import { CopyRight } from '../../CopyRight';
 import { useNavigate } from 'react-router-dom';
+import fondo from '../../../assets/images/fondo.png'
 import { isSaltar } from '../../../redux/paisaje/slicesP/LandscapeSlice';
 
 export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
@@ -61,68 +62,108 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
 
     return (
         <React.Fragment>
-            {mainImage && (
-                <HeaderAves imageUrl={mainImage} bird={birds} back={stepBack} />
-            )}
-            <Grid container spacing={0} sx={{
-                backgroundColor: 'rgba(32,60,18, 0.5)', p: {
-                    xs: 2, md: 2,
-                    alignItems: 'center', // Centra verticalmente (si es necesario)
-                    display: 'flex',
-                    justifyContent: 'center',
-                }
-            }}>
-                <Fab
-                    variant="extended"
-                    size="medium"
-                    color="primary"
-                    sx={{
-                        position: 'fixed',
-                        bottom: 16,
-                        right: 16,
-                        zIndex: 1000,
-                        fontWeight: 'bold',
-                        '&:hover': {
-                            color: 'white',
-                        }
-                    }}
-                    onClick={stepBack}
-                >
-                    <ArrowBackIcon sx={{ mr: 1 }} />
-                    Regresar
-                </Fab>
+            <Grid
+                container
+                spacing={0}
+                sx={{
+                    p: 3,
+                    minHeight: '100vh',
+                    width: '100%',
+                    position: 'relative',
+                    backgroundImage: `url(${fondo})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundAttachment: 'fixed',
 
-                <Box sx={{ width: '100%', mb: 4, textAlign: 'left' }}>
-                    <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center', ml: 4 }}>
-                        Galería de Imágenes
-                    </Typography>
+                    '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(16, 51, 0, 0.6)',
+                        zIndex: 0,
+                    },
+                }}
+            >
+                {/* CONTENIDO REAL */}
+                <Grid container sx={{ position: 'relative', zIndex: 1 }}>
 
-                    {/* <Divider
+                    {/* HEADER / HERO */}
+                    {mainImage && (
+                        <Box sx={{ width: '100%', mt: 5, mb: 5, }}>
+                            <HeaderAves
+                                imageUrl={mainImage}
+                                bird={birds}
+                                back={stepBack}
+                            />
+                        </Box>
+                    )}
+
+                    {/* GALERÍA */}
+                    <Box
                         sx={{
-                            my: 2,
-                            borderColor: theme.palette.primary.main,
-                            width: '25%',
-                            height: '2px',
-                            borderBottomWidth: '3px',
-                            borderRadius: '10px',
+                            maxWidth: '1450px',
+                            mx: 'auto',
+                            width: '100%',
+                            px: { xs: 2, md: 0 },
+                            pb: 10,
                         }}
-                    /> */}
-                </Box>
+                    >
+                        <Typography
+                            variant="h1"
+                            color="primary"
+                            sx={{ mb: 4 }}
+                        >
+                            Galería de Imágenes
+                        </Typography>
 
-                {allImages.length === 0 ? (
-                    <Typography variant="h2" color="primary.main" sx={{ mt: 4 }}>
-                        No se han subido imágenes.
-                    </Typography>
-                ) : (
-                    allImages.map((image, index) => (
-                        <ImagesCards foto={image.url} name={image.nombre_ingles} arrayImages={allImages} />
-                    ))
-                )}
-                <Box sx={{ width: '100%', textAlign: 'center', mt: 4 }}>
-                    <CopyRight.Photo />
-                </Box>
+                        {allImages.length === 0 ? (
+                            <Typography variant="h2" color="primary.main">
+                                No se han subido imágenes.
+                            </Typography>
+                        ) : (
+                            <Grid container spacing={1}>
+                                {allImages.map((image, index) => (
+                                    <Grid item key={index}>
+                                        <ImagesCards
+                                            foto={image.url}
+                                            name={image.nombre_ingles}
+                                            arrayImages={allImages}
+                                        />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                    </Box>
+
+                    {/* COPYRIGHT */}
+                    <Box sx={{ width: '100%', textAlign: 'center', mb: 6 }}>
+                        <CopyRight.Photo />
+                    </Box>
+                </Grid>
             </Grid>
+
+            {/* BOTÓN REGRESAR */}
+            <Fab
+                variant="extended"
+                size="medium"
+                color="secondary"
+                sx={{
+                    position: 'fixed',
+                    bottom: 16,
+                    right: 16,
+                    zIndex: 1000,
+                    fontWeight: 'bold',
+                    color: '#103300',
+                    textTransform: 'none',
+                }}
+                onClick={stepBack}
+            >
+                <ArrowBackIcon sx={{ mr: 1 }} />
+                Regresar
+            </Fab>
+
             <Loading message={loadingMessage} open={showBackdrop} />
         </React.Fragment>
     );
+
 };

@@ -166,12 +166,21 @@ export const CoverDeleteOrigin = ({
                 padding: 2,
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
+                background: `
+                  linear-gradient(
+                    180deg,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(65, 99, 69, 0.75) 50%,
+                    rgba(65, 99, 69, 0.42) 100%
+                  )
+                `, 
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container >
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
+                        <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -196,7 +205,6 @@ export const CoverDeleteOrigin = ({
                     <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
                         variant="contained"
                         color="error"

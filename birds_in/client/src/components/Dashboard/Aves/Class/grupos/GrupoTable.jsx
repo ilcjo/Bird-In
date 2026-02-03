@@ -149,9 +149,9 @@ export const GrupoTable = ({
     return (
         <div>
             <Grid item sx={12} md={12}>
-                <Typography variant='h2' color='primary.light' sx={{ mb: 1, mt: 5 }}>
+                <Typography variant='h1' color='primary' sx={{ mb: 2, mt: 5 }}>
                     Lista de Grupos
-                    <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main }} />
+                    {/* <Divider sx={{ my: 1.5, borderColor: theme.palette.primary.main }} /> */}
                 </Typography>
                 <TextField
                     fullWidth
@@ -238,7 +238,7 @@ export const GrupoTable = ({
                                                         onClick={() => handleEditClick(index)}
                                                         sx={{ fontSize: '1rem' }}
                                                         variant="contained"
-                                                        color="primary"
+                                                        color="secondary"
                                                     >
                                                         Editar
                                                     </Button>

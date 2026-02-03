@@ -36,8 +36,8 @@ CopyRight.Website = () => (
         }}
     >
         <Typography variant="subtitle2" color="text.secondary">
-            © {new Date().getFullYear()}  Website ilcjob.world.
-            All rights reserved.
+             Designed and developed by Ileana Cano <br/>
+             © {new Date().getFullYear()}All rights reserved.
         </Typography>
     </Box>
 );
