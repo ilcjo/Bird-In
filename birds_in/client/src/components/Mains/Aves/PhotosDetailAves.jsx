@@ -122,7 +122,7 @@ export const PhotosDetailAves = ({ setIsFilterOpen, setPage }) => {
                             </Typography>
                         ) : (
                             <Grid container spacing={1}>
-                                {allImages.map((image, index) => (
+                                {allImages?.map((image, index) => (
                                     <Grid item key={index}>
                                         <ImagesCards
                                             foto={image.url}

@@ -30,7 +30,7 @@ export const FamiliaAddForm = ({
             errorMessage('El nombre de la familia no puede estar vacío.');
             return;
         }
-        
+
         try {
             onloading(true);
             loadingMessage('Chequeando...');
@@ -89,14 +89,14 @@ export const FamiliaAddForm = ({
                 p: 3,
                 borderRadius: '10px',
                 mb: 0,
-//                  background: `
-//   linear-gradient(
-//     180deg,
-//     rgba(242, 246, 219, 0.46) 0%,
-//     rgba(65, 99, 69, 0.75) 50%,
-//     rgba(65, 99, 69, 0.42) 100%
-//   )
-// `,
+                //                  background: `
+                //   linear-gradient(
+                //     180deg,
+                //     rgba(242, 246, 219, 0.46) 0%,
+                //     rgba(65, 99, 69, 0.75) 50%,
+                //     rgba(65, 99, 69, 0.42) 100%
+                //   )
+                // `,
             }}>
                 <Grid item xs={12} sm={9}>
                     <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
@@ -110,12 +110,12 @@ export const FamiliaAddForm = ({
                         label="Nombre de Familia"
                         value={nombreFamilia.nombreF}
                         onChange={(e) => setNombreFamilia({ ...nombreFamilia, nombreF: e.target.value })}
-                        // InputLabelProps={{
-                        //     sx: labelStyles,
-                        // }}
-                        // InputProps={{
-                        //     sx: inputStyles,
-                        // }}
+                    // InputLabelProps={{
+                    //     sx: labelStyles,
+                    // }}
+                    // InputProps={{
+                    //     sx: inputStyles,
+                    // }}
                     />
                 </Grid>
                 <Grid item xs={12} md={2}>

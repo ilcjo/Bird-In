@@ -228,19 +228,19 @@ export const CoverDelete = ({
                     rgba(242, 246, 219, 0.14) 0%,
                     rgba(242, 246, 219, 0.14) 0%
                   )
-                `, 
+                `,
                 backdropFilter: 'blur(2px)',
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 0px 0px',
                 mb: 1,
-                
+
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container alignItems="center">
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
-                        <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -262,7 +262,7 @@ export const CoverDelete = ({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h4' color='primary.light' sx={{ mb: 2}}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Button
@@ -283,7 +283,7 @@ export const CoverDelete = ({
                 backdropFilter: 'blur(2px)',
                 borderRadius: '0px 0px 20px 20px',
                 pb: 5,
-                mb:10,
+                mb: 10,
                 background: `
                   linear-gradient(
                     180deg,
@@ -291,7 +291,7 @@ export const CoverDelete = ({
                     rgba(65, 99, 69, 0.75) 50%,
                     rgba(65, 99, 69, 0.42) 100%
                   )
-                `, 
+                `,
             }}>
                 {/* <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer

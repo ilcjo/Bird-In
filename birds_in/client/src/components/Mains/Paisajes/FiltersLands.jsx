@@ -165,7 +165,7 @@ export const FiltersLands = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                         <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
                             Resetear
                         </Button>
-                        <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                        <Button variant="contained" color="secondary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
                             Mostrar
                         </Button>
 

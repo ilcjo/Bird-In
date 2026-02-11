@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import fondo from '../../../assets/images/fondo.png'
 //COMPONENTS
 import { ImagesCards } from '../../Cards/ImagesCards'
 import { HeaderLand } from './HeaderLand';
@@ -95,22 +96,22 @@ export const PhotosDetailLands = ({ setIsFilterOpen, setPage, }) => {
                     alignItems: 'center', // Centra verticalmente (si es necesario)
                     display: 'flex',
                     justifyContent: 'center',
+                     backgroundImage: `url(${fondo})`,
                 }
             }}>
                 <Fab
-                    variant="extended"
-                    size="medium"
-                    color="primary"
-                    sx={{
-                        position: 'fixed',
-                        bottom: 16,
-                        right: 16,
-                        zIndex: 1000,
-                        fontWeight: 'bold',
-                        '&:hover': {
-                            color: 'white',
-                        }
-                    }}
+                   variant="extended"
+                size="medium"
+                color="secondary"
+                sx={{
+                    position: 'fixed',
+                    bottom: 16,
+                    right: 16,
+                    zIndex: 1000,
+                    fontWeight: 'bold',
+                    color: '#103300',
+                    textTransform: 'none',
+                }}
                     onClick={stepBack}
                 >
                     <ArrowBackIcon sx={{ mr: 1 }} />

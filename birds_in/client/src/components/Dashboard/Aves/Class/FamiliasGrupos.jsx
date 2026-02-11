@@ -43,7 +43,7 @@ export const FamiliasGrupos = () => {
                 // minWidth: '1200px',
                 margin: '0 auto',
                 padding: '40px 40px 30px 40px',
-                borderRadius: '20px 20px 20px 20px',
+                borderRadius: '20px',
                 mb: 10,
                  background: `
   linear-gradient(

@@ -97,8 +97,8 @@ export const Aves = () => {
           p: infoBirds.length === 1 ? 0 : 2,
           '::before': {
             content: '""',
-            position: 'absolute',
             display: 'block',
+            position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',

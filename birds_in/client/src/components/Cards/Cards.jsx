@@ -54,11 +54,18 @@ export const Cards = React.memo(({ foto, name, index }) => {
       flexDirection: 'column',
       justifyContent: 'space-between',
       backgroundColor: '#103300',
-      cursor: 'pointer',
-      // transition: 'transform 0.3s ease-out',
-      // '&:hover': {
-      //   transform: 'scale(1.02)',
-      // },
+       transition: 'transform 0.3s ease-out',
+        '&:hover': {
+          // transform: 'scale(1.02)',
+        },
+        '&:hover .divider': {
+          width: '50%',
+          transition: 'transform 0.3s ease-out',
+        },
+        '&:hover .title': {
+          fontSize: '2rem',
+          color: 'white'
+        },
 
     }}>
       <Box
@@ -115,6 +122,7 @@ export const Cards = React.memo(({ foto, name, index }) => {
               >
                 {name}
               </Typography>
+              
               <Button
                 sx={{
                   position: 'absolute',

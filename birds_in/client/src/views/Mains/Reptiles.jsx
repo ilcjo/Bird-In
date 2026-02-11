@@ -86,6 +86,7 @@ export const Reptiles = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           minHeight: '100vh',
+          paddingTop: '90px',
           p: info.length === 1 ? 0 : 2,
           '::before': {
             content: '""',
@@ -104,15 +105,19 @@ export const Reptiles = () => {
           <Fab
             variant="extended"
             size="medium"
-            color="primary"
+            color="secondary"
             sx={{
               position: 'fixed',
               bottom: 16,
               right: 16,
               zIndex: 1000,
               fontWeight: 'bold',
+              color: '#103300',
+              textTransform: 'none',
               '&:hover': {
-                color: 'white',
+                backgroundColor: 'transparent', // Cambia el color de fondo en hover
+                color: '#ccd6cc', // Cambia el color del texto en hover
+                textTransform: 'none',
               }
             }}
             onClick={stepBack}
@@ -143,8 +148,15 @@ export const Reptiles = () => {
               justifyContent: 'center',
               width: '100%',
               margin: 'auto',
-              backgroundColor: 'rgba(0, 56, 28, 0.1)',
-              backdropFilter: 'blur(8px)',
+              background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.27) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.75) 100%
+  )
+`,
+              backdropFilter: 'blur(7px)',
               paddingBottom: '50px',
               borderRadius: '20px',
               mb: 10,
@@ -157,13 +169,11 @@ export const Reptiles = () => {
               spacing={1}
               sx={{ width: '100%' }}>
               <Grid item xs={12} sm={6} lg={6} >
-                <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center', marginLeft: '20px', mt: 5 }}>
+                <Typography variant='h1' color='secondary.dark' sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', marginLeft: '20px', mt: 5 }}>
                   Resultados
-                  <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
                 </Typography>
-                <Typography variant='h4' color='white' sx={{ marginLeft: '20px' }}>
-                  Total de Registros Filtrados: {total}
-                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                <Typography variant='body1' color='secondary.dark' sx={{ marginLeft: '20px', mb: 5 }}>
+                 {total} reptiles encontrados
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} lg={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
@@ -183,7 +193,7 @@ export const Reptiles = () => {
                   fontSize: '1rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
-                  color: theme.palette.primary.main,
+                  color: theme.palette.secondary.main,
                   borderRadius: '800px',
                 }}
                 variant="outline"

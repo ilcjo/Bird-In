@@ -1,284 +1,168 @@
 import * as React from 'react'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Divider, Grid, Tooltip, Typography, useTheme, } from '@mui/material'
-import { formatData } from '../../utils/formatDetail';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
-import { copingFilters, isFromMam, isOneLand, isSaltar, saveFilters } from '../../../redux/paisaje/slicesP/LandscapeSlice';
-import { copingFilters as copingFiltersMam } from '../../../redux/mamiferos/slices/FilterSlice';
+import { Box, Button, Link, Typography, useTheme } from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands'
+import {
+  copingFilters,
+  isFromMam,
+  isOneLand,
+  isSaltar,
+  saveFilters
+} from '../../../redux/paisaje/slicesP/LandscapeSlice'
+import { copingFilters as copingFiltersMam } from '../../../redux/mamiferos/slices/FilterSlice'
 
 export const Header = ({ imageUrl, registro, back }) => {
-  const { paises = [], zonas = [] } = useSelector(state => state.landscapeSlice.optionsP)
+  const { paises = [], zonas = [] } = useSelector(
+    state => state.landscapeSlice.optionsP
+  )
+
   const theme = useTheme()
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleClick = async (e, tipo, nombre) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const optionList = tipo === 'pais' ? paises : zonas;
-    const selectedItem = optionList.find(item => item.nombre === nombre);
+    const optionList = tipo === 'pais' ? paises : zonas
+    const selectedItem = optionList.find(item => item.nombre === nombre)
 
-    if (!selectedItem) {
-      console.warn('No se encontró el item en las opciones');
-      return;
-    }
+    if (!selectedItem) return
 
-    const selectedOption = tipo === 'pais'
-      ? { pais: [selectedItem] }
-      : { zona: [selectedItem] };
+    const selectedOption =
+      tipo === 'pais'
+        ? { pais: [selectedItem] }
+        : { zona: [selectedItem] }
 
     try {
-      const resultLength = await dispatch(sendParameterP(selectedOption));
+      const resultLength = await dispatch(sendParameterP(selectedOption))
 
-      // Armar el payload para saveFilters
-      const filtersPayload = {
-        pais: tipo === 'pais' ? [selectedItem] : [],
-        zona: tipo === 'zona' ? [selectedItem] : [],
-      };
-
-      dispatch(copingFiltersMam());
-      dispatch(saveFilters(filtersPayload));
-      dispatch(copingFilters());
-      dispatch(isSaltar(true));
+      dispatch(copingFiltersMam())
+      dispatch(
+        saveFilters({
+          pais: tipo === 'pais' ? [selectedItem] : [],
+          zona: tipo === 'zona' ? [selectedItem] : [],
+        })
+      )
+      dispatch(copingFilters())
+      dispatch(isSaltar(true))
       dispatch(isFromMam(true))
-      dispatch(isOneLand(resultLength === 1));
-      navigate('/paisajes');
+      dispatch(isOneLand(resultLength === 1))
+
+      navigate('/paisajes')
     } catch (error) {
-      console.error('Error al registrar visita', error);
+      console.error(error)
     }
-  };
-  // console.log('q',registro)
+  }
+
   return (
     <Box
-      component="div"
-      // sx={{
-      //   position: 'relative',
-      //   width: '100%',
-      //   minHeight:'800px',
-      //   height: { xs: 'auto', md: '90vh' },
-      //   display: 'flex',
-      //   flexDirection: { xs: 'column', md: 'row' },
-      //   background: '#86ac8e'
-      // }}
       sx={{
-        position: 'relative',
+        maxWidth: '1450px',
+        mx: 'auto',
         width: '100%',
-        height: { xs: 'auto', md: '90vh' },
+        borderRadius: '28px',
         overflow: 'hidden',
-        borderRadius: '0px',
-        background: '#86ac8e',
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-        background: '#86ac8e'
+        boxShadow: '0 20px 60px rgba(0,0,0,.45)',
+        minHeight: '76vh',
       }}
     >
+      {/* IMAGEN */}
       <Box
-        component="div"
         sx={{
-          width: { xs: '100%', md: '75%', lg: '75%' },
-          height: { xs: '500px', md: '100%' },
-          minWidth: '500px',
-          backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
-          backgroundColor: imageUrl ? 'transparent' : theme.palette.grey[300],
+          flex: { xs: 'none', md: '0 0 75%' },
+          height: { xs: 320, md: 'auto' },
+          backgroundImage: `url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          boxShadow: 3,
-          borderRadius: '0px 0px 0px 0px',
-          pointerEvents: 'none'
         }}
       />
+
+      {/* INFO */}
       <Box
-        component="div"
         sx={{
-          width: { xs: 'auto', md: '25%' },
-          height: { xs: 'auto', md: 'auto' },
-          backgroundColor: 'rgba(16, 51, 0, 0.9)',
-          backdropFilter: 'blur(10px)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: 5,
-          borderRadius: '0px 0px 0px 0px',
+          flex: 1,
+          p: { xs: 3, md: 5 },
+          background: 'rgba(16, 51, 0, 0.9)',
+          backdropFilter: 'blur(12px)',
+          color: 'white',
         }}
       >
-        {registro.map((data, index) => (
-          <React.Fragment key={index}>
-            <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
-              {/* <Grid item xs={12}>
-                <Typography variant='h5' color='white' sx={{ mb: 1, mt: -2 }}>
-                  ORDEN {data.order_mamifero?.nombre || 'N/A'} - {data.order_mamifero?.nombre_comun || 'N/A'}
-                </Typography>
-              </Grid> */}
-              <Grid item xs={12}>
-                <Typography variant='h4' color='primary.light' sx={{ mb: 1, mt: -2 }}>
-                  {data.familias_mamifero?.nombre || 'N/A'} / {data.grupos_mamifero?.nombre || 'N/A'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} >
-                <Typography variant="h5" color='white' >
-                  NOMBRE EN INGLÉS
-                </Typography>
-                <Typography variant='h1' color='primary' >
-                  {data.nombre_ingles || 'N/A'}
-                </Typography>
-                {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '30%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} /> */}
-                <Button
-                  sx={{
-                    mt: 1.5,
-                    fontSize: '0.8rem',
-                    alignSelf: 'center',
-                    textTransform: 'none',
-                    padding: '1px 1px',
-                  }}
-                  variant="outlined"
-                  href={data.url_wiki}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Wiki
-                </Button>
-              </Grid>
-              {/* <Box sx={{
-              // backgroundColor: 'rgba(16, 51, 0, 0.5)',
-              // backdropFilter: 'blur(10px)',
-              p: 2,
-              borderRadius: '10px',
-            }} > */}
-              {/* <Grid container spacing={1}> */}
-              <Grid item xs={12} sx={{ mt: 2 }}>
-                <Typography variant="h5" color='white' sx={{ mb: 1 }} >
-                  NOMBRE CIENTÍFICO
-                  <Typography variant='body1' color='primary.light' sx={{ mb: 0.5, fontStyle: 'italic'  }}>
-                    {data.nombre_cientifico || 'N/A'}
-                  </Typography>
-                </Typography>
-                <Typography variant="h5" color='white' sx={{ mb: 0 }}>
-                  NOMBRE COMÚN
-                  <Typography variant='body2' color='primary.light'>
-                    {data.nombre_comun || 'N/A'}
-                  </Typography>
-                </Typography>
-              </Grid>
+        {registro.map((data, i) => (
+          <Box key={i}>
+            <Typography variant="h4" color="primary.light">
+              {data.familias_mamifero?.nombre} /{' '}
+              {data.grupos_mamifero?.nombre}
+            </Typography>
 
-              {/* <Grid item xs={12}>
-                <Typography variant="h5" color='white' sx={{ mb: 1 }}>
-                  PAÍS:
-                  <Typography variant='body1' color='primary.light' sx={{ mb: 0 }}>
-                    {formatData(data.paises) || 'N/A'}
-                  </Typography>
-                </Typography>
-                <Typography variant="h5" color="white" sx={{ mb: 1 }}>
-                  ZONAS:
-                  <Typography variant="body1" color="primary.light" sx={{ mb: 0 }}>
-                    {formatData(data.zonasMamiferos) || 'N/A'}
-                  </Typography>
-                </Typography>
-              </Grid> */}
-              <Grid item xs={12}>
-                <Typography variant="h5" color="white" sx={{ mb: 1 }}>
-                  PAÍS
-                  <Box component="div" sx={{ display: 'inline', ml: 1 }}>
-                    {data.paises?.length > 0 ? data.paises.map((pais, i) => {
-                      const nombre = pais.nombre;
-                      const esLink = paises.some(p => p.nombre === nombre);
-                      const isLast = i === data.paises.length - 1;
+            <Typography variant="overline" sx={{ opacity: 0.7 }}>
+              Nombre en inglés
+            </Typography>
 
-                      return (
-                        <React.Fragment key={i}>
-                          {esLink ? (
-                            <Tooltip title="Ver Galería" arrow>
-                              <Link
-                                onClick={(e) => handleClick(e, 'pais', nombre)}
-                                // to={'/paisajes'}
-                                style={{
-                                  textDecoration: 'underline',
-                                  color: theme.palette.primary.main,
-                                  cursor: 'pointer',
-                                }}
-                                onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-                                onMouseLeave={e => (e.target.style.color =  theme.palette.primary.main)}
-                              >
-                                {nombre}
-                              </Link>
-                            </Tooltip>
-                          ) : (
-                            <Typography component="span" sx={{ display: 'inline', color: 'primary.light' }}>
-                              {nombre}
-                            </Typography>
-                          )}
-                          {!isLast && ' , '}
-                        </React.Fragment>
-                      );
-                    }) : (
-                      <Typography variant="body1" color="primary.light">N/A</Typography>
-                    )}
-                  </Box>
-                </Typography>
+            <Typography variant="h1" color="primary" sx={{ mb: 2 }}>
+              {data.nombre_ingles}
+            </Typography>
 
-                <Typography variant="h5" color="white" sx={{ mb: 1 }}>
-                  ZONAS
-                  <Box component="div" sx={{ display: 'inline', ml: 1 }}>
-                    {data.zonasMamiferos?.length > 0 ? data.zonasMamiferos.map((zona, i) => {
-                      const nombre = zona.nombre;
-                      const esLink = zonas.some(z => z.nombre === nombre);
-                      const isLast = i === data.zonasMamiferos.length - 1;
+            <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                href={data.url_wiki}
+                target="_blank"
+              >
+                Wiki
+              </Button>
+            </Box>
 
-                      return (
-                        <React.Fragment key={i}>
-                          {esLink ? (
-                            <Tooltip title="Ver Galería" arrow>
-                              <Link
-                                onClick={(e) => handleClick(e, 'zona', nombre)}
-                                // to={'/paisajes'}
-                                style={{
-                                  textDecoration: 'underline',
-                                  color:  theme.palette.primary.main,
-                                  cursor: 'pointer',
-                                }}
-                                onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-                                onMouseLeave={e => (e.target.style.color =  theme.palette.primary.main)}
-                              >
-                                {nombre}
-                              </Link>
-                            </Tooltip>
-                          ) : (
-                            <Typography component="span" sx={{ display: 'inline', color: 'primary.light' }}>
-                              {nombre}
-                            </Typography>
-                          )}
-                          {!isLast && ', '}
-                        </React.Fragment>
-                      );
-                    }) : (
-                      <Typography variant="body1" color="primary.light">N/A</Typography>
-                    )}
-                  </Box>
-                </Typography>
+            <Typography variant="subtitle1">Nombre científico</Typography>
+            <Typography sx={{ fontStyle: 'italic', mb: 2 }}>
+              {data.nombre_cientifico}
+            </Typography>
 
-              </Grid>
-            </Grid>
-          </React.Fragment>
+            <Typography variant="subtitle1">Nombre común</Typography>
+            <Typography sx={{ mb: 2 }}>
+              {data.nombre_comun}
+            </Typography>
+
+            <Typography variant="subtitle1">País</Typography>
+            {data.paises?.map((p, i) => (
+              <Link
+                key={i}
+                onClick={e => handleClick(e, 'pais', p.nombre)}
+                sx={{
+                  display: 'inline-block',
+                  mr: 1,
+                  cursor: 'pointer',
+                  color: theme.palette.primary.main,
+                }}
+              >
+                {p.nombre}
+              </Link>
+            ))}
+
+            <Typography variant="subtitle1" sx={{ mt: 2 }}>
+              Zonas
+            </Typography>
+            {data.zonasMamiferos?.map((z, i) => (
+              <Link
+                key={i}
+                onClick={e => handleClick(e, 'zona', z.nombre)}
+                sx={{
+                  display: 'inline-block',
+                  mr: 1,
+                  cursor: 'pointer',
+                  color: theme.palette.primary.main,
+                }}
+              >
+                {z.nombre}
+              </Link>
+            ))}
+          </Box>
         ))}
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: { xs: 555, md: 0 },
-            right: { xs: '0%', md: '100%' },
-          }}
-        >
-          {/* <Button
-            color='primary'
-            variant="contained"
-            onClick={back}
-            startIcon={<ArrowBackIcon />}
-            sx={{ borderRadius: '0px 0px 10px 0px' }}
-          >
-            Regresar
-          </Button> */}
-        </Box>
-      </Box >
-    </Box >
+      </Box>
+    </Box>
   )
-};
+}

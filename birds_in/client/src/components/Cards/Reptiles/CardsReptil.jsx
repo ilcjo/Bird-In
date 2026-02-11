@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { Card, CardActionArea, CardActions, CardMedia, Divider, IconButton, Typography } from '@mui/material'
+import { Box, Button, Card, CardActionArea, CardActions, CardMedia, Divider, IconButton, Typography } from '@mui/material'
 import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { Loading } from '../../utils/Loading';
 import { sendParameter } from '../../../redux/reptiles/actions/filterAction';
-
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 export const CardsReptil = React.memo(({ foto, name, index }) => {
   // console.log(foto)
   const theme = useTheme()
@@ -57,7 +57,7 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
       backgroundColor: '#103300',
       transition: 'transform 0.3s ease-out', // Transición para el efecto de agrandamiento del título y divider
       '&:hover': {
-        transform: 'scale(1.02)', // Escala aumentada al hacer hover
+        // transform: 'scale(1.02)', // Escala aumentada al hacer hover
       },
       '&:hover .divider': {
         width: '50%',
@@ -69,7 +69,14 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
       },
 
     }}>
-      <CardActionArea sx={{ position: 'relative', }}>
+      <Box
+        sx={{
+          position: 'relative',
+          '&:hover img': {
+            opacity: 0.8,
+          },
+        }}
+      >
         {destacadaImage && destacadaImage.url ? (
           <div style={{ position: 'relative' }}>
             <CardMedia
@@ -79,10 +86,10 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
               image={destacadaImage.url}
               alt={name}
               key={index}
-              onClick={handleDetailClick}
+              // onClick={handleDetailClick}
               sx={{
                 objectFit: 'cover', objectPosition: 'center center ',
-                background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
+                background: 'linear-gradient(to top, rgba(11, 53, 15, 0.45), transparent)',
                 transition: 'opacity 0.3s ease-in-out',
                 '&:hover': {
                   opacity: 0.8, // Opacidad reducida al hacer hover
@@ -99,20 +106,34 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
               padding: '30px',
               transition: 'transform 0.3s ease-out', // Transición para la posición del divider y título
             }}>
-              <Divider className="divider" sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} />
               <Typography
                 className="title"
                 variant='h2'
                 color='primary'
-                onClick={handleDetailClick}
-                style={{ cursor: 'pointer' }}
-                sx={{
-                  color: 'white',
-                  fontWeight: 'bold',
-                }}
+                sx={{ color: 'white', mb: 2 }}
               >
                 {name}
               </Typography>
+              <Button
+                sx={{
+                  position: 'absolute',
+                  right: 80,
+                  bottom: 24,
+                  borderColor: 'rgba(255,255,255,0.6)',
+                  color: '',
+                  fontWeight: 'bold',
+                  backdropFilter: 'blur(4px)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(33, 31, 31, 0.15)',
+                    borderColor: 'white',
+                  },
+                }}
+                onClick={handleDetailClick}
+                color='secondary'
+                variant="outlined"
+                endIcon={<ArrowForwardIcon />}>
+                Ver Ficha
+              </Button>
             </div>
           </div>
         ) : (
@@ -124,15 +145,13 @@ export const CardsReptil = React.memo(({ foto, name, index }) => {
               className="title"
               variant='h2'
               color='primary'
-              onClick={handleDetailClick}
-              style={{ cursor: 'pointer' }}
               sx={{ color: 'white', fontWeight: 'bold' }}
             >
               {name}
             </Typography>
           </div>
         )}
-      </CardActionArea>
+      </Box>
       <CardActions disableSpacing>
       </CardActions>
       <Loading

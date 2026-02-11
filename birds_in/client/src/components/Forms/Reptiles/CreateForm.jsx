@@ -323,7 +323,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -333,13 +333,13 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                             <Grid item xs={12} sm={9}>
                                 <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Creación
+                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                                 </Typography>
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 2 }} >
                             Subir imágenes a Galería
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
                         <Grid container sx={{}} >
                             <Grid item xs={12} sm={3} md={3}>
@@ -360,9 +360,9 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h3' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Registro
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                            {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} /> */}
                         </Typography>
 
                         <Grid container spacing={2}>
@@ -539,8 +539,8 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                                 label={option.nombre}
                                                 {...getTagProps({ index })}
                                                 sx={{
-                                                    backgroundColor: 'secondary.light',
-                                                    color: 'white',
+                                                    backgroundColor: 'secondary.main',
+                                                    color: 'secondary.dark',
                                                     '& .MuiChip-label': {
                                                         fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
                                                     }
@@ -587,7 +587,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                                 label={option.nombre}
                                                 {...getTagProps({ index })}
                                                 sx={{
-                                                    backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                    backgroundColor: 'secondary.main', color: 'secondary.dark', '& .MuiChip-label': {
                                                         fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
                                                     },
                                                 }} // Ajusta los estilos aquí

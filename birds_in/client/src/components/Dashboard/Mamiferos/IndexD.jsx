@@ -14,12 +14,21 @@ import { FamiliasGeneros } from './Class/FamiliasGeneros';
 import { Loading } from '../../utils/Loading';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-  backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-  backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+  backgroundColor: 'rgba(65, 99, 69, 0.42)', // Establece el fondo transparente deseado
+  backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
   borderRadius: '10px 10px 0px 0px',
   marginTop: '110px',
   '& .Mui-selected': {
     backgroundColor: theme.palette.custom.light,
+    background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.38) 0%,
+    // rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
+
   },
 }));
 const StyledTab = styled(Tab)({
@@ -81,14 +90,14 @@ export const IndexD = () => {
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
-        sx={{
-          backgroundColor: 'rgba(0, 56, 28, 0.1)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '20px 20px 0px 0px',
-          '& .Mui-selected': {
-            backgroundColor: theme.palette.custom.light,
-          }
-        }}
+        // sx={{
+        //   backgroundColor: 'rgba(0, 56, 28, 0.1)',
+        //   backdropFilter: 'blur(8px)',
+        //   borderRadius: '20px 20px 0px 0px',
+        //   '& .Mui-selected': {
+        //     backgroundColor: theme.palette.custom.light,
+        //   }
+        // }}
       >
         <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} />
         <StyledTab label={<Typography variant='h4'>Crear</Typography>} />

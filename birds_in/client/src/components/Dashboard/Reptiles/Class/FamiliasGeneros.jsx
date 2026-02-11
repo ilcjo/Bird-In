@@ -40,13 +40,22 @@ export const FamiliasGeneros = () => {
                 // alignItems: 'center',
                 // justifyContent: 'center',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                 width: '100%',
                 // minWidth: '1200px',
                 margin: '0 auto',
                 padding: '40px 40px 30px 40px',
                 borderRadius: '20px',
-                mb: 10
+                mb: 10,
+                background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
+
             }} >
                 <Grid item xs={6}>
                     <FamiliaAddForm

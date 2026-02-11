@@ -52,11 +52,19 @@ export const Contadores = () => {
     const renderTable = (data) => (
         <TableContainer component={Paper} sx={{
             backgroundColor: 'rgba(0, 56, 28, 0.1)',
-            backdropFilter: 'blur(3px)',
+            backdropFilter: 'blur(2px)',
             padding: '20px',
             margin: '0px',
             width: '40vw',
             borderRadius: 3,
+            background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
         }}>
             <Table>
                 <TableHead>

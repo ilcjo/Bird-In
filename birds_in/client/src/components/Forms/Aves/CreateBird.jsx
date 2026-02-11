@@ -617,8 +617,8 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                                 label={option.nombre}
                                                 {...getTagProps({ index })}
                                                 sx={{
-                                                    backgroundColor: 'secondary.light',
-                                                    color: 'white',
+                                                    backgroundColor: 'secondary.main',
+                                                    color: 'secondary.dark',
                                                     '& .MuiChip-label': {
                                                         fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
                                                     }
@@ -665,7 +665,7 @@ export const CreateBird = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                                 label={option.nombre}
                                                 {...getTagProps({ index })}
                                                 sx={{
-                                                    backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                    backgroundColor: 'secondary.main', color: 'secondary.dark', '& .MuiChip-label': {
                                                         fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
                                                     },
                                                 }} // Ajusta los estilos aquí

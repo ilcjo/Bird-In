@@ -98,9 +98,17 @@ export const Search = ({ changeTab }) => {
                         width: '170vh',
                         height: '30vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                        backdropFilter: 'blur(3px)',
+                        backdropFilter: 'blur(2px)',
                         marginTop: 'auto',
                         borderRadius: '10px',
+                        background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
                     }}>
                         <Grid item xs={12} sm={12} sx={{ mt: 0, mr: -50 }}>
                             <Typography variant="h1" color="primary">

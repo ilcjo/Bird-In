@@ -215,7 +215,7 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             Resetear
                         </Button>
 
-                        <Button variant="contained" color="primary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                        <Button variant="contained" color="secondary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
                             Mostrar
                         </Button>
 

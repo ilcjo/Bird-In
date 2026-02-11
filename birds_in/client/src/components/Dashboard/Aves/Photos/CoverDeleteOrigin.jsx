@@ -147,7 +147,7 @@ export const CoverDeleteOrigin = ({
             // localStorage.removeItem('nombreIngles')
         }
     }, [isCreate])
-    
+
     return (
         <React.Fragment>
             <Loading
@@ -173,14 +173,14 @@ export const CoverDeleteOrigin = ({
                     rgba(65, 99, 69, 0.75) 50%,
                     rgba(65, 99, 69, 0.42) 100%
                   )
-                `, 
+                `,
             }}>
                 <Grid item xs={12} md={12}>
                     <Grid container >
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombreAve ? ` ${nombreAve}` : 'del Ave'}
-                        <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -193,6 +193,7 @@ export const CoverDeleteOrigin = ({
                                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                                     }}
+                                    id="boton-buscar"
                                     variant="outlined"
                                     onClick={handleReturnSearch}
                                     startIcon={<SearchIcon />}
@@ -206,6 +207,7 @@ export const CoverDeleteOrigin = ({
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Button
+                        id="boton-eliminar"
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}

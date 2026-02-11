@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Card, CardActionArea, CardActions, CardMedia, Divider, Typography } from '@mui/material';
+import { Box, Button, Card, CardActionArea, CardActions, CardMedia, Divider, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { useDispatch } from 'react-redux';
 import { Loading } from '../../utils/Loading';
 import { sendParameter } from '../../../redux/mamiferos/actions/filterAction';
-
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 export const CardsMamiferos = React.memo(({ foto, name, index }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -56,7 +56,7 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
         backgroundColor: '#103300',
         transition: 'transform 0.3s ease-out',
         '&:hover': {
-          transform: 'scale(1.02)',
+          // transform: 'scale(1.02)',
         },
         '&:hover .divider': {
           width: '50%',
@@ -68,7 +68,15 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
         },
       }}
     >
-      <CardActionArea sx={{ position: 'relative' }}>
+      <Box
+        sx={{
+          position: 'relative',
+          '&:hover img': {
+            opacity: 0.8,
+          },
+        }}
+      >
+        {/* <CardActionArea sx={{ position: 'relative' }}> */}
         {destacadaImage && destacadaImage.url ? (
           <div style={{ position: 'relative' }}>
             <CardMedia
@@ -78,11 +86,11 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
               image={destacadaImage.url}
               alt={name}
               key={index}
-              onClick={handleDetailClick}
+              // onClick={handleDetailClick}
               sx={{
                 objectFit: 'cover',
                 objectPosition: 'center center',
-                background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
+                background: 'linear-gradient(to top, rgba(11, 53, 15, 0.45), transparent)',
                 transition: 'opacity 0.3s ease-in-out',
                 '&:hover': {
                   opacity: 0.8,
@@ -97,27 +105,41 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
                 bottom: 20,
                 width: '100%',
                 background: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)',
-                padding: '30px',
+                padding: '35px',
                 transition: 'transform 0.3s ease-out',
-                '&:hover': {
-                  transform: 'translateX(-50%) scale(1.1)', // Escala aumentada y posición del título al hacer hover
-                },
               }}
             >
-              <Divider
-                className="divider"
-                sx={{ my: 2, borderColor: theme.palette.primary.main, width: '20%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }}
-              />
+
               <Typography
                 className="title"
                 variant="h2"
                 color="primary"
-                onClick={handleDetailClick}
-                style={{ cursor: 'pointer' }}
-                sx={{ color: 'white', fontWeight: 'bold' }}
+                // onClick={handleDetailClick}
+                // style={{ cursor: 'pointer' }}
+                sx={{ color: 'white', mb: 2 }}
               >
                 {name}
               </Typography>
+              <Button
+                sx={{
+                  position: 'absolute',
+                  right: 80,
+                  bottom: 24,
+                  borderColor: 'rgba(255,255,255,0.6)',
+                  color: '',
+                  fontWeight: 'bold',
+                  backdropFilter: 'blur(4px)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(33, 31, 31, 0.15)',
+                    borderColor: 'white',
+                  },
+                }}
+                onClick={handleDetailClick}
+                color='secondary'
+                variant="outlined"
+                endIcon={<ArrowForwardIcon />}>
+                Ver Ficha
+              </Button>
             </div>
           </div>
         ) : (
@@ -129,15 +151,15 @@ export const CardsMamiferos = React.memo(({ foto, name, index }) => {
               className="title"
               variant="h2"
               color="primary"
-              onClick={handleDetailClick}
-              style={{ cursor: 'pointer' }}
+              // onClick={handleDetailClick}
+              // style={{ cursor: 'pointer' }}
               sx={{ color: 'white', fontWeight: 'bold' }}
             >
               {name}
             </Typography>
           </div>
         )}
-      </CardActionArea>
+     </Box>
       <CardActions disableSpacing></CardActions>
       <Loading message={loadingMessage} open={showBackdrop} />
     </Card>

@@ -401,7 +401,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     width: 'auto',
                     margin: 'auto',
                     backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(3px)', // Efecto de desenfoque de fondo
+                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -409,8 +409,9 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h1' color='primary' sx={{ mb: 3 }}>
+                                <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Actualización
+                                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                                 </Typography>
                             </Grid>
 
@@ -420,7 +421,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         fontSize: '1.1rem',
                                         fontWeight: 'bold',
                                         // color: theme.palette.primary.light,
-                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                        backgroundColor: 'rgba(65, 99, 69, 0.42)', // Establece el fondo transparente deseado
                                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                                     }}
                                     variant="outlined"
@@ -432,9 +433,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 2 }} >
                             Subir imágenes a la Galería
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
                         <Grid container sx={{}} >
                             <Grid item xs={12} sm={3} md={3}>
@@ -454,9 +454,9 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h3' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Registro
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                            {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} /> */}
                         </Typography>
 
                         <Grid container spacing={2}>
@@ -646,8 +646,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                                 label={option.nombre}
                                                 {...getTagProps({ index })}
                                                 sx={{
-                                                    backgroundColor: 'secondary.light',
-                                                    color: 'white',
+                                                    backgroundColor: 'secondary.main',
+                                                    color: 'secondary.dark',
                                                     '& .MuiChip-label': {
                                                         fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
                                                     }
@@ -693,7 +693,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                                 label={option.nombre}
                                                 {...getTagProps({ index })}
                                                 sx={{
-                                                    backgroundColor: 'secondary.light', color: 'white', '& .MuiChip-label': {
+                                                    backgroundColor: 'secondary.main', color: 'secondary.dark', '& .MuiChip-label': {
                                                         fontSize: '1.1rem', // Ajusta el tamaño del texto aquí
                                                     },
                                                 }} // Ajusta los estilos aquí

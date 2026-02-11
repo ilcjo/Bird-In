@@ -27,7 +27,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 const StyledTab = styled(Tab)({
     minWidth: 'auto', // Ajusta el ancho mínimo de cada pestaña
     textTransform: 'none',
-    color: '#05fe05',
+    color: '#ccd6cc',
     '&.Mui-selected .MuiTypography-root': {
         color: '#C1C700',
     },

@@ -61,7 +61,7 @@ export const HeaderAves = ({ imageUrl, bird, back }) => {
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
         boxShadow: '0 20px 60px rgba(0,0,0,.45)',
-        height:'76vh'
+        munHeight:'76vh'
         // backgroundColor: '#3A5A40',
         
       }}

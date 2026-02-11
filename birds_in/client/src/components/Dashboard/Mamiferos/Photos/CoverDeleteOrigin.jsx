@@ -150,17 +150,26 @@ export const CoverDeleteOrigin = ({
                 // minWidth: '1200px',
                 margin: '0 auto',
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(4px)',
+                backdropFilter: 'blur(2px)',
                 padding: 2,
-                borderRadius: '0px 0px 0px 0px',
-                mb: 10
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
+                  background: `
+                  linear-gradient(
+                    180deg,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(65, 99, 69, 0.75) 50%,
+                    rgba(65, 99, 69, 0.42) 100%
+                  )
+                `, 
 
             }}>
                 <Grid item xs={12} md={12}>
-                    <Grid container alignItems="center">
+                    <Grid container >
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombre ? ` ${nombre}` : 'del Mamífero'}
+                                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                             </Typography>
                         </Grid>
                         {!isCreate && (

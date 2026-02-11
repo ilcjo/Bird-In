@@ -97,7 +97,7 @@ const fetchFilterRegister = async (
         nombreCientifico = decodeQueryParam(nombreCientifico);
         nombreIngles = decodeQueryParam(nombreIngles);
 
-        const whereClause = buildWhereClause(familia, orden, grupo, nombreCientifico, nombreIngles);
+        const whereClause = buildWhereClause(familia, grupo, nombreCientifico, nombreIngles);
         let includeArr = buildIncludeArray(pais, zonas);
 
 

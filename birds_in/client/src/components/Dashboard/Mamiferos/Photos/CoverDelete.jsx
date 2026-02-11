@@ -202,10 +202,17 @@ export const CoverDelete = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-                minWidth: '1200px',
+                // minWidth: '1200px',
                 margin: '0 auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(3px)',
+                background: `
+                  linear-gradient(
+                    180deg,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(242, 246, 219, 0.14) 0%
+                  )
+                `,
+                backdropFilter: 'blur(2px)',
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 0px 0px',
                 mb: 1
@@ -224,8 +231,8 @@ export const CoverDelete = ({
                                     sx={{
                                         fontSize: '1rem',
                                         fontWeight: 'bold',
-                                        backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                                        backdropFilter: 'blur(2px)',
+                                        backgroundColor: 'rgba(65, 99, 69, 0.42)',
+                                        // backdropFilter: 'blur(2px)',
                                     }}
                                     id='boton-buscar'
                                     variant="outlined"
@@ -237,7 +244,7 @@ export const CoverDelete = ({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
@@ -247,7 +254,7 @@ export const CoverDelete = ({
                         color="error"
                         onClick={handleDeleteButtonClick}
                         endIcon={<DeleteIcon />}
-                        sx={{ mt: 0, mb: 2, color: 'primary.light' }}
+                        sx={{ mt: 0, mb: 0, color: 'primary.light' }}
                     >
                         Eliminar selección
                     </Button>
@@ -261,6 +268,15 @@ export const CoverDelete = ({
                 backdropFilter: 'blur(2px)',
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
+                pb: 5,
+                background: `
+                  linear-gradient(
+                    180deg,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(65, 99, 69, 0.75) 50%,
+                    rgba(65, 99, 69, 0.42) 100%
+                  )
+                `,
             }}>
                 {/* <DndProvider backend={HTML5Backend}>
                     <ImageDragContainer
