@@ -7,81 +7,62 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
   const theme = useTheme()
   return (
     <Box
-      component="div"
       sx={{
-        position: 'relative',
+        maxWidth: '1450px',
+        mx: 'auto',
         width: '100%',
-        height: { xs: 'auto', md: '90vh' },
+        borderRadius: '28px',
         overflow: 'hidden',
-        borderRadius: '0px 0px 0px 0px',
-        background: '#86ac8e',
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-        background: '#86ac8e'
+        boxShadow: '0 20px 60px rgba(0,0,0,.45)',
+        minHeight: '76vh'
+        // backgroundColor: '#3A5A40',
+
       }}
     >
+      {/* IMAGEN */}
       <Box
-        component="div"
         sx={{
-          width: { xs: '100%', md: '75%', lg: '75%' },
-          height: { xs: '500px', md: '100%' },
-          minWidth: '500px',
-          backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
-          backgroundColor: imageUrl ? 'transparent' : theme.palette.grey[300],
+          flex: { xs: 'none', md: '0 0 75%' },
+          height: { xs: 320, md: 'auto' },
+          backgroundImage: `url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          boxShadow: 3,
-          borderRadius: '0px 0px 0px 0px',
-          pointerEvents: 'none'
         }}
       />
+
+      {/* INFO */}
       <Box
-        component="div"
         sx={{
-          width: { xs: 'auto', md: '25%' },
-          height: { xs: 'auto', md: 'auto' },
-          backgroundColor: 'rgba(16, 51, 0, 0.9)',
-          backdropFilter: 'blur(10px)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: 5,
-          borderRadius: '0px 0px 0px 0px',
+          flex: 1,
+          p: { xs: 3, md: 5 },
+          background: 'rgba(58, 90, 64, 0.88), 0.92)',
+          backdropFilter: 'blur(12px)',
+          color: 'white',
         }}
       >
         {registro.map((data, index) => (
-          <React.Fragment key={index}>
-            <Grid container spacing={1} sx={{ mt: { xs: 0, md: 4 }, }}>
+          <Box key={index}>
               {/* <Grid item xs={12}>
                 <Typography variant='h6' color='primary.light' sx={{ mb: 1, mt: -2 }}>
                   {data.familias_insecto.nombre || 'N/A'} / {data.grupos_insecto.nombre || 'N/A'}
                 </Typography>
               </Grid> */}
 
-              <Grid item xs={12} >
-                <Typography variant="h4" color='white' sx={{mb:1, mt:2}} >
-                  ORDEN
+                <Typography variant="overline" sx={{ opacity: .7 }}  >
+                  Orden
                 </Typography>
-                <Typography variant='h1' color='primary' >
+                <Typography variant='h1' color='primary' sx={{ mb: 2 }} >
                   {data.nombre_ingles || 'N/A'}
                 </Typography>
                 {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, width: '30%', height: '2px', borderBottomWidth: '3px', borderRadius: '10px', }} /> */}
-                <Button
-                  sx={{
-                    mt: 1.5,
-                    fontSize: '0.8rem',
-                    alignSelf: 'center',
-                    textTransform: 'none',
-                    padding: '1px 1px',
-                  }}
-                  variant="outlined"
-                  href={data.url_wiki}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Wiki
-                </Button>
-              </Grid>
+                 <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
+                              <Button size="small" variant="outlined" href={data.url_wiki} target="_blank">
+                                Wiki
+                              </Button>
+                            </Box>
+              
               {/* <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography variant="h5" color='white' sx={{ mb: 1 }} >
                   NOMBRE CIENTÍFICO
@@ -97,7 +78,7 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
                 </Typography>
               </Grid> */}
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}> */}
                 {/* <Typography variant="h4" color='primary.light' sx={{ mb: 0.5 }}>
                   PAÍS
                   <Typography variant='h6' color='primary.light' sx={{ mb: 1 }}>
@@ -110,18 +91,17 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
                     {formatData(data.zonasInsectos) || 'N/A'}
                   </Typography>
                 </Typography> */}
-              </Grid>
-            </Grid>
-          </React.Fragment>
+              {/* </Grid> */}
+          </Box>
         ))}
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: { xs: 555, md: 0 },
-          right: { xs: '0%', md: '100%' },
-        }}
-      >
-        {/* <Button
+        {/* <Box
+          sx={{
+            position: 'absolute',
+            bottom: { xs: 555, md: 0 },
+            right: { xs: '0%', md: '100%' },
+          }}
+        > */}
+          {/* <Button
             color='primary'
             variant="contained"
             onClick={back}
@@ -130,8 +110,8 @@ export const HeaderI = ({ imageUrl, registro, back }) => {
           >
             Regresar
           </Button> */}
+        {/* </Box> */}
       </Box>
-    </Box>
     </Box >
   )
 };

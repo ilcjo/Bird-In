@@ -69,7 +69,7 @@ export const MenuBar = ({ isFilterOpen, setIsFilterOpen, ShowFilterButton, ShowB
           left: 0,
           width: '100%',
           height: '50px',
-          zIndex: 1400,
+          zIndex: 1000,
           backdropFilter: 'blur(9px)',
           // background: 'rgba(0, 0, 0, 0.35)',
           borderBottom: '2px solid rgba(255,255,255,0.15)',

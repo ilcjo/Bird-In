@@ -253,198 +253,273 @@ export const HeaderLand = ({ imageUrl, register, back }) => {
     }
   };
   
-  return (
-    <Box sx={{ width: '100%' }}>
-      {/* Imagen de fondo */}
-      <Box
-        sx={{
-          width: '100%',
-          height: '76vh',
-          backgroundImage: `url(${imageUrl})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Panel de información */}
-      <Paper
-  elevation={6}
+return (
+  <Box
   sx={{
+    maxWidth: '1450px',
+    mx: 'auto',
     width: '100%',
-    mt: -3,
-    backgroundColor: 'rgba(16, 51, 0, 0.85)',
-    backdropFilter: 'blur(6px)',
-    borderRadius: '0 0 12px 0px',
-    padding: 4,
+    borderRadius: '28px',
+    overflow: 'hidden',
+    boxShadow: '0 20px 60px rgba(0,0,0,.45)',
   }}
 >
-  {register.map((data, index) => (
-    <Grid container spacing={1} alignItems="flex-start" key={index}>
-      <Grid item xs={12} sm={4}>
-        <Typography variant="h4" color="white" gutterBottom>PAÍS</Typography>
-        <Typography variant="h1" color="primary">
-          {data.paise.nombre || 'N/A'}
-        </Typography>
-      </Grid>
+  {/* HERO IMAGE */}
+  <Box
+    sx={{
+      width: '100%',
+      height: { xs: 320, md: 500 },
+      backgroundImage: `url(${imageUrl})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      position: 'relative',
 
-      <Grid item xs={12} sm={5}>
-        <Typography variant="h4" color="white" gutterBottom>ZONA</Typography>
-        <Typography variant="h1" color="primary">
-          {data.zona.nombre || 'N/A'}
-        </Typography>
-      </Grid>
-
-      <Grid item xs={12} sm={2}>
-        <Typography variant="h4" color="white" gutterBottom>INFO</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
-          <Button
-            variant="outlined"
-            sx={{ textTransform: 'none', flex: 1, fontSize: '0.8rem' }}
-            href={data.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Wiki
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<LocationOnIcon />}
-            sx={{ textTransform: 'none', flex: 1, fontSize: '0.8rem' }}
-            href={data.map}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Maps
-          </Button>
-        </Box>
-      </Grid>
-    </Grid>
-  ))}
-
-  {/* Sección de Biodiversidad debajo de los datos de país/zona/info */}
-  {/* Sección de Biodiversidad debajo de los datos de país/zona/info */}
-<Box mt={4}>
-  {(infoBirds?.length || infoMamiferos?.length || infoRept?.length) > 0 && (
-    <Typography variant="h4" color="white" gutterBottom>
-      BIODIVERSIDAD
-    </Typography>
-  )}
-
-  {/* Aves */}
-  {infoBirds?.length > 0 && (
-    <>
-      <Typography variant="h5" color="white" gutterBottom>
-        Aves
-      </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 2,
-          alignItems: 'center',
-          mb: 2,
-        }}
-      >
-        {infoBirds.map((ave, index) => (
-          <Link
-          key={index}
-          to=""
-          onClick={(e) => handleClickB(e, ave.nombre_ingles, 'aves')}
-          style={{
-            textDecoration: 'underline',
-            color: theme.palette.primary.main,
-            fontSize: '1rem',
-            cursor: 'pointer',
-          }}
-          onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-          onMouseLeave={e => (e.target.style.color =  theme.palette.primary.main)}
-        >
-          {ave.nombre_ingles}
-        </Link>
-        
-        ))}
-      </Box>
-    </>
-  )}
-
-  {/* Mamíferos */}
-  {infoMamiferos?.length > 0 && (
-    <>
-      <Typography variant="h5" color="white" gutterBottom>
-        Mamíferos
-      </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 2,
-          alignItems: 'center',
-          mb: 2,
-        }}
-      >
-        {infoMamiferos.map((mamifero, index) => (
-  <Link
-    key={index}
-    to=""
-    onClick={(e) => handleClickM(e, mamifero.nombre_ingles)}
-    style={{
-      textDecoration: 'underline',
-      color: theme.palette.primary.main,
-      cursor: 'pointer',
+      '&::after': {
+        content: '""',
+        position: 'absolute',
+        inset: 0,
+        background:
+          'linear-gradient(to bottom, rgba(0, 0, 0, 0.06), rgba(16, 51, 0, 0.3))',
+      },
     }}
-    onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-    onMouseLeave={e => (e.target.style.color = theme.palette.primary.main)}
+  />
+
+  {/* PANEL INFO */}
+  <Box
+    sx={{
+      width: '100%',
+      background: 'rgba(16, 51, 0, 0.9)',
+      backdropFilter: 'blur(12px)',
+      p: { xs: 3, md: 2 },
+      color: 'white',
+    }}
   >
-    {mamifero.nombre_ingles}
-  </Link>
-))}
+      {register.map((data, index) => (
+        <Box key={index} maxWidth="1200px" mx="auto">
 
-      </Box>
-    </>
-  )}
+          {/* TITULOS PRINCIPALES */}
+          <Grid container spacing={1} alignItems="flex-start">
+            <Grid item xs={12} md={5}>
+              <Typography variant="subtitle1" sx={{ opacity: 0.7 }}>
+                País
+              </Typography>
+              <Typography
+                variant="h1"
+                color="primary"
+                sx={{
+                }}
+              >
+                {data.paise?.nombre || 'N/A'}
+              </Typography>
+            </Grid>
 
-  {/* Reptiles */}
-  {infoRept?.length > 0 && (
-    <>
-      <Typography variant="h5" color="white" gutterBottom>
-        Reptiles
-      </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 2,
-          alignItems: 'center',
-          mb: 2,
-        }}
-      >
-        {infoRept.map((reptil, index) => (
-          <Link
-          key={index}
-          to=""
-          onClick={(e) => handleClickR(e, reptil.nombre_ingles, 'reptil')}
-          style={{
-            textDecoration: 'underline',
-            color: theme.palette.primary.main,
-            fontSize: '1rem',
-            cursor: 'pointer',
-          }}
-          onMouseEnter={e => (e.target.style.color = theme.palette.primary.light)}
-          onMouseLeave={e => (e.target.style.color =  theme.palette.primary.main)}
-        >
-            {reptil.nombre_ingles}
-          </Link>
-        ))}
-      </Box>
-    </>
-  )}
-</Box>
-</Paper>
+            <Grid item xs={12} md={5}>
+              <Typography variant="subtitle1" sx={{ opacity: 0.7 }}>
+                Zona
+              </Typography>
+              <Typography
+                variant="h1"
+                color="primary"
+                sx={{
+                 
+                }}
+              >
+                {data.zona?.nombre || 'N/A'}
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12} md={2}>
+              <Typography variant="subtitle1" sx={{ opacity: 0.7 }}>
+                Info
+              </Typography>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1,
+                }}
+              >
+                <Button
+                size="small"
+                  variant="outlined"
+                  // sx={{ textTransform: 'none' }}
+                  href={data.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Wiki
+                </Button>
+
+                <Button
+                 size="small"
+                  variant="outlined"
+                  startIcon={<LocationOnIcon />}
+                  // sx={{ textTransform: 'none' }}
+                  href={data.map}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Maps
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+
+          {/* BIODIVERSIDAD */}
+          <Box mt={0}>
+            {(infoBirds?.length ||
+              infoMamiferos?.length ||
+              infoRept?.length) > 0 && (
+              <Typography
+                variant="h4"
+                sx={{ mb: 3 }}
+                color="primary.light"
+              >
+                Biodiversidad
+              </Typography>
+            )}
+
+            {/* AVES */}
+            {infoBirds?.length > 0 && (
+              <>
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  Aves
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 2,
+                    mb: 3,
+                  }}
+                >
+                  {infoBirds.map((ave, index) => (
+                    <Link
+                      key={index}
+                      to=""
+                      onClick={(e) =>
+                        handleClickB(e, ave.nombre_ingles, 'aves')
+                      }
+                      style={{
+                        textDecoration: 'underline',
+                        color: theme.palette.primary.main,
+                        cursor: 'pointer',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.target.style.color =
+                          theme.palette.primary.light)
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.color =
+                          theme.palette.primary.main)
+                      }
+                    >
+                      {ave.nombre_ingles}
+                    </Link>
+                  ))}
+                </Box>
+              </>
+            )}
+
+            {/* MAMIFEROS */}
+            {infoMamiferos?.length > 0 && (
+              <>
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  Mamíferos
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 2,
+                    mb: 3,
+                  }}
+                >
+                  {infoMamiferos.map((mamifero, index) => (
+                    <Link
+                      key={index}
+                      to=""
+                      onClick={(e) =>
+                        handleClickM(e, mamifero.nombre_ingles)
+                      }
+                      style={{
+                        textDecoration: 'underline',
+                        color: theme.palette.primary.main,
+                        cursor: 'pointer',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.target.style.color =
+                          theme.palette.primary.light)
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.color =
+                          theme.palette.primary.main)
+                      }
+                    >
+                      {mamifero.nombre_ingles}
+                    </Link>
+                  ))}
+                </Box>
+              </>
+            )}
+
+            {/* REPTILES */}
+            {infoRept?.length > 0 && (
+              <>
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  Reptiles
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 2,
+                  }}
+                >
+                  {infoRept.map((reptil, index) => (
+                    <Link
+                      key={index}
+                      to=""
+                      onClick={(e) =>
+                        handleClickR(
+                          e,
+                          reptil.nombre_ingles,
+                          'reptil'
+                        )
+                      }
+                      style={{
+                        textDecoration: 'underline',
+                        color: theme.palette.primary.main,
+                        cursor: 'pointer',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.target.style.color =
+                          theme.palette.primary.light)
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.color =
+                          theme.palette.primary.main)
+                      }
+                    >
+                      {reptil.nombre_ingles}
+                    </Link>
+                  ))}
+                </Box>
+              </>
+            )}
+          </Box>
+        </Box>
+      ))}
     </Box>
-    
-  );
+  </Box>
+);
+
 };
+
 // import * as React from 'react';
 // import { Box, Button, Divider, Grid, Typography, useTheme } from '@mui/material';
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';

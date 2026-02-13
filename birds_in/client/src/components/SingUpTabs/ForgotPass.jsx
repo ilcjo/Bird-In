@@ -81,7 +81,7 @@ export const ForgotPass = () => {
           />
         </form>
         <Grid container component={Box} justifyContent="center" size="medium">
-          <Button variant="contained" onClick={handlePass} color="primary"
+          <Button variant="contained" onClick={handlePass} color="secondary"
             endIcon={<SendIcon />}
             sx={{ fontSize: { xs: '1rem' } }}
           >

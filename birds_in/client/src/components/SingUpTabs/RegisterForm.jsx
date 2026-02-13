@@ -309,7 +309,7 @@ export const RegisterForm = ({ changeTab, close }) => {
             sx={{ fontSize: { xs: '1rem' } }}
             variant="contained"
             onClick={handleSubmit}
-            color="primary"
+            color="secondary"
             disabled={isButtonDisabled()}
             endIcon={<SendIcon />}
           >

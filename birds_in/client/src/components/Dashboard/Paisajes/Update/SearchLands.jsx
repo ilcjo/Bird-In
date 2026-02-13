@@ -67,7 +67,7 @@ export const SearchLands = ({ changeTab }) => {
             dispatch(getInfoForUpdateNameP(valor)); // Llama al action con el valor obtenido
             setShowUpdateRegister(true); // Cambia a la vista de actualización
             setShowSearchRegister(false); // Oculta la vista de búsqueda
-            
+
         } else {
             console.error('nombreIngles no se encuentra en localStorage');
         }
@@ -101,29 +101,29 @@ export const SearchLands = ({ changeTab }) => {
                 const response = await axios.get('/paisajes/filtros?page=0&perPage=0');
                 const data = response.data.RegistrosFiltrados;
                 console.log(data);
-    
+
                 // Filtrar los registros para que incluyan solo aquellos con una zona o un país
                 const validData = data.filter((item) => item.zona || item.paise);
                 console.log(validData);
-    
+
                 // Mapear los datos para mostrar el nombre de la zona o el país
                 const formattedData = validData.map((item) => {
                     const nombre = item.zona?.nombre || item.paise?.nombre || ""; // Prioridad a zona, luego a país
                     const id = item.id;
-    
+
                     return {
                         id: id,
                         nombre: nombre,
                     };
                 });
-    
+
                 // Ordenar los datos alfabéticamente por el nombre
                 const sortedData = formattedData.sort((a, b) => {
                     const nameA = a.nombre.toLowerCase();
                     const nameB = b.nombre.toLowerCase();
                     return nameA.localeCompare(nameB);
                 });
-    
+
                 // Guardar los datos ordenados
                 localStorage.setItem('LandsData', JSON.stringify(sortedData)); // Guarda los datos ordenados en localStorage
                 setRegisterData(sortedData); // Actualiza el estado con los datos ordenados
@@ -151,9 +151,17 @@ export const SearchLands = ({ changeTab }) => {
                         width: '170vh',
                         height: '30vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                        backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                         marginTop: 'auto',
                         borderRadius: '10px',
+                        background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
                     }} >
                         <Grid item xs={12} sm={12} sx={{ mt: 0, mr: -50 }}>
                             <Typography variant="h1" color="primary">

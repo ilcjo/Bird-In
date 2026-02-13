@@ -6,14 +6,21 @@ import { CreateLand } from '../../../Forms/Paisajes/CreateLand';
 import { CoverDeleteP } from '../Photos/CoverDeleteP';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+    backgroundColor: 'rgba(65, 99, 69, 0.55)',
+    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     width: '100%',
     boxSizing: 'border-box',
     '& .Mui-selected': {
         backgroundColor: theme.palette.custom.light,
+        background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.38) 0%,
+    
+  )
+`,
     },
 }));
 const StyledTab = styled(Tab)({
@@ -60,13 +67,23 @@ export const IndexTabsCreateP = ({
     // };
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '99%', margin: '0 auto', minWidth: '1200px' }}>
+            <Box sx={{
+                width: '100%', maxWidth: '99%', margin: '0 auto', minWidth: '1200px', background: `
+  linear-gradient(
+    180deg,
+   rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
+                borderRadius: '15px'
+            }}>
 
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
                     textColor='primary'
-                    indicatorColor="primary"
+                    indicatorColor="secondary"
                     aria-label="tabsInfoActualizar"
                 >
                     <StyledTab label={<Typography variant='h4' >
@@ -90,15 +107,15 @@ export const IndexTabsCreateP = ({
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                         <React.Fragment>
-                        <CoverDeleteP
-                            isCreate={true}
-                            changeTab={changeTab}
-                            showUpdateRegister={showUpdateRegister}
-                            showSearchRegister={showSearchRegister}
-                            selectedRegister={selectedRegister}
-                            setCoverSelected={handleSetCoverSelected}
-                        />
+                        <React.Fragment>
+                            <CoverDeleteP
+                                isCreate={true}
+                                changeTab={changeTab}
+                                showUpdateRegister={showUpdateRegister}
+                                showSearchRegister={showSearchRegister}
+                                selectedRegister={selectedRegister}
+                                setCoverSelected={handleSetCoverSelected}
+                            />
                         </React.Fragment>
                     )}
                 </Box>

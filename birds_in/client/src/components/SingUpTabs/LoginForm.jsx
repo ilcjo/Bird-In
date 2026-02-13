@@ -239,6 +239,7 @@ export const LoginForm = ({ changeTab }) => {
             loadingPosition="end"
             disabled={!loginData.email && !loginData.password}
             variant='contained'
+            color='secondary'
           >
             <span>Entrar</span>
           </LoadingButton>

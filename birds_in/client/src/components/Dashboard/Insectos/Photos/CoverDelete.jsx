@@ -208,10 +208,17 @@ export const CoverDelete = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-                minWidth: '1200px',
+                // minWidth: '1200px',
                 margin: '0 auto',
-                backgroundColor: 'rgba(0, 56, 28, 0.1)',
-                backdropFilter: 'blur(3px)',
+                background: `
+                  linear-gradient(
+                    180deg,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(242, 246, 219, 0.14) 0%
+                  )
+                `,
+                backdropFilter: 'blur(2px)',
                 padding: '0px 40px 30px 0px',
                 borderRadius: '0px 0px 0px 0px',
                 mb: 1,
@@ -221,17 +228,17 @@ export const CoverDelete = ({
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombre ? ` ${nombre}` : 'del Insecto'}
+                                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                             </Typography>
                         </Grid>
                         {!isCreate && (
                             <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
                                 <Button
                                     sx={{
-                                        fontSize: '1.1rem',
+                                        fontSize: '1rem',
                                         fontWeight: 'bold',
                                         // color: theme.palette.primary.light,
-                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
+                                        backgroundColor: 'rgba(65, 99, 69, 0.42)', // Establece el fondo transparente deseado
                                     }}
                                     id="boton-buscar"
                                     variant="outlined"
@@ -243,10 +250,9 @@ export const CoverDelete = ({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                     <Button
                         id="boton-eliminar"
                         variant="contained"
@@ -265,7 +271,16 @@ export const CoverDelete = ({
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
                 borderRadius: '0px 0px 20px 20px',
+               pb: 5,
                 mb: 10,
+                background: `
+                  linear-gradient(
+                    180deg,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(65, 99, 69, 0.75) 50%,
+                    rgba(65, 99, 69, 0.42) 100%
+                  )
+                `,
             }}>
                 <PhotosOrganizerContainer
                     ref={organizerRef}

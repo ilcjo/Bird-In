@@ -218,7 +218,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
         setOpenSnackbar(false);
     };
 
-    
+
     const handleLogoClickW = () => {
         if (createData.urlWiki) {
             window.open(createData.urlWiki, '_blank');
@@ -243,8 +243,8 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                     justifyContent: 'center',
                     width: 'auto',
                     margin: 'auto',
-                    backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+                    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -255,6 +255,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                             <Grid item xs={12} sm={9}>
                                 <Typography variant='h1' color='primary' sx={{ mb: 1.5 }} >
                                     Formulario de Actualización
+                                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                                 </Typography>
                             </Grid>
 
@@ -264,7 +265,7 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                                         fontSize: '1rem',
                                         fontWeight: 'bold',
                                         // color: theme.palette.primary.light,
-                                        backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                                        backgroundColor: 'rgba(65, 99, 69, 0.42)', // Establece el fondo transparente deseado
                                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                                     }}
                                     variant="outlined"
@@ -276,12 +277,11 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                             </Grid>
                         </Grid>
 
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 2 }} >
                             Subir imágenes a la Galería
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
-                        <Grid container sx={{ mt: 0 }} >
+                        <Grid container sx={{}} >
                             <Grid item xs={12} sm={3} md={3}>
                                 <ImageUploader
                                     allImageURLs={allImageURLs}
@@ -300,9 +300,9 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                     </Grid>
 
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h4' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h3' color='primary.light' sx={{ mb: 2 }} >
                             Datos del Paisaje
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                            {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} /> */}
                         </Typography>
 
                         <Grid container spacing={2}>
@@ -408,19 +408,19 @@ export const UpdatePaisaje = ({ isEnable, changeTab, showUpdateRegister, showSea
                                     }}
                                 />
                             </Grid>
-                        </Grid>
-                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <Button
-                                endIcon={<DeleteForeverIcon />}
-                                variant="contained"
-                                color='custom'
-                                onClick={handleDeleteRegistro}
-                                sx={{
-                                    color: theme.palette.primary.light,
-                                }}
-                            >
-                                Eliminar Registro
-                            </Button>
+                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <Button
+                                    endIcon={<DeleteForeverIcon />}
+                                    variant="contained"
+                                    color='custom'
+                                    onClick={handleDeleteRegistro}
+                                    sx={{
+                                        color: theme.palette.primary.light,
+                                    }}
+                                >
+                                    Eliminar Registro
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>

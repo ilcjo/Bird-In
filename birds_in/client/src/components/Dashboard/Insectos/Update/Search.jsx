@@ -90,15 +90,22 @@ export const Search = ({ changeTab }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         width: '170vh',
-                        height: '40vh',
+                        height: '30vh',
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-                        backdropFilter: 'blur(4px)', // Efecto de desenfoque de fondo
+                        backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                         marginTop: 'auto',
-                        borderRadius: '10px',
+                        background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.14) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.42) 100%
+  )
+`,
                     }} >
-                        <Grid item xs={12} sm={12} sx={{ mt: -5, mr: -30 }}>
-                            <Typography variant="h2" color="primary">
-                                Buscar Registro
+                        <Grid item xs={12} sm={12} sx={{ mt: 0, mr: -50 }}>
+                            <Typography variant="h1" color="primary">
+                                Buscar Insecto
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={8}>
@@ -115,7 +122,7 @@ export const Search = ({ changeTab }) => {
                                     />
                                 )}
 
-                                sx={{ mb: 3, mt: -10 }}
+                                sx={{ mb: 3, mt: -5 }}
                             />
                         </Grid>
                     </Grid>

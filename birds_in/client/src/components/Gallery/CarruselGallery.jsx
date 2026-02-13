@@ -48,7 +48,7 @@ export const CarruselGallery = ({ isOpen, images, onClose, selectedIndex }) => {
             {
               key: 'image-name',
               render: () => (
-                <div style={{ position: 'absolute', bottom: 10, left: 10, color: 'white', zIndex: 1 }}>
+                <div style={{ position: 'absolute', bottom: 10, left: 10, color: 'white', zIndex: 9999 }}>
                   {viewerImages[viewerIndex] && viewerImages[viewerIndex].alt}
                 </div>
               ),

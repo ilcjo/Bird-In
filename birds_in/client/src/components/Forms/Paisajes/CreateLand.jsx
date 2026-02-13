@@ -45,7 +45,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [formSubmitted, setFormSubmitted] = React.useState(false);
     const [isFromCreate, setIsFromCreate] = React.useState(false);
     const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
-    
+
     const [createData, setCreateData] = React.useState({
         pais: null,
         zona: null,
@@ -129,7 +129,7 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 // Llama a la función para comprobar duplicados
                 await dispatch(duplicateNameCheckP(newValue.id));
             } catch (error) {
-                
+
                 // Si hay un error, muestra un mensaje de error
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Este Registro ya existe');
@@ -310,8 +310,8 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     justifyContent: 'center',
                     width: 'auto',
                     margin: 'auto',
-                    backgroundColor: 'rgba(0, 56, 28, 0.10)', // Establece el fondo transparente deseado
-                    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+                    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
+                    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                     padding: '0px 40px 30px 0px',
                     borderRadius: '0px 0px 20px 20px',
                     mb: 10,
@@ -319,14 +319,14 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                     <Grid item xs={12} sm={12}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={9}>
-                                <Typography variant='h2' color='primary' sx={{ mb: 2 }}>
+                                <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Creación
+                                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                                 </Typography>
                             </Grid>
                         </Grid>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h4' color='primary.light' sx={{ mb: 2 }} >
                             Subir imágenes a Galería
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
                         <Grid container sx={{}} >
@@ -348,9 +348,8 @@ export const CreateLand = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <Typography variant='h5' color='primary.light' sx={{ mb: 1 }} >
+                        <Typography variant='h3' color='primary.light' sx={{ mb: 1 }} >
                             Datos del Paisaje
-                            <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                         </Typography>
 
                         <Grid container spacing={2}>

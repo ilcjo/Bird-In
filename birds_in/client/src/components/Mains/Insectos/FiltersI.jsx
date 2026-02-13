@@ -153,8 +153,8 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 sx={{
                     height: 'auto',
                     borderRadius: '20px',
-                    backgroundColor: 'rgba(0, 61, 21, 0.0)',
-                    padding: { xs: 0, md: 1 },
+                    // backgroundColor: 'rgba(0, 61, 21, 0.0)',
+                    padding: { xs: 0, md: 2 },
                 }} >
                 <Grid item >
                     <Typography variant="h2" color='primary.light' sx={{ m: 1, mt: -1 }}>
@@ -163,7 +163,7 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                 </Grid>
                 <Grid container alignItems="center">
                     <Grid item xs={12}>
-                        <FormControl sx={{ m: 1, width: '95%' }} >
+                        {/* <FormControl sx={{ m: 1, width: '95%' }} > */}
                             <Autocomplete
                                 multiple
                                 value={selectOption.ingles}
@@ -200,13 +200,13 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                                 isOptionEqualToValue={(option, value) => option.id === value?.id}
                                 disabled={nIngles?.length === 0}
                             />
-                        </FormControl>
+                        {/* </FormControl> */}
                     </Grid>
                     <Stack spacing={1} direction="row" justifyContent="center"
                         alignItems="center"
                         sx={{
                             margin: '20px auto', // Centrar horizontalmente el Stack
-                            width: 'fit-content', // Ajustar el ancho al contenido
+                            // width: 'fit-content', // Ajustar el ancho al contenido
                         }} >
                         <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
                             < CloseIcon /> Cerrar
