@@ -320,16 +320,16 @@ const getExcel = async (req, res) => {
    try {
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
       const aves = await VistaMamiferosOrdenadaAll.findAll();
-
+console.log("Cantidad de registros:", aves.length);
       // Crea un nuevo workbook y worksheet con excel.js
       const workbook = new exceljs.Workbook();
       const worksheet = workbook.addWorksheet('Aves');
 
       // Define las columnas en tu archivo Excel
       worksheet.columns = [
+         { header: 'Nombre Común', key: 'nombre_comun', width: 20 },
          { header: 'Nombre Inglés', key: 'nombre_ingles', width: 20 },
          { header: 'Nombre Científico', key: 'nombre_cientifico', width: 20 },
-         { header: 'Nombre Común', key: 'nombre_comun', width: 20 },
          // { header: 'Nombre Orden', key: 'nombre_orden', width: 20 },
          // { header: 'Nombre Order', key: 'nombre_order', width: 20 },
          { header: 'Nombre Familia', key: 'nombre_familia', width: 20 },
@@ -337,18 +337,19 @@ const getExcel = async (req, res) => {
          { header: 'Paises', key: 'paises', width: 20 },
          { header: 'Zonas', key: 'zonas', width: 20 },
          { header: 'URL Wiki', key: 'url_wiki', width: 20 },
-         { header: 'Portada', key: 'tiene_portada', width: 20 },
          { header: 'Imágenes', key: 'imagenes', width: 20 },
+         { header: 'Portada', key: 'tiene_portada', width: 20 },
          // Añade más columnas según los datos que quieras incluir en tu archivo Excel
       ];
 
       // Agrega las filas al worksheet con los datos de las aves
       aves.forEach((registro) => {
          worksheet.addRow({
+            nombre_comun: registro.nombre_comun,
             nombre_ingles: registro.nombre_ingles,
             nombre_cientifico: registro.nombre_cientifico,
-            nombre_comun: registro.nombre_comun,
             nombre_familia: registro.nombre_familia,
+            nombre_grupo: registro.nombre_grupo,
             // nombre_orden: registro.nombre_orden,
             // nombre_order: registro.nombre_order,
             paises: registro.paises,
@@ -385,15 +386,15 @@ const checkClases = async (req, res) => {
 };
 
 const checkDuplicateNames = async (req, res) => {
-   const { grupoName, familiaName, ordenName } = req.query;
+   const { grupoName, familiaName } = req.query;
    try {
       if (grupoName) {
          const message = await findGroupNameDuplicate(grupoName);
          return res.status(200).json({ message });
-      } else if (ordenName) {
-         console.log('llegue')
-         const message = await findOrdenNameDuplicate(ordenName);
-         return res.status(200).json({ message });
+      // } else if (ordenName) {
+      //    console.log('llegue')
+      //    const message = await findOrdenNameDuplicate(ordenName);
+      //    return res.status(200).json({ message });
       } else if (familiaName) {
          const message = await findFamilyNameDuplicate(familiaName);
          return res.status(200).json({ message });

@@ -1204,7 +1204,7 @@ const findGroupNameDuplicate = async (nombreGrupo) => {
 
         // Si encuentra un grupo con el mismo nombre, arroja un error
         if (existingGroup) {
-            throw new Error("Este Nombre de Orden ya existe.");
+            throw new Error("Este Nombre de Grupo ya existe.");
         }
 
         // Si no hay duplicado, retorna un mensaje de éxito (opcional)

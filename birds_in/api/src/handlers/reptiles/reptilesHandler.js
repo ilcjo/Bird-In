@@ -342,6 +342,7 @@ const getExcel = async (req, res) => {
             nombre_cientifico: registro.nombre_cientifico,
             nombre_comun: registro.nombre_comun,
             nombre_familia: registro.nombre_familia,
+            nombre_grupo: registro.nombre_grupo,
             paises: registro.paises,
             zonas: registro.zonas,
             url_wiki: registro.url_wiki,
