@@ -59,6 +59,7 @@ const {
   Mamiferos, Order_mamiferos, Familias_mamiferos, Grupos_mamiferos, Imagenes_mamiferos,
   Reptiles, Order_reptiles, Grupos_reptiles, Familias_reptiles, Imagenes_reptiles,
   Insectos, Grupos_insectos, Familias_insectos, Imagenes_insectos,
+   Peces, Grupos_peces, Familias_peces, Imagenes_peces,
 } = db.models;
 // console.log(db.models)
 // UNO A UNO
@@ -113,6 +114,13 @@ Insectos.belongsTo(Familias_insectos, { foreignKey: 'familias_id_familia' })
 Grupos_insectos.hasMany(Insectos, { foreignKey: 'grupos_id_grupo' })
 Insectos.belongsTo(Grupos_insectos, { foreignKey: 'grupos_id_grupo' })
 
+// // =>  PECES
+Familias_peces.hasMany(Peces, { foreignKey: 'familias_id_familia' })
+Peces.belongsTo(Familias_peces, { foreignKey: 'familias_id_familia' })
+Grupos_peces.hasMany(Peces, { foreignKey: 'grupos_id_grupo' })
+Peces.belongsTo(Grupos_peces, { foreignKey: 'grupos_id_grupo' })
+
+
 // UNO A MUCHOS
 
 //IMÁGENES AVES
@@ -130,6 +138,9 @@ Imagenes_reptiles.belongsTo(Reptiles, { foreignKey: 'reptiles_id_reptil' })
 //INSECTOS
 Insectos.hasMany(Imagenes_insectos, { foreignKey: 'insectos_id_insecto' })
 Imagenes_insectos.belongsTo(Insectos, { foreignKey: 'insectos_id_insecto' })
+//PECES
+Peces.hasMany(Imagenes_peces, { foreignKey: 'peces_id_pez' })
+Imagenes_peces.belongsTo(Peces, { foreignKey: 'peces_id_pez' })
 
 //ZONAS PAISAJES
 Zonas.hasMany(Paisajes, { foreignKey: 'zonas_id_zona', as: 'zonasPaisajes' });
@@ -169,7 +180,12 @@ Paises.belongsToMany(Insectos, { through: 'insectos_has_paises', foreignKey: 'pa
 //ZonasInsectos
 Insectos.belongsToMany(Zonas, { through: 'insectos_has_zonas', foreignKey: 'insectos_id_insecto', timestamps: false, as: 'zonasInsectos' })
 Zonas.belongsToMany(Insectos, { through: 'insectos_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoInsectos' })
-
+//PaisesInsectos (PECES)
+Peces.belongsToMany(Paises, { through: 'peces_has_paises', foreignKey: 'peces_id_pez', timestamps: false })
+Paises.belongsToMany(Peces, { through: 'peces_has_paises', foreignKey: 'paises_id_pais', timestamps: false })
+//ZonasInsectos
+Peces.belongsToMany(Zonas, { through: 'peces_has_zonas', foreignKey: 'peces_id_pez', timestamps: false, as: 'zonasPeces' })
+Zonas.belongsToMany(Peces, { through: 'peces_has_zonas', foreignKey: 'zonas_id_zona', timestamps: false, as: 'zoPeces' })
 
 module.exports = {
   ...db.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

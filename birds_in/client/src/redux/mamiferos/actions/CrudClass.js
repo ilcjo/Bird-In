@@ -136,20 +136,21 @@ export const checkDuplicadosGrupo = (nameg) => {
 };
 
 
-export const checkDuplicadosOrden = (nameg) => {
-    console.log(nameg, 'soy le nombre que envio')
-    return async (dispatch) => {
-        try {
-            const response = await axios.get(`/mamiferos/gruposFamilias?ordenName=${nameg}`);
-            return response.data;
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    };
-};
+// export const checkDuplicadosOrden = (nameg) => {
+//     console.log(nameg, 'soy le nombre que envio')
+//     return async (dispatch) => {
+//         try {
+//             const response = await axios.get(`/mamiferos/gruposFamilias?ordenName=${nameg}`);
+//             return response.data;
+//         } catch (error) {
+//             console.error(error);
+//             throw error;
+//         }
+//     };
+// };
 
 export const checkDuplicadosFamilia = (namef) => {
+     console.log(namef, 'soy le nombre que envio')
     return async (dispatch) => {
         try {
             const response = await axios.get(`/mamiferos/gruposFamilias?familiaName=${namef}`);

@@ -3,7 +3,6 @@ import { PassRecover } from './views/PassRecover'
 import { HomeMenu } from './views/HomeMenu'
 import { Aves } from './views/Mains/Aves'
 import { LandsCapes } from './views/Mains/LandsCapes'
-import { Peces } from './views/Mains/Peces'
 import { CarruselGallery } from './components/Gallery/CarruselGallery'
 import { SobreMi } from './views/Mains/SobreMi'
 
@@ -23,6 +22,8 @@ import { DashMamiferos } from './views/Dash/DashMamiferos'
 import { DashReptiles } from './views/Dash/DashReptiles'
 import { Insectos } from './views/Mains/Insectos'
 import { DashInsectos } from './views/Dash/DashInsectos'
+import { Peces } from './views/Mains/Peces'
+import { DashPeces } from './views/Dash/DashPeces'
 
 function App() {
   return (
@@ -86,11 +87,12 @@ function App() {
           <LandsCapes />
         </ProtectedRoute>
         } />
-      <Route path="/peces" element={
-        <ProtectedRoute roles={['user', 'admin']} >
-          <Peces />
-        </ProtectedRoute>
-      } />
+      <Route path="/peces"
+        element={
+          <ProtectedRoute roles={['user', 'admin']}>
+            < Peces/>
+          </ProtectedRoute>
+        } />
 
 
       <Route path="/panelaves" // DASHBOARDS
@@ -129,6 +131,12 @@ function App() {
         element={<ProtectedRoute roles={['admin']} >
           <MenuBar ShowFilterButton={false} ShowBackButton={true} />
           <DashInsectos />
+        </ProtectedRoute>
+        } />
+         <Route path="/panelPeces"
+        element={<ProtectedRoute roles={['admin']} >
+          <MenuBar ShowFilterButton={false} ShowBackButton={true} />
+          <DashPeces />
         </ProtectedRoute>
         } />
     </Routes>

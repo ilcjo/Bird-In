@@ -1208,7 +1208,7 @@ const findGroupNameDuplicate = async (nombreGrupo) => {
         }
 
         // Si no hay duplicado, retorna un mensaje de éxito (opcional)
-        return "Nombre de Orden disponible.";
+        return "Nombre de Grupo disponible.";
 
     } catch (error) {
         console.error('Error:', error.message);
@@ -1222,7 +1222,7 @@ const findOrdenNameDuplicate = async (nombreGrupo) => {
             where: { nombre: nombreGrupo }
         });
 
-        console.log(existingGroup);
+        // console.log(existingGroup);
 
         // Si encuentra un grupo con el mismo nombre, arroja un error
         if (existingGroup) {

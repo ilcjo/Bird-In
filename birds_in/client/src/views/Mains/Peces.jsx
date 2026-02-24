@@ -1,30 +1,289 @@
-import React from 'react'
-import birdBUild from '../../assets/images/pablita-bird-1.gif'
-import { Button, Grid, Typography } from '@mui/material'
+import * as React from 'react'
+//LIBRARY
+import { useDispatch, useSelector } from 'react-redux'
+import { Box, Button, Dialog, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
+//ICONS
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate } from 'react-router-dom';
+import FilterListIcon from '@mui/icons-material/FilterList';
+//COMPONENTS
+import { MenuBar } from '../../components/Menus/MenuBar'
+import { Loading } from '../../components/utils/Loading'
+import { FiltersP } from '../../components/Mains/Peces/FiltersP';
+import { CardsPeces } from '../../components/Cards/Peces/CardsPeces';
+import { PhotosDetailP } from '../../components/Mains/Peces/PhotosDetailP';
+//REDUX
+import { loadMoreData } from '../../redux/peces/actions/infoAction';
+import { resetInfo, } from '../../redux/peces/slices/InfoSlice';
+import { sendParameter } from '../../redux/peces/actions/filterAction';
+import { copingFilters } from '../../redux/peces/slices/FilterSlice';
 
 export const Peces = () => {
-  const navigate = useNavigate()
-  const returnMenuClick = () => {
-    navigate('/menu')
-  };
-  return (
-    <Grid container >
-      <Grid item xs={12} md={6}>
-        <Typography variant='h1' sx={{ mt: '30%', ml: 50, width: '50%' }}>
-          Esta página se esta construyendo ....
-          <br />
-          <Button variant="filled" color="primary" onClick={returnMenuClick}>
-            <ArrowBackIcon /> Volver
-          </Button>
-        </Typography>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <img src={birdBUild} alt='Página en construcción'>
-        </img>
-      </Grid>
-    </Grid>
 
+  const theme = useTheme()
+  const dispatch = useDispatch()
+  const { loading, info, isOne, total } = useSelector(state => state.data)
+  const { filters, noMoreResults } = useSelector(state => state.filter)
+  const { allCustom } = useSelector((state) => state.customizesSlice);
+  const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const [showBackdrop, setShowBackdrop] = React.useState(false);
+  const [loadingMessage, setLoadingMessage] = React.useState('Cargando..')
+  const [selectOption, setSelectOption] = React.useState({
+    grupo: [],
+    familia: [],
+    pais: [],
+    zona: [],
+    cientifico: [],
+    ingles: [],
+  });
+
+  const panel = localStorage.getItem('panel')
+
+  const handleChangePage = () => {
+    const newPage = page + 1;
+    setPage(newPage);
+    setShowBackdrop(true); // Mostrar Backdrop al cargar más datos
+    setLoadingMessage('Cargando Más Resultados..')
+    dispatch(loadMoreData(newPage, filters)).then(() => {
+      setShowBackdrop(false); // Ocultar Backdrop una vez que los datos se cargan
+    });
+  };
+
+  const stepBack = () => {
+    setFilterDialogOpen(true)
+    dispatch(resetInfo())
+    dispatch(isOne(null))
+  };
+
+  React.useEffect(() => {
+    dispatch(resetInfo());
+    // dispatch(isOneR(null))
+  }, []);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setShowBackdrop(true);
+      setLoadingMessage('Buscando Resultados...');
+      try {
+        const resultLength = await dispatch(sendParameter(selectOption));
+        setPage(1);
+        dispatch(copingFilters());
+
+        if (resultLength === 1) {
+          // dispatch(isOneR(true));
+        } else {
+          // dispatch(isOneR(false));
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        // Aquí puedes mostrar un error al usuario si quieres
+      } finally {
+        setShowBackdrop(false);
+      }
+    };
+
+    fetchData();
+  }, [dispatch, selectOption]);
+
+
+  return (
+    <React.Fragment>
+      <MenuBar
+        isFilterOpen={isFilterDialogOpen}
+        setIsFilterOpen={setFilterDialogOpen}
+        showAllButton={true}
+        ShowFilterButton={true}
+        ShowBackButton={true}
+        showAdmin={true}
+      />
+
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{
+          background: info.length === 1
+            ? 'none'
+            : `url(${allCustom.background_fish}) center/cover no-repeat fixed`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          minHeight: '100vh',
+          paddingTop: '90px',
+          p: info.length === 1 ? 0 : 2,
+          '::before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            opacity: 0.5, // Opcional para mayor discreción
+            pointerEvents: 'none', // Impide la interacción con la imagen
+          }
+        }}
+      >
+        {!isFilterDialogOpen && info.length > 1 && (
+          <Fab
+            variant="extended"
+            size="medium"
+            color="secondary"
+            sx={{
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+              zIndex: 1000,
+              fontWeight: 'bold',
+              color: '#103300',
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: 'transparent', // Cambia el color de fondo en hover
+                color: '#ccd6cc', // Cambia el color del texto en hover
+                textTransform: 'none',
+              }
+            }}
+            onClick={stepBack}
+          >
+            <ArrowBackIcon sx={{ mr: 1 }} />
+            Regresar
+          </Fab>
+        )}
+
+        <Dialog open={isFilterDialogOpen} onClose={() => { }} fullWidth={true}
+          maxWidth='xs'>
+          <FiltersP
+            isFilterOpen={isFilterDialogOpen}
+            setIsFilterOpen={setFilterDialogOpen}
+            pages={setPage}
+          />
+        </Dialog>
+
+        {info.length === 1 && (
+          <Grid container>
+            <PhotosDetailP
+              animal={info[0]}
+              setIsFilterOpen={setFilterDialogOpen}
+              setPage={setPage}
+            />
+          </Grid>
+        )}
+
+        {info.length > 1 && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              margin: 'auto',
+              background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.27) 0%,
+    rgba(65, 99, 69, 0.75) 50%,
+    rgba(65, 99, 69, 0.75) 100%
   )
-}
+`,
+
+              backdropFilter: 'blur(7px)',
+              paddingBottom: '50px',
+              borderRadius: '20px',
+              mb: 10,
+              mt: 10,
+            }}
+          >
+            <Grid container alignItems="baseline" justifyContent="space-between" spacing={1} sx={{ width: '100%' }}>
+              <Grid item xs={12} sm={6} lg={6}>
+                <Typography variant='h1' color='secondary.dark' sx={{ display: 'flex', alignItems: 'center', ml: 2, mt: 5 }}>
+                  Resultados
+                  {/* <FilterListIcon fontSize='large' sx={{ ml: 1 }} /> */}
+                </Typography>
+                <Typography variant='body1' color='secondary.dark' sx={{ marginLeft: '20px', mb: 5 }}>
+                  {total} orden de peces encontrados
+                </Typography>
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={3} justifyContent="center">
+              {info.map((registro, index) => (
+                <Grid item key={index}>
+                  <CardsPeces
+                    foto={registro.imagenes_peces}
+                    name={registro.nombre_ingles}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+
+            {!noMoreResults && (
+              <Button
+                sx={{
+                  m: 2,
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  color: theme.palette.secondary.main,
+                  borderRadius: '800px',
+                }}
+                variant="outlined"
+                onClick={handleChangePage}
+              >
+                Más
+                <ExpandMoreIcon
+                  style={{
+                    fontSize: '3rem',
+                    position: 'absolute',
+                    top: '100%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    marginTop: '5px',
+                  }}
+                />
+              </Button>
+            )}
+          </Box>
+        )}
+
+        {isOne === false && info.length === 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              margin: 'auto',
+              backgroundColor: 'rgba(32,60,18, 0.5)',
+              backdropFilter: 'blur(8px)',
+              padding: '40px',
+              borderRadius: '20px',
+              mb: 10,
+              mt: 10,
+            }}
+          >
+            <Grid container alignItems="baseline" spacing={2} sx={{ width: '100%' }}>
+              <Grid item>
+                <Typography variant='h1' color='primary' sx={{ display: 'flex', alignItems: 'center' }}>
+                  Resultados
+                  <FilterListIcon fontSize='large' sx={{ ml: 1 }} />
+                </Typography>
+                <Typography variant='h5' color='white'>
+                  Total de Resultados Filtrados: 0
+                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} />
+                </Typography>
+                <Typography variant='body1' color='primary.light' sx={{ mt: 2 }}>
+                  No existen resultados.
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+      </Grid>
+
+      <Loading message={loadingMessage} open={showBackdrop} />
+    </React.Fragment>
+  );
+};

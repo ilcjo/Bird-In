@@ -12,6 +12,8 @@ const MamiferoRouter = require('./mamiferos/mamiferosRoute');
 const classMRouter = require('./mamiferos/classMRoute');
 const reptilesRouter = require('./reptiles/reptilesRoute');
 const classRRouter = require('./reptiles/classRRoute');
+const FishRouter = require('./peces/pecesRoute');
+const catePRouter = require('./peces/classPRoute');
 
 const mainRouter = Router();
 
@@ -28,4 +30,6 @@ mainRouter.use('/mamiferos', MamiferoRouter)
 mainRouter.use('/mamiferos/clasificacion', classMRouter )
 mainRouter.use('/reptiles', reptilesRouter)
 mainRouter.use('/reptiles/clasificacion', classRRouter )
+mainRouter.use('/peces', FishRouter)
+mainRouter.use('/peces/clasificacion', catePRouter)
 module.exports = mainRouter
