@@ -39,8 +39,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const { infoForUpdate } = useSelector(state => state.update)
     // console.log(infoForUpdate, 'esto es la info')
     const initialCreateData = {
-        grupo: infoForUpdate.grupos_peces || null,
-        familia: infoForUpdate.familias_peces || null,
+        grupo: infoForUpdate.grupos_pece || null,
+        familia: infoForUpdate.familias_pece || null,
         pais: infoForUpdate.paises || [],
         zona: infoForUpdate.zonasPeces || [],
         cientifico: infoForUpdate.nombre_cientifico || '',

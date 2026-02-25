@@ -199,7 +199,7 @@ const updateInfoRegister = async (req, res) => {
       urlImagen,
       id,
    } = req.body;
-
+console.log(grupo, 'esto llego')
    try {
       const succesUpdate = await sendAndUpdateFish(
          grupo,

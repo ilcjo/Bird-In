@@ -55,11 +55,11 @@ export const CoverDelete = ({
                 }
             });
             // Si la imagen es destacada, enviar la solicitud para guardarla como portada
-            await dispatch(sendCoverPhoto(id, infoForUpdate.id_insecto));
+            await dispatch(sendCoverPhoto(id, infoForUpdate.id_pez));
             setShowBackdrop(true);
             setLoadingMessage('Seleccionando Portada')
             await new Promise((resolve) => setTimeout(resolve, 5000));
-            await dispatch(getInfoForUpdate(infoForUpdate.id_insecto));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_pez));
             setShowBackdrop(false);
             setSnackbarOpen(true);
             setSnackbarMessage('Portada Actual Seleccionada');
@@ -126,7 +126,7 @@ export const CoverDelete = ({
             // 4️⃣ Elimina en base
             await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
             // Mostrar Snackbar y obtener información actualizada
-            await dispatch(getInfoForUpdate(infoForUpdate.id_insecto));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_pez));
             setImages(updatedImages);
             setSelectedImages([])
             setSnackbarMessage('Fotografías Eliminadas con éxito');
@@ -169,7 +169,7 @@ export const CoverDelete = ({
             await dispatch(saveOrderPhotos(formattedImages));
             console.log("Orden guardado en la base de datos.");
             await new Promise(resolve => setTimeout(resolve, 2000));
-            await dispatch(getInfoForUpdate(infoForUpdate.id_insecto));  // usa el id correcto
+            await dispatch(getInfoForUpdate(infoForUpdate.id_pez));  // usa el id correcto
             setSnackbarOpen(true);
             setSnackbarMessage('Orden de imágenes guardado Exitosamente');
         } catch (error) {

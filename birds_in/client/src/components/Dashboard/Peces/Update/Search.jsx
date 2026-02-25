@@ -37,7 +37,7 @@ export const Search = ({ changeTab }) => {
         setLoadingMessage('Cargando...');
         if (selected) {
             // Envía la información al action
-            dispatch(getInfoForUpdate(selected.id_insecto));
+            dispatch(getInfoForUpdate(selected.id_pez));
             // Cambia a la pestaña deseada
             // changeTab(2);
             setShowUpdate(true);

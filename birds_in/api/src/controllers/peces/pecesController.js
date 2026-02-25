@@ -51,7 +51,7 @@ const buildIncludeArray = () => {
         {
             model: Imagenes_peces,
             as: 'imagenes_peces',
-            attributes: [['url_pez', 'url'], 'destacada', 'orden_imagen'],
+            attributes: [['url_peces', 'url'], 'destacada', 'orden_imagen'],
             order: [['orden_imagen', 'ASC']],
             separate: true
 
@@ -417,7 +417,7 @@ const sendAndCreateFish = async (
         const convertComun = comun ? comun.charAt(0).toUpperCase() + comun.slice(1).toLowerCase() : null;
         const imagenesRegistrosData = urlImagen.map((imageUrl) => {
             return {
-                url_pez: imageUrl,
+                url_peces: imageUrl,
             };
         });
         // Crear un nuevo registro en la tabla "Peces" solo si el nombre en inglés está presente
@@ -467,11 +467,11 @@ const findDataById = async (id) => {
             include: [
                 {
                     model: Imagenes_peces,
-                    attributes: [['url_pez', 'url'],
+                    attributes: [['url_peces', 'url'],
                         'id',
                         'destacada',
                         'orden_imagen',
-                    [Sequelize.literal('SUBSTRING_INDEX(url_pez, "_", -1)'), 'titulo']
+                    [Sequelize.literal('SUBSTRING_INDEX(url_peces, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_peces
                 },
                 {
@@ -519,11 +519,11 @@ const findDataByName = async (name) => {
             include: [
                 {
                     model: Imagenes_peces,
-                    attributes: ['url_pez',
+                    attributes: ['url_peces',
                         'id',
                         'destacada',
                         'orden_imagen',
-                        [Sequelize.literal('SUBSTRING_INDEX(url_pez, "_", -1)'), 'titulo']
+                        [Sequelize.literal('SUBSTRING_INDEX(url_peces, "_", -1)'), 'titulo']
                         ,] // Atributos que deseas de Imagenes_peces
                 },
                 {
@@ -650,7 +650,7 @@ const sendAndUpdateFish = async (
             lastOrden += 1;
             await Imagenes_peces.create({
                 peces_id_pez: idRegistro,
-                url_pez: imageUrl,
+                url_peces: imageUrl,
                 orden_imagen: lastOrden,
             });
         }
@@ -784,7 +784,7 @@ const deleteRegistroDb = async (idRegistro) => {
             },
         });
 
-        const ftpDeleteResults = await deletePhotoFromFTPpeces(imagenes.map(imagen => imagen.url_pez));
+        const ftpDeleteResults = await deletePhotoFromFTPpeces(imagenes.map(imagen => imagen.url_peces));
 
         if (!ftpDeleteResults.success) {
             // Si hay un problema al borrar las fotos del FTP, puedes manejar el error aquí
