@@ -43,6 +43,14 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        total_imagenes: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        portada_url: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         tiene_portada: {
             type: DataTypes.STRING,
             allowNull: false,

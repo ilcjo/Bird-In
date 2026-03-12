@@ -1,6 +1,9 @@
 require('dotenv').config();
 const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
+const axios = require('axios');
+const sharp = require('sharp');
+
 const {
    FTP_HOST_2,
    FTP_USER_2,
@@ -320,7 +323,7 @@ const getExcel = async (req, res) => {
    try {
       // Consulta las aves desde tu base de datos o donde sea que las tengas almacenadas
       const aves = await VistaMamiferosOrdenadaAll.findAll();
-console.log("Cantidad de registros:", aves.length);
+      console.log("Cantidad de registros:", aves.length);
       // Crea un nuevo workbook y worksheet con excel.js
       const workbook = new exceljs.Workbook();
       const worksheet = workbook.addWorksheet('Aves');
@@ -374,8 +377,96 @@ console.log("Cantidad de registros:", aves.length);
    }
 };
 
+const getExcelConPortada = async (req, res) => {
+   try {
+      let mamiferos = await VistaMamiferosOrdenadaAll.findAll();
+
+      mamiferos.sort((a, b) => {
+         if (a.nombre_ingles < b.nombre_ingles) return -1;
+         if (a.nombre_ingles > b.nombre_ingles) return 1;
+         return 0;
+      });
+
+      const workbook = new exceljs.Workbook();
+      const worksheet = workbook.addWorksheet('Mamiferos');
+      const ALTO_FILA = 90;
+
+      // 1. Agregamos 'Total' a las columnas
+      worksheet.columns = [
+         { header: 'Nombre Inglés', key: 'nombre_ingles', width: 25 },
+         { header: 'Nombre Común', key: 'nombre_comun', width: 25 },
+         { header: 'Nombre Científico', key: 'nombre_cientifico', width: 30 },
+         { header: 'Nombre Grupo', key: 'nombre_grupo', width: 25 },
+         { header: 'Total', key: 'total_imagenes', width: 10 }, // Nueva columna
+         { header: 'Portada', key: 'portada', width: 35 } 
+      ];
+
+      // Estilo para el encabezado
+      worksheet.getRow(1).font = { bold: true };
+      worksheet.getRow(1).alignment = { horizontal: 'center' };
+
+      for (let i = 0; i < mamiferos.length; i++) {
+         const registro = mamiferos[i];
+         const currentRow = i + 2;
+
+         // 2. Mapeamos el dato de tu vista a la columna 'total_imagenes'
+         const row = worksheet.addRow({
+            nombre_ingles: registro.nombre_ingles,
+            nombre_comun: registro.nombre_comun,
+            nombre_cientifico: registro.nombre_cientifico,
+            nombre_grupo: registro.nombre_grupo,
+            total_imagenes: registro.total_imagenes // Usa el nombre exacto de tu columna en la DB
+         });
+
+         row.height = ALTO_FILA;
+         row.alignment = { vertical: 'middle', horizontal: 'left' };
+
+         if (registro.portada_url) {
+            try {
+               const response = await axios.get(registro.portada_url, { responseType: 'arraybuffer' });
+               const imagePipe = sharp(response.data);
+               const metadata = await imagePipe.metadata();
+
+               const compressedImage = await imagePipe
+                  .resize({ height: 110 })
+                  .jpeg({ quality: 50 })
+                  .toBuffer();
+
+               const imageId = workbook.addImage({
+                  buffer: compressedImage,
+                  extension: 'jpeg'
+               });
+
+               const aspecto = metadata.width / metadata.height;
+               const anchoParaExcel = 110 * aspecto;
+
+               // La columna de portada ahora es la 6 (índice 5) porque agregamos 'Total'
+               worksheet.addImage(imageId, {
+                  tl: { col: 5.1, row: i + 1.1 }, 
+                  ext: { width: anchoParaExcel, height: 110 },
+                  editAs: 'oneCell' 
+               });
+
+            } catch (imgError) {
+               console.log(`Error en imagen: ${imgError.message}`);
+            }
+         }
+      }
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=mamiferos.xlsx');
+
+      await workbook.xlsx.write(res);
+      res.end();
+
+   } catch (error) {
+      console.error('Error al generar Excel:', error);
+      res.status(500).send('Error al generar el Excel');
+   }
+};
+
 const checkClases = async (req, res) => {
-   const { familiaID,  grupoID } = req.query
+   const { familiaID, grupoID } = req.query
 
    try {
       const message = await getClassGrupoFamilia(familiaID, grupoID)
@@ -391,10 +482,10 @@ const checkDuplicateNames = async (req, res) => {
       if (grupoName) {
          const message = await findGroupNameDuplicate(grupoName);
          return res.status(200).json({ message });
-      // } else if (ordenName) {
-      //    console.log('llegue')
-      //    const message = await findOrdenNameDuplicate(ordenName);
-      //    return res.status(200).json({ message });
+         // } else if (ordenName) {
+         //    console.log('llegue')
+         //    const message = await findOrdenNameDuplicate(ordenName);
+         //    return res.status(200).json({ message });
       } else if (familiaName) {
          const message = await findFamilyNameDuplicate(familiaName);
          return res.status(200).json({ message });
@@ -437,7 +528,8 @@ module.exports = {
    checkRegisterDuplicate,
    getAllNombres,
    getExcel,
-   saveOrderImages
+   saveOrderImages,
+   getExcelConPortada
 
 }
 

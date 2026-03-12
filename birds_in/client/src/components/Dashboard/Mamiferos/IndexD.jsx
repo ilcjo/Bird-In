@@ -9,9 +9,10 @@ import { IndexTabsCreate } from './Add/IndexTabsCreate';
 import { Search } from './Update/Search';
 //redux
 import { setEstateInfo } from '../../../redux/mamiferos/slices/UpdateSlice';
-import { getExcel } from '../../../redux/mamiferos/actions/crudAction';
+import { getExcel, getExcelFoto } from '../../../redux/mamiferos/actions/crudAction';
 import { FamiliasGeneros } from './Class/FamiliasGeneros';
 import { Loading } from '../../utils/Loading';
+import { Descargas } from './Descargas';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(65, 99, 69, 0.42)', // Establece el fondo transparente deseado
@@ -52,8 +53,9 @@ export const IndexD = () => {
     setSelectedTab(convertNumber);
     if (convertNumber === 1) {
       dispatch(setEstateInfo());
-    } else if (convertNumber === 4) { // Índice de la pestaña "Descargar Excel"
-      handleDownload();
+    // } else if (convertNumber === 4) { // Índice de la pestaña "Descargar Excel"
+    //   handleDownload();
+    // }
     }
   };
 
@@ -70,7 +72,20 @@ export const IndexD = () => {
       console.log('Este es el error:', String(error));
     } finally {
       setOnLoading(false);
-      setSelectedTab(1)
+      // setSelectedTab(1)
+    }
+  };
+
+    const handleDownloadFoto = async () => {
+    try {
+      setOnLoading(true);
+      setLoadingMessage('Generando Excel, por favor espere...');
+      await dispatch(getExcelFoto());
+    } catch (error) {
+      console.log('Este es el error:', String(error));
+    } finally {
+      setOnLoading(false);
+      // setSelectedTab(1)
     }
   };
 
@@ -90,14 +105,14 @@ export const IndexD = () => {
         textColor='primary'
         indicatorColor="primary"
         aria-label="tabsAdmin"
-        // sx={{
-        //   backgroundColor: 'rgba(0, 56, 28, 0.1)',
-        //   backdropFilter: 'blur(8px)',
-        //   borderRadius: '20px 20px 0px 0px',
-        //   '& .Mui-selected': {
-        //     backgroundColor: theme.palette.custom.light,
-        //   }
-        // }}
+      // sx={{
+      //   backgroundColor: 'rgba(0, 56, 28, 0.1)',
+      //   backdropFilter: 'blur(8px)',
+      //   borderRadius: '20px 20px 0px 0px',
+      //   '& .Mui-selected': {
+      //     backgroundColor: theme.palette.custom.light,
+      //   }
+      // }}
       >
         <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} />
         <StyledTab label={<Typography variant='h4'>Crear</Typography>} />
@@ -124,6 +139,11 @@ export const IndexD = () => {
         {selectedTab === 3 && (
           <Box>
             <FamiliasGeneros />
+          </Box>
+        )}
+        {selectedTab === 4 && (
+          <Box>
+            <Descargas handleDownload={handleDownload} handleFoto={handleDownloadFoto} />
           </Box>
         )}
       </div >

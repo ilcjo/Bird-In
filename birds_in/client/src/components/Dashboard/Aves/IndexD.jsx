@@ -10,7 +10,8 @@ import { FamiliasGrupos } from './Class/FamiliasGrupos';
 import { Loading } from '../../utils/Loading';
 // redux
 import { setEstateInfo } from '../../../redux/birds/slices/UpdateSlice';
-import { getExcelAves } from '../../../redux/birds/actions/crudAction';
+import { getExcelAves, getExcelFoto } from '../../../redux/birds/actions/crudAction';
+import { Descargas } from './Descargas';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: 'rgba(65, 99, 69, 0.42)',
@@ -51,10 +52,10 @@ export const IndexD = () => {
     const convertNumber = Number(newValue);
     setSelectedTab(convertNumber);
     if (convertNumber === 1) {
-      dispatch(setEstateInfo());
-    } else if (convertNumber === 4) { // Índice de la pestaña "Descargar Excel"
-      handleDownload();
-    }
+      dispatch(setEstateInfo());}
+    //  else if (convertNumber === 4) { // Índice de la pestaña "Descargar Excel"
+    //   handleDownload();
+    // }
   };
 
   const handleNavigateToSearch = () => {
@@ -70,9 +71,22 @@ export const IndexD = () => {
       console.log('Este es el error:', String(error));
     } finally {
       setOnLoading(false);
-      setSelectedTab(1)
+      // setSelectedTab(1)
     }
   };
+
+      const handleDownloadFoto = async () => {
+      try {
+        setOnLoading(true);
+        setLoadingMessage('Generando Excel, por favor espere...');
+        await dispatch(getExcelFoto());
+      } catch (error) {
+        console.log('Este es el error:', String(error));
+      } finally {
+        setOnLoading(false);
+        // setSelectedTab(1)
+      }
+    };
 
   React.useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -93,7 +107,7 @@ export const IndexD = () => {
         sx={[{
           // backgroundColor: 'rgba(239, 240, 239, 0.22)',
         }]}
-       
+
       >
         <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} />
         <StyledTab label={<Typography variant='h4'>Crear</Typography>} />
@@ -121,6 +135,11 @@ export const IndexD = () => {
         {selectedTab === 3 && (
           <Box>
             <FamiliasGrupos />
+          </Box>
+        )}
+        {selectedTab === 4 && (
+          <Box>
+            <Descargas handleDownload={handleDownload} handleFoto={handleDownloadFoto} />
           </Box>
         )}
       </div>

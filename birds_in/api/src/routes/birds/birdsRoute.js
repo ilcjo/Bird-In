@@ -18,7 +18,8 @@ const {
     check,
     checkClases,
     checkDuplicateNames,
-    saveOrderImages
+    saveOrderImages,
+    getExcelConPortada
 
 } = require('../../handlers/birds/birdHandler')
 const upload = require('../../utils/multerConfig')
@@ -43,4 +44,5 @@ birdsRouter.get('/filtros', getFilterInfo)
     .get('/clases', checkClases )
     .get('/gruposFamilias', checkDuplicateNames)
     .post('/guardar_orden_images', saveOrderImages)
+    .get('/descargar-excel-foto', getExcelConPortada)
 module.exports = birdsRouter

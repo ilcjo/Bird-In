@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize")
 
 module.exports = (sequelize) => {
     sequelize.define('vistaMamiferosOrdenadaAll', {
-         nombre_comun: {
+        nombre_comun: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -11,11 +11,12 @@ module.exports = (sequelize) => {
             allowNull: false,
             primaryKey: true
         },
+
         nombre_cientifico: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-       
+
         nombre_familia: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -38,6 +39,14 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         imagenes: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        total_imagenes: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        portada_url: {
             type: DataTypes.STRING,
             allowNull: false,
         },
