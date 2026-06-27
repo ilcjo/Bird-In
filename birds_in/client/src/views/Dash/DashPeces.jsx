@@ -14,8 +14,8 @@ export const DashPeces = () => {
   const theme = useTheme();
   const { allCustom } = useSelector((state) => state.customizesSlice);
   // console.log(allCustom)
-  const [showBackdrop, setShowBackdrop] = React.useState(false);
-  const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
+  // const [showBackdrop, setShowBackdrop] = React.useState(false);
+  // const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
 
   React.useEffect(() => {
     // Disparar la acción para obtener todos los usuarios al montar el componente
@@ -24,7 +24,7 @@ export const DashPeces = () => {
 
   return (
     <React.Fragment>
-      <MenuBar ShowFilterButton={false} ShowBackButton={true} />
+      {/* <MenuBar ShowFilterButton={false} ShowBackButton={true} /> */}
       <Grid
         container
         direction="column"
@@ -42,10 +42,10 @@ export const DashPeces = () => {
       >
         <IndexD />
       </Grid>
-      <Loading
+      {/* <Loading
         message={loadingMessage}
         open={showBackdrop}
-      />
+      /> */}
     </React.Fragment>
   );
 };

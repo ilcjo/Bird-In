@@ -7,13 +7,17 @@ const initialState = {
   isOne: null,
   loading: false,
   total: 0,
+  saltarP: false,
 };
 
-export const dataInsect = createSlice({
-  name: 'dataInsectos',
+export const dataPeces = createSlice({
+  name: 'dataPeces',
   initialState,
 
   reducers: {
+    isSaltarPe: (state, action) => {
+      state.saltarP = action.payload
+    },
     setInfo(state, action) {
       state.info = action.payload;
     },
@@ -32,14 +36,14 @@ export const dataInsect = createSlice({
     searchBarResult: (state, action) => {
       state.info = action.payload
     },
-    resetInfo: (state) => {
+    resetInfoPez: (state) => {
       state.info = [],
         state.noMoreResults = true
     },
     saveCounting: (state, action) => {
       state.count = action.payload;
     },
-    isOneR: (state, action) => {
+    isOneP: (state, action) => {
       state.isOne = action.payload;
     },
     howMuch: (state, action) => {
@@ -52,16 +56,17 @@ export const dataInsect = createSlice({
 });
 
 export const {
+  isSaltarPe,
   setInfo,
   fetchInfo,
   copyInfo,
   loadMoreDataSuccess,
   returnFilters,
   searchBarResult,
-  resetInfo,
+  resetInfoPez,
   saveCounting,
-  isOneR,
+  isOneP,
   howMuch,
   cargando,
-} = dataInsect.actions;
-export default dataInsect.reducer;
+} = dataPeces.actions;
+export default dataPeces.reducer;

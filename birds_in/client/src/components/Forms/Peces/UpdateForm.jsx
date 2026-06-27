@@ -35,8 +35,8 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filter.options)
-    const { infoForUpdate } = useSelector(state => state.update)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filterP.options)
+    const { infoForUpdate } = useSelector(state => state.updateP)
     // console.log(infoForUpdate, 'esto es la info')
     const initialCreateData = {
         grupo: infoForUpdate.grupos_pece || null,
@@ -90,17 +90,22 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...grupos, // Mantén las opciones originales
+            try {
+                // Aquí llamas a la función que genera datos extra y actualizas el estado
+                const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+                // console.log(extraData)
+                // Combina las opciones existentes con las nuevas opciones extra
+                const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
+                const newCombinedOptions = [
+                    ...extraGrupos, // Agrega los datos extra
+                    ...grupos, // Mantén las opciones originales
 
-            ];
+                ];
 
-            setCombinedOptionsGrupos(newCombinedOptions);
+                setCombinedOptionsGrupos(newCombinedOptions);
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
         }
     };
 
@@ -111,19 +116,23 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...familias, // Mantén las opciones originales
-            ];
+            try {
+                // Aquí llamas a la función que genera datos extra y actualizas el estado
+                const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+                // console.log(extraData)
+                const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
+                // Combina las opciones existentes con las nuevas opciones extra
+                const newCombinedOptions = [
+                    ...extraFamilias, // Agrega los datos extra
+                    ...familias, // Mantén las opciones originales
+                ];
 
-            setCombinedOptionsFamilias(newCombinedOptions);
+                setCombinedOptionsFamilias(newCombinedOptions);
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
         }
     };
-
     // Usar React.useEffect para manejar el valor inicial cuando se carga el formulario
     React.useEffect(() => {
         const loadInitialData = async () => {
@@ -312,7 +321,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                             <Grid item xs={12} sm={9}>
                                 <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                     Formulario de Actualización
-                                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                                 </Typography>
                             </Grid>
 
@@ -360,17 +369,17 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                         </Typography>
 
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12}>
+                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     name="ingles"
-                                    label="Orden"
+                                    label="Nombre en Ingles"
                                     value={createData.ingles}
                                     onChange={handleInputChange}
                                     variant="outlined"
                                     margin="dense"
                                     fullWidth
                                 />
-                                {/* <TextField
+                                <TextField
                                     name="comun"
                                     label="Nombre común"
                                     value={createData.comun}
@@ -390,10 +399,10 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                         style: { fontStyle: 'italic' } // Aplica estilo cursiva al texto
                                     }}
                                     fullWidth
-                                /> */}
+                                />
                             </Grid>
 
-                            {/* <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={6}>
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-familias"
@@ -440,7 +449,7 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     onChange={handleGrupoChange}
                                     renderInput={(params) =>
                                         <TextField {...params}
-                                            label="Genero"
+                                            label="Grupo"
                                             margin='dense'
 
                                         />}
@@ -464,9 +473,9 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     )}
                                 />
 
-                            </Grid> */}
+                            </Grid>
                         </Grid>
-                        {/* <Grid container spacing={1}>
+                        <Grid container spacing={1}>
                             <Grid item xs={12} sm={12}>
                                 <Autocomplete
                                     disablePortal
@@ -552,50 +561,50 @@ export const UpdateForm = ({ isEnable, changeTab, showUpdate, showSearch, select
                                     }
 
                                 />
-                            </Grid> */}
+                            </Grid>
 
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                name="urlWiki"
-                                label='URL Wiki'
-                                variant="outlined"
-                                value={createData.urlWiki}
-                                onChange={handleInputChange}
-                                fullWidth
-                                shrink='true'
-                                margin="dense"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
+                            <Grid item xs={12} sm={12}>
+                                <TextField
+                                    name="urlWiki"
+                                    label='URL Wiki'
+                                    variant="outlined"
+                                    value={createData.urlWiki}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    shrink='true'
+                                    margin="dense"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
 
-                                            <IconButton onClick={handleLogoClickW}
-                                                sx={{
-                                                    zIndex: 1,
-                                                    '&:hover': {
-                                                        zIndex: 2,
-                                                    },
-                                                }}
-                                            >
-                                                <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
-                            <Button
-                                endIcon={<DeleteForeverIcon />}
-                                variant="contained"
-                                color='custom'
-                                onClick={handleDeleteRegistro}
-                                sx={{
-                                    color: theme.palette.primary.light,
-                                }}
-                            >
-                                Eliminar Registro
-                            </Button>
-                            {/* </Grid> */}
+                                                <IconButton onClick={handleLogoClickW}
+                                                    sx={{
+                                                        zIndex: 1,
+                                                        '&:hover': {
+                                                            zIndex: 2,
+                                                        },
+                                                    }}
+                                                >
+                                                    <img src={wikipediaLogo} alt="Wikipedia Logo" style={{ width: '26px', height: '26px' }} />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
+                                <Button
+                                    endIcon={<DeleteForeverIcon />}
+                                    variant="contained"
+                                    color='custom'
+                                    onClick={handleDeleteRegistro}
+                                    sx={{
+                                        color: theme.palette.primary.light,
+                                    }}
+                                >
+                                    Eliminar Registro
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>

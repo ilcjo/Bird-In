@@ -7,8 +7,8 @@ const initialState = {
     infoForUpdate: {},
 };
 
-export const updateInfoI = createSlice({
-    name: 'updateInfoInsect',
+export const updateInfoPe = createSlice({
+    name: 'updateInfoPe',
     initialState,
 
     reducers: {
@@ -32,5 +32,5 @@ export const {
     idSelectedUpdate,
     getRegistro,
     setEstateInfo
-} = updateInfoI.actions;
-export default updateInfoI.reducer;
+} = updateInfoPe.actions;
+export default updateInfoPe.reducer;

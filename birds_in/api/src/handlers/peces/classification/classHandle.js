@@ -4,7 +4,7 @@ const { createFamilias, updateFamilias, borrarFamilias, createGrupos, updateGrup
 const postFamilias = async (req, res) => {
     const { nombreF } = req.body
     try {
-        console.log('hola')
+        // console.log('hola')
         const options = await createFamilias(nombreF)
         return res.status(200).json(options)
     } catch (error) {

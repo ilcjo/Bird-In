@@ -21,13 +21,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //redux
 import { eliminarFamilia, updateFamilia } from '../../../../../redux/peces/actions/CrudClass';
-import { getOptionsDataI } from '../../../../../redux/peces/actions/fetchOptions';
+import { getOptionsDataPe } from '../../../../../redux/peces/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.primary.dark,
         color: theme.palette.primary.main,
-        ...theme.typography.h5,
+        ...theme.typography.h4,
     },
     [`&.${tableCellClasses.body}`]: {
         fontFamily: theme.typography.fontFamily,
@@ -55,7 +55,7 @@ export const FamiliaTable = ({
 }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { familias } = useSelector(state => state.filter.options)
+    const { familias } = useSelector(state => state.filterP.options)
 
     const [nombreFamilia, setNombreFamilia] = React.useState({
         nombreF: '',
@@ -83,7 +83,7 @@ export const FamiliaTable = ({
                 onloading(true)
                 loadingMessage('Eliminado Familia...')
                 await dispatch(eliminarFamilia(id))
-                await dispatch(getOptionsDataI())
+                await dispatch(getOptionsDataPe())
                 onloading(false)
                 successMessages('Familia eliminada')
                 showSnackBar(true);
@@ -110,7 +110,7 @@ export const FamiliaTable = ({
             onloading(true);
             loadingMessage('Actualizando...');
             await dispatch(updateFamilia(nombreFamilia));
-            await dispatch(getOptionsDataI());
+            await dispatch(getOptionsDataPe());
             onloading(false);
             successMessages('Familia actualizada correctamente')
             showSnackBar(true);
@@ -160,9 +160,9 @@ export const FamiliaTable = ({
     return (
         <div>
             <Grid item sx={12} md={12}>
-                <Typography variant='h5' color='primary.light' sx={{ mb: 1, mt: 5 }}>
+                <Typography variant='h1' color='primary' sx={{ mb: 1, mt: 5 }}>
                     Lista de Familias
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                    {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} /> */}
                 </Typography>
                 <TextField
                     fullWidth
@@ -172,7 +172,7 @@ export const FamiliaTable = ({
                     onChange={(e) => setSearchTerm(e.target.value)}
                     sx={{
                         mb: 2,
-                        backgroundColor: 'rgba(204,214,204,0.17)',
+                        backgroundColor: 'hsla(152, 89.50%, 7.50%, 0.17)',
                         borderRadius: '9px',
                         '& .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'none',
@@ -180,6 +180,10 @@ export const FamiliaTable = ({
                         '&:hover .MuiOutlinedInput-notchedOutline': {
                             borderColor: theme.palette.primary.main,
                         },
+                        '& .MuiInputBase-input::placeholder': {
+                            color: theme.palette.primary, // Cambia el color del placeholder
+                            opacity: 1, // Asegura que el color se aplique correctamente
+                        }
                     }}
                 />
                 <TableContainer sx={{ maxHeight: 450, borderRadius: 3 }}>
@@ -218,6 +222,14 @@ export const FamiliaTable = ({
                                         {editMode === index ? (
                                             // Modo de edición
                                             <>
+
+                                                <Button onClick={handleCancelEdit}
+                                                    sx={{
+                                                        fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
+                                                    }}
+                                                    variant="contained"
+                                                    color="error"
+                                                >Cancelar</Button>
                                                 <Button onClick={saveChanges}
                                                     sx={{
                                                         fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
@@ -226,13 +238,6 @@ export const FamiliaTable = ({
                                                     color="secondary"
                                                     endIcon={<SaveIcon />}
                                                 >Grabar</Button>
-                                                <Button onClick={handleCancelEdit}
-                                                    sx={{
-                                                        fontSize: '1rem', ml: 2, mt: 0.7, textTransform: 'none',
-                                                    }}
-                                                    variant="contained"
-                                                    color="error"
-                                                >Cancelar</Button>
                                             </>
                                         ) : (
                                             <Grid container spacing={0} sx={{ maxHeight: 450 }} >
@@ -241,8 +246,8 @@ export const FamiliaTable = ({
                                                         sx={{
                                                             fontSize: '1rem',
                                                         }}
-                                                        variant="outlined"
-                                                        color="primary"
+                                                        variant="contained"
+                                                        color="secondary"
                                                     >Editar</Button>
                                                 </Grid>
                                                 <Grid item xs={12} md={6}>

@@ -326,7 +326,7 @@ const getExcel = async (req, res) => {
       console.log("Cantidad de registros:", aves.length);
       // Crea un nuevo workbook y worksheet con excel.js
       const workbook = new exceljs.Workbook();
-      const worksheet = workbook.addWorksheet('Aves');
+      const worksheet = workbook.addWorksheet('Mamiferos');
 
       // Define las columnas en tu archivo Excel
       worksheet.columns = [
@@ -388,7 +388,7 @@ const getExcelConPortada = async (req, res) => {
       });
 
       const workbook = new exceljs.Workbook();
-      const worksheet = workbook.addWorksheet('Mamiferos');
+      const worksheet = workbook.addWorksheet('MamiferosFotos');
       const ALTO_FILA = 90;
 
       // 1. Agregamos 'Total' a las columnas
@@ -454,7 +454,7 @@ const getExcelConPortada = async (req, res) => {
       }
 
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', 'attachment; filename=mamiferos.xlsx');
+      res.setHeader('Content-Disposition', 'attachment; filename=mamiferosFotos.xlsx');
 
       await workbook.xlsx.write(res);
       res.end();

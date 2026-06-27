@@ -4,6 +4,7 @@ import { getAve } from "../slices/UpdateSlice";
 export const createBird = (formData) => {
     return async (dispatch) => {
       try {
+        console.log('formData:',formData)
         const response = await axios.post('aves/create', formData)
         // Maneja la respuesta del servidor (puede ser un mensaje de éxito o error)
         console.log('Respuesta del servidor:', response.data);

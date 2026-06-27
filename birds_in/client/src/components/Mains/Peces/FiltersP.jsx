@@ -15,11 +15,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import CloseIcon from '@mui/icons-material/Close';
 //ESTADOS GLOBALES
 import { sendParameter } from '../../../redux/peces/actions/filterAction';
-import { fetchNewOptions, getOptionsDataI } from '../../../redux/peces/actions/fetchOptions';
+import { fetchNewOptions, getOptionsDataPe } from '../../../redux/peces/actions/fetchOptions';
 import { saveFilters } from '../../../redux/peces/slices/FilterSlice';
-import { cargando, isOneR } from '../../../redux/peces/slices/InfoSlice';
+import { cargando, isOneP, } from '../../../redux/peces/slices/InfoSlice';
 import { copingFilters } from '../../../redux/peces/slices/FilterSlice';
 import { setNoMoreResults } from '../../../redux/peces/slices/FilterSlice';
+import { AutocompleteFilter } from '../../utils/AutocompleteFilter';
 
 
 export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
@@ -38,7 +39,7 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     }, [nombreIngles]);
 
 
-    const selectOptionFromSlice = useSelector((state) => state.filter.currentFilters);
+    const selectOptionFromSlice = useSelector((state) => state.filterP.currentFilters);
     const {
         nIngles = [],
         nCientifico = [],
@@ -46,7 +47,7 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         familias = [],
         grupos = [],
         zonas = []
-    } = useSelector(state => state.filter.options);
+    } = useSelector(state => state.filterP.options);
 
     const [isFetchingOptions, setIsFetchingOptions] = React.useState(false);
     const [selectOption, setSelectOption] = React.useState({
@@ -60,7 +61,7 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     });
 
 
-    const handleOptionChange = (category, newValue) => {
+    const handleOptionChange = async (category, newValue) => {
         setIsFetchingOptions(true); // Activa el indicador de carga
 
         const updatedSelectOption = {
@@ -72,14 +73,15 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
         };
 
         setSelectOption(updatedSelectOption);
-        // Realiza la solicitud para obtener las opciones
-        dispatch(fetchNewOptions(updatedSelectOption))
-            .then(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
-            })
-            .catch(() => {
-                setIsFetchingOptions(false); // Desactiva el indicador de carga en caso de error
-            });
+        try {
+            await dispatch(fetchNewOptions(updatedSelectOption))
+        } catch (error) {
+
+            console.error('Error fetching new options:', error);
+        } finally {
+            // Desactiva el indicador de carga cuando la solicitud se completa o hay un error
+            setIsFetchingOptions(false);
+        }
     };
 
     const handleClickFiltrar = async () => {
@@ -90,14 +92,13 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
 
         try {
             const resultLength = await dispatch(sendParameter(selectOption));
-
             pages(1);
             dispatch(copingFilters());
 
             if (resultLength === 1) {
-                dispatch(isOneR(true));
+                dispatch(isOneP(true));
             } else {
-                dispatch(isOneR(false));
+                dispatch(isOneP(false));
             }
         } catch (error) {
             console.error("Error occurred during filtering:", error);
@@ -114,7 +115,7 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const handleReset = () => {
         setIsFetchingOptions(true); // Activa el indicador de carga
         // Realiza la solicitud para obtener las opciones completas
-        dispatch(getOptionsDataI())
+        dispatch(getOptionsDataPe())
             .then(() => {
                 setIsFetchingOptions(false); // Desactiva el indicador de carga cuando la solicitud se completa
             })
@@ -129,24 +130,24 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             cientifico: [],
             ingles: []
         });
-        dispatch(isOneR(null))
+        dispatch(isOneP(null))
         dispatch(setNoMoreResults(true))
     };
 
 
     React.useEffect(() => {
-        return () => {
-            dispatch(getOptionsDataI());
-            setSelectOption({
-                grupo: [],
-                familia: [],
-                pais: [],
-                zona: [],
-                cientifico: [],
-                ingles: []
-            });
-        };
+
+        dispatch(getOptionsDataPe());
+        setSelectOption({
+            grupo: [],
+            familia: [],
+            pais: [],
+            zona: [],
+            cientifico: [],
+            ingles: []
+        });
     }, []);
+
     return (
         <React.Fragment>
             <Grid component={Box}
@@ -157,71 +158,100 @@ export const FiltersP = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                     padding: { xs: 0, md: 2 },
                 }} >
                 <Grid item >
-                    <Typography variant="h2" color='primary.light' sx={{ m: 1, mt: -1 }}>
+                    <Typography variant="h2" color='white' sx={{ m: 1, mt: -1 }}>
                         Búsqueda Avanzada
                     </Typography>
                 </Grid>
                 <Grid container alignItems="center">
                     <Grid item xs={12}>
-                        {/* <FormControl sx={{ m: 1, width: '95%' }} > */}
-                            <Autocomplete
-                                multiple
-                                value={selectOption.ingles}
-                                onChange={(event, newValue) => handleOptionChange('ingles', newValue)}
-                                options={nIngles || []}
-                                getOptionLabel={(option) => option.nombre}
-                                loading={isFetchingOptions}
-                                renderInput={(params) =>
-                                    <TextField {...params}
-                                        label="Orden"
-                                        sx={{
-                                            '& .MuiInputBase-input': {
-                                                height: '26px',
-                                            },
-                                        }}
-                                    />}
-                                renderTags={(value, getTagProps) =>
-                                    value.map((option, index) => (
-                                        <Typography
-                                            key={option.id}
-                                            variant="body1"
-                                            sx={{
-                                                display: 'inline-block',
-                                                fontSize: { xs: '1.2rem', md: '1.5rem', lg: '1.5rem' },
-                                                color: 'white',
-                                                ml: 2,
-                                                mt: 1
-                                            }}
-                                        >
-                                            {option.nombre}
-                                        </Typography>
-                                    ))
-                                }
-                                isOptionEqualToValue={(option, value) => option.id === value?.id}
-                                disabled={nIngles?.length === 0}
-                            />
-                        {/* </FormControl> */}
+                        {/* Familia */}
+                        <AutocompleteFilter
+                            label="Familia"
+                            options={familias}
+                            value={selectOption.familia}
+                            onChange={(newValue) => handleOptionChange('familia', newValue)}
+                            loading={isFetchingOptions}
+                        />
                     </Grid>
-                    <Stack spacing={1} direction="row" justifyContent="center"
-                        alignItems="center"
-                        sx={{
-                            margin: '20px auto', // Centrar horizontalmente el Stack
-                            // width: 'fit-content', // Ajustar el ancho al contenido
-                        }} >
-                        <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
-                            < CloseIcon /> Cerrar
-                        </Button>
-                        <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
-                            Resetear
-                        </Button>
 
-                        <Button variant="contained" color="secondary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
-                            Mostrar
-                        </Button>
+                    {/* Grupo */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Grupo"
+                            options={grupos}
+                            value={selectOption.grupo}
+                            onChange={(newValue) => handleOptionChange('grupo', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
 
-                    </Stack>
-                </Grid>
-            </Grid >
+                    {/* País */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Países"
+                            options={paises}
+                            value={selectOption.pais}
+                            onChange={(newValue) => handleOptionChange('pais', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+
+                    {/* Zona */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Zona"
+                            options={zonas}
+                            value={selectOption.zona}
+                            onChange={(newValue) => handleOptionChange('zona', newValue)}
+                            getOptionLabel={(option) => option.nombre}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Nombre científico"
+                            options={nCientifico}
+                            value={selectOption.cientifico}
+                            onChange={(newValue) => handleOptionChange('cientifico', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+
+                    {/* Nombre Inglés */}
+                    <Grid item xs={12}>
+                        <AutocompleteFilter
+                            label="Nombre inglés"
+                            options={nIngles}
+                            value={selectOption.ingles}
+                            onChange={(newValue) => handleOptionChange('ingles', newValue)}
+                            loading={isFetchingOptions}
+                        />
+                    </Grid>
+                    {/* Botones */}
+                    <Grid item xs={12}>
+                        <Stack
+                            spacing={1}
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{
+                                margin: '20px auto', // Centrar horizontalmente el Stack
+                                // width: 'fit-content', // Ajustar el ancho al contenido
+                            }} >
+                            <Button variant="outlined" color="error" onClick={handleBack} sx={{ fontSize: { xs: '1rem' } }}>
+                                < CloseIcon /> Cerrar
+                            </Button>
+                            <Button variant="outlined" color="primary" onClick={handleReset} sx={{ fontSize: { xs: '1rem' } }}>
+                                Resetear
+                            </Button>
+
+                            <Button variant="contained" color="secondary" onClick={handleClickFiltrar} sx={{ fontSize: { xs: '1rem' } }}>
+                                Mostrar
+                            </Button>
+                        </Stack>
+                    </Grid>
+                </Grid >
+            </Grid>
         </React.Fragment >
     )
 };

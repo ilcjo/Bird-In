@@ -22,14 +22,20 @@ import { getOptionsDataR } from './redux/reptiles/actions/fetchOptions.js';
 import { saveOptionsR } from './redux/reptiles/slices/FilterSlice.js';
 import { getOptionsDataI } from './redux/insectos/actions/fetchOptions.js';
 import { saveOptionsI } from './redux/insectos/slices/FilterSlice.js';
+import { getOptionsDataPe } from './redux/peces/actions/fetchOptions.js';
+import { saveOptionsPe } from './redux/peces/slices/FilterSlice.js';
+
 
 // Configurar la URL base de Axios
-const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
+// const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
 // const api = 'https://pruebabird.onrender.com';
 // const api = 'http://181.48.223.2';
-const apilocal = 'http://localhost:3001';
-axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
+// const api = 'https://api.lasavesquepasaronpormisojos.com/';
+const api = 'http://localhost:3001/';
+// axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
+// const api = 'https://api.lasavesquepasaronpormisojos.com/';
 
+axios.defaults.baseURL = api;
 // Realizar llamadas a la API antes de que la aplicación se monte
 // store.dispatch(getInfoBirds());
 
@@ -44,6 +50,8 @@ store.dispatch(getOptionsDataR());
 store.dispatch(saveOptionsR());
 store.dispatch(getOptionsDataI());
 store.dispatch(saveOptionsI());
+store.dispatch(getOptionsDataPe());
+store.dispatch(saveOptionsPe());
 
 const root = createRoot(document.getElementById('root'));
 root.render(

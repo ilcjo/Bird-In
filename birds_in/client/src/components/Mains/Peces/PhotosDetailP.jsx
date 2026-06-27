@@ -2,6 +2,7 @@ import * as React from 'react'
 //LIBRARY
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
+import { useNavigate } from 'react-router-dom';
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import fondo from '../../../assets/images/fondo.png'
@@ -12,44 +13,74 @@ import { CopyRight } from '../../CopyRight';
 import { HeaderP } from './HeaderP';
 //REDUX
 import { sendParameter } from '../../../redux/peces/actions/filterAction';
-import { resetInfo } from '../../../redux/peces/slices/InfoSlice';
+import { isSaltarPe, resetInfoPez } from '../../../redux/peces/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/peces/slices/FilterSlice';
-import { useNavigate } from 'react-router-dom';
+import { isSaltar } from '../../../redux/paisaje/slicesP/LandscapeSlice';
+import { backInfo } from '../../../redux/paisaje/actionsP/fetchAllLands';
 
 export const PhotosDetailP = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)
     const theme = useTheme()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { isOne, info } = useSelector(state => state.data)
-    const { copyFilters } = useSelector(state => state.filter)
+    const { isOne, info, saltarP } = useSelector(state => state.dataP)
+    const { filtersP } = useSelector(state => state.landscapeSlice)
+    const { copyFilters } = useSelector(state => state.filterP)
     const allImages = info.flatMap(registro => registro.imagenes_peces);
     const featuredImage = allImages.find(image => image.destacada);
     const mainImage = featuredImage ? encodeURI(featuredImage.url) : null;
     const [showBackdrop, setShowBackdrop] = React.useState(false);
     const [loadingMessage, setLoadingMessage] = React.useState('Regresando..')
 
+    // const stepBack = () => {
+    //     setShowBackdrop(true)
+    //     // console.log(copyFilters, 'regreso copy filter')
+    //     setTimeout(() => {
+    //         switch (isOne) {
+    //             case false:
+    //                 console.log(copyFilters)
+    //                 dispatch(sendParameter(copyFilters));
+    //                 setPage(1)
+    //                 break;
+    //             case true:
+    //                 setIsFilterOpen(true);
+    //                 dispatch(resetInfo())
+    //                 setShowBackdrop(false)
+    //                 break;
+    //             default:
+    //                 // Código que se ejecutará si isOne no es ni true ni false
+    //                 break;
+    //         }
+    //     }, 1000);
+
+    // };
     const stepBack = () => {
-        setShowBackdrop(true)
-        // console.log(copyFilters, 'regreso copy filter')
+        setShowBackdrop(true);
+
         setTimeout(() => {
+            if (saltarP) {
+                dispatch(backInfo(filtersP));
+                dispatch(isSaltar(true));
+                dispatch(isSaltarPe(false))
+                dispatch(resetInfoPez())
+                navigate('/paisajes');
+                return;
+            }
             switch (isOne) {
                 case false:
-                    console.log(copyFilters)
                     dispatch(sendParameter(copyFilters));
-                    setPage(1)
+                    setPage(1);
                     break;
                 case true:
                     setIsFilterOpen(true);
-                    dispatch(resetInfo())
-                    setShowBackdrop(false)
+                    dispatch(resetInfoPez());
+                    setShowBackdrop(false);
                     break;
                 default:
-                    // Código que se ejecutará si isOne no es ni true ni false
+                    console.warn('Estado inesperado de oneBird:', oneBird);
                     break;
             }
         }, 1000);
-
     };
 
     React.useEffect(() => {

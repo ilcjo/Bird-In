@@ -18,6 +18,7 @@ import { CardsLand } from '../../components/Cards/Paisaje/CardsLand';
 import { isSaltarRept, resetInfo } from '../../redux/reptiles/slices/InfoSlice';
 import { isSaltarMa, resetInfo as resetInfoM } from '../../redux/mamiferos/slices/InfoSlice'
 import { isSaltarBird, resetInfoBird } from '../../redux/birds/slices/InfoSlice';
+import { isSaltarPe, resetInfoPez } from '../../redux/peces/slices/InfoSlice';
 //STYLES
 
 
@@ -58,10 +59,12 @@ export const LandsCapes = () => {
       dispatch(resetInfo())
       dispatch(resetInfoBird())
       dispatch(resetInfoM())
+      dispatch(resetInfoPez())
       dispatch(isOneLand(null))
       dispatch(isSaltarBird(false))
       dispatch(isSaltarMa(false))
       dispatch(isSaltarRept(false))
+      dispatch(isSaltarPe(false))
     }
 
   }, []);

@@ -43,7 +43,7 @@ const fetchFilterLands = async (pais, zona, page, perPage) => {
                     separate: true
                 }
             ],
-            // order: [['nombre', 'ASC']],
+          //  order: [['nombre', 'ASC']],
             limit: perPageConvert,
             offset: offset
         });

@@ -24,6 +24,8 @@ const exceljs = require('exceljs');
 const ftp = require('basic-ftp');
 const axios = require('axios');
 const sharp = require('sharp');
+const pLimit = require('p-limit').default;
+const path = require('path');
 
 const {
    FTP_HOST,
@@ -119,6 +121,7 @@ const createBird = async (req, res) => {
       urlImagen
 
    } = req.body;
+  
    try {
 
       const succesCreate = await sendAndCreateBird(
@@ -338,94 +341,209 @@ const checkBirdDuplicate = async (req, res) => {
    }
 };
 
-const getExcelConPortada = async (req, res) => {
-   try {
-      let aves = await VistaAvesOrdenadaAll.findAll();
+            // const getExcelConPortada = async (req, res) => {
+            //    try {
+            //       let aves = await VistaAvesOrdenadaAll.findAll();
 
-      aves.sort((a, b) => {
-         if (a.nombre_ingles < b.nombre_ingles) return -1;
-         if (a.nombre_ingles > b.nombre_ingles) return 1;
-         return 0;
-      });
+            //       aves.sort((a, b) => {
+            //          if (a.nombre_ingles < b.nombre_ingles) return -1;
+            //          if (a.nombre_ingles > b.nombre_ingles) return 1;
+            //          return 0;
+            //       });
+
+            //       const workbook = new exceljs.Workbook();
+            //       const worksheet = workbook.addWorksheet('Aves');
+            //       const ALTO_FILA = 90;
+
+            //       // 1. Agregamos 'Total' a las columnas
+            //       worksheet.columns = [
+            //          { header: 'Nombre Inglés', key: 'nombre_ingles', width: 25 },
+            //          { header: 'Nombre Común', key: 'nombre_comun', width: 25 },
+            //          { header: 'Nombre Científico', key: 'nombre_cientifico', width: 30 },
+            //          { header: 'Nombre Grupo', key: 'nombre_grupo', width: 25 },
+            //          { header: 'Total', key: 'total_imagenes', width: 10 }, // Nueva columna
+            //          { header: 'Portada', key: 'portada', width: 35 }
+            //       ];
+
+            //       // Estilo para el encabezado
+            //       worksheet.getRow(1).font = { bold: true };
+            //       worksheet.getRow(1).alignment = { horizontal: 'center' };
+
+            //       for (let i = 0; i < aves.length; i++) {
+            //          const registro = aves[i];
+            //          const currentRow = i + 2;
+
+            //          // 2. Mapeamos el dato de tu vista a la columna 'total_imagenes'
+            //          const row = worksheet.addRow({
+            //             nombre_ingles: registro.nombre_ingles,
+            //             nombre_comun: registro.nombre_comun,
+            //             nombre_cientifico: registro.nombre_cientifico,
+            //             nombre_grupo: registro.nombre_grupo,
+            //             total_imagenes: registro.total_imagenes // Usa el nombre exacto de tu columna en la DB
+            //          });
+
+            //          row.height = ALTO_FILA;
+            //          row.alignment = { vertical: 'middle', horizontal: 'left' };
+
+            //          if (registro.portada_url) {
+            //             try {
+            //                const response = await axios.get(registro.portada_url, { responseType: 'arraybuffer' });
+            //                const imagePipe = sharp(response.data);
+            //                const metadata = await imagePipe.metadata();
+
+            //                const compressedImage = await imagePipe
+            //                   .resize({ height: 110 })
+            //                   .jpeg({ quality: 30 })
+            //                   .toBuffer();
+
+            //                const imageId = workbook.addImage({
+            //                   buffer: compressedImage,
+            //                   extension: 'jpeg'
+            //                });
+
+            //                const aspecto = metadata.width / metadata.height;
+            //                const anchoParaExcel = 110 * aspecto;
+
+            //                // La columna de portada ahora es la 6 (índice 5) porque agregamos 'Total'
+            //                worksheet.addImage(imageId, {
+            //                   tl: { col: 5.1, row: i + 1.1 },
+            //                   ext: { width: anchoParaExcel, height: 110 },
+            //                   editAs: 'oneCell'
+            //                });
+
+            //             } catch (imgError) {
+            //                console.log(`Error en imagen: ${imgError.message}`);
+            //             }
+            //          }
+            //       }
+
+            //       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            //       res.setHeader('Content-Disposition', 'attachment; filename=avesFotos.xlsx');
+
+            //       await workbook.xlsx.write(res);
+            //       res.end();
+
+            //    } catch (error) {
+            //       console.error('Error al generar Excel:', error);
+            //       res.status(500).send('Error al generar el Excel');
+            //    }
+            // };
+
+const generarExcel = async (req, res) => {
+   try {
+      console.log('GENERANDO EXCEL CON IMÁGENES...');
+
+      const aves = await VistaAvesOrdenadaAll.findAll();
 
       const workbook = new exceljs.Workbook();
       const worksheet = workbook.addWorksheet('Aves');
+
       const ALTO_FILA = 90;
 
-      // 1. Agregamos 'Total' a las columnas
       worksheet.columns = [
          { header: 'Nombre Inglés', key: 'nombre_ingles', width: 25 },
          { header: 'Nombre Común', key: 'nombre_comun', width: 25 },
          { header: 'Nombre Científico', key: 'nombre_cientifico', width: 30 },
          { header: 'Nombre Grupo', key: 'nombre_grupo', width: 25 },
-         { header: 'Total', key: 'total_imagenes', width: 10 }, // Nueva columna
+         { header: 'Total', key: 'total_imagenes', width: 10 },
          { header: 'Portada', key: 'portada', width: 35 }
       ];
 
-      // Estilo para el encabezado
       worksheet.getRow(1).font = { bold: true };
-      worksheet.getRow(1).alignment = { horizontal: 'center' };
 
-      for (let i = 0; i < aves.length; i++) {
-         const registro = aves[i];
-         const currentRow = i + 2;
-
-         // 2. Mapeamos el dato de tu vista a la columna 'total_imagenes'
+      // 1️⃣ crear filas primero
+      aves.forEach((a) => {
          const row = worksheet.addRow({
-            nombre_ingles: registro.nombre_ingles,
-            nombre_comun: registro.nombre_comun,
-            nombre_cientifico: registro.nombre_cientifico,
-            nombre_grupo: registro.nombre_grupo,
-            total_imagenes: registro.total_imagenes // Usa el nombre exacto de tu columna en la DB
+            nombre_ingles: a.nombre_ingles,
+            nombre_comun: a.nombre_comun,
+            nombre_cientifico: a.nombre_cientifico,
+            nombre_grupo: a.nombre_grupo,
+            total_imagenes: a.total_imagenes
          });
 
          row.height = ALTO_FILA;
-         row.alignment = { vertical: 'middle', horizontal: 'left' };
+      });
 
-         if (registro.portada_url) {
+      // 🔥 CACHE EN MEMORIA
+      const imageCache = new Map();
+
+      const limit = pLimit(6); // 🔥 clave para estabilidad
+
+      const tareas = aves.map((registro, i) =>
+         limit(async () => {
             try {
-               const response = await axios.get(registro.portada_url, { responseType: 'arraybuffer' });
-               const imagePipe = sharp(response.data);
-               const metadata = await imagePipe.metadata();
+               if (!registro.portada_url) return;
 
-               const compressedImage = await imagePipe
+               // 🔥 cache
+               if (imageCache.has(registro.portada_url)) {
+                  return imageCache.get(registro.portada_url);
+               }
+
+               const response = await axios.get(registro.portada_url, {
+                  responseType: 'arraybuffer',
+                  timeout: 15000
+               });
+
+               const buffer = await sharp(response.data)
                   .resize({ height: 110 })
                   .jpeg({ quality: 30 })
                   .toBuffer();
 
                const imageId = workbook.addImage({
-                  buffer: compressedImage,
+                  buffer,
                   extension: 'jpeg'
                });
 
-               const aspecto = metadata.width / metadata.height;
-               const anchoParaExcel = 110 * aspecto;
+               const aspect = 110 / 110;
 
-               // La columna de portada ahora es la 6 (índice 5) porque agregamos 'Total'
-               worksheet.addImage(imageId, {
-                  tl: { col: 5.1, row: i + 1.1 },
-                  ext: { width: anchoParaExcel, height: 110 },
-                  editAs: 'oneCell'
-               });
+               const result = {
+                  imageId,
+                  index: i,
+                  aspect
+               };
 
-            } catch (imgError) {
-               console.log(`Error en imagen: ${imgError.message}`);
+               imageCache.set(registro.portada_url, result);
+
+               return result;
+
+            } catch (err) {
+               console.log('Error imagen:', err.message);
+               return null;
             }
-         }
-      }
+         })
+      );
 
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', 'attachment; filename=avesFotos.xlsx');
+      const resultados = await Promise.all(tareas);
+
+      // 2️⃣ insertar imágenes
+      resultados.forEach((img) => {
+         if (!img) return;
+
+         worksheet.addImage(img.imageId, {
+            tl: { col: 5.1, row: img.index + 1.1 },
+            ext: { width: 120, height: 110 },
+            editAs: 'oneCell'
+         });
+      });
+
+      res.setHeader(
+         'Content-Type',
+         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      );
+
+      res.setHeader(
+         'Content-Disposition',
+         'attachment; filename=aves.xlsx'
+      );
 
       await workbook.xlsx.write(res);
       res.end();
 
    } catch (error) {
-      console.error('Error al generar Excel:', error);
-      res.status(500).send('Error al generar el Excel');
+      console.error('ERROR:', error);
+      res.status(500).send('Error generando Excel');
    }
 };
-
 
 const getAllAvesAsExcel = async (req, res) => {
    try {
@@ -556,6 +674,6 @@ module.exports = {
    getAllAvesAsExcel,
    getAllNombres,
    checkClases,
-   getExcelConPortada
+   generarExcel,
 }
 

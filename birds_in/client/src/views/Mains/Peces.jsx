@@ -14,29 +14,30 @@ import { CardsPeces } from '../../components/Cards/Peces/CardsPeces';
 import { PhotosDetailP } from '../../components/Mains/Peces/PhotosDetailP';
 //REDUX
 import { loadMoreData } from '../../redux/peces/actions/infoAction';
-import { resetInfo, } from '../../redux/peces/slices/InfoSlice';
-import { sendParameter } from '../../redux/peces/actions/filterAction';
-import { copingFilters } from '../../redux/peces/slices/FilterSlice';
+import { isOneP, resetInfoPez, } from '../../redux/peces/slices/InfoSlice';
+import { isOneLand, resetInfoLand } from '../../redux/paisaje/slicesP/LandscapeSlice';
+import { getOptionsDataPe } from '../../redux/peces/actions/fetchOptions';
 
 export const Peces = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading, info, isOne, total } = useSelector(state => state.data)
-  const { filters, noMoreResults } = useSelector(state => state.filter)
+  const { loading, info, isOne, total, saltarP } = useSelector(state => state.dataP)
+  const { filters, noMoreResults } = useSelector(state => state.filterP)
   const { allCustom } = useSelector((state) => state.customizesSlice);
-  const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(false);
+  const { isPec } = useSelector(state => state.landscapeSlice)
+  const [isFilterDialogOpen, setFilterDialogOpen] = React.useState(true);
   const [page, setPage] = React.useState(1);
   const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Cargando..')
-  const [selectOption, setSelectOption] = React.useState({
-    grupo: [],
-    familia: [],
-    pais: [],
-    zona: [],
-    cientifico: [],
-    ingles: [],
-  });
+  // const [selectOption, setSelectOption] = React.useState({
+  //   grupo: [],
+  //   familia: [],
+  //   pais: [],
+  //   zona: [],
+  //   cientifico: [],
+  //   ingles: [],
+  // });
 
   const panel = localStorage.getItem('panel')
 
@@ -52,39 +53,63 @@ export const Peces = () => {
 
   const stepBack = () => {
     setFilterDialogOpen(true)
-    dispatch(resetInfo())
-    dispatch(isOne(null))
+    dispatch(resetInfoPez())
+    dispatch(isOneP(null))
   };
 
+
   React.useEffect(() => {
-    dispatch(resetInfo());
-    // dispatch(isOneR(null))
+    if (saltarP) {
+      setFilterDialogOpen(false)
+    } else if (isPec) {
+      setFilterDialogOpen(false)
+    } else {
+      dispatch(resetInfoPez());
+      dispatch(isOneP(null))
+      dispatch(resetInfoLand());
+      dispatch(getOptionsDataPe());
+      dispatch(isOneLand(null))
+    }
   }, []);
 
+  // React.useEffect(() => {
+  //   dispatch(resetInfo());
+  //   dispatch(isOneP(null))
+  // }, []);
+
   React.useEffect(() => {
-    const fetchData = async () => {
+    if (loading) {
       setShowBackdrop(true);
       setLoadingMessage('Buscando Resultados...');
-      try {
-        const resultLength = await dispatch(sendParameter(selectOption));
-        setPage(1);
-        dispatch(copingFilters());
+    } else {
+      setShowBackdrop(false);
+    }
+  }, [loading]);
+  
+  // // React.useEffect(() => {
+  // //   const fetchData = async () => {
+  // //     setShowBackdrop(true);
+  // //     setLoadingMessage('Buscando Resultados...');
+  // //     try {
+  // //       const resultLength = await dispatch(sendParameter(selectOption));
+  // //       setPage(1);
+  // //       dispatch(copingFilters());
 
-        if (resultLength === 1) {
-          // dispatch(isOneR(true));
-        } else {
-          // dispatch(isOneR(false));
-        }
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-        // Aquí puedes mostrar un error al usuario si quieres
-      } finally {
-        setShowBackdrop(false);
-      }
-    };
+  // //       if (resultLength === 1) {
+  // //         dispatch(isOneP(true));
+  // //       } else {
+  // //         dispatch(isOneP(false));
+  // //       }
+  // //     } catch (error) {
+  // //       console.error("Failed to fetch data:", error);
+  // //       // Aquí puedes mostrar un error al usuario si quieres
+  // //     } finally {
+  // //       setShowBackdrop(false);
+  // //     }
+  // //   };
 
-    fetchData();
-  }, [dispatch, selectOption]);
+  //   fetchData();
+  // }, [dispatch, selectOption]);
 
 
   return (
@@ -202,9 +227,10 @@ export const Peces = () => {
                   {/* <FilterListIcon fontSize='large' sx={{ ml: 1 }} /> */}
                 </Typography>
                 <Typography variant='body1' color='secondary.dark' sx={{ marginLeft: '20px', mb: 5 }}>
-                  {total} orden de peces encontrados
+                  {total} peces encontrados
                 </Typography>
               </Grid>
+
             </Grid>
 
             <Grid container spacing={3} justifyContent="center">

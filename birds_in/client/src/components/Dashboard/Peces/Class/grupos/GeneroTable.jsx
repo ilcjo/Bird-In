@@ -20,13 +20,13 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { eliminarGrupo, updateGrupo } from '../../../../../redux/peces/actions/CrudClass';
-import { getOptionsDataI } from '../../../../../redux/peces/actions/fetchOptions';
+import { getOptionsDataPe } from '../../../../../redux/peces/actions/fetchOptions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.primary.dark,
         color: theme.palette.primary.main,
-        ...theme.typography.h5,
+        ...theme.typography.h4,
     },
     [`&.${tableCellClasses.body}`]: {
         fontFamily: theme.typography.fontFamily,
@@ -52,7 +52,7 @@ export const GeneroTable = ({
 }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { grupos } = useSelector(state => state.filter.options);
+    const { grupos } = useSelector(state => state.filterP.options);
 
     const [nombreGrupos, setNombreGrupos] = React.useState({
         nombreG: '',
@@ -61,23 +61,23 @@ export const GeneroTable = ({
     const [editMode, setEditMode] = React.useState(null);
     const [searchTerm, setSearchTerm] = React.useState('');
 
-    const handleEditGrupo = (index, newValue) => {
+    const handleEditGrupo = (id, field, newValue) => {
         setNombreGrupos((prevValues) => ({
             ...prevValues,
-            nombreG: newValue,
-            idGrupo: index,
+            idGrupo: id,
+            [field]: newValue,
         }));
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('¿Seguro que deseas eliminar este Genero?')) {
+        if (window.confirm('¿Seguro que deseas eliminar este Grupo?')) {
             try {
                 onloading(true);
-                loadingMessage('Eliminando Grupo...');
+                loadingMessage('Eliminando...');
                 await dispatch(eliminarGrupo(id));
-                await dispatch(getOptionsDataI());
+                await dispatch(getOptionsDataPe());
                 onloading(false);
-                successMessages('Genero Eliminado');
+                successMessages('Grupo Eliminado');
                 showSnackBar(true);
             } catch (error) {
                 errorMessage(String(error));
@@ -86,9 +86,14 @@ export const GeneroTable = ({
         }
     };
 
-    const handleEditClick = (index) => {
-        setEditMode(index);
+    const handleEditClick = (grupo) => {
+        setEditMode(grupo.id); // Usa el ID en lugar del índice
+        setNombreGrupos({
+            nombreG: grupo.nombre,
+            idGrupo: grupo.id
+        });
     };
+
 
     const handleCancelEdit = () => {
         setEditMode(null);
@@ -99,9 +104,9 @@ export const GeneroTable = ({
             onloading(true);
             loadingMessage('Actualizando...');
             await dispatch(updateGrupo(nombreGrupos));
-            await dispatch(getOptionsDataI());
+            await dispatch(getOptionsDataPe());
             onloading(false);
-            successMessages('Genero actualizado correctamente');
+            successMessages('Grupo actualizado correctamente');
             showSnackBar(true);
             setEditMode(null);
             setNombreGrupos({
@@ -149,19 +154,19 @@ export const GeneroTable = ({
     return (
         <div>
             <Grid item sx={12} md={12}>
-                <Typography variant='h5' color='primary.light' sx={{ mb: 1, mt: 5 }}>
-                    Lista de Géneros
-                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} />
+                <Typography variant='h1' color='primary' sx={{ mb: 1, mt: 5 }}>
+                    Lista de Grupos
+                    {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} /> */}
                 </Typography>
                 <TextField
                     fullWidth
                     variant="outlined"
-                    placeholder="Buscar Genero..."
+                    placeholder="Buscar Grupo..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     sx={{
                         mb: 2,
-                        backgroundColor: 'rgba(204,214,204,0.17)',
+                        backgroundColor: 'hsla(152, 89.50%, 7.50%, 0.17)',
                         borderRadius: '9px',
                         '& .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'none',
@@ -169,6 +174,10 @@ export const GeneroTable = ({
                         '&:hover .MuiOutlinedInput-notchedOutline': {
                             borderColor: theme.palette.primary.main,
                         },
+                        '& .MuiInputBase-input::placeholder': {
+                            color: theme.palette.primary, // Cambia el color del placeholder
+                            opacity: 1, // Asegura que el color se aplique correctamente
+                        }
                     }}
                 />
                 <TableContainer sx={{ maxHeight: 450, borderRadius: 3 }}>
@@ -182,12 +191,12 @@ export const GeneroTable = ({
                         <TableBody>
                             {filteredGrupos.map((item, index) => (
                                 <StyledTableRow key={item.index}>
-                                    <TableCell align="center" colSpan={2} style={{ color: 'white' }}>
-                                        {editMode === index ? (
+                                    <TableCell align="center" colSpan={2} style={{ color: 'white',fontSize: '1.4rem' }}>
+                                        {editMode === item.id ? (
                                             <TextField
                                                 fullWidth
-                                                value={nombreGrupos.idGrupo === item.id ? nombreGrupos.nombreG : item.nombre}
-                                                onChange={(e) => handleEditGrupo(item.id, e.target.value)}
+                                                value={nombreGrupos.nombreG}
+                                                onChange={(e) => handleEditGrupo(item.id, "nombreG", e.target.value)}
                                                 InputLabelProps={{ sx: labelStyles }}
                                                 InputProps={{ sx: inputStyles }}
                                             />
@@ -196,8 +205,22 @@ export const GeneroTable = ({
                                         )}
                                     </TableCell>
                                     <TableCell align="center" colSpan={2} style={{ color: theme.palette.primary.light }}>
-                                        {editMode === index ? (
+                                        {editMode === item.id ? (
                                             <>
+
+                                                <Button
+                                                    onClick={handleCancelEdit}
+                                                    sx={{
+                                                        fontSize: '1rem',
+                                                        ml: 2,
+                                                        mt: 0.7,
+                                                        textTransform: 'none',
+                                                    }}
+                                                    variant="contained"
+                                                    color="error"
+                                                >
+                                                    Cancelar
+                                                </Button>
                                                 <Button
                                                     onClick={saveChanges}
                                                     sx={{
@@ -212,28 +235,15 @@ export const GeneroTable = ({
                                                 >
                                                     Grabar
                                                 </Button>
-                                                <Button
-                                                    onClick={handleCancelEdit}
-                                                    sx={{
-                                                        fontSize: '1rem',
-                                                        ml: 2,
-                                                        mt: 0.7,
-                                                        textTransform: 'none',
-                                                    }}
-                                                    variant="contained"
-                                                    color="error"
-                                                >
-                                                    Cancelar
-                                                </Button>
                                             </>
                                         ) : (
                                             <Grid container sx={{ maxHeight: 450 }}>
                                                 <Grid item xs={12} md={6}>
                                                     <Button
-                                                        onClick={() => handleEditClick(index)}
+                                                        onClick={() => handleEditClick(item)}
                                                         sx={{ fontSize: '1rem' }}
-                                                        variant="outlined"
-                                                        color="primary"
+                                                        variant="contained"
+                                                        color="secondary"
                                                     >
                                                         Editar
                                                     </Button>

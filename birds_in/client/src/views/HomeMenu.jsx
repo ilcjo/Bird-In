@@ -7,11 +7,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { CopyRight } from '../components/CopyRight';
-import { isFromBird, isFromMam, isSaltar, isSFromRept } from '../redux/paisaje/slicesP/LandscapeSlice';
+import { isFromBird, isFromMam, isFromPez, isSaltar, isSFromRept } from '../redux/paisaje/slicesP/LandscapeSlice';
 import { isSaltarBird } from '../redux/birds/slices/InfoSlice';
 import { isSaltarMa } from '../redux/mamiferos/slices/InfoSlice';
 import { isSaltarRept } from '../redux/reptiles/slices/InfoSlice';
 import fondo from '../assets/images/fondo.png';
+import { isSaltarPe } from '../redux/peces/slices/InfoSlice';
 
 
 const sections = [
@@ -38,7 +39,9 @@ export const HomeMenu = () => {
       dispatch(isFromBird(false)),
       dispatch(isFromMam(false)),
       dispatch(isSFromRept(false)),
-      dispatch(isSaltarRept(false))
+      dispatch(isSaltarRept(false)),
+      dispatch(isSaltarPe(false)),
+      dispatch(isFromPez(false))
 
   }, []);
   // Access image URLs
@@ -73,7 +76,7 @@ export const HomeMenu = () => {
           background: 'rgba(11, 53, 15, 0.45)',
           backdropFilter: 'blur(0px)',
           zIndex: 1,
-          
+
         }}
       >
 
@@ -141,8 +144,8 @@ export const HomeMenu = () => {
 
             >
               <RouterLink to={`/${section.id}`} style={{
-                display: 'block', 
-                width: '100%',    
+                display: 'block',
+                width: '100%',
                 height: '100%',
               }}>
                 <img
@@ -158,7 +161,7 @@ export const HomeMenu = () => {
                   left: 0,
                   width: '100%',
                   background: 'linear-gradient(to top, rgba(1, 26, 4, 0.8),transparent)',
-  transition: 'opacity 0.35s ease-in-out',
+                  transition: 'opacity 0.35s ease-in-out',
                   // background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
                   color: '#fff',
                   // borderRadius: '0px 0px 10px 0px',

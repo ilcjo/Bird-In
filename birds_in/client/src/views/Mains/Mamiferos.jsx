@@ -10,11 +10,11 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { MenuBar } from '../../components/Menus/MenuBar'
 import { Loading } from '../../components/utils/Loading'
 import { Filters } from '../../components/Mains/Mamiferos/Filters';
+import { CardsMamiferos } from '../../components/Cards/Mamiferos/CardsMamiferos';
 import { PhotosDetail } from '../../components/Mains/Mamiferos/PhotosDetail';
 //REDUX
 import { loadMoreData } from '../../redux/mamiferos/actions/infoAction';
 import { isOneR, resetInfo, } from '../../redux/mamiferos/slices/InfoSlice';
-import { CardsMamiferos } from '../../components/Cards/Mamiferos/CardsMamiferos';
 import { isOneLand, resetInfoLand } from '../../redux/paisaje/slicesP/LandscapeSlice';
 import { getOptionsDataP } from '../../redux/paisaje/actionsP/fetchOptionsLand';
 

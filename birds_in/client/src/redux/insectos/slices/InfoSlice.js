@@ -39,7 +39,7 @@ export const dataInsect = createSlice({
     saveCounting: (state, action) => {
       state.count = action.payload;
     },
-    isOneR: (state, action) => {
+    isOneI: (state, action) => {
       state.isOne = action.payload;
     },
     howMuch: (state, action) => {
@@ -60,7 +60,7 @@ export const {
   searchBarResult,
   resetInfo,
   saveCounting,
-  isOneR,
+  isOneI,
   howMuch,
   cargando,
 } = dataInsect.actions;

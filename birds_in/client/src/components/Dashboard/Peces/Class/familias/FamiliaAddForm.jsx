@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Divider, Grid, TextField, Typography, useTheme } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
-import { getOptionsDataI } from '../../../../../redux/peces/actions/fetchOptions';
+import {  getOptionsDataPe } from '../../../../../redux/peces/actions/fetchOptions';
 import { addFamilia, checkDuplicadosFamilia } from '../../../../../redux/peces/actions/CrudClass';
 
 export const FamiliaAddForm = ({
@@ -39,7 +39,7 @@ export const FamiliaAddForm = ({
             // Continuar con el proceso de agregar la familia
             loadingMessage('Agregando...');
             await dispatch(addFamilia(nombreFamilia));
-            await dispatch(getOptionsDataI());
+            await dispatch(getOptionsDataPe());
             onloading(false);
             successMessages('Familia creada correctamente');
             showSnackBar(true);
@@ -59,41 +59,19 @@ export const FamiliaAddForm = ({
         }
     };
 
-    const labelStyles = {
-        color: theme.palette.primary.main,
-        marginTop: '-10px',
-    };
-
-    const inputStyles = {
-        color: theme.palette.primary.light,
-        backgroundColor: 'rgba(204,214,204,0.17)',
-        borderRadius: '9px',
-        height: '60px',
-        '& .MuiInputBase-input': {
-            padding: '0px',
-            paddingLeft: '10px',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'none',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main,
-            backgroundColor: 'rgba(0,56,28,0.22)',
-        },
-    };
 
     return (
         <div>
             <Grid alignItems="center" container spacing={1} sx={{
-                backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backgroundColor: 'rgba(242, 246, 219, 0.46))',
                 p: 3,
                 borderRadius: '10px',
                 mb: 0
             }}>
                 <Grid item xs={12} sm={9}>
-                    <Typography variant='h5' color='primary.light' sx={{ mb: 1 }}>
+                    <Typography variant='h2' color='primary.light' sx={{ mb: 1 }}>
                         Agregar Nueva Familia
-                        <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} />
+                        {/* <Divider sx={{ my: 1, borderColor: theme.palette.primary.main, }} /> */}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} md={9}>
@@ -102,12 +80,6 @@ export const FamiliaAddForm = ({
                         label="Nombre de Familia"
                         value={nombreFamilia.nombreF}
                         onChange={(e) => setNombreFamilia({ ...nombreFamilia, nombreF: e.target.value })}
-                        InputLabelProps={{
-                            sx: labelStyles,
-                        }}
-                        InputProps={{
-                            sx: inputStyles,
-                        }}
                     />
                 </Grid>
                 <Grid item xs={12} md={2}>

@@ -1200,7 +1200,7 @@ const findGroupNameDuplicate = async (nombreGrupo) => {
             where: { nombre: nombreGrupo }
         });
 
-        console.log(existingGroup);
+        // console.log(existingGroup);
 
         // Si encuentra un grupo con el mismo nombre, arroja un error
         if (existingGroup) {

@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 //components
 import { CoverDelete } from '../Photos/CoverDelete'
 import { UpdateForm } from '../../../Forms/Peces/UpdateForm';
+import { CoverDeleteOrigin } from '../Photos/CoverDeleteOrigin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     backgroundColor: 'rgba(65, 99, 69, 0.55)', // Establece el fondo transparente deseado
@@ -36,6 +37,12 @@ const StyledTab = styled(Tab)({
 
 export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, selected, history }) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
+    const [coverSelected, setCoverSelected] = React.useState(false);
+    const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
+
+    const handleSetCoverSelected = (isSelected) => {
+        setCoverSelected(isSelected);
+    };
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -45,6 +52,29 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
         setSelectedTab(1); // Cambia a la pestaña de imágenes existentes
     };
 
+    React.useEffect(() => {
+            const executeSequence = async () => {
+                // console.log('llegue a funcion que abre la pesataña');
+                let isFromImage = localStorage.getItem('isFromCreateImage');
+                let isExist = localStorage.getItem('isExist');
+                if (isFromImage === 'true' && isExist === 'false') {
+                    // await handleButtonClickFromCreate(); // Espera a que se complete el update
+                    setTimeout(() => {
+                        handleNavigateToCoverDelete(); // Ejecuta después del retraso
+                        localStorage.removeItem('nombreIngles');
+                        localStorage.removeItem('isFromCreateImage');
+                        localStorage.removeItem('isExist');
+                    }, 1000); // Ejecuta después de completar el update
+                } else if (isFromImage === 'false' && isExist === 'true') {
+                    setSelectedTab(0);
+                    localStorage.removeItem('nombreIngles');
+                    localStorage.removeItem('isFromCreateImage');
+                    localStorage.removeItem('isExist');
+                }
+            };
+            executeSequence();
+        }, []);
+        
     return (
         <React.Fragment>
             <Box sx={{
@@ -85,7 +115,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDelete
+                        <CoverDeleteOrigin
                             changeTab={changeTab}
                             showUpdate={showUpdate}
                             showSearch={showSearch}

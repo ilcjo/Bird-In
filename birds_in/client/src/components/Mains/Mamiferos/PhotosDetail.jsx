@@ -2,21 +2,21 @@ import * as React from 'react'
 //LIBRARY
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Divider, Fab, Grid, Typography, useTheme } from '@mui/material'
+import { useNavigate } from 'react-router-dom';
 //ICONS
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import fondo from '../../../assets/images/fondo.png'
 //COMPONENTS
 import { ImagesCards } from '../../Cards/ImagesCards'
 import { Loading } from '../../utils/Loading';
+import { CopyRight } from '../../CopyRight';
+import { Header } from './Header';
 //REDUX
 import { sendParameter } from '../../../redux/mamiferos/actions/filterAction';
 import { isSaltarMa, resetInfo } from '../../../redux/mamiferos/slices/InfoSlice';
 import { setNoMoreResults } from '../../../redux/mamiferos/slices/FilterSlice';
-import { Header } from './Header';
-import { CopyRight } from '../../CopyRight';
 import { isSaltar } from '../../../redux/paisaje/slicesP/LandscapeSlice';
 import { backInfo, sendParameterP } from '../../../redux/paisaje/actionsP/fetchAllLands';
-import { useNavigate } from 'react-router-dom';
 
 export const PhotosDetail = ({ setIsFilterOpen, setPage }) => {
     // console.log(setPage)

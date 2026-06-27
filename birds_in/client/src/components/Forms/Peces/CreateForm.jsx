@@ -33,7 +33,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
 
-    const { paises, familias, grupos, zonas } = useSelector(state => state.filter.options)
+    const { paises, familias, grupos, zonas } = useSelector(state => state.filterP.options)
     const [imageLink, setImageLink] = React.useState([]); // Para mostrar la imagen seleccionada
     const [imageFiles, setImageFiles] = React.useState([]); // Para almacenar el Blob de la imagen
     const [allImageURLs, setAllImageURLs] = React.useState([]);
@@ -47,6 +47,8 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
     const [formSubmitted, setFormSubmitted] = React.useState(false);
     const [combinedOptionsFamilias, setCombinedOptionsFamilias] = React.useState(familias);
     const [combinedOptionsGrupos, setCombinedOptionsGrupos] = React.useState(grupos);
+    const [isFromCreate, setIsFromCreate] = React.useState(false);
+    const [isFromCreateImage, setIsFromCreateImage] = React.useState(false);
 
     const [createData, setCreateData] = React.useState({
         grupo: null,
@@ -122,8 +124,12 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 console.error('Error al comprobar duplicados:', String(error));
                 alert('Este Registro ya existe');
                 // Restablece el valor del input
+                localStorage.setItem('nombreIngles', JSON.stringify(newName))
+                localStorage.setItem('isExist', JSON.stringify(isFromCreate))
+                localStorage.setItem('isFromCreateImage', JSON.stringify(false))
                 changeTabSearch()
                 setCreateData()
+                setIsFromCreate(true)
             }
         }, 700);
     };
@@ -178,12 +184,16 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                 setImageFiles([]);
                 setFormSubmitted(false)
                 setSnackBarMessage('El Registro se a creado correctamente.')
+                setIsFromCreateImage(true)
+                localStorage.setItem('isFromCreateImage', JSON.stringify(true))
+                localStorage.setItem('isExist', JSON.stringify(false))
+                changeTabSearch()
                 // Añadir un retraso de 10 segundos antes de ejecutar changeImagenExist()
-                setTimeout(() => {
-                    dispatch(getInfoForUpdateName(createData.ingles));
-                    changeImagenTab(1);
-                    isImages(true)
-                }, 1500); // 10000 mili segundos = 10 segundos
+                // setTimeout(() => {
+                //     dispatch(getInfoForUpdateName(createData.ingles));
+                //     changeImagenTab(1);
+                //     isImages(true)
+                // }, 1500); // 10000 mili segundos = 10 segundos
             } catch (error) {
                 console.log('este es el error:', String(error))
                 setErrorMessage(`Ocurrió un error: ${error}`);
@@ -244,17 +254,22 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...grupos, // Mantén las opciones originales
+            try {
+                // Aquí llamas a la función que genera datos extra y actualizas el estado
+                const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+                // console.log(extraData)
+                // Combina las opciones existentes con las nuevas opciones extra
+                const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
+                const newCombinedOptions = [
+                    ...extraData, // Agrega los datos extra
+                    ...grupos, // Mantén las opciones originales
 
-            ];
+                ];
 
-            setCombinedOptionsGrupos(newCombinedOptions);
+                setCombinedOptionsGrupos(newCombinedOptions);
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
         }
     };
 
@@ -265,16 +280,22 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
         }));
 
         if (newValue) {
-            // Aquí llamas a la función que genera datos extra y actualizas el estado
-            const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-            // console.log(extraData)
-            // Combina las opciones existentes con las nuevas opciones extra
-            const newCombinedOptions = [
-                ...extraData.map(extra => ({ ...extra, type: 'extra' })), // Agrega los datos extra
-                ...familias, // Mantén las opciones originales
-            ];
+            try {
+                // Aquí llamas a la función que genera datos extra y actualizas el estado
+                const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
+                // console.log(extraData)
+                const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
+                // Combina las opciones existentes con las nuevas opciones extra
+                const newCombinedOptions = [
+                    ...extraData, // Agrega los datos extra
+                    ...familias, // Mantén las opciones originales
+                ];
 
-            setCombinedOptionsFamilias(newCombinedOptions);
+                setCombinedOptionsFamilias(newCombinedOptions);
+
+            } catch (error) {
+                console.error("Error al obtener datos adicionales:", error);
+            }
         }
     };
 
@@ -368,7 +389,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
 
                                 <StyledTextField
                                     name="cientifico"
-                                    label="Nombre Científico(Especie)"
+                                    label="Nombre Científico"
                                     value={createData.cientifico}
                                     onChange={handleInputChange}
                                     type='text'
@@ -440,7 +461,7 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Genero"
+                                            label="Grupo"
                                             margin='dense'
                                             error={formSubmitted && !createData.grupo} // Add error state to the TextField
                                             helperText={formSubmitted && !createData.grupo ? 'Este Campo es obligatorio *' : ''}

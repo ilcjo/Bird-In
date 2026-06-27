@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 //COMPONENTS
 import { IndexTabsUpdates } from './IndexTabsUpdates';
 import { Loading } from '../../../utils/Loading';
-import { getInfoForUpdate } from '../../../../redux/peces/actions/crudAction';
+import { getInfoForUpdate, getInfoForUpdateName } from '../../../../redux/peces/actions/crudAction';
 //redux
 
 export const Search = ({ changeTab }) => {
@@ -45,6 +45,28 @@ export const Search = ({ changeTab }) => {
         }
     };
 
+    const handleButtonClickFromCreate = () => {
+        let valor = localStorage.getItem('nombreIngles');
+        if (valor) {
+            try {
+                valor = JSON.parse(valor); // Asegurarse de parsear el JSON si es necesario
+            } catch (e) {
+                console.error('Error al parsear nombreIngles:', e);
+            }
+            dispatch(getInfoForUpdateName(valor)); // Llama al action con el valor obtenido
+            setShowUpdate(true); // Cambia a la vista de actualización
+            setShowSearch(false); // Oculta la vista de búsqueda
+        } else {
+            console.error('nombreIngles no se encuentra en localStorage');
+        }
+    };
+    React.useEffect(() => {
+        let isFrom = localStorage.getItem('isFromCreateImage');
+        if (isFrom) {
+            handleButtonClickFromCreate()
+        }
+    }, []);
+
     React.useEffect(() => {
         if (selected) {
             handleButtonClick();
@@ -65,7 +87,7 @@ export const Search = ({ changeTab }) => {
                 // Ordenar los datos válidos por "Nombre en Inglés" (englishName)
                 // validData.sort((a, b) => a.nombre_ingles.localeCompare(b.nombre_ingles));
                 // localStorage.setItem('sData', JSON.stringify(validData));
-                setData(data);
+                setData(response.data);
             } catch (error) {
                 console.error("Error al obtener los datos:", error);
 
@@ -94,6 +116,7 @@ export const Search = ({ changeTab }) => {
                         backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
                         backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
                         marginTop: 'auto',
+                        borderRadius: '10px',
                         background: `
   linear-gradient(
     180deg,
@@ -105,7 +128,7 @@ export const Search = ({ changeTab }) => {
                     }} >
                         <Grid item xs={12} sm={12} sx={{ mt: 0, mr: -50 }}>
                             <Typography variant="h1" color="primary">
-                                Buscar Pez
+                                Buscar Registro
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={8}>

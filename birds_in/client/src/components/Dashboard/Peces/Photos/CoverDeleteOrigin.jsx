@@ -1,0 +1,256 @@
+import * as React from 'react';
+import { Alert, Button, Divider, Grid, Snackbar, Typography, useTheme } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import '../../../../assets/styles/zoom.css'
+//ICONS
+import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+//COMPONENTS
+import { CarruselGalleryDelete } from '../../../Gallery/CarruselGalleryDelete';
+import { Loading } from '../../../utils/Loading';
+//redux
+import { sendCoverPhoto, sendPhotosDelete } from '../../../../redux/peces/actions/photosAction';
+import { getInfoForUpdate } from '../../../../redux/peces/actions/crudAction';
+import { getRegistro } from '../../../../redux/peces/slices/UpdateSlice';
+import { EditImageCards } from '../../../Cards/EditImageCards';
+
+
+
+export const CoverDeleteOrigin = ({
+    isCreate,
+    showUpdate,
+    showSearch,
+    selected,
+    setCoverSelected,
+}) => {
+
+    const theme = useTheme();
+    const dispatch = useDispatch();
+    const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
+    const { infoForUpdate } = useSelector(state => state.updateP);
+    const [selectedImages, setSelectedImages] = React.useState([]);
+    const [highlightedImage, setHighlightedImage] = React.useState(null);
+    const [showBackdrop, setShowBackdrop] = React.useState(false);
+    const [loadingMessage, setLoadingMessage] = React.useState('Cargando...');
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = React.useState(false);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(null);
+    const [snackbarMessage, setSnackbarMessage] = React.useState('');
+    const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState('');
+
+    const handleSetAsCover = async (id, url, destacada) => {
+        // console.log(id)
+        try {
+            // Marcar la imagen como portada actual
+            setHighlightedImage((prev) => {
+
+                // Deseleccionar la imagen destacada si ya estaba seleccionada
+                if (prev && prev.id === id) {
+                    return null;
+                } else {
+                    // Seleccionar la nueva imagen destacada
+                    return { id, url };
+                }
+            });
+            // Si la imagen es destacada, enviar la solicitud para guardarla como portada
+            await dispatch(sendCoverPhoto(id, infoForUpdate.id_pez));
+            setShowBackdrop(true);
+            setLoadingMessage('Seleccionando Portada')
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+            await dispatch(getInfoForUpdate(infoForUpdate.id_pez));
+            setShowBackdrop(false);
+            setSnackbarOpen(true);
+            setSnackbarMessage('Portada Actual Seleccionada');
+            if (setCoverSelected) {
+                setCoverSelected(true);
+            }
+        } catch (error) {
+            console.error('Error al realizar la acción:', error);
+            setErrorMessage(`Error al realizar la acción: ${error.message}`);
+            setErrorSnackbarOpen(true);
+        }
+    };
+
+    const handleImageClick = (url) => {
+        // console.log('dentro del handleimage:', url)
+        setShowBackdrop(false);
+        setLoadingMessage('Cargando..')
+        setSelectedImageIndex(url); // Establecer la URL de la imagen seleccionada
+        setIsGalleryOpen(true);
+    };
+
+    const handleCloseGallery = () => {
+        setSelectedImageIndex(null); // Restablecer el estado de la imagen seleccionada
+        setIsGalleryOpen(false);
+    };
+
+
+    const handleDeleteCheckBox = (id, url) => {
+        const index = selectedImages.findIndex((img) => img.id === id);
+        if (index === -1) {
+            // No existe en el array, agregarlo
+            setSelectedImages([...selectedImages, { id, url }]);
+        } else {
+            // Ya existe en el array, quitarlo
+            const newSelectedImages = [...selectedImages];
+            newSelectedImages.splice(index, 1);
+            setSelectedImages(newSelectedImages);
+        }
+    };
+
+    const handleDeleteButtonClick = async () => {
+        try {
+            // Mostrar el indicador de carga
+            setShowBackdrop(true);
+            setLoadingMessage('Borrando Fotografías Seleccionadas')
+            // Separar IDs y URLs en arrays diferentes
+            const selectedIds = selectedImages.map((img) => img.id);
+            const selectedUrls = selectedImages.map((img) => img.url);
+            // Realizar la eliminación de fotos
+            await dispatch(sendPhotosDelete(selectedIds, selectedUrls));
+            // Mostrar Snackbar y obtener información actualizada
+            await dispatch(getInfoForUpdate(infoForUpdate.id_pez));
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
+            setSelectedImages([])
+            setShowBackdrop(false)
+            setSnackbarOpen(true);
+        } catch (error) {
+            console.error('Error al eliminar fotos:', error);
+            setErrorMessage(`Error al eliminar las fotografías: ${error.message}`);
+            setErrorSnackbarOpen(true);
+        } finally {
+            setShowBackdrop(false);
+        }
+    };
+
+    const handleReturnSearch = () => {
+        localStorage.removeItem('nombreIngles')
+        showUpdate(false)
+        showSearch(true)
+        selected(null)
+    };
+
+    React.useEffect(() => {
+        if (isCreate) {
+            setSelectedImages([]);
+            dispatch(getRegistro({}))
+            // localStorage.removeItem('nombreIngles')
+        }
+    }, [isCreate])
+
+    const [images, setImages] = React.useState(infoForUpdate.imagenes_peces || []);
+
+    return (
+        <React.Fragment>
+            <Loading message={loadingMessage} open={showBackdrop} />
+            <Grid container spacing={5} sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                // minWidth: '1200px',
+                margin: '0 auto',
+                backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                backdropFilter: 'blur(2px)',
+                padding: 2,
+                borderRadius: '0px 0px 20px 20px',
+                mb: 10,
+                  background: `
+                  linear-gradient(
+                    180deg,
+                    rgba(242, 246, 219, 0.14) 0%,
+                    rgba(65, 99, 69, 0.75) 50%,
+                    rgba(65, 99, 69, 0.42) 100%
+                  )
+                `, 
+
+            }}>
+                <Grid item xs={12} md={12}>
+                    <Grid container >
+                        <Grid item xs={12} sm={9}>
+                            <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
+                                Imágenes {nombre ? ` ${nombre}` : 'del pez'}
+                                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                            </Typography>
+                        </Grid>
+                        {!isCreate && (
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} >
+                                <Button
+                                    sx={{
+                                        fontSize: '1rem',
+                                        fontWeight: 'bold',
+                                        backgroundColor: 'rgba(0, 56, 28, 0.1)',
+                                        backdropFilter: 'blur(2px)',
+                                    }}
+                                    variant="outlined"
+                                    onClick={handleReturnSearch}
+                                    startIcon={<SearchIcon />}
+                                >
+                                    Buscar Otro Registro
+                                </Button>
+                            </Grid>
+                        )}
+                    </Grid>
+                    <Typography variant='h4' color='primary.light' sx={{ mb: 1 }}>
+                        Elegir Portada o Eliminar Imágenes
+                    </Typography>
+                    <Divider sx={{ my: 2, borderColor: theme.palette.primary.main }} />
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleDeleteButtonClick}
+                        endIcon={<DeleteIcon />}
+                        sx={{ mt: 0, mb: 2, color: 'primary.light' }}
+                    >
+                        Eliminar selección
+                    </Button>
+
+                    {infoForUpdate && infoForUpdate.imagenes_peces && infoForUpdate.imagenes_peces.length > 0 && (
+                        <Grid container spacing={0} sx={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+                            {infoForUpdate.imagenes_peces.map((imageUrl, index) => (
+                                <Grid item xs={12} sm={6} md={4} key={index}>
+                                    <EditImageCards
+                                        imageUrl={imageUrl}
+                                        index={index}
+                                        handleImageClick={handleImageClick}
+                                        handleSetAsCover={handleSetAsCover}
+                                        handleDeleteCheckBox={handleDeleteCheckBox}
+                                    />
+                                </Grid>
+                            ))}
+                            <CarruselGalleryDelete
+                                isOpen={isGalleryOpen}
+                                images={infoForUpdate.imagenes_peces}
+                                selectedIndex={selectedImageIndex}
+                                onClose={handleCloseGallery}
+                            />
+                        </Grid>
+                    )}
+                    {!infoForUpdate || !infoForUpdate.imagenes_peces || infoForUpdate.imagenes_peces.length === 0 && (
+                        <Typography variant='body1' color='primary.light' sx={{ marginTop: '10px' }}>
+                            No hay imágenes subidas.
+                        </Typography>
+                    )}
+                </Grid>
+            </Grid>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setSnackbarOpen(false)}
+                message={snackbarMessage}
+            />
+            <Snackbar
+                open={errorSnackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setErrorSnackbarOpen(false)}
+                message={errorMessage}
+                action={
+                    <Button color="inherit" onClick={() => setErrorSnackbarOpen(false)}>
+                        Cerrar
+                    </Button>
+                }
+            />
+        </React.Fragment>
+    );
+}

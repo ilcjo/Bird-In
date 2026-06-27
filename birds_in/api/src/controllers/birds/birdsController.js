@@ -800,10 +800,11 @@ const sendAndCreateBird = async (
     cientifico,
     ingles,
     comun,
-    urlBird,
     urlWiki,
+    urlBird,
     urlImagen
 ) => {
+     console.log('wiki',urlWiki, urlBird)
     try {
         // Validar que el nombre en inglés esté presente
         if (!ingles) {

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { fetchOptions, newOptions, updateFamiliaOptions, updateGrupoOptions } from '../slices/FilterSlice';
 import { createParams } from '../../../components/utils/convertId';
 
-export const getOptionsDataI = () => {
+export const getOptionsDataPe = () => {
   return async (dispatch) => {
     try {
       // console.log('llegue')
@@ -39,7 +39,7 @@ export const clasesFamilia = (idfamilia) => {
       const grupos = response.data.grupos;
       // Despachar la acción para actualizar las opciones de grupo
       dispatch(updateGrupoOptions({ grupos }));
-      return grupos
+      return { grupos }
       // console.log(grupos)
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -59,7 +59,7 @@ export const clasesGrupo = (idgrupo) => {
       // console.log(familias)
       // Despachar la acción para actualizar las opciones de familia
       dispatch(updateFamiliaOptions({ familias }));
-      return familias
+      return { familias }
 
     } catch (error) {
       console.error('Error fetching data:', error);

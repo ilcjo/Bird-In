@@ -2,17 +2,25 @@ import * as React from 'react'
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 //COMPONENTS
-import { CoverDelete } from '../Photos/CoverDelete';
+// import { CoverDelete } from '../Photos/CoverDelete';
 import { CreateForm } from '../../../Forms/Peces/CreateForm';
+import { CoverDeleteOrigin } from '../Photos/CoverDeleteOrigin';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: 'rgba(0, 56, 28, 0.1)', // Establece el fondo transparente deseado
-    backdropFilter: 'blur(8px)', // Efecto de desenfoque de fondo
+    backgroundColor: 'rgba(65, 99, 69, 0.55)', // Establece el fondo transparente deseado
+    backdropFilter: 'blur(2px)', // Efecto de desenfoque de fondo
     borderRadius: '10px 10px 0px 0px',
     marginTop: '0px',
     width: '100%',
     '& .Mui-selected': {
         backgroundColor: theme.palette.custom.light,
+        background: `
+  linear-gradient(
+    180deg,
+    rgba(242, 246, 219, 0.38) 0%,
+   
+  )
+`,
     },
 }));
 const StyledTab = styled(Tab)({
@@ -37,7 +45,7 @@ export const IndexTabsCreate = ({
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [coverSelected, setCoverSelected] = React.useState(false);
     const [imagesExistTabEnabled, setImagesExistTabEnabled] = React.useState(false);
-    
+
     //si pasa a la otra pestaña que confirme el cover este 
     const handleTabChange = (event, newValue) => {
         // console.log(coverSelected, 'dentro')
@@ -50,15 +58,31 @@ export const IndexTabsCreate = ({
             setCoverSelected(false)
         }
     };
- 
+
     //función que determina si tiene cover en true
     const handleSetCoverSelected = (isSelected) => {
         setCoverSelected(isSelected);
     };
 
+    React.useEffect(() => {
+        localStorage.removeItem('isFromCreateImage');
+        localStorage.removeItem('isExist');
+        localStorage.removeItem('nombreIngles');
+    }, [])
+
     return (
         <React.Fragment>
-            <Box sx={{ width: '100%', maxWidth: '90%', margin: '0 auto', minWidth: '1200px' }}>
+            <Box sx={{
+                width: '100%', maxWidth: '98%', margin: '0 auto', minWidth: '1200px', background: `
+            linear-gradient(
+              180deg,
+             rgba(242, 246, 219, 0.14) 0%,
+              rgba(65, 99, 69, 0.75) 50%,
+              rgba(65, 99, 69, 0.42) 100%
+            )
+          `,
+                borderRadius: '15px'
+            }}>
                 <StyledTabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -66,15 +90,15 @@ export const IndexTabsCreate = ({
                     indicatorColor="primary"
                     aria-label="tabsInfoActualizar"
                 >
-                    <StyledTab label={<Typography variant='h5' >
+                    <StyledTab label={<Typography variant='h4' >
                         Información
                     </Typography>} />
-                    <StyledTab
+                    {/* <StyledTab
                         label={<Typography variant='h5' >
                             Imágenes Existente
                         </Typography>}
                         disabled={!imagesExistTabEnabled} // Deshabilitar la pestaña si no hay imágenes
-                    />
+                    /> */}
                     {/* Agrega más pestañas según sea necesario */}
                 </StyledTabs>
                 <Box sx={{ width: '100%', maxWidth: '100%', }}>
@@ -89,14 +113,16 @@ export const IndexTabsCreate = ({
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDelete
-                            isCreate={true}
-                            changeTab={changeTab}
-                            showUpdate={showUpdate}
-                            showSearch={showSearch}
-                            selected={selected}
-                            setCoverSelected={handleSetCoverSelected}
-                        />
+                        <React.Fragment>
+                            <CoverDeleteOrigin
+                                isCreate={true}
+                                changeTab={changeTab}
+                                showUpdate={showUpdate}
+                                showSearch={showSearch}
+                                selected={selected}
+                                setCoverSelected={handleSetCoverSelected}
+                            />
+                        </React.Fragment>
                     )}
                 </Box>
             </Box>

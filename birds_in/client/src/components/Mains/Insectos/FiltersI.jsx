@@ -17,7 +17,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { sendParameter } from '../../../redux/insectos/actions/filterAction';
 import { fetchNewOptions, getOptionsDataI } from '../../../redux/insectos/actions/fetchOptions';
 import { saveFilters } from '../../../redux/insectos/slices/FilterSlice';
-import { cargando, isOneR } from '../../../redux/insectos/slices/InfoSlice';
+import { cargando, isOneI} from '../../../redux/insectos/slices/InfoSlice';
 import { copingFilters } from '../../../redux/insectos/slices/FilterSlice';
 import { setNoMoreResults } from '../../../redux/insectos/slices/FilterSlice';
 
@@ -95,9 +95,9 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             dispatch(copingFilters());
 
             if (resultLength === 1) {
-                dispatch(isOneR(true));
+                dispatch(isOneI(true));
             } else {
-                dispatch(isOneR(false));
+                dispatch(isOneI(false));
             }
         } catch (error) {
             console.error("Error occurred during filtering:", error);
@@ -129,7 +129,7 @@ export const FiltersI = ({ isFilterOpen, setIsFilterOpen, pages }) => {
             cientifico: [],
             ingles: []
         });
-        dispatch(isOneR(null))
+        dispatch(isOneI(null))
         dispatch(setNoMoreResults(true))
     };
 

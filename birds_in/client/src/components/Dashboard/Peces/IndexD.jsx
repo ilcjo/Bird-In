@@ -20,7 +20,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   marginTop: '110px',
   '& .Mui-selected': {
     backgroundColor: theme.palette.custom.light,
-     background: `
+    background: `
   linear-gradient(
     180deg,
     rgba(242, 246, 219, 0.38) 0%,
@@ -43,7 +43,7 @@ export const IndexD = () => {
   const theme = useTheme()
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isFormEnabled, setIsFormEnabled] = React.useState(false);
-  const [showBackdrop, setShowBackdrop] = React.useState(false);
+  // const [showBackdrop, setShowBackdrop] = React.useState(false);
   const [onloading, setOnLoading] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('Agregando...');
 
@@ -52,8 +52,8 @@ export const IndexD = () => {
     setSelectedTab(convertNumber);
     if (convertNumber === 1) {
       dispatch(setEstateInfo());
-    } else if (convertNumber === 4) { // Índice de la pestaña "Descargar Excel"
-      handleDownload();
+      // } else if (convertNumber === 4) { // Índice de la pestaña "Descargar Excel"
+      //   handleDownload();
     }
   };
 
@@ -70,7 +70,7 @@ export const IndexD = () => {
       console.log('Este es el error:', String(error));
     } finally {
       setOnLoading(false);
-      setSelectedTab(1)
+      // setSelectedTab(1)
     }
   };
 
@@ -99,10 +99,10 @@ export const IndexD = () => {
           // }
         }}
       >
-        {/* <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} /> */}
-        {/* <StyledTab label={<Typography variant='h5'>Crear</Typography>} /> */}
-        {/* <StyledTab label={<Typography variant='h5'>Contadores</Typography>} /> */}
-        {/* <StyledTab label={<Typography variant='h5'>Familias/Géneros</Typography>} /> */}
+        <StyledTab label={<Typography variant='h4'>Actualizar</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Crear</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Contadores</Typography>} />
+        <StyledTab label={<Typography variant='h4'>Familias/Géneros</Typography>} />
         {/* <StyledTab label={<Typography variant='h5'>Descargar Excel</Typography>} /> */}
       </StyledTabs>
       <div>

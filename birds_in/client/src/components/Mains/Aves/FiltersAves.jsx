@@ -43,7 +43,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
     const {
         nIngles = [],
         nCientifico = [],
-        paisesAll = [],
+        paises = [],
         familias = [],
         grupos = [],
         zonas = []
@@ -221,7 +221,7 @@ export const FiltersAves = ({ isFilterOpen, setIsFilterOpen, pages }) => {
                             loading={isFetchingOptions}
                             value={selectOption.pais}
                             onChange={(newValue) => handleOptionChange('pais', newValue)}
-                            options={paisesAll || []}
+                            options={paises || []}
                         />
                     </Grid>
                     <Grid item xs={12}>

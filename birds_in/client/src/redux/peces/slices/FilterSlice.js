@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   options: [],
-  saveOptions: [],
   extraOptions: [],
+  saveOptions: [],
   filtersOn: false,
   noMoreResults: true,
   currentFilters: {
@@ -19,8 +19,8 @@ const initialState = {
   currentPage: 0
 };
 
-export const filtersInsect = createSlice({
-  name: 'filtersInsectos',
+export const filtersPeces = createSlice({
+  name: 'filtersPeces',
   initialState,
 
   reducers: {
@@ -58,7 +58,7 @@ export const filtersInsect = createSlice({
         ingles: [],
       };
     },
-    saveOptionsI: (state, action) => {
+    saveOptionsPe: (state, action) => {
       state.saveOptions = action.payload
     },
     setNoMoreResults: (state, action) => {
@@ -88,9 +88,9 @@ export const {
   saveFilters,
   stringParameter,
   resetCurrentFilters,
-  saveOptionsI,
+  saveOptionsPe,
   setNoMoreResults,
   copingFilters,
   setCurrentPage
-} = filtersInsect.actions;
-export default filtersInsect.reducer;
+} = filtersPeces.actions;
+export default filtersPeces.reducer;
