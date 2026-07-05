@@ -28,7 +28,7 @@ export const CoverDelete = ({
     const theme = useTheme();
     const dispatch = useDispatch();
     const nombre = localStorage.getItem('nombreIngles') || 'del Registro ';
-    const { infoForUpdate } = useSelector(state => state.update);
+    const { infoForUpdate } = useSelector(state => state.updateP);
     const [selectedImages, setSelectedImages] = React.useState([]);
     const [highlightedImage, setHighlightedImage] = React.useState(null);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -129,8 +129,8 @@ export const CoverDelete = ({
             await dispatch(getInfoForUpdate(infoForUpdate.id_pez));
             setImages(updatedImages);
             setSelectedImages([])
-            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setShowBackdrop(false)
+            setSnackbarMessage('Fotografías Eliminadas con éxito');
             setSnackbarOpen(true);
         } catch (error) {
             console.error('Error al eliminar fotos:', error);
@@ -189,7 +189,7 @@ export const CoverDelete = ({
 
     const [images, setImages] = React.useState(infoForUpdate.imagenes_peces);
 
-
+    console.log(images, 'soy imagenes')
     const handleCloseViewer = () => {
         setIsGalleryOpen(false);
         setTimeout(() => {
@@ -228,7 +228,7 @@ export const CoverDelete = ({
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombre ? ` ${nombre}` : 'del Insecto'}
-                                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                                {/* <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} /> */}
                             </Typography>
                         </Grid>
                         {!isCreate && (
@@ -237,8 +237,8 @@ export const CoverDelete = ({
                                     sx={{
                                         fontSize: '1rem',
                                         fontWeight: 'bold',
-                                        // color: theme.palette.primary.light,
                                         backgroundColor: 'rgba(65, 99, 69, 0.42)', // Establece el fondo transparente deseado
+                                        // color: theme.palette.primary.light,
                                     }}
                                     id="boton-buscar"
                                     variant="outlined"
@@ -253,6 +253,7 @@ export const CoverDelete = ({
                     <Typography variant='h4' color='primary.light' sx={{ mb: 2 }}>
                         Elegir Portada o Eliminar Imágenes
                     </Typography>
+                    <Divider sx={{ my: 2, borderColor: 'primary.main' }} />
                     <Button
                         id="boton-eliminar"
                         variant="contained"
@@ -271,8 +272,8 @@ export const CoverDelete = ({
                 backgroundColor: 'rgba(0, 56, 28, 0.1)',
                 backdropFilter: 'blur(2px)',
                 borderRadius: '0px 0px 20px 20px',
-               pb: 5,
                 mb: 10,
+                pb: 5,
                 background: `
                   linear-gradient(
                     180deg,

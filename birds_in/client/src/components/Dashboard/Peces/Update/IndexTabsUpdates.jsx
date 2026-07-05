@@ -115,7 +115,7 @@ export const IndexTabsUpdates = ({ isEnable, changeTab, showUpdate, showSearch, 
                         </React.Fragment>
                     )}
                     {selectedTab === 1 && (
-                        <CoverDeleteOrigin
+                        <CoverDelete
                             changeTab={changeTab}
                             showUpdate={showUpdate}
                             showSearch={showSearch}

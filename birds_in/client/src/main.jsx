@@ -29,11 +29,11 @@ import { saveOptionsPe } from './redux/peces/slices/FilterSlice.js';
 // Configurar la URL base de Axios
 // const api = 'https://lasavesquepasaronpormisojos-com.onrender.com';
 // const api = 'https://pruebabird.onrender.com';
-// const api = 'http://181.48.223.2';
+// const api = 'http://190.65.30.161';
 // const api = 'https://api.lasavesquepasaronpormisojos.com/';
-const api = 'http://localhost:3001/';
+// const api = 'http://localhost:3001/';
 // axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? api : apilocal;
-// const api = 'https://api.lasavesquepasaronpormisojos.com/';
+const api = 'https://api.lasavesquepasaronpormisojos.com/';
 
 axios.defaults.baseURL = api;
 // Realizar llamadas a la API antes de que la aplicación se monte

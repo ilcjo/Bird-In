@@ -140,7 +140,7 @@ export const CoverDeleteOrigin = ({
     }, [isCreate])
 
     const [images, setImages] = React.useState(infoForUpdate.imagenes_peces || []);
-
+    console.log(images, 'soy soy fotossss');
     return (
         <React.Fragment>
             <Loading message={loadingMessage} open={showBackdrop} />
@@ -156,14 +156,14 @@ export const CoverDeleteOrigin = ({
                 padding: 2,
                 borderRadius: '0px 0px 20px 20px',
                 mb: 10,
-                  background: `
+                background: `
                   linear-gradient(
                     180deg,
                     rgba(242, 246, 219, 0.14) 0%,
                     rgba(65, 99, 69, 0.75) 50%,
                     rgba(65, 99, 69, 0.42) 100%
                   )
-                `, 
+                `,
 
             }}>
                 <Grid item xs={12} md={12}>
@@ -171,7 +171,7 @@ export const CoverDeleteOrigin = ({
                         <Grid item xs={12} sm={9}>
                             <Typography variant='h1' color='primary' sx={{ mb: 1.5 }}>
                                 Imágenes {nombre ? ` ${nombre}` : 'del pez'}
-                                  <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
+                                <Divider sx={{ my: 2, borderColor: theme.palette.primary.main, }} />
                             </Typography>
                         </Grid>
                         {!isCreate && (

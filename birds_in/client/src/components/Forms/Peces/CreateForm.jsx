@@ -257,11 +257,11 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             try {
                 // Aquí llamas a la función que genera datos extra y actualizas el estado
                 const extraData = await dispatch(clasesFamilia(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-                // console.log(extraData)
+                console.log(extraData)
                 // Combina las opciones existentes con las nuevas opciones extra
                 const extraGrupos = extraData.grupos ? extraData.grupos.map(g => ({ ...g, type: 'extra' })) : [];
                 const newCombinedOptions = [
-                    ...extraData, // Agrega los datos extra
+                    ...extraGrupos, // Agrega los datos extra
                     ...grupos, // Mantén las opciones originales
 
                 ];
@@ -283,11 +283,11 @@ export const CreateForm = ({ changeImagenTab, changeTabSearch, isImages, }) => {
             try {
                 // Aquí llamas a la función que genera datos extra y actualizas el estado
                 const extraData = await dispatch(clasesGrupo(newValue.id)); // Supongamos que esta función devuelve datos adicionales
-                // console.log(extraData)
+                console.log(extraData)
                 const extraFamilias = extraData.familias ? extraData.familias.map(f => ({ ...f, type: 'extra' })) : [];
                 // Combina las opciones existentes con las nuevas opciones extra
                 const newCombinedOptions = [
-                    ...extraData, // Agrega los datos extra
+                    ...extraFamilias, // Agrega los datos extra
                     ...familias, // Mantén las opciones originales
                 ];
 

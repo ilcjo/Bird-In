@@ -28,7 +28,7 @@ const PhotosOrganizerContainer = React.forwardRef(({
   const [orientations, setOrientations] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedToMoveIndex, setSelectedToMoveIndex] = useState(null);
-
+console.log(images,'imagenes ne organizer')
   const containerRef = useRef(null);
 
   useEffect(() => {

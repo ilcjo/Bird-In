@@ -579,7 +579,7 @@ const findDataByName = async (name) => {
                 {
                     model: Imagenes_peces,
                     attributes: [
-                        'url_peces',
+                        ['url_peces', 'url'],
                         'id',
                         'destacada',
                         'orden_imagen',
